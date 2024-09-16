@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+	   <head>
+		   <!-- Required meta tags -->
+		   <meta charset="utf-8">
+		   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		   <meta content="Codescandy" name="author">
+      <title>Plantilla base para roles administrativos</title>
+      <!-- Favicon icon-->
+<link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico">
+
+
+<!-- Libs CSS -->
+<link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet">
+<link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
+
+
+<!-- Theme CSS -->
+<link rel="stylesheet" href="../assets/css/theme.min.css">
+   </head>
+
+   <body>
+      <!-- main -->
+      <div>
+         <!-- navbar -->
+<nav class="navbar navbar-expand-lg navbar-glass">
+	<div class="container-fluid">
+		<div class="d-flex justify-content-between align-items-center w-100">
+			<div class="d-flex align-items-center">
+				<a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
+						<path
+							d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
+						/>
+					</svg>
+				</a>
+
+			</div>
+			<div>
+				<ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
+					<li class="dropdown-center">
+						<a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="bi bi-bell fs-5"></i>
+							<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+								2
+								<span class="visually-hidden">Mensajes sin leer</span>
+							</span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+							<div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+								<div>
+									<h5 class="mb-1">Notificaciones</h5>
+									<p class="mb-0 small">Tienes 2 mensajes sin leer</p>
+								</div>
+								<a href="#!" class="text-muted">
+									<a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+											<path
+												d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+											/>
+											<path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+										</svg>
+									</a>
+								</a>
+							</div>
+							<div data-simplebar style="height: 250px">
+								<!-- List group -->
+								<ul class="list-group list-group-flush notification-list-scroll fs-6">
+									<!-- List group item -->
+									<li class="list-group-item px-5 py-4 list-group-item-action active">
+										<a href="#!" class="text-muted">
+											<div class="d-flex">
+												<div class="ms-4">
+													<p class="mb-1">
+														<span class="text-dark">Nombre de la persona</span>
+														Descripción notificación 1
+													</p>
+													<span>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+														</svg>
+														<small class="ms-2">Hace 1 minuto</small>  <!--Se puede eliminar-->
+													</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="list-group-item px-5 py-4 list-group-item-action">
+										<a href="#!" class="text-muted">
+											<div class="d-flex">
+												<div class="ms-4">
+													<p class="mb-1">
+														<span class="text-dark">Título de notificación 2</span>
+														Descripción notificación 2
+													</p>
+													<span>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+														</svg>
+														<small class="ms-2">Hace 2 días</small>
+													</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="list-group-item px-5 py-4 list-group-item-action">
+										<a href="#!" class="text-muted">
+											<div class="d-flex">
+												<div class="ms-4">
+													<p class="mb-1">
+														<span class="text-dark">Título de notificación 3</span>
+														Descripción notificación 3
+													</p>
+													<span>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+														</svg>
+														<small class="ms-2">Hace 5 horas</small>
+													</span>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="border-top px-5 py-4 text-center">
+								<a href="#!">Ver todas</a>
+							</div>
+						</div>
+					</li>
+					<li class="dropdown ms-4">
+						<a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+						</a>
+
+						<div class="dropdown-menu dropdown-menu-end p-0">
+							<div class="lh-1 px-5 py-4 border-bottom">
+								<h5 class="mb-1 h6">Nombre Apellido</h5>
+								<small>rol en la pagina</small>
+							</div>
+
+							<div class="border-top px-5 py-3">
+								<a href="perfilAdminZonal.html">Mi perfil</a>
+							</div>
+							<div class="border-top px-5 py-3">
+								<a href="#">Cerrar sesión</a>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</nav>
+
+
+         <div class="main-wrapper">
+            <!-- navbar vertical (para pc)-->
+            <!-- navbar -->
+<nav class="navbar-vertical-nav d-none d-xl-block">
+	<div class="navbar-vertical">
+		<div class="px-4 py-5">
+			<a class="navbar-brand">
+				<img src="../assets/images/logo/logo.svg" alt="" />
+			</a>
+		</div>
+		<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+			<ul class="navbar-nav flex-column" id="sideNavbar">
+				<li class="nav-item">
+					<a class="nav-link " href="dashboard.html">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
+							<span class="nav-link-text">Dashboard</span>
+						</div>
+					</a>
+				</li>
+
+
+
+
+				<li class="nav-item">
+					<a class="nav-link active" href="agentes.html">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-person"></i></span>
+							<span class="nav-link-text">Agentes</span>
+						</div>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="productos.html">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-shop"></i></span>
+							<span class="nav-link-text">Productos</span>
+						</div>
+					</a>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
+	<div class="navbar-vertical">
+		<div class="px-4 py-5 d-flex justify-content-between align-items-center">
+			<a class="navbar-brand">
+				<img src="../assets/images/logo/logo.svg" alt="" />
+			</a>
+			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+			<ul class="navbar-nav flex-column">
+				<li class="nav-item">
+					<a class="nav-link" href="dashboard.html">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-house"></i></span>
+							<span>Dashboard</span>
+						</div>
+					</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link active" href="agentes.html">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-person"></i></span>
+							<span class="nav-link-text">Agentes</span>
+						</div>
+					</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link " href="productos.html">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-shop"></i></span>
+							<span class="nav-link-text">Productos</span>
+						</div>
+					</a>
+				</li>
+
+
+			</ul>
+		</div>
+	</div>
+</nav>
+
+            <!-- COONTENIDO DE LA PAGINA -->
+            <main class="main-content-wrapper">
+               <section class="container">
+				   <h1 class="mb-6">Lista de agentes</h1>
+
+				   <div class ="row">
+					   <!--card-->
+					   <div class="card card-product" style="max-width: 390px;" >
+							   <div class="card-body" >
+								   <div class="text-center position-relative">
+
+									   <a href="#!">
+										   <img src="../assets/images/avatar/avatar-4.jpg"
+												alt="Grocery Ecommerce Template"
+												class="mb-3 img-fluid rounded-circle" style="border-radius: 8px; height: 28vh;" />
+									   </a>
+									   <div class="mt-2">
+										<a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#modal1">
+										  <i class="bi bi-eye" title="Ver más" data-bs-toggle="tooltip" data-placement="top"></i>
+										</a>
+									  </div>
+
+								   </div>
+
+								   <hr style="border: 1px solid #949494;">
+								   <div>
+									   <h2 class="fs-6">
+										   <h3>Agente 1</h3>
+									   </h2>
+									   <div class="text-small mb-1">
+										   <h6  class="text-decoration-none" style="color: #696969"><small>Correo: agente1@gmail.com</small></h6>
+										   <h6  class="text-decoration-none" style="color: #696969"><small>Razón social: Razón social 1</small></h6>
+										   <h6  class="text-decoration-none" style="color: #696969"><small>RUC: RUC1</small></h6>
+										   <h6  class="text-decoration-none" style="color: #696969"><small>Código de despachador de aduana: CódigoA 1</small></h6>
+										   <h6  class="text-decoration-none" style="color: #696969"><small>Código de jurisdicción: CódigoJ 1</small></h6>
+									   </div>
+
+								   </div>
+
+							   </div>
+							   <!-- Modal -->
+							   <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+								   <div class="modal-dialog modal-dialog-centered " role="document">
+									   <div class="modal-content">
+
+										   <div class="modal-body">
+
+											   <div class="text-center position-relative">
+
+												   <a href="#!">
+													   <img src="../assets/images/avatar/avatar-4.jpg"
+															alt="Grocery Ecommerce Template"
+															class="mb-3 img-fluid rounded-circle" style="border-radius: 8px; height: 40vh;" />
+												   </a>
+											   </div>
+											   <hr style="border: 1px solid #949494;">
+											   <div>
+												   <h1 class=" text-center">
+													   Agente 1
+												   </h1>
+												   <div class="text-small mb-1 text-center" >
+													   <h5  class="text-decoration-none" style="color: #696969"><small>Teléfono 1</small></h5>
+													   <h5  class="text-decoration-none" style="color: #696969"><small>agente1@gmail.com</small></h5>
+													   <h5  class="text-decoration-none" style="color: #696969"><small>Razón social 1</small></h5>
+													   <h5  class="text-decoration-none" style="color: #696969"><small>Dirección: Dirección 1</small></h5>
+													   <h5  class="text-decoration-none" style="color: #696969"><small>Distrito: Distrito 1</small></h5>
+													   <h5  class="text-decoration-none" style="color: #696969"><small>57 usuarios finales a cargo</small></h5>
+													   <h5  class="text-decoration-none" style="color: #696969"><small>23 órdenes asignadas</small></h5>
+
+												   </div>
+											   </div>
+
+
+										   </div>
+										   <div class="modal-footer">
+											   <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+
+										   </div>
+									   </div>
+								   </div>
+
+							   </div>
+
+						   </div>
+
+					   <!--card-->
+					   <div class="card card-product" style="max-width: 390px;" >
+						   <div class="card-body" >
+							   <div class="text-center position-relative">
+
+								   <a href="#!">
+									   <img src="../assets/images/avatar/avatar-1.jpg"
+											alt="Imagen del agente"
+											class="mb-3 img-fluid rounded-circle" style="border-radius: 8px; height: 28vh;" />
+								   </a>
+								   <div class="mt-2">
+									<a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#modal2">
+									  <i class="bi bi-eye" title="Ver más" data-bs-toggle="tooltip" data-placement="top"></i>
+									</a>
+								  </div>
+							   </div>
+
+							   <hr style="border: 1px solid #949494;">
+							   <div>
+								   <h2 class="fs-6">
+									   <h3>Maxwell</h3>
+								   </h2>
+								   <div class="text-small mb-1">
+									   <h6  class="text-decoration-none" style="color: #696969"><small>Correo: jacorvi@gmail.com</small></h6>
+									   <h6  class="text-decoration-none" style="color: #696969"><small>Razón social: Razón social 2</small></h6>
+										<h6  class="text-decoration-none" style="color: #696969"><small>RUC: RUC2</small></h6>
+										<h6  class="text-decoration-none" style="color: #696969"><small>Código de despachador de aduana: CódigoA 2</small></h6>
+										<h6  class="text-decoration-none" style="color: #696969"><small>Código de jurisdicción: CódigoJ 2</small></h6>
+
+								   </div>
+							   </div>
+
+
+						   </div>
+
+						   <!-- Modal -->
+						   <div class="modal fade " id="modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+							   <div class="modal-dialog modal-dialog-centered " role="document">
+								   <div class="modal-content">
+
+									   <div class="modal-body">
+
+										   <div class="text-center position-relative">
+
+											   <a href="#!">
+												   <img src="../assets/images/avatar/avatar-1.jpg"
+														alt="Imagen del agente"
+														class="mb-3 img-fluid rounded-circle" style="border-radius: 8px; height: 40vh;" />
+											   </a>
+										   </div>
+										   <hr style="border: 1px solid #949494;">
+										   <div>
+											   <h1 class=" text-center">
+												   Agente 2
+											   </h1>
+											   <div class="text-small mb-1 text-center" >
+												   <h5  class="text-decoration-none" style="color: #696969"><small>Teléfono 2</small></h5>
+												   <h5  class="text-decoration-none" style="color: #696969"><small>jacorvi@gmail.com</small></h5>
+												   <h5  class="text-decoration-none" style="color: #696969"><small>Razón social 2</small></h5>
+												   <h5  class="text-decoration-none" style="color: #696969"><small>Dirección: Dirección 1</small></h5>
+													   <h5  class="text-decoration-none" style="color: #696969"><small>Distrito: Distrito 1</small></h5>
+												   <h5  class="text-decoration-none" style="color: #696969"><small>39 usuarios finales a cargo</small></h5>
+												   <h5  class="text-decoration-none" style="color: #696969"><small>12 órdenes asignadas</small></h5>
+
+
+
+											   </div>
+										   </div>
+
+
+									   </div>
+									   <div class="modal-footer">
+										   <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+
+									   </div>
+								   </div>
+							   </div>
+						   </div>
+					   </div>
+					   <!--card para crear otro agente-->
+					   <div class="card card-product" style="max-width: 390px;padding: 0; height: 33.5vh;">
+						   <div class="card-body" style="padding: 0px;">
+							   <a href="crearAgente.html" class="btn btn-primary bi bi-person-fill-add" style="height: 100%; width: 100%; font-size: 20vh;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Crear agente"></a>
+						   </div>
+					   </div>
+				   </div>
+
+               </section>
+            </main>
+         </div>
+	  </div>
+
+      <!-- Libs JS -->
+<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+
+<!-- Theme JS -->
+<script src="../assets/js/theme.min.js"></script>
+
+      <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+      <script src="../assets/js/vendors/chart.js"></script>
+   </body>
+</html>

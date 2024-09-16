@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta content="Codescandy" name="author">
+      <title>Plantilla base para roles administrativos</title>
+      <!-- Favicon icon-->
+<link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico">
+
+
+<!-- Libs CSS -->
+<link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet">
+<link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
+
+
+<!-- Theme CSS -->
+<link rel="stylesheet" href="../assets/css/theme.min.css">
+   </head>
+
+   <body>
+      <!-- main -->
+      <div>
+         <!-- navbar -->
+<nav class="navbar navbar-expand-lg navbar-glass">
+	<div class="container-fluid">
+		<div class="d-flex justify-content-between align-items-center w-100">
+			<div class="d-flex align-items-center">
+				<a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
+						<path
+							d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
+						/>
+					</svg>
+				</a>
+
+			</div>
+			<div>
+				<ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
+					<li class="dropdown-center">
+						<a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="bi bi-bell fs-5"></i>
+							<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+								2
+								<span class="visually-hidden">Mensajes sin leer</span>
+							</span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+							<div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+								<div>
+									<h5 class="mb-1">Notificaciones</h5>
+									<p class="mb-0 small">Tienes 2 mensajes sin leer</p>
+								</div>
+								<a href="#!" class="text-muted">
+									<a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+											<path
+												d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+											/>
+											<path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+										</svg>
+									</a>
+								</a>
+							</div>
+							<div data-simplebar style="height: 250px">
+								<!-- List group -->
+								<ul class="list-group list-group-flush notification-list-scroll fs-6">
+									<!-- List group item -->
+									<li class="list-group-item px-5 py-4 list-group-item-action active">
+										<a href="#!" class="text-muted">
+											<div class="d-flex">
+												<div class="ms-4">
+													<p class="mb-1">
+														<span class="text-dark">Nombre de la persona</span>
+														Descripción notificación 1
+													</p>
+													<span>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+														</svg>
+														<small class="ms-2">Hace 1 minuto</small>  <!--Se puede eliminar-->
+													</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="list-group-item px-5 py-4 list-group-item-action">
+										<a href="#!" class="text-muted">
+											<div class="d-flex">
+												<div class="ms-4">
+													<p class="mb-1">
+														<span class="text-dark">Título de notificación 2</span>
+														Descripción notificación 2
+													</p>
+													<span>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+														</svg>
+														<small class="ms-2">Hace 2 días</small>
+													</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="list-group-item px-5 py-4 list-group-item-action">
+										<a href="#!" class="text-muted">
+											<div class="d-flex">
+												<div class="ms-4">
+													<p class="mb-1">
+														<span class="text-dark">Título de notificación 3</span>
+														Descripción notificación 3
+													</p>
+													<span>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+														</svg>
+														<small class="ms-2">Hace 5 horas</small>
+													</span>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="border-top px-5 py-4 text-center">
+								<a href="#!">Ver todas</a>
+							</div>
+						</div>
+					</li>
+					<li class="dropdown ms-4">
+						<a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+						</a>
+
+						<div class="dropdown-menu dropdown-menu-end p-0">
+							<div class="lh-1 px-5 py-4 border-bottom">
+								<h5 class="mb-1 h6">Nombre Apellido</h5>
+								<small>rol en la pagina</small>
+							</div>
+
+							<div class="border-top px-5 py-3">
+								<a href="#">Mi perfil</a>
+							</div>
+							<div class="border-top px-5 py-3">
+								<a href="#">Cerrar sesión</a>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</nav>
+
+
+         <div class="main-wrapper">
+            <!-- navbar vertical (para pc)-->
+            <!-- navbar -->
+<nav class="navbar-vertical-nav d-none d-xl-block">
+	<div class="navbar-vertical">
+		<div class="px-4 py-5">
+			<a class="navbar-brand">
+				<img src="../assets/images/logo/logo.svg" alt="" />
+			</a>
+		</div>
+		<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+			<ul class="navbar-nav flex-column" id="sideNavbar">
+				<li class="nav-item">
+					<a class="nav-link  active " href="#">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
+							<span class="nav-link-text">Algo</span>
+						</div>
+					</a>
+				</li>
+
+
+				<li class="nav-item mt-6 mb-3">
+					<span class="nav-label">Division</span>
+				</li>
+
+
+				<li class="nav-item">
+					<a class="nav-link" href="#">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-house"></i></span>
+							<span class="nav-link-text">Algo mas</span>
+						</div>
+					</a>
+				</li>
+
+				<!-- Desplegable -->
+				<li class="nav-item">
+					<a
+							class="nav-link  collapsed "
+							href="#"
+							data-bs-toggle="collapse"
+							data-bs-target="#navCategoriesOrders"
+							aria-expanded="false"
+							aria-controls="navCategoriesOrders"
+					>
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-bag"></i></span>
+							<span class="nav-link-text">Desplegable</span>
+						</div>
+					</a>
+					<div id="navCategoriesOrders" class="collapse " data-bs-parent="#sideNavbar">
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link " href="#">Opcion 1</a>
+							</li>
+							<!-- Nav item -->
+							<li class="nav-item">
+								<a class="nav-link " href="#">Opcion 2</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
+	<div class="navbar-vertical">
+		<div class="px-4 py-5 d-flex justify-content-between align-items-center">
+			<a class="navbar-brand">
+				<img src="../assets/images/logo/logo.svg" alt="" />
+			</a>
+			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+			<ul class="navbar-nav flex-column">
+				<li class="nav-item">
+					<a class="nav-link  active " href="#">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-house"></i></span>
+							<span>Algo</span>
+						</div>
+					</a>
+				</li>
+				<li class="nav-item mt-6 mb-3">
+					<span class="nav-label">Division</span>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link " href="#">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+							<span class="nav-link-text">Algo mas</span>
+						</div>
+					</a>
+				</li>
+				<!-- desplegable en la barra para celular-->
+				<li class="nav-item">
+					<a class="nav-link  collapsed " href="#" data-bs-toggle="collapse" data-bs-target="#navOrders" aria-expanded="false" aria-controls="navOrders">
+						<div class="d-flex align-items-center">
+							<span class="nav-link-icon"><i class="bi bi-bag"></i></span>
+							<span class="nav-link-text">Desplegable</span>
+						</div>
+					</a>
+					<div id="navOrders" class="collapse " data-bs-parent="#sideNavbar">
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link " href="#">Opcion 1</a>
+							</li>
+							<!-- Nav item -->
+							<li class="nav-item">
+								<a class="nav-link " href="#">Opcion 2</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+
+
+			</ul>
+		</div>
+	</div>
+</nav>
+
+            <!-- COONTENIDO DE LA PAGINA -->
+            <main class="main-content-wrapper">
+               <section class="container">
+
+
+                <form action="ocwgrado" method="post" name="formIngreso">
+                    <input type="hidden" name="accion" value="Consultar">
+                      
+                      <input type="hidden" name="enintranet" value="1"> 
+                        
+                    <table class="pucpTablaSubTitulo" width="100%">
+                      <tbody><tr>
+                        <td class="pucpSubTitulo">Criterios de Consulta</td>
+                      </tr>
+                    </tbody></table>
+                    <br>
+                    <table border="0" width="100%" height="1">
+                      <tbody><tr>
+                        <td class="pucpEtiqOblig">Seleccione al usuario</td>
+                        <td class="pucpCampo"><select name="carrera" class="PucpCampo" onchange="carrera_change()"><option value="" selected="">Elegir al usuario
+                    
+                            <option value="0145">Sofía Mendoza</option>
+                            <option value="0934">Alejandro Vargas</option>
+                            <option value="0726">Valeria Rodríguez</option>
+                            <option value="0587">Javier Morales</option>
+                            <option value="1102">Carla Fernández</option>
+                            <option value="0863">Tomás López</option>
+                            <option value="1208">Ana María Castillo</option>
+                            <option value="0347">Luis Fernando Pérez</option>
+                            <option value="0510">Natalia Gómez</option>
+                            <option value="0294">Ricardo Ramírez</option>
+                    </option></select></td>
+                      </tr>
+                      <tr>
+                        <td class="pucpEtiqOblig">Seleccione la orden</td>
+                        <td class="pucpCampo"><select name="grado" class="PucpCampo" onchange="grado_change()"><option value="" selected="">Elegir la orden
+                    </option><option value="7">#1234                                      
+                    </option><option value="6">#1834                        
+                    </option><option value="D">#1334                 
+                    </option><option value="8">#1634                                        
+                    </option><option value="5">#2134                                    
+                    </option></select></td>
+                      </tr>
+                      <tr>
+                        <td class="pucpEtiq">Tipo de Obtención</td>
+                        <td class="pucpCampo"><select name="tipoObten" class="PucpCampo"><option value="" selected="">&lt;Todos&gt;
+                    </option><option value="I">Memoria de desempeño campo profesional
+                    </option><option value="C">Sistematización experiencia profesional
+                    </option><option value="A">Examen de suficiencia profesional
+                    </option><option value="O">Proyecto de Aplicación
+                    </option><option value="7">Discusión experiencia docente
+                    </option><option value="Q">Trabajo de suficiencia profesional
+                    </option><option value="G">Proyecto profesional
+                    </option><option value="N">Examen profesional
+                    </option><option value="E">Artículo publicable
+                    </option><option value="1">Tesis
+                    </option><option value="3">Automático
+                    </option><option value="8">Proposición escrita
+                    </option><option value="P">Examen de competencia profesional
+                    </option><option value="2">Examen de grado
+                    </option><option value="L">Trabajo Académico
+                    </option><option value="6">Actualización de tesis
+                    </option><option value="D">Proyecto fin de carrera
+                    </option><option value="J">Conversión
+                    </option><option value="F">Memoria profesional
+                    </option><option value="0">Sin información
+                    </option><option value="5">Egresados de Estudios Generales
+                    </option><option value="9">Innovación educativa
+                    </option><option value="H">Diplomatura - Curso de especialización
+                    </option><option value="M">Trabajo de investigación
+                    </option><option value="4">Curso de titulación
+                    </option><option value="B">Informe profesional
+                    </option></select></td>
+                      </tr>
+                      <tr>
+                        <td class="pucpEtiq">Fecha de Aprobación</td>
+                        <td class="pucpCampo"><input type="radio" name="fechaAprob" value="0" checked="">No considerar</td>
+                      </tr>
+                      <tr>
+                        <td class="pucpCampo">&nbsp;</td>
+                        <td class="pucpCampo"><input type="radio" name="fechaAprob" value="1">Entre
+                     
+                          <select name="diaIni" class="PucpCampo"><option value="01">01
+                    </option><option value="02">02
+                    </option><option value="03">03
+                    </option><option value="04">04
+                    </option><option value="05">05
+                    </option><option value="06">06
+                    </option><option value="07">07
+                    </option><option value="08">08
+                    </option><option value="09">09
+                    </option><option value="10">10
+                    </option><option value="11">11
+                    </option><option value="12">12
+                    </option><option value="13">13
+                    </option><option value="14">14
+                    </option><option value="15">15
+                    </option><option value="16">16
+                    </option><option value="17">17
+                    </option><option value="18">18
+                    </option><option value="19">19
+                    </option><option value="20">20
+                    </option><option value="21">21
+                    </option><option value="22">22
+                    </option><option value="23">23
+                    </option><option value="24">24
+                    </option><option value="25">25
+                    </option><option value="26">26
+                    </option><option value="27">27
+                    </option><option value="28">28
+                    </option><option value="29">29
+                    </option><option value="30">30
+                    </option><option value="31">31
+                    </option></select>        
+                          <select name="mesIni" class="PucpCampo"><option value="01">Ene
+                    </option><option value="02">Feb
+                    </option><option value="03">Mar
+                    </option><option value="04">Abr
+                    </option><option value="05">May
+                    </option><option value="06">Jun
+                    </option><option value="07">Jul
+                    </option><option value="08">Ago
+                    </option><option value="09">Set
+                    </option><option value="10">Oct
+                    </option><option value="11">Nov
+                    </option><option value="12">Dic
+                    </option></select>       
+                          <select name="anhoIni" class="PucpCampo"><option value="1922">1922
+                    </option><option value="1923">1923
+                    </option><option value="1931">1931
+                    </option><option value="1932">1932
+                    </option><option value="1933">1933
+                    </option><option value="1934">1934
+                    </option><option value="1935">1935
+                    </option><option value="1936">1936
+                    </option><option value="1937">1937
+                    </option><option value="1938">1938
+                    </option><option value="1939">1939
+                    </option><option value="1940">1940
+                    </option><option value="1941">1941
+                    </option><option value="1942">1942
+                    </option><option value="1943">1943
+                    </option><option value="1944">1944
+                    </option><option value="1945">1945
+                    </option><option value="1946">1946
+                    </option><option value="1947">1947
+                    </option><option value="1948">1948
+                    </option><option value="1949">1949
+                    </option><option value="1950">1950
+                    </option><option value="1951">1951
+                    </option><option value="1952">1952
+                    </option><option value="1953">1953
+                    </option><option value="1954">1954
+                    </option><option value="1955">1955
+                    </option><option value="1956">1956
+                    </option><option value="1957">1957
+                    </option><option value="1958">1958
+                    </option><option value="1959">1959
+                    </option><option value="1960">1960
+                    </option><option value="1961">1961
+                    </option><option value="1962">1962
+                    </option><option value="1963">1963
+                    </option><option value="1964">1964
+                    </option><option value="1965">1965
+                    </option><option value="1966">1966
+                    </option><option value="1967">1967
+                    </option><option value="1968">1968
+                    </option><option value="1969">1969
+                    </option><option value="1970">1970
+                    </option><option value="1971">1971
+                    </option><option value="1972">1972
+                    </option><option value="1973">1973
+                    </option><option value="1974">1974
+                    </option><option value="1975">1975
+                    </option><option value="1976">1976
+                    </option><option value="1977">1977
+                    </option><option value="1978">1978
+                    </option><option value="1979">1979
+                    </option><option value="1980">1980
+                    </option><option value="1981">1981
+                    </option><option value="1982">1982
+                    </option><option value="1983">1983
+                    </option><option value="1984">1984
+                    </option><option value="1985">1985
+                    </option><option value="1986">1986
+                    </option><option value="1987">1987
+                    </option><option value="1988">1988
+                    </option><option value="1989">1989
+                    </option><option value="1990">1990
+                    </option><option value="1991">1991
+                    </option><option value="1992">1992
+                    </option><option value="1993">1993
+                    </option><option value="1994">1994
+                    </option><option value="1995">1995
+                    </option><option value="1996">1996
+                    </option><option value="1997">1997
+                    </option><option value="1998">1998
+                    </option><option value="1999">1999
+                    </option><option value="2000">2000
+                    </option><option value="2001">2001
+                    </option><option value="2002">2002
+                    </option><option value="2003">2003
+                    </option><option value="2004">2004
+                    </option><option value="2005">2005
+                    </option><option value="2006">2006
+                    </option><option value="2007">2007
+                    </option><option value="2008">2008
+                    </option><option value="2009">2009
+                    </option><option value="2010">2010
+                    </option><option value="2011">2011
+                    </option><option value="2012">2012
+                    </option><option value="2013">2013
+                    </option><option value="2014">2014
+                    </option><option value="2015">2015
+                    </option><option value="2016">2016
+                    </option><option value="2017">2017
+                    </option><option value="2018">2018
+                    </option><option value="2019">2019
+                    </option><option value="2020">2020
+                    </option><option value="2021">2021
+                    </option><option value="2022">2022
+                    </option><option value="2023">2023
+                    </option><option value="2024">2024
+                    </option></select> y
+                    
+                          <select name="diaFin" class="PucpCampo"><option value="01">01
+                    </option><option value="02">02
+                    </option><option value="03">03
+                    </option><option value="04">04
+                    </option><option value="05">05
+                    </option><option value="06">06
+                    </option><option value="07">07
+                    </option><option value="08">08
+                    </option><option value="09">09
+                    </option><option value="10">10
+                    </option><option value="11">11
+                    </option><option value="12">12
+                    </option><option value="13">13
+                    </option><option value="14">14
+                    </option><option value="15">15
+                    </option><option value="16">16
+                    </option><option value="17">17
+                    </option><option value="18">18
+                    </option><option value="19">19
+                    </option><option value="20">20
+                    </option><option value="21">21
+                    </option><option value="22">22
+                    </option><option value="23">23
+                    </option><option value="24">24
+                    </option><option value="25">25
+                    </option><option value="26">26
+                    </option><option value="27">27
+                    </option><option value="28">28
+                    </option><option value="29">29
+                    </option><option value="30">30
+                    </option><option value="31" selected="">31
+                    </option></select>
+                          <select name="mesFin" class="PucpCampo"><option value="01">Ene
+                    </option><option value="02">Feb
+                    </option><option value="03">Mar
+                    </option><option value="04">Abr
+                    </option><option value="05">May
+                    </option><option value="06">Jun
+                    </option><option value="07">Jul
+                    </option><option value="08">Ago
+                    </option><option value="09">Set
+                    </option><option value="10">Oct
+                    </option><option value="11">Nov
+                    </option><option value="12" selected="">Dic
+                    </option></select>
+                          <select name="anhoFin" class="PucpCampo"><option value="1922">1922
+                    </option><option value="1923">1923
+                    </option><option value="1931">1931
+                    </option><option value="1932">1932
+                    </option><option value="1933">1933
+                    </option><option value="1934">1934
+                    </option><option value="1935">1935
+                    </option><option value="1936">1936
+                    </option><option value="1937">1937
+                    </option><option value="1938">1938
+                    </option><option value="1939">1939
+                    </option><option value="1940">1940
+                    </option><option value="1941">1941
+                    </option><option value="1942">1942
+                    </option><option value="1943">1943
+                    </option><option value="1944">1944
+                    </option><option value="1945">1945
+                    </option><option value="1946">1946
+                    </option><option value="1947">1947
+                    </option><option value="1948">1948
+                    </option><option value="1949">1949
+                    </option><option value="1950">1950
+                    </option><option value="1951">1951
+                    </option><option value="1952">1952
+                    </option><option value="1953">1953
+                    </option><option value="1954">1954
+                    </option><option value="1955">1955
+                    </option><option value="1956">1956
+                    </option><option value="1957">1957
+                    </option><option value="1958">1958
+                    </option><option value="1959">1959
+                    </option><option value="1960">1960
+                    </option><option value="1961">1961
+                    </option><option value="1962">1962
+                    </option><option value="1963">1963
+                    </option><option value="1964">1964
+                    </option><option value="1965">1965
+                    </option><option value="1966">1966
+                    </option><option value="1967">1967
+                    </option><option value="1968">1968
+                    </option><option value="1969">1969
+                    </option><option value="1970">1970
+                    </option><option value="1971">1971
+                    </option><option value="1972">1972
+                    </option><option value="1973">1973
+                    </option><option value="1974">1974
+                    </option><option value="1975">1975
+                    </option><option value="1976">1976
+                    </option><option value="1977">1977
+                    </option><option value="1978">1978
+                    </option><option value="1979">1979
+                    </option><option value="1980">1980
+                    </option><option value="1981">1981
+                    </option><option value="1982">1982
+                    </option><option value="1983">1983
+                    </option><option value="1984">1984
+                    </option><option value="1985">1985
+                    </option><option value="1986">1986
+                    </option><option value="1987">1987
+                    </option><option value="1988">1988
+                    </option><option value="1989">1989
+                    </option><option value="1990">1990
+                    </option><option value="1991">1991
+                    </option><option value="1992">1992
+                    </option><option value="1993">1993
+                    </option><option value="1994">1994
+                    </option><option value="1995">1995
+                    </option><option value="1996">1996
+                    </option><option value="1997">1997
+                    </option><option value="1998">1998
+                    </option><option value="1999">1999
+                    </option><option value="2000">2000
+                    </option><option value="2001">2001
+                    </option><option value="2002">2002
+                    </option><option value="2003">2003
+                    </option><option value="2004">2004
+                    </option><option value="2005">2005
+                    </option><option value="2006">2006
+                    </option><option value="2007">2007
+                    </option><option value="2008">2008
+                    </option><option value="2009">2009
+                    </option><option value="2010">2010
+                    </option><option value="2011">2011
+                    </option><option value="2012">2012
+                    </option><option value="2013">2013
+                    </option><option value="2014">2014
+                    </option><option value="2015">2015
+                    </option><option value="2016">2016
+                    </option><option value="2017">2017
+                    </option><option value="2018">2018
+                    </option><option value="2019">2019
+                    </option><option value="2020">2020
+                    </option><option value="2021">2021
+                    </option><option value="2022">2022
+                    </option><option value="2023">2023
+                    </option><option value="2024" selected="">2024
+                    </option></select> 
+                    
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="pucpEtiqOblig">Ordenado
+                        </td>
+                        <td class="pucpCampo">
+                          <select name="orden" class="pucpCampo">
+                            <option value="0" selected="">por nombre</option>
+                            
+                            <option value="1">por código</option>
+                            
+                            <option value="2">por fecha de aprobación</option>
+                          </select>
+                        </td>
+                      </tr>
+                    
+                    
+                    </tbody></table>
+                    
+                    <table border="0" cellpadding="0" width="100%" height="23">
+                      <tbody><tr> <td> &nbsp; </td> </tr>
+                      <tr>
+                              
+                        <td><p align="center">
+                            <button type="button" onclick="javascript:Valida()" onmouseover="self.status = ''; return true" class="pucpBoton pucpBotonCorto">Consultar</button></p>
+                        </td>
+                    
+                      </tr>
+                    
+                    <!--  //AVR 02-12-2015
+                    //Adicionar ciclo egreso FCI bachiller %>
+                    <tr><td width="100%" colspan="3" class="pucpCampo">
+                    <a href="/pucp/ocr/ocwgrado/jsp/bachilleresFCI.pdf">Enlace especial para bachilleres de la Facultad de Ciencias e Ingeniería</a>
+                    </td></tr>
+                    -->
+                    </tbody></table>
+                    <br>
+                    <table width="98%">
+                        <tbody>
+                            <tr>
+                              <td>
+                              <font class="pucpEtiq"><strong>Importante</strong><br>
+                              La información ofrecida puede ser utilizada para comunicaciones individuales y con fines académicos únicamente vinculados con los servicios educativos de la Pontificia Universidad Católica del Perú (PUCP). Los datos personales aquí contenidos deberán ser utilizados en conformidad con la Ley N.° 29733, Ley de Protección de Datos Personales, y su reglamento. La PUCP NO AUTORIZA su uso para confeccionar bases de datos o generar envíos masivos.</font>
+                              </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    
+                    </form>
+               </section>
+            </main>
+         </div>
+	  </div>
+
+      <!-- Libs JS -->
+<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+
+<!-- Theme JS -->
+<script src="../assets/js/theme.min.js"></script>
+
+      <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+      <script src="../assets/js/vendors/chart.js"></script>
+   </body>
+</html>

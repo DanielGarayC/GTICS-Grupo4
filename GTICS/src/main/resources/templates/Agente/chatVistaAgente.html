@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+	   <!-- Required meta tags -->
+	   <meta charset="utf-8" />
+	   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	   <meta content="Codescandy" name="author" />
+	   <title>Órdenes asignadas</title>
+	   <link href="../assets/libs/tiny-slider/dist/tiny-slider.css" rel="stylesheet" />
+	   <link href="../assets/libs/slick-carousel/slick/slick.css" rel="stylesheet" />
+	   <link href="../assets/libs/slick-carousel/slick/slick-theme.css" rel="stylesheet" />
+	   <!-- Favicon icon-->
+	   <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico" />
+
+	   <!-- Libs CSS -->
+	   <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+	   <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet" />
+	   <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet" />
+
+	   <!-- Theme CSS -->
+	   <link rel="stylesheet" href="../assets/css/theme.min.css" />
+
+
+
+	   <!--Prueba de logo para ver si usamos jpg o svg -->
+	   <style>
+
+		   .logoImagen{
+			   height: 80px;
+			   width: 250px;
+		   }
+		   .logoImagenCelulares{
+			   height: 80px;
+			   width: 220px;
+		   }
+	   </style>
+	   <!--POP UP-->
+	   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	   <style>
+		   .custom-popup{
+			   border-radius: 10px;
+		   }
+		   .swal2-styled{
+			   border-radius: 8px;
+		   }
+		   .swal2-styled.swal2-confirm {
+			   background-color: #28a745;
+			   color: white;
+		   }
+
+		   .swal2-styled.swal2-cancel {
+			   background-color: #dc3545;
+			   color: white;
+		   }
+	   </style>
+
+
+   </head>
+
+   <body>
+
+   <!-- BARRA SUPERIOR -->
+   <nav class="navbar navbar-expand-lg navbar-glass">
+	   <div class="container-fluid">
+		   <div class="d-flex justify-content-between align-items-center w-100">
+			   <div class="d-flex align-items-center">
+				   <a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+					   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
+						   <path
+								   d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
+						   />
+					   </svg>
+				   </a>
+
+			   </div>
+			   <div>
+				   <ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
+					   <li class="dropdown-center">
+						   <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							   <i class="bi bi-bell fs-5"></i>
+							   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+									2
+									<span class="visually-hidden">Mensajes sin leer</span>
+								</span>
+						   </a>
+						   <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+							   <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+								   <div>
+									   <h5 class="mb-1">Notificaciones</h5>
+									   <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
+								   </div>
+								   <a href="#!" class="text-muted">
+									   <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+										   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+											   <path
+													   d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+											   />
+											   <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+										   </svg>
+									   </a>
+								   </a>
+							   </div>
+							   <div data-simplebar style="height: 250px">
+								   <!-- List group -->
+								   <ul class="list-group list-group-flush notification-list-scroll fs-6">
+									   <!-- List group item -->
+									   <li class="list-group-item px-5 py-4 list-group-item-action active">
+										   <a href="#!" class="text-muted">
+											   <div class="d-flex">
+												   <div class="ms-4">
+													   <p class="mb-1">
+														   <span class="text-dark">Nombre de la persona</span>
+														   Descripción notificación 1
+													   </p>
+													   <span>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+															</svg>
+															<small class="ms-2">Hace 1 minuto</small>  <!--Se puede eliminar-->
+														</span>
+												   </div>
+											   </div>
+										   </a>
+									   </li>
+									   <li class="list-group-item px-5 py-4 list-group-item-action">
+										   <a href="#!" class="text-muted">
+											   <div class="d-flex">
+												   <div class="ms-4">
+													   <p class="mb-1">
+														   <span class="text-dark">Título de notificación 2</span>
+														   Descripción notificación 2
+													   </p>
+													   <span>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+															</svg>
+															<small class="ms-2">Hace 2 días</small>
+														</span>
+												   </div>
+											   </div>
+										   </a>
+									   </li>
+									   <li class="list-group-item px-5 py-4 list-group-item-action">
+										   <a href="#!" class="text-muted">
+											   <div class="d-flex">
+												   <div class="ms-4">
+													   <p class="mb-1">
+														   <span class="text-dark">Título de notificación 3</span>
+														   Descripción notificación 3
+													   </p>
+													   <span>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+															</svg>
+															<small class="ms-2">Hace 5 horas</small>
+														</span>
+												   </div>
+											   </div>
+										   </a>
+									   </li>
+								   </ul>
+							   </div>
+							   <div class="border-top px-5 py-4 text-center">
+								   <a href="#!">Ver todas</a>
+							   </div>
+						   </div>
+					   </li>
+					   <li class="dropdown ms-4">
+						   <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							   <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+						   </a>
+
+						   <div class="dropdown-menu dropdown-menu-end p-0">
+							   <div class="lh-1 px-5 py-4 border-bottom">
+								   <h5 class="mb-1 h6">Nombre Apellido</h5>
+								   <small>rol en la pagina</small>
+							   </div>
+
+							   <div class="border-top px-5 py-3">
+								   <a href="#">Mi perfil</a>
+							   </div>
+							   <div class="border-top px-5 py-3">
+								   <a href="#">Cerrar sesión</a>
+							   </div>
+						   </div>
+					   </li>
+				   </ul>
+			   </div>
+		   </div>
+	   </div>
+   </nav>
+	<!-- NAVBAR  -->
+   <div class="main-wrapper">
+
+	   <!-- navbar vertical (para pc)-->
+	   <!-- navbar -->
+	   <nav class="navbar-vertical-nav d-none d-xl-block">
+		   <div class="navbar-vertical">
+			   <div class="px-4 py-5">
+				   <a class="navbar-brand">
+					   <img src="../assets/images/logo/logoGTICS.jpeg" alt="" class="logoImagen " />
+				   </a>
+			   </div>
+			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+				   <ul class="navbar-nav flex-column" id="sideNavbar">
+					   <li class="nav-item">
+						   <a class="nav-link   " href="inicio.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
+								   <span class="nav-link-text">Inicio</span>
+							   </div>
+						   </a>
+					   </li>
+
+
+					   <li class="nav-item">
+						   <a class="nav-link " href="usuariosAsignados.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
+								   <span class="nav-link-text">Usuarios asignados</span>
+							   </div>
+						   </a>
+					   </li>
+
+					   <li class="nav-item">
+						   <a class="nav-link active" href="ordeneslista.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+								   <span class="nav-link-text">Órdenes</span>
+							   </div>
+						   </a>
+					   </li>
+
+					   <li class="nav-item">
+						   <a class="nav-link" href="#">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
+								   <span class="nav-link-text">Reportes</span>
+							   </div>
+						   </a>
+					   </li>
+
+				   </ul>
+			   </div>
+		   </div>
+	   </nav>
+	   <!-- navbar vertical (para celular)-->
+	   <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
+		   <div class="navbar-vertical">
+			   <div class="px-4 py-5 d-flex justify-content-between align-items-center">
+				   <a class="navbar-brand">
+					   <img src="../assets/images/logo/logoGTICS.jpeg" alt="" class="logoImagenCelulares"/>
+				   </a>
+				   <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			   </div>
+			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+				   <ul class="navbar-nav flex-column">
+
+					   <li class="nav-item">
+						   <a class="nav-link  " href="inicio.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>
+								   <span>Inicio</span>
+							   </div>
+						   </a>
+					   </li>
+
+					   <li class="nav-item">
+						   <a class="nav-link   " href="usuariosAsignados.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
+								   <span>Usuarios asignados</span>
+							   </div>
+						   </a>
+					   </li>
+
+					   <li class="nav-item">
+						   <a class="nav-link active " href="ordeneslista.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+								   <span class="nav-link-text">Órdenes</span>
+							   </div>
+						   </a>
+					   </li>
+
+					   <li class="nav-item">
+						   <a class="nav-link " href="#">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
+								   <span class="nav-link-text">Reportes</span>
+							   </div>
+						   </a>
+					   </li>
+
+
+				   </ul>
+			   </div>
+		   </div>
+	   </nav>
+
+
+
+
+
+   <!-- COONTENIDO DE LA PAGINA -->
+   <main class="main-content-wrapper">
+	   <div class="container">
+
+		   <section>
+			   <div class="container py-5">
+
+				   <div class="row d-flex justify-content-center">
+					   <div class="col-md-10 col-lg-8 col-xl-10 col-sm-11">
+
+						   <div class="card" id="chat2">
+							   <div class="card-header d-flex justify-content-between align-items-center p-3">
+								   <h5 class="mb-0">Chat</h5>
+								   <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" data-mdb-ripple-color="dark">Let's Chat
+									   App</button>
+							   </div>
+							   <div class="card-body" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px">
+
+								   <div class="d-flex flex-row justify-content-start">
+									   <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+											alt="avatar 1" style="width: 45px; height: 100%;">
+									   <div>
+										   <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary">Hi</p>
+										   <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary">How are you ...???
+										   </p>
+										   <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary">What are you doing
+											   tomorrow? Can we come up a bar?</p>
+										   <p class="small ms-3 mb-3 rounded-3 text-muted">23:58</p>
+									   </div>
+								   </div>
+
+								   <div class="divider d-flex align-items-center mb-4">
+									   <p class="text-center mx-3 mb-0" style="color: #a2aab7;">Today</p>
+								   </div>
+
+								   <div class="d-flex flex-row justify-content-end mb-4 pt-1">
+									   <div>
+										   <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Hiii, I'm good.</p>
+										   <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">How are you doing?</p>
+										   <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Long time no see! Tomorrow
+											   office. will
+											   be free on sunday.</p>
+										   <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">00:06</p>
+									   </div>
+									   <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
+											alt="avatar 1" style="width: 45px; height: 100%;">
+								   </div>
+							   </div>
+							   <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+								   <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+										alt="avatar 3" style="width: 40px; height: 100%;">
+								   <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
+										  placeholder="Escribe algo al usuario">
+								   <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
+								   <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
+								   <a class="ms-3" href="#!"><i class="fas fa-paper-plane"></i></a>
+							   </div>
+						   </div>
+
+					   </div>
+				   </div>
+
+			   </div>
+		   </section>
+
+
+	   </div>
+
+   </main>
+
+
+
+	</div>
+
+
+   	<!-- LIBRERIAS -->
+	<div>
+		<!-- Javascript-->
+		<!-- Libs JS -->
+		<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+		<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+
+		<!-- Theme JS -->
+		<script src="../assets/js/theme.min.js"></script>
+
+		<script src="../assets/js/vendors/jquery.min.js"></script>
+		<script src="../assets/libs/slick-carousel/slick/slick.min.js"></script>
+		<script src="../assets/js/vendors/slick-slider.js"></script>
+		<script src="../assets/libs/tiny-slider/dist/min/tiny-slider.js"></script>
+		<script src="../assets/js/vendors/tns-slider.js"></script>
+		<script src="../assets/js/vendors/zoom.js"></script>
+
+		<script src="../assets/js/vendors/countdown.js"></script>
+		<script src="../assets/libs/sticky-sidebar/dist/sticky-sidebar.min.js"></script>
+		<script src="../assets/js/vendors/sticky.js"></script>
+		<script src="../assets/js/vendors/modal.js"></script>
+	</div>
+
+   </body>
+</html>

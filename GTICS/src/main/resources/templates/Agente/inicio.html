@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+	   <!-- Required meta tags -->
+	   <meta charset="utf-8" />
+	   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	   <meta content="Codescandy" name="author" />
+	   <title>Inicio</title>
+	   <link href="../assets/libs/tiny-slider/dist/tiny-slider.css" rel="stylesheet" />
+	   <link href="../assets/libs/slick-carousel/slick/slick.css" rel="stylesheet" />
+	   <link href="../assets/libs/slick-carousel/slick/slick-theme.css" rel="stylesheet" />
+	   <!-- Favicon icon-->
+	   <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico" />
+
+	   <!-- Libs CSS -->
+	   <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+	   <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet" />
+	   <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet" />
+
+	   <!-- Theme CSS -->
+	   <link rel="stylesheet" href="../assets/css/theme.min.css" />
+
+
+
+	   <!--Prueba de logo para ver si usamos jpg o svg -->
+	   <style>
+
+		   .logoImagen{
+			   height: 80px;
+			   width: 250px;
+		   }
+		   .logoImagenCelulares{
+			   height: 80px;
+			   width: 220px;
+		   }
+	   </style>
+
+
+   </head>
+
+   <body>
+
+   <!-- BARRA SUPERIOR -->
+   <nav class="navbar navbar-expand-lg navbar-glass">
+	   <div class="container-fluid">
+		   <div class="d-flex justify-content-between align-items-center w-100">
+			   <div class="d-flex align-items-center">
+				   <a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+					   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
+						   <path
+								   d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
+						   />
+					   </svg>
+				   </a>
+
+			   </div>
+			   <div>
+				   <ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
+					   <li class="dropdown-center">
+						   <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							   <i class="bi bi-bell fs-5"></i>
+							   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+									2
+									<span class="visually-hidden">Mensajes sin leer</span>
+								</span>
+						   </a>
+						   <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+							   <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+								   <div>
+									   <h5 class="mb-1">Notificaciones</h5>
+									   <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
+								   </div>
+								   <a href="#!" class="text-muted">
+									   <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+										   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+											   <path
+													   d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+											   />
+											   <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+										   </svg>
+									   </a>
+								   </a>
+							   </div>
+							   <div data-simplebar style="height: 250px">
+								   <!-- List group -->
+								   <ul class="list-group list-group-flush notification-list-scroll fs-6">
+									   <!-- List group item -->
+									   <li class="list-group-item px-5 py-4 list-group-item-action active">
+										   <a href="#!" class="text-muted">
+											   <div class="d-flex">
+												   <div class="ms-4">
+													   <p class="mb-1">
+														   <span class="text-dark">Nombre de la persona</span>
+														   Descripción notificación 1
+													   </p>
+													   <span>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+															</svg>
+															<small class="ms-2">Hace 1 minuto</small>  <!--Se puede eliminar-->
+														</span>
+												   </div>
+											   </div>
+										   </a>
+									   </li>
+									   <li class="list-group-item px-5 py-4 list-group-item-action">
+										   <a href="#!" class="text-muted">
+											   <div class="d-flex">
+												   <div class="ms-4">
+													   <p class="mb-1">
+														   <span class="text-dark">Título de notificación 2</span>
+														   Descripción notificación 2
+													   </p>
+													   <span>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+															</svg>
+															<small class="ms-2">Hace 2 días</small>
+														</span>
+												   </div>
+											   </div>
+										   </a>
+									   </li>
+									   <li class="list-group-item px-5 py-4 list-group-item-action">
+										   <a href="#!" class="text-muted">
+											   <div class="d-flex">
+												   <div class="ms-4">
+													   <p class="mb-1">
+														   <span class="text-dark">Título de notificación 3</span>
+														   Descripción notificación 3
+													   </p>
+													   <span>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+															</svg>
+															<small class="ms-2">Hace 5 horas</small>
+														</span>
+												   </div>
+											   </div>
+										   </a>
+									   </li>
+								   </ul>
+							   </div>
+							   <div class="border-top px-5 py-4 text-center">
+								   <a href="#!">Ver todas</a>
+							   </div>
+						   </div>
+					   </li>
+					   <li class="dropdown ms-4">
+						   <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							   <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+						   </a>
+
+						   <div class="dropdown-menu dropdown-menu-end p-0">
+							   <div class="lh-1 px-5 py-4 border-bottom">
+								   <h5 class="mb-1 h6">Nombre Apellido</h5>
+								   <small>rol en la pagina</small>
+							   </div>
+
+							   <div class="border-top px-5 py-3">
+								   <a href="#">Mi perfil</a>
+							   </div>
+							   <div class="border-top px-5 py-3">
+								   <a href="#">Cerrar sesión</a>
+							   </div>
+						   </div>
+					   </li>
+				   </ul>
+			   </div>
+		   </div>
+	   </div>
+   </nav>
+	<!-- CONTENIDO DE PÁGINA -->
+   <div class="main-wrapper">
+
+	   <!-- navbar vertical (para pc)-->
+	   <!-- navbar -->
+	   <nav class="navbar-vertical-nav d-none d-xl-block">
+		   <div class="navbar-vertical">
+			   <div class="px-4 py-5">
+				   <a class="navbar-brand">
+					   <img src="../assets/images/logo/logoGTICS.jpeg" alt="" class="logoImagen " />
+				   </a>
+			   </div>
+			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+				   <ul class="navbar-nav flex-column" id="sideNavbar">
+					   <li class="nav-item">
+						   <a class="nav-link  active " href="inicio.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
+								   <span class="nav-link-text">Inicio</span>
+							   </div>
+						   </a>
+					   </li>
+
+
+					   <li class="nav-item">
+						   <a class="nav-link" href="usuariosAsignados.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
+								   <span class="nav-link-text">Usuarios asignados</span>
+							   </div>
+						   </a>
+					   </li>
+
+					   <li class="nav-item">
+						   <a class="nav-link" href="ordeneslista.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+								   <span class="nav-link-text">Órdenes</span>
+							   </div>
+						   </a>
+					   </li>
+
+					   <li class="nav-item">
+						   <a class="nav-link" href="#">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
+								   <span class="nav-link-text">Reportes</span>
+							   </div>
+						   </a>
+					   </li>
+
+				   </ul>
+			   </div>
+		   </div>
+	   </nav>
+	   <!-- navbar vertical (para celular)-->
+	   <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
+		   <div class="navbar-vertical">
+			   <div class="px-4 py-5 d-flex justify-content-between align-items-center">
+				   <a class="navbar-brand">
+					   <img src="../assets/images/logo/logoGTICS.jpeg" alt="" class="logoImagenCelulares"/>
+				   </a>
+				   <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			   </div>
+			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+				   <ul class="navbar-nav flex-column">
+
+					   <li class="nav-item">
+						   <a class="nav-link active " href="inicio.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>
+								   <span>Inicio</span>
+							   </div>
+						   </a>
+					   </li>
+
+					   <li class="nav-item">
+						   <a class="nav-link " href="usuariosAsignados.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
+								   <span>Usuarios asignados</span>
+							   </div>
+						   </a>
+					   </li>
+
+					   <li class="nav-item">
+						   <a class="nav-link " href="ordeneslista.html">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+								   <span class="nav-link-text">Órdenes</span>
+							   </div>
+						   </a>
+					   </li>
+
+					   <li class="nav-item">
+						   <a class="nav-link " href="#">
+							   <div class="d-flex align-items-center">
+								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
+								   <span class="nav-link-text">Reportes</span>
+							   </div>
+						   </a>
+					   </li>
+
+
+				   </ul>
+			   </div>
+		   </div>
+	   </nav>
+
+
+
+
+
+
+
+
+
+
+   <!-- COONTENIDO DE LA PAGINA -->
+   <main class="main-content-wrapper">
+	   <!-- SLIDER-->
+	   <section class="container ">
+		   <div class="hero-slider">
+			   <div
+					   style="background: url(../assets/images/slider/slide-1.jpg)no-repeat; background-size: cover; border-radius: .5rem; background-position: center;">
+				   <div class="ps-lg-12 py-lg-12 col-xxl-5 col-md-7 py-17 px-8 text-xs-center">
+					   <span class="badge text-bg-warning">Control</span>
+					   <h2 class="text-dark display-5 fw-bold mt-4">Órdenes </h2>
+					   <p class="lead">Observa, edita y elimina las órdenes de los usuarios que se te han asignado</p>
+					   <a href="ordeneslista.html" class="btn btn-dark mt-3">Mostrar ahora<i class="feather-icon icon-arrow-right ms-1"></i></a>
+				   </div>
+			   </div>
+			   <div class=" "
+					style="background: url(../assets/images/slider/slider-2.jpg)no-repeat; background-size: cover; border-radius: .5rem; background-position: center;">
+				   <div class="ps-lg-12 py-lg-9 col-xxl-7 col-md-10 py-14 px-8 py-md-7 text-xs-center">
+					   <span class="badge text-bg-warning">Gestión</span>
+					   <h2 class="text-dark display-5 fw-bold mt-4">Gestiona hasta <span class="text-primary">100 </span> usuarios <br>y<span class="text-primary"> trackealos</span> a todos</h2> </h2>
+					   <p class="lead">Mira la información y gestiona a los usuarios que se te han asignado, junto con las órdenes que les pertenecen</p>
+					   <a href="usuariosAsignados.html" class="btn btn-dark mt-3">Mostrar ahora <i class="feather-icon icon-arrow-right ms-1"></i></a>
+				   </div>
+			   </div>
+		   </div>
+	   </section>
+
+		<!-- ÓRDENES RECIENTES-->
+	   <section class="mb-lg-14 mb-8">
+		   <div class="container">
+			   <!-- FILTRO DE ÓRDENES RECIENTES-->
+			   <div class="row">
+				   <div class="col-12">
+					   <div class="mb-6 d-xl-flex justify-content-between align-items-center">
+						   <!-- heading -->
+						   <div class="mb-5 mb-xl-0">
+							   <h3 class="mb-0">Recientes</h3>
+							   <p class="mb-0">Mira las ordenes de acuerdo a su estado</p>
+						   </div>
+						   <div>
+							   <!-- nav -->
+							   <nav>
+								   <ul class="nav nav-pills nav-scroll border-bottom-0 gap-1" id="nav-tab" role="tablist">
+									   <!-- nav item -->
+									   <li class="nav-item">
+										   <!-- nav link -->
+										   <a
+												   href="#"
+												   class="nav-link active"
+												   id="nav-fruitsandveg-tab"
+												   data-bs-toggle="tab"
+												   data-bs-target="#nav-fruitsandveg"
+												   role="tab"
+												   aria-controls="nav-fruitsandveg"
+												   aria-selected="true">
+											   Todos
+										   </a>
+									   </li>
+									   <!-- nav item -->
+
+									   <li class="nav-item">
+										   <!-- nav link -->
+										   <a
+												   href="#"
+												   class="nav-link"
+												   id="nav-snackMunchies-tab"
+												   data-bs-toggle="tab"
+												   data-bs-target="#nav-snackMunchies"
+												   role="tab"
+												   aria-controls="nav-snackMunchies"
+												   aria-selected="false">
+											   Sin asignar
+										   </a>
+									   </li>
+									   <!-- nav item -->
+									   <li class="nav-item">
+										   <!-- nav link -->
+										   <a href="#" class="nav-link" id="nav-bakery-tab" data-bs-toggle="tab" data-bs-target="#nav-bakery" role="tab" aria-controls="nav-bakery" aria-selected="false">
+											   Pendiente
+										   </a>
+									   </li>
+									   <!-- nav item -->
+									   <li class="nav-item">
+										   <!-- nav link -->
+										   <a href="#" class="nav-link" id="nav-tea-tab" data-bs-toggle="tab" data-bs-target="#nav-tea" role="tab" aria-controls="nav-tea" aria-selected="false">
+											   En proceso
+										   </a>
+									   </li>
+									   <!-- nav item -->
+									   <li class="nav-item">
+										   <!-- nav link -->
+										   <a href="#" class="nav-link" id="nav-drinks-tab" data-bs-toggle="tab" data-bs-target="#nav-drinks" role="tab" aria-controls="nav-drinks" aria-selected="false">
+											   Resueltas
+										   </a>
+									   </li>
+								   </ul>
+							   </nav>
+						   </div>
+					   </div>
+				   </div>
+			   </div>
+			   <!--ORDENES RECIENTES-->
+			   <div class="row">
+				   <div class="col-12">
+					   <!-- tab -->
+					   <div class="tab-content" id="nav-tabContent">
+						   <!-- filtro 1-->
+						   <div class="tab-pane fade show active" id="nav-fruitsandveg" role="tabpanel" aria-labelledby="nav-fruitsandveg-tab" tabindex="0">
+							   <!-- row -->
+							   <div class="row row-cols-2 row-cols-xl-5 row-cols-md-3 g-4">
+								   <!-- ORDEN 1-->
+								   <div class="col">
+									   <!-- card -->
+									   <div class="card card-product-v2 h-100">
+										   <div class="card-body position-relative">
+											   <!-- badge -->
+											   <div class="text-center position-relative">
+
+												   <!-- img -->
+												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <!-- action btn -->
+												   <div class="product-action-btn">
+													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+												   </div>
+											   </div>
+											   <!-- title -->
+											   <h2 class="fs-6"><a href="#!" class="text-inherit text-decoration-none">Orden: #12554</a></h2>
+
+											   <!-- price -->
+											   <div class="d-flex justify-content-between align-items-center mt-3">
+												   <div>
+													   <span class="text-primary">S/. 135.00</span>
+												   </div>
+												   <div><span class="text-uppercase small text-primary">En proceso</span></div>
+											   </div>
+
+										   </div>
+										   <!-- hidden class for hover -->
+										   <div class="product-content-fade border-info" style="margin-bottom: -10px"></div>
+									   </div>
+								   </div>
+								   <!-- ORDEN 1-->
+								   <div class="col">
+									   <!-- card -->
+									   <div class="card card-product-v2 h-100">
+										   <div class="card-body position-relative">
+											   <!-- badge -->
+											   <div class="text-center position-relative">
+
+												   <!-- img -->
+												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <!-- action btn -->
+												   <div class="product-action-btn">
+													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+												   </div>
+											   </div>
+											   <!-- title -->
+											   <h2 class="fs-6"><a href="#!" class="text-inherit text-decoration-none">Orden: #12554</a></h2>
+
+											   <!-- price -->
+											   <div class="d-flex justify-content-between align-items-center mt-3">
+												   <div>
+													   <span class="text-primary">S/. 135.00</span>
+												   </div>
+												   <div><span class="text-uppercase small text-primary">En proceso</span></div>
+											   </div>
+
+										   </div>
+										   <!-- hidden class for hover -->
+										   <div class="product-content-fade border-info" style="margin-bottom: -10px"></div>
+									   </div>
+								   </div>
+								   <!-- ORDEN 1-->
+								   <div class="col">
+									   <!-- card -->
+									   <div class="card card-product-v2 h-100">
+										   <div class="card-body position-relative">
+											   <!-- badge -->
+											   <div class="text-center position-relative">
+
+												   <!-- img -->
+												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <!-- action btn -->
+												   <div class="product-action-btn">
+													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+												   </div>
+											   </div>
+											   <!-- title -->
+											   <h2 class="fs-6"><a href="#!" class="text-inherit text-decoration-none">Orden: #12554</a></h2>
+
+											   <!-- price -->
+											   <div class="d-flex justify-content-between align-items-center mt-3">
+												   <div>
+													   <span class="text-primary">S/. 135.00</span>
+												   </div>
+												   <div><span class="text-uppercase small text-primary">En proceso</span></div>
+											   </div>
+
+										   </div>
+										   <!-- hidden class for hover -->
+										   <div class="product-content-fade border-info" style="margin-bottom: -10px"></div>
+									   </div>
+								   </div>
+								   <!-- ORDEN 1-->
+								   <div class="col">
+									   <!-- card -->
+									   <div class="card card-product-v2 h-100">
+										   <div class="card-body position-relative">
+											   <!-- badge -->
+											   <div class="text-center position-relative">
+
+												   <!-- img -->
+												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <!-- action btn -->
+												   <div class="product-action-btn">
+													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+												   </div>
+											   </div>
+											   <!-- title -->
+											   <h2 class="fs-6"><a href="#!" class="text-inherit text-decoration-none">Orden: #12554</a></h2>
+
+											   <!-- price -->
+											   <div class="d-flex justify-content-between align-items-center mt-3">
+												   <div>
+													   <span class="text-primary">S/. 135.00</span>
+												   </div>
+												   <div><span class="text-uppercase small text-primary">En proceso</span></div>
+											   </div>
+
+										   </div>
+										   <!-- hidden class for hover -->
+										   <div class="product-content-fade border-info" style="margin-bottom: -10px"></div>
+									   </div>
+								   </div>
+								   <!-- ORDEN 1-->
+								   <div class="col">
+									   <!-- card -->
+									   <div class="card card-product-v2 h-100">
+										   <div class="card-body position-relative">
+											   <!-- badge -->
+											   <div class="text-center position-relative">
+
+												   <!-- img -->
+												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <!-- action btn -->
+												   <div class="product-action-btn">
+													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+												   </div>
+											   </div>
+											   <!-- title -->
+											   <h2 class="fs-6"><a href="#!" class="text-inherit text-decoration-none">Orden: #12554</a></h2>
+
+											   <!-- price -->
+											   <div class="d-flex justify-content-between align-items-center mt-3">
+												   <div>
+													   <span class="text-primary">S/. 135.00</span>
+												   </div>
+												   <div><span class="text-uppercase small text-primary">En proceso</span></div>
+											   </div>
+
+										   </div>
+										   <!-- hidden class for hover -->
+										   <div class="product-content-fade border-info" style="margin-bottom: -10px"></div>
+									   </div>
+								   </div>
+							   </div>
+						   </div>
+						   <!-- filtro 2-->
+						   <div class="tab-pane fade show active" id="nav-snackMunchies" role="tabpanel" aria-labelledby="nav-snackMunchies-tab" tabindex="0">
+							   <!-- row -->
+							   <div class="row row-cols-2 row-cols-xl-5 row-cols-md-3 g-4">
+								   <!-- ORDEN 1-->
+								   <div class="col">
+									   <!-- card -->
+									   <div class="card card-product-v2 h-100">
+										   <div class="card-body position-relative">
+											   <!-- badge -->
+											   <div class="text-center position-relative">
+
+												   <!-- img -->
+												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <!-- action btn -->
+												   <div class="product-action-btn">
+													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+												   </div>
+											   </div>
+											   <!-- title -->
+											   <h2 class="fs-6"><a href="#!" class="text-inherit text-decoration-none">Orden: #12554</a></h2>
+
+											   <!-- price -->
+											   <div class="d-flex justify-content-between align-items-center mt-3">
+												   <div>
+													   <span class="text-primary">S/. 135.00</span>
+												   </div>
+												   <div><span class="text-uppercase small text-danger">Sin asignar</span></div>
+											   </div>
+
+										   </div>
+										   <!-- hidden class for hover -->
+										   <div class="product-content-fade border-info" style="margin-bottom: -10px"></div>
+									   </div>
+								   </div>
+								   <!-- ORDEN 1-->
+								   <div class="col">
+									   <!-- card -->
+									   <div class="card card-product-v2 h-100">
+										   <div class="card-body position-relative">
+											   <!-- badge -->
+											   <div class="text-center position-relative">
+
+												   <!-- img -->
+												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <!-- action btn -->
+												   <div class="product-action-btn">
+													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+												   </div>
+											   </div>
+											   <!-- title -->
+											   <h2 class="fs-6"><a href="#!" class="text-inherit text-decoration-none">Orden: #12554</a></h2>
+
+											   <!-- price -->
+											   <div class="d-flex justify-content-between align-items-center mt-3">
+												   <div>
+													   <span class="text-primary">S/. 135.00</span>
+												   </div>
+												   <div><span class="text-uppercase small text-danger">Sin asignar</span></div>
+											   </div>
+
+										   </div>
+										   <!-- hidden class for hover -->
+										   <div class="product-content-fade border-info" style="margin-bottom: -10px"></div>
+									   </div>
+								   </div>
+								   <!-- ORDEN 1-->
+								   <div class="col">
+									   <!-- card -->
+									   <div class="card card-product-v2 h-100">
+										   <div class="card-body position-relative">
+											   <!-- badge -->
+											   <div class="text-center position-relative">
+
+												   <!-- img -->
+												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <!-- action btn -->
+												   <div class="product-action-btn">
+													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+												   </div>
+											   </div>
+											   <!-- title -->
+											   <h2 class="fs-6"><a href="#!" class="text-inherit text-decoration-none">Orden: #12554</a></h2>
+
+											   <!-- price -->
+											   <div class="d-flex justify-content-between align-items-center mt-3">
+												   <div>
+													   <span class="text-primary">S/. 135.00</span>
+												   </div>
+												   <div><span class="text-uppercase small text-danger">Sin asignar</span></div>
+											   </div>
+
+										   </div>
+										   <!-- hidden class for hover -->
+										   <div class="product-content-fade border-info" style="margin-bottom: -10px"></div>
+									   </div>
+								   </div>
+								   <!-- ORDEN 1-->
+								   <div class="col">
+									   <!-- card -->
+									   <div class="card card-product-v2 h-100">
+										   <div class="card-body position-relative">
+											   <!-- badge -->
+											   <div class="text-center position-relative">
+
+												   <!-- img -->
+												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <!-- action btn -->
+												   <div class="product-action-btn">
+													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+												   </div>
+											   </div>
+											   <!-- title -->
+											   <h2 class="fs-6"><a href="#!" class="text-inherit text-decoration-none">Orden: #12554</a></h2>
+
+											   <!-- price -->
+											   <div class="d-flex justify-content-between align-items-center mt-3">
+												   <div>
+													   <span class="text-primary">S/. 135.00</span>
+												   </div>
+												   <div><span class="text-uppercase small text-danger">Sin asignar</span></div>
+											   </div>
+
+										   </div>
+										   <!-- hidden class for hover -->
+										   <div class="product-content-fade border-info" style="margin-bottom: -10px"></div>
+									   </div>
+								   </div>
+								   <!-- ORDEN 1-->
+								   <div class="col">
+									   <!-- card -->
+									   <div class="card card-product-v2 h-100">
+										   <div class="card-body position-relative">
+											   <!-- badge -->
+											   <div class="text-center position-relative">
+
+												   <!-- img -->
+												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <!-- action btn -->
+												   <div class="product-action-btn">
+													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+												   </div>
+											   </div>
+											   <!-- title -->
+											   <h2 class="fs-6"><a href="#!" class="text-inherit text-decoration-none">Orden: #12554</a></h2>
+
+											   <!-- price -->
+											   <div class="d-flex justify-content-between align-items-center mt-3">
+												   <div>
+													   <span class="text-primary">S/. 135.00</span>
+												   </div>
+												   <div><span class="text-uppercase small text-danger">Sin asignar</span></div>
+											   </div>
+
+										   </div>
+										   <!-- hidden class for hover -->
+										   <div class="product-content-fade border-info" style="margin-bottom: -10px"></div>
+									   </div>
+								   </div>
+							   </div>
+						   </div>
+
+					   </div>
+				   </div>
+			   </div>
+
+		   </div>
+	   </section>
+
+
+
+
+
+   </main>
+
+
+
+	</div>
+
+
+   	<!-- LIBRERIAS -->
+	<div>
+		<!-- Javascript-->
+		<!-- Libs JS -->
+		<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+		<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+
+		<!-- Theme JS -->
+		<script src="../assets/js/theme.min.js"></script>
+
+		<script src="../assets/js/vendors/jquery.min.js"></script>
+		<script src="../assets/libs/slick-carousel/slick/slick.min.js"></script>
+		<script src="../assets/js/vendors/slick-slider.js"></script>
+		<script src="../assets/libs/tiny-slider/dist/min/tiny-slider.js"></script>
+		<script src="../assets/js/vendors/tns-slider.js"></script>
+		<script src="../assets/js/vendors/zoom.js"></script>
+
+		<script src="../assets/js/vendors/countdown.js"></script>
+		<script src="../assets/libs/sticky-sidebar/dist/sticky-sidebar.min.js"></script>
+		<script src="../assets/js/vendors/sticky.js"></script>
+		<script src="../assets/js/vendors/modal.js"></script>
+	</div>
+
+   </body>
+</html>
