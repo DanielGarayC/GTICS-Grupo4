@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta content="Codescandy" name="author" />
+    <title>Productos</title>
+
+    <link href="/assets/libs/slick-carousel/slick/slick.css" rel="stylesheet" />
+    <link href="/assets/libs/slick-carousel/slick/slick-theme.css" rel="stylesheet" />
+    <link href="/assets/libs/tiny-slider/dist/tiny-slider.css" rel="stylesheet" />
+
+    <!-- Favicon icon-->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon/favicon.ico" />
+
+    <!-- Libs CSS -->
+    <link href="/assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="/assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet" />
+    <link href="/assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet" />
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="/assets/css/theme.min.css" />
+
+    <style>
+        .banner-small {
+            padding: 20px; /* Reduce el padding para hacer el banner más pequeño */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .banner-content h3 {
+            font-size: 1.5rem; /* Ajusta el tamaño del texto del título */
+        }
+
+        .banner-content p {
+            font-size: 1rem; /* Ajusta el tamaño del texto del párrafo */
+        }
+
+        .banner-content .btn {
+            padding: 5px 15px; /* Reduce el tamaño del botón */
+            font-size: 0.875rem; /* Ajusta el tamaño de la fuente en el botón */
+        }
+
+    </style>
+</head>
+
+<body>
+<!-- navbar -->
+<div class="border-bottom">
+    <div class="py-5">
+        <div class="container">
+            <div class="row w-100 align-items-center gx-lg-2 gx-0">
+                <div class="col-xxl-2 col-lg-3 col-md-6 col-5">
+                    <a class="navbar-brand d-none d-lg-block" href="../index.html">
+                        <img src="/assets/images/logo/logoGTICS.jpeg" alt="" width="200" height="auto" />
+                    </a>
+                    <div class="d-flex justify-content-between w-100 d-lg-none">
+                        <a class="navbar-brand" href="">
+                            <img src="/assets/images/logo/logoGTICS.jpeg" alt="eCommerce HTML Template" width="100" height="auto" />
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xxl-5 col-lg-5 d-none d-lg-block">
+                    <form action="#">
+                        <div class="input-group">
+                            <input class="form-control rounded" type="search" placeholder="Búsqueda de productos" />
+                            <span class="input-group-append">
+                              <button class="btn bg-white border border-start-0 ms-n10 rounded-0 rounded-end" type="button">
+                                 <svg
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         width="16"
+                                         height="16"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="feather feather-search">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                 </svg>
+                              </button>
+                           </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-2 col-xxl-3 d-none d-lg-block">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-outline-gray-400 text-muted" data-bs-toggle="modal" data-bs-target="#locationModal">
+                        <i class="feather-icon icon-map-pin me-2"></i>
+                        Ubicación
+                    </button>
+                </div>
+                <div class="col-lg-2 col-xxl-2 text-end col-md-6 col-7 d-flex align-items-center justify-content-end">
+                    <div class="list-inline mb-0">
+                        <ul class="list-inline">
+                            <!-- Shopcart icon -->
+                            <li class="list-inline-item me-5">
+                                <a class="text-muted position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" href="#offcanvasExample" role="button" aria-controls="offcanvasRight">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag">
+                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                    </svg>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+											1
+											<span class="visually-hidden">unread messages</span>
+										</span>
+                                </a>
+                            </li>
+                            <!-- Notifications icon -->
+                            <li class="list-inline-item dropdown">
+                                <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-bell fs-5"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+										2
+										<span class="visually-hidden">Mensajes sin leer</span>
+									</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+                                    <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="mb-1">Notificaciones</h5>
+                                            <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
+                                        </div>
+                                        <a href="#!" class="text-muted">
+                                            <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+                                                    <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"/>
+                                                    <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z"/>
+                                                </svg>
+                                            </a>
+                                        </a>
+                                    </div>
+                                    <ul class="list-group list-group-flush notification-list-scroll fs-6">
+                                        <li class="list-group-item px-5 py-4 list-group-item-action">
+                                            <a href="#!" class="text-muted">
+                                                <div class="d-flex">
+                                                    <div class="ms-4">
+                                                        <p class="mb-1">
+                                                            <span class="text-dark">Título de notificación 1</span>
+                                                            Descripción notificación 1
+                                                        </p>
+                                                        <span>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+															</svg>
+															<small class="ms-2">Hace 1 minuto</small>
+														</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <!-- Más notificaciones -->
+                                    </ul>
+                                    <div class="border-top px-5 py-4 text-center">
+                                        <a href="#!">Ver todas</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- Avatar -->
+                            <li class="list-inline-item dropdown">
+                                <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="/assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end p-0">
+                                    <div class="lh-1 px-5 py-4 border-bottom">
+                                        <h5 class="mb-1 h6">Nombre Apellido</h5>
+                                        <small>rol en la página</small>
+                                    </div>
+                                    <div class="border-top px-5 py-3">
+                                        <a href="#">Mi perfil</a>
+                                    </div>
+                                    <div class="border-top px-5 py-3">
+                                        <a href="#">Cerrar sesión</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light navbar-default py-0 pb-lg-4" aria-label="Offcanvas navbar large">
+        <div class="container">
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="navbar-default" aria-labelledby="navbar-defaultLabel">
+                <div class="offcanvas-header pb-1">
+                    <a href="./index.html"><img src="/assets/images/logo/logo.svg" alt="eCommerce HTML Template" /></a>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="d-block d-lg-none mb-4">
+                        <form action="#">
+                            <div class="input-group">
+                                <input class="form-control rounded" type="search" placeholder="Search for products" />
+                                <span class="input-group-append">
+                                 <button class="btn bg-white border border-start-0 ms-n10 rounded-0 rounded-end" type="button">
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="feather feather-search">
+                                       <circle cx="11" cy="11" r="8"></circle>
+                                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                 </button>
+                              </span>
+                            </div>
+                        </form>
+                        <div class="mt-2">
+                            <button type="button" class="btn btn-outline-gray-400 text-muted w-100" data-bs-toggle="modal" data-bs-target="#locationModal">
+                                <i class="feather-icon icon-map-pin me-2"></i>
+                                Pick Location
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="dropdown me-3 d-none d-lg-block">
+                        <button class="btn btn-primary px-6" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                           <span class="me-1">
+                              <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="feather feather-grid">
+                                 <rect x="3" y="3" width="7" height="7"></rect>
+                                 <rect x="14" y="3" width="7" height="7"></rect>
+                                 <rect x="14" y="14" width="7" height="7"></rect>
+                                 <rect x="3" y="14" width="7" height="7"></rect>
+                              </svg>
+                           </span>
+                            Todas las categorías
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="../pages/shop-grid.html">Salud y Belleza</a></li>
+                            <li><a class="dropdown-item" href="../pages/shop-grid.html">Electrónica y tecnología</a></li>
+                            <li><a class="dropdown-item" href="../pages/shop-grid.html">Moda y ropa</a></li>
+                            <li><a class="dropdown-item" href="../pages/shop-grid.html">Hogar y cocina</a></li>
+                            <li><a class="dropdown-item" href="../pages/shop-grid.html">Arte y manualidades</a></li>
+                            <li><a class="dropdown-item" href="../pages/shop-grid.html">Deportes y ocio</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="navbar-nav align-items-center">
+                            <li class="nav-item dropdown w-100 w-lg-auto">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Inicio</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../pages/store-list.html">Store List</a></li>
+                                    <li><a class="dropdown-item" href="../pages/store-grid.html">Store Grid</a></li>
+                                    <li><a class="dropdown-item" href="../pages/store-single.html">Store Single</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown w-100 w-lg-auto">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Productos</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../pages/store-list.html">Store List</a></li>
+                                    <li><a class="dropdown-item" href="../pages/store-grid.html">Store Grid</a></li>
+                                    <li><a class="dropdown-item" href="../pages/store-single.html">Store Single</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown w-100 w-lg-auto">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mis compras</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../pages/store-list.html">Store List</a></li>
+                                    <li><a class="dropdown-item" href="../pages/store-grid.html">Store Grid</a></li>
+                                    <li><a class="dropdown-item" href="../pages/store-single.html">Store Single</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown w-100 w-lg-auto">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mensajería</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../pages/store-list.html">Store List</a></li>
+                                    <li><a class="dropdown-item" href="../pages/store-grid.html">Store Grid</a></li>
+                                    <li><a class="dropdown-item" href="../pages/store-single.html">Store Single</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown w-100 w-lg-auto">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Soporte Técnico</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../pages/store-list.html">Store List</a></li>
+                                    <li><a class="dropdown-item" href="../pages/store-grid.html">Store Grid</a></li>
+                                    <li><a class="dropdown-item" href="../pages/store-single.html">Store Single</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-4">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fs-3 fw-bold" id="userModalLabel">Sign Up</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter Your Name" required />
+                        <div class="invalid-feedback">Please enter name.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter Email address" required />
+                        <div class="invalid-feedback">Please enter email.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Enter Password" required />
+                        <div class="invalid-feedback">Please enter password.</div>
+                        <small class="form-text">
+                            By Signup, you agree to our
+                            <a href="#!">Terms of Service</a>
+                            &
+                            <a href="#!">Privacy Policy</a>
+                        </small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" type="submit">Sign Up</button>
+                </form>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                Already have an account?
+                <a href="#">Sign in</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Shop Cart -->
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header border-bottom">
+        <div class="text-start">
+            <h5 id="offcanvasRightLabel" class="mb-0 fs-4">Carrito de Compras</h5>
+        </div>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div>
+            <!-- alert -->
+            <div class="alert alert-danger p-2" role="alert">
+                You’ve got FREE delivery. Start
+                <a href="#!" class="alert-link">checkout now!</a>
+            </div>
+            <ul class="list-group list-group-flush">
+                <!-- list group -->
+                <li class="list-group-item py-3 ps-0 border-top">
+                    <!-- row -->
+                    <div class="row align-items-center">
+                        <div class="col-6 col-md-6 col-lg-7">
+                            <div class="d-flex">
+                                <img src="/assets/images/products/laptop.jpg" alt="" class="icon-shape icon-xxl" />
+                                <div class="ms-3">
+                                    <!-- title -->
+                                    <a href="/pages/shop-single.html" class="text-inherit">
+                                        <h6 class="mb-0">Ropa de bebe 30 x 50 cm </h6>
+                                    </a>
+                                    <span><small class="text-muted">.98 / lb</small></span>
+                                    <!-- text -->
+                                    <div class="mt-2 small lh-1">
+                                        <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                            <span class="text-muted">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- input group -->
+                        <div class="col-4 col-md-3 col-lg-3">
+                            <!-- input -->
+                            <!-- input -->
+                            <div class="input-group input-spinner">
+                                <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                            </div>
+                        </div>
+                        <!-- price -->
+                        <div class="col-2 text-lg-end text-start text-md-end col-md-2">
+                            <span class="fw-bold">$5.00</span>
+                        </div>
+                    </div>
+                </li>
+                <!-- list group -->
+                <li class="list-group-item py-3 ps-0">
+                    <!-- row -->
+                    <div class="row align-items-center">
+                        <div class="col-6 col-md-6 col-lg-7">
+                            <div class="d-flex">
+                                <img src="/assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                <div class="ms-3">
+                                    <a href="../pages/shop-single.html" class="text-inherit">
+                                        <h6 class="mb-0">NutriChoice Digestive</h6>
+                                    </a>
+                                    <span><small class="text-muted">250g</small></span>
+                                    <!-- text -->
+                                    <div class="mt-2 small lh-1">
+                                        <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                            <span class="text-muted">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- input group -->
+                        <div class="col-4 col-md-3 col-lg-3">
+                            <!-- input -->
+                            <!-- input -->
+                            <div class="input-group input-spinner">
+                                <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                            </div>
+                        </div>
+                        <!-- price -->
+                        <div class="col-2 text-lg-end text-start text-md-end col-md-2">
+                            <span class="fw-bold text-danger">$20.00</span>
+                            <div class="text-decoration-line-through text-muted small">$26.00</div>
+                        </div>
+                    </div>
+                </li>
+                <!-- list group -->
+                <li class="list-group-item py-3 ps-0">
+                    <!-- row -->
+                    <div class="row align-items-center">
+                        <div class="col-6 col-md-6 col-lg-7">
+                            <div class="d-flex">
+                                <img src="/assets/images/products/laptop.jpg" alt="" class="icon-shape icon-xxl" />
+                                <div class="ms-3">
+                                    <!-- title -->
+                                    <a href="../pages/shop-single.html" class="text-inherit">
+                                        <h6 class="mb-0">Cadbury 5 Star Chocolate</h6>
+                                    </a>
+                                    <span><small class="text-muted">1 kg</small></span>
+                                    <!-- text -->
+                                    <div class="mt-2 small lh-1">
+                                        <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                            <span class="text-muted">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- input group -->
+                        <div class="col-4 col-md-3 col-lg-3">
+                            <!-- input -->
+                            <!-- input -->
+                            <div class="input-group input-spinner">
+                                <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                            </div>
+                        </div>
+                        <!-- price -->
+                        <div class="col-2 text-lg-end text-start text-md-end col-md-2">
+                            <span class="fw-bold">$15.00</span>
+                            <div class="text-decoration-line-through text-muted small">$20.00</div>
+                        </div>
+                    </div>
+                </li>
+                <!-- list group -->
+                <li class="list-group-item py-3 ps-0">
+                    <!-- row -->
+                    <div class="row align-items-center">
+                        <div class="col-6 col-md-6 col-lg-7">
+                            <div class="d-flex">
+                                <img src="/assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                <div class="ms-3">
+                                    <!-- title -->
+                                    <!-- title -->
+                                    <a href="../pages/shop-single.html" class="text-inherit">
+                                        <h6 class="mb-0">Onion Flavour Potato</h6>
+                                    </a>
+                                    <span><small class="text-muted">250g</small></span>
+                                    <!-- text -->
+                                    <div class="mt-2 small lh-1">
+                                        <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                            <span class="text-muted">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- input group -->
+                        <div class="col-4 col-md-3 col-lg-3">
+                            <!-- input -->
+                            <!-- input -->
+                            <div class="input-group input-spinner">
+                                <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                            </div>
+                        </div>
+                        <!-- price -->
+                        <div class="col-2 text-lg-end text-start text-md-end col-md-2">
+                            <span class="fw-bold">$15.00</span>
+                            <div class="text-decoration-line-through text-muted small">$20.00</div>
+                        </div>
+                    </div>
+                </li>
+                <!-- list group -->
+                <li class="list-group-item py-3 ps-0 border-bottom">
+                    <!-- row -->
+                    <div class="row align-items-center">
+                        <div class="col-6 col-md-6 col-lg-7">
+                            <div class="d-flex">
+                                <img src="/assets/images/products/laptop.jpg" alt="" class="icon-shape icon-xxl" />
+                                <div class="ms-3">
+                                    <!-- title -->
+                                    <a href="../pages/shop-single.html" class="text-inherit">
+                                        <h6 class="mb-0">Salted Instant Popcorn</h6>
+                                    </a>
+                                    <span><small class="text-muted">100g</small></span>
+                                    <!-- text -->
+                                    <div class="mt-2 small lh-1">
+                                        <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                            <span class="text-muted">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- input group -->
+                        <div class="col-4 col-md-3 col-lg-3">
+                            <!-- input -->
+                            <!-- input -->
+                            <div class="input-group input-spinner">
+                                <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                            </div>
+                        </div>
+                        <!-- price -->
+                        <div class="col-2 text-lg-end text-start text-md-end col-md-2">
+                            <span class="fw-bold">$15.00</span>
+                            <div class="text-decoration-line-through text-muted small">$25.00</div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!-- btn -->
+            <div class="d-flex justify-content-between mt-4">
+                <a href="#!" class="btn btn-primary">Continue Shopping</a>
+                <a href="#!" class="btn btn-dark">Update Cart</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-6">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="mb-1" id="locationModalLabel">Choose your Delivery Location</h5>
+                        <p class="mb-0 small">Enter your address and we will specify the offer you area.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="my-5">
+                    <input type="search" class="form-control" placeholder="Search your area" />
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">Select Location</h6>
+                    <a href="#" class="btn btn-outline-gray-400 text-muted btn-sm">Clear All</a>
+                </div>
+                <div>
+                    <div data-simplebar style="height: 300px">
+                        <div class="list-group list-group-flush">
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action active">
+                                <span>Alabama</span>
+                                <span>Min:$20</span>
+                            </a>
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                <span>Alaska</span>
+                                <span>Min:$30</span>
+                            </a>
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                <span>Arizona</span>
+                                <span>Min:$50</span>
+                            </a>
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                <span>California</span>
+                                <span>Min:$29</span>
+                            </a>
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                <span>Colorado</span>
+                                <span>Min:$80</span>
+                            </a>
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                <span>Florida</span>
+                                <span>Min:$90</span>
+                            </a>
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                <span>Arizona</span>
+                                <span>Min:$50</span>
+                            </a>
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                <span>California</span>
+                                <span>Min:$29</span>
+                            </a>
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                <span>Colorado</span>
+                                <span>Min:$80</span>
+                            </a>
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                <span>Florida</span>
+                                <span>Min:$90</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/vendors/validation.js"></script>
+
+<main>
+    <!-- Category Section Start-->
+    <section class="mb-lg-6 mt-lg-6 my-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 mb-6">
+                    <h3 class="mb-0" style="margin-top: -10px;">Categorías</h3>
+                </div>
+            </div>
+            <div class="category-slider">
+                <div class="item">
+                    <a href="../pages/shop-grid.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-3" style="max-width: 150px;"> <!-- Ajustar el ancho de la card -->
+                            <div class="card-body text-center py-4"> <!-- Reducir el padding -->
+                                <img src="/assets/images/category/saludBelleza.jpg" alt="" class="mb-2 img-fluid" style="max-height: 80px;" /> <!-- Reducir el tamaño de la imagen -->
+                                <div class="text-truncate" style="font-size: 0.85rem;">Salud y belleza</div> <!-- Reducir el tamaño de texto -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="item">
+                    <a href="../pages/shop-grid.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-3" style="max-width: 150px;"> <!-- Ajustar el ancho de la card -->
+                            <div class="card-body text-center py-4"> <!-- Reducir el padding -->
+                                <img src="/assets/images/products/laptop.jpg" alt="" class="mb-2 img-fluid" style="max-height: 80px;" /> <!-- Reducir el tamaño de la imagen -->
+                                <div class="text-truncate" style="font-size: 0.85rem;">Electrónica y tecnología</div> <!-- Reducir el tamaño del texto -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a href="../pages/shop-grid.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-3" style="max-width: 150px;"> <!-- Ajustar el ancho de la card -->
+                            <div class="card-body text-center py-4"> <!-- Reducir el padding -->
+                                <img src="/assets/images/category/modaRopa.jpg" alt="" class="mb-2 img-fluid" style="max-height: 80px;" /> <!-- Reducir el tamaño de la imagen -->
+                                <div class="text-truncate" style="font-size: 0.85rem;">Moda y ropa</div> <!-- Reducir el tamaño del texto -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a href="../pages/shop-grid.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-3" style="max-width: 150px;"> <!-- Ajustar el ancho de la card -->
+                            <div class="card-body text-center py-4"> <!-- Reducir el padding -->
+                                <img src="/assets/images/category/hogarCocina.jpg" alt="" class="mb-2 img-fluid" style="max-height: 80px;" /> <!-- Reducir el tamaño de la imagen -->
+                                <div class="text-truncate" style="font-size: 0.85rem;">Hogar y cocina</div> <!-- Reducir el tamaño del texto -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a href="../pages/shop-grid.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-3" style="max-width: 150px;"> <!-- Ajustar el ancho de la card -->
+                            <div class="card-body text-center py-4"> <!-- Reducir el padding -->
+                                <img src="/assets/images/category/arteManualidades.jpg" alt="" class="mb-2 img-fluid" style="max-height: 80px;" /> <!-- Reducir el tamaño de la imagen -->
+                                <div class="text-truncate" style="font-size: 0.85rem;">Arte y manualidades</div> <!-- Reducir el tamaño del texto -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a href="../pages/shop-grid.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-3" style="max-width: 150px;"> <!-- Ajustar el ancho de la card -->
+                            <div class="card-body text-center py-4"> <!-- Reducir el padding -->
+                                <img src="/assets/images/category/deportesOcio.jpg" alt="" class="mb-2 img-fluid" style="max-height: 80px;" /> <!-- Reducir el tamaño de la imagen -->
+                                <div class="text-truncate" style="font-size: 0.85rem;">Deportes y ocio</div> <!-- Reducir el tamaño del texto -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- Category Section End-->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-6 mb-3 mb-lg-0">
+                    <div>
+                        <div class="banner-small rounded" style="background: url(/assets/images/banner/hogarBanner.jpg) no-repeat;">
+                            <div class="banner-content">
+                                <h3 class="fw-bold mb-1">¡Descubre lo nuevo para tu hogar!</h3>
+                                <a href="#!" class="btn btn-dark">Ir ahora</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div>
+                        <div class="banner-small rounded" style="background: url(/assets/images/banner/modaBanner.jpg) no-repeat;">
+                            <div class="banner-content">
+                                <h3 class="fw-bold mb-1">¡Lo último en tendencia de moda!</h3>
+                                <a href="#!" class="btn btn-dark">Revisa aquí</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="my-lg-8 my-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 mb-6">
+                    <h3 class="mb-0">Productos que te podrían gustar</h3>
+                </div>
+            </div>
+
+            <!-- Slick slider container -->
+            <div class="product-slider">
+
+                <!-- Producto 1 -->
+                <div class="item">
+                    <a href="../pages/shop-single.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-4">
+                            <!-- Card Body with combined content -->
+                            <div class="card-body">
+                                <!-- Image and badge -->
+                                <div class="text-center position-relative">
+                                    <div class="position-absolute top-0 start-0">
+                                        <span class="badge bg-danger">Sale</span>
+                                    </div>
+                                    <a href="#!">
+                                        <img src="/assets/images/products/laptop.jpg" alt="" class="mb-3 img-fluid" />
+                                    </a>
+
+                                    <!-- Product actions (Quick View, Wishlist, Compare) -->
+                                    <div class="card-product-action">
+                                        <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista Rápida"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <!-- Product information -->
+                                <div class="text-small mb-1">
+                                    <a class="text-decoration-none text-muted"><small>Electrónica y tecnología</small></a>
+                                </div>
+                                <h2 class="fs-6">
+                                    <a href="../UsuarioFinal/info.html" class="text-inherit text-decoration-none">Laptop HP 13 pulgadas core i7</a>
+                                </h2>
+                                <div>
+                                    <small class="text-warning">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </small>
+                                    <span class="text-muted small">4.5(149)</span>
+                                </div>
+
+                                <!-- Pricing and Add to Cart -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div>
+                                        <span class="text-dark">S/. 3000</span>
+                                    </div>
+                                    <div>
+                                        <a href="#!" class="btn btn-primary btn-sm">
+                                            <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="feather feather-plus">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                            Añadir al carrito
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Producto 1 -->
+                <div class="item">
+                    <a href="../pages/shop-single.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-4">
+                            <!-- Card Body with combined content -->
+                            <div class="card-body">
+                                <!-- Image and badge -->
+                                <div class="text-center position-relative">
+                                    <div class="position-absolute top-0 start-0">
+                                        <span class="badge bg-danger">Sale</span>
+                                    </div>
+                                    <a href="#!">
+                                        <img src="/assets/images/products/laptop.jpg" alt="" class="mb-3 img-fluid" />
+                                    </a>
+
+                                    <!-- Product actions (Quick View, Wishlist, Compare) -->
+                                    <div class="card-product-action">
+                                        <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista Rápida"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <!-- Product information -->
+                                <div class="text-small mb-1">
+                                    <a class="text-decoration-none text-muted"><small>Electrónica y tecnología</small></a>
+                                </div>
+                                <h2 class="fs-6">
+                                    <a href="../UsuarioFinal/info.html" class="text-inherit text-decoration-none">Laptop HP 13 pulgadas core i7</a>
+                                </h2>
+                                <div>
+                                    <small class="text-warning">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </small>
+                                    <span class="text-muted small">4.5(149)</span>
+                                </div>
+
+                                <!-- Pricing and Add to Cart -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div>
+                                        <span class="text-dark">S/. 3000</span>
+                                    </div>
+                                    <div>
+                                        <a href="#!" class="btn btn-primary btn-sm">
+                                            <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="feather feather-plus">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                            Añadir al carrito
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Producto 1 -->
+                <div class="item">
+                    <a href="../pages/shop-single.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-4">
+                            <!-- Card Body with combined content -->
+                            <div class="card-body">
+                                <!-- Image and badge -->
+                                <div class="text-center position-relative">
+                                    <div class="position-absolute top-0 start-0">
+                                        <span class="badge bg-danger">Sale</span>
+                                    </div>
+                                    <a href="#!">
+                                        <img src="/assets/images/products/laptop.jpg" alt="" class="mb-3 img-fluid" />
+                                    </a>
+
+                                    <!-- Product actions (Quick View, Wishlist, Compare) -->
+                                    <div class="card-product-action">
+                                        <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista Rápida"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <!-- Product information -->
+                                <div class="text-small mb-1">
+                                    <a class="text-decoration-none text-muted"><small>Electrónica y tecnología</small></a>
+                                </div>
+                                <h2 class="fs-6">
+                                    <a href="../UsuarioFinal/info.html" class="text-inherit text-decoration-none">Laptop HP 13 pulgadas core i7</a>
+                                </h2>
+                                <div>
+                                    <small class="text-warning">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </small>
+                                    <span class="text-muted small">4.5(149)</span>
+                                </div>
+
+                                <!-- Pricing and Add to Cart -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div>
+                                        <span class="text-dark">S/. 3000</span>
+                                    </div>
+                                    <div>
+                                        <a href="#!" class="btn btn-primary btn-sm">
+                                            <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="feather feather-plus">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                            Añadir al carrito
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Producto 1 -->
+                <div class="item">
+                    <a href="../pages/shop-single.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-4">
+                            <!-- Card Body with combined content -->
+                            <div class="card-body">
+                                <!-- Image and badge -->
+                                <div class="text-center position-relative">
+                                    <div class="position-absolute top-0 start-0">
+                                        <span class="badge bg-danger">Sale</span>
+                                    </div>
+                                    <a href="#!">
+                                        <img src="/assets/images/products/laptop.jpg" alt="" class="mb-3 img-fluid" />
+                                    </a>
+
+                                    <!-- Product actions (Quick View, Wishlist, Compare) -->
+                                    <div class="card-product-action">
+                                        <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista Rápida"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <!-- Product information -->
+                                <div class="text-small mb-1">
+                                    <a class="text-decoration-none text-muted"><small>Electrónica y tecnología</small></a>
+                                </div>
+                                <h2 class="fs-6">
+                                    <a href="../UsuarioFinal/info.html" class="text-inherit text-decoration-none">Laptop HP 13 pulgadas core i7</a>
+                                </h2>
+                                <div>
+                                    <small class="text-warning">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </small>
+                                    <span class="text-muted small">4.5(149)</span>
+                                </div>
+
+                                <!-- Pricing and Add to Cart -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div>
+                                        <span class="text-dark">S/. 3000</span>
+                                    </div>
+                                    <div>
+                                        <a href="#!" class="btn btn-primary btn-sm">
+                                            <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="feather feather-plus">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                            Añadir al carrito
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Producto 1 -->
+                <div class="item">
+                    <a href="../pages/shop-single.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-4">
+                            <!-- Card Body with combined content -->
+                            <div class="card-body">
+                                <!-- Image and badge -->
+                                <div class="text-center position-relative">
+                                    <div class="position-absolute top-0 start-0">
+                                        <span class="badge bg-danger">Sale</span>
+                                    </div>
+                                    <a href="#!">
+                                        <img src="/assets/images/products/laptop.jpg" alt="" class="mb-3 img-fluid" />
+                                    </a>
+
+                                    <!-- Product actions (Quick View, Wishlist, Compare) -->
+                                    <div class="card-product-action">
+                                        <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista Rápida"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <!-- Product information -->
+                                <div class="text-small mb-1">
+                                    <a class="text-decoration-none text-muted"><small>Electrónica y tecnología</small></a>
+                                </div>
+                                <h2 class="fs-6">
+                                    <a href="../UsuarioFinal/info.html" class="text-inherit text-decoration-none">Laptop HP 13 pulgadas core i7</a>
+                                </h2>
+                                <div>
+                                    <small class="text-warning">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </small>
+                                    <span class="text-muted small">4.5(149)</span>
+                                </div>
+
+                                <!-- Pricing and Add to Cart -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div>
+                                        <span class="text-dark">S/. 3000</span>
+                                    </div>
+                                    <div>
+                                        <a href="#!" class="btn btn-primary btn-sm">
+                                            <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="feather feather-plus">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                            Añadir al carrito
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Producto 1 -->
+                <div class="item">
+                    <a href="../pages/shop-single.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-4">
+                            <!-- Card Body with combined content -->
+                            <div class="card-body">
+                                <!-- Image and badge -->
+                                <div class="text-center position-relative">
+                                    <div class="position-absolute top-0 start-0">
+                                        <span class="badge bg-danger">Sale</span>
+                                    </div>
+                                    <a href="#!">
+                                        <img src="/assets/images/products/laptop.jpg" alt="" class="mb-3 img-fluid" />
+                                    </a>
+
+                                    <!-- Product actions (Quick View, Wishlist, Compare) -->
+                                    <div class="card-product-action">
+                                        <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista Rápida"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <!-- Product information -->
+                                <div class="text-small mb-1">
+                                    <a class="text-decoration-none text-muted"><small>Electrónica y tecnología</small></a>
+                                </div>
+                                <h2 class="fs-6">
+                                    <a href="../UsuarioFinal/info.html" class="text-inherit text-decoration-none">Laptop HP 13 pulgadas core i7</a>
+                                </h2>
+                                <div>
+                                    <small class="text-warning">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </small>
+                                    <span class="text-muted small">4.5(149)</span>
+                                </div>
+
+                                <!-- Pricing and Add to Cart -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div>
+                                        <span class="text-dark">S/. 3000</span>
+                                    </div>
+                                    <div>
+                                        <a href="#!" class="btn btn-primary btn-sm">
+                                            <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="feather feather-plus">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                            Añadir al carrito
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Producto 1 -->
+                <div class="item">
+                    <a href="../pages/shop-single.html" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-4">
+                            <!-- Card Body with combined content -->
+                            <div class="card-body">
+                                <!-- Image and badge -->
+                                <div class="text-center position-relative">
+                                    <div class="position-absolute top-0 start-0">
+                                        <span class="badge bg-danger">Sale</span>
+                                    </div>
+                                    <a href="#!">
+                                        <img src="/assets/images/products/laptop.jpg" alt="" class="mb-3 img-fluid" />
+                                    </a>
+
+                                    <!-- Product actions (Quick View, Wishlist, Compare) -->
+                                    <div class="card-product-action">
+                                        <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista Rápida"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <!-- Product information -->
+                                <div class="text-small mb-1">
+                                    <a class="text-decoration-none text-muted"><small>Electrónica y tecnología</small></a>
+                                </div>
+                                <h2 class="fs-6">
+                                    <a href="../UsuarioFinal/info.html" class="text-inherit text-decoration-none">Laptop HP 13 pulgadas core i7</a>
+                                </h2>
+                                <div>
+                                    <small class="text-warning">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </small>
+                                    <span class="text-muted small">4.5(149)</span>
+                                </div>
+
+                                <!-- Pricing and Add to Cart -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div>
+                                        <span class="text-dark">S/. 3000</span>
+                                    </div>
+                                    <div>
+                                        <a href="#!" class="btn btn-primary btn-sm">
+                                            <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="feather feather-plus">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                            Añadir al carrito
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Modal -->
+<div class="modal fade" id="quickViewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-8">
+                <div class="position-absolute top-0 end-0 me-3 mt-3">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!-- img slide -->
+                        <div class="product productModal" id="productModal">
+                            <div class="zoom" onmousemove="zoom(event)" style="background-image: url(/assets/images/products/laptop.jpg)">
+                                <!-- img -->
+                                <img src="/assets/images/products/laptop.jpg" alt="" />
+                            </div>
+                            <div>
+                                <div class="zoom" onmousemove="zoom(event)" style="background-image: url(/assets/images/products/product-single-img-2.jpg)">
+                                    <!-- img -->
+                                    <img src="/assets/images/products/laptop.jpg" alt="" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="zoom" onmousemove="zoom(event)" style="background-image: url(/assets/images/products/laptop.jpg)">
+                                    <!-- img -->
+                                    <img src="/assets/images/products/laptop.jpg" alt="" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="zoom" onmousemove="zoom(event)" style="background-image: url(/assets/images/products/laptop.jpg)">
+                                    <!-- img -->
+                                    <img src="/assets/images/products/laptop.jpg" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- product tools -->
+                        <div class="product-tools">
+                            <div class="thumbnails row g-3" id="productModalThumbnails">
+                                <div class="col-3" class="tns-nav-active">
+                                    <div class="thumbnails-img">
+                                        <!-- img -->
+                                        <img src="/assets/images/products/laptop.jpg" alt="" />
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="thumbnails-img">
+                                        <!-- img -->
+                                        <img src="/assets/images/products/laptop.jpg" alt="" />
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="thumbnails-img">
+                                        <!-- img -->
+                                        <img src="/assets/images/products/laptop.jpg" alt="" />
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="thumbnails-img">
+                                        <!-- img -->
+                                        <img src="/assets/images/products/laptop.jpg" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="ps-lg-8 mt-6 mt-lg-0">
+                            <a href="#!" class="mb-4 d-block">Electrónica y tecnología</a>
+                            <h2 class="mb-1 h1">Laptop HP 13 pulgadas core i7</h2>
+                            <div class="mb-4">
+                                <small class="text-warning">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                </small>
+                                <a href="#" class="ms-2">(30 reseñas)</a>
+                            </div>
+                            <div class="fs-4">
+                                <span class="fw-bold text-dark">S/. 3000</span>
+                            </div>
+                            <hr class="my-6" />
+                            <div>
+                                <!-- input -->
+                                <!-- input -->
+                                <div class="input-group input-spinner">
+                                    <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                    <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                    <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                                </div>
+                            </div>
+                            <div class="mt-3 row justify-content-start g-2 align-items-center">
+                                <div class="col-lg-4 col-md-5 col-6 d-grid">
+                                    <!-- button -->
+                                    <!-- btn -->
+                                    <button type="button" class="btn btn-primary">
+                                        <i class="feather-icon icon-shopping-bag me-2"></i>
+                                        Añadir al carrito
+                                    </button>
+                                </div>
+                            </div>
+                            <hr class="my-6" />
+                            <div>
+                                <table class="table table-borderless">
+                                    <tbody>
+                                    <tr>
+                                        <td>Código del producto:</td>
+                                        <td>FBB00255</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Disponibilidad:</td>
+                                        <td>En Stock</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tipo:</td>
+                                        <td>Tecnología</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Envío:</td>
+                                        <td>
+                                            <small>
+                                                Envío en 3 días
+                                            </small>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Javascript-->
+
+<script>
+    $(document).ready(function(){
+        $('.product-slider').slick({
+            infinite: true,          // Deslizar infinitamente
+            slidesToShow: 5,         // Cuántos productos mostrar por fila
+            slidesToScroll: 1,       // Cuántos productos se deslizan por vez
+            arrows: true,            // Mostrar flechas de navegación
+            dots: true,              // Mostrar indicadores de paginación
+            responsive: [            // Opciones de responsividad para pantallas más pequeñas
+                {
+                    breakpoint: 1200,
+                    settings: {
+                        slidesToShow: 4,
+                    }
+                },
+                {
+                    breakpoint: 992,
+                    settings: {
+                        slidesToShow: 3,
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2,
+                    }
+                },
+                {
+                    breakpoint: 576,
+                    settings: {
+                        slidesToShow: 1,
+                    }
+                }
+            ]
+        });
+    });
+
+</script>
+
+<!-- Libs JS -->
+<!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
+<script src="/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/libs/simplebar/dist/simplebar.min.js"></script>
+
+<!-- Theme JS -->
+<script src="/assets/js/theme.min.js"></script>
+
+<script src="/assets/js/vendors/jquery.min.js"></script>
+<script src="/assets/js/vendors/countdown.js"></script>
+<script src="/assets/libs/slick-carousel/slick/slick.min.js"></script>
+<script src="/assets/js/vendors/slick-slider.js"></script>
+<script src="/assets/libs/tiny-slider/dist/min/tiny-slider.js"></script>
+<script src="/assets/js/vendors/tns-slider.js"></script>
+<script src="/assets/js/vendors/zoom.js"></script>
+</body>
+</html>
