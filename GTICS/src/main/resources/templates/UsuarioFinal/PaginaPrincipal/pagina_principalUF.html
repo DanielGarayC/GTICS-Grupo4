@@ -259,22 +259,22 @@
                               Todas las categorías
                            </button>
                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Salud y Belleza</a></li>
-                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Electrónica y tecnología</a></li>
-                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Moda y ropa</a></li>
-                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Hogar y cocina</a></li>
-                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Arte y manualidades</a></li>
-                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Deportes y ocio</a></li>
+                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Salud y Belleza</a></li>
+                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Electrónica y tecnología</a></li>
+                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Moda y ropa</a></li>
+                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Hogar y cocina</a></li>
+                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Arte y manualidades</a></li>
+                              <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Deportes y ocio</a></li>
                            </ul>
                         </div>
                         <div>
                            <ul class="navbar-nav align-items-center">
                               <li class="nav-item dropdown w-100 w-lg-auto">
-                                 <a class="nav-link " th:ref="@{/UsuarioFinal/pagina_principalUF}"   aria-expanded="false">Inicio</a>
+                                 <a class="nav-link " th:href="@{/UsuarioFinal/pagina_principalUF}"   aria-expanded="false">Inicio</a>
 
                               </li>
                               <li class="nav-item dropdown w-100 w-lg-auto">
-                                 <a class="nav-link " th:ref="@{/UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
+                                 <a class="nav-link " th:href="@{/UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
 
                               </li>
                               <li class="nav-item dropdown w-100 w-lg-auto">
@@ -317,7 +317,7 @@
                <!-- alert -->
                <div class="alert alert-danger p-2" role="alert">
                   Tenemos los mejores productos.
-                  <a th:href="@{UsuarioFinal/listaProductos}" class="alert-link">Ve a la sección proceso de compras ya!</a>
+                  <a th:href="@{UsuarioFinal/procesoCompra}" class="alert-link">Ve a la sección proceso de compras ya!</a>
                </div>
                <ul class="list-group list-group-flush">
                   <!-- list group -->
