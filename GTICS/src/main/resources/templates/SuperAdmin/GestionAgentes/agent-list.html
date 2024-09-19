@@ -7,17 +7,17 @@
     <meta content="Codescandy" name="author">
     <title>Lista de agentes</title>
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
 
     <!-- Libs CSS -->
-    <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet">
-    <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
+    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
 
     <!-- Theme CSS -->
-    <link rel="stylesheet" href="../assets/css/theme.min.css">
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
 </head>
 
 <body>
@@ -134,7 +134,7 @@
                         </li>
                         <li class="dropdown ms-4">
                             <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+                                <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end p-0">
@@ -165,7 +165,7 @@
             <div class="navbar-vertical">
                 <div class="px-4 py-5">
                     <a class="navbar-brand">
-                        <img src="../assets/images/logo/logo.svg" alt="" />
+                        <img th:src="@{/images/logo/logo.svg}" alt="" />
                     </a>
                 </div>
                 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
@@ -324,7 +324,7 @@
             <div class="navbar-vertical">
                 <div class="px-4 py-5 d-flex justify-content-between align-items-center">
                     <a class="navbar-brand">
-                        <img src="../assets/images/logo/logo.svg" alt="" />
+                        <img th:src="@{/images/logo/logo.svg}" alt="" />
                     </a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
@@ -482,7 +482,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Bonnie Howe</a>
                                                     </div>
@@ -509,7 +509,7 @@
                                                         <li>
                                                             <a class="dropdown-item" href="customers-edits.html">
                                                                 <i class="bi bi-pencil-square me-3"></i>
-                                                                Editar
+                                                                Edit
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -527,7 +527,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-2.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-2.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Judy Nelson</a>
                                                     </div>
@@ -571,7 +571,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-3.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-3.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">John Mattox</a>
                                                     </div>
@@ -590,9 +590,9 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
+                                                            <a class="dropdown-item" href="#">
                                                                 <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
+                                                                Delete
                                                             </a>
                                                         </li>
                                                         <li>
@@ -615,7 +615,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-4.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Wayne Rossman</a>
                                                     </div>
@@ -634,9 +634,9 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
+                                                            <a class="dropdown-item" href="#">
                                                                 <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
+                                                                Delete
                                                             </a>
                                                         </li>
                                                         <li>
@@ -659,7 +659,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-5.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-5.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Rhonda Pinson</a>
                                                     </div>
@@ -678,9 +678,9 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
+                                                            <a class="dropdown-item" href="#">
                                                                 <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
+                                                                Delete
                                                             </a>
                                                         </li>
                                                         <li>
@@ -703,7 +703,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-6.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-6.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">John Mattox</a>
                                                     </div>
@@ -747,7 +747,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-7.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-7.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Wayne Rossman</a>
                                                     </div>
@@ -791,7 +791,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-8.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-8.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Richard Shelton</a>
                                                     </div>
@@ -835,7 +835,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-9.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-9.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Stephanie Morales</a>
                                                     </div>
@@ -879,7 +879,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-10.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-10.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Stephanie Morales</a>
                                                     </div>
@@ -923,7 +923,7 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="../assets/images/avatar/avatar-11.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+                                                    <img th:src="@{/images/avatar/avatar-11.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Pasquale Kidd</a>
                                                     </div>
@@ -942,9 +942,9 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="#">
+                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
                                                                 <i class="bi bi-trash me-3"></i>
-                                                                Delete
+                                                                Eliminar
                                                             </a>
                                                         </li>
                                                         <li>
@@ -984,14 +984,14 @@
 
 <!-- Libs JS -->
 <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
 <!-- Theme JS -->
-<script src="../assets/js/theme.min.js"></script>
+<script th:src="@{/js/theme.min.js}"></script>
 
-<script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-<script src="../assets/js/vendors/chart.js"></script>
+<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+<script th:src="@{/js/vendors/chart.js}"></script>
 
 <!-- SweetAlert2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">

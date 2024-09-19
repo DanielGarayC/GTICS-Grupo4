@@ -7,17 +7,17 @@
     <meta content="Codescandy" name="author">
     <title>Editar administrador zonal</title>
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
 
     <!-- Libs CSS -->
-    <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet">
-    <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
+    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
 
     <!-- Theme CSS -->
-    <link rel="stylesheet" href="../assets/css/theme.min.css">
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
 </head>
 
 <body>
@@ -134,7 +134,7 @@
                         </li>
                         <li class="dropdown ms-4">
                             <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+                                <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end p-0">
@@ -165,7 +165,7 @@
             <div class="navbar-vertical">
                 <div class="px-4 py-5">
                     <a class="navbar-brand">
-                        <img src="../assets/images/logo/logo.svg" alt="" />
+                        <img th:src="@{/images/logo/logo.svg}" alt="" />
                     </a>
                 </div>
                 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
@@ -323,7 +323,7 @@
             <div class="navbar-vertical">
                 <div class="px-4 py-5 d-flex justify-content-between align-items-center">
                     <a class="navbar-brand">
-                        <img src="../assets/images/logo/logo.svg" alt="" />
+                        <img th:src="@{/images/logo/logo.svg}" alt="" />
                     </a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
@@ -444,7 +444,7 @@
                             <div class="card-body d-flex flex-column gap-8 p-7">
                                 <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
                                     <div>
-                                        <img class="image avatar avatar-lg rounded-3" src="../assets/images/docs/placeholder-img.jpg" alt="Image" />
+                                        <img class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/placeholder-img.jpg}" alt="Image" />
                                     </div>
 
                                     <div class="file-upload btn btn-light ms-md-4">
@@ -907,14 +907,14 @@
 
 <!-- Libs JS -->
 <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
 <!-- Theme JS -->
-<script src="../assets/js/theme.min.js"></script>
+<script th:src="@{/js/theme.min.js}"></script>
 
-<script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-<script src="../assets/js/vendors/chart.js"></script>
+<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+<script th:src="@{/js/vendors/chart.js}"></script>
 
 
 
