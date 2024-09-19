@@ -8,22 +8,22 @@ public class UsuarioFinalController {
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
     public String mostrarPagPrincipal(){
 
-        return "UsuarioFinal/pagina_principalUF";
+        return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
     }
     @GetMapping("/UsuarioFinal/miPerfil")
     public String miPerfil(){
 
-        return "UsuarioFinal/perfil";
+        return "UsuarioFinal/Perfil/perfil";
     }
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
     public String mostrarListaMisOrdenes(){
 
-        return "UsuarioFinal/listaMisOrdenes";
+        return "UsuarioFinal/Ordenes/listaMisOrdenes";
     }
     @GetMapping("/UsuarioFinal/detallesOrden")
     public String mostrarDetallesOrden(){
 
-        return "detalleOrden";
+        return "UsuarioFinal/Ordenes/detalleOrden";
     }
     @GetMapping("/UsuarioFinal/listaProductos")
     public String mostrarListaProductos(){
