@@ -26,13 +26,13 @@
             <input type="text"id="distrito" required>
             <label for="password" style="text-align: left; font-size:1.7vh; margin-left:1vh;margin-top:none;"> Contraseña</label>
             <input type="password"id="password" required>
-            <label for="password" style="text-align: left; font-size:1.7vh; margin-left:1vh;margin-top:none;"> Repetir contraseña</label>
-            <input type="password"id="password" required>
+            <label for="passwordConfirm" style="text-align: left; font-size:1.7vh; margin-left:1vh;margin-top:none;"> Repetir contraseña</label>
+            <input type="password"id="passwordConfirm" required>
             
             <button type="submit">Crear cuenta</button>
         </form>
         <div class="links">
-            <a href="login.html">¿Ya tienes una cuenta? Inicia sesión</a>
+            <a th:href="@{/Login}">¿Ya tienes una cuenta? Inicia sesión</a>
         </div>
     </div>
     <script th:src="@{/login/script.js}"></script>

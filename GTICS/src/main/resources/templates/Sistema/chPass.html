@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar Contraseña | MiTienda</title>
+    <title>Recuperar Contraseña</title>
     <link rel="stylesheet" th:href="@{/login/styles.css}">
 </head>
 <body>
     <div class="background"></div>
     <div class="container">
-        <div class="logo">MiTienda</div>
+        <div class="logo">
+            <img th:src="@{/images/logo/logo.png}" alt="" style="width: 100%;"/>
+        </div>
         <h1>Cambio de Contraseña</h1>
-        <form id="passwordForm" onsubmit="return validarContrasenas(event)">
+        <form id="passwordForm" >
             <input type="password" id="password" placeholder="Ingrese su nueva contraseña" required>
             <input type="password" id="confirmPassword" placeholder="Confirme su nueva contraseña" required>
 
@@ -20,10 +22,10 @@
                 <label for="showPassword">Mostrar contraseña</label>
             </div>
 
-            <button type="submit">Cambiar contraseña</button>
+            <a type="submit" class="buttoncustom" th:href="@{/Login}">Cambiar contraseña</a>
         </form>
         <div class="links">
-            <a href="login.html">Volver al inicio de sesión</a>
+            <a th:href="@{/Login}">Volver al inicio de sesión</a>
         </div>
     </div>
     <script>
@@ -36,18 +38,6 @@
         }
 
 
-        function validarContrasenas(event) {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-
-            if (password !== confirmPassword) {
-                alert("Las contraseñas no coinciden. Inténtelo nuevamente.");
-                event.preventDefault(); 
-                return false;
-            }
-            window.location.href = 'validarToken.html';
-            return true;
-        }
     </script>
 </body>
 </html>

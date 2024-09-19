@@ -152,7 +152,7 @@
                                         <a th:href="@{UsuarioFinal/miPerfil}">Mi perfil</a>
                                     </div>
                                     <div class="border-top px-5 py-3">
-                                        <a href="#">Cerrar sesión</a>
+                                        <a th:href="@{/Login}">Cerrar sesión</a>
                                     </div>
                                 </div>
                             </li>
@@ -237,21 +237,21 @@
                     <div>
                         <ul class="navbar-nav align-items-center">
                             <li class="nav-item dropdown w-100 w-lg-auto">
-                                <a class="nav-link " th:href="@{UsuarioFinal/pagPricipal}"   aria-expanded="false">Inicio</a>
+                                <a class="nav-link " th:href="@{/UsuarioFinal/pagPrincipal}"   aria-expanded="false">Inicio</a>
 
                             </li>
                             <li class="nav-item dropdown w-100 w-lg-auto">
-                                <a class="nav-link " th:href="@{UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
+                                <a class="nav-link " th:href="@{/UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
 
                             </li>
                             <li class="nav-item dropdown w-100 w-lg-auto">
-                                <a class="nav-link " th:href="@{UsuarioFinal/listaMisOrdenes}"  aria-expanded="false">Mis compras</a>
+                                <a class="nav-link " th:href="@{/UsuarioFinal/listaMisOrdenes}"  aria-expanded="false">Mis compras</a>
 
                             </li>
                             <li class="nav-item dropdown w-100 w-lg-auto">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mensajería</a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" th:href="@{UsuarioFinal/foro}">Reseñas</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/UsuarioFinal/foro}">Reseñas</a></li>
                                     <li><a class="dropdown-item" th:href="@{../pages/store-grid.html}">Preguntas frecuentes</a></li>
 
                                 </ul>

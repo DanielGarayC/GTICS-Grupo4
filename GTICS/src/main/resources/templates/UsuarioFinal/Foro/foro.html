@@ -18,7 +18,7 @@
 
         <!-- Theme CSS -->
         <link rel="stylesheet" th:href="@{/css/theme.min.css}">
-        <link rel="stylesheet" th:href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
         <style>
             .form-control::placeholder {
@@ -188,7 +188,7 @@
                                                     <a th:href="@{UsuarioFinal/miPerfil}">Mi perfil</a>
                                                 </div>
                                                 <div class="border-top px-5 py-3">
-                                                    <a href="#">Cerrar sesión</a>
+                                                    <a th:href="@{/Login}">Cerrar sesión</a>
                                                 </div>
                                             </div>
                                         </li>
