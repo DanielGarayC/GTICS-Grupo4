@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body, .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .background {
+            background: linear-gradient(135deg, #1a602b, #6ffa45);
+            transition: filter 0.3s ease;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1a602b;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            margin-bottom: 2rem;
+            color: #333;
+            font-weight: 300;
+            font-size: 1.5rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input {
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #1a602b;
+            box-shadow: 0 0 0 3px rgba(154, 255, 107, 0.1);
+        }
+        button {
+            background: linear-gradient(135deg, #1a602b, #6ffa45);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(154, 255, 107, 0.1);
+        }
+        .links {
+            margin-top: 1.5rem;
+        }
+        .links a {
+            color: #1a602b;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .links a:hover {
+            color: #4bc149;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .container {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .checkbox-container {
+            display: flex;
+
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #1a602b; /* Cambia el color del checkbox */
+            margin-right: 10px;
+        }
+        
+        .checkbox-container label {
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
