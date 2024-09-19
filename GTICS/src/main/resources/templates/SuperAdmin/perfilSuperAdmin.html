@@ -7,17 +7,17 @@
     <meta content="Codescandy" name="author">
     <title>Lista de usuarios finales</title>
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
 
     <!-- Libs CSS -->
-    <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet">
-    <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
+    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
 
     <!-- Theme CSS -->
-    <link rel="stylesheet" href="../assets/css/theme.min.css">
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
 </head>
 
 <body>
@@ -134,7 +134,7 @@
                         </li>
                         <li class="dropdown ms-4">
                             <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+                                <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end p-0">
@@ -165,13 +165,13 @@
             <div class="navbar-vertical">
                 <div class="px-4 py-5">
                     <a class="navbar-brand">
-                        <img src="../assets/images/logo/logo.svg" alt="" />
+                        <img th:src="@{/images/logo/logo.svg}" alt="" />
                     </a>
                 </div>
                 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
                     <ul class="navbar-nav flex-column" id="sideNavbar">
                         <li class="nav-item">
-                            <a class="nav-link" href="dashboard-superadmin.html">
+                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
                                     <span class="nav-link-text">DashBoard</span>
@@ -189,7 +189,7 @@
                         <!-- Desplegable de los Clientes-->
                         <li class="nav-item">
                             <a
-                                    class="nav-link"
+                                    class="nav-link collapsed"
                                     href="#"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#navCustomer"
@@ -197,23 +197,23 @@
                                     aria-controls="navCustomer"
                             >
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-people"></i></span>
+                                    <span class="nav-link-icon"><i class="bi bi-people"></i></span>
                                     <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">New</span>
+                                    <span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
                                 </div>
                             </a>
-                            <div id="navCustomer" class="collapse  show " data-bs-parent="#sideNavbar">
+                            <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
                                 <ul class="nav flex-column">
-                                    <li class="nav-item active" >
-                                        <a class="nav-link active" href="GestionUsuarioFinal/final-users-list.html">Usuarios</a>
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link " href="GestionUsuarioFinal/create-final-user.html">Crear usuario</a>
+                                        <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link " href="GestionUsuarioFinal/final-user-edit.html">Editar Usuario</a>
+                                        <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
                                     </li>
                                 </ul>
                             </div>
@@ -236,15 +236,15 @@
                             <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
                                 <ul class="nav flex-column">
                                     <li class="nav-item active">
-                                        <a class="nav-link" href="admin-zonal-list.html">Administradores Zonales</a>
+                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link " href="create-zonal-admin.html">Crear Administrador Zonal</a>
+                                        <a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link" href="admin-zonal-edit.html">Editar Administrador Zonal</a>
+                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
                                     </li>
                                 </ul>
                             </div>
@@ -254,7 +254,7 @@
                         <li class="nav-item">
                             <a
                                     class="nav-link"
-                                    href="#"
+                                    x              href="#"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#navAgent"
                                     aria-expanded="false"
@@ -268,11 +268,11 @@
                             <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
                                 <ul class="nav flex-column">
                                     <li class="nav-item active">
-                                        <a class="nav-link" href="agent-list.html">Agentes</a>
+                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link" href="agent-edit.html">Editar Agente</a>
+                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
                                     </li>
                                 </ul>
                             </div>
@@ -280,7 +280,7 @@
 
                         <!-- Desplegable de los Proveedores-->
                         <li class="nav-item">
-                            <a class="nav-link" href="vendor-grid.html">
+                            <a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
                                     <span class="nav-link-text">Proveedores</span>
@@ -290,7 +290,7 @@
 
                         <!-- Opción de los productor-->
                         <li class="nav-item">
-                            <a class="nav-link" href="categories.html">
+                            <a class="nav-link" th:href="@{/SuperAdmin/categorias}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
                                     <span class="nav-link-text">Inventario de productos</span>
@@ -301,7 +301,7 @@
 
                         <!-- Opción de solicitudes de Agente-->
                         <li class="nav-item">
-                            <a class="nav-link" href="agent-request.html">
+                            <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
                                     <span class="nav-link-text">Solicitudes para Agente</span>
@@ -322,14 +322,14 @@
             <div class="navbar-vertical">
                 <div class="px-4 py-5 d-flex justify-content-between align-items-center">
                     <a class="navbar-brand">
-                        <img src="../assets/images/logo/logo.svg" alt="" />
+                        <img th:src="@{/images/logo/logo.svg}" alt="" />
                     </a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
                     <ul class="navbar-nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
                                     <span class="nav-link-text">DashBoard</span>
@@ -347,7 +347,7 @@
                         <!-- Desplegable de los Clientes-->
                         <li class="nav-item">
                             <a
-                                    class="nav-link active"
+                                    class="nav-link collapsed"
                                     href="#"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#navCustomer"
@@ -355,23 +355,82 @@
                                     aria-controls="navCustomer"
                             >
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-people"></i></span>
+                                    <span class="nav-link-icon"><i class="bi bi-people"></i></span>
                                     <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">New</span>
+                                    <span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
                                 </div>
                             </a>
-                            <div id="navCustomer" class="collapse  show " data-bs-parent="#sideNavbar">
+                            <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
                                 <ul class="nav flex-column">
-                                    <li class="nav-item" >
-                                        <a class="nav-link active" href="GestionUsuarioFinal/final-users-list.html">Usuarios</a>
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link " href="GestionUsuarioFinal/create-final-user.html">Crear usuario</a>
+                                        <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link " href="GestionUsuarioFinal/final-user-edit.html">Editar Usuario</a>
+                                        <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!-- Desplegable de los Administradores Zonales-->
+                        <li class="nav-item">
+                            <a
+                                    class="nav-link"
+                                    href="#"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#navAdminZonal"
+                                    aria-expanded="false"
+                                    aria-controls="navAdminZonal"
+                            >
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
+                                    <span class="nav-link-text">Administrador Zonal</span>
+                                </div>
+                            </a>
+                            <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item active">
+                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
+                                    </li>
+                                    <!-- Nav item -->
+                                    <li class="nav-item">
+                                        <a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
+                                    </li>
+                                    <!-- Nav item -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <!-- Desplegable de los Agentes-->
+                        <li class="nav-item">
+                            <a
+                                    class="nav-link"
+                                    x              href="#"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#navAgent"
+                                    aria-expanded="false"
+                                    aria-controls="navAgent"
+                            >
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
+                                    <span class="nav-link-text">Agente</span>
+                                </div>
+                            </a>
+                            <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item active">
+                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
+                                    </li>
+                                    <!-- Nav item -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
                                     </li>
                                 </ul>
                             </div>
@@ -379,7 +438,7 @@
 
                         <!-- Desplegable de los Proveedores-->
                         <li class="nav-item">
-                            <a class="nav-link" href="vendor-grid.html">
+                            <a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
                                     <span class="nav-link-text">Proveedores</span>
@@ -389,7 +448,7 @@
 
                         <!-- Opción de los productor-->
                         <li class="nav-item">
-                            <a class="nav-link" href="categories.html">
+                            <a class="nav-link" th:href="@{/SuperAdmin/categorias}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
                                     <span class="nav-link-text">Inventario de productos</span>
@@ -400,13 +459,16 @@
 
                         <!-- Opción de solicitudes de Agente-->
                         <li class="nav-item">
-                            <a class="nav-link" href="agent-request.html">
+                            <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
                                     <span class="nav-link-text">Solicitudes para Agente</span>
                                 </div>
                             </a>
                         </li>
+
+
+
 
 
                     </ul>
@@ -513,14 +575,14 @@
 
 <!-- Libs JS -->
 <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
 <!-- Theme JS -->
-<script src="../assets/js/theme.min.js"></script>
+<script th:src="@{/js/theme.min.js}"></script>
 
-<script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-<script src="../assets/js/vendors/chart.js"></script>
+<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+<script th:src="@{/js/vendors/chart.js}"></script>
 </body>
 </html>
 
