@@ -60,6 +60,7 @@
         <div>
             <!-- navbar -->
 
+            <!-- navbar horizontal -->
             <!-- navbar -->
             <div class="border-bottom">
                 <div class="py-5">
@@ -262,33 +263,33 @@
                                         Todas las categorías
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Salud y Belleza</a></li>
-                                        <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Electrónica y tecnología</a></li>
-                                        <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Moda y ropa</a></li>
-                                        <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Hogar y cocina</a></li>
-                                        <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Arte y manualidades</a></li>
-                                        <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Deportes y ocio</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Salud y Belleza</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Electrónica y tecnología</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Moda y ropa</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Hogar y cocina</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Arte y manualidades</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Categorias}">Deportes y ocio</a></li>
                                     </ul>
                                 </div>
                                 <div>
                                     <ul class="navbar-nav align-items-center">
                                         <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link " th:href="@{UsuarioFinal/pagPrincipal}"   aria-expanded="false">Inicio</a>
+                                            <a class="nav-link " th:href="@{/UsuarioFinal/pagPrincipal}"   aria-expanded="false">Inicio</a>
 
                                         </li>
                                         <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link " th:href="@{UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
+                                            <a class="nav-link " th:href="@{/UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
 
                                         </li>
                                         <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link " th:href="@{UsuarioFinal/listaMisOrdenes}"  aria-expanded="false">Mis compras</a>
+                                            <a class="nav-link " th:href="@{/UsuarioFinal/listaMisOrdenes}"  aria-expanded="false">Mis compras</a>
 
                                         </li>
                                         <li class="nav-item dropdown w-100 w-lg-auto">
                                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mensajería</a>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" th:href="@{UsuarioFinal/foro}">Reseñas</a></li>
-                                                <li><a class="dropdown-item" th:href="@{../pages/store-grid.html}">Preguntas frecuentes</a></li>
+                                                <li><a class="dropdown-item" th:href="@{/UsuarioFinal/foro}">Reseñas</a></li>
+                                                <li><a class="dropdown-item" th:href="@{/UsuarioFinal/faq}">Preguntas frecuentes</a></li>
 
                                             </ul>
                                         </li>
@@ -303,43 +304,43 @@
                     </div>
                 </nav>
             </div>
-            </div>
-            <!-- Modal -->
+        </div>
+        <!-- Modal -->
 
-            <!-- Shop Cart -->
+        <!-- Shop Cart -->
 
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                <div class="offcanvas-header border-bottom">
-                    <div class="text-start">
-                        <h5 id="offcanvasRightLabel" class="mb-0 fs-4">Carrito de Compras</h5>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header border-bottom">
+                <div class="text-start">
+                    <h5 id="offcanvasRightLabel" class="mb-0 fs-4">Carrito de Compras</h5>
 
-                    </div>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
-                    <div>
-                        <!-- alert -->
-                        <div class="alert alert-danger p-2" role="alert">
-                            Tenemos los mejores productos.
-                            <a href="#!" class="alert-link">Ve a la sección proceso de compras ya!</a>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <!-- list group -->
-                            <li class="list-group-item py-3 ps-0 border-top">
-                                <!-- row -->
-                                <div class="row align-items-center">
-                                    <div class="col-6 col-md-6 col-lg-7">
-                                        <div class="d-flex">
-                                            <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                            <div class="ms-3">
-                                                <!-- title -->
-                                                <a th:href="@{../pages/shop-single.html}" class="text-inherit">
-                                                    <h6 class="mb-0">Laptop HP</h6>
-                                                </a>
-                                                <span><small class="text-muted"></small></span>
-                                                <!-- text -->
-                                                <div class="mt-2 small lh-1">
-                                                    <a href="#!" class="text-decoration-none text-inherit">
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div>
+                    <!-- alert -->
+                    <div class="alert alert-danger p-2" role="alert">
+                        Tenemos los mejores productos.
+                        <a href="#!" class="alert-link">Ve a la sección proceso de compras ya!</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <!-- list group -->
+                        <li class="list-group-item py-3 ps-0 border-top">
+                            <!-- row -->
+                            <div class="row align-items-center">
+                                <div class="col-6 col-md-6 col-lg-7">
+                                    <div class="d-flex">
+                                        <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                        <div class="ms-3">
+                                            <!-- title -->
+                                            <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                                <h6 class="mb-0">Laptop HP</h6>
+                                            </a>
+                                            <span><small class="text-muted"></small></span>
+                                            <!-- text -->
+                                            <div class="mt-2 small lh-1">
+                                                <a href="#!" class="text-decoration-none text-inherit">
                                        <span class="me-1 align-text-bottom">
                                           <svg
                                                   xmlns="http://www.w3.org/2000/svg"
@@ -358,44 +359,44 @@
                                              <line x1="14" y1="11" x2="14" y2="17"></line>
                                           </svg>
                                        </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </a>
-                                                </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- input group -->
-                                    <div class="col-4 col-md-3 col-lg-3">
-                                        <!-- input -->
-                                        <!-- input -->
-                                        <div class="input-group input-spinner">
-                                            <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                            <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                        </div>
-                                    </div>
-                                    <!-- price -->
-                                    <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                        <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                                <!-- input group -->
+                                <div class="col-4 col-md-3 col-lg-3">
+                                    <!-- input -->
+                                    <!-- input -->
+                                    <div class="input-group input-spinner">
+                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                        <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                            </li>
-                            <!-- list group -->
-                            <li class="list-group-item py-3 ps-0 border-top">
-                                <!-- row -->
-                                <div class="row align-items-center">
-                                    <div class="col-6 col-md-6 col-lg-7">
-                                        <div class="d-flex">
-                                            <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                            <div class="ms-3">
-                                                <!-- title -->
-                                                <a th:href="@{../pages/shop-single.html}" class="text-inherit">
-                                                    <h6 class="mb-0">Laptop HP</h6>
-                                                </a>
-                                                <span><small class="text-muted"></small></span>
-                                                <!-- text -->
-                                                <div class="mt-2 small lh-1">
-                                                    <a href="#!" class="text-decoration-none text-inherit">
+                                <!-- price -->
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                    <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- list group -->
+                        <li class="list-group-item py-3 ps-0 border-top">
+                            <!-- row -->
+                            <div class="row align-items-center">
+                                <div class="col-6 col-md-6 col-lg-7">
+                                    <div class="d-flex">
+                                        <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                        <div class="ms-3">
+                                            <!-- title -->
+                                            <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                                <h6 class="mb-0">Laptop HP</h6>
+                                            </a>
+                                            <span><small class="text-muted"></small></span>
+                                            <!-- text -->
+                                            <div class="mt-2 small lh-1">
+                                                <a href="#!" class="text-decoration-none text-inherit">
                                        <span class="me-1 align-text-bottom">
                                           <svg
                                                   xmlns="http://www.w3.org/2000/svg"
@@ -414,44 +415,44 @@
                                              <line x1="14" y1="11" x2="14" y2="17"></line>
                                           </svg>
                                        </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </a>
-                                                </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- input group -->
-                                    <div class="col-4 col-md-3 col-lg-3">
-                                        <!-- input -->
-                                        <!-- input -->
-                                        <div class="input-group input-spinner">
-                                            <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                            <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                        </div>
-                                    </div>
-                                    <!-- price -->
-                                    <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                        <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                                <!-- input group -->
+                                <div class="col-4 col-md-3 col-lg-3">
+                                    <!-- input -->
+                                    <!-- input -->
+                                    <div class="input-group input-spinner">
+                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                        <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                            </li>
-                            <!-- list group -->
-                            <li class="list-group-item py-3 ps-0 border-top">
-                                <!-- row -->
-                                <div class="row align-items-center">
-                                    <div class="col-6 col-md-6 col-lg-7">
-                                        <div class="d-flex">
-                                            <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                            <div class="ms-3">
-                                                <!-- title -->
-                                                <a th:href="@{../pages/shop-single.html}" class="text-inherit">
-                                                    <h6 class="mb-0">Laptop HP</h6>
-                                                </a>
-                                                <span><small class="text-muted"></small></span>
-                                                <!-- text -->
-                                                <div class="mt-2 small lh-1">
-                                                    <a href="#!" class="text-decoration-none text-inherit">
+                                <!-- price -->
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                    <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- list group -->
+                        <li class="list-group-item py-3 ps-0 border-top">
+                            <!-- row -->
+                            <div class="row align-items-center">
+                                <div class="col-6 col-md-6 col-lg-7">
+                                    <div class="d-flex">
+                                        <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                        <div class="ms-3">
+                                            <!-- title -->
+                                            <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                                <h6 class="mb-0">Laptop HP</h6>
+                                            </a>
+                                            <span><small class="text-muted"></small></span>
+                                            <!-- text -->
+                                            <div class="mt-2 small lh-1">
+                                                <a href="#!" class="text-decoration-none text-inherit">
                                        <span class="me-1 align-text-bottom">
                                           <svg
                                                   xmlns="http://www.w3.org/2000/svg"
@@ -470,44 +471,44 @@
                                              <line x1="14" y1="11" x2="14" y2="17"></line>
                                           </svg>
                                        </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </a>
-                                                </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- input group -->
-                                    <div class="col-4 col-md-3 col-lg-3">
-                                        <!-- input -->
-                                        <!-- input -->
-                                        <div class="input-group input-spinner">
-                                            <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                            <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                        </div>
-                                    </div>
-                                    <!-- price -->
-                                    <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                        <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                                <!-- input group -->
+                                <div class="col-4 col-md-3 col-lg-3">
+                                    <!-- input -->
+                                    <!-- input -->
+                                    <div class="input-group input-spinner">
+                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                        <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                            </li>
-                            <!-- list group -->
-                            <li class="list-group-item py-3 ps-0 border-top">
-                                <!-- row -->
-                                <div class="row align-items-center">
-                                    <div class="col-6 col-md-6 col-lg-7">
-                                        <div class="d-flex">
-                                            <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                            <div class="ms-3">
-                                                <!-- title -->
-                                                <a th:href="@{../pages/shop-single.html}" class="text-inherit">
-                                                    <h6 class="mb-0">Laptop HP</h6>
-                                                </a>
-                                                <span><small class="text-muted"></small></span>
-                                                <!-- text -->
-                                                <div class="mt-2 small lh-1">
-                                                    <a href="#!" class="text-decoration-none text-inherit">
+                                <!-- price -->
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                    <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- list group -->
+                        <li class="list-group-item py-3 ps-0 border-top">
+                            <!-- row -->
+                            <div class="row align-items-center">
+                                <div class="col-6 col-md-6 col-lg-7">
+                                    <div class="d-flex">
+                                        <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                        <div class="ms-3">
+                                            <!-- title -->
+                                            <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                                <h6 class="mb-0">Laptop HP</h6>
+                                            </a>
+                                            <span><small class="text-muted"></small></span>
+                                            <!-- text -->
+                                            <div class="mt-2 small lh-1">
+                                                <a href="#!" class="text-decoration-none text-inherit">
                                        <span class="me-1 align-text-bottom">
                                           <svg
                                                   xmlns="http://www.w3.org/2000/svg"
@@ -526,44 +527,44 @@
                                              <line x1="14" y1="11" x2="14" y2="17"></line>
                                           </svg>
                                        </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </a>
-                                                </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- input group -->
-                                    <div class="col-4 col-md-3 col-lg-3">
-                                        <!-- input -->
-                                        <!-- input -->
-                                        <div class="input-group input-spinner">
-                                            <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                            <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                        </div>
-                                    </div>
-                                    <!-- price -->
-                                    <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                        <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                                <!-- input group -->
+                                <div class="col-4 col-md-3 col-lg-3">
+                                    <!-- input -->
+                                    <!-- input -->
+                                    <div class="input-group input-spinner">
+                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                        <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                            </li>
-                            <!-- list group -->
-                            <li class="list-group-item py-3 ps-0 border-top">
-                                <!-- row -->
-                                <div class="row align-items-center">
-                                    <div class="col-6 col-md-6 col-lg-7">
-                                        <div class="d-flex">
-                                            <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                            <div class="ms-3">
-                                                <!-- title -->
-                                                <a th:href="@{../pages/shop-single.html}" class="text-inherit">
-                                                    <h6 class="mb-0">Laptop HP</h6>
-                                                </a>
-                                                <span><small class="text-muted"></small></span>
-                                                <!-- text -->
-                                                <div class="mt-2 small lh-1">
-                                                    <a href="#!" class="text-decoration-none text-inherit">
+                                <!-- price -->
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                    <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- list group -->
+                        <li class="list-group-item py-3 ps-0 border-top">
+                            <!-- row -->
+                            <div class="row align-items-center">
+                                <div class="col-6 col-md-6 col-lg-7">
+                                    <div class="d-flex">
+                                        <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                        <div class="ms-3">
+                                            <!-- title -->
+                                            <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                                <h6 class="mb-0">Laptop HP</h6>
+                                            </a>
+                                            <span><small class="text-muted"></small></span>
+                                            <!-- text -->
+                                            <div class="mt-2 small lh-1">
+                                                <a href="#!" class="text-decoration-none text-inherit">
                                        <span class="me-1 align-text-bottom">
                                           <svg
                                                   xmlns="http://www.w3.org/2000/svg"
@@ -582,37 +583,37 @@
                                              <line x1="14" y1="11" x2="14" y2="17"></line>
                                           </svg>
                                        </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </a>
-                                                </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- input group -->
-                                    <div class="col-4 col-md-3 col-lg-3">
-                                        <!-- input -->
-                                        <!-- input -->
-                                        <div class="input-group input-spinner">
-                                            <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                            <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                        </div>
-                                    </div>
-                                    <!-- price -->
-                                    <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                        <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                                <!-- input group -->
+                                <div class="col-4 col-md-3 col-lg-3">
+                                    <!-- input -->
+                                    <!-- input -->
+                                    <div class="input-group input-spinner">
+                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                        <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                            </li>
-                        </ul>
-                        <!-- btn -->
-                        <div class="d-flex justify-content-between mt-4">
-                            <a href="#!" class="btn btn-primary">Continuar comprando</a>
-                            <a href="#!" class="btn btn-dark">Ir a Proceso de Compra</a>
-                        </div>
+                                <!-- price -->
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                    <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- btn -->
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="#!" class="btn btn-primary">Continuar comprando</a>
+                        <a href="#!" class="btn btn-dark">Ir a Proceso de Compra</a>
                     </div>
                 </div>
             </div>
+        </div>
 
             <!-- Modal -->
             <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
