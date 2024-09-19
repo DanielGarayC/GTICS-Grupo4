@@ -1,24 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta content="Codescandy" name="author">
-      <title>Plantilla base para roles administrativos</title>
-      <!-- Favicon icon-->
-       <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta content="Codescandy" name="author" />
+	<title>Descargar reportes</title>
+	<link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
+	<link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
+	<link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
+	<!-- Favicon icon-->
+	<link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}" />
+
+	<!-- Libs CSS -->
+	<link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
+	<link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet" />
+	<link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
+
+	<!-- Theme CSS -->
+	<link rel="stylesheet" th:href="@{/css/theme.min.css}" />
 
 
-       <!-- Libs CSS -->
-       <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
-       <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
-       <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+
+	<!--Prueba de logo para ver si usamos jpg o svg -->
+	<style>
+
+		.logoImagen{
+			height: 80px;
+			width: 250px;
+		}
+		.logoImagenCelulares{
+			height: 80px;
+			width: 220px;
+		}
+	</style>
+	<!--POP UP-->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<style>
+		.custom-popup{
+			border-radius: 10px;
+		}
+		.swal2-styled{
+			border-radius: 8px;
+		}
+		.swal2-styled.swal2-confirm {
+			background-color: #28a745;
+			color: white;
+		}
+
+		.swal2-styled.swal2-cancel {
+			background-color: #dc3545;
+			color: white;
+		}
+	</style>
 
 
-       <!-- Theme CSS -->
-       <link rel="stylesheet" th:href="@{/css/theme.min.css}">
-   </head>
+</head>
 
    <body>
       <!-- main -->
@@ -159,72 +196,111 @@
 
 
          <div class="main-wrapper">
-            <!-- navbar vertical (para pc)-->
-            <!-- navbar -->
-<nav class="navbar-vertical-nav d-none d-xl-block">
-	<div class="navbar-vertical">
-		<div class="px-4 py-5">
-			<a class="navbar-brand">
-				<img th:src="@{/images/logo/logo.svg}" alt="" />
-			</a>
-		</div>
-		<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-			<ul class="navbar-nav flex-column" id="sideNavbar">
-				<li class="nav-item">
-					<a class="nav-link  active " href="#">
-						<div class="d-flex align-items-center">
-							<span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
-							<span class="nav-link-text">Algo</span>
-						</div>
-					</a>
-				</li>
+			 <!-- navbar vertical (para pc)-->
+			 <!-- navbar -->
+			 <nav class="navbar-vertical-nav d-none d-xl-block">
+				 <div class="navbar-vertical">
+					 <div class="px-4 py-5">
+						 <a class="navbar-brand">
+							 <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagen " />
+						 </a>
+					 </div>
+					 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+						 <ul class="navbar-nav flex-column" id="sideNavbar">
+							 <li class="nav-item">
+								 <a class="nav-link   " href="inicio.html">
+									 <div class="d-flex align-items-center">
+										 <span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
+										 <span class="nav-link-text">Inicio</span>
+									 </div>
+								 </a>
+							 </li>
 
 
-				<li class="nav-item mt-6 mb-3">
-					<span class="nav-label">Division</span>
-				</li>
+							 <li class="nav-item">
+								 <a class="nav-link " href="usuariosAsignados.html">
+									 <div class="d-flex align-items-center">
+										 <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
+										 <span class="nav-link-text">Usuarios asignados</span>
+									 </div>
+								 </a>
+							 </li>
+
+							 <li class="nav-item">
+								 <a class="nav-link " href="ordeneslista.html">
+									 <div class="d-flex align-items-center">
+										 <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+										 <span class="nav-link-text">Órdenes</span>
+									 </div>
+								 </a>
+							 </li>
+
+							 <li class="nav-item">
+								 <a class="nav-link active" href="#">
+									 <div class="d-flex align-items-center">
+										 <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
+										 <span class="nav-link-text">Reportes</span>
+									 </div>
+								 </a>
+							 </li>
+
+						 </ul>
+					 </div>
+				 </div>
+			 </nav>
+			 <!-- navbar vertical (para celular)-->
+			 <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
+				 <div class="navbar-vertical">
+					 <div class="px-4 py-5 d-flex justify-content-between align-items-center">
+						 <a class="navbar-brand">
+							 <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagenCelulares"/>
+						 </a>
+						 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+					 </div>
+					 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+						 <ul class="navbar-nav flex-column">
+
+							 <li class="nav-item">
+								 <a class="nav-link  " href="inicio.html">
+									 <div class="d-flex align-items-center">
+										 <span class="nav-link-icon"><i class="bi bi-house"></i></span>
+										 <span>Inicio</span>
+									 </div>
+								 </a>
+							 </li>
+
+							 <li class="nav-item">
+								 <a class="nav-link   " href="usuariosAsignados.html">
+									 <div class="d-flex align-items-center">
+										 <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
+										 <span>Usuarios asignados</span>
+									 </div>
+								 </a>
+							 </li>
+
+							 <li class="nav-item">
+								 <a class="nav-link active " href="ordeneslista.html">
+									 <div class="d-flex align-items-center">
+										 <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+										 <span class="nav-link-text">Órdenes</span>
+									 </div>
+								 </a>
+							 </li>
+
+							 <li class="nav-item">
+								 <a class="nav-link " href="#">
+									 <div class="d-flex align-items-center">
+										 <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
+										 <span class="nav-link-text">Reportes</span>
+									 </div>
+								 </a>
+							 </li>
 
 
-				<li class="nav-item">
-					<a class="nav-link" href="#">
-						<div class="d-flex align-items-center">
-							<span class="nav-link-icon"><i class="bi bi-house"></i></span>
-							<span class="nav-link-text">Algo mas</span>
-						</div>
-					</a>
-				</li>
-
-				<!-- Desplegable -->
-				<li class="nav-item">
-					<a
-							class="nav-link  collapsed "
-							href="#"
-							data-bs-toggle="collapse"
-							data-bs-target="#navCategoriesOrders"
-							aria-expanded="false"
-							aria-controls="navCategoriesOrders"
-					>
-						<div class="d-flex align-items-center">
-							<span class="nav-link-icon"><i class="bi bi-bag"></i></span>
-							<span class="nav-link-text">Desplegable</span>
-						</div>
-					</a>
-					<div id="navCategoriesOrders" class="collapse " data-bs-parent="#sideNavbar">
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link " href="#">Opcion 1</a>
-							</li>
-							<!-- Nav item -->
-							<li class="nav-item">
-								<a class="nav-link " href="#">Opcion 2</a>
-							</li>
-						</ul>
-					</div>
-				</li>
-			</ul>
-		</div>
-	</div>
-</nav>
+						 </ul>
+					 </div>
+				 </div>
+			 </nav>
 
 <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
 	<div class="navbar-vertical">
@@ -283,437 +359,206 @@
 </nav>
 
             <!-- COONTENIDO DE LA PAGINA -->
-            <main class="main-content-wrapper">
-               <section class="container">
+             <!-- COONTENIDO DE LA PAGINA -->
+             <main class="main-content-wrapper">
+                 <div class="container">
+                     <!-- row -->
+                     <div class="row mb-8">
+                         <div class="col-md-12">
+                             <!-- page header -->
+                             <div>
+                                 <h2>Reportes</h2>
+                                 <!-- breacrumb -->
+                                 <nav aria-label="breadcrumb">
+                                     <ol class="breadcrumb mb-0">
+                                         <li class="breadcrumb-item"><a href="inicio.html">Inicio</a></li>
+                                         <li class="breadcrumb-item active" aria-current="page">Descarga de reporte</li>
+                                     </ol>
+                                 </nav>
+                             </div>
+                         </div>
+                     </div>
+                     <!-- row -->
+                     <div class="row">
+                         <div class="col-xl-12 col-12 mb-5">
+                             <div class="row"> <!-- Aseguramos que las columnas estén dentro de un row -->
+                                 <!-- Primera tarjeta -->
+                                 <div class="col-lg-4 col-12"> <!-- Aumentamos a col-lg-6 para dividir el espacio -->
+                                     <h3 class="text-center mt-6">Órdenes generadas por usuario</h3> <!-- Aquí está el título -->
+                                     <div class="card card-lg">
+                                         <div class="card-body p-6 d-flex flex-column gap-3">
+                                             <div class="col-12">
+                                                 <div class="d-flex flex-column gap-3">
+                                                     <div>
+                                                         <label for="validationCustom04" class="form-label">Seleccione un usuario</label>
+                                                         <select class="form-select" id="validationCustom04" required>
+                                                             <option selected disabled value="">Usuario</option>
+                                                             <option value="Recipes">Jesus Alvarado</option>
+                                                             <option value="Company">Roberto Tafur</option>
+                                                             <option value="Retailer">Nadia Hernandez</option>
+                                                             <option value="Category 4">Ricardo Calderon</option>
+                                                         </select>
+                                                         <div class="invalid-feedback">Please select a valid category.</div>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                             <div class="col-12">
+                                                 <div class="d-flex flex-column gap-3">
+                                                     <div>
+                                                         <label for="validationCustom04" class="form-label">Seleccione la orden</label>
+                                                         <select class="form-select" id="a" required>
+                                                             <option selected disabled value="">Orden</option>
+                                                             <option value="Recipes">Orden #1234</option>
+                                                             <option value="Company">Orden #5678</option>
+                                                             <option value="Retailer">Orden #9123</option>
+                                                             <option value="Category 4">Orden #4567</option>
+                                                         </select>
+                                                         <div class="invalid-feedback">Please select a valid category.</div>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                             <div class="col-12">
+                                                 <label for="validationCustom04" class="form-label">Seleccione formatos de descarga</label>
+                                                 <div class="form-check form-switch ps-0">
+                                                     <label class="form-check-label" for="flexSwitchCheckDefault">PDF</label>
+                                                     <input class="form-check-input ms-auto" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+                                                 </div>
+                                                 <div class="form-check form-switch ps-0 mt-2">
+                                                     <label class="form-check-label" for="flexSwitchCheckDefault">Excel</label>
+                                                     <input class="form-check-input ms-auto" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+                                                 </div>
+                                                 <div class="form-check form-switch ps-0 mt-2">
+                                                     <label class="form-check-label" for="flexSwitchCheckDefault">CSV</label>
+                                                     <input class="form-check-input ms-auto" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+                                                 </div>
+                                             </div>
+                                             <div class="col-12">
+                                                 <div class="d-flex flex-row gap-2">
+                                                     <button class="btn btn-primary w-100" type="submit">Descargar</button>
+                                                     <button class="btn btn-light w-100" type="button">Previsualizar</button>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+
+                                 <!-- Segunda tarjeta -->
+                                 <div class="col-lg-4 col-12"> <!-- Aumentamos a col-lg-6 para dividir el espacio -->
+                                     <h3 class="text-center mt-6">Total de órdenes en el sistema</h3> <!-- Aquí está el título -->
+                                     <div class="card card-lg">
+                                         <div class="card-body p-6 d-flex flex-column gap-3">
+                                             <div class="col-12">
+                                                 <label for="validationCustom04" class="form-label">Rango de fechas</label>
+
+                                                 <div class="form-check form-switch ps-0 mt-2">
+                                                     <label class="form-check-label" for="flexSwitchCheckDefault">Entre</label>
+
+                                                     <!-- Primer input de fecha -->
+                                                     <input type="date" id="fechaInicio" name="fechaInicio"
+                                                            min="2023-01-01" max="2023-12-31" >
+
+                                                     <span class="mx-2">y</span>
+
+                                                     <!-- Segundo input de fecha -->
+                                                     <input type="date" id="fechaFin" name="fechaFin"
+                                                            min="2023-01-01" max="2023-12-31">
 
 
-                <form action="ocwgrado" method="post" name="formIngreso">
-                    <input type="hidden" name="accion" value="Consultar">
-                      
-                      <input type="hidden" name="enintranet" value="1"> 
-                        
-                    <table class="pucpTablaSubTitulo" width="100%">
-                      <tbody><tr>
-                        <td class="pucpSubTitulo">Criterios de Consulta</td>
-                      </tr>
-                    </tbody></table>
-                    <br>
-                    <table border="0" width="100%" height="1">
-                      <tbody><tr>
-                        <td class="pucpEtiqOblig">Seleccione al usuario</td>
-                        <td class="pucpCampo"><select name="carrera" class="PucpCampo" onchange="carrera_change()"><option value="" selected="">Elegir al usuario
-                    
-                            <option value="0145">Sofía Mendoza</option>
-                            <option value="0934">Alejandro Vargas</option>
-                            <option value="0726">Valeria Rodríguez</option>
-                            <option value="0587">Javier Morales</option>
-                            <option value="1102">Carla Fernández</option>
-                            <option value="0863">Tomás López</option>
-                            <option value="1208">Ana María Castillo</option>
-                            <option value="0347">Luis Fernando Pérez</option>
-                            <option value="0510">Natalia Gómez</option>
-                            <option value="0294">Ricardo Ramírez</option>
-                    </option></select></td>
-                      </tr>
-                      <tr>
-                        <td class="pucpEtiqOblig">Seleccione la orden</td>
-                        <td class="pucpCampo"><select name="grado" class="PucpCampo" onchange="grado_change()"><option value="" selected="">Elegir la orden
-                    </option><option value="7">#1234                                      
-                    </option><option value="6">#1834                        
-                    </option><option value="D">#1334                 
-                    </option><option value="8">#1634                                        
-                    </option><option value="5">#2134                                    
-                    </option></select></td>
-                      </tr>
-                      <tr>
-                        <td class="pucpEtiq">Tipo de Obtención</td>
-                        <td class="pucpCampo"><select name="tipoObten" class="PucpCampo"><option value="" selected="">&lt;Todos&gt;
-                    </option><option value="I">Memoria de desempeño campo profesional
-                    </option><option value="C">Sistematización experiencia profesional
-                    </option><option value="A">Examen de suficiencia profesional
-                    </option><option value="O">Proyecto de Aplicación
-                    </option><option value="7">Discusión experiencia docente
-                    </option><option value="Q">Trabajo de suficiencia profesional
-                    </option><option value="G">Proyecto profesional
-                    </option><option value="N">Examen profesional
-                    </option><option value="E">Artículo publicable
-                    </option><option value="1">Tesis
-                    </option><option value="3">Automático
-                    </option><option value="8">Proposición escrita
-                    </option><option value="P">Examen de competencia profesional
-                    </option><option value="2">Examen de grado
-                    </option><option value="L">Trabajo Académico
-                    </option><option value="6">Actualización de tesis
-                    </option><option value="D">Proyecto fin de carrera
-                    </option><option value="J">Conversión
-                    </option><option value="F">Memoria profesional
-                    </option><option value="0">Sin información
-                    </option><option value="5">Egresados de Estudios Generales
-                    </option><option value="9">Innovación educativa
-                    </option><option value="H">Diplomatura - Curso de especialización
-                    </option><option value="M">Trabajo de investigación
-                    </option><option value="4">Curso de titulación
-                    </option><option value="B">Informe profesional
-                    </option></select></td>
-                      </tr>
-                      <tr>
-                        <td class="pucpEtiq">Fecha de Aprobación</td>
-                        <td class="pucpCampo"><input type="radio" name="fechaAprob" value="0" checked="">No considerar</td>
-                      </tr>
-                      <tr>
-                        <td class="pucpCampo">&nbsp;</td>
-                        <td class="pucpCampo"><input type="radio" name="fechaAprob" value="1">Entre
-                     
-                          <select name="diaIni" class="PucpCampo"><option value="01">01
-                    </option><option value="02">02
-                    </option><option value="03">03
-                    </option><option value="04">04
-                    </option><option value="05">05
-                    </option><option value="06">06
-                    </option><option value="07">07
-                    </option><option value="08">08
-                    </option><option value="09">09
-                    </option><option value="10">10
-                    </option><option value="11">11
-                    </option><option value="12">12
-                    </option><option value="13">13
-                    </option><option value="14">14
-                    </option><option value="15">15
-                    </option><option value="16">16
-                    </option><option value="17">17
-                    </option><option value="18">18
-                    </option><option value="19">19
-                    </option><option value="20">20
-                    </option><option value="21">21
-                    </option><option value="22">22
-                    </option><option value="23">23
-                    </option><option value="24">24
-                    </option><option value="25">25
-                    </option><option value="26">26
-                    </option><option value="27">27
-                    </option><option value="28">28
-                    </option><option value="29">29
-                    </option><option value="30">30
-                    </option><option value="31">31
-                    </option></select>        
-                          <select name="mesIni" class="PucpCampo"><option value="01">Ene
-                    </option><option value="02">Feb
-                    </option><option value="03">Mar
-                    </option><option value="04">Abr
-                    </option><option value="05">May
-                    </option><option value="06">Jun
-                    </option><option value="07">Jul
-                    </option><option value="08">Ago
-                    </option><option value="09">Set
-                    </option><option value="10">Oct
-                    </option><option value="11">Nov
-                    </option><option value="12">Dic
-                    </option></select>       
-                          <select name="anhoIni" class="PucpCampo"><option value="1922">1922
-                    </option><option value="1923">1923
-                    </option><option value="1931">1931
-                    </option><option value="1932">1932
-                    </option><option value="1933">1933
-                    </option><option value="1934">1934
-                    </option><option value="1935">1935
-                    </option><option value="1936">1936
-                    </option><option value="1937">1937
-                    </option><option value="1938">1938
-                    </option><option value="1939">1939
-                    </option><option value="1940">1940
-                    </option><option value="1941">1941
-                    </option><option value="1942">1942
-                    </option><option value="1943">1943
-                    </option><option value="1944">1944
-                    </option><option value="1945">1945
-                    </option><option value="1946">1946
-                    </option><option value="1947">1947
-                    </option><option value="1948">1948
-                    </option><option value="1949">1949
-                    </option><option value="1950">1950
-                    </option><option value="1951">1951
-                    </option><option value="1952">1952
-                    </option><option value="1953">1953
-                    </option><option value="1954">1954
-                    </option><option value="1955">1955
-                    </option><option value="1956">1956
-                    </option><option value="1957">1957
-                    </option><option value="1958">1958
-                    </option><option value="1959">1959
-                    </option><option value="1960">1960
-                    </option><option value="1961">1961
-                    </option><option value="1962">1962
-                    </option><option value="1963">1963
-                    </option><option value="1964">1964
-                    </option><option value="1965">1965
-                    </option><option value="1966">1966
-                    </option><option value="1967">1967
-                    </option><option value="1968">1968
-                    </option><option value="1969">1969
-                    </option><option value="1970">1970
-                    </option><option value="1971">1971
-                    </option><option value="1972">1972
-                    </option><option value="1973">1973
-                    </option><option value="1974">1974
-                    </option><option value="1975">1975
-                    </option><option value="1976">1976
-                    </option><option value="1977">1977
-                    </option><option value="1978">1978
-                    </option><option value="1979">1979
-                    </option><option value="1980">1980
-                    </option><option value="1981">1981
-                    </option><option value="1982">1982
-                    </option><option value="1983">1983
-                    </option><option value="1984">1984
-                    </option><option value="1985">1985
-                    </option><option value="1986">1986
-                    </option><option value="1987">1987
-                    </option><option value="1988">1988
-                    </option><option value="1989">1989
-                    </option><option value="1990">1990
-                    </option><option value="1991">1991
-                    </option><option value="1992">1992
-                    </option><option value="1993">1993
-                    </option><option value="1994">1994
-                    </option><option value="1995">1995
-                    </option><option value="1996">1996
-                    </option><option value="1997">1997
-                    </option><option value="1998">1998
-                    </option><option value="1999">1999
-                    </option><option value="2000">2000
-                    </option><option value="2001">2001
-                    </option><option value="2002">2002
-                    </option><option value="2003">2003
-                    </option><option value="2004">2004
-                    </option><option value="2005">2005
-                    </option><option value="2006">2006
-                    </option><option value="2007">2007
-                    </option><option value="2008">2008
-                    </option><option value="2009">2009
-                    </option><option value="2010">2010
-                    </option><option value="2011">2011
-                    </option><option value="2012">2012
-                    </option><option value="2013">2013
-                    </option><option value="2014">2014
-                    </option><option value="2015">2015
-                    </option><option value="2016">2016
-                    </option><option value="2017">2017
-                    </option><option value="2018">2018
-                    </option><option value="2019">2019
-                    </option><option value="2020">2020
-                    </option><option value="2021">2021
-                    </option><option value="2022">2022
-                    </option><option value="2023">2023
-                    </option><option value="2024">2024
-                    </option></select> y
-                    
-                          <select name="diaFin" class="PucpCampo"><option value="01">01
-                    </option><option value="02">02
-                    </option><option value="03">03
-                    </option><option value="04">04
-                    </option><option value="05">05
-                    </option><option value="06">06
-                    </option><option value="07">07
-                    </option><option value="08">08
-                    </option><option value="09">09
-                    </option><option value="10">10
-                    </option><option value="11">11
-                    </option><option value="12">12
-                    </option><option value="13">13
-                    </option><option value="14">14
-                    </option><option value="15">15
-                    </option><option value="16">16
-                    </option><option value="17">17
-                    </option><option value="18">18
-                    </option><option value="19">19
-                    </option><option value="20">20
-                    </option><option value="21">21
-                    </option><option value="22">22
-                    </option><option value="23">23
-                    </option><option value="24">24
-                    </option><option value="25">25
-                    </option><option value="26">26
-                    </option><option value="27">27
-                    </option><option value="28">28
-                    </option><option value="29">29
-                    </option><option value="30">30
-                    </option><option value="31" selected="">31
-                    </option></select>
-                          <select name="mesFin" class="PucpCampo"><option value="01">Ene
-                    </option><option value="02">Feb
-                    </option><option value="03">Mar
-                    </option><option value="04">Abr
-                    </option><option value="05">May
-                    </option><option value="06">Jun
-                    </option><option value="07">Jul
-                    </option><option value="08">Ago
-                    </option><option value="09">Set
-                    </option><option value="10">Oct
-                    </option><option value="11">Nov
-                    </option><option value="12" selected="">Dic
-                    </option></select>
-                          <select name="anhoFin" class="PucpCampo"><option value="1922">1922
-                    </option><option value="1923">1923
-                    </option><option value="1931">1931
-                    </option><option value="1932">1932
-                    </option><option value="1933">1933
-                    </option><option value="1934">1934
-                    </option><option value="1935">1935
-                    </option><option value="1936">1936
-                    </option><option value="1937">1937
-                    </option><option value="1938">1938
-                    </option><option value="1939">1939
-                    </option><option value="1940">1940
-                    </option><option value="1941">1941
-                    </option><option value="1942">1942
-                    </option><option value="1943">1943
-                    </option><option value="1944">1944
-                    </option><option value="1945">1945
-                    </option><option value="1946">1946
-                    </option><option value="1947">1947
-                    </option><option value="1948">1948
-                    </option><option value="1949">1949
-                    </option><option value="1950">1950
-                    </option><option value="1951">1951
-                    </option><option value="1952">1952
-                    </option><option value="1953">1953
-                    </option><option value="1954">1954
-                    </option><option value="1955">1955
-                    </option><option value="1956">1956
-                    </option><option value="1957">1957
-                    </option><option value="1958">1958
-                    </option><option value="1959">1959
-                    </option><option value="1960">1960
-                    </option><option value="1961">1961
-                    </option><option value="1962">1962
-                    </option><option value="1963">1963
-                    </option><option value="1964">1964
-                    </option><option value="1965">1965
-                    </option><option value="1966">1966
-                    </option><option value="1967">1967
-                    </option><option value="1968">1968
-                    </option><option value="1969">1969
-                    </option><option value="1970">1970
-                    </option><option value="1971">1971
-                    </option><option value="1972">1972
-                    </option><option value="1973">1973
-                    </option><option value="1974">1974
-                    </option><option value="1975">1975
-                    </option><option value="1976">1976
-                    </option><option value="1977">1977
-                    </option><option value="1978">1978
-                    </option><option value="1979">1979
-                    </option><option value="1980">1980
-                    </option><option value="1981">1981
-                    </option><option value="1982">1982
-                    </option><option value="1983">1983
-                    </option><option value="1984">1984
-                    </option><option value="1985">1985
-                    </option><option value="1986">1986
-                    </option><option value="1987">1987
-                    </option><option value="1988">1988
-                    </option><option value="1989">1989
-                    </option><option value="1990">1990
-                    </option><option value="1991">1991
-                    </option><option value="1992">1992
-                    </option><option value="1993">1993
-                    </option><option value="1994">1994
-                    </option><option value="1995">1995
-                    </option><option value="1996">1996
-                    </option><option value="1997">1997
-                    </option><option value="1998">1998
-                    </option><option value="1999">1999
-                    </option><option value="2000">2000
-                    </option><option value="2001">2001
-                    </option><option value="2002">2002
-                    </option><option value="2003">2003
-                    </option><option value="2004">2004
-                    </option><option value="2005">2005
-                    </option><option value="2006">2006
-                    </option><option value="2007">2007
-                    </option><option value="2008">2008
-                    </option><option value="2009">2009
-                    </option><option value="2010">2010
-                    </option><option value="2011">2011
-                    </option><option value="2012">2012
-                    </option><option value="2013">2013
-                    </option><option value="2014">2014
-                    </option><option value="2015">2015
-                    </option><option value="2016">2016
-                    </option><option value="2017">2017
-                    </option><option value="2018">2018
-                    </option><option value="2019">2019
-                    </option><option value="2020">2020
-                    </option><option value="2021">2021
-                    </option><option value="2022">2022
-                    </option><option value="2023">2023
-                    </option><option value="2024" selected="">2024
-                    </option></select> 
-                    
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="pucpEtiqOblig">Ordenado
-                        </td>
-                        <td class="pucpCampo">
-                          <select name="orden" class="pucpCampo">
-                            <option value="0" selected="">por nombre</option>
-                            
-                            <option value="1">por código</option>
-                            
-                            <option value="2">por fecha de aprobación</option>
-                          </select>
-                        </td>
-                      </tr>
-                    
-                    
-                    </tbody></table>
-                    
-                    <table border="0" cellpadding="0" width="100%" height="23">
-                      <tbody><tr> <td> &nbsp; </td> </tr>
-                      <tr>
-                              
-                        <td><p align="center">
-                            <button type="button" onclick="javascript:Valida()" onmouseover="self.status = ''; return true" class="pucpBoton pucpBotonCorto">Consultar</button></p>
-                        </td>
-                    
-                      </tr>
-                    
-                    <!--  //AVR 02-12-2015
-                    //Adicionar ciclo egreso FCI bachiller %>
-                    <tr><td width="100%" colspan="3" class="pucpCampo">
-                    <a href="/pucp/ocr/ocwgrado/jsp/bachilleresFCI.pdf">Enlace especial para bachilleres de la Facultad de Ciencias e Ingeniería</a>
-                    </td></tr>
-                    -->
-                    </tbody></table>
-                    <br>
-                    <table width="98%">
-                        <tbody>
-                            <tr>
-                              <td>
-                              <font class="pucpEtiq"><strong>Importante</strong><br>
-                              La información ofrecida puede ser utilizada para comunicaciones individuales y con fines académicos únicamente vinculados con los servicios educativos de la Pontificia Universidad Católica del Perú (PUCP). Los datos personales aquí contenidos deberán ser utilizados en conformidad con la Ley N.° 29733, Ley de Protección de Datos Personales, y su reglamento. La PUCP NO AUTORIZA su uso para confeccionar bases de datos o generar envíos masivos.</font>
-                              </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    
-                    </form>
-               </section>
-            </main>
+                                                 </div>
+
+
+                                             </div>
+
+                                             <div class="col-12">
+                                                 <label for="validationCustom04" class="form-label">Seleccione formatos de descarga</label>
+                                                 <div class="form-check form-switch ps-0">
+                                                     <label class="form-check-label" for="flexSwitchCheckDefault">PDF</label>
+                                                     <input class="form-check-input ms-auto" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+                                                 </div>
+                                                 <div class="form-check form-switch ps-0 mt-2">
+                                                     <label class="form-check-label" for="flexSwitchCheckDefault">Excel</label>
+                                                     <input class="form-check-input ms-auto" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+                                                 </div>
+                                                 <div class="form-check form-switch ps-0 mt-2">
+                                                     <label class="form-check-label" for="flexSwitchCheckDefault">CSV</label>
+                                                     <input class="form-check-input ms-auto" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+                                                 </div>
+                                             </div>
+                                             <div class="col-12">
+                                                 <div class="d-flex flex-row gap-2">
+                                                     <button class="btn btn-primary w-100" type="submit">Descargar</button>
+                                                     <button class="btn btn-light w-100" type="button">Previsualizar</button>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+
+                                 <!-- tercera tarjeta -->
+                                 <div class="col-lg-4 col-12"> <!-- Aumentamos a col-lg-6 para dividir el espacio -->
+                                     <h3 class="text-center mt-6">Órdenes por agente asignado en la zona</h3> <!-- Aquí está el título -->
+                                     <div class="card card-lg">
+                                         <div class="card-body p-6 d-flex flex-column gap-3">
+
+
+                                             <div class="col-12">
+                                                 <label for="validationCustom04" class="form-label">Seleccione formatos de descarga</label>
+                                                 <div class="form-check form-switch ps-0">
+                                                     <label class="form-check-label" for="flexSwitchCheckDefault">PDF</label>
+                                                     <input class="form-check-input ms-auto" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+                                                 </div>
+                                                 <div class="form-check form-switch ps-0 mt-2">
+                                                     <label class="form-check-label" for="flexSwitchCheckDefault">Excel</label>
+                                                     <input class="form-check-input ms-auto" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+                                                 </div>
+                                                 <div class="form-check form-switch ps-0 mt-2">
+                                                     <label class="form-check-label" for="flexSwitchCheckDefault">CSV</label>
+                                                     <input class="form-check-input ms-auto" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+                                                 </div>
+                                             </div>
+                                             <div class="col-12">
+                                                 <div class="d-flex flex-row gap-2">
+                                                     <button class="btn btn-primary w-100" type="submit">Descargar</button>
+                                                     <button class="btn btn-light w-100" type="button">Previsualizar</button>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+
+                 </div>
+
+
+
+
+             </main>
          </div>
 	  </div>
+	  <!-- LIBRERIAS -->
+	  <div>
+		  <!-- Javascript-->
+		  <!-- Libs JS -->
+		  <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+		  <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+		  <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
-      <!-- Libs JS -->
-<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-      <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-      <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+		  <!-- Theme JS -->
+		  <script th:src="@{/js/theme.min.js}"></script>
 
-      <!-- Theme JS -->
-      <script th:src="@{/js/theme.min.js}"></script>
+		  <script th:src="@{/js/vendors/jquery.min.js}"></script>
+		  <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+		  <script th:src="@{/js/vendors/slick-slider.js}"></script>
+		  <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+		  <script th:src="@{/js/vendors/tns-slider.js}"></script>
+		  <script th:src="@{/js/vendors/zoom.js}"></script>
 
-      <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
-      <script th:src="@{/js/vendors/chart.js}"></script>
+		  <script th:src="@{/js/vendors/countdown.js}"></script>
+		  <script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
+		  <script th:src="@{/js/vendors/sticky.js}"></script>
+		  <script th:src="@{/js/vendors/modal.js}"></script>
+	  </div>
    </body>
 </html>
