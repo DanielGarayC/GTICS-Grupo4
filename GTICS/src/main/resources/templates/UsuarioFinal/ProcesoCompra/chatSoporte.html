@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -7,17 +7,16 @@
         <meta content="Codescandy" name="author">
         <title>Chat Soporte</title>
         <!-- Favicon icon-->
-        <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico">
+        <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
 
         <!-- Libs CSS -->
-        <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
-        <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet">
-        <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
-
+        <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+        <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+        <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
         <!-- Theme CSS -->
-        <link rel="stylesheet" href="../assets/css/theme.min.css">
+        <link rel="stylesheet" th:href="@{/css/theme.min.css}">
         <style>
             .info-box {
                 display: flex;
@@ -61,12 +60,12 @@
                     <div class="container">
                         <div class="row w-100 align-items-center gx-lg-2 gx-0">
                             <div class="col-xxl-2 col-lg-3 col-md-6 col-5">
-                                <a class="navbar-brand d-none d-lg-block" href="pagina_principalUF.html">
-                                    <img src="../assets/images/logo/logoGTICS.jpeg" alt="" width="200" height="auto" />
+                                <a class="navbar-brand d-none d-lg-block" th:href="@{/UsuarioFinal/pagPrincipal}">
+                                    <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" width="200" height="auto" />
                                 </a>
                                 <div class="d-flex justify-content-between w-100 d-lg-none">
                                     <a class="navbar-brand" href="">
-                                        <img src="../assets/images/logo/logoGTICS.jpeg" alt="eCommerce HTML Template" width="100" height="auto" />
+                                        <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="eCommerce HTML Template" width="100" height="auto" />
                                     </a>
                                 </div>
                             </div>
@@ -172,7 +171,7 @@
                                         <!-- Avatar -->
                                         <li class="list-inline-item dropdown">
                                             <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+                                                <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end p-0">
                                                 <div class="lh-1 px-5 py-4 border-bottom">
@@ -180,7 +179,7 @@
                                                     <small>rol en la página</small>
                                                 </div>
                                                 <div class="border-top px-5 py-3">
-                                                    <a href="perfil.html">Mi perfil</a>
+                                                    <a th:href="@{/UsuarioFinal/miPerfil}">Mi perfil</a>
                                                 </div>
                                                 <div class="border-top px-5 py-3">
                                                     <a href="#">Cerrar sesión</a>
@@ -257,33 +256,33 @@
                                         Todas las categorías
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item" href="categoria.html">Salud y Belleza</a></li>
-                                        <li><a class="dropdown-item" href="categoria.html">Electrónica y tecnología</a></li>
-                                        <li><a class="dropdown-item" href="categoria.html">Moda y ropa</a></li>
-                                        <li><a class="dropdown-item" href="categoria.html">Hogar y cocina</a></li>
-                                        <li><a class="dropdown-item" href="categoria.html">Arte y manualidades</a></li>
-                                        <li><a class="dropdown-item" href="categoria.html">Deportes y ocio</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Salud y Belleza</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Electrónica y tecnología</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Moda y ropa</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Hogar y cocina</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Arte y manualidades</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Deportes y ocio</a></li>
                                     </ul>
                                 </div>
                                 <div>
                                     <ul class="navbar-nav align-items-center">
                                         <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link " href="pagina_principalUF.html"   aria-expanded="false">Inicio</a>
+                                            <a class="nav-link " th:href="@{/UsuarioFinal/pagPrincipal}"   aria-expanded="false">Inicio</a>
 
                                         </li>
                                         <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link " href="productos.html" aria-expanded="false">Productos</a>
+                                            <a class="nav-link " th:href="@{/UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
 
                                         </li>
                                         <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link " href="listaMisOrdenes.html"  aria-expanded="false">Mis compras</a>
+                                            <a class="nav-link " th:href="@{/UsuarioFinal/listaMisOrdenes}"  aria-expanded="false">Mis compras</a>
 
                                         </li>
                                         <li class="nav-item dropdown w-100 w-lg-auto">
                                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mensajería</a>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="foro.html">Reseñas</a></li>
-                                                <li><a class="dropdown-item" href="../pages/store-grid.html">Preguntas frecuentes</a></li>
+                                                <li><a class="dropdown-item" th:href="@{/UsuarioFinal/foro}">Reseñas</a></li>
+                                                <li><a class="dropdown-item" th:href="@{/UsuarioFinal/faq}">Preguntas frecuentes</a></li>
 
                                             </ul>
                                         </li>
@@ -298,43 +297,43 @@
                     </div>
                 </nav>
             </div>
-            </div>
-            <!-- Modal -->
+        </div>
+        <!-- Modal -->
 
-            <!-- Shop Cart -->
+        <!-- Shop Cart -->
 
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                <div class="offcanvas-header border-bottom">
-                    <div class="text-start">
-                        <h5 id="offcanvasRightLabel" class="mb-0 fs-4">Carrito de Compras</h5>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header border-bottom">
+                <div class="text-start">
+                    <h5 id="offcanvasRightLabel" class="mb-0 fs-4">Carrito de Compras</h5>
 
-                    </div>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
-                    <div>
-                        <!-- alert -->
-                        <div class="alert alert-danger p-2" role="alert">
-                            Tenemos los mejores productos.
-                            <a href="#!" class="alert-link">Ve a la sección proceso de compras ya!</a>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <!-- list group -->
-                            <li class="list-group-item py-3 ps-0 border-top">
-                                <!-- row -->
-                                <div class="row align-items-center">
-                                    <div class="col-6 col-md-6 col-lg-7">
-                                        <div class="d-flex">
-                                            <img src="../assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                            <div class="ms-3">
-                                                <!-- title -->
-                                                <a href="../pages/shop-single.html" class="text-inherit">
-                                                    <h6 class="mb-0">Laptop HP</h6>
-                                                </a>
-                                                <span><small class="text-muted"></small></span>
-                                                <!-- text -->
-                                                <div class="mt-2 small lh-1">
-                                                    <a href="#!" class="text-decoration-none text-inherit">
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div>
+                    <!-- alert -->
+                    <div class="alert alert-danger p-2" role="alert">
+                        Tenemos los mejores productos.
+                        <a href="#!" class="alert-link">Ve a la sección proceso de compras ya!</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <!-- list group -->
+                        <li class="list-group-item py-3 ps-0 border-top">
+                            <!-- row -->
+                            <div class="row align-items-center">
+                                <div class="col-6 col-md-6 col-lg-7">
+                                    <div class="d-flex">
+                                        <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                        <div class="ms-3">
+                                            <!-- title -->
+                                            <a th:href="@{/UsuarioFinal/detallesProducto}" class="text-inherit">
+                                                <h6 class="mb-0">Laptop HP</h6>
+                                            </a>
+                                            <span><small class="text-muted"></small></span>
+                                            <!-- text -->
+                                            <div class="mt-2 small lh-1">
+                                                <a href="#!" class="text-decoration-none text-inherit">
                                        <span class="me-1 align-text-bottom">
                                           <svg
                                                   xmlns="http://www.w3.org/2000/svg"
@@ -353,44 +352,44 @@
                                              <line x1="14" y1="11" x2="14" y2="17"></line>
                                           </svg>
                                        </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </a>
-                                                </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- input group -->
-                                    <div class="col-4 col-md-3 col-lg-3">
-                                        <!-- input -->
-                                        <!-- input -->
-                                        <div class="input-group input-spinner">
-                                            <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                            <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                        </div>
-                                    </div>
-                                    <!-- price -->
-                                    <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                        <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                                <!-- input group -->
+                                <div class="col-4 col-md-3 col-lg-3">
+                                    <!-- input -->
+                                    <!-- input -->
+                                    <div class="input-group input-spinner">
+                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                        <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                            </li>
-                            <!-- list group -->
-                            <li class="list-group-item py-3 ps-0 border-top">
-                                <!-- row -->
-                                <div class="row align-items-center">
-                                    <div class="col-6 col-md-6 col-lg-7">
-                                        <div class="d-flex">
-                                            <img src="../assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                            <div class="ms-3">
-                                                <!-- title -->
-                                                <a href="../pages/shop-single.html" class="text-inherit">
-                                                    <h6 class="mb-0">Laptop HP</h6>
-                                                </a>
-                                                <span><small class="text-muted"></small></span>
-                                                <!-- text -->
-                                                <div class="mt-2 small lh-1">
-                                                    <a href="#!" class="text-decoration-none text-inherit">
+                                <!-- price -->
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                    <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- list group -->
+                        <li class="list-group-item py-3 ps-0 border-top">
+                            <!-- row -->
+                            <div class="row align-items-center">
+                                <div class="col-6 col-md-6 col-lg-7">
+                                    <div class="d-flex">
+                                        <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                        <div class="ms-3">
+                                            <!-- title -->
+                                            <a th:href="@{/UsuarioFinal/detallesProducto}" class="text-inherit">
+                                                <h6 class="mb-0">Laptop HP</h6>
+                                            </a>
+                                            <span><small class="text-muted"></small></span>
+                                            <!-- text -->
+                                            <div class="mt-2 small lh-1">
+                                                <a href="#!" class="text-decoration-none text-inherit">
                                        <span class="me-1 align-text-bottom">
                                           <svg
                                                   xmlns="http://www.w3.org/2000/svg"
@@ -409,44 +408,44 @@
                                              <line x1="14" y1="11" x2="14" y2="17"></line>
                                           </svg>
                                        </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </a>
-                                                </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- input group -->
-                                    <div class="col-4 col-md-3 col-lg-3">
-                                        <!-- input -->
-                                        <!-- input -->
-                                        <div class="input-group input-spinner">
-                                            <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                            <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                        </div>
-                                    </div>
-                                    <!-- price -->
-                                    <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                        <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                                <!-- input group -->
+                                <div class="col-4 col-md-3 col-lg-3">
+                                    <!-- input -->
+                                    <!-- input -->
+                                    <div class="input-group input-spinner">
+                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                        <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                            </li>
-                            <!-- list group -->
-                            <li class="list-group-item py-3 ps-0 border-top">
-                                <!-- row -->
-                                <div class="row align-items-center">
-                                    <div class="col-6 col-md-6 col-lg-7">
-                                        <div class="d-flex">
-                                            <img src="../assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                            <div class="ms-3">
-                                                <!-- title -->
-                                                <a href="../pages/shop-single.html" class="text-inherit">
-                                                    <h6 class="mb-0">Laptop HP</h6>
-                                                </a>
-                                                <span><small class="text-muted"></small></span>
-                                                <!-- text -->
-                                                <div class="mt-2 small lh-1">
-                                                    <a href="#!" class="text-decoration-none text-inherit">
+                                <!-- price -->
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                    <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- list group -->
+                        <li class="list-group-item py-3 ps-0 border-top">
+                            <!-- row -->
+                            <div class="row align-items-center">
+                                <div class="col-6 col-md-6 col-lg-7">
+                                    <div class="d-flex">
+                                        <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                        <div class="ms-3">
+                                            <!-- title -->
+                                            <a th:href="@{/UsuarioFinal/detallesProducto}" class="text-inherit">
+                                                <h6 class="mb-0">Laptop HP</h6>
+                                            </a>
+                                            <span><small class="text-muted"></small></span>
+                                            <!-- text -->
+                                            <div class="mt-2 small lh-1">
+                                                <a href="#!" class="text-decoration-none text-inherit">
                                        <span class="me-1 align-text-bottom">
                                           <svg
                                                   xmlns="http://www.w3.org/2000/svg"
@@ -465,44 +464,44 @@
                                              <line x1="14" y1="11" x2="14" y2="17"></line>
                                           </svg>
                                        </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </a>
-                                                </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- input group -->
-                                    <div class="col-4 col-md-3 col-lg-3">
-                                        <!-- input -->
-                                        <!-- input -->
-                                        <div class="input-group input-spinner">
-                                            <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                            <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                        </div>
-                                    </div>
-                                    <!-- price -->
-                                    <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                        <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                                <!-- input group -->
+                                <div class="col-4 col-md-3 col-lg-3">
+                                    <!-- input -->
+                                    <!-- input -->
+                                    <div class="input-group input-spinner">
+                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                        <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                            </li>
-                            <!-- list group -->
-                            <li class="list-group-item py-3 ps-0 border-top">
-                                <!-- row -->
-                                <div class="row align-items-center">
-                                    <div class="col-6 col-md-6 col-lg-7">
-                                        <div class="d-flex">
-                                            <img src="../assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                            <div class="ms-3">
-                                                <!-- title -->
-                                                <a href="../pages/shop-single.html" class="text-inherit">
-                                                    <h6 class="mb-0">Laptop HP</h6>
-                                                </a>
-                                                <span><small class="text-muted"></small></span>
-                                                <!-- text -->
-                                                <div class="mt-2 small lh-1">
-                                                    <a href="#!" class="text-decoration-none text-inherit">
+                                <!-- price -->
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                    <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- list group -->
+                        <li class="list-group-item py-3 ps-0 border-top">
+                            <!-- row -->
+                            <div class="row align-items-center">
+                                <div class="col-6 col-md-6 col-lg-7">
+                                    <div class="d-flex">
+                                        <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                        <div class="ms-3">
+                                            <!-- title -->
+                                            <a th:href="@{/UsuarioFinal/detallesProducto}" class="text-inherit">
+                                                <h6 class="mb-0">Laptop HP</h6>
+                                            </a>
+                                            <span><small class="text-muted"></small></span>
+                                            <!-- text -->
+                                            <div class="mt-2 small lh-1">
+                                                <a href="#!" class="text-decoration-none text-inherit">
                                        <span class="me-1 align-text-bottom">
                                           <svg
                                                   xmlns="http://www.w3.org/2000/svg"
@@ -521,44 +520,44 @@
                                              <line x1="14" y1="11" x2="14" y2="17"></line>
                                           </svg>
                                        </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </a>
-                                                </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- input group -->
-                                    <div class="col-4 col-md-3 col-lg-3">
-                                        <!-- input -->
-                                        <!-- input -->
-                                        <div class="input-group input-spinner">
-                                            <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                            <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                        </div>
-                                    </div>
-                                    <!-- price -->
-                                    <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                        <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                                <!-- input group -->
+                                <div class="col-4 col-md-3 col-lg-3">
+                                    <!-- input -->
+                                    <!-- input -->
+                                    <div class="input-group input-spinner">
+                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                        <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                            </li>
-                            <!-- list group -->
-                            <li class="list-group-item py-3 ps-0 border-top">
-                                <!-- row -->
-                                <div class="row align-items-center">
-                                    <div class="col-6 col-md-6 col-lg-7">
-                                        <div class="d-flex">
-                                            <img src="../assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                            <div class="ms-3">
-                                                <!-- title -->
-                                                <a href="../pages/shop-single.html" class="text-inherit">
-                                                    <h6 class="mb-0">Laptop HP</h6>
-                                                </a>
-                                                <span><small class="text-muted"></small></span>
-                                                <!-- text -->
-                                                <div class="mt-2 small lh-1">
-                                                    <a href="#!" class="text-decoration-none text-inherit">
+                                <!-- price -->
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                    <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- list group -->
+                        <li class="list-group-item py-3 ps-0 border-top">
+                            <!-- row -->
+                            <div class="row align-items-center">
+                                <div class="col-6 col-md-6 col-lg-7">
+                                    <div class="d-flex">
+                                        <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                        <div class="ms-3">
+                                            <!-- title -->
+                                            <a th:href="@{/UsuarioFinal/detallesProducto}" class="text-inherit">
+                                                <h6 class="mb-0">Laptop HP</h6>
+                                            </a>
+                                            <span><small class="text-muted"></small></span>
+                                            <!-- text -->
+                                            <div class="mt-2 small lh-1">
+                                                <a href="#!" class="text-decoration-none text-inherit">
                                        <span class="me-1 align-text-bottom">
                                           <svg
                                                   xmlns="http://www.w3.org/2000/svg"
@@ -577,168 +576,168 @@
                                              <line x1="14" y1="11" x2="14" y2="17"></line>
                                           </svg>
                                        </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </a>
-                                                </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- input group -->
-                                    <div class="col-4 col-md-3 col-lg-3">
-                                        <!-- input -->
-                                        <!-- input -->
-                                        <div class="input-group input-spinner">
-                                            <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                            <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                        </div>
-                                    </div>
-                                    <!-- price -->
-                                    <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                        <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                                <!-- input group -->
+                                <div class="col-4 col-md-3 col-lg-3">
+                                    <!-- input -->
+                                    <!-- input -->
+                                    <div class="input-group input-spinner">
+                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                        <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                            </li>
-                        </ul>
-                        <!-- btn -->
-                        <div class="d-flex justify-content-between mt-4">
-                            <a href="#!" class="btn btn-primary">Continuar comprando</a>
-                            <a href="#!" class="btn btn-dark">Ir a Proceso de Compra</a>
-                        </div>
+                                <!-- price -->
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                    <span class="fw-bold">S/. 145.00</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- btn -->
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="#!" class="btn btn-primary">Continuar comprando</a>
+                        <a href="#!" class="btn btn-dark">Ir a Proceso de Compra</a>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-sm modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body p-6">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="mb-1" id="locationModalLabel">Choose your Delivery Location</h5>
-                                    <p class="mb-0 small">Enter your address and we will specify the offer you area.</p>
-                                </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="my-5">
-                                <input type="search" class="form-control" placeholder="Search your area" />
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="mb-0">Select Location</h6>
-                                <a href="#" class="btn btn-outline-gray-400 text-muted btn-sm">Clear All</a>
-                            </div>
+        <!-- Modal -->
+        <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-6">
+                        <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <div data-simplebar style="height: 300px">
-                                    <div class="list-group list-group-flush">
-                                        <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action active">
-                                            <span>Alabama</span>
-                                            <span>Min:$20</span>
-                                        </a>
-                                        <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
-                                            <span>Alaska</span>
-                                            <span>Min:$30</span>
-                                        </a>
-                                        <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
-                                            <span>Arizona</span>
-                                            <span>Min:$50</span>
-                                        </a>
-                                        <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
-                                            <span>California</span>
-                                            <span>Min:$29</span>
-                                        </a>
-                                        <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
-                                            <span>Colorado</span>
-                                            <span>Min:$80</span>
-                                        </a>
-                                        <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
-                                            <span>Florida</span>
-                                            <span>Min:$90</span>
-                                        </a>
-                                        <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
-                                            <span>Arizona</span>
-                                            <span>Min:$50</span>
-                                        </a>
-                                        <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
-                                            <span>California</span>
-                                            <span>Min:$29</span>
-                                        </a>
-                                        <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
-                                            <span>Colorado</span>
-                                            <span>Min:$80</span>
-                                        </a>
-                                        <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
-                                            <span>Florida</span>
-                                            <span>Min:$90</span>
-                                        </a>
-                                    </div>
+                                <h5 class="mb-1" id="locationModalLabel">Choose your Delivery Location</h5>
+                                <p class="mb-0 small">Enter your address and we will specify the offer you area.</p>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="my-5">
+                            <input type="search" class="form-control" placeholder="Search your area" />
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">Select Location</h6>
+                            <a href="#" class="btn btn-outline-gray-400 text-muted btn-sm">Clear All</a>
+                        </div>
+                        <div>
+                            <div data-simplebar style="height: 300px">
+                                <div class="list-group list-group-flush">
+                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action active">
+                                        <span>Alabama</span>
+                                        <span>Min:$20</span>
+                                    </a>
+                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                        <span>Alaska</span>
+                                        <span>Min:$30</span>
+                                    </a>
+                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                        <span>Arizona</span>
+                                        <span>Min:$50</span>
+                                    </a>
+                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                        <span>California</span>
+                                        <span>Min:$29</span>
+                                    </a>
+                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                        <span>Colorado</span>
+                                        <span>Min:$80</span>
+                                    </a>
+                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                        <span>Florida</span>
+                                        <span>Min:$90</span>
+                                    </a>
+                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                        <span>Arizona</span>
+                                        <span>Min:$50</span>
+                                    </a>
+                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                        <span>California</span>
+                                        <span>Min:$29</span>
+                                    </a>
+                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                        <span>Colorado</span>
+                                        <span>Min:$80</span>
+                                    </a>
+                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                                        <span>Florida</span>
+                                        <span>Min:$90</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <script src="../assets/js/vendors/validation.js"></script>
+        <script th:src="@{/js/vendors/validation.js}"></script>
 
 
-            <main>
-                <!-- nav
-               bar vertical (para pc)-->
-                <!-- navbar -->
-                <div class="container">
-                    <section>
-                        <div class="container py-5">
-                            <div class="row d-flex justify-content-center">
-                                <div class="col-md-10 col-lg-8 col-xl-10 col-sm-11">
-                                    <div class="card" id="chat2">
-                                        <div class="card-header d-flex justify-content-between align-items-center p-3">
-                                            <h5 class="mb-0">Chat</h5>
-                                            <a href="listaMisOrdenes.html" class="btn btn-secondary btn-sm" role="button">Regresar</a>
-                                        </div>
-                                        <div class="card-body" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px">
-                                            <div class="d-flex flex-row justify-content-start">
-                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 1" style="width: 45px; height: 100%;">
-                                                <div>
-                                                    <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary">Buenas tardes, ¿podría confirmarme si su ubicación es la siguiente?</p>
-                                                    <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary">Av. La Marina 1290</p>
-                                                    <p class="small ms-3 mb-3 rounded-3 text-muted">15:58</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="divider d-flex align-items-center mb-4">
-                                                <p class="text-center mx-3 mb-0" style="color: #a2aab7;">Hoy</p>
-                                            </div>
-
-                                            <div class="d-flex flex-row justify-content-end mb-4 pt-1">
-                                                <div>
-                                                    <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Sí, la dirección es correcta.</p>
-                                                    <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">La otra referencia es Calle San Cristobal 123.</p>
-                                                    <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">No podré recoger mañana porque iré al trabajo.</p>
-                                                    <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">16:06</p>
-                                                </div>
-                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar 2" style="width: 45px; height: 100%;">
+        <main>
+            <!-- nav
+           bar vertical (para pc)-->
+            <!-- navbar -->
+            <div class="container">
+                <section>
+                    <div class="container py-5">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-md-10 col-lg-8 col-xl-10 col-sm-11">
+                                <div class="card" id="chat2">
+                                    <div class="card-header d-flex justify-content-between align-items-center p-3">
+                                        <h5 class="mb-0">Chat</h5>
+                                        <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-secondary btn-sm" role="button">Regresar</a>
+                                    </div>
+                                    <div class="card-body" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px">
+                                        <div class="d-flex flex-row justify-content-start">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 1" style="width: 45px; height: 100%;">
+                                            <div>
+                                                <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary">Buenas tardes, ¿podría confirmarme si su ubicación es la siguiente?</p>
+                                                <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary">Av. La Marina 1290</p>
+                                                <p class="small ms-3 mb-3 rounded-3 text-muted">15:58</p>
                                             </div>
                                         </div>
-                                        <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3" style="width: 40px; height: 100%;">
-                                            <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1" placeholder="Escribe algo...">
-                                            <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
-                                            <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
-                                            <a class="ms-3" href="#!"><i class="fas fa-paper-plane"></i></a>
+
+                                        <div class="divider d-flex align-items-center mb-4">
+                                            <p class="text-center mx-3 mb-0" style="color: #a2aab7;">Hoy</p>
                                         </div>
+
+                                        <div class="d-flex flex-row justify-content-end mb-4 pt-1">
+                                            <div>
+                                                <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Sí, la dirección es correcta.</p>
+                                                <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">La otra referencia es Calle San Cristobal 123.</p>
+                                                <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">No podré recoger mañana porque iré al trabajo.</p>
+                                                <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">16:06</p>
+                                            </div>
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar 2" style="width: 45px; height: 100%;">
+                                        </div>
+                                    </div>
+                                    <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3" style="width: 40px; height: 100%;">
+                                        <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1" placeholder="Escribe algo...">
+                                        <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
+                                        <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
+                                        <a class="ms-3" href="#!"><i class="fas fa-paper-plane"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
-                </div>
+                    </div>
+                </section>
+            </div>
 
 
 
 
 
-            </main>
+        </main>
 
 
 
@@ -748,13 +747,13 @@
         <!-- Libs JS -->
         <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
 
-        <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
         <!-- Theme JS -->
-        <script src="../assets/js/theme.min.js"></script>
+        <script th:src="@{/js/theme.min.js}"></script>
 
-        <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-        <script src="../assets/js/vendors/chart.js"></script>
+        <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+        <script th:src="@{/js/vendors/chart.js}"></script>
     </body>
 </html>
