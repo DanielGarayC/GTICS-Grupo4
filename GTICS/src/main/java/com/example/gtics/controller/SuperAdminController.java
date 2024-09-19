@@ -35,7 +35,12 @@ public class SuperAdminController {
 
         return "SuperAdmin/GestionAgentes/agent-edit";
     }
-    @GetMapping("SuperAdmin/crearAgente")
+    @GetMapping("SuperAdmin/listaSolicitudesAgentes")
+    public String listaSolicitudesAgentes(){
+
+        return "SuperAdmin/GestionAgentes/agent-request";
+    }
+
     public String crearAgente(){
 
         return "SuperAdmin/GestionAgentes/create-agent";
