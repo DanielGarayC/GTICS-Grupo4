@@ -17,7 +17,7 @@ public class AdminZonalController {
 
         return "AdminZonal/GestionAgentes/agentes";
     }
-    @GetMapping({ "AdminZonal/CrearAgente"})
+    @GetMapping({ "AdminZonal/Agentes/Crear"})
     public String CrearAgente(){
 
         return "AdminZonal/GestionAgentes/crearAgente";

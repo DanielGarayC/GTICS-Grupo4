@@ -144,7 +144,7 @@
 							</div>
 
 							<div class="border-top px-5 py-3">
-								<a href="perfilAdminZonal.html">Mi perfil</a>
+								<a th:href="@{/AdminZonal/Perfil}">Mi perfil</a>
 							</div>
 							<div class="border-top px-5 py-3">
 								<a href="#">Cerrar sesión</a>
@@ -171,7 +171,7 @@
 		<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
 			<ul class="navbar-nav flex-column" id="sideNavbar">
 				<li class="nav-item">
-					<a class="nav-link  active " href="#">
+					<a class="nav-link " th:href="@{/AdminZonal/Dashboard}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
 							<span class="nav-link-text">Dashboard</span>
@@ -183,7 +183,7 @@
 
 
 				<li class="nav-item">
-					<a class="nav-link" href="#">
+					<a class="nav-link active" th:href="@{/AdminZonal/Agentes}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-person"></i></span>
 							<span class="nav-link-text">Agentes</span>
@@ -191,7 +191,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">
+					<a class="nav-link" th:href="@{/AdminZonal/Productos}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-shop"></i></span>
 							<span class="nav-link-text">Productos</span>
@@ -215,7 +215,7 @@
 		<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
 			<ul class="navbar-nav flex-column">
 				<li class="nav-item">
-					<a class="nav-link  active " href="#">
+					<a class="nav-link   " th:href="@{/AdminZonal/Dashboard}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-house"></i></span>
 							<span>Dashboard</span>
@@ -224,7 +224,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link " href="#">
+					<a class="nav-link active" th:href="@{/AdminZonal/Agentes}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-person"></i></span>
 							<span class="nav-link-text">Agentes</span>
@@ -233,7 +233,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link " href="#">
+					<a class="nav-link " th:href="@{/AdminZonal/Productos}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-shop"></i></span>
 							<span class="nav-link-text">Productos</span>
@@ -260,7 +260,7 @@
 							  <!-- breacrumb -->
 							</div>
 							<div>
-							  <a href="agentes.html" class="btn btn-primary">Regresar</a>
+							  <a th:href="@{/AdminZonal/Agentes}" class="btn btn-primary">Regresar</a>
 							</div>
 						  </div>
 						</div>
@@ -345,8 +345,8 @@
 			  
 								
 								<div class="col-lg-12">
-								  <a href="agentes.html" class="btn btn-success mb-2">Crear Agente</a>
-								  <a href="agentes.html" class="btn btn-danger mb-2">Cancelar</a>
+								  <a th:href="@{/AdminZonal/Agentes}" class="btn btn-success mb-2">Crear Agente</a>
+								  <a th:href="@{/AdminZonal/Agentes}" class="btn btn-danger mb-2">Cancelar</a>
 								</div>
 							  </div>
 							</div>

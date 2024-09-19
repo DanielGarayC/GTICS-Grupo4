@@ -144,7 +144,7 @@
 							</div>
 
 							<div class="border-top px-5 py-3">
-								<a href="perfilAdminZonal.html">Mi perfil</a>
+								<a th:href="@{Perfil}">Mi perfil</a>
 							</div>
 							<div class="border-top px-5 py-3">
 								<a href="#">Cerrar sesión</a>
@@ -171,7 +171,7 @@
 		<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
 			<ul class="navbar-nav flex-column" id="sideNavbar">
 				<li class="nav-item">
-					<a class="nav-link " href="dashboard.html">
+					<a class="nav-link " th:href="@{Dashboard}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
 							<span class="nav-link-text">Dashboard</span>
@@ -183,7 +183,7 @@
 
 
 				<li class="nav-item">
-					<a class="nav-link active" href="agentes.html">
+					<a class="nav-link active" th:href="@{Agentes}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-person"></i></span>
 							<span class="nav-link-text">Agentes</span>
@@ -191,7 +191,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="productos.html">
+					<a class="nav-link" th:href="@{Productos}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-shop"></i></span>
 							<span class="nav-link-text">Productos</span>
@@ -215,7 +215,7 @@
 		<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
 			<ul class="navbar-nav flex-column">
 				<li class="nav-item">
-					<a class="nav-link" href="dashboard.html">
+					<a class="nav-link" th:href="@{Dashboard}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-house"></i></span>
 							<span>Dashboard</span>
@@ -224,7 +224,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link active" href="agentes.html">
+					<a class="nav-link active" th:href="@{Agentes}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-person"></i></span>
 							<span class="nav-link-text">Agentes</span>
@@ -233,7 +233,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link " href="productos.html">
+					<a class="nav-link " th:href="@{Productos}">
 						<div class="d-flex align-items-center">
 							<span class="nav-link-icon"><i class="bi bi-shop"></i></span>
 							<span class="nav-link-text">Productos</span>
@@ -414,7 +414,7 @@
 					   <!--card para crear otro agente-->
 					   <div class="card card-product" style="max-width: 390px;padding: 0; height: 33.5vh;">
 						   <div class="card-body" style="padding: 0px;">
-							   <a href="crearAgente.html" class="btn btn-primary bi bi-person-fill-add" style="height: 100%; width: 100%; font-size: 20vh;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Crear agente"></a>
+							   <a th:href="@{Agentes/Crear}" class="btn btn-primary bi bi-person-fill-add" style="height: 100%; width: 100%; font-size: 20vh;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Crear agente"></a>
 						   </div>
 					   </div>
 				   </div>
