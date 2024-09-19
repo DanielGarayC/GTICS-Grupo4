@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta content="Codescandy" name="author">
+      <title>Mis Órdenes</title>
+      <!-- Favicon icon-->
+<link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+
+
+<!-- Libs CSS -->
+       <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+       <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+       <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+
+
+<!-- Theme CSS -->
+<link rel="stylesheet" th:href="@{/css/theme.min.css}">
+   <style>
+      .info-box {
+         display: flex;
+         padding: 20px;
+         border-radius: 8px;
+         margin-top: -100px;
+      }
+      .highlight-text {
+         font-style: italic; /* Texto en cursiva */
+         font-weight: bold; /* Texto en negritas */
+         color:black;
+         letter-spacing: 1px; /* Espaciado entre letras */
+         text-align: center; /* Centrar el texto */
+         font-family: 'Arial', sans-serif; /* Puedes cambiar la fuente si lo prefieres */
+         font-size: 1.2em; /* Tamaño del texto ajustable */
+         text-transform: uppercase; /* Convertir el texto a mayúsculas */
+         margin-top: 20px;
+      }
+      .button-container {
+         text-align: center; /* Centra el botón horizontalmente */
+      }
+      .table {
+         width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
+         text-align: center; /* Centra el contenido horizontalmente */
+      }
+      .table tbody td {
+         color: black; /* Texto negro para el cuerpo de la tabla */
+      }
+   </style>
+
+   </head>
+
+   <body>
+      <!-- main -->
+      <div>
+         <!-- navbar -->
+
+<!-- navbar horizontal -->
+          <!-- navbar -->
+          <div class="border-bottom">
+              <div class="py-5">
+                  <div class="container">
+                      <div class="row w-100 align-items-center gx-lg-2 gx-0">
+                          <div class="col-xxl-2 col-lg-3 col-md-6 col-5">
+                              <a class="navbar-brand d-none d-lg-block" th:href="@{UsuarioFinal/pagPrincipal}">
+                                  <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" width="200" height="auto" />
+                              </a>
+                              <div class="d-flex justify-content-between w-100 d-lg-none">
+                                  <a class="navbar-brand" href="">
+                                      <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="eCommerce HTML Template" width="100" height="auto" />
+                                  </a>
+                              </div>
+                          </div>
+                          <div class="col-xxl-5 col-lg-5 d-none d-lg-block">
+                              <form action="#">
+                                  <div class="input-group">
+                                      <input class="form-control rounded" type="search" placeholder="Búsqueda de productos" />
+                                      <span class="input-group-append">
+                              <button class="btn bg-white border border-start-0 ms-n10 rounded-0 rounded-end" type="button">
+                                 <svg
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         width="16"
+                                         height="16"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="feather feather-search">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                 </svg>
+                              </button>
+                           </span>
+                                  </div>
+                              </form>
+                          </div>
+                          <div class="col-md-2 col-xxl-3 d-none d-lg-block">
+                              <!-- Button trigger modal -->
+
+                          </div>
+                          <div class="col-lg-2 col-xxl-2 text-end col-md-6 col-7 d-flex align-items-center justify-content-end">
+                              <div class="list-inline mb-0">
+                                  <ul class="list-inline">
+                                      <!-- Shopcart icon -->
+                                      <li class="list-inline-item me-5">
+                                          <a class="text-muted position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" th:href="@{#offcanvasExample}" role="button" aria-controls="offcanvasRight">
+                                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
+                                                  <circle cx="9" cy="21" r="1"></circle>
+                                                  <circle cx="20" cy="21" r="1"></circle>
+                                                  <path d="M1 1h4l2 13h13"></path>
+                                                  <path d="M6 6h15l-1.68 8.39a1 1 0 0 1-1 .61H7"></path>
+                                              </svg>
+
+                                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+											1
+											<span class="visually-hidden">unread messages</span>
+										</span>
+                                          </a>
+                                      </li>
+                                      <!-- Notifications icon -->
+                                      <li class="list-inline-item dropdown">
+                                          <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                              <i class="bi bi-bell fs-5"></i>
+                                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+										2
+										<span class="visually-hidden">Mensajes sin leer</span>
+									</span>
+                                          </a>
+                                          <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+                                              <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+                                                  <div>
+                                                      <h5 class="mb-1">Notificaciones</h5>
+                                                      <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
+                                                  </div>
+                                                  <a href="#!" class="text-muted">
+                                                      <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+                                                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+                                                              <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"/>
+                                                              <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z"/>
+                                                          </svg>
+                                                      </a>
+                                                  </a>
+                                              </div>
+                                              <ul class="list-group list-group-flush notification-list-scroll fs-6">
+                                                  <li class="list-group-item px-5 py-4 list-group-item-action">
+                                                      <a href="#!" class="text-muted">
+                                                          <div class="d-flex">
+                                                              <div class="ms-4">
+                                                                  <p class="mb-1">
+                                                                      <span class="text-dark">Título de notificación 1</span>
+                                                                      Descripción notificación 1
+                                                                  </p>
+                                                                  <span>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+															</svg>
+															<small class="ms-2">Hace 1 minuto</small>
+														</span>
+                                                              </div>
+                                                          </div>
+                                                      </a>
+                                                  </li>
+                                                  <!-- Más notificaciones -->
+                                              </ul>
+                                              <div class="border-top px-5 py-4 text-center">
+                                                  <a href="#!">Ver todas</a>
+                                              </div>
+                                          </div>
+                                      </li>
+                                      <!-- Avatar -->
+                                      <li class="list-inline-item dropdown">
+                                          <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                              <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
+                                          </a>
+                                          <div class="dropdown-menu dropdown-menu-end p-0">
+                                              <div class="lh-1 px-5 py-4 border-bottom">
+                                                  <h5 class="mb-1 h6">Nombre Apellido</h5>
+                                                  <small>rol en la página</small>
+                                              </div>
+                                              <div class="border-top px-5 py-3">
+                                                  <a th:href="@{UsuarioFinal/miPerfil}">Mi perfil</a>
+                                              </div>
+                                              <div class="border-top px-5 py-3">
+                                                  <a href="#">Cerrar sesión</a>
+                                              </div>
+                                          </div>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <nav class="navbar navbar-expand-lg navbar-light navbar-default py-0 pb-lg-4" aria-label="Offcanvas navbar large">
+                  <div class="container">
+                      <div class="offcanvas offcanvas-start" tabindex="-1" id="navbar-default" aria-labelledby="navbar-defaultLabel">
+                          <div class="offcanvas-header pb-1">
+                              <a th:href="@{./index.html}"><img th:src="@{/images/logo/logo.svg}" alt="eCommerce HTML Template" /></a>
+                              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                          </div>
+                          <div class="offcanvas-body">
+                              <div class="d-block d-lg-none mb-4">
+                                  <form action="#">
+                                      <div class="input-group">
+                                          <input class="form-control rounded" type="search" placeholder="Search for products" />
+                                          <span class="input-group-append">
+                                 <button class="btn bg-white border border-start-0 ms-n10 rounded-0 rounded-end" type="button">
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="feather feather-search">
+                                       <circle cx="11" cy="11" r="8"></circle>
+                                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                 </button>
+                              </span>
+                                      </div>
+                                  </form>
+                                  <div class="mt-2">
+                                      <button type="button" class="btn btn-outline-gray-400 text-muted w-100" data-bs-toggle="modal" data-bs-target="#locationModal">
+                                          <i class="feather-icon icon-map-pin me-2"></i>
+                                          Pick Location
+                                      </button>
+                                  </div>
+                              </div>
+
+                              <div class="dropdown me-3 d-none d-lg-block">
+                                  <button class="btn btn-primary px-6" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                           <span class="me-1">
+                              <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="feather feather-grid">
+                                 <rect x="3" y="3" width="7" height="7"></rect>
+                                 <rect x="14" y="3" width="7" height="7"></rect>
+                                 <rect x="14" y="14" width="7" height="7"></rect>
+                                 <rect x="3" y="14" width="7" height="7"></rect>
+                              </svg>
+                           </span>
+                                      Todas las categorías
+                                  </button>
+                                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Salud y Belleza</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Electrónica y tecnología</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Moda y ropa</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Hogar y cocina</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Arte y manualidades</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Deportes y ocio</a></li>
+                                  </ul>
+                              </div>
+                              <div>
+                                  <ul class="navbar-nav align-items-center">
+                                      <li class="nav-item dropdown w-100 w-lg-auto">
+                                          <a class="nav-link " th:href="@{UsuarioFinal/pagPrincipal}"   aria-expanded="false">Inicio</a>
+
+                                      </li>
+                                      <li class="nav-item dropdown w-100 w-lg-auto">
+                                          <a class="nav-link " th:href="@{UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
+
+                                      </li>
+                                      <li class="nav-item dropdown w-100 w-lg-auto">
+                                          <a class="nav-link " th:href="@{UsuarioFinal/listaMisOrdenes}"  aria-expanded="false">Mis compras</a>
+
+                                      </li>
+                                      <li class="nav-item dropdown w-100 w-lg-auto">
+                                          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mensajería</a>
+                                          <ul class="dropdown-menu">
+                                              <li><a class="dropdown-item" th:href="@{UsuarioFinal/foro}">Reseñas</a></li>
+                                              <li><a class="dropdown-item" th:href="@{../pages/store-grid.html}">Preguntas frecuentes</a></li>
+
+                                          </ul>
+                                      </li>
+                                      <li class="nav-item dropdown w-100 w-lg-auto">
+                                          <a class="nav-link " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Soporte Técnico</a>
+
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </nav>
+          </div>
+          </div>
+      <!-- Modal -->
+
+          <!-- Shop Cart -->
+
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+              <div class="offcanvas-header border-bottom">
+                  <div class="text-start">
+                      <h5 id="offcanvasRightLabel" class="mb-0 fs-4">Carrito de Compras</h5>
+
+                  </div>
+                  <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div class="offcanvas-body">
+                  <div>
+                      <!-- alert -->
+                      <div class="alert alert-danger p-2" role="alert">
+                          Tenemos los mejores productos.
+                          <a href="#!" class="alert-link">Ve a la sección proceso de compras ya!</a>
+                      </div>
+                      <ul class="list-group list-group-flush">
+                          <!-- list group -->
+                          <li class="list-group-item py-3 ps-0 border-top">
+                              <!-- row -->
+                              <div class="row align-items-center">
+                                  <div class="col-6 col-md-6 col-lg-7">
+                                      <div class="d-flex">
+                                          <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                          <div class="ms-3">
+                                              <!-- title -->
+                                              <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                                  <h6 class="mb-0">Laptop HP</h6>
+                                              </a>
+                                              <span><small class="text-muted"></small></span>
+                                              <!-- text -->
+                                              <div class="mt-2 small lh-1">
+                                                  <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                                      <span class="text-muted">Eliminar</span>
+                                                  </a>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <!-- input group -->
+                                  <div class="col-4 col-md-3 col-lg-3">
+                                      <!-- input -->
+                                      <!-- input -->
+                                      <div class="input-group input-spinner">
+                                          <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                          <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                          <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                                      </div>
+                                  </div>
+                                  <!-- price -->
+                                  <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                      <span class="fw-bold">S/. 145.00</span>
+                                  </div>
+                              </div>
+                          </li>
+                          <!-- list group -->
+                          <li class="list-group-item py-3 ps-0 border-top">
+                              <!-- row -->
+                              <div class="row align-items-center">
+                                  <div class="col-6 col-md-6 col-lg-7">
+                                      <div class="d-flex">
+                                          <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                          <div class="ms-3">
+                                              <!-- title -->
+                                              <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                                  <h6 class="mb-0">Laptop HP</h6>
+                                              </a>
+                                              <span><small class="text-muted"></small></span>
+                                              <!-- text -->
+                                              <div class="mt-2 small lh-1">
+                                                  <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                                      <span class="text-muted">Eliminar</span>
+                                                  </a>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <!-- input group -->
+                                  <div class="col-4 col-md-3 col-lg-3">
+                                      <!-- input -->
+                                      <!-- input -->
+                                      <div class="input-group input-spinner">
+                                          <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                          <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                          <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                                      </div>
+                                  </div>
+                                  <!-- price -->
+                                  <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                      <span class="fw-bold">S/. 145.00</span>
+                                  </div>
+                              </div>
+                          </li>
+                          <!-- list group -->
+                          <li class="list-group-item py-3 ps-0 border-top">
+                              <!-- row -->
+                              <div class="row align-items-center">
+                                  <div class="col-6 col-md-6 col-lg-7">
+                                      <div class="d-flex">
+                                          <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                          <div class="ms-3">
+                                              <!-- title -->
+                                              <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                                  <h6 class="mb-0">Laptop HP</h6>
+                                              </a>
+                                              <span><small class="text-muted"></small></span>
+                                              <!-- text -->
+                                              <div class="mt-2 small lh-1">
+                                                  <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                                      <span class="text-muted">Eliminar</span>
+                                                  </a>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <!-- input group -->
+                                  <div class="col-4 col-md-3 col-lg-3">
+                                      <!-- input -->
+                                      <!-- input -->
+                                      <div class="input-group input-spinner">
+                                          <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                          <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                          <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                                      </div>
+                                  </div>
+                                  <!-- price -->
+                                  <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                      <span class="fw-bold">S/. 145.00</span>
+                                  </div>
+                              </div>
+                          </li>
+                          <!-- list group -->
+                          <li class="list-group-item py-3 ps-0 border-top">
+                              <!-- row -->
+                              <div class="row align-items-center">
+                                  <div class="col-6 col-md-6 col-lg-7">
+                                      <div class="d-flex">
+                                          <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                          <div class="ms-3">
+                                              <!-- title -->
+                                              <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                                  <h6 class="mb-0">Laptop HP</h6>
+                                              </a>
+                                              <span><small class="text-muted"></small></span>
+                                              <!-- text -->
+                                              <div class="mt-2 small lh-1">
+                                                  <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                                      <span class="text-muted">Eliminar</span>
+                                                  </a>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <!-- input group -->
+                                  <div class="col-4 col-md-3 col-lg-3">
+                                      <!-- input -->
+                                      <!-- input -->
+                                      <div class="input-group input-spinner">
+                                          <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                          <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                          <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                                      </div>
+                                  </div>
+                                  <!-- price -->
+                                  <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                      <span class="fw-bold">S/. 145.00</span>
+                                  </div>
+                              </div>
+                          </li>
+                          <!-- list group -->
+                          <li class="list-group-item py-3 ps-0 border-top">
+                              <!-- row -->
+                              <div class="row align-items-center">
+                                  <div class="col-6 col-md-6 col-lg-7">
+                                      <div class="d-flex">
+                                          <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                          <div class="ms-3">
+                                              <!-- title -->
+                                              <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                                  <h6 class="mb-0">Laptop HP</h6>
+                                              </a>
+                                              <span><small class="text-muted"></small></span>
+                                              <!-- text -->
+                                              <div class="mt-2 small lh-1">
+                                                  <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                                      <span class="text-muted">Eliminar</span>
+                                                  </a>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <!-- input group -->
+                                  <div class="col-4 col-md-3 col-lg-3">
+                                      <!-- input -->
+                                      <!-- input -->
+                                      <div class="input-group input-spinner">
+                                          <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                                          <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                                          <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                                      </div>
+                                  </div>
+                                  <!-- price -->
+                                  <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                                      <span class="fw-bold">S/. 145.00</span>
+                                  </div>
+                              </div>
+                          </li>
+                      </ul>
+                      <!-- btn -->
+                      <div class="d-flex justify-content-between mt-4">
+                          <a href="#!" class="btn btn-primary">Continuar comprando</a>
+                          <a href="#!" class="btn btn-dark">Ir a Proceso de Compra</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-body p-6">
+                  <div class="d-flex justify-content-between align-items-start">
+                     <div>
+                        <h5 class="mb-1" id="locationModalLabel">Choose your Delivery Location</h5>
+                        <p class="mb-0 small">Enter your address and we will specify the offer you area.</p>
+                     </div>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="my-5">
+                     <input type="search" class="form-control" placeholder="Search your area" />
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                     <h6 class="mb-0">Select Location</h6>
+                     <a href="#" class="btn btn-outline-gray-400 text-muted btn-sm">Clear All</a>
+                  </div>
+                  <div>
+                     <div data-simplebar style="height: 300px">
+                        <div class="list-group list-group-flush">
+                           <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action active">
+                              <span>Alabama</span>
+                              <span>Min:$20</span>
+                           </a>
+                           <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                              <span>Alaska</span>
+                              <span>Min:$30</span>
+                           </a>
+                           <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                              <span>Arizona</span>
+                              <span>Min:$50</span>
+                           </a>
+                           <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                              <span>California</span>
+                              <span>Min:$29</span>
+                           </a>
+                           <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                              <span>Colorado</span>
+                              <span>Min:$80</span>
+                           </a>
+                           <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                              <span>Florida</span>
+                              <span>Min:$90</span>
+                           </a>
+                           <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                              <span>Arizona</span>
+                              <span>Min:$50</span>
+                           </a>
+                           <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                              <span>California</span>
+                              <span>Min:$29</span>
+                           </a>
+                           <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                              <span>Colorado</span>
+                              <span>Min:$80</span>
+                           </a>
+                           <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                              <span>Florida</span>
+                              <span>Min:$90</span>
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <script th:src="@{/js/vendors/validation.js}"></script>
+
+
+         <main>
+            <!-- navbar vertical (para pc)-->
+            <!-- navbar -->
+
+
+            <section class="my-lg-14 my-8">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12 col-12 mb-5">
+                            <h2>Mis órdenes</h2>
+                            <!-- card -->
+                            <div class="card h-100 card-lg">
+                                <div class="p-6">
+                                    <div class="row justify-content-between">
+                                        <div class="col-md-4 col-12 mb-2 mb-md-0">
+                                            <!-- form -->
+                                            <form class="d-flex" role="search">
+                                                <input class="form-control" type="search" placeholder="Buscar por número de orden" aria-label="Search" />
+                                            </form>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-12">
+                                            <!-- select -->
+                                            <select class="form-select">
+                                                <option selected>Estado</option>
+                                                <option value="Success">Creado</option>
+                                                <option value="Pending">En validación</option>
+                                                <option value="Pending">En proceso</option>
+                                                <option value="Cancel">Arribo al país</option>
+                                                <option value="Cancel">En aduanas</option>
+                                                <option value="Cancel">En ruts</option>
+                                                <option value="Cancel">Recibido</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- card body -->
+                                <div class="card-body p-0">
+                                    <!-- table responsive -->
+                                    <div class="table-responsive">
+                                        <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
+                                            <thead class="bg-light">
+                                                <tr>
+
+                                                    <th>Nº de orden</th>
+                                                    <th>Fecha</th>
+                                                    <th>Estado</th>
+                                                    <th>Monto total</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>#1234</td>
+                                                    <td>07-07-24</td>
+                                                    <td>	<span class="badge bg-light-primary text-dark-primary">Recibido</span></td>
+                                                    <td> S/. 145.00 </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                        <i class="bi bi-trash me-3"></i>Eliminar
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#1234</td>
+                                                    <td>07-07-24</td>
+                                                    <td>	<span class="badge bg-light-primary text-dark-primary">Recibido</span></td>
+                                                    <td> S/. 145.00 </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                        <i class="bi bi-trash me-3"></i>Eliminar
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#1234</td>
+                                                    <td>07-07-24</td>
+                                                    <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
+                                                    <td> S/. 145.00 </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                        <i class="bi bi-trash me-3"></i>Eliminar
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#1234</td>
+                                                    <td>07-07-24</td>
+                                                    <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
+                                                    <td> S/. 145.00 </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                        <i class="bi bi-trash me-3"></i>Eliminar
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#1234</td>
+                                                    <td>07-07-24</td>
+                                                    <td><span class="badge bg-light-warning text-dark-warning">En proceso</span></td>
+                                                    <td> S/. 145.00 </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                        <i class="bi bi-trash me-3"></i>Eliminar
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#1234</td>
+                                                    <td>07-07-24</td>
+                                                    <td><span class="badge bg-light-warning text-dark-warning">En proceso</span></td>
+                                                    <td> S/. 135.00 </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                        <i class="bi bi-trash me-3"></i>Eliminar
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="border-top d-md-flex justify-content-between align-items-center p-6">
+                                    <span> </span>
+                                    <nav class="mt-2 mt-md-0">
+                                        <ul class="pagination mb-0">
+                                            <li class="page-item disabled"><a class="page-link" href="#!">Anterior</a></li>
+                                            <li class="page-item"><a class="page-link active" href="#!">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#!">3</a></li>
+                                            <li class="page-item"><a class="page-link" href="#!">Siguiente</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+
+         </main>
+
+
+
+
+	  </div>
+
+      <!-- Libs JS -->
+<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+<!-- Theme JS -->
+<script src="../assets/js/theme.min.js"></script>
+
+      <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+      <script th:src="@{/js/vendors/chart.js}"></script>
+   </body>
+</html>

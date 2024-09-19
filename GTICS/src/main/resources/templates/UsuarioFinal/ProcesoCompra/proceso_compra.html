@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+      <meta content="Codescandy" name="author" />
+      <title>Shop Checkout eCommerce HTML Template - FreshCart</title>
+      <!-- Favicon icon-->
+      <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico" />
+
+      <!-- Libs CSS -->
+      <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+      <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet" />
+      <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet" />
+
+      <!-- Theme CSS -->
+      <link rel="stylesheet" href="../assets/css/theme.min.css" />
+
+      <!-- Flag Icons -->
+
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.14/css/bootstrap-select.min.css">
+
+   </head>
+
+   <body>
+      
+      <script src="../assets/js/vendors/validation.js"></script>
+
+      <main>
+         <!-- section-->
+         <div class="mt-4">
+            <div class="container">
+               <!-- row -->
+               <div class="row">
+                  <!-- col -->
+                  <div class="col-12">
+                     <!-- breadcrumb -->
+                     <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                           <li class="breadcrumb-item"><a href="#!">Tienda</a></li>
+                           <li class="breadcrumb-item active" aria-current="page">Proceso de pago</li>
+                        </ol>
+                     </nav>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- section -->
+         <section class="mb-lg-14 mb-8 mt-8">
+            <div class="container">
+               <!-- row -->
+               <div class="row">
+                  <!-- col -->
+                  <div class="col-12">
+                     <div>
+                        <div class="mb-8">
+                           <!-- text -->
+                           <h1 class="fw-bold mb-0">Proceso de pago</h1>
+                           <p class="mb-0">
+                              
+                           ¿Ya tienes una cuenta? Haga clic aquí para iniciar sesión
+                              <a href="#!">Iniciar Sesión</a>
+                              .
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div>
+                  <!-- row -->
+                  <div class="row">
+                     <div class="col-xl-7 col-lg-6 col-md-12">
+                        <!-- accordion -->
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                           <!-- accordion item -->
+                           <div class="accordion-item py-4">
+                              <div class="d-flex justify-content-between align-items-center">
+                                 <!-- heading one -->
+                                 <a
+                                    href="#"
+                                    class="fs-5 text-inherit collapsed h4"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne"
+                                    aria-expanded="true"
+                                    aria-controls="flush-collapseOne">
+                                    <i class="feather-icon icon-map-pin me-2 text-muted"></i>
+                                    Añadir dirección para el delivery
+                                 </a>
+                                 <!-- btn -->
+                                 <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">Añadir nueva dirección</a>
+                                 <!-- collapse -->
+                              </div>
+                              <div id="flush-collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushExample">
+                                 
+                                 <div class="mt-5">
+                                    <div class="row">
+                                       <div class="col-xl-6 col-lg-12 col-md-6 col-12 mb-4">
+                                          <!-- form -->
+                                          <div class="card card-body p-6">
+                                             <div class="form-check mb-4">
+                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="homeRadio" checked />
+                                                <label class="form-check-label text-dark" for="homeRadio">Casa</label>
+                                             </div>
+                                             <!-- address -->
+                                             <address>
+                                                <strong>Adrian Lopez</strong>
+                                                <br />
+
+                                                Av Universitaria 255,
+                                                <br />
+
+                                                C.P. 15001,
+                                                <br />
+
+                                                Perú, Lima, Pueblo Libre,
+                                                <br />
+
+                                                <abbr title="Phone">Tel: +51 963449953</abbr>
+
+                                                <br />
+                                                <abbr title="RUC">RUC: 20552103816</abbr>
+                                             </address>
+                                       
+                                             <span class="text-danger">Dirección predeterminada</span>
+                                             <!-- btn -->
+                                             <div class="mt-4">
+                                                <a href="#" class="text-inherit"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#editModal">Editar</a>
+                                                <a href="#" class="text-danger ms-3"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#deleteModal">Borrar</a>
+                                             </div>
+                                          </div>
+                                          
+                                       </div>
+                                       <div class="col-xl-6 col-lg-12 col-md-6 col-12 mb-4">
+                                          <!-- input -->
+                                          <div class="card card-body p-6">
+                                             <div class="form-check mb-4">
+                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="officeRadio" />
+                                                <label class="form-check-label text-dark" for="officeRadio">Oficina</label>
+                                             </div>
+                                             <address>
+                                                <strong>Nadia Hernandez</strong>
+                                                <br />
+
+                                                Av Universitaria 255,
+                                                <br />
+                                          
+
+                                                C.P. 15001,
+                                                <br />
+                                                Perú, Lima, Pueblo Libre,
+                                                <br />
+
+                                                <abbr title="Phone">Tel: +51 963449953</abbr>
+
+                                                <br />
+                                                <abbr title="RUC">RUC: 20552103816</abbr>
+                                             </address>
+                                              <!-- btn -->
+                                             <div class="mt-4">
+                                                <a href="#" class="text-inherit"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#editModal">Editar</a>
+                                                <a href="#" class="text-danger ms-3"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#deleteModal">Borrar</a>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       
+                                    </div>
+                                 </div>
+                                
+                              </div>
+                           </div>
+                           <!-- accordion item -->
+                           <div class="accordion-item py-4">
+                              <a href="#" class="text-inherit collapsed h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                 <i class="feather-icon icon-clock me-2 text-muted"></i>
+                                 Tiempo aproximado del delivery
+                              </a>
+                              <!-- collapse -->
+                              <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                 <!-- nav -->
+                                 
+                                 <!-- tab content -->
+                                 <div class="tab-content" id="pills-tabContent">
+                                    <!-- tab pane -->
+                                    <div class="tab-pane fade show active" id="pills-today" role="tabpanel" aria-labelledby="pills-today-tab" tabindex="0">
+                                       <!-- list group -->
+                                       <ul class="list-group list-group-flush mt-4">
+                                          <!-- list group item -->
+                                          <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+                                             <!-- col -->
+                                             <div class="col-4">
+                                                <div class="form-check">
+                                                   <!-- form check input -->
+                                                   <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                                                   <span style="width: 120px; background-color: gold;" class="badge ">Express</span>
+                                                </div>
+                                             </div>
+                                             <!-- col -->
+                                             <div class="col-4">
+                     
+                                                      <span style="white-space: nowrap;">Entrega estimada entre SEP 17 - SEP 20</span>
+                                             
+                                             </div>
+                                             <!-- price -->
+                                             <div class="col-3 text-center">S/. 50.00</div>
+                                    
+                                             
+                                          </li>
+                                          <!-- list group item -->
+                                          <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+                                             <!-- col -->
+                                             <div class="col-4">
+                                                <div class="form-check" >
+                                                   <!-- form check input -->
+                                                   <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                                                   <span style="width: 120px; background-color: silver;" class="badge ">Entrega Estandar</span>
+                                                  
+                                                   
+                                                </div>
+                                             </div>
+                                             <!-- col -->
+                                             <div class="col-4">
+                                          
+                                                      <span style="white-space: nowrap;">Entrega estimada entre SEP 20 - SEP 25 </span>
+                                                  
+                                             </div>
+                                             <!-- price -->
+                                             <div class="col-3 text-center">S/. 30.00</div>
+                                    
+                                             
+                                          </li>
+                                          <!-- list group item -->
+                                          <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+                                             <!-- col -->
+                                             <div class="col-4">
+                                                <div class="form-check" style="width: 100%;">
+                                                   <!-- form check input -->
+                                                   <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                                                   <span style="width: 120px;background-color: burlywood;" class="badge">Entrega Económica</span>
+                                                  
+                                                </div>
+                                             </div>
+                                             <!-- col -->
+                                             <div class="col-4">
+                                                      <span style="white-space: nowrap;">Entrega estimada entre SEP 25 - SEP 30</span>
+                                                
+                                             </div>
+                                             <!-- price -->
+                                             <div class="col-3 text-center">S/. 20.00</div>
+                                    
+                                           
+                                          </li>
+                                         
+                                       </ul>
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-monday" role="tabpanel" aria-labelledby="pills-monday-tab" tabindex="0">
+                                       
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-Tue" role="tabpanel" aria-labelledby="pills-Tue-tab" tabindex="0">
+                                       
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-Wed" role="tabpanel" aria-labelledby="pills-Wed-tab" tabindex="0">
+                                       
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-Thu" role="tabpanel" aria-labelledby="pills-Thu-tab" tabindex="0">
+                                       
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-Fri" role="tabpanel" aria-labelledby="pills-Fri-tab" tabindex="0">
+                                      
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-Sat" role="tabpanel" aria-labelledby="pills-Sat-tab" tabindex="0">
+                                     
+                                    </div>
+                                 </div>
+                                 <div class="mt-5 d-flex justify-content-end">
+                                    <a
+                                       href="#"
+                                       class="btn btn-outline-gray-400 text-muted"
+                                       data-bs-toggle="collapse"
+                                       data-bs-target="#flush-collapseOne"
+                                       aria-expanded="false"
+                                       aria-controls="flush-collapseOne">
+                                       Anterior
+                                    </a>
+                                    <a href="#" class="btn btn-primary ms-2" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                       Siguiente
+                                    </a>
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- accordion item -->
+                           <div class="accordion-item py-4">
+                              <a href="#" class="text-inherit h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                 <i class="feather-icon icon-shopping-bag me-2 text-muted"></i>
+                                 Comentarios adicionales sobre la entrega
+                                 <!-- collapse -->
+                              </a>
+                              <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                 <div class="mt-5">
+                                    <label for="DeliveryInstructions" class="form-label sr-only">Instrucciones para el delivery</label>
+                                    <textarea class="form-control" id="DeliveryInstructions" rows="3" placeholder="Escribe las intrucciones para la entrega"></textarea>
+                                    <p class="form-text">Añade instrucciones sobre cómo desean que sea tratada su orden en el proceso de entrega</p>
+                                    <div class="mt-5 d-flex justify-content-end">
+                                       <a
+                                          href="#"
+                                          class="btn btn-outline-gray-400 text-muted"
+                                          data-bs-toggle="collapse"
+                                          data-bs-target="#flush-collapseTwo"
+                                          aria-expanded="false"
+                                          aria-controls="flush-collapseTwo">
+                                          Anterior
+                                       </a>
+                                       <a href="#" class="btn btn-primary ms-2" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                                          Siguiente
+                                       </a>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- accordion item -->
+                           <div class="accordion-item py-4">
+                              <a href="#" class="text-inherit h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                                 <i class="feather-icon icon-credit-card me-2 text-muted"></i>
+                                 Métodos de pago
+                                 <!-- collapse -->
+                              </a>
+                              <div id="flush-collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                 <div class="mt-5">
+                                    <div>
+                                    
+                                       <!-- card -->
+                                       <div class="card card-bordered shadow-none mb-2">
+                                          <!-- card body -->
+                                          <div class="card-body p-6">
+                                             <div class="d-flex">
+                                                <div class="form-check">
+                                                   <!-- input -->
+                                                   <input class="form-check-input" type="radio" name="flexRadioDefault" id="creditdebitcard" data-bs-toggle="modal" data-bs-target="#addCardModal"/>
+                                                   <label class="form-check-label ms-2" for="creditdebitcard"></label>
+                                                </div>
+                                                
+                                                <div>
+                                            
+                                                   <h5 class="mb-1 h6">Tarjeta de crédito/débito</h5>
+                                                   <p class="mb-0 small">Transferencia de dinero segura utilizando su cuenta bancaria. Admitimos Mastercard , Visa y American-express.</p>
+                                                   
+                                                   <ul class="list-inline mb-0">
+                                             
+                                                      <li class="list-inline-item">
+                                                         <a href="#!"><img src="../assets/images/payment/american-express.svg" alt="" /></a>
+                                                      </li>
+                                                      <li class="list-inline-item">
+                                                         <a href="#!"><img src="../assets/images/payment//mastercard.svg" alt="" /></a>
+                                                      </li>
+                        
+                                                      <li class="list-inline-item">
+                                                         <a href="#!"><img src="../assets/images/payment/visa.svg" alt="" /></a>
+                                                      </li>
+                                                   </ul>
+                                                </div>
+
+
+
+                                             </div>
+
+                                          </div>
+                                       </div>
+                                 
+                                       <!-- card -->
+                                       <div class="card card-bordered shadow-none">
+                                          <div class="card-body p-6">
+                                             <!-- check input -->
+                                             <div class="d-flex">
+                                                <div class="form-check">
+                                                   <input class="form-check-input" type="radio" name="flexRadioDefault" id="cashonDelivery" />
+                                                   <label class="form-check-label ms-2" for="cashonDelivery"></label>
+                                                </div>
+                                                <div>
+                                                   <!-- title -->
+                                                   <h5 class="mb-1 h6">Contra reembolso</h5>
+                                                   <p class="mb-0 small">Pague en efectivo cuando se entregue su pedido.</p>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <!-- Button -->
+                                       <div class="mt-5 d-flex justify-content-end">
+                                          <a
+                                             href="#"
+                                             class="btn btn-outline-gray-400 text-muted"
+                                             data-bs-toggle="collapse"
+                                             data-bs-target="#flush-collapseThree"
+                                             aria-expanded="false"
+                                             aria-controls="flush-collapseThree">
+                                             Anterior
+                                          </a>
+                                          <a href="#" class="btn btn-primary ms-2">Realizar Pedido</a>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-md-12 offset-xl-1 col-xl-4 col-lg-6">
+                        <div class="mt-4 mt-lg-0">
+                           <div class="card shadow-sm">
+                              <h5 class="px-6 py-4 bg-transparent mb-0">Resumen de la compra</h5>
+                              <ul class="list-group list-group-flush">
+                                 <!-- list group item -->
+                                 <li class="list-group-item px-4 py-3">
+                                    <div class="row align-items-center">
+                                       <div class="col-2 col-md-2">
+                                          <img src="../img_user/producto1.jpg" alt="Ecommerce" class="img-fluid" />
+                                       </div>
+                                       <div class="col-5 col-md-5">
+                                          <h6 class="mb-0">Zapato Calvin Klein</h6>
+                          
+                                       </div>
+                                       <div class="col-2 col-md-2 text-center text-muted">
+                                          <span>1</span>
+                                       </div>
+                                       <div class="col-3 text-lg-end text-start text-md-end col-md-3">
+                                          <span class="fw-bold">S/. 45.00</span>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <!-- list group item -->
+                                 <li class="list-group-item px-4 py-3">
+                                    <div class="row align-items-center">
+                                       <div class="col-2 col-md-2">
+                                          <img src="../img_user/producto2.jpg" alt="Ecommerce" class="img-fluid" />
+                                       </div>
+                                       <div class="col-5 col-md-5">
+                                          <h6 class="mb-0">Bolsa deportiva</h6>
+                                 
+                                       </div>
+                                       <div class="col-2 col-md-2 text-center text-muted">
+                                          <span>1</span>
+                                       </div>
+                                       <div class="col-3 text-lg-end text-start text-md-end col-md-3">
+                                          <span class="fw-bold">S/. 50.00</span>
+                        
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <!-- list group item -->
+                                 <li class="list-group-item px-4 py-3">
+                                    <div class="row align-items-center">
+                                       <div class="col-2 col-md-2">
+                                          <img src="../img_user/producto3.jpg" alt="Ecommerce" class="img-fluid" />
+                                       </div>
+                                       <div class="col-5 col-md-5">
+                                          <h6 class="mb-0">Refrigeradora Hyandia</h6>
+                                       
+                                       </div>
+                                       <div class="col-2 col-md-2 text-center text-muted">
+                                          <span>1</span>
+                                       </div>
+                                       <div class="col-3 text-lg-end text-start text-md-end col-md-3">
+                                          <span class="fw-bold">S/. 30.00</span>
+                             
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <!-- list group item -->
+                                 <li class="list-group-item px-4 py-3">
+                                    <div class="row align-items-center">
+                                       <div class="col-2 col-md-2">
+                                          <img src="../img_user/producto4.jpg" alt="Ecommerce" class="img-fluid" />
+                                       </div>
+                                       <div class="col-5 col-md-5">
+                                          <h6 class="mb-0">Pan carbonato</h6>
+                                          <span><small class="text-muted">250g</small></span>
+                                       </div>
+                                       <div class="col-2 col-md-2 text-center text-muted">
+                                          <span>2</span>
+                                       </div>
+                                       <div class="col-3 text-lg-end text-start text-md-end col-md-3">
+                                          <span class="fw-bold">S/. 60.00</span>
+                         
+                                       </div>
+                                    </div>
+                                 </li>
+
+                                 <!-- list group item -->
+                                 <li class="list-group-item px-4 py-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                       <div>Subtotal</div>
+                                       <div class="fw-bold">S/. 185.00</div>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                       <div>
+                                          Costo de envío
+                                          <i class="feather-icon icon-info text-muted" data-bs-toggle="tooltip" title="Tarifa de envío adicional. Puede variar según el destino"></i>
+                                       </div>
+                                       <div class="fw-bold">S/. 20.00</div>
+                                    </div>
+                                 </li>
+                                 <!-- list group item -->
+                                 <li class="list-group-item px-4 py-3">
+                                    <div class="d-flex align-items-center justify-content-between fw-bold">
+                                       <div>Total</div>
+                                       <div>S/. 205.00</div>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </section>
+      </main>
+
+      <!-- Modal -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="deleteModalLabel">Borrar dirección</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body">
+                  <h6>¿Estás seguro que quieres eliminar esta dirección?</h6>
+                  <p class="mb-6">
+                     Adrian Lopez
+                     <br />
+
+                     Av Universitaria 255,
+                     <br />
+
+                     Perú, Lima, Pueblo Libre,
+                     <br />
+
+                     Tel: +51 963449953
+                  </p>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-gray-400" data-bs-dismiss="modal">Cancelar </button>
+                  <button type="button" class="btn btn-danger">Borrar</button>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <!-- modal body -->
+               <div class="modal-body p-6">
+                  <div class="d-flex justify-content-between mb-5">
+                     <!-- heading -->
+                     <div>
+                        <h5 class="h6 mb-1" id="addAddressModalLabel">Añadir nueva dirección</h5>
+                        <p class="small mb-0">Añade una nueva dirección para la entrega del pedido.</p>
+                     </div>
+                     <div>
+                        <!-- button -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                     </div>
+                  </div>
+                  <!-- row -->
+                  <div class="row g-3">
+                     <div class="col-12">
+                        <label for="CountryName" class="form-label">País/región</label>
+                        <!-- button -->
+                        <select class="form-select">
+                           <option value="IN">Perú</option>
+                           <option value="UK">Brasil</option>
+                           <option value="US">Chile</option>
+                           <option value="AE">Canadá</option>
+                        </select>
+                        
+                     </div>
+                     <!-- col -->
+                     <div class="col-12">
+                        <label for="ContactName" class="form-label">Información personal</label>
+                        <input type="text" class="form-control" placeholder="Nombre del contacto*" aria-label="Nombre del contacto" required="" />
+                     </div>
+                     <!-- col -->
+                     <!-- Número de teléfono -->
+                     <div class="col-12">
+                        <div class="input-group">
+                           <input style="width: 15%;" type="text" class="form-control" id="countryCode" placeholder="Código de país" value="+51"  aria-label="" />
+                           <input style="width: 85%;" type="text" class="form-control" id="phoneNumber" placeholder="Número de teléfono" aria-label="Número de teléfono" required />
+                        </div>
+                     </div>
+                     
+                     <!-- col -->
+                     <div class="col-12">
+                        <label for="direction" class="form-label">Dirección </label>
+                        <input type="text" class="form-control" placeholder="Dirección, apartado posta, etc." aria-label="Dirección" required="" />
+                     </div>
+                     <!-- col -->
+                     <div class="col-12">
+                        <input type="text" class="form-control" placeholder="Apartamento, suite, unidad, etc.(opcional)" aria-label="Apartamento" required="" />
+                     </div>
+                     <!-- col -->
+                     <div class="col-12">
+                        <!-- select -->
+                        <select class="form-select">
+                           <option value="" selected disabled hidden>Provincia</option>
+                           <option >Lima</option>
+                           <option >Cajamarca</option>
+                           <option >La Libertad</option>
+                           <option >Junin</option>
+                        </select>
+                     </div>
+
+                     <!-- col -->
+                     <div class="col-12">
+                        <!-- select -->
+                        <select class="form-select">
+                           <option value="" selected disabled hidden>Distrito</option>
+                           <option >Pueblo Libre</option>
+                           <option >San Miguel</option>
+                           <option >Lince</option>
+                           <option >La Victoria</option>
+                        </select>
+                     </div>
+
+                     <div class="col-12">
+                        <!-- button -->
+                        <input type="text" class="form-control" placeholder="Código postal*" />
+                     </div>
+
+                     <div class="col-12"></div>
+                        <!-- button -->
+                        <label for="Etiquetas" class="form-label"> Etiquetas </label>
+                        <div class="d-flex" style="margin-bottom: 20px; margin-top: -3.5px;">
+                           <a style="flex: 1; margin-right: 5px;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Casa">
+                               <i class="bi bi-house-door"></i> Casa
+                           </a>
+                           <a style="flex: 1; margin-right: 5px;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Oficina">
+                               <i class="bi bi-briefcase"></i> Oficina
+                           </a>
+                           <a style="flex: 1;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Agregar">
+                               <i class="bi bi-plus"></i> Agregar
+                           </a>
+                       </div>
+                     </div>
+                     
+                     <div class="col-12">
+                        <label for="aduanas" class="form-label">Información para aduanas </label>
+                        <!-- button -->
+                        <input type="text" class="form-control" placeholder="Número de RUC*" />
+                        <span class="text-danger">Opcional para importaciones personales.</span>
+                     </div>
+               
+                     <div class="col-12" style="margin-bottom: 10px;">
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                           <!-- label -->
+                           <label class="form-check-label" for="flexCheckDefault">Establecer como dirección de envío predeterminada</label>
+                        </div>
+                     </div>
+                     <!-- button -->
+                     <div class="col-12 text-end">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary" type="button">Guardar dirección</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- Modal -->
+      <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <!-- modal body -->
+               <div class="modal-body p-6">
+                  <div class="d-flex justify-content-between mb-5">
+                     <!-- heading -->
+                     <div>
+                        <h5 class="h6 mb-1" id="editModalLabel">Edita la dirección</h5>
+                        <p class="small mb-0">Edita la dirección para la entrega del pedido.</p>
+                     </div>
+                     <div>
+                        <!-- button -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                     </div>
+                  </div>
+                  <!-- row -->
+                  <div class="row g-3">
+                     <div class="col-12">
+                        <label for="CountryName" class="form-label">País/región</label>
+                        <!-- button -->
+                        <select class="form-select">
+                           <option value="IN" selected>Perú</option>
+                           <option value="UK">Brasil</option>
+                           <option value="US">Chile</option>
+                           <option value="AE">Canadá</option>
+                        </select>
+                        
+                     </div>
+                     <!-- col -->
+                     <div class="col-12">
+                        <label for="ContactName" class="form-label">Información personal</label>
+                        <input type="text" class="form-control" placeholder="Nombre del contacto*" aria-label="Nombre del contacto" required="" value="Adrian Lopez"/>
+                     </div>
+                     <!-- col -->
+                     <!-- Número de teléfono -->
+                     <div class="col-12">
+                        <div class="input-group">
+                           <input style="width: 15%;" type="text" class="form-control" id="countryCode" placeholder="Código de país" value="+51"  aria-label="" />
+                           <input style="width: 85%;" type="text" class="form-control" id="phoneNumber" placeholder="Número de teléfono" aria-label="Número de teléfono" value="963447234" />
+                        </div>
+                     </div>
+                     
+                     <!-- col -->
+                     <div class="col-12">
+                        <label for="direction" class="form-label">Dirección </label>
+                        <input type="text" class="form-control" placeholder="Dirección, apartado posta, etc." aria-label="Dirección" required="" value="Av Universitaria 255"/>
+                     </div>
+                     <!-- col -->
+                     <div class="col-12">
+                        <input type="text" class="form-control" placeholder="Apartamento, suite, unidad, etc.(opcional)" aria-label="Apartamento" required="" />
+                     </div>
+                     <!-- col -->
+                     <div class="col-12">
+                        <!-- select -->
+                        <select class="form-select">
+                           <option value="" selected disabled hidden>Provincia</option>
+                           <option selected >Lima</option>
+                           <option >Cajamarca</option>
+                           <option >La Libertad</option>
+                           <option >Junin</option>
+                        </select>
+                     </div>
+
+                     <!-- col -->
+                     <div class="col-12">
+                        <!-- select -->
+                        <select class="form-select">
+                           <option value="" selected disabled hidden>Distrito</option>
+                           <option >Pueblo Libre</option>
+                           <option >San Miguel</option>
+                           <option >Lince</option>
+                           <option selected >La Victoria</option>
+                        </select>
+                     </div>
+
+                     <div class="col-12">
+                        <!-- button -->
+                        <input type="text" class="form-control" placeholder="Código postal*" value="15001"/>
+                     </div>
+
+                     <div class="col-12"></div>
+                        <!-- button -->
+                        <label for="Etiquetas" class="form-label"> Etiquetas </label>
+                        <div class="d-flex" style="margin-bottom: 20px; margin-top: -3.5px;">
+                           <a style="flex: 1; margin-right: 5px;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Casa">
+                               <i class="bi bi-house-door"></i> Casa
+                           </a>
+                           <a style="flex: 1; margin-right: 5px;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Oficina">
+                               <i class="bi bi-briefcase"></i> Oficina
+                           </a>
+                           <a style="flex: 1;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Agregar">
+                               <i class="bi bi-plus"></i> Agregar
+                           </a>
+                       </div>
+                     </div>
+                     
+                     <div class="col-12">
+                        <label for="aduanas" class="form-label">Información para aduanas </label>
+                        <!-- button -->
+                        <input type="text" class="form-control" placeholder="Número de RUC*" value="20552103816"/>
+                        <span class="text-danger">Opcional para importaciones personales.</span>
+                     </div>
+               
+                     <div class="col-12" style="margin-bottom: 10px;">
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                           <!-- label -->
+                           <label class="form-check-label" for="flexCheckDefault" >Establecer como dirección de envío predeterminada</label>
+                        </div>
+                     </div>
+                     <!-- button -->
+                     <div class="col-12 text-end">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary" type="button">Guardar dirección</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      
+         <!-- Modal -->
+      <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-lg modal-dialog-centered"" >
+            <div class="modal-content">
+              
+               <!-- modal body -->
+               <div class="modal-body p-6">
+                  <div class="d-flex justify-content-between mb-5">
+                     <!-- heading -->
+                     <div>
+                        <h5 class="h6 mb-1" id="addAddressModalLabel">Añadir una nueva tarjeta</h5>
+                        <p class="small mb-0 d-inline-block me-2">Lista de tarjetas válidas:</p>
+                                       <!-- Lista de tarjetas -->
+                     <ul class="list-inline mb-0 d-inline-block">
+                        <li class="list-inline-item">
+                           <a href="#!"><img src="../assets/images/payment/american-express.svg" alt="" /></a>
+                        </li>
+                        <li class="list-inline-item">
+                           <a href="#!"><img src="../assets/images/payment/mastercard.svg" alt="" /></a>
+                        </li>
+                        <li class="list-inline-item">
+                           <a href="#!"><img src="../assets/images/payment/visa.svg" alt="" /></a>
+                        </li>
+                     </ul>
+                     </div>
+                     <div>
+                        <!-- button -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                     </div>
+                  </div>
+                  <!-- row -->
+                 
+                        
+                        <div class="row g-2">
+                           <div class="col-md-6 col-12">
+                              <!-- Input: Número de tarjeta -->
+                              <div class="mb-3">
+                                 <label for="card-number" class="form-label">Número de tarjeta</label>
+                                 <input type="text" class="form-control" id="card-number2" placeholder="xxxx-xxxx-xxxx-xxxx" required maxlength="19" inputmode="numeric"  />
+                              </div>
+                           </div>
+                           <div class="col-md-6 col-12">
+                              <!-- Input: Nombre del titular -->
+                              <div class="mb-3">
+                                 <label class="form-label" for="nameoncard">Nombre del titular de la tarjeta</label>
+                                 <input type="text" class="form-control" placeholder="Ingrese nombre" id="nameoncard" />
+                              </div>
+                           </div>
+                           <div class="col-md-6 col-6">
+                              <!-- Input: Mes de expiración -->
+                              <div class="mb-3 mb-lg-0">
+                                 <label class="form-label" for="expiry-month">Fecha de expiración</label>
+                                 <div class="d-flex">
+                                             <!-- select -->
+                                 <select class="form-select">
+                                    <option value="" selected disabled hidden>MM</option>
+                                    <option >01</option>
+                                    <option >02</option>
+                                    <option >03</option>
+                                    <option >04</option>
+                                    <option >05</option>
+                                    <option >06</option>
+                                    <option >07</option>
+                                    <option >08</option>
+                                 </select>
+                                    <span class="mx-1">/</span>
+                                    <select class="form-select">
+                                       <option value="" selected disabled hidden>YY</option>
+                                       <option >2024</option>
+                                       <option >2025</option>
+                                       <option >2026</option>
+                                       <option >2027</option>
+                                       <option >2028</option>
+                                       <option >2029</option>
+                                       <option >2030</option>
+                                       <option >2031</option>
+                                    </select>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col">
+                              <!-- Input: CVV -->
+                              <div class="mb-3 mb-lg-0">
+                                 <label for="digit-mask" class="form-label">
+                                    Código CVV
+                                    <i class="fe fe-help-circle ms-1" data-bs-toggle="tooltip" data-placement="top" title="Un número de 3 dígitos, normalmente impreso en el reverso de la tarjeta."></i>
+                                 </label>
+                                 <input type="password" class="form-control" name="digit-mask" id="digit-mask" placeholder="xxx" maxlength="3" inputmode="numeric" required />
+                              </div>
+                           </div>
+                           <div class="col-12 mt-3">
+                              <!-- Guardar datos de la tarjeta -->
+                              <div class="form-check">
+                                 <input class="form-check-input" type="checkbox" id="save-card" />
+                                 <label class="form-check-label" for="save-card">Guardar datos de la tarjeta</label>
+                              </div>
+                           </div>
+                           <div class="col-12 text-center">
+                              <button class="btn btn-primary w-30" type="button">Guardar y confirmar</button>
+                           </div>
+                           
+                        </div>
+                     
+            
+
+
+               </div>
+            </div>
+         </div>
+      </div>
+     
+
+      <!-- Footer -->
+      
+                  <!-- JavaScript para el formateo automático del número de tarjeta -->
+                  <script>
+                     document.getElementById('card-number2').addEventListener('input', function (e) {
+                        let value = e.target.value.replace(/\D/g, ''); // Elimina cualquier caracter que no sea un número
+                        let formattedValue = '';
+
+                        // Agrupa los números en bloques de 4 separados por guiones
+                        for (let i = 0; i < value.length; i += 4) {
+                           if (i > 0) formattedValue += '-';
+                           formattedValue += value.substr(i, 4);
+                        }
+
+                        e.target.value = formattedValue;
+                     });
+                  </script>
+      <!-- Javascript-->
+      <script src="../assets/libs/flatpickr/dist/flatpickr.min.js"></script>
+      <!-- Libs JS -->
+      <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+      <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+
+      <!-- Theme JS -->
+      <script src="../assets/js/theme.min.js"></script>
+
+      <script src="../assets/libs/imask/dist/imask.min.js"></script>
+      <script src="../assets/js/vendors/inputmask.js"></script>
+      
+
+   </body>
+</html>
