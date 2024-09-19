@@ -20,10 +20,20 @@ public class UsuarioFinalController {
 
         return "UsuarioFinal/listaMisOrdenes";
     }
+    @GetMapping("/UsuarioFinal/detallesOrden")
+    public String mostrarDetallesOrden(){
+
+        return "detalleOrden";
+    }
     @GetMapping("/UsuarioFinal/listaProductos")
     public String mostrarListaProductos(){
 
         return "UsuarioFinal/productos";
+    }
+    @GetMapping("/UsuarioFinal/detallesProducto")
+    public String mostrarDetallesProducto(){
+
+        return "detalleProducto";
     }
     @GetMapping("/UsuarioFinal/Review")
     public String mostrarReview(){
@@ -39,5 +49,10 @@ public class UsuarioFinalController {
     public String interactuarChatBot(){
 
         return "chatbot";
+    }
+    @GetMapping("/UsuarioFinal/foro")
+    public String verForo(){
+
+        return "foro";
     }
 }
