@@ -327,10 +327,10 @@
                                 <div class="row align-items-center">
                                     <div class="col-6 col-md-6 col-lg-7">
                                         <div class="d-flex">
-                                            <img src="../assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                            <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
                                             <div class="ms-3">
                                                 <!-- title -->
-                                                <a href="../pages/shop-single.html" class="text-inherit">
+                                                <a th:href="@{../pages/shop-single.html}" class="text-inherit">
                                                     <h6 class="mb-0">Laptop HP</h6>
                                                 </a>
                                                 <span><small class="text-muted"></small></span>
@@ -383,10 +383,10 @@
                                 <div class="row align-items-center">
                                     <div class="col-6 col-md-6 col-lg-7">
                                         <div class="d-flex">
-                                            <img src="../assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                            <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
                                             <div class="ms-3">
                                                 <!-- title -->
-                                                <a href="../pages/shop-single.html" class="text-inherit">
+                                                <a th:href="@{../pages/shop-single.html}" class="text-inherit">
                                                     <h6 class="mb-0">Laptop HP</h6>
                                                 </a>
                                                 <span><small class="text-muted"></small></span>
@@ -439,10 +439,10 @@
                                 <div class="row align-items-center">
                                     <div class="col-6 col-md-6 col-lg-7">
                                         <div class="d-flex">
-                                            <img src="../assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                            <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
                                             <div class="ms-3">
                                                 <!-- title -->
-                                                <a href="../pages/shop-single.html" class="text-inherit">
+                                                <a th:href="@{../pages/shop-single.html}" class="text-inherit">
                                                     <h6 class="mb-0">Laptop HP</h6>
                                                 </a>
                                                 <span><small class="text-muted"></small></span>
@@ -495,10 +495,10 @@
                                 <div class="row align-items-center">
                                     <div class="col-6 col-md-6 col-lg-7">
                                         <div class="d-flex">
-                                            <img src="../assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                            <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
                                             <div class="ms-3">
                                                 <!-- title -->
-                                                <a href="../pages/shop-single.html" class="text-inherit">
+                                                <a th:href="@{../pages/shop-single.html}" class="text-inherit">
                                                     <h6 class="mb-0">Laptop HP</h6>
                                                 </a>
                                                 <span><small class="text-muted"></small></span>
@@ -551,10 +551,10 @@
                                 <div class="row align-items-center">
                                     <div class="col-6 col-md-6 col-lg-7">
                                         <div class="d-flex">
-                                            <img src="../assets/images/products/laptop.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                                            <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
                                             <div class="ms-3">
                                                 <!-- title -->
-                                                <a href="../pages/shop-single.html" class="text-inherit">
+                                                <a th:href="@{../pages/shop-single.html}" class="text-inherit">
                                                     <h6 class="mb-0">Laptop HP</h6>
                                                 </a>
                                                 <span><small class="text-muted"></small></span>
@@ -681,7 +681,7 @@
                 </div>
             </div>
 
-            <script src="../assets/js/vendors/validation.js"></script>
+            <script th:src="@{/js/vendors/validation.js}"></script>
 
 
             <main>
@@ -791,7 +791,7 @@
                                                             <a href="#" class="text-inherit">
                                                                 <div class="d-flex align-items-center">
                                                                     <div>
-                                                                        <img src="../assets/images/products/product-img-1.jpg" alt="" class="icon-shape icon-lg" />
+                                                                        <img th:src="@{/images/products/product-img-1.jpg}" alt="" class="icon-shape icon-lg" />
                                                                     </div>
                                                                     <div class="ms-lg-4 mt-2 mt-lg-0">
                                                                         <h5 class="mb-0 h6">Producto 1</h5>
@@ -808,7 +808,7 @@
                                                             <a href="#" class="text-inherit">
                                                                 <div class="d-flex align-items-center">
                                                                     <div>
-                                                                        <img src="../assets/images/products/product-img-2.jpg" alt="" class="icon-shape icon-lg" />
+                                                                        <img th:src="@{/images/products/product-img-2.jpg}" alt="" class="icon-shape icon-lg" />
                                                                     </div>
                                                                     <div class="ms-lg-4 mt-2 mt-lg-0">
                                                                         <h5 class="mb-0 h6">Producto 2</h5>
@@ -889,8 +889,8 @@
 
                                                     <!-- button -->
                                                     <div class="ms-md-3">
-                                                        <a href="listaMisOrdenes.html" class="btn btn-gray-400 mb-2">Regresar</a>
-                                                        <a href="chatSoporte.html" class="btn btn-info mb-2 " data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-chat-dots me-3"></i>Comunicarme con mi agente de compra</a>
+                                                        <a th:href="@{UsuarioFinal/listaMisOrdenes}" class="btn btn-gray-400 mb-2">Regresar</a>
+                                                        <a th:href="@{UsuarioFinal/chatSoporte}" class="btn btn-info mb-2 " data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-chat-dots me-3"></i>Comunicarme con mi agente de compra</a>
 
                                                     </div>
                                                 </div>
@@ -964,14 +964,14 @@
         <!-- Libs JS -->
         <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
 
-        <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
         <!-- Theme JS -->
-        <script src="../assets/js/theme.min.js"></script>
+        <script th:src="@{/js/theme.min.js}"></script>
 
-        <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-        <script src="../assets/js/vendors/chart.js"></script>
+        <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+        <script th:src="@{/js/vendors/chart.js}"></script>
 
 
         <style>
