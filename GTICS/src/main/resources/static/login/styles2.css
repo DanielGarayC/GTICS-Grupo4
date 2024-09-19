@@ -51,7 +51,7 @@ form {
     flex-direction: column;
 }
 input, select {
-    margin-bottom: 0.8rem;
+    margin-bottom: 0px !important;
     padding: 0.6rem 0.8rem;
     border: 1px solid #e0e0e0;
     border-radius: 25px;

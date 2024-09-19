@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,11 +16,11 @@
         <form>
             <input type="email" placeholder="Correo electrónico" required>
             <input type="password" placeholder="Contraseña" required>
-            <button type="submit">Iniciar sesión</button>
+            <a class="buttoncustom" type="submit">Iniciar sesión</a>
         </form>
         <div class="links">
-            <a href="register.html">Registrarse</a>
-            <a href="recvPass.html">¿Olvidaste tu contraseña?</a>
+            <a th:href="@{/Registro}">Registrarse</a>
+            <a th:href="@{/RecuperarContra}">¿Olvidaste tu contraseña?</a>
         </div>
     </div>
     <script th:src="@{/login/script.js}"></script>

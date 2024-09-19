@@ -62,7 +62,7 @@
             border-color: #1a602b;
             box-shadow: 0 0 0 3px rgba(154, 255, 107, 0.1);
         }
-        button {
+        a.buttoncustom {
             background: linear-gradient(135deg, #1a602b, #6ffa45);
             color: white;
             border: none;
@@ -74,8 +74,9 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
+            text-decoration:none;
         }
-        button:hover {
+        a.buttoncustom:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(154, 255, 107, 0.1);
         }
