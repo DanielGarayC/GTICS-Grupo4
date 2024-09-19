@@ -72,10 +72,8 @@
                      <div class="input-group">
                         <input class="form-control rounded" type="search" placeholder="Search for products" />
                         <span class="input-group-append">
-                                 <button class="btn bg-white border border-start-0 ms-n10 rounded-0 rounded-end" type="button">
-                                    <!-- SVG Icon -->
-                                 </button>
-                              </span>
+
+                        </span>
                      </div>
                   </form>
                </div>
@@ -699,7 +697,7 @@
                      ¡Bienvenido a ExpressDeals!
                   </h2>
                   <p class="lead" style="margin-left: 50px;">Aquí podrás explorar y gestionar tus compras  <br>de manera segura con la posibilidad de <br> solicitar ayuda de agentes de compra. </p>
-                  <a href="#" class="btn btn-dark mt-3" style="margin-left: 120px; ">
+                  <a th:href="@{/UsuarioFinal/listaProductos}" class="btn btn-dark mt-3" style="margin-left: 120px; ">
                      Explorar
                      <i class="feather-icon icon-arrow-right ms-1"></i>
                   </a>
@@ -711,7 +709,7 @@
                      Órdenes de compra
                   </h1>
                   <p class="lead">Podrás generar órdenes de compra con los productos<br> de tu preferencia. Recuerda que puedes visualizar <br>y gestionar todas tus órdenes generadas en el <br>siguiente botón </p>
-                  <a href="#" class="btn btn-dark mt-3">
+                  <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-dark mt-3">
                      Ver órdenes
                      <i class="feather-icon icon-arrow-right ms-1"></i>
                   </a>
@@ -721,7 +719,7 @@
                <div class="ps-lg-12 py-lg-16 col-xxl-5 col-lg-7 col-md-8 py-14 px-8 text-xs-center">
                   <h1 class="text-dark display-5 fw-bold mt-4">Interactúa con nuestro ChatBot</h1>
                   <p class="lead">El chatbot Carricardo te brindará soporte para tus consultas sobre la página o algún reclamo en cualquier momento!</p>
-                  <a href="#" class="btn btn-dark mt-3">
+                  <a th:href="@{/UsuarioFinal/chatbot}" class="btn btn-dark mt-3">
                      Ir ahora
                      <i class="feather-icon icon-arrow-right ms-1"></i>
                   </a>
@@ -775,35 +773,7 @@
 
 <!-- Modal -->
 
-<div class="modal fade" id="modal-subscribe" tabindex="-1" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-         <div class="modal-body p-0">
-            <div class="d-flex align-items-center">
-               <div class="d-none d-lg-block">
-                  <img th:src="@{/images/banner/modal_img.jpg}" alt="" class="img-fluid rounded-start" />
-               </div>
-               <div class="px-8 py-8 py-lg-0">
-                  <div class="position-absolute end-0 top-0 m-6">
-                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <span class="bg-light-danger text-danger badge rounded-pill mb-4 px-4 py-2">7 Day Super Sale</span>
-                  <h2 class="display-6 fw-bold">
-                     Discount up to
-                     <br />
-                     <span class="text-primary">50%</span>
-                  </h2>
-                  <p class="lead mb-5">Seven day of grate deals - what could be better?</p>
 
-                  <div class="d-grid">
-                     <a th:href="@{#}" class="btn btn-primary" data-bs-dismiss="modal">Start Show Now</a>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-</div>
 
 <!-- modal -->
 

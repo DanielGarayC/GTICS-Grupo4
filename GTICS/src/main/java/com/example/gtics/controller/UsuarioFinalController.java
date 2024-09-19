@@ -35,4 +35,9 @@ public class UsuarioFinalController {
 
         return "categoria";
     }
+    @GetMapping("/UsuarioFinal/chatbot")
+    public String interactuarChatBot(){
+
+        return "chatbot";
+    }
 }
