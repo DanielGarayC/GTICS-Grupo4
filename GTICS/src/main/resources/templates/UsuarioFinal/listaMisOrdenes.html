@@ -11,13 +11,13 @@
 
 
 <!-- Libs CSS -->
-<link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
-<link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet">
-<link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
+<link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+<link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+<link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
 
 <!-- Theme CSS -->
-<link rel="stylesheet" href="../assets/css/theme.min.css">
+<link rel="stylesheet" th:href="@{/css/theme.min.css}">
    <style>
       .info-box {
          display: flex;
@@ -61,12 +61,12 @@
 			<div class="container">
 				<div class="row w-100 align-items-center gx-lg-2 gx-0">
 					<div class="col-xxl-2 col-lg-3 col-md-6 col-5 d-flex align-items-center">
-						<a class="navbar-brand d-none d-lg-block" href="../index.html">
-							<img src="../assets/images/logo/logo.svg" alt="eCommerce HTML Template" />
+						<a class="navbar-brand d-none d-lg-block" th:href="@{../index.html}">
+							<img th:src="@{/images/logo/logo.svg}" alt="eCommerce HTML Template" />
 						</a>
 						<div class="d-flex justify-content-between w-100 d-lg-none">
-							<a class="navbar-brand" href="../index.html">
-								<img src="../assets/images/logo/logo.svg" alt="eCommerce HTML Template" />
+							<a class="navbar-brand" th:href="@{../index.html}">
+								<img th:src="@{/images/logo/logo.svg}" alt="eCommerce HTML Template" />
 							</a>
 						</div>
 					</div>
@@ -94,7 +94,7 @@
 							<ul class="list-inline">
 								<!-- Shopcart icon -->
 								<li class="list-inline-item me-5">
-									<a class="text-muted position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" href="#offcanvasExample" role="button" aria-controls="offcanvasRight">
+									<a class="text-muted position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" th:href="@{#offcanvasExample}" role="button" aria-controls="offcanvasRight">
 										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag">
 											<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
 											<line x1="3" y1="6" x2="21" y2="6"></line>
@@ -160,7 +160,7 @@
 							<!-- Avatar -->
 							<li class="list-inline-item dropdown">
 								<a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-									<img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+									<img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
 								</a>
 								<div class="dropdown-menu dropdown-menu-end p-0">
 									<div class="lh-1 px-5 py-4 border-bottom">
@@ -187,7 +187,7 @@
             <div class="container">
                <div class="offcanvas offcanvas-start" tabindex="-1" id="navbar-default" aria-labelledby="navbar-defaultLabel">
                   <div class="offcanvas-header pb-1">
-                     <a href="./index.html"><img src="../assets/images/logo/logo.svg" alt="eCommerce HTML Template" /></a>
+                     <a th:href="@{../index.html}"><img th:src="@{/images/logo/logo.svg}" alt="eCommerce HTML Template" /></a>
                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                   </div>
                   <div class="offcanvas-body">
@@ -226,7 +226,7 @@
                         <a
                            class="btn btn-primary w-100 d-flex justify-content-center align-items-center"
                            data-bs-toggle="collapse"
-                           href="#collapseExample"
+                           th:href="@{#collapseExample}"
                            role="button"
                            aria-expanded="false"
                            aria-controls="collapseExample">
@@ -397,7 +397,7 @@
                      <div class="row align-items-center">
                         <div class="col-6 col-md-6 col-lg-7">
                            <div class="d-flex">
-                              <img src="../assets/images/products/product-img-1.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                              <img th:src="@{/images/products/product-img-1.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
                               <div class="ms-3">
                                  <!-- title -->
                                  <a href="../pages/shop-single.html" class="text-inherit">
@@ -453,7 +453,7 @@
                      <div class="row align-items-center">
                         <div class="col-6 col-md-6 col-lg-7">
                            <div class="d-flex">
-                              <img src="../assets/images/products/product-img-2.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                              <img th:src="@{/images/products/product-img-2.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
                               <div class="ms-3">
                                  <a href="../pages/shop-single.html" class="text-inherit">
                                     <h6 class="mb-0">NutriChoice Digestive</h6>
@@ -510,7 +510,7 @@
                      <div class="row align-items-center">
                         <div class="col-6 col-md-6 col-lg-7">
                            <div class="d-flex">
-                              <img src="../assets/images/products/product-img-3.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                              <img th:src="@{/images/products/product-img-3.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
                               <div class="ms-3">
                                  <!-- title -->
                                  <a href="../pages/shop-single.html" class="text-inherit">
@@ -568,7 +568,7 @@
                      <div class="row align-items-center">
                         <div class="col-6 col-md-6 col-lg-7">
                            <div class="d-flex">
-                              <img src="../assets/images/products/product-img-4.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                              <img th:src="@{/images/products/product-img-4.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
                               <div class="ms-3">
                                  <!-- title -->
                                  <!-- title -->
@@ -627,7 +627,7 @@
                      <div class="row align-items-center">
                         <div class="col-6 col-md-6 col-lg-7">
                            <div class="d-flex">
-                              <img src="../assets/images/products/product-img-5.jpg" alt="Ecommerce" class="icon-shape icon-xxl" />
+                              <img th:src="@{/images/products/product-img-5.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
                               <div class="ms-3">
                                  <!-- title -->
                                  <a href="../pages/shop-single.html" class="text-inherit">
@@ -759,7 +759,7 @@
          </div>
       </div>
 
-      <script src="../assets/js/vendors/validation.js"></script>
+      <script th:src="@{/js/vendors/validation.js}"></script>
 
 
          <main>
@@ -822,7 +822,7 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="detalleOrden.html"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+                                                            <a class="dropdown-item" th:href="@{detalleOrden.html}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
                                                         </li>
                                                         <li>
                                                             <a class="dropdown-item eliminarOrden btn" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-trash me-3"></i>Eliminar</a>
@@ -849,7 +849,7 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="detalleOrden.html"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+                                                            <a class="dropdown-item" th:href="@{detalleOrden.html}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
                                                         </li>
                                                         <li>
                                                             <a class="dropdown-item eliminarOrden btn" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-trash me-3"></i>Eliminar</a>
@@ -876,7 +876,7 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="detalleOrden.html"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+                                                            <a class="dropdown-item" th:href="@{detalleOrden.html}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
                                                         </li>
                                                         <li>
                                                             <a class="dropdown-item eliminarOrden btn" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-trash me-3"></i>Eliminar</a>
@@ -903,7 +903,7 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="detalleOrden.html"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+                                                            <a class="dropdown-item" th:href="@{detalleOrden.html}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
                                                         </li>
                                                         <li>
                                                             <a class="dropdown-item eliminarOrden btn" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-trash me-3"></i>Eliminar</a>
@@ -930,7 +930,7 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="detalleOrden.html"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+                                                            <a class="dropdown-item" th:href="@{detalleOrden.html}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
                                                         </li>
                                                         <li>
                                                             <a class="dropdown-item eliminarOrden btn" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-trash me-3"></i>Eliminar</a>
@@ -1005,13 +1005,13 @@
       <!-- Libs JS -->
 <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
 
-<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
 <!-- Theme JS -->
-<script src="../assets/js/theme.min.js"></script>
+<script th:src="@{/js/theme.min.js}"></script>
 
-      <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-      <script src="../assets/js/vendors/chart.js"></script>
+      <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+      <script th:src="@{/js/vendors/chart.js}"></script>
    </body>
 </html>
