@@ -5,29 +5,34 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class UsuarioFinalController {
-    @GetMapping("/UsuarioFinal, /UsuarioFinal/pagPrincipal")
+    @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
     public String mostrarPagPrincipal(){
 
-        return "pagina_principalUF";
+        return "UsuarioFinal/pagina_principalUF";
     }
-    @GetMapping("/UsuarioFinal/MiPerfil")
+    @GetMapping("/UsuarioFinal/miPerfil")
     public String miPerfil(){
 
-        return "perfil";
+        return "UsuarioFinal/perfil";
     }
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
     public String mostrarListaMisOrdenes(){
 
-        return "listaMisOrdenes";
+        return "UsuarioFinal/listaMisOrdenes";
     }
     @GetMapping("/UsuarioFinal/listaProductos")
     public String mostrarListaProductos(){
 
-        return "productos";
+        return "UsuarioFinal/productos";
     }
     @GetMapping("/UsuarioFinal/Review")
     public String mostrarReview(){
 
-        return "reviuw";
+        return "UsuarioFinal/reviuw";
+    }
+    @GetMapping("/UsuarioFinal/Categorias")
+    public String mostrarCategorias(){
+
+        return "categoria";
     }
 }

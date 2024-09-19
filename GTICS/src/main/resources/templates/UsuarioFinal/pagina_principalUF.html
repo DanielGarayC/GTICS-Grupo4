@@ -63,7 +63,7 @@
             <div class="row w-100 align-items-center gx-lg-2 gx-0">
                <div class="col-xxl-2 col-lg-3 col-md-6 col-5 d-flex align-items-center">
                   <a class="navbar-brand d-none d-lg-block" th:href="@{/index.html}">
-                     <img th:src="@{/assets/images/logo/logo.png}" alt="eCommerce HTML Template" />
+                     <img th:src="@{/images/logo/logo.png}" alt="eCommerce HTML Template" />
                   </a>
 
                </div>
@@ -105,7 +105,7 @@
                         </li>
                         <!-- Notifications icon -->
                         <li class="list-inline-item dropdown">
-                           <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" th:href="@{#}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                           <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                               <i class="bi bi-bell fs-5"></i>
                               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
                                     2
@@ -118,7 +118,7 @@
                                     <h5 class="mb-1">Notificaciones</h5>
                                     <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
                                  </div>
-                                 <a th:href="@{#}" class="text-muted">
+                                 <a href="#" class="text-muted">
                                     <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
                                           <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"/>
@@ -129,7 +129,7 @@
                               </div>
                               <ul class="list-group list-group-flush notification-list-scroll fs-6">
                                  <li class="list-group-item px-5 py-4 list-group-item-action">
-                                    <a th:href="@{#}" class="text-muted">
+                                    <a href="#" class="text-muted">
                                        <div class="d-flex">
                                           <div class="ms-4">
                                              <p class="mb-1">
@@ -150,13 +150,13 @@
                                  <!-- Más notificaciones -->
                               </ul>
                               <div class="border-top px-5 py-4 text-center">
-                                 <a th:href="@{#}">Ver todas</a>
+                                 <a href="#">Ver todas</a>
                               </div>
                            </div>
                         </li>
                         <!-- Avatar -->
                         <li class="list-inline-item dropdown">
-                           <a th:href="@{#}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                           <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                               <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
                            </a>
                            <div class="dropdown-menu dropdown-menu-end p-0">
@@ -165,10 +165,10 @@
                                  <small>rol en la página</small>
                               </div>
                               <div class="border-top px-5 py-3">
-                                 <a th:href="@{#}">Mi perfil</a>
+                                 <a href="#">Mi perfil</a>
                               </div>
                               <div class="border-top px-5 py-3">
-                                 <a th:href="@{#}">Cerrar sesión</a>
+                                 <a href="#">Cerrar sesión</a>
                               </div>
                            </div>
                         </li>
@@ -224,14 +224,14 @@
                   <div>
                      <ul class="navbar-nav align-items-center">
                         <li class="nav-item dropdown w-100 w-lg-auto">
-                           <a class="nav-link dropdown-toggle" th:href="@{#}" role="button" data-bs-toggle="dropdown" aria-expanded="false">Inicio</a>
+                           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Inicio</a>
                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="../index.html">Home 1</a></li>
-                              <li><a class="dropdown-item" th:href="../pages/index-2.html">Home 2</a></li>
-                              <li><a class="dropdown-item" href="../pages/index-3.html">Home 3</a></li>
-                              <li><a class="dropdown-item" href="../pages/index-4.html">Home 4</a></li>
+                              <li><a class="dropdown-item" th:href="@{../index.html}">Home 1</a></li>
+                              <li><a class="dropdown-item" th:href="@{../pages/index-2.html}">Home 2</a></li>
+                              <li><a class="dropdown-item" th:href="@{../pages/index-3.html}">Home 3</a></li>
+                              <li><a class="dropdown-item" th:href="@{../pages/index-4.html}">Home 4</a></li>
                               <li>
-                                 <a class="dropdown-item" href="../pages/index-5.html">Home 5</a>
+                                 <a class="dropdown-item" th:href="@{../pages/index-5.html}">Home 5</a>
                               </li>
                            </ul>
                         </li>
@@ -631,48 +631,48 @@
             </div>
             <div class="d-flex justify-content-between align-items-center mb-2">
                <h6 class="mb-0">Select Location</h6>
-               <a th:href="@{#}" class="btn btn-outline-gray-400 text-muted btn-sm">Clear All</a>
+               <a href="#" class="btn btn-outline-gray-400 text-muted btn-sm">Clear All</a>
             </div>
             <div>
                <div data-simplebar style="height: 300px">
                   <div class="list-group list-group-flush">
-                     <a th:href="@{#}" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action active">
+                     <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action active">
                         <span>Alabama</span>
                         <span>Min:$20</span>
                      </a>
-                     <a th:href="@{#}" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                     <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
                         <span>Alaska</span>
                         <span>Min:$30</span>
                      </a>
-                     <a th:href="@{#}" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                     <a href={#} class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
                         <span>Arizona</span>
                         <span>Min:$50</span>
                      </a>
-                     <a th:href="@{#}" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                     <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
                         <span>California</span>
                         <span>Min:$29</span>
                      </a>
-                     <a th:href="@{#}" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                     <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
                         <span>Colorado</span>
                         <span>Min:$80</span>
                      </a>
-                     <a th:href="@{#}" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                     <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
                         <span>Florida</span>
                         <span>Min:$90</span>
                      </a>
-                     <a th:href="@{#}" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                     <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
                         <span>Arizona</span>
                         <span>Min:$50</span>
                      </a>
-                     <a th:href="@{#}" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                     <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
                         <span>California</span>
                         <span>Min:$29</span>
                      </a>
-                     <a th:href="@{#}" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                     <a href="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
                         <span>Colorado</span>
                         <span>Min:$80</span>
                      </a>
-                     <a th:href="@{#}" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
+                     <a h="#" class="list-group-item d-flex justify-content-between align-items-center px-2 py-3 list-group-item-action">
                         <span>Florida</span>
                         <span>Min:$90</span>
                      </a>
@@ -699,7 +699,7 @@
                      ¡Bienvenido a ExpressDeals!
                   </h2>
                   <p class="lead" style="margin-left: 50px;">Aquí podrás explorar y gestionar tus compras  <br>de manera segura con la posibilidad de <br> solicitar ayuda de agentes de compra. </p>
-                  <a th:href="@{#}" class="btn btn-dark mt-3" style="margin-left: 120px; ">
+                  <a href="#" class="btn btn-dark mt-3" style="margin-left: 120px; ">
                      Explorar
                      <i class="feather-icon icon-arrow-right ms-1"></i>
                   </a>
@@ -711,7 +711,7 @@
                      Órdenes de compra
                   </h1>
                   <p class="lead">Podrás generar órdenes de compra con los productos<br> de tu preferencia. Recuerda que puedes visualizar <br>y gestionar todas tus órdenes generadas en el <br>siguiente botón </p>
-                  <a th:href="@{#}" class="btn btn-dark mt-3">
+                  <a href="#" class="btn btn-dark mt-3">
                      Ver órdenes
                      <i class="feather-icon icon-arrow-right ms-1"></i>
                   </a>
@@ -721,47 +721,48 @@
                <div class="ps-lg-12 py-lg-16 col-xxl-5 col-lg-7 col-md-8 py-14 px-8 text-xs-center">
                   <h1 class="text-dark display-5 fw-bold mt-4">Interactúa con nuestro ChatBot</h1>
                   <p class="lead">El chatbot Carricardo te brindará soporte para tus consultas sobre la página o algún reclamo en cualquier momento!</p>
-                  <a th:href="@{#}" class="btn btn-dark mt-3">
+                  <a href="#" class="btn btn-dark mt-3">
                      Ir ahora
                      <i class="feather-icon icon-arrow-right ms-1"></i>
                   </a>
                </div>
             </div>
          </div>
-         <h1>Órdenes ya realizadas</h1>
-         <table class="table">
-            <thead class="table-dark">
-            <tr>
-               <th scope="col">Pedido</th>
-               <th scope="col">Monto total</th>
-               <th scope="col">Estado</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-               <th scope="row">Audifonos RedmiBuds</th>
-               <td>S/.500</td>
-               <td>Creado</td>
-            </tr>
-            <tr>
-               <th scope="row">Laptop Acer Nitro V</th>
-               <td>S/.300</td>
-               <td>En validación</td>
-            </tr>
-            <tr>
-               <th scope="row">20 poleras Telecom</th>
-               <td>S/.400</td>
-               <td>En proceso</td>
-            </tr>
-            <tr></tr>
-            <th scope="row">iPad 10.9</th>
-            <td>S/.450</td>
-            <td>Recibido</td>
-            </tr>
+         <h2>Órdenes realizadas</h2>
+         <div class="table-responsive">
+            <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
+               <thead class="bg-light">
+                  <tr>
+                     <th scope="col">Pedido</th>
+                     <th scope="col">Monto total</th>
+                     <th scope="col">Estado</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                     <th scope="row">Audifonos RedmiBuds</th>
+                     <td>S/.500</td>
+                     <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
+                  </tr>
+                  <tr>
+                     <th scope="row">Laptop Acer Nitro V</th>
+                     <td>S/.300</td>
+                     <td><span class="badge bg-light-danger text-dark-danger">En validación</span></td>
+                  </tr>
+                  <tr>
+                     <th scope="row">20 poleras Telecom</th>
+                     <td>S/.400</td>
+                     <td><span class="badge bg-light-warning text-dark-warning">En proceso</span></td>
+                  </tr>
+                  <tr></tr>
+                  <th scope="row">iPad 10.9</th>
+                  <td>S/.450</td>
+                  <td><span class="badge bg-light-primary text-dark-primary">Recibido</span></td>
+                  </tr>
             </tbody>
          </table>
          <div class="button-container">
-            <button type="button" class="btn btn-outline-info mb-2">Ver más</button>
+            <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-outline-info mb-2">Ver más</a>
          </div>
       </div>
    </section>
@@ -815,7 +816,7 @@
 
 <!-- Javascript-->
 <!-- Libs JS -->
-<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+<script th:src="@{/libs/jquery/dist/jquery.min.js}"></script> -->
 <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
