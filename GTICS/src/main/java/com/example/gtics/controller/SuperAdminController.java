@@ -31,7 +31,7 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAgentes/agent-list";
     }
     @GetMapping("SuperAdmin/editarAgente")
-    public String editarAdminZonal(){
+    public String editarAgente(){
 
         return "SuperAdmin/GestionAgentes/agent-edit";
     }
