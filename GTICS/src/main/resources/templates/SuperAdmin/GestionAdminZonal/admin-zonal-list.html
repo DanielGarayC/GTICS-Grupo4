@@ -169,7 +169,7 @@
                     </a>
                 </div>
                 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column" id="sideNavbar">
+                    <ul class="navbar-nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
                                 <div class="d-flex align-items-center">
@@ -311,102 +311,6 @@
 
 
 
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5 d-flex justify-content-between align-items-center">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.svg}" alt="" />
-                    </a>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-                                    <span class="nav-link-text">DashBoard</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-                        <li class="nav-item mt-6 mb-3">
-                            <span class="nav-label">Opciones</span>
-                        </li>
-
-                        <!-- Desplegable de los Clientes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link active"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navCustomer"
-                                    aria-expanded="false"
-                                    aria-controls="navCustomer"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-people"></i></span>
-                                    <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">New</span>
-                                </div>
-                            </a>
-                            <div id="navCustomer" class="collapse  show " data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item" >
-                                        <a class="nav-link active" href="customers.html">Usuarios</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link " href="create-customers.html">Crear usuario</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link " href="customers-edits.html">Editar Usuario</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Proveedores-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="vendor-grid.html">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-                                    <span class="nav-link-text">Proveedores</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <!-- Opción de los productor-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="categories.html">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-                                    <span class="nav-link-text">Inventario de productos</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-                        <!-- Opción de solicitudes de Agente-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="agent-request.html">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-                                    <span class="nav-link-text">Solicitudes para Agente</span>
-                                </div>
-                            </a>
-                        </li>
 
 
                     </ul>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
    <head>
       <!-- Required meta tags -->
       <meta charset="utf-8" />
@@ -7,15 +7,16 @@
       <meta content="Codescandy" name="author" />
       <title>Shop Checkout eCommerce HTML Template - FreshCart</title>
       <!-- Favicon icon-->
-      <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico" />
+      <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+
 
       <!-- Libs CSS -->
-      <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
-      <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet" />
-      <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet" />
+      <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+      <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+      <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
       <!-- Theme CSS -->
-      <link rel="stylesheet" href="../assets/css/theme.min.css" />
+      <link rel="stylesheet" th:href="@{/css/theme.min.css}">
 
       <!-- Flag Icons -->
 
@@ -24,10 +25,16 @@
    </head>
 
    <body>
-      
-      <script src="../assets/js/vendors/validation.js"></script>
+
+      <script th:src="@{/js/vendors/validation.js}"></script>
 
       <main>
+         <nav class="navbar navbar-light d-flex justify-content-between" style="border-bottom: 2px solid #959ea9">
+            <a th:href="@{/UsuarioFinal/pagPrincipal}" class="btn btn-secondary">Regresar</a>
+            <a class="navbar-brand">
+               <img th:src="@{/images/logo/logoGTICS.jpeg}" width="220" height="auto" class="d-inline-block align-top" alt="Logo de la Empresa">
+            </a>
+         </nav>
          <!-- section-->
          <div class="mt-4">
             <div class="container">
@@ -57,12 +64,7 @@
                         <div class="mb-8">
                            <!-- text -->
                            <h1 class="fw-bold mb-0">Proceso de pago</h1>
-                           <p class="mb-0">
-                              
-                           ¿Ya tienes una cuenta? Haga clic aquí para iniciar sesión
-                              <a href="#!">Iniciar Sesión</a>
-                              .
-                           </p>
+
                         </div>
                      </div>
                   </div>
@@ -355,14 +357,14 @@
                                                    <ul class="list-inline mb-0">
                                              
                                                       <li class="list-inline-item">
-                                                         <a href="#!"><img src="../assets/images/payment/american-express.svg" alt="" /></a>
+                                                         <a href="#!"><img th:src="@{/images/payment/american-express.svg}" alt="" /></a>
                                                       </li>
                                                       <li class="list-inline-item">
-                                                         <a href="#!"><img src="../assets/images/payment//mastercard.svg" alt="" /></a>
+                                                         <a href="#!"><img th:src="@{/images/payment//mastercard.svg}" alt="" /></a>
                                                       </li>
                         
                                                       <li class="list-inline-item">
-                                                         <a href="#!"><img src="../assets/images/payment/visa.svg" alt="" /></a>
+                                                         <a href="#!"><img th:src="@{/images/payment/visa.svg}" alt="" /></a>
                                                       </li>
                                                    </ul>
                                                 </div>
@@ -383,11 +385,7 @@
                                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="cashonDelivery" />
                                                    <label class="form-check-label ms-2" for="cashonDelivery"></label>
                                                 </div>
-                                                <div>
-                                                   <!-- title -->
-                                                   <h5 class="mb-1 h6">Contra reembolso</h5>
-                                                   <p class="mb-0 small">Pague en efectivo cuando se entregue su pedido.</p>
-                                                </div>
+
                                              </div>
                                           </div>
                                        </div>
@@ -420,7 +418,7 @@
                                  <li class="list-group-item px-4 py-3">
                                     <div class="row align-items-center">
                                        <div class="col-2 col-md-2">
-                                          <img src="../img_user/producto1.jpg" alt="Ecommerce" class="img-fluid" />
+                                          <img th:src="@{/img_user/img_user/producto1.jpg}" alt="Ecommerce" class="img-fluid" />
                                        </div>
                                        <div class="col-5 col-md-5">
                                           <h6 class="mb-0">Zapato Calvin Klein</h6>
@@ -438,7 +436,7 @@
                                  <li class="list-group-item px-4 py-3">
                                     <div class="row align-items-center">
                                        <div class="col-2 col-md-2">
-                                          <img src="../img_user/producto2.jpg" alt="Ecommerce" class="img-fluid" />
+                                          <img th:src="@{/img_user/img_user/producto2.jpg}" alt="Ecommerce" class="img-fluid" />
                                        </div>
                                        <div class="col-5 col-md-5">
                                           <h6 class="mb-0">Bolsa deportiva</h6>
@@ -457,7 +455,7 @@
                                  <li class="list-group-item px-4 py-3">
                                     <div class="row align-items-center">
                                        <div class="col-2 col-md-2">
-                                          <img src="../img_user/producto3.jpg" alt="Ecommerce" class="img-fluid" />
+                                          <img th:src="@{/img_user/img_user/producto3.jpg}" alt="Ecommerce" class="img-fluid" />
                                        </div>
                                        <div class="col-5 col-md-5">
                                           <h6 class="mb-0">Refrigeradora Hyandia</h6>
@@ -476,7 +474,7 @@
                                  <li class="list-group-item px-4 py-3">
                                     <div class="row align-items-center">
                                        <div class="col-2 col-md-2">
-                                          <img src="../img_user/producto4.jpg" alt="Ecommerce" class="img-fluid" />
+                                          <img th:src="@{/img_user/img_user/producto4.jpg}" alt="Ecommerce" class="img-fluid" />
                                        </div>
                                        <div class="col-5 col-md-5">
                                           <h6 class="mb-0">Pan carbonato</h6>
@@ -799,7 +797,7 @@
       
          <!-- Modal -->
       <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
-         <div class="modal-dialog modal-lg modal-dialog-centered"" >
+         <div class="modal-dialog modal-lg modal-dialog-centered" >
             <div class="modal-content">
               
                <!-- modal body -->
@@ -812,13 +810,14 @@
                                        <!-- Lista de tarjetas -->
                      <ul class="list-inline mb-0 d-inline-block">
                         <li class="list-inline-item">
-                           <a href="#!"><img src="../assets/images/payment/american-express.svg" alt="" /></a>
+                           <a href="#!"><img th:src="@{/images/payment/american-express.svg}" alt="" /></a>
                         </li>
                         <li class="list-inline-item">
-                           <a href="#!"><img src="../assets/images/payment/mastercard.svg" alt="" /></a>
+                           <a href="#!"><img th:src="@{/images/payment//mastercard.svg}" alt="" /></a>
                         </li>
+
                         <li class="list-inline-item">
-                           <a href="#!"><img src="../assets/images/payment/visa.svg" alt="" /></a>
+                           <a href="#!"><img th:src="@{/images/payment/visa.svg}" alt="" /></a>
                         </li>
                      </ul>
                      </div>
@@ -927,17 +926,17 @@
                      });
                   </script>
       <!-- Javascript-->
-      <script src="../assets/libs/flatpickr/dist/flatpickr.min.js"></script>
+      <script th:src="@{/libs/flatpickr/dist/flatpickr.min.js}"></script>
       <!-- Libs JS -->
       <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-      <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-      <script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+      <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+      <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
       <!-- Theme JS -->
-      <script src="../assets/js/theme.min.js"></script>
+      <script th:src="@{/js/theme.min.js}"></script>
 
-      <script src="../assets/libs/imask/dist/imask.min.js"></script>
-      <script src="../assets/js/vendors/inputmask.js"></script>
+      <script th:src="@{/libs/imask/dist/imask.min.js}"></script>
+      <script th:src="@{/js/vendors/inputmask.js}"></script>
       
 
    </body>
