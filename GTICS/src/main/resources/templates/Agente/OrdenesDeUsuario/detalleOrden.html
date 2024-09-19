@@ -207,7 +207,7 @@
 			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
 				   <ul class="navbar-nav flex-column" id="sideNavbar">
 					   <li class="nav-item">
-						   <a class="nav-link   " href="../inicio.html">
+						   <a class="nav-link  active " th:href="@{/Agente}">
 							   <div class="d-flex align-items-center">
 								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
 								   <span class="nav-link-text">Inicio</span>
@@ -217,7 +217,7 @@
 
 
 					   <li class="nav-item">
-						   <a class="nav-link " href="usuariosAsignados.html">
+						   <a class="nav-link" th:href="@{/Agente/UsuariosAsignados}">
 							   <div class="d-flex align-items-center">
 								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
 								   <span class="nav-link-text">Usuarios asignados</span>
@@ -226,7 +226,7 @@
 					   </li>
 
 					   <li class="nav-item">
-						   <a class="nav-link active" href="ordeneslista.html">
+						   <a class="nav-link" th:href="@{Agente/Ordenes}">
 							   <div class="d-flex align-items-center">
 								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
 								   <span class="nav-link-text">Órdenes</span>
@@ -235,7 +235,7 @@
 					   </li>
 
 					   <li class="nav-item">
-						   <a class="nav-link" href="#">
+						   <a class="nav-link" th:href="@{/Agente/Reportes/Descargar}">
 							   <div class="d-flex align-items-center">
 								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
 								   <span class="nav-link-text">Reportes</span>
@@ -260,7 +260,7 @@
 				   <ul class="navbar-nav flex-column">
 
 					   <li class="nav-item">
-						   <a class="nav-link  " href="../inicio.html">
+						   <a class="nav-link active " th:href="@{/Agente}">
 							   <div class="d-flex align-items-center">
 								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>
 								   <span>Inicio</span>
@@ -269,7 +269,7 @@
 					   </li>
 
 					   <li class="nav-item">
-						   <a class="nav-link   " href="usuariosAsignados.html">
+						   <a class="nav-link " th:href="@{/Agente/UsuariosAsignados}">
 							   <div class="d-flex align-items-center">
 								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
 								   <span>Usuarios asignados</span>
@@ -278,7 +278,7 @@
 					   </li>
 
 					   <li class="nav-item">
-						   <a class="nav-link active " href="ordeneslista.html">
+						   <a class="nav-link " th:href="@{/Agente/Ordenes/Usuario/Lista}">
 							   <div class="d-flex align-items-center">
 								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
 								   <span class="nav-link-text">Órdenes</span>
@@ -287,7 +287,7 @@
 					   </li>
 
 					   <li class="nav-item">
-						   <a class="nav-link " href="#">
+						   <a class="nav-link " th:href="@{/Agente/Reportes/Descargar}">
 							   <div class="d-flex align-items-center">
 								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
 								   <span class="nav-link-text">Reportes</span>
