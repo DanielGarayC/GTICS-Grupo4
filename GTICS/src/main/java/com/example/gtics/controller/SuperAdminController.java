@@ -40,4 +40,50 @@ public class SuperAdminController {
 
         return "SuperAdmin/GestionAgentes/create-agent";
     }
+
+    @GetMapping("SuperAdmin/listaUsuarioFinal")
+    public String listaGestionUsuarioFinal(){
+
+        return "SuperAdmin/GestionUsuarioFinal/final-users-list";
+    }
+
+    @GetMapping("SuperAdmin/crearUsuarioFinal")
+    public String crearUsuarioFinal(){
+
+        return "SuperAdmin/GestionUsuarioFinal/create-final-user";
+    }
+    @GetMapping("SuperAdmin/editarUsuarioFinal")
+    public String editarUsuarioFinal(){
+
+        return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
+    }
+
+    @GetMapping("SuperAdmin/agregarCategoria")
+    public String agregarCategoria(){
+
+        return "SuperAdmin/add-category";
+    }
+
+    @GetMapping("SuperAdmin/categorias")
+    public String categorias(){
+
+        return "SuperAdmin/categories";
+    }
+    @GetMapping("SuperAdmin/proveedores")
+    public String proveedores(){
+
+        return "SuperAdmin/vendor-grid";
+    }
+
+    @GetMapping("SuperAdmin/listaProveedores")
+    public String listaProveedores(){
+
+        return "SuperAdmin/vendor-list";
+    }
+
+    @GetMapping("SuperAdmin/perfil")
+    public String añadirCategoria(){
+
+        return "SuperAdmin/perfilSuperAdmin";
+    }
 }

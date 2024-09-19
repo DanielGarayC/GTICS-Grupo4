@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
    <head>
       <!-- Required meta tags -->
 <meta charset="utf-8">
@@ -47,7 +47,10 @@
          color: black; /* Texto negro para el cuerpo de la tabla */
       }
    </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+<!-- SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    </head>
 
    <body>
@@ -181,7 +184,7 @@
                                                   <small>rol en la página</small>
                                               </div>
                                               <div class="border-top px-5 py-3">
-                                                  <a th:href="@{UsuarioFinal/miPerfil}">Mi perfil</a>
+                                                  <a th:href="@{/UsuarioFinal/miPerfil}">Mi perfil</a>
                                               </div>
                                               <div class="border-top px-5 py-3">
                                                   <a th:href="@{/Login}">Cerrar sesión</a>
@@ -258,12 +261,12 @@
                                       Todas las categorías
                                   </button>
                                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Salud y Belleza</a></li>
-                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Electrónica y tecnología</a></li>
-                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Moda y ropa</a></li>
-                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Hogar y cocina</a></li>
-                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Arte y manualidades</a></li>
-                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/Categorias}">Deportes y ocio</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/categorias}">Salud y Belleza</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/categorias}">Electrónica y tecnología</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/categorias}">Moda y ropa</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/categorias}">Hogar y cocina</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/categorias}">Arte y manualidades</a></li>
+                                      <li><a class="dropdown-item" th:href="@{UsuarioFinal/categorias}">Deportes y ocio</a></li>
                                   </ul>
                               </div>
                               <div>
@@ -277,14 +280,14 @@
 
                                       </li>
                                       <li class="nav-item dropdown w-100 w-lg-auto">
-                                          <a class="nav-link " th:href="@{UsuarioFinal/listaMisOrdenes}"  aria-expanded="false">Mis compras</a>
+                                          <a class="nav-link " th:href="@{UsuarioFinal/listaMisOrdenes}" aria-expanded="false">Mis compras</a>
 
                                       </li>
                                       <li class="nav-item dropdown w-100 w-lg-auto">
                                           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mensajería</a>
                                           <ul class="dropdown-menu">
                                               <li><a class="dropdown-item" th:href="@{UsuarioFinal/foro}">Reseñas</a></li>
-                                              <li><a class="dropdown-item" th:href="@{../pages/store-grid.html}">Preguntas frecuentes</a></li>
+                                              <li><a class="dropdown-item" th:href="@{UsuarioFinal/preguntasFrecuentes}">Preguntas frecuentes</a></li>
 
                                           </ul>
                                       </li>
@@ -683,260 +686,69 @@
       <script th:src="@{/js/vendors/validation.js}"></script>
 
 
-         <main>
-            <!-- navbar vertical (para pc)-->
-            <!-- navbar -->
-
-
-            <section class="my-lg-14 my-8">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-12 col-12 mb-5">
-                            <h2>Mis órdenes</h2>
-                            <!-- card -->
-                            <div class="card h-100 card-lg">
-                                <div class="p-6">
-                                    <div class="row justify-content-between">
-                                        <div class="col-md-4 col-12 mb-2 mb-md-0">
-                                            <!-- form -->
-                                            <form class="d-flex" role="search">
-                                                <input class="form-control" type="search" placeholder="Buscar por número de orden" aria-label="Search" />
-                                            </form>
-                                        </div>
-                                        <div class="col-lg-2 col-md-4 col-12">
-                                            <!-- select -->
-                                            <select class="form-select">
-                                                <option selected>Estado</option>
-                                                <option value="Success">Creado</option>
-                                                <option value="Pending">En validación</option>
-                                                <option value="Pending">En proceso</option>
-                                                <option value="Cancel">Arribo al país</option>
-                                                <option value="Cancel">En aduanas</option>
-                                                <option value="Cancel">En ruts</option>
-                                                <option value="Cancel">Recibido</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- card body -->
-                                <div class="card-body p-0">
-                                    <!-- table responsive -->
-                                    <div class="table-responsive">
-                                        <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
-                                            <thead class="bg-light">
-                                                <tr>
-
-                                                    <th>Nº de orden</th>
-                                                    <th>Fecha</th>
-                                                    <th>Estado</th>
-                                                    <th>Monto total</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td>	<span class="badge bg-light-primary text-dark-primary">Recibido</span></td>
-                                                    <td> S/. 145.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td>	<span class="badge bg-light-primary text-dark-primary">Recibido</span></td>
-                                                    <td> S/. 145.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
-                                                    <td> S/. 145.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
-                                                    <td> S/. 145.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td><span class="badge bg-light-warning text-dark-warning">En proceso</span></td>
-                                                    <td> S/. 145.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td><span class="badge bg-light-warning text-dark-warning">En proceso</span></td>
-                                                    <td> S/. 135.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="border-top d-md-flex justify-content-between align-items-center p-6">
-                                    <span> </span>
-                                    <nav class="mt-2 mt-md-0">
-                                        <ul class="pagination mb-0">
-                                            <li class="page-item disabled"><a class="page-link" href="#!">Anterior</a></li>
-                                            <li class="page-item"><a class="page-link active" href="#!">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#!">Siguiente</a></li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+      <main>
+        <section class="my-lg-14 my-8">
+          <div class="container">
+            <div class="row">
+              <div class="col-xl-12 col-12 mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <h2 style="margin-top: -50px; margin-bottom: 20px">Preguntas Frecuentes</h2>
+                  <button class="btn btn-primary" id="ask-question-btn" onclick="pregunta()">Formular Pregunta</button>
                 </div>
-
-            </section>
-
-
-
-
-         </main>
+      
+                <div class="accordion">
+                  <div class="accordion-item">
+                    <button id="accordion-button-1" class="accordion-btn" aria-expanded="false">
+                      <span class="accordion-title">¿Cuánto tiempo tarda en llegar un producto desde China?</span>
+                      <span class="icon" aria-hidden="true"></span>
+                    </button>
+                    <div class="accordion-content">
+                      <p><strong>María Angeles:</strong> Depende del método de envío y aduanas. Generalmente entre 15 y 30 días.</p>
+                      <hr>
+                      <p><strong>José Miguel:</strong> Yo pedí por envío express y me llegó en 7 días.</p>
+                      <hr>
+                      <div class="text-center">
+                        <button class="btn btn-outline-primary btn-sm small-reply-btn">Redactar Respuesta</button>
+                      </div>
+      
+                      <div class="reply-section" style="display: none;">
+                        <h5>Escribe tu respuesta</h5>
+                        <textarea class="form-control mb-3" rows="3" placeholder="Escribe tu respuesta..."></textarea>
+                        <div class="text-right">
+                            <button class="btn btn-outline-primary btn-sm small-reply-btn btn-reply">Enviar Respuesta</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+      
+                  <div class="accordion-item">
+                    <button id="accordion-button-2" class="accordion-btn" aria-expanded="false">
+                      <span class="accordion-title">¿Qué métodos de pago se aceptan para compras internacionales?</span>
+                      <span class="icon" aria-hidden="true"></span>
+                    </button>
+                    <div class="accordion-content">
+                      <p><strong>María Angeles:</strong> Se aceptan tarjetas de crédito y PayPal.</p>
+                      <p><strong>José Miguel:</strong> También puedes pagar con transferencia bancaria.</p>
+                  
+                      <div class="text-center">
+                        <button class="btn btn-outline-primary btn-sm small-reply-btn btn-reply">Responder</button>
+                      </div>
+                  
+                      <div class="reply-section" style="display: none;">
+                        <h5>Escribe tu respuesta</h5>
+                        <textarea class="form-control mb-3" rows="3" placeholder="Escribe tu respuesta..."></textarea>
+                        <div class="text-right">
+                          <button class="btn btn-outline-primary btn-sm small-reply-btn btn-reply">Enviar Respuesta</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
 
 
 
@@ -950,9 +762,287 @@
 <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
 <!-- Theme JS -->
-<script src="../assets/js/theme.min.js"></script>
+<script th:src="@{/js/theme.min.js}"></script>
 
       <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
       <script th:src="@{/js/vendors/chart.js}"></script>
+
+      <style>
+        @import url('https://fonts.googleapis.com/css?family=Hind:300,400&display=swap');
+        
+        
+        * {
+          box-sizing: border-box;
+        }
+        *::before,
+        *::after {
+          box-sizing: border-box;
+        }
+        
+        /* Estilos para el contenedor de acordeón */
+        .accordion .accordion-item {
+          border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .accordion .accordion-item button[aria-expanded='true'] {
+          border-bottom: 1px solid #03b5d2;
+        }
+        
+        /* Botones del acordeón */
+        .accordion button {
+          position: relative;
+          display: block;
+          text-align: left;
+          width: 100%;
+          padding: 1em 1.5em;
+          color: #7288a2;
+          font-size: 1.15rem;
+          font-weight: 400;
+          border: none;
+          background: none;
+          outline: none;
+        }
+        
+        
+        
+        /* Estilos del título dentro del botón */
+        .accordion button .accordion-title {
+          padding: 1em 1.5em 1em 0;
+        }
+        
+        /* Iconos de expansión del acordeón */
+        .accordion button .icon {
+          display: inline-block;
+          position: absolute;
+          top: 18px;
+          right: 0;
+          width: 22px;
+          height: 22px;
+          border: 1px solid;
+          border-radius: 22px;
+          margin-right: 20px;
+        }
+        
+        .accordion button .icon::before {
+          display: block;
+          position: absolute;
+          content: '';
+          top: 9px;
+          left: 5px;
+          width: 10px;
+          height: 2px;
+          background: currentColor;
+        }
+        
+        .accordion button .icon::after {
+          display: block;
+          position: absolute;
+          content: '';
+          top: 5px;
+          left: 9px;
+          width: 2px;
+          height: 10px;
+          background: currentColor;
+        }
+        
+        .accordion button[aria-expanded='true'] {
+          color: #03b5d2;
+        }
+        .accordion button[aria-expanded='true'] .icon::after {
+          width: 0;
+        }
+        
+        /* Transiciones suaves para el contenido del acordeón */
+        .accordion button[aria-expanded='true'] + .accordion-content {
+          opacity: 1;
+          max-height: 12em;
+          transition: all 200ms linear;
+          will-change: opacity, max-height;
+        }
+        
+        .accordion .accordion-content {
+          opacity: 0;
+          max-height: 0;
+          overflow: hidden;
+          transition: opacity 200ms linear, max-height 200ms linear;
+          will-change: opacity, max-height;
+          padding: 0.5em 1em;
+        }
+        
+        /* Estilos para el contenido del acordeón */
+        .accordion .accordion-content p {
+          font-size: 1rem;
+          font-weight: 300;
+          margin: 1em 0;
+        }
+        
+        /* Estilos para el botón "Redactar Respuesta" */
+        .text-center {
+          text-align: center;
+        }
+        
+        
+        
+        /* Sección de respuesta (oculta inicialmente) */
+        .accordion .reply-section {
+          margin-top: 20px;
+          padding: 10px;
+          background-color: #f9f9f9;
+          border-radius: 5px;
+        }
+        
+        .reply-section h5 {
+          font-size: 1rem;
+          margin-bottom: 10px;
+        }
+        
+        textarea.form-control {
+          resize: vertical;
+        }
+        
+        .text-right {
+          text-align: right;
+        }
+        
+        /* Estilos para el botón "Enviar Respuesta" */
+        .btn-success {
+            padding: 0.2rem 0.5rem;
+              font-size: 0.8rem;
+              text-align: center;
+              margin: 10px auto; /* Centrado */
+              display: block;
+              width: 12%;
+        }
+        
+        /* Transiciones para el despliegue de la sección de respuesta */
+        .reply-section {
+          display: none; /* Inicialmente oculta */
+        }
+        
+        /* Botón para formular preguntas */
+        #ask-question-btn {
+          margin-right: 10px;
+          padding: 0.5rem 1rem;
+          font-size: 1rem;
+          cursor: pointer;
+        }
+        
+        /* Estilo para el área de respuesta */
+        .reply-section {
+          margin-top: 20px;
+          padding: 10px;
+          background-color: #f9f9f9;
+          border-radius: 5px;
+          display: none; /* Oculto inicialmente */
+        }
+        
+        .reply-section h5 {
+          font-size: 1rem;
+          margin-bottom: 10px;
+        }
+        
+        textarea.form-control {
+          resize: vertical;
+        }
+        
+        </style>
+        <style>
+            .btn-outline-primary.small-reply-btn {
+              padding: 0.2rem 0.5rem;
+              font-size: 0.8rem;
+              text-align: center;
+              margin: 10px auto; /* Centrado */
+              display: block;
+              width: 12%;
+              border: 100px;
+            }
+            .btn-outline-secundary.small-reply-btn {
+              padding: 0.2rem 0.5rem;
+              font-size: 0.8rem;
+              text-align: center;
+              margin: 10px auto; /* Centrado */
+              display: block;
+              width: 12%;
+              border: 100px;
+            }
+            .accordion .accordion-content {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 200ms linear, max-height 200ms linear;
+            padding: 0 1em;
+            will-change: max-height;
+        }
+        
+        .accordion button[aria-expanded='true'] + .accordion-content {
+            opacity: 1;
+            max-height: none; /* Permite que el contenido se expanda automáticamente */
+            transition: opacity 200ms linear, max-height 200ms ease-in-out;
+        }
+          </style>
+        
+        <script>
+            // Funcionalidad del acordeón
+            const items = document.querySelectorAll('.accordion button.accordion-btn');
+            
+            function toggleAccordion() {
+              const itemToggle = this.getAttribute('aria-expanded');
+            
+              items.forEach(item => item.setAttribute('aria-expanded', 'false'));
+            
+              if (itemToggle === 'false') {
+                this.setAttribute('aria-expanded', 'true');
+              }
+            }
+            
+            items.forEach(item => item.addEventListener('click', toggleAccordion));
+            
+            // Mostrar sección de respuesta cuando se presiona 'Redactar Respuesta'
+            const replyButtons = document.querySelectorAll('.small-reply-btn');
+            
+            replyButtons.forEach((btn) => {
+              btn.addEventListener('click', function (e) {
+                e.stopPropagation();  // Evita que cierre el acordeón al presionar el botón
+                const replySection = this.closest('.accordion-content').querySelector('.reply-section');
+                
+                if (replySection.style.display === 'none' || replySection.style.display === '') {
+                  replySection.style.display = 'block'; // Mostrar sección de respuesta
+                } else {
+                  replySection.style.display = 'none';  // Ocultar sección de respuesta si ya está visible
+                }
+              });
+            });
+        
+            
+            </script>
+        
+            <script>
+                async function pregunta() {
+                    const { value: text } = await Swal.fire({
+                      input: "textarea",
+                      inputLabel: "Redactar Pregunta",
+                      inputPlaceholder: "Escribe tu pregunta aquí...",
+                      inputAttributes: {
+                        "aria-label": "Escribe tu pregunta aquí"
+                      },
+                      showCancelButton: true,
+                      confirmButtonText: 'Enviar',
+                      cancelButtonText: 'Cancelar'
+                    });
+                  
+                    if (text) {
+                      Swal.fire({
+                        title: 'Pregunta enviada',
+                        text: 'Tu pregunta es: ' + text,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                      });
+                    }
+                  }
+            </script>
+
    </body>
+
+
+
 </html>

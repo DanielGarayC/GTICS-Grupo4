@@ -13,7 +13,7 @@ public class UsuarioFinalController {
     @GetMapping("/UsuarioFinal/miPerfil")
     public String miPerfil(){
 
-        return "UsuarioFinal/Perfil/perfil";
+        return "UsuarioFinal/Perfil/miperfil";
     }
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
     public String mostrarListaMisOrdenes(){
@@ -35,7 +35,7 @@ public class UsuarioFinalController {
 
         return "UsuarioFinal/Productos/detalleProducto";
     }
-    @GetMapping("/UsuarioFinal/Categorias")
+    @GetMapping("/UsuarioFinal/categorias")
     public String mostrarCategorias(){
 
         return "UsuarioFinal/Productos/categoria";
