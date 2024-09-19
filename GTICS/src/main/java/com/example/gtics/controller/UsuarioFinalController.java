@@ -28,7 +28,7 @@ public class UsuarioFinalController {
     @GetMapping("/UsuarioFinal/listaProductos")
     public String mostrarListaProductos(){
 
-        return "UsuarioFinal/Productos/productos";
+        return "UsuarioFinal/Productos/listaProductos";
     }
     @GetMapping("/UsuarioFinal/detallesProducto")
     public String mostrarDetallesProducto(){
