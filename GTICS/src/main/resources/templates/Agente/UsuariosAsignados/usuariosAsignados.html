@@ -6,19 +6,19 @@
 	   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 	   <meta content="Codescandy" name="author" />
 	   <title>Usuarios asignados</title>
-	   <link href="../assets/libs/tiny-slider/dist/tiny-slider.css" rel="stylesheet" />
-	   <link href="../assets/libs/slick-carousel/slick/slick.css" rel="stylesheet" />
-	   <link href="../assets/libs/slick-carousel/slick/slick-theme.css" rel="stylesheet" />
+	   <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
+	   <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
+	   <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
 	   <!-- Favicon icon-->
-	   <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico" />
+	   <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}" />
 
 	   <!-- Libs CSS -->
-	   <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
-	   <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet" />
-	   <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet" />
+	   <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
+	   <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet" />
+	   <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
 
 	   <!-- Theme CSS -->
-	   <link rel="stylesheet" href="../assets/css/theme.min.css" />
+	   <link rel="stylesheet" th:href="@{/css/theme.min.css}" />
 
 
 
@@ -171,7 +171,7 @@
 					   </li>
 					   <li class="dropdown ms-4">
 						   <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							   <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+							   <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
 						   </a>
 
 						   <div class="dropdown-menu dropdown-menu-end p-0">
@@ -202,7 +202,7 @@
 		   <div class="navbar-vertical">
 			   <div class="px-4 py-5">
 				   <a class="navbar-brand">
-					   <img src="../assets/images/logo/logoGTICS.jpeg" alt="" class="logoImagen " />
+					   <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagen " />
 				   </a>
 			   </div>
 			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
@@ -253,7 +253,7 @@
 		   <div class="navbar-vertical">
 			   <div class="px-4 py-5 d-flex justify-content-between align-items-center">
 				   <a class="navbar-brand">
-					   <img src="../assets/images/logo/logoGTICS.jpeg" alt="" class="logoImagenCelulares"/>
+					   <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagenCelulares"/>
 				   </a>
 				   <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			   </div>
@@ -370,7 +370,7 @@
 								   <tbody>
 								   <tr>
 									   <td>
-										   <a ><img src="../assets/images/avatar/avatar-4.jpg" alt="" class="icon-shape icon-md" /></a>
+										   <a ><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
 									   </td>
 									   <td>Pérez García, Juan Carlos </td>
 									   <td>a20211688@pucp.edu.pe</td>
@@ -403,7 +403,7 @@
 								   </tr>
 								   <tr>
 									   <td>
-										   <a href="#!"><img src="../assets/images/avatar/avatar-4.jpg" alt="" class="icon-shape icon-md" /></a>
+										   <a href="#!"><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
 									   </td>
 									   <td>López Rodríguez, María Fernanda</td>
 									   <td>a20211688@pucp.edu.pe</td>
@@ -436,7 +436,7 @@
 								   </tr>
 								   <tr>
 									   <td>
-										   <a href="#!"><img src="../assets/images/avatar/avatar-4.jpg" alt="" class="icon-shape icon-md" /></a>
+										   <a href="#!"><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
 									   </td>
 									   <td>González Sánchez, Andrés Felipe</td>
 									   <td>a20211688@pucp.edu.pe</td>
@@ -467,7 +467,7 @@
 								   </tr>
 								   <tr>
 									   <td>
-										   <a href="#!"><img src="../assets/images/avatar/avatar-4.jpg" alt="" class="icon-shape icon-md" /></a>
+										   <a href="#!"><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
 									   </td>
 									   <td>Ramírez Torres, Luis Alberto</td>
 									   <td>a20211688@pucp.edu.pe</td>
@@ -497,7 +497,7 @@
 									   </td>
 								   </tr>
 								   <tr>
-									   <td><a href="#!"><img src="../assets/images/avatar/avatar-4.jpg" alt="" class="icon-shape icon-md" /></a></td>
+									   <td><a href="#!"><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a></td>
 									   <td>Martínez Fernández, Ana Sofía</td>
 									   <td>a20211688@pucp.edu.pe</td>
 									   <td>Bellavista</td>
@@ -526,7 +526,7 @@
 								   </tr>
 								   <tr>
 									   <td>
-										   <a href="#!"><img src="../assets/images/avatar/avatar-4.jpg" alt="" class="icon-shape icon-md" /></a>
+										   <a href="#!"><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
 									   </td>
 									   <td>Hernández Romero, José Manuel</td>
 									   <td>a20211688@pucp.edu.pe</td>
@@ -591,7 +591,7 @@
 					   <div class="text-center position-relative">
 
 						   <a href="#!">
-							   <img src="../assets/images/avatar/avatar-4.jpg"
+							   <img th:src="@{/images/avatar/avatar-4.jpg}"
 									alt="Imagen del agente"
 									class="mt-3 mb-3 img-fluid" style="border-radius: 8px; height: 40vh;" />
 						   </a>
@@ -657,23 +657,23 @@
 		<!-- Javascript-->
 		<!-- Libs JS -->
 		<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-		<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-		<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+		<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+		<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
 		<!-- Theme JS -->
-		<script src="../assets/js/theme.min.js"></script>
+		<script th:src="@{/js/theme.min.js}"></script>
 
-		<script src="../assets/js/vendors/jquery.min.js"></script>
-		<script src="../assets/libs/slick-carousel/slick/slick.min.js"></script>
-		<script src="../assets/js/vendors/slick-slider.js"></script>
-		<script src="../assets/libs/tiny-slider/dist/min/tiny-slider.js"></script>
-		<script src="../assets/js/vendors/tns-slider.js"></script>
-		<script src="../assets/js/vendors/zoom.js"></script>
+		<script th:src="@{/js/vendors/jquery.min.js}"></script>
+		<script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+		<script th:src="@{/js/vendors/slick-slider.js}"></script>
+		<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+		<script th:src="@{/js/vendors/tns-slider.js}"></script>
+		<script th:src="@{/js/vendors/zoom.js}"></script>
 
-		<script src="../assets/js/vendors/countdown.js"></script>
-		<script src="../assets/libs/sticky-sidebar/dist/sticky-sidebar.min.js"></script>
-		<script src="../assets/js/vendors/sticky.js"></script>
-		<script src="../assets/js/vendors/modal.js"></script>
+		<script th:src="@{/js/vendors/countdown.js}"></script>
+		<script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
+		<script th:src="@{/js/vendors/sticky.js}"></script>
+		<script th:src="@{/js/vendors/modal.js}"></script>
 
 	</div>
 

@@ -6,19 +6,19 @@
 	   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 	   <meta content="Codescandy" name="author" />
 	   <title>Inicio</title>
-	   <link href="../assets/libs/tiny-slider/dist/tiny-slider.css" rel="stylesheet" />
-	   <link href="../assets/libs/slick-carousel/slick/slick.css" rel="stylesheet" />
-	   <link href="../assets/libs/slick-carousel/slick/slick-theme.css" rel="stylesheet" />
+	   <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
+	   <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
+	   <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
 	   <!-- Favicon icon-->
-	   <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico" />
+	   <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}" />
 
 	   <!-- Libs CSS -->
-	   <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
-	   <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet" />
-	   <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet" />
+	   <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
+	   <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet" />
+	   <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
 
 	   <!-- Theme CSS -->
-	   <link rel="stylesheet" href="../assets/css/theme.min.css" />
+	   <link rel="stylesheet" th:href="@{/css/theme.min.css}" />
 
 
 
@@ -151,7 +151,7 @@
 					   </li>
 					   <li class="dropdown ms-4">
 						   <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							   <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+							   <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
 						   </a>
 
 						   <div class="dropdown-menu dropdown-menu-end p-0">
@@ -182,7 +182,7 @@
 		   <div class="navbar-vertical">
 			   <div class="px-4 py-5">
 				   <a class="navbar-brand">
-					   <img src="../assets/images/logo/logoGTICS.jpeg" alt="" class="logoImagen " />
+					   <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagen " />
 				   </a>
 			   </div>
 			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
@@ -233,7 +233,7 @@
 		   <div class="navbar-vertical">
 			   <div class="px-4 py-5 d-flex justify-content-between align-items-center">
 				   <a class="navbar-brand">
-					   <img src="../assets/images/logo/logoGTICS.jpeg" alt="" class="logoImagenCelulares"/>
+					   <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagenCelulares"/>
 				   </a>
 				   <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			   </div>
@@ -297,7 +297,7 @@
 	   <section class="container ">
 		   <div class="hero-slider">
 			   <div
-					   style="background: url(../assets/images/slider/slide-1.jpg)no-repeat; background-size: cover; border-radius: .5rem; background-position: center;">
+					   style="background-size: cover; border-radius: .5rem; background: url(/images/slider/slide-1.jpg) no-repeat center;">
 				   <div class="ps-lg-12 py-lg-12 col-xxl-5 col-md-7 py-17 px-8 text-xs-center">
 					   <span class="badge text-bg-warning">Control</span>
 					   <h2 class="text-dark display-5 fw-bold mt-4">Órdenes </h2>
@@ -306,7 +306,7 @@
 				   </div>
 			   </div>
 			   <div class=" "
-					style="background: url(../assets/images/slider/slider-2.jpg)no-repeat; background-size: cover; border-radius: .5rem; background-position: center;">
+					style="background-size: cover; border-radius: .5rem; background: url(/images/slider/slider-2.jpg) no-repeat center;">
 				   <div class="ps-lg-12 py-lg-9 col-xxl-7 col-md-10 py-14 px-8 py-md-7 text-xs-center">
 					   <span class="badge text-bg-warning">Gestión</span>
 					   <h2 class="text-dark display-5 fw-bold mt-4">Gestiona hasta <span class="text-primary">100 </span> usuarios <br>y<span class="text-primary"> trackealos</span> a todos</h2> </h2>
@@ -409,7 +409,7 @@
 											   <div class="text-center position-relative">
 
 												   <!-- img -->
-												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
@@ -440,7 +440,7 @@
 											   <div class="text-center position-relative">
 
 												   <!-- img -->
-												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
@@ -471,7 +471,7 @@
 											   <div class="text-center position-relative">
 
 												   <!-- img -->
-												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
@@ -502,7 +502,7 @@
 											   <div class="text-center position-relative">
 
 												   <!-- img -->
-												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
@@ -533,7 +533,7 @@
 											   <div class="text-center position-relative">
 
 												   <!-- img -->
-												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
@@ -570,7 +570,7 @@
 											   <div class="text-center position-relative">
 
 												   <!-- img -->
-												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
@@ -601,7 +601,7 @@
 											   <div class="text-center position-relative">
 
 												   <!-- img -->
-												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
@@ -632,7 +632,7 @@
 											   <div class="text-center position-relative">
 
 												   <!-- img -->
-												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
@@ -663,7 +663,7 @@
 											   <div class="text-center position-relative">
 
 												   <!-- img -->
-												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
@@ -694,7 +694,7 @@
 											   <div class="text-center position-relative">
 
 												   <!-- img -->
-												   <a href="#!"><img src="../assets/images/products/product-img-1.jpg" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
+												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
@@ -742,23 +742,23 @@
 		<!-- Javascript-->
 		<!-- Libs JS -->
 		<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-		<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-		<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+		<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+		<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
 		<!-- Theme JS -->
-		<script src="../assets/js/theme.min.js"></script>
+		<script th:src="@{/js/theme.min.js}"></script>
 
-		<script src="../assets/js/vendors/jquery.min.js"></script>
-		<script src="../assets/libs/slick-carousel/slick/slick.min.js"></script>
-		<script src="../assets/js/vendors/slick-slider.js"></script>
-		<script src="../assets/libs/tiny-slider/dist/min/tiny-slider.js"></script>
-		<script src="../assets/js/vendors/tns-slider.js"></script>
-		<script src="../assets/js/vendors/zoom.js"></script>
+		<script th:src="@{/js/vendors/jquery.min.js}"></script>
+		<script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+		<script th:src="@{/js/vendors/slick-slider.js}"></script>
+		<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+		<script th:src="@{/js/vendors/tns-slider.js}"></script>
+		<script th:src="@{/js/vendors/zoom.js}"></script>
 
-		<script src="../assets/js/vendors/countdown.js"></script>
-		<script src="../assets/libs/sticky-sidebar/dist/sticky-sidebar.min.js"></script>
-		<script src="../assets/js/vendors/sticky.js"></script>
-		<script src="../assets/js/vendors/modal.js"></script>
+		<script th:src="@{/js/vendors/countdown.js}"></script>
+		<script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
+		<script th:src="@{/js/vendors/sticky.js}"></script>
+		<script th:src="@{/js/vendors/modal.js}"></script>
 	</div>
 
    </body>

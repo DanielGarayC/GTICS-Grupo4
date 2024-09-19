@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
    <head>
       <!-- Required meta tags -->
 <meta charset="utf-8">
@@ -7,17 +7,17 @@
 <meta content="Codescandy" name="author">
       <title>Plantilla base para roles administrativos</title>
       <!-- Favicon icon-->
-<link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
 
 <!-- Libs CSS -->
-<link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
-<link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet">
-<link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
+<link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+<link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+<link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
 
 <!-- Theme CSS -->
-<link rel="stylesheet" href="../assets/css/theme.min.css">
+<link rel="stylesheet" th:href="@{/css/theme.min.css}">
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
    </head>
@@ -136,7 +136,7 @@
 					</li>
 					<li class="dropdown ms-4">
 						<a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+							<img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
 						</a>
 
 						<div class="dropdown-menu dropdown-menu-end p-0">
@@ -167,7 +167,7 @@
 	<div class="navbar-vertical">
 		<div class="px-4 py-5">
 			<a class="navbar-brand">
-				<img src="../assets/images/logo/logo.svg" alt="" />
+				<img th:src="@{/images/logo/logo.png}" alt="" style="width: 100%;"/>
 			</a>
 		</div>
 		<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
@@ -210,7 +210,7 @@
 	<div class="navbar-vertical">
 		<div class="px-4 py-5 d-flex justify-content-between align-items-center">
 			<a class="navbar-brand">
-				<img src="../assets/images/logo/logo.svg" alt="" />
+				<img th:src="@{/images/logo/logo.svg}" alt=""style="width: 100%;" />
 			</a>
 			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
@@ -258,7 +258,7 @@
 							<!-- card -->
 							<div
 									class="card bg-light border-0 rounded-4"
-									style="background-image: url(../assets/images/slider/slider-image-1.jpg); background-repeat: no-repeat; background-size: cover; background-position: right">
+									style="background-image: url(/images/slider/slider-image-1.jpg); background-repeat: no-repeat; background-size: cover; background-position: right">
 								<div class="card-body p-lg-12" >
 									<h1 style="color: white; font-size: 5vh;">Bienvenido! Admin/Admin zonal</h1>
 								</div>
@@ -313,7 +313,7 @@
 										</div>
 										<!-- project number -->
 										<div class="lh-1">
-											<img alt="Imagen del producto" src="imagen.jpg" class="mb-2" style="height: 10vh;border-radius: 5px;">
+											<img alt="Imagen del producto" th:src="@{imagen.jpg}" class="mb-2" style="height: 10vh;border-radius: 5px;">
 											<br>
 											<span>
 
@@ -916,11 +916,11 @@
 <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
 
 
-<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
 <!-- Theme JS -->
-<script src="../assets/js/theme.min.js"></script>
+<script th:src="@{/js/theme.min.js}"></script>
 
 <script>
 	var options = {
