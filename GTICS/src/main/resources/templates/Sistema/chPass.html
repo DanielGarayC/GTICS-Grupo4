@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña | MiTienda</title>
+    <link rel="stylesheet" th:href="@{/login/styles.css}">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="logo">MiTienda</div>
+        <h1>Cambio de Contraseña</h1>
+        <form id="passwordForm" onsubmit="return validarContrasenas(event)">
+            <input type="password" id="password" placeholder="Ingrese su nueva contraseña" required>
+            <input type="password" id="confirmPassword" placeholder="Confirme su nueva contraseña" required>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="showPassword" onclick="togglePasswordVisibility()">
+                <label for="showPassword">Mostrar contraseña</label>
+            </div>
+
+            <button type="submit">Cambiar contraseña</button>
+        </form>
+        <div class="links">
+            <a href="login.html">Volver al inicio de sesión</a>
+        </div>
+    </div>
+    <script>
+        function togglePasswordVisibility() {
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const type = document.getElementById('showPassword').checked ? 'text' : 'password';
+            password.type = type;
+            confirmPassword.type = type;
+        }
+
+
+        function validarContrasenas(event) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert("Las contraseñas no coinciden. Inténtelo nuevamente.");
+                event.preventDefault(); 
+                return false;
+            }
+            window.location.href = 'validarToken.html';
+            return true;
+        }
+    </script>
+</body>
+</html>

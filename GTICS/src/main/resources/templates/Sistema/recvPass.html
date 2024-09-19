@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña | MiTienda</title>
+    <link rel="stylesheet" th:href="@{/login/styles.css}">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="logo">MiTienda</div>
+        <h1>Recuperar Contraseña</h1>
+        <form>
+            <input type="email" placeholder="Correo electrónico" required>
+            <button type="submit" onclick="window.location.href='validarToken.html'">Enviar correo</button>
+        </form>
+        <div class="links">
+            <a href="login.html">Volver al inicio de sesión</a>
+        </div>
+    </div>
+    <script th:href="@{/login/script.js}"></script>
+
+
+</body>
+</html>
