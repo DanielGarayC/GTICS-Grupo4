@@ -5,19 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="Codescandy" name="author">
-    <title>Plantilla base para roles administrativos</title>
+    <title>Categorias</title>
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
 
     <!-- Libs CSS -->
-    <link href="../assets/libs/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="../assets/libs/feather-webfont/dist/feather-icons.css" rel="stylesheet">
-    <link href="../assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
+    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
 
     <!-- Theme CSS -->
-    <link rel="stylesheet" href="../assets/css/theme.min.css">
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
 </head>
 
 <body>
@@ -496,7 +496,7 @@
                             </div>
                             <!-- button -->
                             <div>
-                                <a href="add-category.html" class="btn btn-primary">Agregar producto</a>
+                                <a th:href="@{/SuperAdmin/agregarCategoria}" class="btn btn-primary">Agregar producto</a>
                             </div>
                         </div>
                     </div>
