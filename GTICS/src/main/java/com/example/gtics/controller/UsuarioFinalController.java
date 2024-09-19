@@ -28,31 +28,46 @@ public class UsuarioFinalController {
     @GetMapping("/UsuarioFinal/listaProductos")
     public String mostrarListaProductos(){
 
-        return "UsuarioFinal/productos";
+        return "UsuarioFinal/Productos/productos";
     }
     @GetMapping("/UsuarioFinal/detallesProducto")
     public String mostrarDetallesProducto(){
 
-        return "detalleProducto";
-    }
-    @GetMapping("/UsuarioFinal/Review")
-    public String mostrarReview(){
-
-        return "UsuarioFinal/reviuw";
+        return "UsuarioFinal/Productos/detalleProducto";
     }
     @GetMapping("/UsuarioFinal/Categorias")
     public String mostrarCategorias(){
 
-        return "categoria";
+        return "UsuarioFinal/Productos/categoria";
+    }
+    @GetMapping("/UsuarioFinal/Review")
+    public String mostrarReview(){
+
+        return "UsuarioFinal/Productos/reviuw";
+    }
+    @GetMapping("/UsuarioFinal/procesoCompra")
+    public String procesoComprar(){
+
+        return "UsuarioFinal/ProcesoCompra/proceso_compra";
     }
     @GetMapping("/UsuarioFinal/chatbot")
     public String interactuarChatBot(){
 
-        return "chatbot";
+        return "UsuarioFinal/ProcesoCompra/chatbot";
+    }
+    @GetMapping("/UsuarioFinal/chatSoporte")
+    public String chatSoporte(){
+
+        return "UsuarioFinal/ProcesoCompra/chatSoporte";
     }
     @GetMapping("/UsuarioFinal/foro")
     public String verForo(){
 
-        return "foro";
+        return "UsuarioFinal/Foro/foro";
+    }
+    @GetMapping("/UsuarioFinal/faq")
+    public String preguntasFrecuentes(){
+
+        return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
 }
