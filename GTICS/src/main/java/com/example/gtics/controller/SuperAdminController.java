@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class SuperAdminController {
-    @GetMapping("SuperAdmin/dashboard")
+    @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
     public String dashboard(){
 
         return "SuperAdmin/Dashboard/dashboard-superadmin";

@@ -144,7 +144,7 @@
                                 </div>
 
                                 <div class="border-top px-5 py-3">
-                                    <a href="perfilSuperAdmin.html">Mi perfil</a>
+                                    <a th:href="@{perfil}">Mi perfil</a>
                                 </div>
                                 <div class="border-top px-5 py-3">
                                     <a href="#">Cerrar sesión</a>
@@ -199,7 +199,6 @@
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-people"></i></span>
                                     <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
                                 </div>
                             </a>
                             <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
@@ -268,7 +267,7 @@
                             <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
                                 <ul class="nav flex-column">
                                     <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
+                                        <a class="nav-link active" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
@@ -357,7 +356,6 @@
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-people"></i></span>
                                     <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
                                 </div>
                             </a>
                             <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
@@ -426,7 +424,7 @@
                             <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
                                 <ul class="nav flex-column">
                                     <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
+                                        <a class="nav-link active" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
@@ -487,8 +485,8 @@
                                 <!-- breacrumb -->
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="dashboard-superadmin.html" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+                                        <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Agentes</li>
                                     </ol>
                                 </nav>
                             </div>

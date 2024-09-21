@@ -144,7 +144,7 @@
                                 </div>
 
                                 <div class="border-top px-5 py-3">
-                                    <a href="perfilSuperAdmin.html">Mi perfil</a>
+                                    <a th:href="@{perfil}">Mi perfil</a>
                                 </div>
                                 <div class="border-top px-5 py-3">
                                     <a href="#">Cerrar sesión</a>
@@ -199,7 +199,6 @@
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-people"></i></span>
                                     <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
                                 </div>
                             </a>
                             <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
@@ -272,7 +271,7 @@
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
+                                        <a class="nav-link active" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
                                     </li>
                                 </ul>
                             </div>
@@ -357,7 +356,6 @@
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-people"></i></span>
                                     <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
                                 </div>
                             </a>
                             <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
@@ -430,7 +428,7 @@
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
+                                        <a class="nav-link active" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
                                     </li>
                                 </ul>
                             </div>
@@ -487,9 +485,8 @@
                                 <!-- breacrumb -->
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="dashboard-superadmin.html" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="agent-edit.html" class="text-inherit">Editar agente</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                                        <li class="breadcrumb-item"><a th:href="@{dashborad}" class="text-inherit">Dashboard</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Editar agente</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -510,7 +507,7 @@
 
                                     <div class="file-upload btn btn-light ms-md-4">
                                         <input type="file" class="file-input opacity-0" />
-                                        Upload Photo
+                                        Subir Foto
                                     </div>
 
                                     <span class="ms-md-2">JPG, GIF or PNG. 1MB Max.</span>

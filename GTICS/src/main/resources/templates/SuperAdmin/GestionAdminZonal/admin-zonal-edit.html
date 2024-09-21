@@ -144,7 +144,7 @@
                                 </div>
 
                                 <div class="border-top px-5 py-3">
-                                    <a href="perfilSuperAdmin.html">Mi perfil</a>
+                                    <a th:href="@{perfil}">Mi perfil</a>
                                 </div>
                                 <div class="border-top px-5 py-3">
                                     <a href="#">Cerrar sesión</a>
@@ -171,7 +171,7 @@
                 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
                     <ul class="navbar-nav flex-column" id="sideNavbar">
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
+                            <a class="nav-link" th:href="@{dashboard}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
                                     <span class="nav-link-text">DashBoard</span>
@@ -244,7 +244,7 @@
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
+                                        <a class="nav-link active" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
                                     </li>
                                 </ul>
                             </div>
@@ -329,7 +329,7 @@
                 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
                     <ul class="navbar-nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
+                            <a class="nav-link" th:href="@{dashboard}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
                                     <span class="nav-link-text">DashBoard</span>
@@ -487,9 +487,8 @@
                                 <!-- breacrumb -->
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="dashboard-superadmin.html" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="admin-zonal-edit.html" class="text-inherit">Editar adminstrador zonal</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                                        <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Editar adminstrador zonal</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -510,7 +509,7 @@
 
                                     <div class="file-upload btn btn-light ms-md-4">
                                         <input type="file" class="file-input opacity-0" />
-                                        Upload Photo
+                                        Actualizar foto
                                     </div>
 
                                     <span class="ms-md-2">JPG, GIF or PNG. 1MB Max.</span>
@@ -608,7 +607,7 @@
                                             <div class="col-12 mt-3">
                                                 <div class="d-flex flex-column flex-md-row gap-2">
 													<button class="btn btn-primary" type="submit" onclick="showSuccessPopup(event)">Actualizar</button>
-                                                    <button class="btn btn-secondary" type="submit">Cancel</button>
+                                                    <button class="btn btn-secondary" type="submit">Cancelar</button>
                                                 </div>
                                             </div>
                                         </div>

@@ -145,7 +145,7 @@
                                 </div>
 
                                 <div class="border-top px-5 py-3">
-                                    <a href="perfilSuperAdmin.html">Mi perfil</a>
+                                    <a th:href="@{perfil}">Mi perfil</a>
                                 </div>
                                 <div class="border-top px-5 py-3">
                                     <a href="#">Cerrar sesión</a>
@@ -172,7 +172,7 @@
                 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
                     <ul class="navbar-nav flex-column" id="sideNavbar">
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
+                            <a class="nav-link" th:href="@{dashboard}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
                                     <span class="nav-link-text">DashBoard</span>
@@ -200,7 +200,7 @@
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-people"></i></span>
                                     <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
+
                                 </div>
                             </a>
                             <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
@@ -241,7 +241,7 @@
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
+                                        <a class="nav-link active" th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
@@ -329,7 +329,7 @@
                 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
                     <ul class="navbar-nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
+                            <a class="nav-link" th:href="@{dashboard}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
                                     <span class="nav-link-text">DashBoard</span>
@@ -357,7 +357,6 @@
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-people"></i></span>
                                     <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
                                 </div>
                             </a>
                             <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
@@ -398,7 +397,7 @@
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
-                                        <a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
+                                        <a class="nav-link active" th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
                                     </li>
                                     <!-- Nav item -->
                                     <li class="nav-item">
@@ -486,7 +485,8 @@
                             <!-- breacrumb -->
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-0">
-                                    <li class="breadcrumb-item"><a href="dashboard-superadmin.html" class="text-inherit">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a th:href="@{
+                                    dashboard}" class="text-inherit">Dashboard</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">Crear</li>
                                 </ol>
                             </nav>
@@ -504,7 +504,7 @@
 
                                     <div class="file-upload btn btn-light ms-md-4">
                                         <input type="file" class="file-input opacity-0" />
-                                        Upload Photo
+                                        Subir foto
                                     </div>
 
                                     <span class="ms-2">JPG, GIF or PNG. 1MB Max.</span>
@@ -608,7 +608,7 @@
                                             <div class="col-12 mt-3">
                                                 <div class="d-flex flex-column flex-md-row gap-2">
                                                     <button class="btn btn-primary" type="submit" onclick="mostrarExito()">Crear</button>
-                                                    <button class="btn btn-secondary" type="submit">Cancel</button>
+                                                    <button class="btn btn-secondary" type="submit">Cancelar</button>
                                                 </div>
                                             </div>
                                         </div>
