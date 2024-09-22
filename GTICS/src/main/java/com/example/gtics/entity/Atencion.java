@@ -1,4 +1,4 @@
-package com.example.gtics;
+package com.example.gtics.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
