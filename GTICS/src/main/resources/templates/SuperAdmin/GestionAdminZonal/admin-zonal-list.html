@@ -505,6 +505,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}">
+
+                            </div>
+                            <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
+
+                            </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
                                     <table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">

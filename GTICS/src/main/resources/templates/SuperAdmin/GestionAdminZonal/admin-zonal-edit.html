@@ -493,7 +493,7 @@
                                 </nav>
                             </div>
                             <div>
-								<button type="button" class="btn btn-danger" onclick="confirmDelete()" data-bs-toggle="modal" data-bs-target="#delete">Eliminar</button>
+								<button type="button" th:action="@{/AdminZonal/eliminar}" class="btn btn-danger" onclick="confirmDelete()" data-bs-toggle="modal" data-bs-target="#delete">Eliminar</button>
                             </div>
                         </div>
                     </div>
@@ -525,8 +525,8 @@
                                                     DNI:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="DNIFinalUser" placeholder="DNI del usuario final" required />
-                                                <div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
+                                                <input type="text" class="form-control" id="DNIFinalUser" name="dni" placeholder="DNI del admin zonal" required />
+                                                <div class="invalid-feedback">Por favor ingrese el DNI del admin zonal</div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12">
@@ -536,8 +536,8 @@
                                                     Nombres:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatCustomerName" placeholder="Nombre del usuario final" required />
-                                                <div class="invalid-feedback">Por favor ingrese los nombres del usuario</div>
+                                                <input type="text" class="form-control" id="creatCustomerName" name="nombre" placeholder="Nombre del admin zonal" required />
+                                                <div class="invalid-feedback">Por favor ingrese los nombres del admin zonal</div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12">
@@ -547,8 +547,8 @@
                                                     Apellidos:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastName" placeholder="Apellidos del usuario final" required />
-                                                <div class="invalid-feedback">Por favor ingrese los apellidos del usuario</div>
+                                                <input type="text" class="form-control" id="creatFinalUserLastName" name="apellido" placeholder="Apellidos del admin zonal" required />
+                                                <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12">
@@ -558,7 +558,7 @@
                                                     Número telefónico:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="phoneAdminZonal" placeholder="Teléfono" required />
+                                                <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" placeholder="Teléfono" required />
                                                 <div class="invalid-feedback">Por favor ingrese el teléfono</div>
                                             </div>
                                         </div>
@@ -569,7 +569,7 @@
                                                     Email
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="email" class="form-control" id="creatFinalUserEmail" placeholder="Correo Electrónico" required />
+                                                <input type="email" class="form-control" id="creatFinalUserEmail" name="email" placeholder="Correo Electrónico" required />
                                                 <div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
                                             </div>
                                         </div>
@@ -577,7 +577,7 @@
                                             <div>
                                                 <!-- input -->
                                                 <label for="creatFinalUserDirection" class="form-label">Dirección</label>
-                                                <input type="text" class="form-control" id="creatFinalUserDirection" placeholder="Dirección" required />
+                                                <input type="text" class="form-control" id="creatFinalUserDirection" name="direccion" placeholder="Dirección" required />
                                                 <div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
                                             </div>
                                         </div>

@@ -511,7 +511,7 @@
                                 </div>
                                 <div class="d-flex flex-column gap-4">
                                     <h3 class="mb-0 h6">Información del administrador zonal</h3>
-                                    <form class="row g-3 needs-validation" novalidate>
+                                    <form th:action="@{/AdminZonal/guardar}" method="post" class="row g-3 needs-validation" novalidate>
                                         <div class="col-lg-6 col-12">
                                             <div>
                                                 <!-- input -->
@@ -519,7 +519,7 @@
                                                     DNI:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="DNIFinalUser" placeholder="DNI del usuario final" required />
+                                                <input type="text" class="form-control" id="DNIFinalUser" name="dni" placeholder="DNI del admin zonal" required />
                                                 <div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
                                             </div>
                                         </div>
@@ -530,8 +530,8 @@
                                                     Nombres:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatCustomerName" placeholder="Nombre del usuario final" required />
-                                                <div class="invalid-feedback">Por favor ingrese los nombres del usuario</div>
+                                                <input type="text" class="form-control" id="creatCustomerName" name="nombre" placeholder="Nombre del admin zonal" required />
+                                                <div class="invalid-feedback">Por favor ingrese los nombres del admin zonal</div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12">
@@ -541,8 +541,8 @@
                                                     Apellidos:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastName" placeholder="Apellidos del usuario final" required />
-                                                <div class="invalid-feedback">Por favor ingrese los apellidos del usuario</div>
+                                                <input type="text" class="form-control" id="creatFinalUserLastName" name="apellido" placeholder="Apellidos del admin zonal" required />
+                                                <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12">
@@ -552,7 +552,7 @@
                                                     Número telefónico:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="phoneAdminZonal" placeholder="Teléfono" required />
+                                                <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" placeholder="Teléfono" required />
                                                 <div class="invalid-feedback">Por favor ingrese el teléfono</div>
                                             </div>
                                         </div>
@@ -563,28 +563,26 @@
                                                     Email
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="email" class="form-control" id="creatFinalUserEmail" placeholder="Correo Electrónico" required />
-                                                <div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
+                                                <input type="email" class="form-control" id="creatFinalUserEmail" name="email" placeholder="Correo Electrónico" required />
+                                                <div class="invalid-feedback">Por favor ingrese el correo electrónico del admin zonal</div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12">
                                             <div>
                                                 <!-- input -->
                                                 <label for="creatFinalUserDirection" class="form-label">Dirección</label>
-                                                <input type="text" class="form-control" id="creatFinalUserDirection" placeholder="Dirección" required />
-                                                <div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
+                                                <input type="text" class="form-control" id="creatFinalUserDirection" name="direccion" placeholder="Dirección" required />
+                                                <div class="invalid-feedback">Por favor ingrese la dirección del admin zonal</div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12">
                                             <div>
                                                 <!-- select -->
                                                 <label for="selectZone" class="form-label">Seleccione una zona</label>
-                                                <select class="form-select" id="selectZone" required>
-                                                    <option value="" selected disabled>Seleccione una opción</option>
-                                                    <option value="norte">Zona norte</option>
-                                                    <option value="sur">Zona sur</option>
-                                                    <option value="este">Zona este</option>
-                                                    <option value="oeste">Zona oeste</option>
+                                                <select class="form-select" name="zona" id="selectZone" required>
+                                                    <option value="" selected disabled>--Seleccione una zona--</option>
+                                                    <option th:each="zona : ${zonas}" th:text="${zona.getNombreZona()}"
+                                                            th:value="${zona.getId()}"></option>
                                                 </select>
                                                 <div class="invalid-feedback">Por favor seleccione una zona</div>
                                             </div>
@@ -593,13 +591,13 @@
 
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label" for="creatFinalUserDate">Fecha de nacimiento</label>
-                                            <input type="text" class="form-control flatpickr" id="creatFinalUserDate" placeholder="Fecha de nacimiento" required />
+                                            <input type="text" class="form-control flatpickr" id="creatFinalUserDate" name="azFechanacimiento" placeholder="Fecha de nacimiento" required />
                                             <div class="invalid-feedback">Por favor ingrese la fecha de nacimiento</div>
                                         </div>
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label" for="passwordAdminZonal">Contraseña temporal</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control flatpickr" id="passwordAdminZonal" placeholder="********" required />
+                                                <input type="text" class="form-control flatpickr" id="passwordAdminZonal" name="contraseña" placeholder="********" required />
                                                 <button class="btn btn-outline-secondary" type="button" id="generatePassword">Generar</button>
                                             </div>
                                         </div>
@@ -608,7 +606,7 @@
                                             <div class="col-12 mt-3">
                                                 <div class="d-flex flex-column flex-md-row gap-2">
                                                     <button class="btn btn-primary" type="submit" onclick="mostrarExito()">Crear</button>
-                                                    <button class="btn btn-secondary" type="submit">Cancelar</button>
+                                                    <a th:href="@{/SuperAdmin/listaAdminZonal}"  class="btn btn-secondary" >Cancelar</a>
                                                 </div>
                                             </div>
                                         </div>

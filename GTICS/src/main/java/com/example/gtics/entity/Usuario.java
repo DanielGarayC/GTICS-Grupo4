@@ -72,4 +72,11 @@ public class Usuario {
     @Column(name = "`contraseña`", nullable = false, length = 45)
     private String contraseña;
 
+    @Column(name="telefono", nullable = false, length = 45)
+    private String telefono;
+
+    @Column(name="dni", nullable = false, length = 45)
+    private String dni;
+
+
 }
