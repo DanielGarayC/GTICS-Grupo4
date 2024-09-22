@@ -34,8 +34,8 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAdminZonal/admin-zonal-list";
     }
     @GetMapping("SuperAdmin/editarAdminZonal")
-    public String editarAdminZonal(){
-
+    public String editarAdminZonal(Model model){
+        model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/admin-zonal-edit";
     }
     @GetMapping("SuperAdmin/crearAdminZonal")

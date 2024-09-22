@@ -586,11 +586,12 @@
                                                 <!-- select -->
                                                 <label for="selectZone" class="form-label">Seleccione una zona</label>
                                                 <select class="form-select" id="selectZone" required>
-                                                    <option value="" selected disabled>Seleccione una opción</option>
-                                                    <option value="norte">Zona norte</option>
-                                                    <option value="sur">Zona sur</option>
-                                                    <option value="este">Zona este</option>
-                                                    <option value="oeste">Zona oeste</option>
+                                                    <option value="" th:if="${usuario.zona == null}" selected disabled>--Seleccione una zona--</option>
+                                                    <option th:each="zona : ${zonas}"
+                                                            th:text="${zona.getNombreZona()}"
+                                                            th:value="${zona.getId()}"
+                                                            th:selected="${usuario.zona != null && usuario.zona.getId() == zona.getId()}">
+                                                    </option>
                                                 </select>
                                                 <div class="invalid-feedback">Por favor seleccione una zona</div>
                                             </div>
