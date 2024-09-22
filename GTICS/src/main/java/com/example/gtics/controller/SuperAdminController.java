@@ -1,6 +1,7 @@
 package com.example.gtics.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -21,7 +22,7 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAdminZonal/admin-zonal-edit";
     }
     @GetMapping("SuperAdmin/crearAdminZonal")
-    public String crearAdminZonal(){
+    public String crearAdminZonal(Model model){
 
         return "SuperAdmin/GestionAdminZonal/create-zonal-admin";
     }
