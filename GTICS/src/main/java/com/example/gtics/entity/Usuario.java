@@ -29,41 +29,41 @@ public class Usuario {
     private String direccion;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idDistrito", nullable = false)
+    @JoinColumn(name = "iddistrito", nullable = false)
     private Distrito idDistrito;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idRol", nullable = false)
-    private Rol idRol;
+    @JoinColumn(name = "idrol", nullable = false)
+    private Rol rol;
 
     @Column(name = "baneado")
     private Byte baneado;
 
-    @Column(name = "AGT_codigoAduana", length = 45)
+    @Column(name = "agt_codigoaduana", length = 45)
     private String agtCodigoaduana;
 
-    @Column(name = "AGT_ruc", length = 45)
+    @Column(name = "agt_ruc", length = 45)
     private String agtRuc;
 
-    @Column(name = "AGT_razonSocial", length = 45)
+    @Column(name = "agt_razonsocial", length = 45)
     private String agtRazonsocial;
 
-    @Column(name = "AZ_fechaNacimiento")
+    @Column(name = "az_fechanacimiento")
     private LocalDate azFechanacimiento;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idSolicitudAgente", nullable = false)
+    @JoinColumn(name = "idsolicitudagente", nullable = false)
     private Solicitudagente idSolicitudAgente;
 
-    @Column(name = "AGT_codigoJurisdiccion", length = 45)
+    @Column(name = "agt_codigojurisdiccion", length = 45)
     private String agtCodigojurisdiccion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idAgente")
+    @JoinColumn(name = "idagente")
     private Usuario idAgente;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idAdminZonal")
+    @JoinColumn(name = "idadminzonal")
     private Usuario idAdminZonal;
 
     @Column(name = "foto")
@@ -79,7 +79,7 @@ public class Usuario {
     private String dni;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idZona", nullable = false)
-    private Zona idZona;
+    @JoinColumn(name = "idzona", nullable = false)
+    private Zona zona;
 
 }

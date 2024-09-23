@@ -28,17 +28,29 @@ public class SuperAdminController {
         return "SuperAdmin/Dashboard/dashboard-superadmin";
     }
     @GetMapping("SuperAdmin/listaAdminZonal")
-    public String listaGestionAdminZonal(Model model){
-        model.addAttribute("usuarios",usuarioRepository.findAll());
+    public String listaGestionAdminZonal(Model model, @RequestParam(value = "busqueda", required = false) String busqueda){
+        try {
+            List<Usuario> listaAZ = usuarioRepository.findByIdRol_Id(2);
+            if (listaAZ.isEmpty()){
+                model.addAttribute("msg", "No hay coordinadores zonales registrados");
+            }else {
+
+                model.addAttribute("usuarios", listaAZ);
+            }
+        }catch (Exception e){
+            model.addAttribute("error","Error al cargar la lista de coordinadores zonales.");
+            e.printStackTrace();
+        }
+
         return "SuperAdmin/GestionAdminZonal/admin-zonal-list";
     }
-    @GetMapping("SuperAdmin/editarAdminZonal")
-    public String editarAdminZonal(Model model){
+    @GetMapping("SuperAdmin/editarAdminZonal/{id}")
+    public String editarAdminZonal(@PathVariable("id") Integer id, Model model){
         model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/admin-zonal-edit";
     }
-    @GetMapping("SuperAdmin/crearAdminZonal")
-    public String crearAdminZonal(Model model){
+    @GetMapping("SuperAdmin/crearAdminZonal/{id}")
+    public String crearAdminZonal(@PathVariable("id") Integer id, Model model){
         model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/create-zonal-admin";
     }
@@ -74,7 +86,7 @@ public class SuperAdminController {
     public String listaGestionAgente(Model model ){
 
         try {
-            List<Usuario> agentes = usuarioRepository.findByIdRol_Id(2);
+            List<Usuario> agentes = usuarioRepository.findByIdRol_Id(3);
             if (agentes.isEmpty()){
                 model.addAttribute("message", "No hay agentes Registrados");
             }else {
@@ -93,7 +105,7 @@ public class SuperAdminController {
     public String editarAgente(@PathVariable("id") Integer id, Model model){
         try {
             Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
-            if (optionalAgente.isPresent() && optionalAgente.get().getIdRol().getId() == 2){
+            if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 2){
                 model.addAttribute("agente",optionalAgente.get());
             } else {
                 model.addAttribute("error","Agente no encontrado o el rol no es válido");
@@ -109,7 +121,7 @@ public class SuperAdminController {
     @PostMapping("/guardarAgente")
     public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model) {
         try {
-            if (agente.getIdRol().getId() == 2) {  // Asegura que el rol del usuario sea de agente
+            if (agente.getRol().getId() == 2) {  // Asegura que el rol del usuario sea de agente
                 usuarioRepository.save(agente);
             } else {
                 model.addAttribute("error", "El rol del usuario no es válido para un agente.");
@@ -127,7 +139,7 @@ public class SuperAdminController {
     public String eliminarAgente(@PathVariable("id") Integer id, Model model) {
         try {
             Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
-            if (optionalAgente.isPresent() && optionalAgente.get().getIdRol().getId() == 2) {
+            if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 2) {
                 usuarioRepository.deleteById(id);
             } else {
                 model.addAttribute("error", "Agente no encontrado o el rol no es válido.");

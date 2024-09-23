@@ -498,9 +498,9 @@
                             <div class="p-6">
                                 <div class="row justify-content-between">
                                     <div class="col-md-4 col-12">
-                                        <form class="d-flex" role="search">
+                                        <form class="d-flex" role="search" onsubmit="return false;">
                                             <label for="searchCustomers" class="visually-hidden">Buscar administradores zonales</label>
-                                            <input class="form-control" type="search" id="searchCustomers" placeholder="Buscar admin zonal" aria-label="Search" />
+                                            <input class="form-control" type="search" id="searchCustomers" placeholder="Buscar admin zonal" aria-label="Search" th:value="${param.busqueda}" oninput="filterTable()" />
                                         </form>
                                     </div>
                                 </div>
@@ -519,9 +519,9 @@
 
                                             <th>Nombres</th>
                                             <th>Correo electrónico</th>
-                                            <th>Fecha de registro</th>
-                                            <th>Teléfono</th>
                                             <th>DNI</th>
+                                            <th>Teléfono</th>
+                                            <th>Zona</th>
 
                                             <th></th>
                                         </tr>
@@ -533,7 +533,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <img th:src="@{/images/avatar/avatar-${usuario.id}.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" th:text="${usuario.nombre + '' + usuario.apellido}"></a>
+                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" th:text="${usuario.nombre + ' ' + usuario.apellido}"></a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -541,7 +541,7 @@
 
                                             <td th:text="${usuario.dni}"></td>
                                             <td th:text="${usuario.telefono != null ? usuario.telefono : '-'}"></td>
-                                            <td th:text="${usuario.getIdZona().getNombreZona()}"></td>
+                                            <td th:text="${usuario.zona.getNombreZona()}"></td>
 
                                             <td>
                                                 <div class="dropdown">
@@ -550,13 +550,13 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/editarAdminZonal}">
+                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/editarAdminZonal/{id}(id=${usuario.id})}">
                                                                 <i class="bi bi-pencil-square me-3"></i>
                                                                 Editar
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a class="dropdown-item" th:href="@{/AdminZonal/eliminar}" onclick="confirmDelete()">
+                                                            <a class="dropdown-item" th:href="@{/AdminZonal/eliminar/{id}(id=${usuario.id})}" onclick="confirmDelete()">
                                                                 <i class="bi bi-trash me-3"></i>
                                                                 Eliminar
                                                             </a>
@@ -632,7 +632,25 @@ function confirmDelete() {
     });
 }
 
+function filterTable() {
+    const input = document.getElementById("searchCustomers");
+    const filter = input.value.toLowerCase();
+    const table = document.querySelector("table tbody");
+    const rows = table.getElementsByTagName("tr");
 
+    for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+        let match = false;
+
+        for (let j = 0; j < cells.length; j++) {
+            if (cells[j].innerText.toLowerCase().includes(filter)) {
+                match = true;
+                break;
+            }
+        }
+        rows[i].style.display = match ? "" : "none";
+    }
+}
 </script>
 
 </body>

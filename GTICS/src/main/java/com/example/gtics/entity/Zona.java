@@ -11,10 +11,10 @@ import lombok.Setter;
 public class Zona {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idZona", nullable = false)
+    @Column(name = "idzona", nullable = false)
     private Integer id;
 
-    @Column(name = "nombreZona", length = 45)
+    @Column(name = "nombrezona", length = 45)
     private String nombreZona;
 
 }
