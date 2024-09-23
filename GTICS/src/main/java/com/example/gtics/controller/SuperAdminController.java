@@ -6,11 +6,10 @@ import com.example.gtics.repository.UsuarioRepository;
 import com.example.gtics.repository.ZonaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -72,15 +71,78 @@ public class SuperAdminController {
 
     }
     @GetMapping("SuperAdmin/listaAgente")
-    public String listaGestionAgente(){
+    public String listaGestionAgente(Model model ){
+
+        try {
+            List<Usuario> agentes = usuarioRepository.findByIdRol_Id(2);
+            if (agentes.isEmpty()){
+                model.addAttribute("message", "No hay agentes Registrados");
+            }else {
+                model.addAttribute("agentes", agentes);
+
+            }
+        }catch (Exception e){
+            model.addAttribute("error","Error al cargar la lista de agentes.");
+            e.printStackTrace();
+        }
+
 
         return "SuperAdmin/GestionAgentes/agent-list";
     }
-    @GetMapping("SuperAdmin/editarAgente")
-    public String editarAgente(){
-
+    @GetMapping("SuperAdmin/editarAgente/{id}")
+    public String editarAgente(@PathVariable("id") Integer id, Model model){
+        try {
+            Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
+            if (optionalAgente.isPresent() && optionalAgente.get().getIdRol().getId() == 2){
+                model.addAttribute("agente",optionalAgente.get());
+            } else {
+                model.addAttribute("error","Agente no encontrado o el rol no es válido");
+                return "SuperAdmin/GestionAgentes/agent-list";  // Redirigir a la lista si no se encuentra el agente
+            }
+        }catch (Exception e) {
+            model.addAttribute("error", "Error al cargar el agente para editar.");
+            e.printStackTrace();
+        }
         return "SuperAdmin/GestionAgentes/agent-edit";
     }
+
+    @PostMapping("/guardarAgente")
+    public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model) {
+        try {
+            if (agente.getIdRol().getId() == 2) {  // Asegura que el rol del usuario sea de agente
+                usuarioRepository.save(agente);
+            } else {
+                model.addAttribute("error", "El rol del usuario no es válido para un agente.");
+                return "SuperAdmin/GestionAgentes/agent-edit";
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", "Error al guardar el agente.");
+            e.printStackTrace();
+            return "SuperAdmin/GestionAgentes/agent-edit";
+        }
+        return "redirect:/SuperAdmin/listaAgente";
+    }
+
+    @PostMapping("/SuperAdmin/eliminarAgente/{id}")
+    public String eliminarAgente(@PathVariable("id") Integer id, Model model) {
+        try {
+            Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
+            if (optionalAgente.isPresent() && optionalAgente.get().getIdRol().getId() == 2) {
+                usuarioRepository.deleteById(id);
+            } else {
+                model.addAttribute("error", "Agente no encontrado o el rol no es válido.");
+                return "redirect:/SuperAdmin/listaAgente?error";
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", "Error al eliminar el agente.");
+            e.printStackTrace();
+            return "redirect:/SuperAdmin/listaAgente?error";
+        }
+        return "redirect:/SuperAdmin/listaAgente";
+    }
+
+
+
     @GetMapping("SuperAdmin/listaSolicitudesAgentes")
     public String listaSolicitudesAgentes(){
 
