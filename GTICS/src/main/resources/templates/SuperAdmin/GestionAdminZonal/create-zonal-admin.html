@@ -15,7 +15,8 @@
     <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
     <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- Theme CSS -->
     <link rel="stylesheet" th:href="@{/css/theme.min.css}">
 
@@ -597,7 +598,7 @@
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label" for="passwordAdminZonal">Contraseña temporal</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control flatpickr" id="passwordAdminZonal" name="contraseña" placeholder="********" required />
+                                                <input type="text" class="form-control" id="passwordAdminZonal" name="contraseña" required />
                                                 <button class="btn btn-outline-secondary" type="button" id="generatePassword">Generar</button>
                                             </div>
                                         </div>
@@ -605,7 +606,7 @@
                                         <div>
                                             <div class="col-12 mt-3">
                                                 <div class="d-flex flex-column flex-md-row gap-2">
-                                                    <button class="btn btn-primary" type="submit" onclick="mostrarExito()">Crear</button>
+                                                    <button class="btn btn-primary" type="button"  onclick="confirmarRegistro()">Crear</button>
                                                     <a th:href="@{/SuperAdmin/listaAdminZonal}"  class="btn btn-secondary" >Cancelar</a>
                                                 </div>
                                             </div>
@@ -637,18 +638,42 @@
 
 
 <script>
-    function mostrarExito() {
+    function confirmarRegistro() {
         Swal.fire({
-  title: "¡Éxito!",
-  text: "Se ha registrado un nuevo administrador zonal",
-  icon: "success",
-  confirmButtonColor: '#3085d6',  // Color del botón
-  confirmButtonText: 'Aceptar',
-  
-});
+            title: '¿Estás seguro?',
+            text: "¿Deseas crear un nuevo administrador zonal?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#dc3545',
+            confirmButtonText: 'Sí, crear',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                document.querySelector('form').submit(); // Asegúrate de que este sea el selector correcto para tu formulario
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("generatePassword").addEventListener("click", generatePassword);
+    });
+
+    function generatePassword() {
+        console.log("Botón de generar contraseña presionado");
+        const length = 12;
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+        let password = "";
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * charset.length);
+            password += charset[randomIndex];
+        }
+
+        document.getElementById("passwordAdminZonal").value = password;
     }
 </script>
-
 
 </body>
 </html>

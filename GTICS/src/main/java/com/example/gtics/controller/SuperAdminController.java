@@ -1,5 +1,6 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.entity.Rol;
 import com.example.gtics.entity.Usuario;
 import com.example.gtics.entity.Zona;
 import com.example.gtics.repository.UsuarioRepository;
@@ -21,7 +22,7 @@ public class SuperAdminController {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
     }
-
+    Rol rolAZ = new Rol();
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
     public String dashboard(){
 
@@ -46,16 +47,32 @@ public class SuperAdminController {
     }
     @GetMapping("SuperAdmin/editarAdminZonal/{id}")
     public String editarAdminZonal(@PathVariable("id") Integer id, Model model){
+        try {
+            Optional<Usuario> optionalAZ = usuarioRepository.findById(id);
+            if (optionalAZ.isPresent() && optionalAZ.get().getRol().getId() == 2){
+                model.addAttribute("usuario",optionalAZ.get());
+            } else {
+                model.addAttribute("error","Admin Zonal no encontrado o el rol no es válido");
+                return "SuperAdmin/listaAdminZonal";
+            }
+        }catch (Exception e) {
+            model.addAttribute("error", "Error al cargar el admin zonal para editar.");
+            e.printStackTrace();
+        }
         model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/admin-zonal-edit";
     }
-    @GetMapping("SuperAdmin/crearAdminZonal/{id}")
-    public String crearAdminZonal(@PathVariable("id") Integer id, Model model){
+    @GetMapping("SuperAdmin/crearAdminZonal")
+    public String crearAdminZonal(Model model){
+        Usuario usuario = new Usuario();
+        rolAZ.setId(2);
+        usuario.setRol(rolAZ);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/create-zonal-admin";
     }
     @PostMapping("/AdminZonal/guardar")
-    public String registrarAdminZonal(Usuario usuario, RedirectAttributes attr) {
+    public String guardarAdminZonal(Usuario usuario, RedirectAttributes attr) {
 
         if (usuario.getId() == 0) {
             attr.addFlashAttribute("msg", "Admin Zonal creado exitosamente");

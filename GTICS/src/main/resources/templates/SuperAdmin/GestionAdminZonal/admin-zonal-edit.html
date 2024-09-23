@@ -525,7 +525,7 @@
                                                     DNI:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="DNIFinalUser" name="dni" placeholder="DNI del admin zonal" required />
+                                                <input type="text" class="form-control" id="DNIFinalUser" name="dni" th:value="${usuario.dni}" required />
                                                 <div class="invalid-feedback">Por favor ingrese el DNI del admin zonal</div>
                                             </div>
                                         </div>
@@ -536,7 +536,7 @@
                                                     Nombres:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatCustomerName" name="nombre" placeholder="Nombre del admin zonal" required />
+                                                <input type="text" class="form-control" id="creatCustomerName" name="nombre" th:value="${usuario.nombre}" required />
                                                 <div class="invalid-feedback">Por favor ingrese los nombres del admin zonal</div>
                                             </div>
                                         </div>
@@ -547,7 +547,7 @@
                                                     Apellidos:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastName" name="apellido" placeholder="Apellidos del admin zonal" required />
+                                                <input type="text" class="form-control" id="creatFinalUserLastName" name="apellido" th:value="${usuario.apellido}" required />
                                                 <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
                                             </div>
                                         </div>
@@ -558,7 +558,7 @@
                                                     Número telefónico:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" placeholder="Teléfono" required />
+                                                <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" th:value="${usuario.telefono}" required />
                                                 <div class="invalid-feedback">Por favor ingrese el teléfono</div>
                                             </div>
                                         </div>
@@ -569,7 +569,7 @@
                                                     Email
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="email" class="form-control" id="creatFinalUserEmail" name="email" placeholder="Correo Electrónico" required />
+                                                <input type="email" class="form-control" id="creatFinalUserEmail" name="email" th:value="${usuario.email}" required />
                                                 <div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
                                             </div>
                                         </div>
@@ -577,7 +577,7 @@
                                             <div>
                                                 <!-- input -->
                                                 <label for="creatFinalUserDirection" class="form-label">Dirección</label>
-                                                <input type="text" class="form-control" id="creatFinalUserDirection" name="direccion" placeholder="Dirección" required />
+                                                <input type="text" class="form-control" id="creatFinalUserDirection" name="direccion"  th:value="${usuario.direccion}" required />
                                                 <div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
                                             </div>
                                         </div>
@@ -586,11 +586,10 @@
                                                 <!-- select -->
                                                 <label for="selectZone" class="form-label">Seleccione una zona</label>
                                                 <select class="form-select" id="selectZone" required>
-                                                    <option value="" th:if="${usuario.zona == null}" selected disabled>--Seleccione una zona--</option>
                                                     <option th:each="zona : ${zonas}"
                                                             th:text="${zona.getNombreZona()}"
                                                             th:value="${zona.getId()}"
-                                                            th:selected="${usuario.zona != null && usuario.zona.getId() == zona.getId()}">
+                                                            th:selected="${usuario.zona.getId() != null && usuario.zona.getId() == zona.getId()}">
                                                     </option>
                                                 </select>
                                                 <div class="invalid-feedback">Por favor seleccione una zona</div>

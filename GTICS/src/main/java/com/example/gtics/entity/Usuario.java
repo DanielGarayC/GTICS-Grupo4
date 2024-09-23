@@ -52,7 +52,7 @@ public class Usuario {
     private LocalDate azFechanacimiento;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idsolicitudagente", nullable = false)
+    @JoinColumn(name = "idsolicitudagente")
     private Solicitudagente idSolicitudAgente;
 
     @Column(name = "agt_codigojurisdiccion", length = 45)

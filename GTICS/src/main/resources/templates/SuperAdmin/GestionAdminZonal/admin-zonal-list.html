@@ -556,7 +556,7 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a class="dropdown-item" th:href="@{/AdminZonal/eliminar/{id}(id=${usuario.id})}" onclick="confirmDelete()">
+                                                            <a class="dropdown-item" href="javascript:void(0);" th:onclick="'confirmDelete(' + ${usuario.id} + ')'">
                                                                 <i class="bi bi-trash me-3"></i>
                                                                 Eliminar
                                                             </a>
@@ -606,32 +606,26 @@
 
 <!-- SweetAlert2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- SweetAlert2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
-function confirmDelete() {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "Los cambios no serán reversibles",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#28a745', // Color verde para el botón de eliminar
-        cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
-        confirmButtonText: 'Eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Aquí puedes poner la lógica para eliminar el elemento
-            Swal.fire(
-                '¡Eliminado!',
-                'El elemento ha sido eliminado con éxito.',
-                'success'
-            );
-        }
-    });
-}
-
+    function confirmDelete(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Los cambios no serán reversibles",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#dc3545',
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/AdminZonal/eliminar?id=${id}`;
+            }
+        });
+    }
 function filterTable() {
     const input = document.getElementById("searchCustomers");
     const filter = input.value.toLowerCase();
