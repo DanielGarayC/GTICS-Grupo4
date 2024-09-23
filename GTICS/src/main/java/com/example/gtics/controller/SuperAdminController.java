@@ -29,8 +29,8 @@ public class SuperAdminController {
         return "SuperAdmin/Dashboard/dashboard-superadmin";
     }
     @GetMapping("SuperAdmin/listaAdminZonal")
-    public String listaGestionAdminZonal(){
-
+    public String listaGestionAdminZonal(Model model){
+        model.addAttribute("usuarios",usuarioRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/admin-zonal-list";
     }
     @GetMapping("SuperAdmin/editarAdminZonal")

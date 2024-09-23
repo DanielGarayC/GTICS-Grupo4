@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idUsuario", nullable = false)
+    @Column(name = "idusuario", nullable = false)
     private Integer id;
 
     @Column(name = "nombre", nullable = false, length = 45)
@@ -72,11 +72,14 @@ public class Usuario {
     @Column(name = "`contraseña`", nullable = false, length = 45)
     private String contraseña;
 
-    @Column(name="telefono", nullable = false, length = 45)
+    @Column(name = "telefono", nullable = false, length = 45)
     private String telefono;
 
-    @Column(name="dni", nullable = false, length = 45)
+    @Column(name = "dni", nullable = false, length = 45)
     private String dni;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idZona", nullable = false)
+    private Zona idZona;
 
 }
