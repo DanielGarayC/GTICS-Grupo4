@@ -22,4 +22,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "OR LOWER(u.telefono) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
             "OR LOWER(u.zona.nombreZona) LIKE LOWER(CONCAT('%', :busqueda, '%'))")
     List<Usuario>FiltroBuscador(@Param("busqueda") String busqueda);
+
+
+    @Query("SELECT u FROM Usuario u WHERE u.rol.id = :idRol AND u.idAgente = :agente AND (u.baneado IS NULL OR u.baneado = 0)")
+    List<Usuario> findUsuariosFiltrados(@Param("idRol") Integer idRol, @Param("agente") Usuario agente);
 }

@@ -30,7 +30,7 @@ public class Usuario {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "iddistrito", nullable = false)
-    private Distrito idDistrito;
+    private Distrito distrito;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idrol", nullable = false)
