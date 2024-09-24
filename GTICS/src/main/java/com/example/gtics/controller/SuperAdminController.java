@@ -25,6 +25,21 @@ public class SuperAdminController {
     Rol rolAZ = new Rol();
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
     public String dashboard(){
+        //Cantidad de ordenes por mes
+
+        // Cantidad de ordenes por estado de seguimiento
+
+        // Productos mas importantes (10), entity producto
+
+        // Proveedores mas solicitados, entity: usuario
+
+        // Proveedores con peores comentarios, entity: usuario
+
+        // Cantidad de agentes //Cantidad de usuarios registrados vs activos
+
+        // Cantidad de usuarios baneados
+
+        // Cantidad de proveedores baneados
 
         return "SuperAdmin/Dashboard/dashboard-superadmin";
     }

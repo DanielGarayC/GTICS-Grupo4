@@ -19,8 +19,6 @@ public class Usuario {
     @Column(name = "nombre", nullable = false, length = 45)
     private String nombre;
 
-    @Column(name = "apellido", nullable = false, length = 45)
-    private String apellido;
 
     @Column(name = "email", nullable = false, length = 45)
     private String email;
@@ -69,8 +67,6 @@ public class Usuario {
     @Column(name = "foto")
     private byte[] foto;
 
-    @Column(name = "`contraseña`", nullable = false, length = 45)
-    private String contraseña;
 
     @Column(name = "telefono", nullable = false, length = 45)
     private String telefono;
@@ -81,5 +77,14 @@ public class Usuario {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idzona", nullable = false)
     private Zona zona;
+
+    @Column(name = "apellidoPaterno", nullable = false, length = 45)
+    private String apellidoPaterno;
+
+    @Column(name = "apellidoMaterno", nullable = false, length = 45)
+    private String apellidoMaterno;
+
+    @Column(name = "contrasena", nullable = false, length = 45)
+    private String contrasena;
 
 }
