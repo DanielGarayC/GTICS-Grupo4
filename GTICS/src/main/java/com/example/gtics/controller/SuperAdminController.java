@@ -3,6 +3,7 @@ package com.example.gtics.controller;
 import com.example.gtics.entity.Rol;
 import com.example.gtics.entity.Usuario;
 import com.example.gtics.entity.Zona;
+import com.example.gtics.repository.DashboardRepository;
 import com.example.gtics.repository.UsuarioRepository;
 import com.example.gtics.repository.ZonaRepository;
 import org.springframework.stereotype.Controller;
@@ -18,9 +19,12 @@ public class SuperAdminController {
 
     private final UsuarioRepository usuarioRepository;
     private final ZonaRepository zonaRepository;
-    public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository) {
+    private final DashboardRepository dashboardRepository;
+
+    public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository, DashboardRepository dashboardRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
+        this.dashboardRepository = dashboardRepository;
     }
     Rol rolAZ = new Rol();
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})

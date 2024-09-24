@@ -35,4 +35,7 @@ public class Proveedor {
     @OneToMany(mappedBy = "idProveedor")
     private Set<Producto> productos = new LinkedHashSet<>();
 
+    @Column(name = "baneado", nullable = false)
+    private Byte baneado;
+
 }

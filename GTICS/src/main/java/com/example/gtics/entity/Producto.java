@@ -48,4 +48,11 @@ public class Producto {
     @JoinColumn(name = "idProveedor", nullable = false)
     private Proveedor idProveedor;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idZona", nullable = false)
+    private Zona idZona;
+
+    @Column(name = "cantVentas", nullable = false, length = 45)
+    private String cantVentas;
+
 }
