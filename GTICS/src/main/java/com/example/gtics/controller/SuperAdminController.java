@@ -3,6 +3,7 @@ package com.example.gtics.controller;
 import com.example.gtics.entity.Rol;
 import com.example.gtics.entity.Usuario;
 import com.example.gtics.entity.Zona;
+import com.example.gtics.repository.DashboardRepository;
 import com.example.gtics.repository.UsuarioRepository;
 import com.example.gtics.repository.ZonaRepository;
 import org.springframework.stereotype.Controller;
@@ -18,13 +19,31 @@ public class SuperAdminController {
 
     private final UsuarioRepository usuarioRepository;
     private final ZonaRepository zonaRepository;
-    public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository) {
+    private final DashboardRepository dashboardRepository;
+
+    public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository, DashboardRepository dashboardRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
+        this.dashboardRepository = dashboardRepository;
     }
     Rol rolAZ = new Rol();
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
     public String dashboard(){
+        //Cantidad de ordenes por mes
+
+        // Cantidad de ordenes por estado de seguimiento
+
+        // Productos mas importantes (10), entity producto
+
+        // Proveedores mas solicitados, entity: usuario
+
+        // Proveedores con peores comentarios, entity: usuario
+
+        // Cantidad de agentes //Cantidad de usuarios registrados vs activos
+
+        // Cantidad de usuarios baneados
+
+        // Cantidad de proveedores baneados
 
         return "SuperAdmin/Dashboard/dashboard-superadmin";
     }
