@@ -237,8 +237,9 @@ public class SuperAdminController {
     }
 
     @GetMapping("SuperAdmin/listaUsuarioFinal")
-    public String listaGestionUsuarioFinal(){
-
+    public String listaGestionUsuarioFinal(Model model){
+        List<Usuario> finalUsersList = usuarioRepository.findByIdRol_Id(4);
+        model.addAttribute("finalUsersList", finalUsersList);
         return "SuperAdmin/GestionUsuarioFinal/final-users-list";
     }
 
