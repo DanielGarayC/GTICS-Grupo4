@@ -1,5 +1,6 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.entity.Distrito;
 import com.example.gtics.entity.Orden;
 import com.example.gtics.entity.Usuario;
 import com.example.gtics.repository.DistritoRepository;
@@ -130,9 +131,20 @@ public class AgenteController {
         return "Agente/OrdenesDeUsuario/ordenesDeUsuario";
     }
     @GetMapping({"Agente/Ordenes/Detalles"})
-    public String DetalleOrden(){
+    public String DetalleOrden(@RequestParam("idOrden") Integer idOrden,Model model){
+        List<Distrito> listaDistritos   = distritoRepository.findAll();
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        
+        if(ordenOpt.isPresent()){
+            model.addAttribute("orden",ordenOpt.get());
+            model.addAttribute("listaDistritos",listaDistritos);
+            return "Agente/OrdenesDeUsuario/detalleOrden";
 
-        return "Agente/OrdenesDeUsuario/detalleOrden";
+        }else{
+            return "Agente/Ordenes";
+        }
+
+
     }
     @GetMapping({"Agente/Ordenes/Descargar"})
     public String DescargarOrden(){
