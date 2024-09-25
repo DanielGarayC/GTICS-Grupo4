@@ -1,11 +1,14 @@
 package com.example.gtics.repository;
 
-import com.example.gtics.entity.Usuario;
-import com.example.gtics.entity.Zona;
+import com.example.gtics.entity.Orden;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 
 @Repository
-public interface ZonaRepository extends JpaRepository<Zona,Integer> {
+public interface OrdenRepository extends JpaRepository<Orden, Integer> {
+
 }
+
+

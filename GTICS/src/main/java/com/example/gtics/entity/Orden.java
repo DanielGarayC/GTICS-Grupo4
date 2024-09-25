@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Entity
@@ -16,5 +18,16 @@ public class Orden {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idAgente")
     private Usuario idAgente;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idCarritoCompra", nullable = false)
+    private Carritocompra idCarritoCompra;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idEstadoOrden", nullable = false)
+    private Estadoorden EstadoOrden;
+
+    @Column(name = "fechaOrden", nullable = false)
+    private LocalDate fechaOrden;
 
 }

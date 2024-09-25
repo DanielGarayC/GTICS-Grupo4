@@ -328,8 +328,10 @@
 		   <!-- row -->
 		   <div class="row">
 			   <div class="col-xl-12 col-12 mb-5">
+				   <div th:if="${successMessage}" class="alert alert-success"><p th:text="${successMessage}"></p></div>
+
 				   <!-- card -->
-				   <div class="card h-100 card-lg">
+				   <div class="card h-100 card-lg shadow-sm border">
 					   <div class="p-6">
 						   <div class="row justify-content-between">
 							   <div class="col-md-4 col-12 mb-2 mb-md-0">
@@ -338,21 +340,12 @@
 									   <input class="form-control" type="search" placeholder="Buscar por nombre, ID o apellido" aria-label="Search" />
 								   </form>
 							   </div>
-							   <div class="col-lg-3 col-md-5 col-12">
-								   <!-- select -->
-								   <select class="form-select">
-									   <option selected>Estado de su orden</option>
-									   <option value="Success">Todos</option>
-									   <option value="Pending">Pendiente</option>
-									   <option value="Cancel">En progreso</option>
-									   <option value="Cancel">Resuelta</option>
 
-								   </select>
-							   </div>
 						   </div>
 					   </div>
 					   <!-- card body -->
 					   <div class="card-body p-0">
+
 						   <!-- table responsive -->
 						   <div class="table-responsive">
 							   <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
@@ -361,35 +354,43 @@
 
 										   <th></th>
 										   <th>Nombre</th>
+										   <th>Apellido</th>
 										   <th>Correo</th>
 										   <th>Distrito</th>
-										   <th>Orden</th>
 										   <th></th>
 									   </tr>
 								   </thead>
 								   <tbody>
-								   <tr>
+									   <tr th:each="usuarioAsignado: ${listaUsuariosAsignados}">
 									   <td>
 										   <a ><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
 									   </td>
-									   <td>Pérez García, Juan Carlos </td>
-									   <td>a20211688@pucp.edu.pe</td>
-									   <td>Bellavista</td>
-									   <td>
-										   <span class="badge bg-light-primary text-dark-primary">Resuelta</span>
-									   </td>
+									   <td th:text="${usuarioAsignado.nombre}"></td>
+									   <td th:text="${usuarioAsignado.apellido}"></td>
+									   <td th:text="${usuarioAsignado.email}"></td>
+									   <td>Distrito</td>
 
-									   <td>
+										   <td>
 										   <div class="dropdown">
 											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
 												   <i class="feather-icon icon-more-vertical fs-5"></i>
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item banearUsuario btn"  data-bs-toggle="tooltip" data-bs-placement="bottom" ><i class="bi bi-person-fill-slash me-3 "></i> Banear</a>
+													   <a class="dropdown-item banearUsuario btn"
+														  href="javascript:void(0);"
+														  th:attr="data-id=${usuarioAsignado.id}, data-nombre=${usuarioAsignado.nombre}"
+														  data-bs-toggle="tooltip"
+														  data-bs-placement="bottom">
+														   <i class="bi bi-person-fill-slash me-3"></i> Banear
+													   </a>
 												   </li>
+
 												   <li>
-													   <a class="dropdown-item" th:href="@{/Agente/Ordenes/Usuario/Lista}"><i class="bi bi-cart-check me-3"></i>Ver órdenes </a>
+													   <a class="dropdown-item"
+														  th:href="@{/Agente/Ordenes/Usuario/Lista(id=${usuarioAsignado.id})}">
+														   <i class="bi bi-cart-check me-3"></i>Ver órdenes
+													   </a>
 												   </li>
 												   <li>
 													   <a class="dropdown-item" th:href="@{/Agente/Chat}"><i class="bi bi-wechat me-3"></i>Chat </a>
@@ -400,163 +401,9 @@
 											   </ul>
 										   </div>
 									   </td>
-								   </tr>
-								   <tr>
-									   <td>
-										   <a href="#!"><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
-									   </td>
-									   <td>López Rodríguez, María Fernanda</td>
-									   <td>a20211688@pucp.edu.pe</td>
-									   <td>Bellavista</td>
-									   <td>
-										   <span class="badge bg-light-warning text-dark-warning">Pendiente</span>
-									   </td>
 
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item banearUsuario btn"  data-bs-toggle="tooltip" data-bs-placement="bottom" ><i class="bi bi-person-fill-slash me-3 "></i> Banear</a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="ordenesDeUsuario.html"><i class="bi bi-cart-check me-3"></i>Ver órdenes </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#modal2" ><i class="bi bi-person-fill me-3"></i>Ver perfil </a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
 								   </tr>
-								   <tr>
-									   <td>
-										   <a href="#!"><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
-									   </td>
-									   <td>González Sánchez, Andrés Felipe</td>
-									   <td>a20211688@pucp.edu.pe</td>
-									   <td>Bellavista</td>
-									   <td><span class="badge bg-light-info text-dark-info">En progreso</span></td>
 
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item banearUsuario btn"  data-bs-toggle="tooltip" data-bs-placement="bottom" ><i class="bi bi-person-fill-slash me-3 "></i> Banear</a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="ordenesDeUsuario.html"><i class="bi bi-cart-check me-3"></i>Ver órdenes </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#modal2" ><i class="bi bi-person-fill me-3"></i>Ver perfil </a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
-								   </tr>
-								   <tr>
-									   <td>
-										   <a href="#!"><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
-									   </td>
-									   <td>Ramírez Torres, Luis Alberto</td>
-									   <td>a20211688@pucp.edu.pe</td>
-									   <td>Bellavista</td>
-									   <td><span class="badge bg-light-info text-dark-info">En progreso</span></td>
-
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item banearUsuario btn"  data-bs-toggle="tooltip" data-bs-placement="bottom" ><i class="bi bi-person-fill-slash me-3 "></i> Banear</a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="ordenesDeUsuario.html"><i class="bi bi-cart-check me-3"></i>Ver órdenes </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#modal2" ><i class="bi bi-person-fill me-3"></i>Ver perfil </a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
-								   </tr>
-								   <tr>
-									   <td><a href="#!"><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a></td>
-									   <td>Martínez Fernández, Ana Sofía</td>
-									   <td>a20211688@pucp.edu.pe</td>
-									   <td>Bellavista</td>
-									   <td><span class="badge bg-light-primary text-dark-primary">Resuelta</span></td>
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item banearUsuario btn"  data-bs-toggle="tooltip" data-bs-placement="bottom" ><i class="bi bi-person-fill-slash me-3 "></i> Banear</a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="ordenesDeUsuario.html"><i class="bi bi-cart-check me-3"></i>Ver órdenes </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#modal2" ><i class="bi bi-person-fill me-3"></i>Ver perfil </a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
-								   </tr>
-								   <tr>
-									   <td>
-										   <a href="#!"><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
-									   </td>
-									   <td>Hernández Romero, José Manuel</td>
-									   <td>a20211688@pucp.edu.pe</td>
-									   <td>Bellavista</td>
-									   <td>
-										   <span class="badge bg-light-warning text-dark-warning">Pendiente</span>
-									   </td>
-
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item banearUsuario btn"  data-bs-toggle="tooltip" data-bs-placement="bottom" ><i class="bi bi-person-fill-slash me-3 "></i> Banear</a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-cart-check me-3"></i>Ver órdenes </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-person-fill me-3"></i>Ver perfil </a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
-								   </tr>
 
 								   </tbody>
 							   </table>
@@ -598,8 +445,9 @@
 					   </div>
 					   <hr style="border: 1px solid #949494;">
 					   <div>
-						   <h1 class=" text-center">
-							   Jesus Alvarado
+						   <h1 class="text-center">
+							   <!-- Nombre completo del usuario -->
+							   <span th:text="${usuarioAsignado.nombre} + ' ' + ${usuario.apellidoPaterno} + ' ' + ${usuario.apellidoMaterno}">Nombre Usuario</span>
 						   </h1>
 						   <div class="text-small mb-1 text-center" >
 							   <h5  class="text-decoration-none" style="color: #696969"><small>a20211688@pucp.edu.pe</small></h5>
@@ -624,10 +472,15 @@
 	   <script>
 		   document.querySelectorAll('.banearUsuario').forEach(button => {
 			   button.addEventListener('click', function() {
+				   // Obtenemos el ID y nombre del usuario
+				   const userId = this.getAttribute('data-id');
+				   const userName = this.getAttribute('data-nombre');
+
+				   // SweetAlert de confirmación
 				   Swal.fire({
 					   showCloseButton: true,
-					   title: 'Confirmar ',
-					   text: "¿Está seguro de que deseas banear el usuario Jesus Alvarado?",
+					   title: 'Confirmar',
+					   text: `¿Está seguro de que deseas banear al usuario ${userName}?`,
 					   icon: 'warning',
 					   showCancelButton: true,
 					   confirmButtonText: 'Confirmar',
@@ -637,7 +490,8 @@
 					   }
 				   }).then((result) => {
 					   if (result.isConfirmed) {
-						   Swal.fire('Usuario baneado', 'Se ha baneado al usuario exitosamente.', 'success');
+						   // Redirigir al controlador de baneo con el ID del usuario
+						   window.location.href = `/Agente/banear?id=${userId}`;
 					   }
 				   });
 			   });
