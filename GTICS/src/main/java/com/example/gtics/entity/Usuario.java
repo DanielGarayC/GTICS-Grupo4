@@ -49,7 +49,7 @@ public class Usuario {
     @Column(name = "az_fechanacimiento")
     private LocalDate azFechanacimiento;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "idsolicitudagente")
     private Solicitudagente idSolicitudAgente;
 

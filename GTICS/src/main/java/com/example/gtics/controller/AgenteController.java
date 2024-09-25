@@ -49,15 +49,23 @@ public class AgenteController {
     @GetMapping({"Agente/UsuariosAsignados"})
     public String UsuariosAsignados(Model model){
 
-        // Supongamos que ya tienes el objeto "agente" cargado o puedes cargarlo por su ID
-        Usuario agente = usuarioRepository.findById(1).orElseThrow(() -> new RuntimeException("Agente no encontrado"));
 
-        // Filtrar usuarios con idRol=4, agente asignado y no baneados
-        List<Usuario> usuariosAsignados = usuarioRepository.findUsuariosFiltrados(4, agente);
+        Optional<Usuario> optUsuario = usuarioRepository.findById(1);
 
-        model.addAttribute("listaUsuariosAsignados", usuariosAsignados);
+        if (optUsuario.isPresent()) {
 
-        return "Agente/UsuariosAsignados/usuariosAsignados";
+            Usuario agente = optUsuario.get();
+            // Filtrar usuarios con idRol=4, agente asignado y no baneados
+            List<Usuario> usuariosAsignados = usuarioRepository.findUsuariosFiltrados(4, agente);
+
+            model.addAttribute("listaUsuariosAsignados", usuariosAsignados);
+
+            return "Agente/UsuariosAsignados/usuariosAsignados";
+
+        }else {
+            return "redirect:/Agente";
+        }
+
     }
 
 
@@ -87,7 +95,10 @@ public class AgenteController {
 
 
     @GetMapping({"Agente/Ordenes"})
-    public String Ordenes(){
+    public String Ordenes(Model model){
+        List<Orden> ordenesLista = ordenRepository.findAll();
+        model.addAttribute("ordenesLista", ordenesLista);
+
 
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
