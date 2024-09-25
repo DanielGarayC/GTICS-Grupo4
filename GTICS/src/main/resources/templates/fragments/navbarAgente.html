@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!-- navbar vertical (para pc)-->
+    <th:block th:fragment="navbarVerticalPc(paginaActiva)">
+        <nav class="navbar-vertical-nav d-none d-xl-block">
+            <div class="navbar-vertical">
+                <div class="px-4 py-5">
+                    <a class="navbar-brand">
+                        <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagen" />
+                    </a>
+                </div>
+                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+                    <ul class="navbar-nav flex-column" id="sideNavbar">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${paginaActiva == 'inicio'} ? ' active'" th:href="@{/Agente}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-house"></i></span>
+                                    <span class="nav-link-text">Inicio</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${paginaActiva == 'usuariosAsignados'} ? ' active'" th:href="@{/Agente/UsuariosAsignados}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
+                                    <span class="nav-link-text">Usuarios asignados</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${paginaActiva == 'ordenes'} ? ' active'" th:href="@{/Agente/Ordenes}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+                                    <span class="nav-link-text">Órdenes</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${paginaActiva == 'reportes'} ? ' active'" th:href="@{/Agente/Reportes/Descargar}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
+                                    <span class="nav-link-text">Reportes</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </th:block>
+
+    <!-- navbar vertical (para celular)-->
+    <th:block th:fragment="navbarVerticalCelulares(paginaActiva)">
+        <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
+            <div class="navbar-vertical">
+                <div class="px-4 py-5 d-flex justify-content-between align-items-center">
+                    <a class="navbar-brand">
+                        <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagenCelulares"/>
+                    </a>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+                    <ul class="navbar-nav flex-column">
+
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${paginaActiva == 'inicio'} ? ' active'" th:href="@{/Agente}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-house"></i></span>
+                                    <span>Inicio</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${paginaActiva == 'usuariosAsignados'} ? ' active'" th:href="@{/Agente/UsuariosAsignados}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
+                                    <span>Usuarios asignados</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${paginaActiva == 'ordenes'} ? ' active'" th:href="@{/Agente/Ordenes}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+                                    <span class="nav-link-text">Órdenes</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${paginaActiva == 'reportes'} ? ' active'" th:href="@{/Agente/Reportes/Descargar}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
+                                    <span class="nav-link-text">Reportes</span>
+                                </div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </th:block>
+
+</body>
+</html>
