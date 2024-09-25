@@ -27,6 +27,10 @@ public class Orden {
     @JoinColumn(name = "idEstadoOrden", nullable = false)
     private Estadoorden EstadoOrden;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idControlOrden", nullable = false)
+    private ControlOrden controlOrden;
+
     @Column(name = "fechaOrden", nullable = false)
     private LocalDate fechaOrden;
 

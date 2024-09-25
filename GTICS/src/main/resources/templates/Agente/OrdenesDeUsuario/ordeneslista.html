@@ -340,7 +340,7 @@
 							   <div class="col-lg-2 col-md-4 col-12">
 								   <!-- select -->
 								   <select class="form-select">
-									   <option selected>Estado</option>
+									   <option selected>Control</option>
 									   <option value="Success">Todos las órdenes</option>
 									   <option value="Pending">Ordenes sin aginar</option>
 									   <option value="Pending">Ordenes pendientes</option>
@@ -362,6 +362,7 @@
 										   <th>Nº de orden</th>
 										   <th>Fecha</th>
 										   <th>Estado</th>
+										   <th>Control</th>
 										   <th>Monto total</th>
 										   <th></th>
 									   </tr>
@@ -371,10 +372,11 @@
 									   <td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td>
 									   <td>#1234</td>
 									   <td th:text="${orden.fechaOrden}"></td>
+									   <td th:text="${orden.estadoOrden.nombreEstado}"></td>
 									   <!--<td>	<span class="badge bg-light-primary text-dark-primary">Resuelta</span></td>-->
 									   <!--<td th:text="${orden.estadoOrden.nombreEstado}"></td>-->
 
-									   <td th:switch="${orden.estadoOrden.id}">
+									   <td th:switch="${orden.controlOrden.id}">
 										   <span th:case="1" class="badge bg-light-danger text-dark-danger">Sin asignar</span>
 										   <span th:case="2" class="badge bg-light-warning text-dark-warning">Pendiente</span>
 										   <span th:case="3" class="badge bg-light-info text-dark-info">En progreso</span>
