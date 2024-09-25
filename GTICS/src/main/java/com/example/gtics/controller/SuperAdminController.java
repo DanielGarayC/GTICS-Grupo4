@@ -71,10 +71,10 @@ public class SuperAdminController {
         model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/create-zonal-admin";
     }
-    @PostMapping("/AdminZonal/guardar")
+    @PostMapping("/SuperAdmin/AdminZonal/guardar")
     public String guardarAdminZonal(Usuario usuario, RedirectAttributes attr) {
-
-        if (usuario.getId() == 0) {
+        System.out.println("hola");
+        if (usuario.getId() == null) {
             attr.addFlashAttribute("msg", "Admin Zonal creado exitosamente");
         } else {
             attr.addFlashAttribute("msg", "Información del admin aonal actualizada exitosamente");
