@@ -91,7 +91,7 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAdminZonal/create-zonal-admin";
     }
     @PostMapping("/SuperAdmin/AdminZonal/guardar")
-    public String guardarAdminZonal(Usuario usuario, RedirectAttributes attr) {
+    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario, RedirectAttributes attr) {
         System.out.println("hola");
         if (usuario.getId() == null) {
             attr.addFlashAttribute("msg", "Admin Zonal creado exitosamente");

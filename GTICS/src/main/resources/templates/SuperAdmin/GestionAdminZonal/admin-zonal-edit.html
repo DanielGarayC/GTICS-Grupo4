@@ -496,8 +496,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12">
+                <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+                    <div class="col-lg-8 col-md-10 col-sm-12">
                         <div class="card card-lg border-0">
                             <div class="card-body d-flex flex-column gap-8 p-7">
                                 <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
@@ -518,73 +518,90 @@
                                     <form id="adminZonalForm" th:action="@{/SuperAdmin/AdminZonal/guardar}" method="post" class="row g-3">
                                         <input type="hidden" name="id" th:value="${usuario.id}" />
                                         <input type="hidden" name="rol" th:value="${usuario.rol.getId()}" />
-                                        <div class="col-lg-6 col-12">
+                                        <input type="hidden" name="id" th:value="${usuario.id}" />
+                                        <!-- Nombres -->
+                                        <div class="col-12">
                                             <div>
-                                                <!-- input -->
-                                                <label for="DNIFinalUser" class="form-label">
-                                                    DNI:
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="DNIFinalUser" name="dni" th:value="${usuario.dni}" required />
-                                                <div class="invalid-feedback">Por favor ingrese el DNI del admin zonal</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-12">
-                                            <div>
-                                                <!-- input -->
                                                 <label for="creatCustomerName" class="form-label">
                                                     Nombres:
-                                                    <span class="text-danger">*</span>
+                                                    <span style="visibility: hidden;">*</span>
                                                 </label>
                                                 <input type="text" class="form-control" id="creatCustomerName" name="nombre" th:value="${usuario.nombre}" required />
                                                 <div class="invalid-feedback">Por favor ingrese los nombres del admin zonal</div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-12">
+
+                                        <!-- Apellidos -->
+                                        <div class="col-12">
                                             <div>
-                                                <!-- input -->
-                                                <label for="creatFinalUserLastName" class="form-label">
+                                                <label for="creatFinalUserLastNameP" class="form-label">
                                                     Apellidos:
-                                                    <span class="text-danger">*</span>
+                                                    <span style="visibility: hidden;">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastName" name="apellido" th:value="${usuario.apellido}" required />
+                                                <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidopaterno" th:value="${usuario.apellidoPaterno}" required />
                                                 <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-12">
+                                        <div class="col-12">
                                             <div>
-                                                <!-- input -->
+                                                <label for="creatFinalUserLastNameM" class="form-label">
+                                                    Apellidos:
+                                                    <span style="visibility: hidden;">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidomaterno" th:value="${usuario.apellidoMaterno}" required />
+                                                <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- DNI -->
+                                        <div class="col-12">
+                                            <div>
+                                                <label for="DNIFinalUser" class="form-label">
+                                                    DNI:
+                                                    <span style="visibility: hidden;">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="DNIFinalUser" name="dni" th:value="${usuario.dni}" required />
+                                                <div class="invalid-feedback">Por favor ingrese el DNI del admin zonal</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Número telefónico -->
+                                        <div class="col-12">
+                                            <div>
                                                 <label for="phoneAdminZonal" class="form-label">
                                                     Número telefónico:
-                                                    <span class="text-danger">*</span>
+                                                    <span style="visibility: hidden;">*</span>
                                                 </label>
                                                 <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" th:value="${usuario.telefono}" required />
                                                 <div class="invalid-feedback">Por favor ingrese el teléfono</div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-12">
+
+                                        <!-- Email -->
+                                        <div class="col-12">
                                             <div>
-                                                <!-- input -->
                                                 <label for="creatFinalUserEmail" class="form-label">
-                                                    Email
-                                                    <span class="text-danger">*</span>
+                                                    Email:
+                                                    <span style="visibility: hidden;">*</span>
                                                 </label>
                                                 <input type="email" class="form-control" id="creatFinalUserEmail" name="email" th:value="${usuario.email}" required />
                                                 <div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-12">
+
+                                        <!-- Dirección -->
+                                        <div class="col-12">
                                             <div>
-                                                <!-- input -->
                                                 <label for="creatFinalUserDirection" class="form-label">Dirección</label>
                                                 <input type="text" class="form-control" id="creatFinalUserDirection" name="direccion"  th:value="${usuario.direccion}" required />
                                                 <div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-12">
+
+                                        <!-- Selección de zona -->
+                                        <div class="col-12">
                                             <div>
-                                                <!-- select -->
-                                                <label for="selectZone" class="form-label">Seleccione una zona</label>
+                                                <label for="selectZone" class="form-label">Zona</label>
                                                 <select class="form-select" id="selectZone" name="zona" required>
                                                     <option th:each="zona : ${zonas}"
                                                             th:text="${zona.getNombreZona()}"
@@ -596,19 +613,18 @@
                                             </div>
                                         </div>
 
-
-                                        <div class="col-lg-6 col-12">
+                                        <!-- Fecha de nacimiento -->
+                                        <div class="col-12">
                                             <label class="form-label" for="creatFinalUserDate">Fecha de nacimiento</label>
                                             <input type="text" class="form-control flatpickr" id="creatFinalUserDate" name="azFechanacimiento" th:value="${usuario.azFechanacimiento}" required />
                                             <div class="invalid-feedback">Por favor ingrese la fecha de nacimiento</div>
                                         </div>
 
-                                        <div>
-                                            <div class="col-12 mt-3">
-                                                <div class="d-flex flex-column flex-md-row gap-2">
-													<button class="btn btn-primary" type="button" onclick="showSuccessPopup()">Actualizar</button>
-                                                    <a th:href="@{/SuperAdmin/listaAdminZonal}" class="btn btn-secondary" >Cancelar</a>
-                                                </div>
+                                        <!-- Botones de acción -->
+                                        <div class="col-12 mt-3">
+                                            <div class="d-flex flex-column flex-md-row gap-2">
+                                                <button class="btn btn-primary" type="button" onclick="showSuccessPopup()">Actualizar</button>
+                                                <a th:href="@{/SuperAdmin/listaAdminZonal}" class="btn btn-secondary">Cancelar</a>
                                             </div>
                                         </div>
 

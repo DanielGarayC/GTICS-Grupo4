@@ -517,7 +517,7 @@
                                         <thead class="bg-light">
                                         <tr>
 
-                                            <th>Nombres</th>
+                                            <th>Nombre completo</th>
                                             <th>Correo electrónico</th>
                                             <th>DNI</th>
                                             <th>Teléfono</th>
@@ -533,7 +533,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <img th:src="@{/images/avatar/avatar-${usuario.id}.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                     <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" th:text="${usuario.nombre + ' ' + usuario.apellido}"></a>
+                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" th:text="${usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno}"></a>
                                                     </div>
                                                 </div>
                                             </td>
