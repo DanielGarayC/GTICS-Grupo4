@@ -18,6 +18,8 @@ public class Distrito {
     @Column(name = "nombreDistrito", nullable = false, length = 45)
     private String nombre;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idZona", nullable = false)
+    private Zona zona;
 
 }

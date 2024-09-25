@@ -1,11 +1,10 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.entity.Distrito;
 import com.example.gtics.entity.Rol;
 import com.example.gtics.entity.Usuario;
 import com.example.gtics.entity.Zona;
-import com.example.gtics.repository.DashboardRepository;
-import com.example.gtics.repository.UsuarioRepository;
-import com.example.gtics.repository.ZonaRepository;
+import com.example.gtics.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +19,21 @@ public class SuperAdminController {
     private final UsuarioRepository usuarioRepository;
     private final ZonaRepository zonaRepository;
     private final DashboardRepository dashboardRepository;
+    private final RolRepository rolRepository;
 
-    public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository, DashboardRepository dashboardRepository) {
+    public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository, DashboardRepository dashboardRepository,
+                                RolRepository rolRepository,
+                                DistritoRepository distritoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
         this.dashboardRepository = dashboardRepository;
+        this.rolRepository = rolRepository;
+        this.distritoRepository = distritoRepository;
     }
-    Rol rolAZ = new Rol();
+
+
+    private final DistritoRepository distritoRepository;
+
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
     public String dashboard(){
         //Cantidad de ordenes por mes
@@ -72,7 +79,7 @@ public class SuperAdminController {
                 model.addAttribute("usuario",optionalAZ.get());
             } else {
                 model.addAttribute("error","Admin Zonal no encontrado o el rol no es válido");
-                return "SuperAdmin/listaAdminZonal";
+                return "redirect:/SuperAdmin/listaAdminZonal";
             }
         }catch (Exception e) {
             model.addAttribute("error", "Error al cargar el admin zonal para editar.");
@@ -84,21 +91,48 @@ public class SuperAdminController {
     @GetMapping("SuperAdmin/crearAdminZonal")
     public String crearAdminZonal(Model model){
         Usuario usuario = new Usuario();
-        rolAZ.setId(2);
-        usuario.setRol(rolAZ);
+
+        model.addAttribute("distritos", distritoRepository.findAll());
         model.addAttribute("usuario", usuario);
         model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/create-zonal-admin";
     }
     @PostMapping("/SuperAdmin/AdminZonal/guardar")
-    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario, RedirectAttributes attr) {
+    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario,@RequestParam("zonaId") Integer zonaId, RedirectAttributes attr) {
         System.out.println("hola");
-        if (usuario.getId() == null) {
-            attr.addFlashAttribute("msg", "Admin Zonal creado exitosamente");
-        } else {
-            attr.addFlashAttribute("msg", "Información del admin aonal actualizada exitosamente");
+        try {
+            Optional<Rol> optionalAZRol = rolRepository.findById(2);
+            if (optionalAZRol.isPresent()) {
+                usuario.setRol(optionalAZRol.get());
+            } else {
+                throw new RuntimeException("Rol Admin Zonal no encontrado");
+            }
+            Optional<Zona> optionalZona = zonaRepository.findById(zonaId);
+            if (optionalZona.isPresent()) {
+                usuario.setZona(optionalZona.get());  // Asignar la zona al usuario
+            } else {
+                throw new RuntimeException("Zona no encontrada");
+            }
+            Optional<Distrito> optionalNoRegistradoDistrito = distritoRepository.findById(5);
+            if (optionalNoRegistradoDistrito.isPresent()) {
+                Distrito noRegistradoDistrito = optionalNoRegistradoDistrito.get();
+
+                // Actualiza el distrito "No Registrado" con la zona seleccionada
+                noRegistradoDistrito.setZona(optionalZona.get());
+                usuario.setDistrito(noRegistradoDistrito);
+            } else {
+                throw new RuntimeException("Distrito 'No Registrado' no encontrado");
+            }
+            usuarioRepository.save(usuario);
+            if (usuario.getId() == null) {
+                attr.addFlashAttribute("msg", "Admin Zonal creado exitosamente");
+            } else {
+                attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
+            }
+        } catch (Exception e) {
+            attr.addFlashAttribute("error", "Ocurrió un error al guardar el Admin Zonal.");
+            e.printStackTrace();
         }
-        usuarioRepository.save(usuario);
         return "redirect:/SuperAdmin/listaAdminZonal";
     }
     @GetMapping("/AdminZonal/eliminar")

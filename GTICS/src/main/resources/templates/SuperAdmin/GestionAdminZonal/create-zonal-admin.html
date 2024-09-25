@@ -513,6 +513,7 @@
                                 <div class="d-flex flex-column gap-4">
                                     <h3 class="mb-0 h5">Información del administrador zonal</h3>
                                     <form id="adminZonalForm" th:action="@{/SuperAdmin/AdminZonal/guardar}" method="post" class="needs-validation" novalidate>
+                                        <input type="hidden" name="idusuario" th:value="${usuario.id != null ? usuario.id : ''}" />
                                         <div class="row g-3">
 
                                             <!-- Nombres -->
@@ -529,15 +530,15 @@
                                                 <label for="creatFinalUserLastNameP" class="form-label">
                                                     Apellido Paterno: <span style="visibility: hidden;">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidopaterno" placeholder="Apellido paterno del admin zonal" required />
-                                                <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
+                                                <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidoPaterno" placeholder="Apellido paterno del admin zonal" required />
+                                                <div class="invalid-feedback">Por favor ingrese el apellido paterno del admin zonal</div>
                                             </div>
                                             <div class="col-12">
                                                 <label for="creatFinalUserLastNameM" class="form-label">
                                                     Apellido Materno: <span style="visibility: hidden;">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidomaterno" placeholder="Apellido materno del admin zonal" required />
-                                                <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
+                                                <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidoMaterno" placeholder="Apellido materno del admin zonal" required />
+                                                <div class="invalid-feedback">Por favor ingrese el apellidom del admin zonal</div>
                                             </div>
                                             <!-- DNI -->
                                             <div class="col-12">
@@ -576,9 +577,9 @@
                                             <!-- Selección de zona -->
                                             <div class="col-12">
                                                 <label for="selectZone" class="form-label">Zona</label>
-                                                <select class="form-select" name="zona" id="selectZone" required>
+                                                <select class="form-select" name="zonaId" id="selectZone" required>
                                                     <option value="" selected disabled>--Seleccione una zona--</option>
-                                                    <option th:each="zona : ${zonas}" th:text="${zona.getNombreZona()}" th:value="${zona.getId()}"></option>
+                                                    <option th:each="zona : ${zonas}" th:text="${zona.getNombreZona()}" th:value="${zona.id}"></option>
                                                 </select>
                                                 <div class="invalid-feedback">Por favor seleccione una zona</div>
                                             </div>
@@ -586,7 +587,7 @@
                                             <!-- Fecha de nacimiento -->
                                             <div class="col-12">
                                                 <label class="form-label" for="creatFinalUserDate">Fecha de nacimiento</label>
-                                                <input type="text" class="form-control flatpickr" id="creatFinalUserDate" name="azFechanacimiento" placeholder="Fecha de nacimiento" required />
+                                                <input type="date" class="form-control flatpickr" id="creatFinalUserDate" name="azFechanacimiento" placeholder="Fecha de nacimiento" required />
                                                 <div class="invalid-feedback">Por favor ingrese la fecha de nacimiento</div>
                                             </div>
 
@@ -594,7 +595,7 @@
                                             <div class="col-12">
                                                 <label class="form-label" for="passwordAdminZonal">Contraseña temporal</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="passwordAdminZonal" name="contraseña" required />
+                                                    <input type="text" class="form-control" id="passwordAdminZonal" name="contrasena" required />
                                                     <button class="btn btn-outline-secondary" type="button" id="generatePassword">Generar</button>
                                                 </div>
                                             </div>
@@ -633,6 +634,11 @@
 
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr("#creatFinalUserDate", {
+            dateFormat: "Y-m-d"  // Esto asegura que la fecha se envíe en formato yyyy-MM-dd
+        });
+    });
     function confirmarRegistro() {
         Swal.fire({
             title: '¿Estás seguro?',

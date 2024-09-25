@@ -517,8 +517,8 @@
                                     <h3 class="mb-0 h6">Información del administrador zonal</h3>
                                     <form id="adminZonalForm" th:action="@{/SuperAdmin/AdminZonal/guardar}" method="post" class="row g-3">
                                         <input type="hidden" name="id" th:value="${usuario.id}" />
-                                        <input type="hidden" name="rol" th:value="${usuario.rol.getId()}" />
-                                        <input type="hidden" name="id" th:value="${usuario.id}" />
+                                        <input type="hidden" name="contrasena" th:value="${usuario.contrasena}" />
+
                                         <!-- Nombres -->
                                         <div class="col-12">
                                             <div>
@@ -535,21 +535,21 @@
                                         <div class="col-12">
                                             <div>
                                                 <label for="creatFinalUserLastNameP" class="form-label">
-                                                    Apellidos:
+                                                    Apellido Paterno:
                                                     <span style="visibility: hidden;">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidopaterno" th:value="${usuario.apellidoPaterno}" required />
-                                                <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
+                                                <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidoPaterno" th:value="${usuario.apellidoPaterno}" required />
+                                                <div class="invalid-feedback">Por favor ingrese el apellido paterno del admin zonal</div>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div>
                                                 <label for="creatFinalUserLastNameM" class="form-label">
-                                                    Apellidos:
+                                                    Apellido Materno:
                                                     <span style="visibility: hidden;">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidomaterno" th:value="${usuario.apellidoMaterno}" required />
-                                                <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
+                                                <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidoMaterno" th:value="${usuario.apellidoMaterno}" required />
+                                                <div class="invalid-feedback">Por favor ingrese el apellido materno del admin zonal</div>
                                             </div>
                                         </div>
 
@@ -602,7 +602,7 @@
                                         <div class="col-12">
                                             <div>
                                                 <label for="selectZone" class="form-label">Zona</label>
-                                                <select class="form-select" id="selectZone" name="zona" required>
+                                                <select class="form-select" id="selectZone" name="zonaId" required>
                                                     <option th:each="zona : ${zonas}"
                                                             th:text="${zona.getNombreZona()}"
                                                             th:value="${zona.getId()}"
@@ -664,6 +664,12 @@
 
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr("#creatFinalUserDate", {
+            dateFormat: "Y-m-d"  // Esto asegura que la fecha se envíe en formato yyyy-MM-dd
+        });
+    });
+
     function showSuccessPopup() {
         console.log('showSuccessPopup se ha ejecutado');
 
