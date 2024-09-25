@@ -515,8 +515,8 @@
 
                                 <div class="d-flex flex-column gap-4">
                                     <h3 class="mb-0 h6">Información del administrador zonal</h3>
-                                    <form id="adminZonalForm" th:action="@{/SuperAdmin/AdminZonal/guardar}" method="post" class="row g-3">
-                                        <input type="hidden" name="id" th:value="${usuario.id}" />
+                                    <form id="adminZonalForm" th:action="@{/SuperAdmin/AdminZonal/guardar}" method="post" class="row g-3 needs-validation" novalidate>
+                                    <input type="hidden" name="id" th:value="${usuario.id}" />
                                         <input type="hidden" name="contrasena" th:value="${usuario.contrasena}" />
 
                                         <!-- Nombres -->
@@ -554,28 +554,20 @@
                                         </div>
 
                                         <!-- DNI -->
-                                        <div class="col-12">
-                                            <div>
-                                                <label for="DNIFinalUser" class="form-label">
-                                                    DNI:
-                                                    <span style="visibility: hidden;">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="DNIFinalUser" name="dni" th:value="${usuario.dni}" required />
-                                                <div class="invalid-feedback">Por favor ingrese el DNI del admin zonal</div>
-                                            </div>
-                                        </div>
+                                    <!-- DNI -->
+                                    <div class="col-12">
+                                        <label for="DNIFinalUser" class="form-label">DNI:</label>
+                                        <input type="text" class="form-control" id="DNIFinalUser" name="dni" minlength="8" maxlength="8" pattern="\d{8}" placeholder="Ejemplo: 12345678" th:value="${usuario.dni}" required />
+                                        <div class="invalid-feedback" id="dni-feedback">Por favor ingrese un DNI válido con 8 dígitos</div>
+                                    </div>
 
-                                        <!-- Número telefónico -->
-                                        <div class="col-12">
-                                            <div>
-                                                <label for="phoneAdminZonal" class="form-label">
-                                                    Número telefónico:
-                                                    <span style="visibility: hidden;">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" th:value="${usuario.telefono}" required />
-                                                <div class="invalid-feedback">Por favor ingrese el teléfono</div>
-                                            </div>
-                                        </div>
+
+                                    <!-- Número telefónico -->
+                                    <div class="col-12">
+                                        <label for="phoneAdminZonal" class="form-label">Número telefónico:</label>
+                                        <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" minlength="9" maxlength="9" pattern="\d{9}" placeholder="Ejemplo: 987654321" th:value="${usuario.telefono}" required />
+                                        <div class="invalid-feedback" id="phone-feedback">El teléfono debe contener exactamente 9 dígitos</div>
+                                    </div>
 
                                         <!-- Email -->
                                         <div class="col-12">
@@ -664,15 +656,58 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        flatpickr("#creatFinalUserDate", {
-            dateFormat: "Y-m-d"  // Esto asegura que la fecha se envíe en formato yyyy-MM-dd
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('adminZonalForm');
+        const dniInput = document.getElementById('DNIFinalUser');
+        const phoneInput = document.getElementById('phoneAdminZonal');
+        const dateInput = document.getElementById('creatFinalUserDate');
+
+        // Validar fecha de nacimiento (no puede ser futura)
+        dateInput.addEventListener('blur', function () {
+            const currentDate = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
+            if (dateInput.value > currentDate) {
+                dateInput.setCustomValidity("La fecha de nacimiento no puede ser futura.");
+                dateInput.classList.add('is-invalid');
+            } else {
+                dateInput.setCustomValidity(""); // Restablecer si la fecha es válida
+                dateInput.classList.remove('is-invalid');
+                dateInput.classList.add('is-valid');
+            }
+        });
+
+        // Evento blur para validación en campo DNI
+        dniInput.addEventListener('blur', function() {
+            this.classList.remove('is-valid', 'is-invalid');
+            if (!this.validity.valid) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.add('is-valid');
+            }
+        });
+
+        // Evento blur para validación en campo Teléfono
+        phoneInput.addEventListener('blur', function() {
+            this.classList.remove('is-valid', 'is-invalid');
+            if (!this.validity.valid) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.add('is-valid');
+            }
+        });
+
+        // Validar todo el formulario al enviarlo
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated'); // Forzar mostrar validaciones si no es válido
         });
     });
 
+    // Función para mostrar el popup de confirmación con validación del formulario
     function showSuccessPopup() {
-        console.log('showSuccessPopup se ha ejecutado');
-
         Swal.fire({
             title: '¿Estás seguro?',
             text: "Confirma que deseas actualizar la información del Admin Zonal",
@@ -683,15 +718,24 @@
             confirmButtonText: 'Sí, actualizar',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
-            console.log('Resultado del popup:', result);
+            const form = document.getElementById('adminZonalForm');
             if (result.isConfirmed) {
-                console.log('Se confirmó el popup');
-                document.getElementById('adminZonalForm').submit();
+                if (form.checkValidity()) {
+                    form.submit();
+                } else {
+                    form.classList.add('was-validated'); // Forzar mostrar validaciones si no es válido
+                }
             }
-        }).catch((error) => {
-            console.error('Error con SweetAlert2:', error);
         });
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr("#creatFinalUserDate", {
+            dateFormat: "Y-m-d"  // Esto asegura que la fecha se envíe en formato yyyy-MM-dd
+        });
+    });
+
+
 </script>
 </body>
 </html>
