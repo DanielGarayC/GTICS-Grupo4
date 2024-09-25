@@ -484,8 +484,8 @@
 							<!-- breacrumb -->
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb mb-0">
-									<li class="breadcrumb-item"><a href="../Dashboard" class="text-inherit">Dashboard</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Create</li>
+									<li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Crear Usuario</li>
 								</ol>
 							</nav>
 						</div>
@@ -502,7 +502,7 @@
 
 									<div class="file-upload btn btn-light ms-md-4">
 										<input type="file" class="file-input opacity-0" />
-										Upload Photo
+										Subir Foto
 									</div>
 
 									<span class="ms-2">JPG, GIF or PNG. 1MB Max.</span>
@@ -536,11 +536,22 @@
 											<div>
 												<!-- input -->
 												<label for="creatFinalUserLastName" class="form-label">
-													Apellidos:
+													Apellido Paterno:
 													<span class="text-danger">*</span>
 												</label>
 												<input type="text" class="form-control" id="creatFinalUserLastName" placeholder="Apellidos del usuario final" required />
-												<div class="invalid-feedback">Por favor ingrese los apellidos del usuario</div>
+												<div class="invalid-feedback">Por favor ingrese el apellido paterno del usuario</div>
+											</div>
+										</div>
+										<div class="col-lg-6 col-12">
+											<div>
+												<!-- input -->
+												<label for="creatFinalUserLastName2" class="form-label">
+													Apellido Materno:
+													<span class="text-danger">*</span>
+												</label>
+												<input type="text" class="form-control" id="creatFinalUserLastName2" placeholder="Apellidos del usuario final" required />
+												<div class="invalid-feedback">Por favor ingrese el apellido materno de usuario</div>
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
@@ -564,7 +575,7 @@
 										</div>
 
 										<div class="col-lg-6 col-12">
-											<label class="form-label" for="creatFinalUserDate">Distrio</label>
+											<label class="form-label" for="creatFinalUserDate">Distrito</label>
 											<input type="text" class="form-control flatpickr" id="creatFinalUserDate" placeholder="Distrito" required />
 											<div class="invalid-feedback">Por favor ingrese un distrito</div>
 										</div>
