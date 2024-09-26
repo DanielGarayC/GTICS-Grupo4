@@ -2,6 +2,9 @@ package com.example.gtics.controller;
 
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +25,7 @@ public class SuperAdminController {
     private final CategoriaRepository categoriaRepository;
     private final SubcategoriaRepository subcategoriaRepository;
     private final ProductoZonaRepository productoZonaRepository;
+    private final TiendaRepository tiendaRepository;
 
     public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository,
                                 RolRepository rolRepository,
@@ -30,7 +34,8 @@ public class SuperAdminController {
                                 OrdenRepository ordenRepository,
                                 CategoriaRepository categoriaRepository,
                                 SubcategoriaRepository subcategoriaRepository,
-                                ProductoZonaRepository productoZonaRepository) {
+                                ProductoZonaRepository productoZonaRepository,
+                                TiendaRepository tiendaRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
         this.rolRepository = rolRepository;
@@ -41,6 +46,7 @@ public class SuperAdminController {
         this.categoriaRepository = categoriaRepository;
         this.subcategoriaRepository = subcategoriaRepository;
         this.productoZonaRepository = productoZonaRepository;
+        this.tiendaRepository=tiendaRepository;
     }
 
 
@@ -50,7 +56,7 @@ public class SuperAdminController {
 
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
     public String dashboard(Model model){
-       //Cantidad de ordenes por mes
+        //Cantidad de ordenes por mes
         model.addAttribute("OrdenesPormes", ordenRepository.getOrdenesMes());
         // Cantidad de ordenes por estado de seguimiento
         model.addAttribute("OrdenesPorEstado", ordenRepository.getOrdenesEstado());
@@ -375,6 +381,13 @@ public class SuperAdminController {
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
     }
 
+    @GetMapping("SuperAdmin/verUsuarioFinal/{id}")
+    public String verUsuarioFinal(Model model, @PathVariable("id") Integer idUsuarioFinal){
+        Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
+        model.addAttribute("finalUser", finalUser);
+        return "SuperAdmin/GestionUsuarioFinal/final-user-info";
+    }
+
     @PostMapping("SuperAdmin/Actualizar/{id}")
     public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal){
 
@@ -515,17 +528,134 @@ public class SuperAdminController {
         model.addAttribute("productos", listaProductos);
         return "SuperAdmin/productos";
     }
+    //
     @GetMapping("SuperAdmin/proveedores")
-    public String proveedores(){
+    public String proveedores(Model model,
+                              @RequestParam(defaultValue = "0") int page){
+        int pageSize = 6;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Tienda> tiendas = tiendaRepository.findAll(pageable);
 
-        return "SuperAdmin/vendor-grid";
+        model.addAttribute("tiendas", tiendas.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", tiendas.getTotalPages());
+        return "SuperAdmin/GestionProveedores/vendor-grid";
     }
 
-    @GetMapping("SuperAdmin/listaProveedores")
-    public String listaProveedores(){
+    @GetMapping("/SuperAdmin/listaProveedores")
+    public String listaProveedores(Model model,
+                                   @RequestParam(defaultValue = "0") int page){
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Proveedor> proveedores = proveedorRepository.findAll(pageable);
 
-        return "SuperAdmin/vendor-list";
+        model.addAttribute("proveedores", proveedores.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", proveedores.getTotalPages());
+        return "SuperAdmin/GestionProveedores/vendor-list";
     }
+
+    @GetMapping("/SuperAdmin/borrar")
+    public String borrar(@RequestParam("id") int id, RedirectAttributes attr){
+        System.out.println(id);
+
+        Optional<Proveedor> optProveedor = proveedorRepository.findById(id);
+
+        if (optProveedor.isPresent()) {
+            try {
+                proveedorRepository.deleteById(id);
+                attr.addFlashAttribute("msg", "El proveedor ha sido eliminado exitosamente.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("error", "El proveedor no se pudo borrar correctamente.");
+            }
+        } else {
+            attr.addFlashAttribute("error", "Proveedor no encontrado.");
+        }
+
+        return "redirect:/SuperAdmin/listaProveedores";
+    }
+
+    @GetMapping("/Proveedor/eliminar")
+    public String eliminarProveedor(@RequestParam("id") int id, RedirectAttributes attr) {
+
+        Optional<Proveedor> optProduct = proveedorRepository.findById(id);
+
+        if (optProduct.isPresent()) {
+            try {
+                proveedorRepository.deleteById(id);
+                attr.addFlashAttribute("msg", "El Proveedor ha sido eliminado exitosamente");
+            } catch (Exception e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("error", "El Proveedor no se pudo borrar correctamente =(.");
+            }
+        }
+        return "redirect:/SuperAdmin/listaProveedores";
+
+    }
+
+    @GetMapping("SuperAdmin/editarProveedor/{id}")
+    public String editarProveedor(@PathVariable("id") Integer id, Model model){
+        try {
+            Optional<Proveedor> optionalAZ = proveedorRepository.findById(id);
+            if (optionalAZ.isPresent()){
+                List<Tienda> tiendas=tiendaRepository.findAll();
+                System.out.println(tiendas.size());
+                model.addAttribute("tiendas", tiendas);
+                model.addAttribute("proveedor",optionalAZ.get());
+            } else {
+                model.addAttribute("error","Proveedor no encontrado");
+                return "redirect:/SuperAdmin/listaProveedores";
+            }
+        }catch (Exception e) {
+            model.addAttribute("error", "Error al cargar proveedor para editar.");
+            e.printStackTrace();
+        }
+
+        return "SuperAdmin/GestionProveedores/vendor-edit";
+    }
+
+    @GetMapping("/SuperAdmin/agregarTienda")
+    public String agregarTienda(){
+
+        return "SuperAdmin/GestionProveedores/add-store";
+    }
+
+    @PostMapping("/SuperAdmin/Proveedor/guardar")
+    public String guardarProveedor(
+            @ModelAttribute("proveedor") Proveedor proveedor,
+            @RequestParam("tienda") Integer tiendaId,
+            RedirectAttributes attr) {
+
+        try {
+            // Buscar la tienda por el id recibido en el formulario
+            Optional<Tienda> optionalTienda = tiendaRepository.findById(tiendaId);
+
+            // Verificar si la tienda existe
+            if (optionalTienda.isPresent()) {
+                // Asignar la tienda al proveedor
+                proveedor.setTienda(optionalTienda.get());
+            } else {
+                throw new RuntimeException("Tienda no encontrada");
+            }
+
+            // Guardar el proveedor en el repositorio
+            proveedorRepository.save(proveedor);
+
+            if (proveedor.getId() == null) {
+                attr.addFlashAttribute("msg", "Proveedor creado exitosamente");
+            } else {
+                attr.addFlashAttribute("msg", "Información del proveedor actualizada exitosamente");
+            }
+        } catch (Exception e) {
+            attr.addFlashAttribute("error", "Ocurrió un error al guardar el proveedor.");
+            e.printStackTrace();
+        }
+
+        // Redirigir a la lista de proveedores después de guardar
+        return "redirect:/SuperAdmin/listaProveedores";
+    }
+
 
     @GetMapping("SuperAdmin/perfil")
     public String añadirCategoria(){

@@ -174,10 +174,10 @@
     <div class="main-wrapper">
         <!-- navbar -->
         <!-- navbar vertical (para pc)-->
-        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('dashboard')"></div>
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaAdminZonal')"></div>
 
         <!-- navbar vertical (para celular)-->
-        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('dashboard')"></div>
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaAdminZonal')"></div>
         <!-- COONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">
             <div class="container">
@@ -196,9 +196,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-                    <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="row" style="min-height: 100vh;">
+                    <div class="col-12">
                         <div class="card shadow border-0">
+
                             <div class="card-body d-flex flex-column gap-8 p-7">
                                 <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
                                     <div>
@@ -223,7 +224,7 @@
                                         <div class="row g-3">
 
                                             <!-- Nombres -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="creatCustomerName" class="form-label">
                                                     Nombres: <span style="visibility: hidden;">*</span>
                                                 </label>
@@ -232,14 +233,14 @@
                                             </div>
 
                                             <!-- Apellidos -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="creatFinalUserLastNameP" class="form-label">
                                                     Apellido Paterno: <span style="visibility: hidden;">*</span>
                                                 </label>
                                                 <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidoPaterno" placeholder="Apellido paterno del admin zonal" required />
                                                 <div class="invalid-feedback">Por favor ingrese el apellido paterno del admin zonal</div>
                                             </div>
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="creatFinalUserLastNameM" class="form-label">
                                                     Apellido Materno: <span style="visibility: hidden;">*</span>
                                                 </label>
@@ -247,7 +248,7 @@
                                                 <div class="invalid-feedback">Por favor ingrese el apellido materno del admin zonal</div>
                                             </div>
                                             <!-- DNI -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="DNIFinalUser" class="form-label">
                                                     DNI: <span style="visibility: hidden;">*</span>
                                                 </label>
@@ -256,7 +257,7 @@
                                             </div>
 
                                             <!-- Número telefónico -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="phoneAdminZonal" class="form-label">
                                                     Número telefónico: <span style="visibility: hidden;">*</span>
                                                 </label>
@@ -265,7 +266,7 @@
                                             </div>
 
                                             <!-- Email -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="creatFinalUserEmail" class="form-label">
                                                     Email: <span style="visibility: hidden;">*</span>
                                                 </label>
@@ -274,14 +275,14 @@
                                             </div>
 
                                             <!-- Dirección -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="creatFinalUserDirection" class="form-label">Dirección</label>
                                                 <input type="text" class="form-control" id="creatFinalUserDirection" name="direccion" placeholder="Dirección" required />
                                                 <div class="invalid-feedback">Por favor ingrese la dirección del admin zonal</div>
                                             </div>
 
                                             <!-- Selección de zona -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="selectZone" class="form-label">Zona</label>
                                                 <select class="form-select" name="zonaId" id="selectZone" required>
                                                     <option value="" selected disabled>--Seleccione una zona--</option>
@@ -291,14 +292,14 @@
                                             </div>
 
                                             <!-- Fecha de nacimiento -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label class="form-label" for="creatFinalUserDate">Fecha de nacimiento</label>
                                                 <input type="date" class="form-control" id="creatFinalUserDate" name="azFechanacimiento" placeholder="Fecha de nacimiento" required />
                                                 <div class="invalid-feedback" id="fecha-feedback">Por favor ingrese una fecha válida de nacimiento</div>
                                             </div>
 
                                             <!-- Contraseña temporal -->
-                                            <div class="col-12">
+                                            <div class="col-6">
                                                 <label class="form-label" for="passwordAdminZonal">Contraseña temporal</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="passwordAdminZonal" name="contrasena" required />

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="Codescandy" name="author">
+  <title>Ver Usuario</title>
+  <!-- Favicon icon-->
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+
+
+  <!-- Libs CSS -->
+  <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+  <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+  <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+
+
+  <!-- Theme CSS -->
+  <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+
+  <style>
+
+    .logoImagen{
+      height: 80px;
+      width: 250px;
+    }
+    .logoImagenCelulares{
+      height: 80px;
+      width: 220px;
+    }
+  </style>
+</head>
+
+<body>
+<!-- main -->
+<div>
+  <!-- navbar -->
+  <nav class="navbar navbar-expand-lg navbar-glass">
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <div class="d-flex align-items-center">
+          <a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
+              <path
+                      d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
+              />
+            </svg>
+          </a>
+
+        </div>
+        <div>
+          <ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
+            <li class="dropdown-center">
+              <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-bell fs-5"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+								2
+								<span class="visually-hidden">Mensajes sin leer</span>
+							</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+                <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="mb-1">Notificaciones</h5>
+                    <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
+                  </div>
+                  <a href="#!" class="text-muted">
+                    <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+                        <path
+                                d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+                        />
+                        <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+                      </svg>
+                    </a>
+                  </a>
+                </div>
+                <div data-simplebar style="height: 250px">
+                  <!-- List group -->
+                  <ul class="list-group list-group-flush notification-list-scroll fs-6">
+                    <!-- List group item -->
+                    <li class="list-group-item px-5 py-4 list-group-item-action active">
+                      <a href="#!" class="text-muted">
+                        <div class="d-flex">
+                          <div class="ms-4">
+                            <p class="mb-1">
+                              <span class="text-dark">Nombre de la persona</span>
+                              Descripción notificación 1
+                            </p>
+                            <span>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+														</svg>
+														<small class="ms-2">Hace 1 minuto</small>  <!--Se puede eliminar-->
+													</span>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="list-group-item px-5 py-4 list-group-item-action">
+                      <a href="#!" class="text-muted">
+                        <div class="d-flex">
+                          <div class="ms-4">
+                            <p class="mb-1">
+                              <span class="text-dark">Título de notificación 2</span>
+                              Descripción notificación 2
+                            </p>
+                            <span>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+														</svg>
+														<small class="ms-2">Hace 2 días</small>
+													</span>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="list-group-item px-5 py-4 list-group-item-action">
+                      <a href="#!" class="text-muted">
+                        <div class="d-flex">
+                          <div class="ms-4">
+                            <p class="mb-1">
+                              <span class="text-dark">Título de notificación 3</span>
+                              Descripción notificación 3
+                            </p>
+                            <span>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
+															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+														</svg>
+														<small class="ms-2">Hace 5 horas</small>
+													</span>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="border-top px-5 py-4 text-center">
+                  <a href="#!">Ver todas</a>
+                </div>
+              </div>
+            </li>
+            <li class="dropdown ms-4">
+              <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img th:src="@{images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
+              </a>
+
+              <div class="dropdown-menu dropdown-menu-end p-0">
+                <div class="lh-1 px-5 py-4 border-bottom">
+                  <h5 class="mb-1 h6">Nombre Apellido</h5>
+                  <small>rol en la pagina</small>
+                </div>
+
+                <div class="border-top px-5 py-3">
+                  <a href="../perfilSuperAdmin.html">Mi perfil</a>
+                </div>
+                <div class="border-top px-5 py-3">
+                  <a href="#">Cerrar sesión</a>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="main-wrapper">
+    <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaUsuarioFinal')"></div>
+
+    <!-- navbar vertical (para celular)-->
+    <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaUsuarioFinal')"></div>
+    <!-- COONTENIDO DE LA PAGINA -->
+    <main class="main-content-wrapper">
+      <div class="container">
+        <div class="row mb-8">
+          <div class="col-md-12">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+              <div>
+                <h2>Info Usuario Final</h2>
+                <!-- breacrumb -->
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Ver</li>
+                  </ol>
+                </nav>
+              </div>
+              <div>
+                <button type="button" class="btn btn-danger" href="#" th:data-href="@{/SuperAdmin/banearUsuarioFinal/{id}(id=${finalUser.get().getId()})}" onclick="confirmDelete(this.getAttribute('data-href'))" data-bs-toggle="modal" data-bs-target="#delete" >Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="min-height: 100vh;">
+          <div class="col-12">
+            <div class="card card-lg border-0">
+              <div class="card-body d-flex flex-column gap-8 p-7">
+                <div class="d-flex flex-column gap-4">
+                  <h4 class="mb-0 h5">Información del usuario final</h4>
+
+                  <div class="row">
+                    <div class="col-lg-6 col-12">
+                      <label for="DNIFinalUser" class="form-label">DNI:</label>
+                      <input type="text" class="form-control" id="DNIFinalUser" disabled th:value="${finalUser.get().getDni()}" required />
+                      <div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
+                    </div>
+
+                    <div class="col-lg-6 col-12">
+                      <label for="creatCustomerName" class="form-label">Nombres:</label>
+                      <input type="text" class="form-control" id="creatCustomerName" disabled th:value="${finalUser.get().getNombre()}" required />
+                      <div class="invalid-feedback">Por favor ingrese los nombres del usuario</div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-6 col-12">
+                      <label for="creatFinalUserLastName1" class="form-label">Apellido Paterno:</label>
+                      <input type="text" class="form-control" disabled id="creatFinalUserLastName1" th:value="${finalUser.get().getApellidoPaterno()}" required />
+                      <div class="invalid-feedback">Por favor ingrese el apellido paterno del usuario</div>
+                    </div>
+
+                    <div class="col-lg-6 col-12">
+                      <label for="creatFinalUserLastName" class="form-label">Apellido Materno:</label>
+                      <input type="text" class="form-control" disabled id="creatFinalUserLastName" th:value="${finalUser.get().getApellidoMaterno()}" required />
+                      <div class="invalid-feedback">Por favor ingrese el apellido materno del usuario</div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-6 col-12">
+                      <label for="creatFinalUserEmail" class="form-label">Email:</label>
+                      <input type="email" class="form-control" disabled id="creatFinalUserEmail" th:value="${finalUser.get().getEmail()}" required />
+                      <div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
+                    </div>
+
+                    <div class="col-lg-6 col-12">
+                      <label for="creatFinalUserDirection" class="form-label">Dirección:</label>
+                      <input type="text" class="form-control" disabled id="creatFinalUserDirection" th:value="${finalUser.get().getDireccion()}" required />
+                      <div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-6 col-12">
+                      <label for="creatFinalUserPhone" class="form-label">Teléfono:</label>
+                      <input type="text" disabled class="form-control" id="creatFinalUserPhone" th:value="${finalUser.get().getTelefono()}" required />
+                      <div class="invalid-feedback">Por favor ingrese el número de teléfono</div>
+                    </div>
+
+                    <div class="col-lg-6 col-12">
+                      <label class="form-label" for="creatFinalUserDistrict">Distrito:</label>
+                      <input type="text" disabled class="form-control" id="creatFinalUserDistrict" th:value="${finalUser.get().getDistrito().getNombre()}" required />
+                      <div class="invalid-feedback">Por favor ingrese un distrito</div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 mt-3">
+                    <div class="d-flex flex-column flex-md-row gap-2">
+                      <button class="btn btn-secondary" th:href="@{/SuperAdmin/listaUsuarioFinal}">Regresar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Libs JS -->
+<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+<!-- Theme JS -->
+<script th:src="@{/js/theme.min.js}"></script>
+
+<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+<script th:src="@{/js/vendors/chart.js}"></script>
+
+
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<script>
+  function confirmDelete(url) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Los cambios no serán reversibles",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745', // Color verde para el botón de confirmar
+      cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+                '¡Eliminado!',
+                'El usuario ha sido baneado con éxito.',
+                'success'
+        ).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = url; // Redirecciona al usuario a la URL del enlace
+          }
+        });
+      }
+    });
+  }
+
+</script>
+
+<script>
+  function showSuccessPopup(event) {
+    event.preventDefault(); // Evita el envío del formulario
+    Swal.fire({
+      title: '¡Éxito!',
+      text: 'Usuario actualizado correctamente',
+      icon: 'success',
+      confirmButtonColor: '#007bff',
+      confirmButtonText: 'Aceptar',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: true
+    });
+  }
+</script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
