@@ -105,8 +105,8 @@
 
                     <!-- Inventario de productos -->
                     <li class="nav-item">
-                        <a class="nav-link" th:classappend="${paginaActiva == 'categorias'} ? ' active'"
-                           th:href="@{/SuperAdmin/categorias}">
+                        <a class="nav-link" th:classappend="${paginaActiva == 'productos'} ? ' active'"
+                           th:href="@{/SuperAdmin/productos}">
                             <div class="d-flex align-items-center">
                                 <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
                                 <span class="nav-link-text">Inventario de productos</span>
@@ -207,8 +207,8 @@
 
                     <!-- Inventario de productos -->
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/SuperAdmin/categorias}"
-                           th:classappend="${paginaActiva == 'categorias'} ? ' active'">
+                        <a class="nav-link" th:href="@{/SuperAdmin/productos}"
+                           th:classappend="${paginaActiva == 'productos'} ? ' active'">
                             <div class="d-flex align-items-center">
                                 <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
                                 <span class="nav-link-text">Inventario de productos</span>

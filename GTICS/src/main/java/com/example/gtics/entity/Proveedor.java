@@ -20,6 +20,9 @@ public class Proveedor {
     @Column(name = "nombreProveedor", nullable = false, length = 45)
     private String nombreProveedor;
 
+    @Column(name = "apellidoProveedor", nullable = false, length = 45)
+    private String apellidoProveedor;
+
     @Column(name = "contacto", nullable = false, length = 45)
     private String contacto;
 
@@ -29,11 +32,12 @@ public class Proveedor {
     @Column(name = "dni", nullable = false, length = 45)
     private String dni;
 
-    @Column(name = "nombreTienda", nullable = false, length = 45)
-    private String nombreTienda;
-
     @OneToMany(mappedBy = "idProveedor")
     private Set<Producto> productos = new LinkedHashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "idTienda", nullable = false)  // Clave foránea que referencia la tabla tienda
+    private Tienda tienda;
 
     @Column(name = "baneado", nullable = false)
     private Byte baneado;

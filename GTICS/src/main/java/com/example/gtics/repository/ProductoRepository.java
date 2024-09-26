@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
+    @Query("SELECT p FROM Producto p WHERE p.borrado = 0")
+    List<Producto> findAllActive();
+
     @Query(value ="SELECT p.idProducto, p.nombreProducto, p.cantVentas FROM Producto p ORDER BY p.cantVentas DESC LIMIT 10", nativeQuery = true)
     List<ProductoRelevanteDTO> findProductosRelevantes();
 
