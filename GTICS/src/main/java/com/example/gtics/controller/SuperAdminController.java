@@ -222,19 +222,25 @@ public class SuperAdminController {
         }
         return "redirect:/SuperAdmin/listaAgente";
     }
-    @GetMapping("SuperAdmin/CrearAgente")
-    public String crearAgente(){
 
-        return "SuperAdmin/GestionAgentes/create-agent";
-    }
+
 
     @GetMapping("SuperAdmin/listaSolicitudesAgentes")
-    public String listaSolicitudesAgentes(){
+    public String listaSolicitudesAgentes(Model model){
+
+        List<Usuario> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesAgente();
+        model.addAttribute("listaUsuariosSolicitudes",listaUsuariosSolicitudes);
 
         return "SuperAdmin/GestionAgentes/agent-request";
     }
 
+    @GetMapping("SuperAdmin/cambiarRolaAgente")
+    public String cambiarRolaAgente(Model model,@RequestParam("id") Integer id){
 
+        usuarioRepository.actualizarRolAAgente(id);
+
+        return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+    }
 
     @GetMapping("SuperAdmin/listaUsuarioFinal")
     public String listaGestionUsuarioFinal(Model model){
@@ -252,6 +258,12 @@ public class SuperAdminController {
     public String editarUsuarioFinal(){
 
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
+    }
+
+    @GetMapping("SuperAdmin/banearUsuarioFinal/{id}")
+    public String banearUsuarioFinal(@PathVariable("id") Integer idUsuarioFinal, Model model) {
+        usuarioRepository.banUsuario(idUsuarioFinal);
+        return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 
     @GetMapping("SuperAdmin/agregarCategoria")

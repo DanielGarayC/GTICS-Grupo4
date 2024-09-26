@@ -549,10 +549,11 @@
 													</a>
 													<ul class="dropdown-menu">
 														<li>
-															<a class="dropdown-item" href="#" onclick="confirmDelete()">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
-                                                            </a>
+															<a class="dropdown-item" href="#" th:data-href="@{/SuperAdmin/banearUsuarioFinal/{id}(id=${finalUser.getId()})}" onclick="confirmDelete(this.getAttribute('data-href'))">
+																<i class="bi bi-trash me-3"></i>
+																Eliminar
+															</a>
+
 														</li>
 														<li>
 															<a class="dropdown-item" href="final-user-edit.html">
@@ -606,28 +607,30 @@
 <!-- SweetAlert2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
-function confirmDelete() {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "Los cambios no serán reversibles",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#28a745', // Color verde para el botón de eliminar
-        cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
-        confirmButtonText: 'Eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Aquí puedes poner la lógica para eliminar el elemento
-            Swal.fire(
-                '¡Eliminado!',
-                'El elemento ha sido eliminado con éxito.',
-                'success'
-            );
-        }
-    });
-}
-
+	function confirmDelete(url) {
+		Swal.fire({
+			title: '¿Estás seguro?',
+			text: "Los cambios no serán reversibles",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#28a745', // Color verde para el botón de confirmar
+			cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
+			confirmButtonText: 'Eliminar',
+			cancelButtonText: 'Cancelar'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire(
+						'¡Eliminado!',
+						'El usuario ha sido baneado con éxito.',
+						'success'
+				).then((result) => {
+					if (result.isConfirmed) {
+						window.location.href = url; // Redirecciona al usuario a la URL del enlace
+					}
+				});
+			}
+		});
+	}
 
 </script>
 
