@@ -282,7 +282,7 @@
                                             <select class="form-select" name="idProveedor" id="selectProveedor" required>
                                                 <option value="" selected disabled>--Seleccione un proveedor--</option>
                                                 <option th:each="proveedor : ${proveedores}"
-                                                        th:text="${proveedor.nombreProveedor}"
+                                                        th:text="${proveedor.tienda.nombreTienda}"
                                                         th:value="${proveedor.id}"
                                                         th:selected="${proveedor.id == producto.idProveedor.id}">
                                                 </option>
