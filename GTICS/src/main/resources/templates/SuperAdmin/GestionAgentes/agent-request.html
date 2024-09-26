@@ -234,13 +234,16 @@
                                                     <tr>
 
 
-                                                        <th>Número de solicitud</th>
+                                                        <th></th>
                                                         <th>Nombres</th>
                                                         <th>Apellidos</th>
                                                         <th>DNI</th>
                                                         <th>Teléfono</th>
                                                         <th>Postulación</th>
-
+                                                        <th>Código de Despachador Aduanero </th>
+                                                        <th>Estado del código</th>
+                                                        <th>Código de jurisdicción </th>
+                                                        <th>Zona </th>
                                                         <th></th>
 
                                                     </tr>
@@ -258,6 +261,11 @@
                                                             <span th:case="1" class="badge bg-light-info text-dark-info">Por coordinador</span>
 
                                                         </td>
+
+                                                        <td th:text="${usuario.idSolicitudAgente.codigoAduana}"></td>
+                                                        <td >estado</td>
+                                                        <td th:text="${usuario.idSolicitudAgente.codigoJurisdiccion}"></td>
+                                                        <td th:text="${usuario.zona.nombreZona}"></td>
                                                         <td>
                                                             <div class="dropdown">
                                                                 <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -294,6 +302,8 @@
                                                                 </ul>
                                                             </div>
                                                         </td>
+
+
                                                     </tr>
 
 
