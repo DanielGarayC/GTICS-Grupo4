@@ -404,7 +404,7 @@ public class SuperAdminController {
         model.addAttribute("proveedores", proveedores);
         model.addAttribute("zonas", zonas);
         model.addAttribute("subcategorias", subcategorias);
-        model.addAttribute("productoZonas", productoZonas);  // Asegúrate de añadir esto al modelo
+        model.addAttribute("productoZonas", productoZonas);
 
         return "SuperAdmin/add-product";
     }
@@ -477,7 +477,7 @@ public class SuperAdminController {
             model.addAttribute("proveedores", proveedores);
             model.addAttribute("zonas", zonas);
             model.addAttribute("subcategorias", subcategorias);
-            model.addAttribute("productoZonas", zonasMap); // Pasar el mapa al modelo
+            model.addAttribute("productoZonas", zonasMap);
 
             return "SuperAdmin/edit-product";
         } else {
