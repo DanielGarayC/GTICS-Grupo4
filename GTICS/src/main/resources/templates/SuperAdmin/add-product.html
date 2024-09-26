@@ -274,7 +274,10 @@
                                             <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
                                             <select class="form-select" name="idProveedor" id="selectProveedor" required>
                                                 <option value="" selected disabled>--Seleccione un proveedor--</option>
-                                                <option th:each="proveedor : ${proveedores}" th:text="${proveedor.nombreProveedor}" th:value="${proveedor.id}"></option>
+                                                <option th:each="proveedor : ${proveedores}"
+                                                        th:text="${proveedor.tienda.nombreTienda}"
+                                                        th:value="${proveedor.id}">
+                                                </option>
                                             </select>
                                             <div class="invalid-feedback">Por favor seleccione un proveedor</div>
                                         </div>

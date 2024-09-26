@@ -214,11 +214,11 @@
                                     <!-- select option -->
                                     <div class="col-xl-2 col-md-4 col-12">
                                         <select class="form-select">
-                                            <option selected>Zona</option>
-                                            <option value="Published">Este</option>
-                                            <option value="Unpublished">Oeste</option>
-                                            <option value="Unpublished">Norte</option>
-                                            <option value="Unpublished">Sur</option>
+                                            <option selected>Categoría</option>
+                                            <option value="1">Electrónica y Tecnología</option>
+                                            <option value="2">Salud y Belleza</option>
+                                            <option value="3">Moda y Ropa</option>
+                                            <option value="4">Hogar y Cocina</option>
                                         </select>
                                     </div>
                                 </div>
@@ -245,11 +245,11 @@
                                         </tr>
 
                                         <tr th:each="producto : ${productos}" th:if="${producto.borrado == 0}">
-                                            <td th:text="${producto.nombreProducto}">Nombre del producto</td>
-                                            <td th:text="${producto.idCategoria.nombreCategoria}">Categoría</td>
-                                            <td th:text="${producto.cantidadDisponible}">Cantidad Disponible</td>
-                                            <td th:text="${producto.precio}">Precio</td>
-                                            <td th:text="${producto.idProveedor.nombreProveedor}">Proveedor</td>
+                                            <td class="text-center" th:text="${producto.nombreProducto}">Nombre del producto</td>
+                                            <td class="text-center" th:text="${producto.idCategoria.nombreCategoria}">Categoría</td>
+                                            <td class="text-center" th:text="${producto.cantidadDisponible}">Cantidad Disponible</td>
+                                            <td class="text-center" th:text="${producto.precio}">Precio</td>
+                                            <td class="text-center" th:text="${producto.idProveedor.tienda.nombreTienda}">Proveedor</td>
 
                                             <td>
                                                 <div class="dropdown">

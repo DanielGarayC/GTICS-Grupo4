@@ -111,8 +111,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(value="SELECT COUNT(u.idUsuario) as cantUsuariosActivos FROM Usuario u WHERE u.activo = 1 AND u.idRol = 4", nativeQuery = true)
     CantUsuariosActivos getCantidadActivos();
 
-    @Query(value = "SELECT COUNT(u.idUsuario) as cantUsuariosInactivos FROM Usuario u WHERE u.activo = 0 AND u.idRol = 4", nativeQuery = true)
-    CantUsuariosInactivos getCantidadInactivos();
+    @Query(value = "SELECT COUNT(u.idUsuario) as cantUsuariosRegistrados FROM Usuario u WHERE u.idRol = 4", nativeQuery = true)
+    CantUsuariosRegistrados getCantidadRegistrados();
 
     @Query(value = "SELECT COUNT(u.idUsuario) as cantAgentes FROM Usuario u WHERE u.idRol = 3", nativeQuery = true)
     CantidadAgentes getCantidadAgentes();
