@@ -81,4 +81,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
     @Query(value = "SELECT COUNT(u.idUsuario) as cantAgentes FROM Usuario u WHERE u.idRol = 3", nativeQuery = true)
     CantidadAgentes getCantidadAgentes();
+
+    //Para asignar una solicitud a un usuario
+    @Transactional
+    @Modifying
+    @Query(nativeQuery=true,value="update usuario set idSolicitudAgente = ?1 where idUsuario= ?2")
+    void asignarSolictudAusuario(int idSolicitud,int idUsuario);
 }

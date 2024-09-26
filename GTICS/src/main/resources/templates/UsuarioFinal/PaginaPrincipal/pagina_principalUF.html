@@ -210,7 +210,7 @@
                   <div class="modal-dialog">
                      <div class="modal-content">
                         <!-- modal body -->
-                        <div class="modal-body p-6">
+                        <form class="modal-body p-6" method="post" th:action="@{/UsuarioFinal/solicitudAgente}">
                            <div class="d-flex justify-content-between mb-5">
                               <!-- heading -->
                               <div>
@@ -253,14 +253,17 @@
                               <!-- col -->
                               <div class="col-12">
                                  <label for="direction" class="form-label">Código de jurisdicción </label>
-                                 <input type="text" class="form-control" th:value="${usuario.distrito.codigosJurisdiccion}" aria-label="Dirección" required="" disabled/>
+                                 <input type="text" class="form-control" th:name="codigoJurisdiccion" th:value="${usuario.distrito.codigosJurisdiccion}" aria-label="Dirección" required="" readonly/>
                               </div>
 
                               <!-- col -->
                               <div class="col-12">
                                  <label for="direction" class="form-label">Código de aduana </label>
-                                 <input type="text" class="form-control" placeholder="numeroAleatorio" aria-label="Dirección" required="" />
+                                 <input type="text" class="form-control"  th:name="codigoAduana" value="222" aria-label="Dirección" required="" readonly/> <!--Valor aleatorio, momentaneamente le pongo222-->
                               </div>
+
+
+
 
                            </div>
 
@@ -271,9 +274,9 @@
                            <!-- button -->
                            <div class="col-12 text-end">
                               <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
-                              <button class="btn btn-primary" type="button">Enviar solicitud</button>
+                              <button class="btn btn-primary" type="submit">Enviar solicitud</button>
                            </div>
-                        </div>
+                        </form>
                      </div>
                   </div>
                </div>
