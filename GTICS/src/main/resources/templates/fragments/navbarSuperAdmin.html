@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -38,7 +38,7 @@
                                 <span class="nav-link-text">Usuarios</span>
                             </div>
                         </a>
-                        <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
+                        <div class="collapse" data-bs-parent="#sideNavbar">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
                                     <a class="nav-link" th:classappend="${paginaActiva == 'listaUsuarioFinal'} ? ' active'"
@@ -65,7 +65,7 @@
                                 <span class="nav-link-text">Administrador Zonal</span>
                             </div>
                         </a>
-                        <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
+                        <div class="collapse" data-bs-parent="#sideNavbar">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
                                     <a class="nav-link" th:classappend="${paginaActiva == 'listaAdminZonal'} ? ' active'"
@@ -92,7 +92,7 @@
                                 <span class="nav-link-text">Agente</span>
                             </div>
                         </a>
-                        <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
+                        <div class="collapse" data-bs-parent="#sideNavbar">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
                                     <a class="nav-link" th:classappend="${paginaActiva == 'listaAgente'} ? ' active'"

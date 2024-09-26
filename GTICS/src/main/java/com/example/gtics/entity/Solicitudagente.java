@@ -22,7 +22,7 @@ public class Solicitudagente {
     @Column(name = "codigoJurisdiccion", nullable = false, length = 45)
     private String codigoJurisdiccion;
 
-    @Column(name = "indicadorSolicitud", nullable = false)
+    @Column(name = "indicadorSolicitud", nullable = true)
     private Integer indicadorSolicitud;
 
 }
