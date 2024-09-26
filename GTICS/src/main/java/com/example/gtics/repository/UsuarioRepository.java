@@ -45,6 +45,22 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query("UPDATE Usuario u SET u.baneado = true WHERE u.id = :idUsuario AND u.baneado = false")
     void banUsuario(Integer idUsuario);
 
+    //Actualizar Usuario Final
+    @Transactional
+    @Modifying
+    @Query("UPDATE Usuario u SET u.dni = :dni, u.nombre = :nombre, u.apellidoPaterno = :apellidoPaterno, " +
+            "u.apellidoMaterno = :apellidoMaterno, u.email = :email, u.direccion = :direccion, " +
+            "u.telefono = :telefono, u.distrito.id = :idDistrito WHERE u.id = :idUsuario")
+    void actualizarUsuarioFinal(String dni,
+                                String nombre,
+                                String apellidoPaterno,
+                                String apellidoMaterno,
+                                String email,
+                                String direccion,
+                                String telefono,
+                                Integer idDistrito,
+                                Integer idUsuario);
+
     //Metodo para mostrar solicitudes de agente
     @Query(nativeQuery = true, value = "SELECT * FROM gticsdb.usuario where idSolicitudAgente > 0 and idRol=4 ")
     List<Usuario> mostrarSolicitudesAgente();
