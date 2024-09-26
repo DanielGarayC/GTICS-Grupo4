@@ -485,14 +485,12 @@
                                 <!-- breacrumb -->
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Agente</li>
                                         <li class="breadcrumb-item active" aria-current="page">Agentes</li>
                                     </ol>
                                 </nav>
                             </div>
-                            <div>
-                                <a href="create-customers.html" class="btn btn-primary">Agregar nuevo usuario</a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -514,89 +512,48 @@
                                     <table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
                                         <thead class="bg-light">
                                         <tr>
-                                            <th>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="checkAll" />
-                                                    <label class="form-check-label" for="checkAll"></label>
-                                                </div>
-                                            </th>
+                                            <th></th>
                                             <th>Nombres</th>
-                                            <th>Correo electrónico</th>
-                                            <th>Fecha de registro</th>
-                                            <th>Teléfono</th>
+                                            <th>Apellido paterno</th>
+                                            <th>Apellido materno</th>
                                             <th>DNI</th>
-
+                                            <th>Teléfono</th>
+                                            <th>Correo electrónico</th>
+                                            <th>Razón social</th>
+                                            <th>Código de Despachador Aduanero</th>
+                                            <th>Estado del Código</th>
+                                            <th>Código de Jurisdicción</th>
+                                            <th>Zona</th>
                                             <th></th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerOne" />
-                                                    <label class="form-check-label" for="customerOne"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Bonnie Howe</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>bonniehowe@gmail.com</td>
-
-                                            <td>17 May, 2023 at 3:18pm</td>
-                                            <td>-</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
 
                                         <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerTwo" />
-                                                    <label class="form-check-label" for="customerTwo"></label>
-                                                </div>
-                                            </td>
+
 
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <img th:src="@{/images/avatar/avatar-2.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Judy Nelson</a>
-                                                    </div>
                                                 </div>
                                             </td>
-                                            <td>judynelson@gmail.com</td>
-
-                                            <td>27 April, 2023 at 2:47pm</td>
+                                            <td>
+                                              Adrian
+                                            </td>
+                                            <td>
+                                                Lopez
+                                            </td>
+                                            <td>
+                                                Pascual
+                                            </td>
+                                            <td>71235456</td>
                                             <td>435-239-6436</td>
-                                            <td>71235456</td>
-
+                                            <td>judynelson@gmail.com</td>
+                                            <td>Logística SAC</td>
+                                            <td>987654</td>
+                                            <td>Habilitado</td>
+                                            <td>001</td>
+                                            <td>Norte</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -619,402 +576,8 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerThree" />
-                                                    <label class="form-check-label" for="customerThree"></label>
-                                                </div>
-                                            </td>
 
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-3.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">John Mattox</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>johnmattox@gmail.com</td>
 
-                                            <td>27 April, 2023 at 2:47pm</td>
-                                            <td>347-424-9526</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerFour" />
-                                                    <label class="form-check-label" for="customerFour"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Wayne Rossman</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>waynerossman@gmail.com</td>
-
-                                            <td>27 April, 2023 at 2:47pm</td>
-                                            <td>-</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerFive" />
-                                                    <label class="form-check-label" for="customerFive"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-5.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Rhonda Pinson</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>rhondapinson@gmail.com</td>
-
-                                            <td>18 March, 2023 at 2:47pm</td>
-                                            <td>304-471-8451</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerSix" />
-                                                    <label class="form-check-label" for="customerSix"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-6.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">John Mattox</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>johnmattox@gmail.com</td>
-
-                                            <td>18 March, 2023 at 2:47pm</td>
-                                            <td>410-636-2682</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerSeven" />
-                                                    <label class="form-check-label" for="customerSeven"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-7.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Wayne Rossman</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>waynerossman@gmail.com</td>
-
-                                            <td>18 March, 2023 at 2:47pm</td>
-                                            <td>845-294-6681</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerEight" />
-                                                    <label class="form-check-label" for="customerEight"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-8.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Richard Shelton</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>richarddhelton@jourrapide.com</td>
-
-                                            <td>12 March, 2023 at 9:47am</td>
-                                            <td>313-887-8495</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerNine" />
-                                                    <label class="form-check-label" for="customerNine"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-9.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Stephanie Morales</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>stephaniemorales@gmail.com</td>
-
-                                            <td>22 Feb, 2023 at 9:47pm</td>
-                                            <td>812-682-1588</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerTen" />
-                                                    <label class="form-check-label" for="customerTen"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-10.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Stephanie Morales</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>stephaniemorales@gmail.com</td>
-
-                                            <td>22 Feb, 2023 at 9:47pm</td>
-                                            <td>812-682-1588</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerEleven" />
-                                                    <label class="form-check-label" for="customerEleven"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-11.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Pasquale Kidd</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>pasqualekidd@rhyta.com</td>
-
-                                            <td>22 Feb, 2023 at 9:47pm</td>
-                                            <td>336-396-0658</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>

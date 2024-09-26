@@ -140,7 +140,7 @@ public class SuperAdminController {
         }
         return "redirect:/SuperAdmin/listaAgente";
     }
-
+    @GetMapping("SuperAdmin/CrearAgente")
     public String crearAgente(){
 
         return "SuperAdmin/GestionAgentes/create-agent";
