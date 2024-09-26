@@ -18,12 +18,12 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     // Método personalizado para encontrar usuarios por rol
-    @Query(value = "SELECT * FROM usuario u WHERE u.rol_id = :idRol AND u.baneado = false", nativeQuery = true)
+    @Query(value = "SELECT * FROM usuario u WHERE u.idRol = :idRol AND u.baneado = false", nativeQuery = true)
     List<Usuario> findByIdRol_Id(@Param("idRol") Integer idRol);
 
     @Query(value = "SELECT COUNT(*) " +
             "FROM usuario u " +
-            "WHERE u.rol_id = 2 " +
+            "WHERE u.idRol = 2 " +
             "AND u.zona_id = :zonaId", nativeQuery = true)
     Integer countCoordinadoresByZona(@Param("zonaId") Integer zonaId);
 
@@ -40,7 +40,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
 
     @Query(value = "SELECT * FROM usuario u " +
-            "WHERE u.rol_id = :idRol " +
+            "WHERE u.idRol = :idRol " +
             "AND u.id_agente = :agente " +
             "AND (u.baneado IS NULL OR u.baneado = false)",
             nativeQuery = true)
@@ -113,18 +113,18 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(nativeQuery=true,value="update usuario set idRol = 3 where idUsuario= ?1")
     void actualizarRolAAgente(int idUsuario);
 
-    @Query(value = "SELECT COUNT(u.id_usuario) as cantUsuariosBaneados " +
-            "FROM usuario u WHERE u.baneado = 1 AND u.rol_id = 4", nativeQuery = true)
+    @Query(value = "SELECT COUNT(u.idusuario) as cantUsuariosBaneados " +
+            "FROM usuario u WHERE u.baneado = 1 AND u.idRol = 4", nativeQuery = true)
     CantUsuariosBaneados getCantidadBaneados();
 
-    @Query(value = "SELECT COUNT(u.id_usuario) as cantUsuariosActivos " +
-            "FROM usuario u WHERE u.activo = 1 AND u.rol_id = 4", nativeQuery = true)
+    @Query(value = "SELECT COUNT(u.idusuario) as cantUsuariosActivos " +
+            "FROM usuario u WHERE u.activo = 1 AND u.idRol = 4", nativeQuery = true)
     CantUsuariosActivos getCantidadActivos();
 
-    @Query(value = "SELECT COUNT(u.idUsuario) as cantUsuariosRegistrados FROM Usuario u WHERE u.idRol = 4", nativeQuery = true)
+    @Query(value = "SELECT COUNT(u.idusuario) as cantUsuariosRegistrados FROM usuario u WHERE u.idRol = 4", nativeQuery = true)
     CantUsuariosRegistrados getCantidadRegistrados();
 
-    @Query(value = "SELECT COUNT(u.idUsuario) as cantAgentes FROM Usuario u WHERE u.idRol = 3", nativeQuery = true)
+    @Query(value = "SELECT COUNT(u.idusuario) as cantAgentes FROM usuario u WHERE u.idRol = 3", nativeQuery = true)
     CantidadAgentes getCantidadAgentes();
 
     //Para asignar una solicitud a un usuario
