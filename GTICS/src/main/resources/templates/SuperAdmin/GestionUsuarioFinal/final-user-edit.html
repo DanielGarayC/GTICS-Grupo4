@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta content="Codescandy" name="author">
-	<title>Plantilla base para roles administrativos</title>
+	<title>Editar Usuario</title>
 	<!-- Favicon icon-->
 	<link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
@@ -507,7 +507,7 @@
 
 									<div class="file-upload btn btn-light ms-md-4">
 										<input type="file" class="file-input opacity-0" />
-										Upload Photo
+										Subir Foto
 									</div>
 
 									<span class="ms-md-2">JPG, GIF or PNG. 1MB Max.</span>
@@ -523,7 +523,7 @@
 													DNI:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" id="DNIFinalUser" placeholder="DNI del usuario final" required />
+												<input type="text" class="form-control" id="DNIFinalUser" th:value="${finalUser.get().getDni()}" required />
 												<div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
 											</div>
 										</div>
@@ -534,19 +534,30 @@
 													Nombres:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" id="creatCustomerName" placeholder="Nombre del usuario final" required />
+												<input type="text" class="form-control" id="creatCustomerName" th:value="${finalUser.get().getNombre()}" required />
 												<div class="invalid-feedback">Por favor ingrese los nombres del usuario</div>
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
 											<div>
 												<!-- input -->
-												<label for="creatFinalUserLastName" class="form-label">
-													Apellidos:
+												<label for="creatFinalUserLastName1" class="form-label">
+													Apellido Paterno:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" id="creatFinalUserLastName" placeholder="Apellidos del usuario final" required />
-												<div class="invalid-feedback">Por favor ingrese los apellidos del usuario</div>
+												<input type="text" class="form-control" id="creatFinalUserLastName1" th:value="${finalUser.get().getApellidoPaterno()}" required />
+												<div class="invalid-feedback">Por favor ingrese el apellido paterno del usuario</div>
+											</div>
+										</div>
+										<div class="col-lg-6 col-12">
+											<div>
+												<!-- input -->
+												<label for="creatFinalUserLastName" class="form-label">
+													Apellido materno:
+													<span class="text-danger">*</span>
+												</label>
+												<input type="text" class="form-control" id="creatFinalUserLastName" th:value="${finalUser.get().getApellidoMaterno()}" required />
+												<div class="invalid-feedback">Por favor ingrese el apellido materno del usuario</div>
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
@@ -556,7 +567,7 @@
 													Email
 													<span class="text-danger">*</span>
 												</label>
-												<input type="email" class="form-control" id="creatFinalUserEmail" placeholder="Correo Electrónico" required />
+												<input type="email" class="form-control" id="creatFinalUserEmail" th:value="${finalUser.get().getEmail()}" required />
 												<div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
 											</div>
 										</div>
@@ -564,14 +575,22 @@
 											<div>
 												<!-- input -->
 												<label for="creatFinalUserDirection" class="form-label">Dirección</label>
-												<input type="text" class="form-control" id="creatFinalUserDirection" placeholder="Dirección" required />
+												<input type="text" class="form-control" id="creatFinalUserDirection" th:value="${finalUser.get().getDireccion()}" required />
 												<div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
 											</div>
 										</div>
 
 										<div class="col-lg-6 col-12">
-											<label class="form-label" for="creatFinalUserDate">Distrito</label>
-											<input type="text" class="form-control flatpickr" id="creatFinalUserDate" placeholder="Distrito" required />
+											<label class="form-label" for="creatFinalUserDistrict">Distrito</label>
+											<select class="form-control" id="creatFinalUserDistrict" name="distrito" required>
+												<option value="">Seleccione un distrito</option>
+												<option th:each="distrito : ${listaDistritos}"
+														th:value="${distrito.getId()}"
+														th:text="${distrito.getNombre()}"
+														th:selected="${distrito.getNombre() == finalUser.get().getDistrito().getNombre()}">
+													[Nombre del Distrito]
+												</option>
+											</select>
 											<div class="invalid-feedback">Por favor ingrese un distrito</div>
 										</div>
 										<div>

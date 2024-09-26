@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -191,7 +191,7 @@
                                 <!-- breacrumb -->
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="dashboard-superadmin.html" class="text-inherit">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a th:href="@{/SuperAdmin/listaSolicitudesAgentes}" class="text-inherit">Dashboard</a></li>
                                         <li class="breadcrumb-item " aria-current="page">Solicitudes</li>
                                     </ol>
                                 </nav>
@@ -232,12 +232,8 @@
                                     <table class="table table-centered table-hover mb-0 text-nowrap table-borderless table-with-checkbox">
                                         <thead class="bg-light">
                                         <tr>
-                                            <th>
-                                                <div class="form-check">
 
-                                                </div>
-                                            </th>
-                                            <th></th>
+
                                             <th>Número de solicitud</th>
                                             <th>Nombres</th>
                                             <th>Apellidos</th>
@@ -249,23 +245,17 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="categoryOne" />
-                                                    <label class="form-check-label" for="categoryOne"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a href="#!"><img th:src="@{/images/icons/snacks.svg}" alt="" class="icon-shape icon-sm" /></a>
-                                            </td>
-                                            <td>1</td>
-                                            <td>Ricardo</td>
-                                            <td>Calderón</td>
-                                            <td>71761570</td>
-                                            <td>952530495</td>
-                                            <td>
-                                                <span class="badge bg-light-primary text-dark-primary">Directa</span>
+                                        <tr th:each="usuario,var : ${listaUsuariosSolicitudes}">
+
+                                            <td th:text="${var.index+1}"></td>
+                                            <td th:text="${usuario.nombre}"></td>
+                                            <td th:text="${usuario.apellidoPaterno} + ' '+ ${usuario.apellidoMaterno}"></td>
+                                            <td th:text="${usuario.dni}"></td>
+                                            <td th:text="${usuario.telefono}"></td>
+                                            <td th:switch="${usuario.idSolicitudAgente.indicadorSolicitud}">
+                                                <span th:case="0" class="badge bg-light-primary text-dark-primary">Directa</span>
+                                                <span th:case="1" class="badge bg-light-info text-dark-info">Por coordinador</span>
+
                                             </td>
                                             <td>
                                                 <div class="dropdown">
@@ -276,11 +266,11 @@
                                                         <li>
                                                             <a class="dropdown-item" href="#" onclick="confirmDelete()">
                                                                 <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
+                                                                Rechazar
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a class="dropdown-item" href="#">
+                                                            <a class="dropdown-item" th:href="@{'/SuperAdmin/cambiarRolaAgente?id=' + ${usuario.getId()}}">
                                                                 <i class="bi bi-check-circle me-3"></i> <!-- Icono de aceptar -->
                                                                 Aceptar
                                                             </a>
@@ -300,64 +290,13 @@
                                         </tr>
 
 
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="categoryFive" />
-                                                    <label class="form-check-label" for="categoryFive"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a href="#!"><img th:src="@{/images/icons/toiletries.svg}" alt="" class="icon-shape icon-sm" /></a>
-                                            </td>
-                                            <td>1</td>
-                                            <td>Ricardo</td>
-                                            <td>Calderón</td>
-                                            <td>71761570</td>
-                                            <td>952530495</td>
-                                            <td>
-                                                <span class="badge bg-light-danger text-dark-danger">Por coordinador</span></td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-check-circle me-3"></i> <!-- Icono de aceptar -->
-                                                                Aceptar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-person me-3"></i> <!-- Icono de usuario individual -->
-                                                                Ver Usuario
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-person-badge me-3"></i> <!-- Icono de coordinador o líder -->
-                                                                Ver Coordinador
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
+
 
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <div class="border-top d-flex justify-content-between align-items-md-center px-6 py-6 flex-md-row flex-column gap-4">
-                                <span>Mostrando 1 a 8 de 12 entradas</span>
                                 <nav>
                                     <ul class="pagination mb-0">
                                         <li class="page-item disabled"><a class="page-link" href="#!">Previo</a></li>
