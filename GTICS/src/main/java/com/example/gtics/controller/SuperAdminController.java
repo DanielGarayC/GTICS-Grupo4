@@ -248,9 +248,10 @@ public class SuperAdminController {
 
         return "SuperAdmin/GestionUsuarioFinal/create-final-user";
     }
-    @GetMapping("SuperAdmin/editarUsuarioFinal")
-    public String editarUsuarioFinal(){
-
+    @GetMapping("SuperAdmin/editarUsuarioFinal/{id}")
+    public String editarUsuarioFinal(Model model, @PathVariable("id") Integer idUsuarioFinal){
+        Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
+        model.addAttribute("finalUser", finalUser);
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
     }
 
