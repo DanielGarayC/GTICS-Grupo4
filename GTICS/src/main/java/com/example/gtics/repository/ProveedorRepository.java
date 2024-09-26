@@ -13,7 +13,7 @@ import java.util.List;
 public interface ProveedorRepository extends JpaRepository<Proveedor, Integer> {
 
     //Proveedores más solicitados LISTO
-    @Query(value ="SELECT p.nombreProveedor, SUM(CAST(prod.cantVentas AS SIGNED)) as totalVentas\n" +
+    @Query(value ="SELECT p.nombreProveedor, SUM(prod.cantVentas) as totalVentas\n" +
             "FROM proveedor p\n" +
             "         JOIN producto prod ON p.idProveedor = prod.idProveedor\n" +
             "GROUP BY p.nombreProveedor\n" +

@@ -50,6 +50,7 @@ public class SuperAdminController {
         model.addAttribute("OrdenesPorEstado", ordenRepository.getOrdenesEstado());
         // Productos mas importantes (10), entity producto
         model.addAttribute("ProductosMasImportados", productoRepository.findProductosRelevantes());
+        model.addAttribute("TotalVentas", productoRepository.getCantidadProductos());
         // Proveedores mas solicitados, entity: usuario
         model.addAttribute("ProveedoresMasSolicitados", proveedorRepository.findProveedoresMasSolicitados());
         // Proveedores con peores comentarios, entity: usuario
