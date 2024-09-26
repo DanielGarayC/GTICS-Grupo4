@@ -80,7 +80,7 @@ public class AgenteController {
         if (optUsuario.isPresent()) {
             Usuario usuario = optUsuario.get();
 
-            usuario.setBaneado((byte) 1);
+            usuario.setBaneado((true) );
             usuarioRepository.save(usuario);
 
             redirectAttributes.addFlashAttribute("successMessage", "El usuario ha sido baneado éxitosamente.");
