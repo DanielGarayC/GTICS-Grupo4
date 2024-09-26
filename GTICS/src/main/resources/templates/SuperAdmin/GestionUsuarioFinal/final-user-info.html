@@ -182,7 +182,7 @@
           <div class="col-md-12">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
               <div>
-                <h2>Editar Usuario Final</h2>
+                <h2>Info Usuario Final</h2>
                 <!-- breacrumb -->
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb mb-0">
@@ -197,70 +197,75 @@
             </div>
           </div>
         </div>
-        <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-          <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="row" style="min-height: 100vh;">
+          <div class="col-12">
             <div class="card card-lg border-0">
               <div class="card-body d-flex flex-column gap-8 p-7">
-                  <div class="d-flex flex-column gap-4">
-                    <h4 class="mb-0 h6">Información del usuario final</h4>
-                    <div class="col-12">
-                      <label for="DNIFinalUser" class="form-label">
-                        DNI:
-                      </label>
+                <div class="d-flex flex-column gap-4">
+                  <h4 class="mb-0 h5">Información del usuario final</h4>
+
+                  <div class="row">
+                    <div class="col-lg-6 col-12">
+                      <label for="DNIFinalUser" class="form-label">DNI:</label>
                       <input type="text" class="form-control" id="DNIFinalUser" disabled th:value="${finalUser.get().getDni()}" required />
                       <div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
                     </div>
-                    <div class="col-12">
-                      <label for="creatCustomerName" class="form-label">
-                        Nombres:
-                      </label>
+
+                    <div class="col-lg-6 col-12">
+                      <label for="creatCustomerName" class="form-label">Nombres:</label>
                       <input type="text" class="form-control" id="creatCustomerName" disabled th:value="${finalUser.get().getNombre()}" required />
                       <div class="invalid-feedback">Por favor ingrese los nombres del usuario</div>
                     </div>
-                    <div class="col-12">
-                      <label for="creatFinalUserLastName1" class="form-label">
-                        Apellido Paterno:
-                      </label>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-6 col-12">
+                      <label for="creatFinalUserLastName1" class="form-label">Apellido Paterno:</label>
                       <input type="text" class="form-control" disabled id="creatFinalUserLastName1" th:value="${finalUser.get().getApellidoPaterno()}" required />
                       <div class="invalid-feedback">Por favor ingrese el apellido paterno del usuario</div>
                     </div>
-                    <div class="col-12">
-                      <label for="creatFinalUserLastName" class="form-label">
-                        Apellido Materno:
-                      </label>
+
+                    <div class="col-lg-6 col-12">
+                      <label for="creatFinalUserLastName" class="form-label">Apellido Materno:</label>
                       <input type="text" class="form-control" disabled id="creatFinalUserLastName" th:value="${finalUser.get().getApellidoMaterno()}" required />
                       <div class="invalid-feedback">Por favor ingrese el apellido materno del usuario</div>
                     </div>
-                    <div class="col-12">
-                      <label for="creatFinalUserEmail" class="form-label">
-                        Email:
-                      </label>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-6 col-12">
+                      <label for="creatFinalUserEmail" class="form-label">Email:</label>
                       <input type="email" class="form-control" disabled id="creatFinalUserEmail" th:value="${finalUser.get().getEmail()}" required />
                       <div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
                     </div>
-                    <div class="col-12">
-                      <label for="creatFinalUserDirection" class="form-label">Dirección</label>
+
+                    <div class="col-lg-6 col-12">
+                      <label for="creatFinalUserDirection" class="form-label">Dirección:</label>
                       <input type="text" class="form-control" disabled id="creatFinalUserDirection" th:value="${finalUser.get().getDireccion()}" required />
                       <div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
                     </div>
+                  </div>
 
-                    <div class="col-12">
-                      <label for="creatFinalUserPhone" class="form-label">Telefóno</label>
+                  <div class="row">
+                    <div class="col-lg-6 col-12">
+                      <label for="creatFinalUserPhone" class="form-label">Teléfono:</label>
                       <input type="text" disabled class="form-control" id="creatFinalUserPhone" th:value="${finalUser.get().getTelefono()}" required />
                       <div class="invalid-feedback">Por favor ingrese el número de teléfono</div>
                     </div>
-                    <div class="col-12">
-                      <label class="form-label" for="creatFinalUserDistrict">Distrito</label>
+
+                    <div class="col-lg-6 col-12">
+                      <label class="form-label" for="creatFinalUserDistrict">Distrito:</label>
                       <input type="text" disabled class="form-control" id="creatFinalUserDistrict" th:value="${finalUser.get().getDistrito().getNombre()}" required />
                       <div class="invalid-feedback">Por favor ingrese un distrito</div>
                     </div>
+                  </div>
 
-                    <div class="col-12 mt-3">
-                      <div class="d-flex flex-column flex-md-row gap-2">
-                        <button class="btn btn-secondary" th:href="@{/SuperAdmin/listaUsuarioFinal}" >Regresar</button>
-                      </div>
+                  <div class="col-12 mt-3">
+                    <div class="d-flex flex-column flex-md-row gap-2">
+                      <button class="btn btn-secondary" th:href="@{/SuperAdmin/listaUsuarioFinal}">Regresar</button>
                     </div>
                   </div>
+                </div>
               </div>
             </div>
           </div>
