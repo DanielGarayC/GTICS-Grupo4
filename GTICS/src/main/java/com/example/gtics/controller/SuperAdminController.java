@@ -18,40 +18,51 @@ public class SuperAdminController {
 
     private final UsuarioRepository usuarioRepository;
     private final ZonaRepository zonaRepository;
-    private final DashboardRepository dashboardRepository;
+    
     private final RolRepository rolRepository;
 
-    public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository, DashboardRepository dashboardRepository,
+    private final ProveedorRepository proveedorRepository;
+
+    public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository,
                                 RolRepository rolRepository,
-                                DistritoRepository distritoRepository) {
+                                DistritoRepository distritoRepository, ProveedorRepository proveedorRepository,
+                                ProductoRepository productoRepository,
+                                OrdenRepository ordenRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
-        this.dashboardRepository = dashboardRepository;
         this.rolRepository = rolRepository;
         this.distritoRepository = distritoRepository;
+        this.proveedorRepository = proveedorRepository;
+        this.productoRepository = productoRepository;
+        this.ordenRepository = ordenRepository;
     }
 
 
     private final DistritoRepository distritoRepository;
+    private final ProductoRepository productoRepository;
+    private final OrdenRepository ordenRepository;
 
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
     public String dashboard(){
-        //Cantidad de ordenes por mes
-
+       //Cantidad de ordenes por mes
+        model.addAttribute("OrdenesPormes", ordenRepository.getOrdenesMes());
         // Cantidad de ordenes por estado de seguimiento
-
+        model.addAttribute("OrdenesPorEstado", ordenRepository.getOrdenesEstado());
         // Productos mas importantes (10), entity producto
-
+        model.addAttribute("ProductosMasImportados", productoRepository.findProductosRelevantes());
         // Proveedores mas solicitados, entity: usuario
-
+        model.addAttribute("ProveedoresMasSolicitados", proveedorRepository.findProveedoresMasSolicitados());
         // Proveedores con peores comentarios, entity: usuario
-
-        // Cantidad de agentes //Cantidad de usuarios registrados vs activos
-
+        model.addAttribute("PeoresProveedores", proveedorRepository.findProveedoresPorCalidadASC());
+        // Cantidad de agentes
+        model.addAttribute("CantidadAgentes", usuarioRepository.getCantidadAgentes());
+        // Cantidad de usuarios inactivos vs activos
+        model.addAttribute("CantidadUsuariosInactivos",usuarioRepository.getCantidadInactivos());
+        model.addAttribute("CantidadUsuariosActivos", usuarioRepository.getCantidadActivos());
         // Cantidad de usuarios baneados
-
+        model.addAttribute("CantidadUsuariosBaneados", usuarioRepository.getCantidadBaneados());
         // Cantidad de proveedores baneados
-
+        model.addAttribute("CantidadProveedoresBaneados", proveedorRepository.countProveedoresBaneados());
         return "SuperAdmin/Dashboard/dashboard-superadmin";
     }
     @GetMapping("SuperAdmin/listaAdminZonal")
