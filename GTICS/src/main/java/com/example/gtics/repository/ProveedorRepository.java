@@ -1,6 +1,7 @@
 package com.example.gtics.repository;
 
 import com.example.gtics.dto.FindProveedoresMasSolicitados;
+import com.example.gtics.dto.FindProveedoresPorCalidad;
 import com.example.gtics.dto.FindProveeodresBaneados;
 import com.example.gtics.entity.Proveedor;
 import org.springframework.data.jpa.repository.JpaRepository;
