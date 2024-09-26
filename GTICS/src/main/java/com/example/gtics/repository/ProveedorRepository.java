@@ -17,7 +17,7 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Integer> {
             "FROM proveedor p\n" +
             "         JOIN producto prod ON p.idProveedor = prod.idProveedor\n" +
             "GROUP BY p.nombreProveedor\n" +
-            "ORDER BY totalVentas DESC;", nativeQuery = true)
+            "ORDER BY totalVentas DESC LIMIT 5;", nativeQuery = true)
     List<FindProveedoresMasSolicitados> findProveedoresMasSolicitados();
 
     // Cantidad de proveedores baneados LISTO
@@ -28,6 +28,6 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Integer> {
             "          JOIN Producto prod ON p.idProveedor = prod.idProveedor\n" +
             "        JOIN Resena r ON r.idProducto = prod.idProducto\n" +
             "      JOIN Calidad c ON r.idCalidad = c.idCalidad\n" +
-            "     GROUP BY p.nombreProveedor ORDER BY promedioCalidad ASC", nativeQuery = true)
+            "     GROUP BY p.nombreProveedor ORDER BY promedioCalidad ASC LIMIT 5", nativeQuery = true)
     List<FindProveedoresMasSolicitados> findProveedoresPorCalidadASC();
 }
