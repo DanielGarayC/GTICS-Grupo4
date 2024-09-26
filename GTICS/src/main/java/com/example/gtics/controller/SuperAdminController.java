@@ -2,6 +2,9 @@ package com.example.gtics.controller;
 
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +35,7 @@ public class SuperAdminController {
                                 CategoriaRepository categoriaRepository,
                                 SubcategoriaRepository subcategoriaRepository,
                                 ProductoZonaRepository productoZonaRepository,
-                               TiendaRepository tiendaRepository) {
+                                TiendaRepository tiendaRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
         this.rolRepository = rolRepository;
@@ -43,6 +46,7 @@ public class SuperAdminController {
         this.categoriaRepository = categoriaRepository;
         this.subcategoriaRepository = subcategoriaRepository;
         this.productoZonaRepository = productoZonaRepository;
+        this.tiendaRepository=tiendaRepository;
     }
 
 
@@ -52,7 +56,7 @@ public class SuperAdminController {
 
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
     public String dashboard(Model model){
-       //Cantidad de ordenes por mes
+        //Cantidad de ordenes por mes
         model.addAttribute("OrdenesPormes", ordenRepository.getOrdenesMes());
         // Cantidad de ordenes por estado de seguimiento
         model.addAttribute("OrdenesPorEstado", ordenRepository.getOrdenesEstado());
@@ -517,7 +521,7 @@ public class SuperAdminController {
         model.addAttribute("productos", listaProductos);
         return "SuperAdmin/productos";
     }
-     //
+    //
     @GetMapping("SuperAdmin/proveedores")
     public String proveedores(Model model,
                               @RequestParam(defaultValue = "0") int page){
@@ -644,7 +648,7 @@ public class SuperAdminController {
         // Redirigir a la lista de proveedores después de guardar
         return "redirect:/SuperAdmin/listaProveedores";
     }
-    /
+
 
     @GetMapping("SuperAdmin/perfil")
     public String añadirCategoria(){
