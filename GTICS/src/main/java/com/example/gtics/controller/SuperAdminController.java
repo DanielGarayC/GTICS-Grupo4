@@ -257,6 +257,8 @@ public class SuperAdminController {
     @GetMapping("SuperAdmin/editarUsuarioFinal/{id}")
     public String editarUsuarioFinal(Model model, @PathVariable("id") Integer idUsuarioFinal){
         Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
+        List<Distrito> listaDistritos = distritoRepository.findAll();
+        model.addAttribute("listaDistritos", listaDistritos);
         model.addAttribute("finalUser", finalUser);
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
     }

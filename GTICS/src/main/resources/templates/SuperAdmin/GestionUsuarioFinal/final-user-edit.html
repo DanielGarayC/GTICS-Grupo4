@@ -581,8 +581,16 @@
 										</div>
 
 										<div class="col-lg-6 col-12">
-											<label class="form-label" for="creatFinalUserDate">Distrito</label>
-											<input type="text" class="form-control flatpickr" id="creatFinalUserDate" th:value="${finalUser.get().getDistrito().getNombre()}" required />
+											<label class="form-label" for="creatFinalUserDistrict">Distrito</label>
+											<select class="form-control" id="creatFinalUserDistrict" name="distrito" required>
+												<option value="">Seleccione un distrito</option>
+												<option th:each="distrito : ${listaDistritos}"
+														th:value="${distrito.getId()}"
+														th:text="${distrito.getNombre()}"
+														th:selected="${distrito.getNombre() == finalUser.get().getDistrito().getNombre()}">
+													[Nombre del Distrito]
+												</option>
+											</select>
 											<div class="invalid-feedback">Por favor ingrese un distrito</div>
 										</div>
 										<div>
