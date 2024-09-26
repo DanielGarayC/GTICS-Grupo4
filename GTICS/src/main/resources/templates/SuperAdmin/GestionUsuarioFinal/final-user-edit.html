@@ -201,14 +201,14 @@
 					<div class="col-lg-8 col-md-10 col-sm-12">
 						<div class="card card-lg border-0">
 							<div class="card-body d-flex flex-column gap-8 p-7">
-								<form class="row g-3 needs-validation" novalidate method="post" enctype="multipart/form-data" th:action="@{/SuperAdmin/Actualizar/{id}(id=${finalUser.get().getId()})}">
+								<form class="row g-3 needs-validation" novalidate method="post"  th:action="@{/SuperAdmin/Actualizar/{id}(id=${finalUser.get().getId()})}">
 									<div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
 										<div>
 											<img class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/placeholder-img.jpg}" alt="Image" />
 										</div>
 
 										<div class="file-upload btn btn-light ms-md-4">
-											<input type="file" name="foto" class="file-input opacity-0" />
+											<input type="file" class="file-input opacity-0" />
 											Subir Foto
 										</div>
 
