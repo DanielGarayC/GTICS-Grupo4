@@ -253,6 +253,35 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAgentes/agent-request";
     }
 
+    @GetMapping("/SuperAdmin/rechazarSolicitudAgente")
+    public String RechazarSolicitudAgente(@RequestParam Integer id,
+                                          RedirectAttributes redirectAttributes) {
+
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+
+        if (optUsuario.isPresent()) {
+
+            Usuario usuario = optUsuario.get();
+
+            usuario.setIdSolicitudAgente(null);
+            usuarioRepository.save(usuario);
+
+            redirectAttributes.addFlashAttribute("successMessage", "El usuario ha sido rechazado éxitosamente.");
+
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+
+        }else {
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+        }
+
+    }
+
+
+
+
+
+
+
     @GetMapping("SuperAdmin/cambiarRolaAgente")
     public String cambiarRolaAgente(Model model,@RequestParam("id") Integer id){
 
