@@ -171,11 +171,12 @@ public class SuperAdminController {
 
         return "SuperAdmin/GestionAgentes/agent-list";
     }
+
     @GetMapping("SuperAdmin/editarAgente/{id}")
     public String editarAgente(@PathVariable("id") Integer id, Model model){
         try {
             Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
-            if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 2){
+            if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 3){
                 model.addAttribute("agente",optionalAgente.get());
             } else {
                 model.addAttribute("error","Agente no encontrado o el rol no es válido");

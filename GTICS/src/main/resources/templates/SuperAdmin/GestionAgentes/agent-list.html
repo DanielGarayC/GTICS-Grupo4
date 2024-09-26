@@ -211,11 +211,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}">
+
+                            </div>
+                            <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
+
+                            </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
                                     <table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
+
                                         <thead class="bg-light">
-                                        <tr>
+                                        <tr >
                                             <th></th>
                                             <th>Nombres</th>
                                             <th>Apellido paterno</th>
@@ -233,7 +240,7 @@
                                         </thead>
                                         <tbody>
 
-                                        <tr>
+                                        <tr th:each="agente : ${agentes}">
 
 
                                             <td>
@@ -241,23 +248,17 @@
                                                     <img th:src="@{/images/avatar/avatar-2.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
                                                 </div>
                                             </td>
-                                            <td>
-                                              Adrian
-                                            </td>
-                                            <td>
-                                                Lopez
-                                            </td>
-                                            <td>
-                                                Pascual
-                                            </td>
-                                            <td>71235456</td>
-                                            <td>435-239-6436</td>
-                                            <td>judynelson@gmail.com</td>
-                                            <td>Logística SAC</td>
-                                            <td>987654</td>
-                                            <td>Habilitado</td>
-                                            <td>001</td>
-                                            <td>Norte</td>
+                                            <td th:text="${agente.nombre}"></td>
+                                            <td th:text="${agente.apellidoPaterno}"></td>
+                                            <td th:text="${agente.apellidoMaterno}"></td>
+                                            <td th:text="${agente.dni}"></td>
+                                            <td th:text="${agente.telefono}"> </td>
+                                            <td th:text="${agente.email}"> </td>
+                                            <td th:text="${agente.agtRazonsocial != null ? agente.agtRazonsocial : '-'}"> </td>
+                                            <td th:text="${agente.agtCodigoaduana != null ? agente.agtCodigoaduana : '-'}"> </td>
+                                            <td >Habilitado</td>
+                                            <td th:text="${agente.agtCodigojurisdiccion != null ? agente.agtCodigojurisdiccion : '-'}"></td>
+                                            <td th:text="${agente.zona.getNombreZona() != null ? agente.zona.getNombreZona() : '-'}">Norte</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -265,17 +266,18 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
+                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/editarAgente/{id}(id=${agente.id})}">
+                                                                <i class="bi bi-pencil-square me-3"></i>
+                                                                Editar
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="javascript:void(0);" th:onclick="'confirmDelete(' + ${agente.id} + ')'">
                                                                 <i class="bi bi-trash me-3"></i>
                                                                 Eliminar
                                                             </a>
                                                         </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
+
                                                     </ul>
                                                 </div>
                                             </td>
@@ -336,7 +338,7 @@ function confirmDelete() {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Aquí puedes poner la lógica para eliminar el elemento
+            window.location.href = `/AdminZonal/eliminar?id=${id}`;
             Swal.fire(
                 '¡Eliminado!',
                 'El elemento ha sido eliminado con éxito.',
