@@ -47,7 +47,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Modifying
     @Query(nativeQuery=true,value="update usuario set idRol = 3 where idUsuario= ?1")
     void actualizarRolAAgente(int idUsuario);
-    
+
     @Query(value = "SELECT COUNT(u.idUsuario) as cantUsuariosBaneados FROM Usuario u WHERE u.baneado = 1 AND u.idRol = 4", nativeQuery = true)
     CantUsuariosBaneados getCantidadBaneados();
 
