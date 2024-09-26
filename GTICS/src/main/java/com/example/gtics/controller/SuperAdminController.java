@@ -296,13 +296,17 @@ public class SuperAdminController {
 
 
     @GetMapping("SuperAdmin/listaSolicitudesAgentes")
-    public String listaSolicitudesAgentes(Model model){
+    public String listaSolicitudesAgentes(Model model) {
+        // Realiza la consulta que devuelve los datos con los estados aleatorios
+        List<Object[]> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesConEstadosAleatorios();
 
-        List<Usuario> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesAgente();
-        model.addAttribute("listaUsuariosSolicitudes",listaUsuariosSolicitudes);
+        // Añadir la lista de solicitudes al modelo
+        model.addAttribute("listaUsuariosSolicitudes", listaUsuariosSolicitudes);
 
+        // Redireccionar a la vista correspondiente
         return "SuperAdmin/GestionAgentes/agent-request";
     }
+
 
     @GetMapping("/SuperAdmin/rechazarSolicitudAgente")
     public String RechazarSolicitudAgente(@RequestParam Integer id,

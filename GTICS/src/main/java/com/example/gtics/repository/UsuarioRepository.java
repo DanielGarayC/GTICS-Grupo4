@@ -62,8 +62,33 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
                                 Integer idUsuario);
 
     //Metodo para mostrar solicitudes de agente
-    @Query(nativeQuery = true, value = "SELECT * FROM gticsdb.usuario where idSolicitudAgente > 0 and idRol=4 ")
-    List<Usuario> mostrarSolicitudesAgente();
+    @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
+            "u.idSolicitudAgente AS solicitudId, s.indicadorSolicitud, " +
+            "u.agt_codigoaduana, " +
+            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "WHEN 1 THEN 'Habilitado' " +
+            "WHEN 2 THEN 'Multado' " +
+            "WHEN 3 THEN 'Cancelado' " +
+            "WHEN 4 THEN 'Suspendido' " +
+            "WHEN 5 THEN 'Anulado de jurisdicción' " +
+            "END AS estadoCodigoAduana, " +
+            "u.agt_codigojurisdiccion, " +
+            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "WHEN 1 THEN 'Habilitado' " +
+            "WHEN 2 THEN 'Multado' " +
+            "WHEN 3 THEN 'Cancelado' " +
+            "WHEN 4 THEN 'Suspendido' " +
+            "WHEN 5 THEN 'Anulado de jurisdicción' " +
+            "END AS estadoCodigoJurisdiccion, " +
+            "z.nombrezona " +
+            "FROM usuario u " +
+            "LEFT JOIN solicitudagente s ON u.idSolicitudAgente = s.idSolicitudAgente " +
+            "JOIN zona z ON u.idzona = z.idzona " +
+            "WHERE u.idSolicitudAgente > 0 AND u.idRol = 4 " +
+            "GROUP BY u.idusuario, u.idSolicitudAgente")
+    List<Object[]> mostrarSolicitudesConEstadosAleatorios();
+
+
 
     @Transactional
     @Modifying
