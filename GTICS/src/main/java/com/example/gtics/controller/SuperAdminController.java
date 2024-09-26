@@ -56,8 +56,8 @@ public class SuperAdminController {
 
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
     public String dashboard(Model model){
-        //Cantidad de ordenes por mes
-        model.addAttribute("OrdenesPormes", ordenRepository.getOrdenesMes());
+       //Cantidad de ordenes por mes
+        model.addAttribute("ordenesPorMes", ordenRepository.getOrdenesMes());
         // Cantidad de ordenes por estado de seguimiento
         model.addAttribute("OrdenesPorEstado", ordenRepository.getOrdenesEstado());
         // Productos mas importantes (10), entity producto
@@ -70,7 +70,7 @@ public class SuperAdminController {
         // Cantidad de agentes
         model.addAttribute("CantidadAgentes", usuarioRepository.getCantidadAgentes());
         // Cantidad de usuarios inactivos vs activos
-        model.addAttribute("CantidadUsuariosInactivos",usuarioRepository.getCantidadInactivos());
+        model.addAttribute("CantidadUsuariosRegistrados",usuarioRepository.getCantidadRegistrados());
         model.addAttribute("CantidadUsuariosActivos", usuarioRepository.getCantidadActivos());
         // Cantidad de usuarios baneados
         model.addAttribute("CantidadUsuariosBaneados", usuarioRepository.getCantidadBaneados());
