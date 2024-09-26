@@ -20,6 +20,5 @@ public class Subcategoria {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idCategoria", nullable = false)
-    private Categoria idCategoria;
-
+    private Categoria categoria;
 }

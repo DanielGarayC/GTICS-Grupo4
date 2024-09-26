@@ -389,12 +389,18 @@ public class SuperAdminController {
     }
 
     @GetMapping("SuperAdmin/agregarProducto")
-    public String agregarProducto(Model model) {
+    public String agregarProducto(Model model, @RequestParam(value = "idCategoria", required = false) Integer idCategoria) {
         Producto producto = new Producto();
         List<Categoria> categorias = categoriaRepository.findAll();
         List<Proveedor> proveedores = proveedorRepository.findAll();
         List<Zona> zonas = zonaRepository.findAll();
-        List<Subcategoria> subcategorias = subcategoriaRepository.findAll();
+        List<Subcategoria> subcategorias;
+
+        if (idCategoria != null) {
+            subcategorias = subcategoriaRepository.findByCategoria_Id(idCategoria);
+        } else {
+            subcategorias = List.of();
+        }
 
         // Inicializar la lista de productoZonas para evitar que sea null
         Map<Integer, ProductoZona> productoZonas = new HashMap<>();
@@ -408,6 +414,7 @@ public class SuperAdminController {
 
         return "SuperAdmin/add-product";
     }
+
 
     @PostMapping("/SuperAdmin/guardarProducto")
     public String guardarProducto(@ModelAttribute("producto") Producto producto,

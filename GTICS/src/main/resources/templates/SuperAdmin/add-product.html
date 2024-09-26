@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="Codescandy" name="author">
-    <title>Plantilla base para roles administrativos</title>
+    <title>Agregar Producto</title>
     <!-- Favicon icon-->
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
@@ -18,6 +18,18 @@
 
     <!-- Theme CSS -->
     <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+
+    <style>
+
+        .logoImagen{
+            height: 80px;
+            width: 250px;
+        }
+        .logoImagenCelulares{
+            height: 80px;
+            width: 220px;
+        }
+    </style>
 </head>
 
 <body>
@@ -159,322 +171,12 @@
 
 
     <div class="main-wrapper">
-        <!-- navbar vertical (para pc)-->
+
         <!-- navbar -->
-        <nav class="navbar-vertical-nav d-none d-xl-block">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.svg}" alt="" />
-                    </a>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column" id="sideNavbar">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-                                    <span class="nav-link-text">DashBoard</span>
-                                </div>
-                            </a>
-                        </li>
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('productos')"></div>
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('productos')"></div>
 
-
-
-
-                        <li class="nav-item mt-6 mb-3">
-                            <span class="nav-label">Opciones</span>
-                        </li>
-
-                        <!-- Desplegable de los Clientes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link collapsed"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navCustomer"
-                                    aria-expanded="false"
-                                    aria-controls="navCustomer"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-people"></i></span>
-                                    <span class="nav-link-text">Usuarios</span>
-                                </div>
-                            </a>
-                            <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- Desplegable de los Administradores Zonales-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAdminZonal"
-                                    aria-expanded="false"
-                                    aria-controls="navAdminZonal"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
-                                    <span class="nav-link-text">Administrador Zonal</span>
-                                </div>
-                            </a>
-                            <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Agentes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    x              href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAgent"
-                                    aria-expanded="false"
-                                    aria-controls="navAgent"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
-                                    <span class="nav-link-text">Agente</span>
-                                </div>
-                            </a>
-                            <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Proveedores-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-                                    <span class="nav-link-text">Proveedores</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <!-- Opción de los productor-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/categorias}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-                                    <span class="nav-link-text">Inventario de productos</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-                        <!-- Opción de solicitudes de Agente-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-                                    <span class="nav-link-text">Solicitudes para Agente</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5 d-flex justify-content-between align-items-center">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.svg}" alt="" />
-                    </a>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-                                    <span class="nav-link-text">DashBoard</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-                        <li class="nav-item mt-6 mb-3">
-                            <span class="nav-label">Opciones</span>
-                        </li>
-
-                        <!-- Desplegable de los Clientes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link collapsed"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navCustomer"
-                                    aria-expanded="false"
-                                    aria-controls="navCustomer"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-people"></i></span>
-                                    <span class="nav-link-text">Usuarios</span>
-                                </div>
-                            </a>
-                            <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- Desplegable de los Administradores Zonales-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAdminZonal"
-                                    aria-expanded="false"
-                                    aria-controls="navAdminZonal"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
-                                    <span class="nav-link-text">Administrador Zonal</span>
-                                </div>
-                            </a>
-                            <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Agentes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    x              href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAgent"
-                                    aria-expanded="false"
-                                    aria-controls="navAgent"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
-                                    <span class="nav-link-text">Agente</span>
-                                </div>
-                            </a>
-                            <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Proveedores-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-                                    <span class="nav-link-text">Proveedores</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <!-- Opción de los productor-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/categorias}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-                                    <span class="nav-link-text">Inventario de productos</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-                        <!-- Opción de solicitudes de Agente-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-                                    <span class="nav-link-text">Solicitudes para Agente</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <!-- COONTENIDO DE LA PAGINA -->
+        <!-- CONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">
             <!-- container -->
             <div class="container">
@@ -540,12 +242,12 @@
                                             </select>
                                             <div class="invalid-feedback">Por favor seleccione una categoría</div>
                                         </div>
+
                                         <!-- Subcategoría (se cargará según la categoría seleccionada) -->
                                         <div class="mb-3 col-lg-6">
                                             <label for="selectSubcategoria" class="form-label">Subcategoría</label>
                                             <select class="form-select" name="idSubcategoria" id="selectSubcategoria" required>
                                                 <option value="" selected disabled>--Seleccione una subcategoría--</option>
-                                                <option th:each="subcategoria : ${subcategorias}" th:text="${subcategoria.nombreSubcategoria}" th:value="${subcategoria.id}"></option>
                                             </select>
                                             <div class="invalid-feedback">Por favor seleccione una subcategoría</div>
                                         </div>
@@ -609,7 +311,7 @@
                                             <button class="btn btn-primary" type="submit">Crear Producto</button>
                                             <a th:href="@{/SuperAdmin/productos}" class="btn btn-secondary">Cancelar</a>
                                         </div>
-                                    </div>
+                                </div>
                                 </form>
                             </div>
                         </div>
@@ -640,6 +342,52 @@
                     form.classList.add('was-validated');
                 }
             }
+        });
+    }
+</script>
+
+<script>
+    // Objeto que contiene las subcategorías asociadas a cada categoría
+    var subcategoriasPorCategoria = {
+        1: [ // Id de categoría 1
+            { id: 1, nombre: 'Teléfonos móviles y Accesorios' },
+            { id: 2, nombre: 'Electrodomésticos' },
+            { id: 3, nombre: 'Cámaras y Fotografía' },
+            { id: 4, nombre: 'Gaming' },
+            { id: 3, nombre: 'Otro' },
+        ],
+        2: [ // Id de categoría 2
+            { id: 6, nombre: 'Maquillaje y Cosméticos' },
+            { id: 7, nombre: 'Fragancias' },
+            { id: 8, nombre: 'Cuidado Corporal' },
+            { id: 9, nombre: 'Cuidado capilar' },
+            { id: 10, nombre: 'Otro' },
+
+        ],
+
+        //3: [ // Id de categoría 3
+            //{ id: 5, nombre: 'Moda y Ropa' },
+            //{ id: 6, nombre: 'Zapatos' }
+        //]
+        // Puedes agregar más categorías y sus subcategorías aquí
+    };
+
+    function cargarSubcategorias() {
+        var categoriaId = document.getElementById("selectCategoria").value;
+        var selectSubcategoria = document.getElementById("selectSubcategoria");
+
+        // Limpiar las opciones previas de subcategorías
+        selectSubcategoria.innerHTML = '<option value="" selected disabled>--Seleccione una subcategoría--</option>';
+
+        // Obtener las subcategorías correspondientes a la categoría seleccionada
+        var subcategorias = subcategoriasPorCategoria[categoriaId] || [];
+
+        // Poblamos el menú de subcategorías
+        subcategorias.forEach(function(subcat) {
+            var option = document.createElement("option");
+            option.value = subcat.id;
+            option.text = subcat.nombre;
+            selectSubcategoria.appendChild(option);
         });
     }
 </script>
