@@ -43,7 +43,7 @@ public class SuperAdminController {
     private final OrdenRepository ordenRepository;
 
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
-    public String dashboard(){
+    public String dashboard(Model model){
        //Cantidad de ordenes por mes
         model.addAttribute("OrdenesPormes", ordenRepository.getOrdenesMes());
         // Cantidad de ordenes por estado de seguimiento
