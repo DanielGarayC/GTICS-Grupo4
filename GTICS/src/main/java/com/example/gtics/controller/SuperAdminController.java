@@ -18,7 +18,7 @@ public class SuperAdminController {
 
     private final UsuarioRepository usuarioRepository;
     private final ZonaRepository zonaRepository;
-
+    
     private final RolRepository rolRepository;
 
     private final ProveedorRepository proveedorRepository;
@@ -44,7 +44,7 @@ public class SuperAdminController {
 
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
     public String dashboard(Model model){
-        //Cantidad de ordenes por mes
+       //Cantidad de ordenes por mes
         model.addAttribute("OrdenesPormes", ordenRepository.getOrdenesMes());
         // Cantidad de ordenes por estado de seguimiento
         model.addAttribute("OrdenesPorEstado", ordenRepository.getOrdenesEstado());

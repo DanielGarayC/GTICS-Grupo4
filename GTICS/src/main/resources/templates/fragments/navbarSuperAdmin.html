@@ -1,8 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Codescandy" name="author">
+    <title>Lista de administradores zonales</title>
+    <!-- Favicon icon-->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{images/favicon/favicon.ico}">
+
+
+    <!-- Libs CSS -->
+    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}"}>
+    <style>
+
+        .logoImagen{
+            height: 80px;
+            width: 250px;
+        }
+        .logoImagenCelulares{
+            height: 80px;
+            width: 220px;
+        }
+    </style>
 </head>
 <body>
 <th:block th:fragment="navbarVerticalPc(paginaActiva)">
@@ -38,7 +66,7 @@
                                 <span class="nav-link-text">Usuarios</span>
                             </div>
                         </a>
-                        <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
+                        <div class="collapse" data-bs-parent="#sideNavbar">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
                                     <a class="nav-link" th:classappend="${paginaActiva == 'listaUsuarioFinal'} ? ' active'"
@@ -65,7 +93,7 @@
                                 <span class="nav-link-text">Administrador Zonal</span>
                             </div>
                         </a>
-                        <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
+                        <div class="collapse" data-bs-parent="#sideNavbar">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
                                     <a class="nav-link" th:classappend="${paginaActiva == 'listaAdminZonal'} ? ' active'"
@@ -92,7 +120,7 @@
                                 <span class="nav-link-text">Agente</span>
                             </div>
                         </a>
-                        <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
+                        <div class="collapse" data-bs-parent="#sideNavbar">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
                                     <a class="nav-link" th:classappend="${paginaActiva == 'listaAgente'} ? ' active'"
@@ -304,6 +332,29 @@
         </div>
     </nav>
 </th:block>
+<!-- LIBRERIAS -->
+<div>
+    <!-- Javascript-->
+    <!-- Libs JS -->
+    <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+    <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+    <!-- Theme JS -->
+    <script th:src="@{/js/theme.min.js}"></script>
+
+    <script th:src="@{/js/vendors/jquery.min.js}"></script>
+    <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+    <script th:src="@{/js/vendors/slick-slider.js}"></script>
+    <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+    <script th:src="@{/js/vendors/tns-slider.js}"></script>
+    <script th:src="@{/js/vendors/zoom.js}"></script>
+
+    <script th:src="@{/js/vendors/countdown.js}"></script>
+    <script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
+    <script th:src="@{/js/vendors/sticky.js}"></script>
+    <script th:src="@{/js/vendors/modal.js}"></script>
+</div>
 
 
 </body>
