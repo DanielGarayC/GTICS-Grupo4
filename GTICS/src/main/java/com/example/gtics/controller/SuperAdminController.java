@@ -1,16 +1,15 @@
 package com.example.gtics.controller;
 
-import com.example.gtics.entity.Distrito;
-import com.example.gtics.entity.Rol;
-import com.example.gtics.entity.Usuario;
-import com.example.gtics.entity.Zona;
+import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -18,16 +17,20 @@ public class SuperAdminController {
 
     private final UsuarioRepository usuarioRepository;
     private final ZonaRepository zonaRepository;
-    
     private final RolRepository rolRepository;
-
     private final ProveedorRepository proveedorRepository;
+    private final CategoriaRepository categoriaRepository;
+    private final SubcategoriaRepository subcategoriaRepository;
+    private final ProductoZonaRepository productoZonaRepository;
 
     public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository,
                                 RolRepository rolRepository,
                                 DistritoRepository distritoRepository, ProveedorRepository proveedorRepository,
                                 ProductoRepository productoRepository,
-                                OrdenRepository ordenRepository) {
+                                OrdenRepository ordenRepository,
+                                CategoriaRepository categoriaRepository,
+                                SubcategoriaRepository subcategoriaRepository,
+                                ProductoZonaRepository productoZonaRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
         this.rolRepository = rolRepository;
@@ -35,6 +38,9 @@ public class SuperAdminController {
         this.proveedorRepository = proveedorRepository;
         this.productoRepository = productoRepository;
         this.ordenRepository = ordenRepository;
+        this.categoriaRepository = categoriaRepository;
+        this.subcategoriaRepository = subcategoriaRepository;
+        this.productoZonaRepository = productoZonaRepository;
     }
 
 
@@ -382,16 +388,125 @@ public class SuperAdminController {
         return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 
-    @GetMapping("SuperAdmin/agregarCategoria")
-    public String agregarCategoria(){
+    @GetMapping("SuperAdmin/agregarProducto")
+    public String agregarProducto(Model model) {
+        Producto producto = new Producto();
+        List<Categoria> categorias = categoriaRepository.findAll();
+        List<Proveedor> proveedores = proveedorRepository.findAll();
+        List<Zona> zonas = zonaRepository.findAll();
+        List<Subcategoria> subcategorias = subcategoriaRepository.findAll();
 
-        return "SuperAdmin/add-category";
+        // Inicializar la lista de productoZonas para evitar que sea null
+        Map<Integer, ProductoZona> productoZonas = new HashMap<>();
+
+        model.addAttribute("producto", producto);
+        model.addAttribute("categorias", categorias);
+        model.addAttribute("proveedores", proveedores);
+        model.addAttribute("zonas", zonas);
+        model.addAttribute("subcategorias", subcategorias);
+        model.addAttribute("productoZonas", productoZonas);  // Asegúrate de añadir esto al modelo
+
+        return "SuperAdmin/add-product";
     }
 
-    @GetMapping("SuperAdmin/categorias")
-    public String categorias(){
+    @PostMapping("/SuperAdmin/guardarProducto")
+    public String guardarProducto(@ModelAttribute("producto") Producto producto,
+                                  @RequestParam("zona-1") Integer cantidadZona1,
+                                  @RequestParam("zona-2") Integer cantidadZona2,
+                                  @RequestParam("zona-3") Integer cantidadZona3,
+                                  @RequestParam("zona-4") Integer cantidadZona4,
+                                  RedirectAttributes attr) {
 
-        return "SuperAdmin/categories";
+        try {
+            if (producto.getCantVentas() == null) {
+                producto.setCantVentas("0");
+            }
+            if (producto.getBorrado() == null) {
+                producto.setBorrado(0);
+            }
+            productoRepository.save(producto);
+            guardarProductoZona(producto, 1, cantidadZona1);
+            guardarProductoZona(producto, 2, cantidadZona2);
+            guardarProductoZona(producto, 3, cantidadZona3);
+            guardarProductoZona(producto, 4, cantidadZona4);
+
+            attr.addFlashAttribute("msg", "Producto creado exitosamente.");
+        } catch (Exception e) {
+            attr.addFlashAttribute("error", "Ocurrió un error al crear el producto.");
+            e.printStackTrace();
+        }
+        return "redirect:/SuperAdmin/productos";
+    }
+
+    private void guardarProductoZona(Producto producto, Integer zonaId, Integer cantidad) {
+        Optional<ProductoZona> optionalProductoZona = productoZonaRepository.findByProductoIdAndZonaId(producto.getId(), zonaId);
+
+        ProductoZona productoZona;
+        if (optionalProductoZona.isPresent()) {
+            productoZona = optionalProductoZona.get();
+        } else {
+            productoZona = new ProductoZona();
+            productoZona.setProducto(producto);
+            Optional<Zona> zonaOpt = zonaRepository.findById(zonaId);
+            zonaOpt.ifPresent(productoZona::setZona);
+        }
+        productoZona.setCantidad(cantidad);
+        productoZonaRepository.save(productoZona);
+    }
+
+    @GetMapping("/SuperAdmin/editarProducto/{id}")
+    public String editarProducto(@PathVariable("id") Integer id, Model model) {
+        Optional<Producto> optionalProducto = productoRepository.findById(id);
+
+        if (optionalProducto.isPresent()) {
+            Producto producto = optionalProducto.get();
+            List<Categoria> categorias = categoriaRepository.findAll();
+            List<Proveedor> proveedores = proveedorRepository.findAll();
+            List<Zona> zonas = zonaRepository.findAll();
+            List<Subcategoria> subcategorias = subcategoriaRepository.findAll();
+
+            // Cargar las cantidades por zona en un mapa
+            List<ProductoZona> productoZonas = productoZonaRepository.findByProductoId(id);
+            Map<Integer, ProductoZona> zonasMap = new HashMap<>();
+            for (ProductoZona productoZona : productoZonas) {
+                zonasMap.put(productoZona.getZona().getId(), productoZona);
+            }
+
+            model.addAttribute("producto", producto);
+            model.addAttribute("categorias", categorias);
+            model.addAttribute("proveedores", proveedores);
+            model.addAttribute("zonas", zonas);
+            model.addAttribute("subcategorias", subcategorias);
+            model.addAttribute("productoZonas", zonasMap); // Pasar el mapa al modelo
+
+            return "SuperAdmin/edit-product";
+        } else {
+            return "redirect:/SuperAdmin/productos";
+        }
+    }
+
+
+    @GetMapping("/SuperAdmin/eliminarProducto/{id}")
+    public String eliminarProducto(@PathVariable("id") Integer id, RedirectAttributes attr) {
+        Optional<Producto> optionalProducto = productoRepository.findById(id);
+
+        if (optionalProducto.isPresent()) {
+            Producto producto = optionalProducto.get();
+            producto.setBorrado(1);
+            productoRepository.save(producto);
+            attr.addFlashAttribute("msg", "El producto ha sido eliminado.");
+        } else {
+            attr.addFlashAttribute("error", "Producto no encontrado.");
+        }
+
+        return "redirect:/SuperAdmin/productos";
+    }
+
+    @GetMapping("SuperAdmin/productos")
+    public String productos(Model model) {
+        List<Producto> listaProductos = productoRepository.findAllActive();
+        model.addAttribute("productos", listaProductos);
+        return "SuperAdmin/productos";
     }
     @GetMapping("SuperAdmin/proveedores")
     public String proveedores(){
