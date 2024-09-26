@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta content="Codescandy" name="author">
-        <title>Solicitud nuevo agente</title>
+        <title>Editar administrador zonal</title>
         <!-- Favicon icon-->
         <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
@@ -18,7 +18,6 @@
 
         <!-- Theme CSS -->
         <link rel="stylesheet" th:href="@{/css/theme.min.css}">
-
         <style>
 
             .logoImagen{
@@ -156,7 +155,7 @@
                                         </div>
 
                                         <div class="border-top px-5 py-3">
-                                            <a href="perfilSuperAdmin.html">Mi perfil</a>
+                                            <a th:href="@{perfil}">Mi perfil</a>
                                         </div>
                                         <div class="border-top px-5 py-3">
                                             <a href="#">Cerrar sesión</a>
@@ -181,141 +180,131 @@
                 <!-- COONTENIDO DE LA PAGINA -->
                 <main class="main-content-wrapper">
                     <div class="container">
-                        <!-- row -->
                         <div class="row mb-8">
                             <div class="col-md-12">
                                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
-                                    <!-- pageheader -->
                                     <div>
-                                        <h2>Lista de solicitudes para rol de Agente</h2>
+                                        <h2>Usuario: <span th:text="${nombre}"></span></h2>
                                         <!-- breacrumb -->
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb mb-0">
-                                                <li class="breadcrumb-item"><a th:href="@{/SuperAdmin}" class="text-inherit">Dashboard</a></li>
-                                                <li class="breadcrumb-item " aria-current="page">Solicitudes</li>
+                                                <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page">Ver usuario</li>
                                             </ol>
                                         </nav>
                                     </div>
-                                    <!-- button -->
+
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xl-12 col-12 mb-5">
-                                <div th:if="${successMessage}" class="alert alert-success"><p th:text="${successMessage}"></p></div>
-
-                                <!-- card -->
-                                <div class="card h-100 card-lg">
-                                    <div class="px-6 py-6">
-                                        <div class="row justify-content-between">
-                                            <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
-                                                <!-- form -->
-                                                <form class="d-flex" role="search">
-                                                    <input id="searchAgente" class="form-control" type="search" placeholder="Buscar" aria-label="Search" oninput="filterTable()" />
-                                                </form>
-
+                        <div th:if="${error}" class="alert alert-danger">
+                            <span th:text="${error}"></span>
+                        </div>
+                        <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+                            <div class="col-lg-8 col-md-10 col-sm-12">
+                                <div class="card card-lg border-0">
+                                    <div class="card-body d-flex flex-column gap-8 p-7">
+                                        <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
+                                            <div>
+                                                <img class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/placeholder-img.jpg}" alt="Image" />
                                             </div>
-                                            <!-- select option -->
-                                            <div class="col-xl-2 col-md-4 col-12">
-                                                <select class="form-select">
-                                                    <option selected>Postulación</option>
-                                                    <option value="directa">Directa</option>
-                                                    <option value="coordinador">Por Coordinador</option>
-                                                </select>
-                                            </div>
+
+                                            <span class="ms-md-2">JPG, GIF or PNG. 1MB Max.</span>
                                         </div>
-                                    </div>
-                                    <!-- card body -->
-                                    <div class="card-body p-0">
-                                        <!-- table -->
-                                        <div class="table-responsive">
-                                            <table class="table table-centered table-hover mb-0 text-nowrap table-borderless table-with-checkbox">
-                                                <thead class="bg-light">
-                                                    <tr>
 
+                                        <div class="d-flex flex-column gap-4">
+                                            <h3 class="mb-0 h6">Información del usuario </h3>
+                                            <form id="adminZonalForm" class="row g-3 needs-validation">
+                                                <!-- Nombres -->
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label for="creatCustomerName" class="form-label">
+                                                            Nombres:
+                                                        </label>
 
-                                                        <th>Número de solicitud</th>
-                                                        <th>Nombres</th>
-                                                        <th>Apellidos</th>
-                                                        <th>DNI</th>
-                                                        <th>Teléfono</th>
-                                                        <th>Postulación</th>
-                                                        <th></th>
+                                                        <input type="text" class="form-control" id="creatCustomerName" name="nombre" th:value="${usuario.nombre}" readonly />
+                                                    </div>
+                                                </div>
 
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr th:each="usuario,var : ${listaUsuariosSolicitudes}">
+                                                <!-- Apellido Paterno -->
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label for="creatFinalUserLastNameP" class="form-label">
+                                                            Apellido Paterno:
+                                                        </label>
+                                                        <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidoPaterno" th:value="${usuario.apellidoPaterno}" readonly />
+                                                    </div>
+                                                </div>
 
-                                                        <td th:text="${var.index+1}"></td>
-                                                        <td th:text="${usuario.nombre}"></td>
-                                                        <td th:text="${usuario.apellidoPaterno} + ' '+ ${usuario.apellidoMaterno}"></td>
-                                                        <td th:text="${usuario.dni}"></td>
-                                                        <td th:text="${usuario.telefono}"></td>
-                                                        <td th:switch="${usuario.idSolicitudAgente.indicadorSolicitud}">
-                                                            <span th:case="0" class="badge bg-light-primary text-dark-primary">Directa</span>
-                                                            <span th:case="1" class="badge bg-light-info text-dark-info">Por coordinador</span>
+                                                <!-- Apellido Materno -->
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label for="creatFinalUserLastNameM" class="form-label">
+                                                            Apellido Materno:
+                                                        </label>
+                                                        <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidoMaterno" th:value="${usuario.apellidoMaterno}" readonly />
+                                                    </div>
+                                                </div>
 
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li>
-                                                                        <a class="dropdown-item"
-                                                                           href="javascript:void(0);"
-                                                                           th:attr="data-id=${usuario.getId()}, data-nombre=${usuario.getNombre()}"
-                                                                           onclick="confirmDelete(this)">
-                                                                            <i class="bi bi-trash me-3"></i>
-                                                                            Rechazar
-                                                                        </a>
-                                                                    </li>
+                                                <!-- DNI -->
+                                                <div class="col-12">
+                                                    <label for="DNIFinalUser" class="form-label">DNI:</label>
+                                                    <input type="text" class="form-control" id="DNIFinalUser" name="dni" th:value="${usuario.dni}" readonly />
+                                                </div>
 
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{'/SuperAdmin/cambiarRolaAgente?id=' + ${usuario.getId()}}">
-                                                                            <i class="bi bi-check-circle me-3"></i> <!-- Icono de aceptar -->
-                                                                            Aceptar
-                                                                        </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/SuperAdmin/verUsuario/{id}(id=${usuario.getId()})}">
-                                                                            <i class="bi bi-person me-3"></i> <!-- Icono de usuario individual -->
-                                                                            Ver Usuario
-                                                                        </a>
-                                                                    </li>
+                                                <!-- Número telefónico -->
+                                                <div class="col-12">
+                                                    <label for="phoneAdminZonal" class="form-label">Número telefónico:</label>
+                                                    <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" th:value="${usuario.telefono}" readonly />
+                                                </div>
 
+                                                <!-- Email -->
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label for="creatFinalUserEmail" class="form-label">
+                                                            Email:
+                                                        </label>
+                                                        <input type="email" class="form-control" id="creatFinalUserEmail" name="email" th:value="${usuario.email}" readonly />
+                                                    </div>
+                                                </div>
 
+                                                <!-- Dirección -->
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label for="creatFinalUserDirection" class="form-label">Dirección</label>
+                                                        <input type="text" class="form-control" id="creatFinalUserDirection" name="direccion" th:value="${usuario.direccion}" readonly />
+                                                    </div>
+                                                </div>
 
+                                                <!-- Selección de zona -->
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label for="selectZone" class="form-label">Zona</label>
+                                                        <input type="text" class="form-control" id="selectZone" name="direccion" th:value="${usuario.zona.nombreZona}" readonly />
 
+                                                    </div>
+                                                </div>
 
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                <!-- Fecha de nacimiento -->
+                                                <div class="col-12">
+                                                    <label class="form-label" for="creatFinal">Fecha de nacimiento</label>
+                                                    <input type="text" class="form-control" id="creatFinal" name="azFechanacimiento" th:value="${usuario.azFechanacimiento}" readonly />
+                                                </div>
 
-
-
-
-                                                </tbody>
-                                            </table>
+                                                <!-- Botón de Retroceder -->
+                                                <div class="col-12 mt-3">
+                                                    <div class="d-flex flex-column flex-md-row gap-2">
+                                                        <a th:href="@{/SuperAdmin/listaSolicitudesAgentes}" class="btn btn-secondary">Retroceder</a>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
-                                    </div>
-                                    <div class="border-top d-flex justify-content-between align-items-md-center px-6 py-6 flex-md-row flex-column gap-4">
-                                        <nav>
-                                            <ul class="pagination mb-0">
-                                                <li class="page-item disabled"><a class="page-link" href="#!">Previo</a></li>
-                                                <li class="page-item"><a class="page-link active" href="#!">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="#!">siguiente</a></li>
-                                            </ul>
-                                        </nav>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
+
                     </div>
                 </main>
             </div>
@@ -326,11 +315,14 @@
         <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
         <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <!-- Theme JS -->
         <script th:src="@{/js/theme.min.js}"></script>
 
         <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
         <script th:src="@{/js/vendors/chart.js}"></script>
+
 
 
         <!-- SweetAlert2 CSS -->
@@ -339,49 +331,96 @@
         <!-- SweetAlert2 JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
+
         <script>
-            function confirmDelete(element) {
 
-                var id = element.getAttribute("data-id");
-                var nombre = element.getAttribute("data-nombre");
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('adminZonalForm');
+                const dniInput = document.getElementById('DNIFinalUser');
+                const phoneInput = document.getElementById('phoneAdminZonal');
+                const dateInput = document.getElementById('creatFinalUserDate');
 
+                // Validar fecha de nacimiento (no puede ser futura)
+                dateInput.addEventListener('blur', function () {
+                    const currentDate = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
+                    if (dateInput.value > currentDate) {
+                        dateInput.setCustomValidity("La fecha de nacimiento no puede ser futura.");
+                        dateInput.classList.add('is-invalid');
+                    } else {
+                        dateInput.setCustomValidity(""); // Restablecer si la fecha es válida
+                        dateInput.classList.remove('is-invalid');
+                        dateInput.classList.add('is-valid');
+                    }
+                });
+
+                // Evento blur para validación en campo DNI
+                dniInput.addEventListener('blur', function() {
+                    this.classList.remove('is-valid', 'is-invalid');
+                    if (!this.validity.valid) {
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.classList.add('is-valid');
+                    }
+                });
+
+                // Evento blur para validación en campo Teléfono
+                phoneInput.addEventListener('blur', function() {
+                    this.classList.remove('is-valid', 'is-invalid');
+                    if (!this.validity.valid) {
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.classList.add('is-valid');
+                    }
+                });
+
+                // Validar todo el formulario al enviarlo
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated'); // Forzar mostrar validaciones si no es válido
+                });
+            });
+
+            // Función para mostrar el popup de confirmación con validación del formulario
+            function showSuccessPopup() {
                 Swal.fire({
-                    title: `¿Estás seguro de rechazar la solicitud de ${nombre}?`,
-                    text: "Una vez rechazada, no se podrá revertir esta acción",
+                    title: '¿Estás seguro?',
+                    text: "Confirma que deseas actualizar la información del Admin Zonal",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#28a745', // Color verde para el botón de confirmar rechazo
-                    cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
-                    confirmButtonText: 'Rechazar',
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, actualizar',
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
+                    const form = document.getElementById('adminZonalForm');
                     if (result.isConfirmed) {
-                        // Redirigir al controlador con el ID del usuario
-                        window.location.href = `/SuperAdmin/rechazarSolicitudAgente?id=${id}`;
+                        if (form.checkValidity()) {
+                            form.submit();
+                        } else {
+                            form.classList.add('was-validated'); // Forzar mostrar validaciones si no es válido
+                        }
                     }
                 });
             }
 
+            document.addEventListener("DOMContentLoaded", function() {
+                flatpickr("#creatFinalUserDate", {
+                    dateFormat: "Y-m-d"  // Esto asegura que la fecha se envíe en formato yyyy-MM-dd
+                });
+            });
 
-            function filterTable() {
-                const input = document.getElementById("searchAgente");
-                const filter = input.value.toLowerCase();
-                const table = document.querySelector("table tbody");
-                const rows = table.getElementsByTagName("tr");
 
-                for (let i = 0; i < rows.length; i++) {
-                    const cells = rows[i].getElementsByTagName("td");
-                    let match = false;
-
-                    for (let j = 0; j < cells.length; j++) {
-                        if (cells[j].innerText.toLowerCase().includes(filter)) {
-                            match = true;
-                            break;
-                        }
-                    }
-                    rows[i].style.display = match ? "" : "none";
-                }
-            }
         </script>
     </body>
 </html>
+
+
+
+
+
+
+
+

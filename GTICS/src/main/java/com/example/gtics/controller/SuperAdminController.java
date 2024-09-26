@@ -315,6 +315,25 @@ public class SuperAdminController {
 
     }
 
+    @GetMapping("SuperAdmin/verUsuario/{id}")
+    public String verUsuario(@PathVariable("id") Integer id, Model model){
+        try {
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent() && optionalUsuario.get().getRol().getId() == 4){
+                model.addAttribute("usuario",optionalUsuario.get());
+                String nombre = optionalUsuario.get().getNombre();
+                model.addAttribute("nombre",nombre);
+
+            } else {
+                model.addAttribute("error","Agente no encontrado o el rol no es válido");
+                return "SuperAdmin/GestionAgentes/agent-request";  // Redirigir a la lista si no se encuentra el agente
+            }
+        }catch (Exception e) {
+            model.addAttribute("error", "Error al cargar el usuario");
+            e.printStackTrace();
+        }
+        return "SuperAdmin/GestionAgentes/agent-ver-usuario";
+    }
 
 
 
@@ -348,6 +367,13 @@ public class SuperAdminController {
         model.addAttribute("listaDistritos", listaDistritos);
         model.addAttribute("finalUser", finalUser);
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
+    }
+
+    @PostMapping("SuperAdmin/Actualizar/{id}")
+    public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal){
+
+        usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), idUsuarioFinal);
+        return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 
     @GetMapping("SuperAdmin/banearUsuarioFinal/{id}")
