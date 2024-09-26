@@ -489,13 +489,13 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a th:href="@{categorias}" class="text-inherit">Productos</a></li>
+                                        <li class="breadcrumb-item"><a th:href="@{productos}" class="text-inherit">Productos</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Agregar nuevo producto</li>
                                     </ol>
                                 </nav>
                             </div>
                             <div>
-                                <a th:href="@{categorias}" class="btn btn-light">Back to Categories</a>
+                                <a th:href="@{productos}" class="btn btn-light">Regresar a la lista de productos</a>
                             </div>
                         </div>
                     </div>
@@ -506,7 +506,7 @@
                         <div class="card mb-6 shadow border-0">
                             <!-- card body -->
                             <div class="card-body p-6">
-                                <h4 class="mb-5 h5">Category Image</h4>
+                                <h4 class="mb-5 h5">Imagen del Producto</h4>
                                 <div class="mb-4 d-flex">
                                     <div class="position-relative">
                                         <img class="image icon-shape icon-xxxl bg-light rounded-4" th:src="@{/images/icons/bakery.svg}" alt="Image" />
@@ -522,76 +522,95 @@
                                         </div>
                                     </div>
                                 </div>
-                                <h4 class="mb-4 h5 mt-5">Category Information</h4>
-
+                                <h4 class="mb-4 h5 mt-5">Información del Producto</h4>
+                                <form id="productoForm" th:action="@{/SuperAdmin/guardarProducto}" method="post" class="needs-validation" novalidate>
                                 <div class="row">
-                                    <!-- input -->
-                                    <div class="mb-3 col-lg-6">
-                                        <label class="form-label">Category Name</label>
-                                        <input type="text" class="form-control" placeholder="Category Name" required />
-                                    </div>
-                                    <!-- input -->
-                                    <div class="mb-3 col-lg-6">
-                                        <label class="form-label">Slug</label>
-                                        <input type="text" class="form-control" placeholder="Slug" required />
-                                    </div>
-                                    <!-- input -->
-                                    <div class="mb-3 col-lg-6">
-                                        <label class="form-label">Parent Category</label>
-                                        <select class="form-select">
-                                            <option selected>Category Name</option>
-                                            <option value="Dairy, Bread & Eggs">Dairy, Bread & Eggs</option>
-                                            <option value="Snacks & Munchies">Snacks & Munchies</option>
-                                            <option value="Fruits & Vegetables">Fruits & Vegetables</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col-lg-6">
-                                        <label class="form-label">Date</label>
-                                        <input type="text" class="form-control flatpickr" placeholder="Select Date" />
-                                    </div>
-
-                                    <div></div>
-                                    <!-- input -->
-                                    <div class="mb-3 col-lg-12">
-                                        <label class="form-label">Descriptions</label>
-
-                                        <div class="py-8" id="editor"></div>
-                                    </div>
-
-                                    <!-- input -->
-                                    <div class="mb-3 col-lg-12">
-                                        <label class="form-label" id="productSKU">Status</label>
-                                        <br />
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked />
-                                            <label class="form-check-label" for="inlineRadio1">Active</label>
+                                        <!-- nombre del producto -->
+                                        <div class="mb-3 col-lg-12">
+                                            <label for="nombreProducto" class="form-label">Nombre del producto</label>
+                                            <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Nombre del producto" required />
+                                            <div class="invalid-feedback">Por favor ingrese el nombre del producto</div>
                                         </div>
-                                        <!-- input -->
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" />
-                                            <label class="form-check-label" for="inlineRadio2">Disabled</label>
+                                        <!-- categoría -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="selectCategoria" class="form-label">Categoría</label>
+                                            <select class="form-select" name="idCategoria" id="selectCategoria" onchange="cargarSubcategorias()" required>
+                                                <option value="" selected disabled>--Seleccione una categoría--</option>
+                                                <option th:each="categoria : ${categorias}" th:text="${categoria.nombreCategoria}" th:value="${categoria.id}"></option>
+                                            </select>
+                                            <div class="invalid-feedback">Por favor seleccione una categoría</div>
                                         </div>
-                                        <!-- input -->
-                                    </div>
-                                    <div class="mb-3 col-lg-12 mt-5">
-                                        <h4 class="mb-4 h5">Meta Data</h4>
-                                        <!-- input -->
-                                        <div class="mb-3">
-                                            <label class="form-label">Meta Title</label>
-                                            <input type="text" class="form-control" placeholder="Title" />
+                                        <!-- Subcategoría (se cargará según la categoría seleccionada) -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="selectSubcategoria" class="form-label">Subcategoría</label>
+                                            <select class="form-select" name="idSubcategoria" id="selectSubcategoria" required>
+                                                <option value="" selected disabled>--Seleccione una subcategoría--</option>
+                                                <option th:each="subcategoria : ${subcategorias}" th:text="${subcategoria.nombreSubcategoria}" th:value="${subcategoria.id}"></option>
+                                            </select>
+                                            <div class="invalid-feedback">Por favor seleccione una subcategoría</div>
+                                        </div>
+                                        <!-- cantidad de productos -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="cantidadDisponible" class="form-label">Cantidad Disponible</label>
+                                            <input type="text" class="form-control" id="cantidadDisponible" name="cantidadDisponible" placeholder="Cantidad disponible" required />
+                                            <div class="invalid-feedback">Por favor ingrese la cantidad disponible</div>
+                                        </div>
+                                        <!-- Precio -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="precio" class="form-label">Precio</label>
+                                            <input type="text" class="form-control" id="precio" name="precio" placeholder="Precio" required />
+                                            <div class="invalid-feedback">Por favor ingrese el precio del producto</div>
+                                        </div>
+                                        <!-- Costo de envío -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="costoEnvio" class="form-label">Costo de Envío</label>
+                                            <input type="text" class="form-control" id="costoEnvio" name="costoEnvio" placeholder="Costo de envío" required />
+                                            <div class="invalid-feedback">Por favor ingrese el costo de envío</div>
+                                        </div>
+                                        <!-- Proveedor -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
+                                            <select class="form-select" name="idProveedor" id="selectProveedor" required>
+                                                <option value="" selected disabled>--Seleccione un proveedor--</option>
+                                                <option th:each="proveedor : ${proveedores}" th:text="${proveedor.nombreProveedor}" th:value="${proveedor.id}"></option>
+                                            </select>
+                                            <div class="invalid-feedback">Por favor seleccione un proveedor</div>
                                         </div>
 
+                                        <!-- Zonas -->
+                                        <div class="mb-3 col-lg-6" th:each="zona : ${zonas}">
+                                            <label th:for="'cantidadZona' + ${zona.id}" th:text="'Cantidad para ' + ${zona.nombreZona}"></label>
+                                            <input type="number" class="form-control" th:id="'cantidadZona' + ${zona.id}"
+                                                   th:name="'zona-' + ${zona.id}" min="0"
+                                                   th:value="${#lists.contains(productoZonas, zona.id) ? productoZonas[zona.id].cantidad : 0}" />
+                                        </div>
+
+                                        <!-- Modelo (opcional) -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="modelo" class="form-label">Modelo (opcional)</label>
+                                            <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo" />
+                                        </div>
+
+                                        <!-- Color (opcional) -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="color" class="form-label">Color (opcional)</label>
+                                            <input type="text" class="form-control" id="color" name="color" placeholder="Color" />
+                                        </div>
+
                                         <!-- input -->
-                                        <div class="mb-3">
-                                            <label class="form-label">Meta Description</label>
-                                            <textarea class="form-control" rows="3" placeholder="Meta Description"></textarea>
+                                        <div class="mb-3 col-lg-12">
+                                            <label for="descripcion" class="form-label">Descripción</label>
+                                            <textarea class="form-control" id="descripcion" name="descripción" rows="3" placeholder="Descripción" required></textarea>
+                                            <div class="invalid-feedback">Por favor ingrese una descripción</div>
+                                        </div>
+
+
+                                        <div class="col-lg-12">
+                                            <button class="btn btn-primary" type="submit">Crear Producto</button>
+                                            <a th:href="@{/SuperAdmin/productos}" class="btn btn-secondary">Cancelar</a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12">
-                                        <a href="#" class="btn btn-primary">Create Product</a>
-                                        <a href="#" class="btn btn-secondary ms-2">Save</a>
-                                    </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -600,6 +619,30 @@
         </main>
     </div>
 </div>
+
+<script>
+    function crearProducto() {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Deseas crear un nuevo producto?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#dc3545',
+            confirmButtonText: 'Sí, crear',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('productoForm');
+                if (form.checkValidity()) {
+                    form.submit();
+                } else {
+                    form.classList.add('was-validated');
+                }
+            }
+        });
+    }
+</script>
 
 <!-- Libs JS -->
 <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->

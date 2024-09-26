@@ -24,10 +24,6 @@ public class Producto {
     @Column(name = "`descripción`", nullable = false)
     private String descripción;
 
-    @Lob
-    @Column(name = "detallesTecnicos")
-    private String detallesTecnicos;
-
     @Column(name = "precio", nullable = false, length = 45)
     private String precio;
 
@@ -48,11 +44,14 @@ public class Producto {
     @JoinColumn(name = "idProveedor", nullable = false)
     private Proveedor idProveedor;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idZona", nullable = false)
-    private Zona idZona;
 
     @Column(name = "cantVentas", nullable = false, length = 45)
     private String cantVentas;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idSubcategoria", nullable = false)
+    private Subcategoria idSubcategoria;
+
+    @Column(name = "borrado", nullable = false)
+    private Integer borrado;
 }
