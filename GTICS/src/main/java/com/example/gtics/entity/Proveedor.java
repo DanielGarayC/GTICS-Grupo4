@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -28,5 +31,11 @@ public class Proveedor {
 
     @Column(name = "nombreTienda", nullable = false, length = 45)
     private String nombreTienda;
+
+    @OneToMany(mappedBy = "idProveedor")
+    private Set<Producto> productos = new LinkedHashSet<>();
+
+    @Column(name = "baneado", nullable = false)
+    private Byte baneado;
 
 }

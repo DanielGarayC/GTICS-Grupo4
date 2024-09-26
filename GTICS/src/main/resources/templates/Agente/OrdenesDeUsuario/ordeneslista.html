@@ -195,117 +195,16 @@
 	<!-- NAVBAR  -->
    <div class="main-wrapper">
 
-	   <!-- navbar vertical (para pc)-->
 	   <!-- navbar -->
-	   <nav class="navbar-vertical-nav d-none d-xl-block">
-		   <div class="navbar-vertical">
-			   <div class="px-4 py-5">
-				   <a class="navbar-brand">
-					   <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagen " />
-				   </a>
-			   </div>
-			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-				   <ul class="navbar-nav flex-column" id="sideNavbar">
-					   <li class="nav-item">
-						   <a class="nav-link   " th:href="@{/Agente}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
-								   <span class="nav-link-text">Inicio</span>
-							   </div>
-						   </a>
-					   </li>
+	   <!-- navbar vertical (para pc)-->
+	   <div th:insert="fragments/navbarAgente.html :: navbarVerticalPc('ordenes')"></div>
 
-
-					   <li class="nav-item">
-						   <a class="nav-link" th:href="@{/Agente/UsuariosAsignados}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
-								   <span class="nav-link-text">Usuarios asignados</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link active" th:href="@{/Agente/Ordenes}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-								   <span class="nav-link-text">Órdenes</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link" th:href="@{/Agente/Reportes/Descargar}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
-								   <span class="nav-link-text">Reportes</span>
-							   </div>
-						   </a>
-					   </li>
-
-				   </ul>
-			   </div>
-		   </div>
-	   </nav>
 	   <!-- navbar vertical (para celular)-->
-	   <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
-		   <div class="navbar-vertical">
-			   <div class="px-4 py-5 d-flex justify-content-between align-items-center">
-				   <a class="navbar-brand">
-					   <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagenCelulares"/>
-				   </a>
-				   <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-			   </div>
-			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-				   <ul class="navbar-nav flex-column">
-
-					   <li class="nav-item">
-						   <a class="nav-link  " th:href="@{/Agente}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>
-								   <span>Inicio</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link " th:href="@{/Agente/UsuariosAsignados}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
-								   <span>Usuarios asignados</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link active" th:href="@{/Agente/Ordenes}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-								   <span class="nav-link-text">Órdenes</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link " th:href="@{/Agente/Reportes/Descargar}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
-								   <span class="nav-link-text">Reportes</span>
-							   </div>
-						   </a>
-					   </li>
-
-
-				   </ul>
-			   </div>
-		   </div>
-	   </nav>
+	   <div th:insert="fragments/navbarAgente.html :: navbarVerticalCelulares('ordenes')"></div>
 
 
 
-
-
-   <!-- COONTENIDO DE LA PAGINA -->
+	   <!-- COONTENIDO DE LA PAGINA -->
    <main class="main-content-wrapper">
 	   <div class="container">
 		   <!-- row -->
@@ -340,7 +239,7 @@
 							   <div class="col-lg-2 col-md-4 col-12">
 								   <!-- select -->
 								   <select class="form-select">
-									   <option selected>Estado</option>
+									   <option selected>Control</option>
 									   <option value="Success">Todos las órdenes</option>
 									   <option value="Pending">Ordenes sin aginar</option>
 									   <option value="Pending">Ordenes pendientes</option>
@@ -362,16 +261,27 @@
 										   <th>Nº de orden</th>
 										   <th>Fecha</th>
 										   <th>Estado</th>
+										   <th>Control</th>
 										   <th>Monto total</th>
 										   <th></th>
 									   </tr>
 								   </thead>
 								   <tbody>
-								   <tr>
+								   <tr th:each="orden: ${ordenesLista}">
 									   <td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td>
 									   <td>#1234</td>
-									   <td>07-07-24</td>
-									   <td>	<span class="badge bg-light-primary text-dark-primary">Resuelta</span></td>
+									   <td th:text="${orden.fechaOrden}"></td>
+									   <td th:text="${orden.estadoOrden.nombreEstado}"></td>
+									   <!--<td>	<span class="badge bg-light-primary text-dark-primary">Resuelta</span></td>-->
+									   <!--<td th:text="${orden.estadoOrden.nombreEstado}"></td>-->
+
+									   <td th:switch="${orden.controlOrden.id}">
+										   <span th:case="1" class="badge bg-light-danger text-dark-danger">Sin asignar</span>
+										   <span th:case="2" class="badge bg-light-warning text-dark-warning">Pendiente</span>
+										   <span th:case="3" class="badge bg-light-info text-dark-info">En progreso</span>
+										   <span th:case="4" class="badge bg-light-primary text-dark-primary">Resuelta</span>
+									   </td>
+
 									   <td> S/. 145.00 </td>
 									   <td>
 										   <div class="dropdown">
@@ -380,7 +290,7 @@
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item" th:href="@{/Agente/Ordenes/Detalles}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
 												   </li>
 												   <li>
 													<a class="dropdown-item" href="#" onclick="eliminarOrden()">
@@ -397,180 +307,8 @@
 										   </div>
 									   </td>
 								   </tr>
-								   <tr>
-									   <td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td>
-									   <td>#1234</td>
-									   <td>07-07-24</td>
-									   <td>	<span class="badge bg-light-primary text-dark-primary">Resuelta</span></td>
-									   <td> S/. 145.00 </td>
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item" href="detalleOrden.html"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
-												   </li>
-												   <li>
-													<a class="dropdown-item" href="#" onclick="eliminarOrden()">
-														<i class="bi bi-trash me-3"></i>Eliminar
-													</a>
-												</li>
-												   <li>
-													   <a class="dropdown-item" href="chatVistaAgente.html"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
-								   </tr>
-								   <tr>
-									   <td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td>
-									   <td>#1234</td>
-									   <td>07-07-24</td>
-									   <td><span class="badge bg-light-info text-dark-info">En progreso</span></td>
-									   <td> S/. 145.00 </td>
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item" href="detalleOrden.html"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
-												   </li>
-												   <li>
-													<a class="dropdown-item" href="#" onclick="eliminarOrden()">
-														<i class="bi bi-trash me-3"></i>Eliminar
-													</a>
-												</li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
-								   </tr>
-								   <tr>
-									   <td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td>
-									   <td>#1234</td>
-									   <td>07-07-24</td>
-									   <td><span class="badge bg-light-info text-dark-info">En progreso</span></td>
-									   <td> S/. 145.00 </td>
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item" href="detalleOrden.html"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
-												   </li>
-												   <li>
-													<a class="dropdown-item" href="#" onclick="eliminarOrden()">
-														<i class="bi bi-trash me-3"></i>Eliminar
-													</a>
-												</li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
-								   </tr>
-								   <tr>
-									   <td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td>
-									   <td>#1234</td>
-									   <td>07-07-24</td>
-									   <td><span class="badge bg-light-warning text-dark-warning">Pendiente</span></td>
-									   <td> S/. 145.00 </td>
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item" href="detalleOrden.html"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
-												   </li>
-												   <li>
-													<a class="dropdown-item" href="#" onclick="eliminarOrden()">
-														<i class="bi bi-trash me-3"></i>Eliminar
-													</a>
-												</li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
-								   </tr>
-								   <tr>
-									   <td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td>
-									   <td>#1234</td>
-									   <td>07-07-24</td>
-									   <td><span class="badge bg-light-warning text-dark-warning">Pendiente</span></td>
-									   <td> S/. 135.00 </td>
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
-												   </li>
-												   <li>
-													<a class="dropdown-item" href="#" onclick="eliminarOrden()">
-														<i class="bi bi-trash me-3"></i>Eliminar
-													</a>
-												</li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
-								   </tr>
-								   <tr>
-									<td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td>
-									<td>#1664</td>
-									<td>07-07-24</td>
-									<td><span class="badge bg-light-danger text-dark-danger">Sin asignar</span></td>
-									<td> S/. 135.00 </td>
-									<td>
-										<div class="dropdown">
-											<a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												<i class="feather-icon icon-more-vertical fs-5"></i>
-											</a>
-											<ul class="dropdown-menu">
-												<li>
-													<a class="dropdown-item" href="#"><i class="bi bi-eye-fill me-3"></i> Ver</a>
-												</li>
-	
-												<li>
-													<a class="dropdown-item" href="#" onclick="asignacion()">
-														<i class="bi bi-person-check-fill me-3"></i>Auto-asignarse orden
-													</a>												</li>
-											</ul>
-										</div>
-									</td>
-								</tr>
+
+
 								   </tbody>
 							   </table>
 						   </div>

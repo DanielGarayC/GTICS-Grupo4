@@ -17,4 +17,8 @@ public class Fotosproducto {
     @Column(name = "foto", nullable = false)
     private byte[] foto;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idProducto", nullable = false)
+    private Producto idProducto;
+
 }

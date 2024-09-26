@@ -30,6 +30,6 @@ public class Resena {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idProducto", nullable = false)
-    private Producto idProducto;
+    private Producto Producto;
 
 }

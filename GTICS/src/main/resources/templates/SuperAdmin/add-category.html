@@ -199,7 +199,6 @@
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-people"></i></span>
                                     <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
                                 </div>
                             </a>
                             <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
@@ -357,7 +356,6 @@
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-people"></i></span>
                                     <span class="nav-link-text">Usuarios</span>
-                                    <span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
                                 </div>
                             </a>
                             <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
@@ -486,18 +484,18 @@
                         <div class="d-md-flex justify-content-between align-items-center">
                             <!-- page header -->
                             <div>
-                                <h2>Add New Category</h2>
+                                <h2>Agregar nuevo producto</h2>
                                 <!-- breacrumb -->
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="#" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="#" class="text-inherit">Categories</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Add New Category</li>
+                                        <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a th:href="@{categorias}" class="text-inherit">Productos</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Agregar nuevo producto</li>
                                     </ol>
                                 </nav>
                             </div>
                             <div>
-                                <a href="categories.html" class="btn btn-light">Back to Categories</a>
+                                <a th:href="@{categorias}" class="btn btn-light">Back to Categories</a>
                             </div>
                         </div>
                     </div>

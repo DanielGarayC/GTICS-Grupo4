@@ -199,7 +199,6 @@
 								<div class="d-flex align-items-center">
 									<span class="nav-link-icon"><i class="bi bi-people"></i></span>
 									<span class="nav-link-text">Usuarios</span>
-									<span class="badge bg-light-success text-dark-success ms-2">Vagos</span>
 								</div>
 							</a>
 							<div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
@@ -209,7 +208,164 @@
 									</li>
 									<!-- Nav item -->
 									<li class="nav-item">
-										<a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
+										<a class="nav-link active" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
+									</li>
+									<!-- Nav item -->
+									<li class="nav-item">
+										<a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<!-- Desplegable de los Administradores Zonales-->
+						<li class="nav-item">
+							<a
+									class="nav-link"
+									href="#"
+									data-bs-toggle="collapse"
+									data-bs-target="#navAdminZonal"
+									aria-expanded="false"
+									aria-controls="navAdminZonal"
+							>
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
+									<span class="nav-link-text">Administrador Zonal</span>
+								</div>
+							</a>
+							<div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
+								<ul class="nav flex-column">
+									<li class="nav-item active">
+										<a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
+									</li>
+									<!-- Nav item -->
+									<li class="nav-item">
+										<a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
+									</li>
+									<!-- Nav item -->
+									<li class="nav-item">
+										<a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+
+						<!-- Desplegable de los Agentes-->
+						<li class="nav-item">
+							<a
+									class="nav-link"
+									x              href="#"
+									data-bs-toggle="collapse"
+									data-bs-target="#navAgent"
+									aria-expanded="false"
+									aria-controls="navAgent"
+							>
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
+									<span class="nav-link-text">Agente</span>
+								</div>
+							</a>
+							<div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
+								<ul class="nav flex-column">
+									<li class="nav-item active">
+										<a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
+									</li>
+									<!-- Nav item -->
+									<li class="nav-item">
+										<a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+
+
+						<!-- Desplegable de los Proveedores-->
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon"><i class="bi bi-truck"></i></span>
+									<span class="nav-link-text">Proveedores</span>
+								</div>
+							</a>
+						</li>
+
+						<!-- Opción de los productor-->
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/SuperAdmin/categorias}">
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+									<span class="nav-link-text">Inventario de productos</span>
+								</div>
+							</a>
+						</li>
+
+
+						<!-- Opción de solicitudes de Agente-->
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
+									<span class="nav-link-text">Solicitudes para Agente</span>
+								</div>
+							</a>
+						</li>
+
+
+
+
+
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
+			<div class="navbar-vertical">
+				<div class="px-4 py-5 d-flex justify-content-between align-items-center">
+					<a class="navbar-brand">
+						<img th:src="@{/images/logo/logo.svg}" alt="" />
+					</a>
+					<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+				</div>
+				<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+					<ul class="navbar-nav flex-column">
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
+									<span class="nav-link-text">DashBoard</span>
+								</div>
+							</a>
+						</li>
+
+
+
+
+						<li class="nav-item mt-6 mb-3">
+							<span class="nav-label">Opciones</span>
+						</li>
+
+						<!-- Desplegable de los Clientes-->
+						<li class="nav-item">
+							<a
+									class="nav-link collapsed"
+									href="#"
+									data-bs-toggle="collapse"
+									data-bs-target="#navCustomer"
+									aria-expanded="false"
+									aria-controls="navCustomer"
+							>
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon"><i class="bi bi-people"></i></span>
+									<span class="nav-link-text">Usuarios</span>
+								</div>
+							</a>
+							<div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
+								<ul class="nav flex-column">
+									<li class="nav-item">
+										<a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
+									</li>
+									<!-- Nav item -->
+									<li class="nav-item">
+										<a class="nav-link active" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
 									</li>
 									<!-- Nav item -->
 									<li class="nav-item">
@@ -328,8 +484,8 @@
 							<!-- breacrumb -->
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb mb-0">
-									<li class="breadcrumb-item"><a href="../Dashboard" class="text-inherit">Dashboard</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Create</li>
+									<li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Crear Usuario</li>
 								</ol>
 							</nav>
 						</div>
@@ -346,7 +502,7 @@
 
 									<div class="file-upload btn btn-light ms-md-4">
 										<input type="file" class="file-input opacity-0" />
-										Upload Photo
+										Subir Foto
 									</div>
 
 									<span class="ms-2">JPG, GIF or PNG. 1MB Max.</span>
@@ -380,11 +536,22 @@
 											<div>
 												<!-- input -->
 												<label for="creatFinalUserLastName" class="form-label">
-													Apellidos:
+													Apellido Paterno:
 													<span class="text-danger">*</span>
 												</label>
 												<input type="text" class="form-control" id="creatFinalUserLastName" placeholder="Apellidos del usuario final" required />
-												<div class="invalid-feedback">Por favor ingrese los apellidos del usuario</div>
+												<div class="invalid-feedback">Por favor ingrese el apellido paterno del usuario</div>
+											</div>
+										</div>
+										<div class="col-lg-6 col-12">
+											<div>
+												<!-- input -->
+												<label for="creatFinalUserLastName2" class="form-label">
+													Apellido Materno:
+													<span class="text-danger">*</span>
+												</label>
+												<input type="text" class="form-control" id="creatFinalUserLastName2" placeholder="Apellidos del usuario final" required />
+												<div class="invalid-feedback">Por favor ingrese el apellido materno de usuario</div>
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
@@ -408,7 +575,7 @@
 										</div>
 
 										<div class="col-lg-6 col-12">
-											<label class="form-label" for="creatFinalUserDate">Distrio</label>
+											<label class="form-label" for="creatFinalUserDate">Distrito</label>
 											<input type="text" class="form-control flatpickr" id="creatFinalUserDate" placeholder="Distrito" required />
 											<div class="invalid-feedback">Por favor ingrese un distrito</div>
 										</div>
