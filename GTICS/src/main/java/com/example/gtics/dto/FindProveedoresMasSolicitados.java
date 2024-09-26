@@ -1,6 +1,6 @@
 package com.example.gtics.dto;
 
 public interface FindProveedoresMasSolicitados {
-    String getNombreProveedor();
+    String getNombreCompleto();
     int getTotalVentas();
 }

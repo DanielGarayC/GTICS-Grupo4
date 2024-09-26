@@ -495,7 +495,6 @@
                 </div>
                 <!-- table -->
                 <div class="table-responsive-xl mb-6 mb-lg-0">
-                    <h2 style="margin-left: 1vh;">Productos con menor stock:</h2>
                     <div class="row flex-nowrap pb-3 pb-lg-0">
                         <div class="col-lg-4 col-12 mb-6">
                             <!-- card -->
@@ -505,50 +504,16 @@
                                     <!-- heading -->
                                     <div class="d-flex justify-content-between align-items-center mb-6">
                                         <div>
-                                            <h4 class="mb-0 fs-5">Producto 1</h4>
+                                            <h4 class="mb-0 fs-5">Cantidad de agentes</h4>
                                         </div>
                                         <div class="icon-shape icon-md bg-light-warning text-dark-warning rounded-circle">
-                                            <i class="bi bi-cart fs-5"></i>
+                                            <i class="bi bi-person-fill fs-3"></i>
                                         </div>
                                     </div>
                                     <!-- project number -->
                                     <div class="lh-1">
-                                        <img alt="Imagen del producto" th:src="@{imagen.jpg}" class="mb-2" style="height: 10vh;border-radius: 5px;">
-                                        <br>
-                                        <span>
 
-                                       <span class="text-dark me-1 mt2"></span>
-                                       Stock disponible:
-                                    </span>
-                                        <h3 class="mt-2 fw-bold fs-2" style="margin-left: 1vh;">9</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-12 mb-6">
-                            <!-- card -->
-                            <div class="card h-100 card-lg">
-                                <!-- card body -->
-                                <div class="card-body p-6">
-                                    <!-- heading -->
-                                    <div class="d-flex justify-content-between align-items-center mb-6">
-                                        <div>
-                                            <h4 class="mb-0 fs-5">Producto 2</h4>
-                                        </div>
-                                        <div class="icon-shape icon-md bg-light-warning text-dark-warning rounded-circle">
-                                            <i class="bi bi-cart fs-5"></i>
-                                        </div>
-                                    </div>
-                                    <!-- project number -->
-                                    <div class="lh-1">
-                                        <img alt="Imagen del producto" src="imagen.jpg" class="mb-2" style="height: 10vh;border-radius: 5px;">
-                                        <br>
-                                        <span>
-
-                                       <span class="text-dark me-1 mt2"></span>
-                                       Stock disponible:
-                                    </span>
-                                        <h3 class="mt-2 fw-bold fs-2" style="margin-left: 1vh;">13</h3>
+                                        <h3 class="mt-2 fw-bold fs-2" style="margin-left: 1vh;" th:text="${CantidadAgentes.getCantAgentes()}"></h3>
                                     </div>
                                 </div>
                             </div>
@@ -562,82 +527,19 @@
                                     <!-- heading -->
                                     <div class="d-flex justify-content-between align-items-center mb-6">
                                         <div>
-                                            <h4 class="mb-0 fs-5">Producto 3</h4>
+                                            <h4 class="mb-0 fs-5">Candidad de usuarios baneados</h4>
                                         </div>
                                         <div class="icon-shape icon-md bg-light-warning text-dark-warning rounded-circle">
-                                            <i class="bi bi-cart fs-5"></i>
+                                            <i class="bi bi-person-fill-slash fs-3"></i>
                                         </div>
                                     </div>
                                     <!-- project number -->
                                     <div class="lh-1">
-                                        <img alt="Imagen del producto" src="imagen.jpg" class="mb-2" style="height: 10vh;border-radius: 5px;">
-                                        <br>
                                         <span>
 
                                        <span class="text-dark me-1 mt2"></span>
-                                       Stock disponible:
                                     </span>
-                                        <h3 class="mt-2 fw-bold fs-2" style="margin-left: 1vh;">18</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <h2 style="margin-left: 1vh;">Productos con menor stock:</h2>
-                    <div class="row flex-nowrap pb-3 pb-lg-0">
-                        <div class="col-lg-4 col-12 mb-6">
-                            <!-- card -->
-                            <div class="card h-100 card-lg">
-                                <!-- card body -->
-                                <div class="card-body p-6">
-                                    <!-- heading -->
-                                    <div class="d-flex justify-content-between align-items-center mb-6">
-                                        <div>
-                                            <h4 class="mb-0 fs-5">Producto 1</h4>
-                                        </div>
-                                        <div class="icon-shape icon-md bg-light-warning text-dark-warning rounded-circle">
-                                            <i class="bi bi-cart fs-5"></i>
-                                        </div>
-                                    </div>
-                                    <!-- project number -->
-                                    <div class="lh-1">
-                                        <img alt="Imagen del producto" th:src="@{imagen.jpg}" class="mb-2" style="height: 10vh;border-radius: 5px;">
-                                        <br>
-                                        <span>
-
-                                       <span class="text-dark me-1 mt2"></span>
-                                       Stock disponible:
-                                    </span>
-                                        <h3 class="mt-2 fw-bold fs-2" style="margin-left: 1vh;">9</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-12 mb-6">
-                            <!-- card -->
-                            <div class="card h-100 card-lg">
-                                <!-- card body -->
-                                <div class="card-body p-6">
-                                    <!-- heading -->
-                                    <div class="d-flex justify-content-between align-items-center mb-6">
-                                        <div>
-                                            <h4 class="mb-0 fs-5">Producto 2</h4>
-                                        </div>
-                                        <div class="icon-shape icon-md bg-light-warning text-dark-warning rounded-circle">
-                                            <i class="bi bi-cart fs-5"></i>
-                                        </div>
-                                    </div>
-                                    <!-- project number -->
-                                    <div class="lh-1">
-                                        <img alt="Imagen del producto" src="imagen.jpg" class="mb-2" style="height: 10vh;border-radius: 5px;">
-                                        <br>
-                                        <span>
-
-                                       <span class="text-dark me-1 mt2"></span>
-                                       Stock disponible:
-                                    </span>
-                                        <h3 class="mt-2 fw-bold fs-2" style="margin-left: 1vh;">13</h3>
+                                        <h3 class="mt-2 fw-bold fs-2" style="margin-left: 1vh;" th:text="${CantidadUsuariosBaneados.getCantusuariosBaneados()}" ></h3>
                                     </div>
                                 </div>
                             </div>
@@ -651,60 +553,73 @@
                                     <!-- heading -->
                                     <div class="d-flex justify-content-between align-items-center mb-6">
                                         <div>
-                                            <h4 class="mb-0 fs-5">Producto 3</h4>
+                                            <h4 class="mb-0 fs-5">Cantidad de proveedores baneados</h4>
                                         </div>
                                         <div class="icon-shape icon-md bg-light-warning text-dark-warning rounded-circle">
-                                            <i class="bi bi-cart fs-5"></i>
+                                            <i class="bi bi-person-fill-slash fs-3"></i>
                                         </div>
                                     </div>
                                     <!-- project number -->
                                     <div class="lh-1">
-                                        <img alt="Imagen del producto" src="imagen.jpg" class="mb-2" style="height: 10vh;border-radius: 5px;">
-                                        <br>
                                         <span>
 
                                        <span class="text-dark me-1 mt2"></span>
-                                       Stock disponible:
                                     </span>
-                                        <h3 class="mt-2 fw-bold fs-2" style="margin-left: 1vh;">18</h3>
+                                        <h3 class="mt-2 fw-bold fs-2" style="margin-left: 1vh;" th:text="${CantidadProveedoresBaneados.getCantBaneados()}"></h3>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                 </div>
 
                 <!-- row -->
                 <div class="row">
-                    <div class="col-xl-7 col-lg-6 col-md-12 col-12 mb-6">
+                    <div class="mb-6">
                         <!-- card -->
                         <div class="card h-100 card-lg">
                             <div class="card-body p-6">
                                 <!-- heading -->
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h3 class="mb-1 fs-5">Usuarios Registrados vs Activos</h3>
-                                        <small>(+63%) respecto al año anterior</small>
+                                        <h3 class="mb-1 fs-5">Cantidad de órdenes por mes</h3>
                                     </div>
 
                                 </div>
                                 <!-- chart -->
-                                <div id="registeredVsActiveChart" class="mt-6" style="height: 200px;"></div> <!-- Ajustado a 300px -->
+                                <div id="cantOrdenesMes" class="mt-6" style="height: 40vh;"></div> <!-- Ajustado a 300px -->
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-xl-5 col-lg-6 col-12 mb-6">
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-12 mb-6">
                         <!-- card -->
                         <div class="card h-100 card-lg">
                             <!-- card body -->
                             <div class="card-body p-6">
                                 <!-- heading -->
-                                <h3 class="mb-0 fs-5">Usuarios</h3>
+                                <h3 class="mb-0 fs-5">Usuarios registrados vs activos</h3>
                                 <div class="mt-4" style="height: 40vh;"> <!-- Ajuste de altura a 300px -->
-                                    <div id="usersChart" style="height: 350px; width: 100%; max-width: 400px;"></div> <!-- Ajuste de max-width a 400px -->
+                                    <div id="usersChart" style="height: 40vh; width: 100%;"></div> <!-- Ajuste de max-width a 400px -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-12 mb-6">
+                        <!-- card -->
+                        <div class="card h-100 card-lg">
+                            <!-- card body -->
+                            <div class="card-body p-6">
+                                <!-- heading -->
+                                <h3 class="mb-0 fs-5">Órdenes pr estado de seguimiento</h3>
+                                <div class="mt-4" style="height: 40vh;"> <!-- Ajuste de altura a 300px -->
+                                    <div id="ordenesEstadoChart" style="height: 40vh; width: 100%;"></div> <!-- Ajuste de max-width a 400px -->
                                 </div>
                             </div>
                         </div>
@@ -720,248 +635,37 @@
                         <div class="card h-100 card-lg">
                             <!-- card body -->
                             <div class="card-body p-6">
-                                <h3 class="mb-0 fs-5">Productos más importantes</h3>
+                                <h3 class="mb-0 fs-5">Productos más importados</h3>
                                 <div class="mt-6">
                                     <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Producto 1	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-info" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-info"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
+                                    <div th:each="producto : ${ProductosMasImportados}">
+                                        <div class="mb-8">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <h5 class="fs-6" th:text="${producto.nombreProducto}"></h5>
+                                                <span>
+                                                <span class="me-1 text-dark" th:text="${producto.cantVentas}"></span>
+                                                de <span th:text="${TotalVentas.getTotalVentas()}"></span>
+                                            </span>
+                                            </div>
+                                            <!-- main wrapper -->
+                                            <div>
+                                                <!-- progressbar -->
+                                                <div class="progress bg-light-info" style="height: 6px">
+                                                    <div
+                                                            class="progress-bar bg-info"
+                                                            role="progressbar"
+                                                            aria-label="Example 1px high"
+                                                            th:style="'width:' + ${producto.cantVentas} * 100.0 / ${TotalVentas.getTotalVentas()} + '%'"
+                                                            aria-valuenow="25"
+                                                            aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Producto 2	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-info" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-info"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Producto 3	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-info" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-info"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Producto 4	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-info" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-info"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Producto 5	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-info" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-info"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Producto 6	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-info" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-info"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Producto 7	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-info" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-info"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Producto 8	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-info" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-info"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Producto 9	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-info" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-info"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Producto 10	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-info" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-info"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+
+
                                 </div>
                             </div>
 
@@ -970,127 +674,35 @@
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-12 col-12 mb-6">
                         <!-- card -->
-                        <div class="card h-100 card-lg">
+                        <div class="card h-45 card-lg">
                             <!-- card body -->
                             <div class="card-body p-6">
-                                <h3 class="mb-0 fs-5">Usuarios con más importaciones</h3>
+                                <h5 class="mb-0 fs-5">Proveedores con peores comentarios</h5>
                                 <div class="mt-6">
                                     <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Usuario 1	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
+
+                                    <div th:each="proveedormalo : ${PeoresProveedores}">
+                                        <div class="mb-5">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <h5 class="fs-6" th:text="${proveedormalo.nombreCompleto}"></h5>
+                                                <span>
+                                          <span class="me-1 text-dark" th:text="${proveedormalo.promedioCalidad}"></span>
+                                                    / 5 <i class="bi bi-star-fill fs-10"></i><!--Tiene que ser el mismo valr que el width respectivo-->
                                        </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-primary" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-primary"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Usuario 2	</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-primary" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-primary"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Usuario 3</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-primary" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-primary"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- text -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Usuario 4</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-primary" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-primary"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-6">Usuario 5</h5>
-                                            <span>
-                                          <span class="me-1 text-dark">1000</span>
-                                          (21%) <!--Tiene que ser el mismo valr que el width respectivo-->
-                                       </span>
-                                        </div>
-                                        <!-- main wrapper -->
-                                        <div>
-                                            <!-- progressbar -->
-                                            <div class="progress bg-light-primary" style="height: 6px">
-                                                <div
-                                                        class="progress-bar bg-primary"
-                                                        role="progressbar"
-                                                        aria-label="Example 1px high"
-                                                        style="width: 21%"
-                                                        aria-valuenow="25"
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
+                                            <!-- main wrapper -->
+                                            <div>
+                                                <!-- progressbar -->
+                                                <div class="progress bg-light-danger" style="height: 6px">
+                                                    <div
+                                                            class="progress-bar bg-danger"
+                                                            role="progressbar"
+                                                            aria-label="Example 1px high"
+                                                            th:style="'width:' + ${proveedormalo.promedioCalidad} * 100 / 5 + '%'"
+                                                            aria-valuenow="25"
+                                                            aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1098,7 +710,45 @@
                             </div>
 
                         </div>
+                        <br>
+                        <!-- card -->
+                        <div class="card h-45 card-lg">
+                            <!-- card body -->
+                            <div class="card-body p-6">
+                                <h5 class="mb-0 fs-5">Proveedores más solicitados</h5>
+                                <div class="mt-6">
+                                    <div th:each="proovedorSolicitado : ${ProveedoresMasSolicitados}">
 
+                                        <div class="mb-5">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <h5 class="fs-6" th:text="${proovedorSolicitado.nombreCompleto}"></h5>
+                                                <span>
+                                          <span class="me-1 text-dark" th:text="${proovedorSolicitado.totalVentas}"></span>
+                                          ventas <!--Tiene que ser el mismo valr que el width respectivo-->
+                                       </span>
+                                            </div>
+                                            <!-- main wrapper -->
+                                            <div>
+                                                <!-- progressbar -->
+                                                <div class="progress bg-light-primary" style="height: 6px">
+                                                    <div
+                                                            class="progress-bar bg-primary"
+                                                            role="progressbar"
+                                                            aria-label="Example 1px high"
+                                                            th:style="'width:' + ${proovedorSolicitado.totalVentas} * 100.0 / ${TotalVentas.getTotalVentas()} + '%'"
+                                                            aria-valuenow="25"
+                                                            aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>
@@ -1119,13 +769,23 @@
 <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
 <script th:src="@{/js/vendors/chart.js}"></script>
 
-<script>
+<script th:inline="javascript">
+    var usuariosregistrados = /*[[${CantidadUsuariosRegistrados}]]*/ [];
+    var usuariosactivos = /*[[${CantidadUsuariosActivos}]]*/ [];
+    var CantusuariosRegistrados = usuariosregistrados.cantUsuariosRegistrados;
+
+    var CantusuariosActivos = usuariosactivos.cantUsuariosActivos;
+
+    console.log("Usuarios Registrados: ", CantusuariosRegistrados)
+    console.log("Usuarios Registrados: ", CantusuariosActivos)
     var options = {
         chart: {
-            type: 'donut'
+            type: 'donut',
+            height: '380vh',
+            width: '100%'
         },
-        series: [99, 55, 23, 33],
-        labels: ['Agente 1', 'Agente 2', 'Agente 3', 'Sin asignar'],
+        series: [CantusuariosRegistrados, CantusuariosActivos],
+        labels: ['Usuarios registrados', 'Usuarios activos'],
         responsive: [{
             breakpoint: 480,
             options: {
@@ -1135,31 +795,97 @@
                 }
             }
         }],
-        colors: ['#008FFB', '#00E396', '#FEB019', '#FF4560'],
+        colors: ['#008FFB', '#FF4560'],
 
     };
 
     var chart = new ApexCharts(document.querySelector("#usersChart"), options);
     chart.render();
 </script>
-<script>
+
+<script th:inline="javascript">
+    var ordenesPorEstado = /*[[${OrdenesPorEstado}]]*/ [];
+
+    var datos = ordenesPorEstado.map(function(orden) {
+        return orden.totalOrdenes;  // 'totalOrdenes' es el otro campo
+    });
+
+    var labels = ordenesPorEstado.map(function(orden) {
+        return orden.nombreEstado;  // 'totalOrdenes' es el otro campo
+    });
+    var options = {
+        chart: {
+            type: 'donut',
+            height: '380vh',
+            width: '100%'
+        },
+        series: datos,
+        labels: labels,
+        responsive: [{
+            breakpoint: 480,
+            options: {
+
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }],
+        colors: ['#008FFB', '#00ff9d', '#84ff67', '#ffe137', '#fd6a00' , '#FF4560', '#804fff'],
+
+    };
+
+    var chart = new ApexCharts(document.querySelector("#ordenesEstadoChart"), options);
+    chart.render();
+</script>
+
+<script th:inline="javascript">
+    const mesesEnEspanol = {
+        "January": "Enero",
+        "February": "Febrero",
+        "March": "Marzo",
+        "April": "Abril",
+        "May": "Mayo",
+        "June": "Junio",
+        "July": "Julio",
+        "August": "Agosto",
+        "September": "Septiembre",
+        "October": "Octubre",
+        "November": "Noviembre",
+        "December": "Diciembre"
+    };
+    // Aquí te aseguras de que el mes que estás obteniendo es el nombre en inglés dentro de los objetos de la lista
+    var meses = /*[[${ordenesPorMes}]]*/ [];
+    var labels = meses.map(function(mes) {
+        return mesesEnEspanol[mes.mes] || mes.mes;  // Accede a la propiedad 'mes' del objeto
+    });
+
+    var datos = meses.map(function(mes) {
+        return mes.totalOrdenes;  // 'totalOrdenes' es el otro campo
+    });
+
+    console.log("Datos thymeleaf", meses);
+    console.log("Labels (Meses en Español):", labels);
+    console.log("Datos (Total de Órdenes):", datos);
+
     var chartOptions = {
         chart: {
             type: 'area',
-            height: '230px',
+            height: '380vh',
             width: '100%'
         },
         series: [{
-            name: 'Usuarios Registrados',
-            data: [150, 180, 200, 220, 250, 300, 350]  // Datos de ejemplo
-        }, {
-            name: 'Usuarios Activos',
-            data: [80, 100, 120, 140, 160, 180, 200]  // Datos de ejemplo
+            name: 'Cantidad de órdenes',
+            data: datos
         }],
         xaxis: {
-            categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul']  // Meses
+            categories: labels,  // Meses traducidos al español
+            labels: {
+                datetimeFormatter: {
+                    month: 'MMM'
+                }
+            }
         },
-        colors: ['#00E396', '#FEB019'],  // Colores de las líneas
+        colors: ['#00E396'],  // Colores de las líneas
         dataLabels: {
             enabled: false
         },
@@ -1180,15 +906,10 @@
         }
     };
 
-    var registeredVsActiveChart = new ApexCharts(document.querySelector("#registeredVsActiveChart"), chartOptions);
+    var registeredVsActiveChart = new ApexCharts(document.querySelector("#cantOrdenesMes"), chartOptions);
     registeredVsActiveChart.render();
 
-    // Función para actualizar la gráfica cuando se selecciona otro año
-    function updateChart() {
-        var selectedYear = document.getElementById("yearSelect").value;
-        // Aquí puedes agregar la lógica para actualizar los datos de acuerdo al año seleccionado
-        console.log("Año seleccionado: ", selectedYear);
-    }
+
 
 </script>
 </body>
