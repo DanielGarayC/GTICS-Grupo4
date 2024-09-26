@@ -226,14 +226,20 @@ public class SuperAdminController {
 
 
     @GetMapping("SuperAdmin/listaSolicitudesAgentes")
-    public String listaSolicitudesAgentes(){
+    public String listaSolicitudesAgentes(Model model){
+
+        List<Usuario> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesAgente();
+        model.addAttribute("listaUsuariosSolicitudes",listaUsuariosSolicitudes);
 
         return "SuperAdmin/GestionAgentes/agent-request";
     }
 
-    public String crearAgente(){
+    @GetMapping("SuperAdmin/cambiarRolaAgente")
+    public String cambiarRolaAgente(Model model,@RequestParam("id") Integer id){
 
-        return "SuperAdmin/GestionAgentes/create-agent";
+        usuarioRepository.actualizarRolAAgente(id);
+
+        return "redirect:/SuperAdmin/listaSolicitudesAgentes";
     }
 
     @GetMapping("SuperAdmin/listaUsuarioFinal")
