@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
+import jakarta.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -34,4 +34,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Modifying
     @Query("UPDATE Usuario u SET u.baneado = 1 WHERE u.id = :idUsuario AND u.baneado = 0")
     void banUsuario(Integer idUsuario);
+
+    //Metodo para mostrar solicitudes de agente
+    @Query(nativeQuery = true, value = "SELECT * FROM gticsdb.usuario where idSolicitudAgente > 0 and idRol=4 ")
+    List<Usuario> mostrarSolicitudesAgente();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery=true,value="update usuario set idRol = 3 where idUsuario= ?1")
+    void actualizarRolAAgente(int idUsuario);
 }
