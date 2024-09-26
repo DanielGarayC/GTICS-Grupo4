@@ -45,9 +45,50 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query("UPDATE Usuario u SET u.baneado = true WHERE u.id = :idUsuario AND u.baneado = false")
     void banUsuario(Integer idUsuario);
 
+    //Actualizar Usuario Final
+    @Transactional
+    @Modifying
+    @Query("UPDATE Usuario u SET u.dni = :dni, u.nombre = :nombre, u.apellidoPaterno = :apellidoPaterno, " +
+            "u.apellidoMaterno = :apellidoMaterno, u.email = :email, u.direccion = :direccion, " +
+            "u.telefono = :telefono, u.distrito.id = :idDistrito WHERE u.id = :idUsuario")
+    void actualizarUsuarioFinal(String dni,
+                                String nombre,
+                                String apellidoPaterno,
+                                String apellidoMaterno,
+                                String email,
+                                String direccion,
+                                String telefono,
+                                Integer idDistrito,
+                                Integer idUsuario);
+
     //Metodo para mostrar solicitudes de agente
-    @Query(nativeQuery = true, value = "SELECT * FROM gticsdb.usuario where idSolicitudAgente > 0 and idRol=4 ")
-    List<Usuario> mostrarSolicitudesAgente();
+    @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
+            "u.idSolicitudAgente AS solicitudId, s.indicadorSolicitud, " +
+            "u.agt_codigoaduana, " +
+            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "WHEN 1 THEN 'Habilitado' " +
+            "WHEN 2 THEN 'Multado' " +
+            "WHEN 3 THEN 'Cancelado' " +
+            "WHEN 4 THEN 'Suspendido' " +
+            "WHEN 5 THEN 'Anulado de jurisdicción' " +
+            "END AS estadoCodigoAduana, " +
+            "u.agt_codigojurisdiccion, " +
+            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "WHEN 1 THEN 'Habilitado' " +
+            "WHEN 2 THEN 'Multado' " +
+            "WHEN 3 THEN 'Cancelado' " +
+            "WHEN 4 THEN 'Suspendido' " +
+            "WHEN 5 THEN 'Anulado de jurisdicción' " +
+            "END AS estadoCodigoJurisdiccion, " +
+            "z.nombrezona " +
+            "FROM usuario u " +
+            "LEFT JOIN solicitudagente s ON u.idSolicitudAgente = s.idSolicitudAgente " +
+            "JOIN zona z ON u.idzona = z.idzona " +
+            "WHERE u.idSolicitudAgente > 0 AND u.idRol = 4 " +
+            "GROUP BY u.idusuario, u.idSolicitudAgente")
+    List<Object[]> mostrarSolicitudesConEstadosAleatorios();
+
+
 
     @Transactional
     @Modifying
@@ -60,9 +101,15 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(value="SELECT COUNT(u.idUsuario) as cantUsuariosActivos FROM Usuario u WHERE u.activo = 1 AND u.idRol = 4", nativeQuery = true)
     CantUsuariosActivos getCantidadActivos();
 
-    @Query(value = "SELECT COUNT(u.idUsuario) as cantUsuariosInactivos FROM Usuario u WHERE u.activo = 0 AND u.idRol = 4", nativeQuery = true)
-    CantUsuariosInactivos getCantidadInactivos();
+    @Query(value = "SELECT COUNT(u.idUsuario) as cantUsuariosRegistrados FROM Usuario u WHERE u.idRol = 4", nativeQuery = true)
+    CantUsuariosRegistrados getCantidadRegistrados();
 
     @Query(value = "SELECT COUNT(u.idUsuario) as cantAgentes FROM Usuario u WHERE u.idRol = 3", nativeQuery = true)
     CantidadAgentes getCantidadAgentes();
+
+    //Para asignar una solicitud a un usuario
+    @Transactional
+    @Modifying
+    @Query(nativeQuery=true,value="update usuario set idSolicitudAgente = ?1 where idUsuario= ?2")
+    void asignarSolictudAusuario(int idSolicitud,int idUsuario);
 }

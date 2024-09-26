@@ -18,6 +18,18 @@
 
 	<!-- Theme CSS -->
 	<link rel="stylesheet" th:href="@{/css/theme.min.css}">
+
+	<style>
+
+		.logoImagen{
+			height: 80px;
+			width: 250px;
+		}
+		.logoImagenCelulares{
+			height: 80px;
+			width: 220px;
+		}
+	</style>
 </head>
 
 <body>
@@ -159,326 +171,15 @@
 
 
 	<div class="main-wrapper">
-		<!-- navbar vertical (para pc)-->
-		<!-- navbar -->
-		<nav class="navbar-vertical-nav d-none d-xl-block">
-			<div class="navbar-vertical">
-				<div class="px-4 py-5">
-					<a class="navbar-brand">
-						<img th:src="@{/images/logo/logo.svg}" alt="" />
-					</a>
-				</div>
-				<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-					<ul class="navbar-nav flex-column">
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-									<span class="nav-link-text">DashBoard</span>
-								</div>
-							</a>
-						</li>
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaUsuarioFinal')"></div>
 
-
-
-
-						<li class="nav-item mt-6 mb-3">
-							<span class="nav-label">Opciones</span>
-						</li>
-
-						<!-- Desplegable de los Clientes-->
-						<li class="nav-item">
-							<a
-									class="nav-link collapsed"
-									href="#"
-									data-bs-toggle="collapse"
-									data-bs-target="#navCustomer"
-									aria-expanded="false"
-									aria-controls="navCustomer"
-							>
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon"><i class="bi bi-people"></i></span>
-									<span class="nav-link-text">Usuarios</span>
-								</div>
-							</a>
-							<div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
-								<ul class="nav flex-column">
-									<li class="nav-item">
-										<a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
-									</li>
-									<!-- Nav item -->
-									<li class="nav-item">
-										<a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
-									</li>
-									<!-- Nav item -->
-									<li class="nav-item">
-										<a class="nav-link active" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-						<!-- Desplegable de los Administradores Zonales-->
-						<li class="nav-item">
-							<a
-									class="nav-link"
-									href="#"
-									data-bs-toggle="collapse"
-									data-bs-target="#navAdminZonal"
-									aria-expanded="false"
-									aria-controls="navAdminZonal"
-							>
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
-									<span class="nav-link-text">Administrador Zonal</span>
-								</div>
-							</a>
-							<div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
-								<ul class="nav flex-column">
-									<li class="nav-item active">
-										<a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
-									</li>
-									<!-- Nav item -->
-									<li class="nav-item">
-										<a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
-									</li>
-									<!-- Nav item -->
-									<li class="nav-item">
-										<a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-
-						<!-- Desplegable de los Agentes-->
-						<li class="nav-item">
-							<a
-									class="nav-link"
-									x              href="#"
-									data-bs-toggle="collapse"
-									data-bs-target="#navAgent"
-									aria-expanded="false"
-									aria-controls="navAgent"
-							>
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
-									<span class="nav-link-text">Agente</span>
-								</div>
-							</a>
-							<div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
-								<ul class="nav flex-column">
-									<li class="nav-item active">
-										<a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
-									</li>
-									<!-- Nav item -->
-									<li class="nav-item">
-										<a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-
-						<!-- Desplegable de los Proveedores-->
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-									<span class="nav-link-text">Proveedores</span>
-								</div>
-							</a>
-						</li>
-
-						<!-- Opción de los productor-->
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/SuperAdmin/categorias}">
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-									<span class="nav-link-text">Inventario de productos</span>
-								</div>
-							</a>
-						</li>
-
-
-						<!-- Opción de solicitudes de Agente-->
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-									<span class="nav-link-text">Solicitudes para Agente</span>
-								</div>
-							</a>
-						</li>
-
-
-
-
-
-					</ul>
-				</div>
-			</div>
-		</nav>
-
-		<nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
-			<div class="navbar-vertical">
-				<div class="px-4 py-5 d-flex justify-content-between align-items-center">
-					<a class="navbar-brand">
-						<img th:src="@{/images/logo/logo.svg}" alt="" />
-					</a>
-					<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-				</div>
-				<div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-					<ul class="navbar-nav flex-column">
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-									<span class="nav-link-text">DashBoard</span>
-								</div>
-							</a>
-						</li>
-
-
-
-
-						<li class="nav-item mt-6 mb-3">
-							<span class="nav-label">Opciones</span>
-						</li>
-
-						<!-- Desplegable de los Clientes-->
-						<li class="nav-item">
-							<a
-									class="nav-link collapsed"
-									href="#"
-									data-bs-toggle="collapse"
-									data-bs-target="#navCustomer"
-									aria-expanded="false"
-									aria-controls="navCustomer"
-							>
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon"><i class="bi bi-people"></i></span>
-									<span class="nav-link-text">Usuarios</span>
-								</div>
-							</a>
-							<div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
-								<ul class="nav flex-column">
-									<li class="nav-item">
-										<a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
-									</li>
-									<!-- Nav item -->
-									<li class="nav-item">
-										<a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
-									</li>
-									<!-- Nav item -->
-									<li class="nav-item">
-										<a class="nav-link active" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-						<!-- Desplegable de los Administradores Zonales-->
-						<li class="nav-item">
-							<a
-									class="nav-link"
-									href="#"
-									data-bs-toggle="collapse"
-									data-bs-target="#navAdminZonal"
-									aria-expanded="false"
-									aria-controls="navAdminZonal"
-							>
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
-									<span class="nav-link-text">Administrador Zonal</span>
-								</div>
-							</a>
-							<div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
-								<ul class="nav flex-column">
-									<li class="nav-item active">
-										<a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
-									</li>
-									<!-- Nav item -->
-									<li class="nav-item">
-										<a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
-									</li>
-									<!-- Nav item -->
-									<li class="nav-item">
-										<a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-
-						<!-- Desplegable de los Agentes-->
-						<li class="nav-item">
-							<a
-									class="nav-link"
-									x              href="#"
-									data-bs-toggle="collapse"
-									data-bs-target="#navAgent"
-									aria-expanded="false"
-									aria-controls="navAgent"
-							>
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
-									<span class="nav-link-text">Agente</span>
-								</div>
-							</a>
-							<div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
-								<ul class="nav flex-column">
-									<li class="nav-item active">
-										<a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
-									</li>
-									<!-- Nav item -->
-									<li class="nav-item">
-										<a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-
-						<!-- Desplegable de los Proveedores-->
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-									<span class="nav-link-text">Proveedores</span>
-								</div>
-							</a>
-						</li>
-
-						<!-- Opción de los productor-->
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/SuperAdmin/categorias}">
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-									<span class="nav-link-text">Inventario de productos</span>
-								</div>
-							</a>
-						</li>
-
-
-						<!-- Opción de solicitudes de Agente-->
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
-								<div class="d-flex align-items-center">
-									<span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-									<span class="nav-link-text">Solicitudes para Agente</span>
-								</div>
-							</a>
-						</li>
-
-
-
-
-
-					</ul>
-				</div>
-			</div>
-		</nav>
-
+        <!-- navbar vertical (para celular)-->
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaUsuarioFinal')"></div>
 		<!-- COONTENIDO DE LA PAGINA -->
 		<main class="main-content-wrapper">
 			<div class="container">
-				<div class="row mb-8">
-					<div class="col-md-12">
+				<div class="row ">
+					<div class="col-12">
 						<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
 							<div>
 								<h2>Editar Usuario Final</h2>
@@ -491,464 +192,124 @@
 								</nav>
 							</div>
 							<div>
-								<button type="button" class="btn btn-danger" onclick="confirmDelete()" data-bs-toggle="modal" data-bs-target="#delete">Eliminar</button>
+								<button type="button" class="btn btn-danger" href="#" th:data-href="@{/SuperAdmin/banearUsuarioFinal/{id}(id=${finalUser.get().getId()})}" onclick="confirmDelete(this.getAttribute('data-href'))" data-bs-toggle="modal" data-bs-target="#delete" >Eliminar</button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row mb-8 g-5">
-					<div class="col-lg-8 col-12">
+				<div class="row" style="min-height: 100vh;">
+					<div class="col-12">
 						<div class="card card-lg border-0">
 							<div class="card-body d-flex flex-column gap-8 p-7">
-								<div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
-									<div>
-										<img class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/placeholder-img.jpg}" alt="Image" />
+								<form class="row g-3 needs-validation" novalidate method="post" th:action="@{/SuperAdmin/Actualizar/{id}(id=${finalUser.get().getId()})}">
+									<div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
+										<div>
+											<img class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/placeholder-img.jpg}" alt="Image" />
+										</div>
+
+										<div class="file-upload btn btn-light ms-md-4">
+											<input type="file" class="file-input opacity-0" />
+											Subir Foto
+										</div>
+
+										<span class="ms-md-2">JPG, GIF o PNG. Máx. 1MB.</span>
 									</div>
 
-									<div class="file-upload btn btn-light ms-md-4">
-										<input type="file" class="file-input opacity-0" />
-										Subir Foto
-									</div>
+									<div class="d-flex flex-column gap-4">
+										<h4 class="mb-0 h5">Información del usuario final</h4>
 
-									<span class="ms-md-2">JPG, GIF or PNG. 1MB Max.</span>
-								</div>
-
-								<div class="d-flex flex-column gap-4">
-									<h4 class="mb-0 h6">Información del usuario final</h4>
-									<form class="row g-3 needs-validation" novalidate>
-										<div class="col-lg-6 col-12">
-											<div>
-												<!-- input -->
+										<div class="row">
+											<div class="col-lg-6 col-12">
 												<label for="DNIFinalUser" class="form-label">
 													DNI:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" id="DNIFinalUser" th:value="${finalUser.get().getDni()}" required />
+												<input type="text" class="form-control" id="DNIFinalUser" name="dni" th:value="${finalUser.get().getDni()}" required />
 												<div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
 											</div>
-										</div>
-										<div class="col-lg-6 col-12">
-											<div>
-												<!-- input -->
+
+											<div class="col-lg-6 col-12">
 												<label for="creatCustomerName" class="form-label">
 													Nombres:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" id="creatCustomerName" th:value="${finalUser.get().getNombre()}" required />
+												<input type="text" class="form-control" id="creatCustomerName" name="nombre" th:value="${finalUser.get().getNombre()}" required />
 												<div class="invalid-feedback">Por favor ingrese los nombres del usuario</div>
 											</div>
 										</div>
-										<div class="col-lg-6 col-12">
-											<div>
-												<!-- input -->
+
+										<div class="row">
+											<div class="col-lg-6 col-12">
 												<label for="creatFinalUserLastName1" class="form-label">
 													Apellido Paterno:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" id="creatFinalUserLastName1" th:value="${finalUser.get().getApellidoPaterno()}" required />
+												<input type="text" class="form-control" name="apellidoPaterno" id="creatFinalUserLastName1" th:value="${finalUser.get().getApellidoPaterno()}" required />
 												<div class="invalid-feedback">Por favor ingrese el apellido paterno del usuario</div>
 											</div>
-										</div>
-										<div class="col-lg-6 col-12">
-											<div>
-												<!-- input -->
+
+											<div class="col-lg-6 col-12">
 												<label for="creatFinalUserLastName" class="form-label">
-													Apellido materno:
+													Apellido Materno:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" id="creatFinalUserLastName" th:value="${finalUser.get().getApellidoMaterno()}" required />
+												<input type="text" class="form-control" name="apellidoMaterno" id="creatFinalUserLastName" th:value="${finalUser.get().getApellidoMaterno()}" required />
 												<div class="invalid-feedback">Por favor ingrese el apellido materno del usuario</div>
 											</div>
 										</div>
-										<div class="col-lg-6 col-12">
-											<div>
-												<!-- input -->
+
+										<div class="row">
+											<div class="col-lg-6 col-12">
 												<label for="creatFinalUserEmail" class="form-label">
-													Email
+													Email:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="email" class="form-control" id="creatFinalUserEmail" th:value="${finalUser.get().getEmail()}" required />
+												<input type="email" class="form-control" name="email" id="creatFinalUserEmail" th:value="${finalUser.get().getEmail()}" required />
 												<div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
 											</div>
-										</div>
-										<div class="col-lg-6 col-12">
-											<div>
-												<!-- input -->
+
+											<div class="col-lg-6 col-12">
 												<label for="creatFinalUserDirection" class="form-label">Dirección</label>
-												<input type="text" class="form-control" id="creatFinalUserDirection" th:value="${finalUser.get().getDireccion()}" required />
+												<input type="text" class="form-control" name="direccion" id="creatFinalUserDirection" th:value="${finalUser.get().getDireccion()}" required />
 												<div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
 											</div>
 										</div>
 
-										<div class="col-lg-6 col-12">
-											<label class="form-label" for="creatFinalUserDistrict">Distrito</label>
-											<select class="form-control" id="creatFinalUserDistrict" name="distrito" required>
-												<option value="">Seleccione un distrito</option>
-												<option th:each="distrito : ${listaDistritos}"
-														th:value="${distrito.getId()}"
-														th:text="${distrito.getNombre()}"
-														th:selected="${distrito.getNombre() == finalUser.get().getDistrito().getNombre()}">
-													[Nombre del Distrito]
-												</option>
-											</select>
-											<div class="invalid-feedback">Por favor ingrese un distrito</div>
-										</div>
-										<div>
-											<div class="col-12 mt-3">
-												<div class="d-flex flex-column flex-md-row gap-2">
-													<button class="btn btn-primary" type="submit" onclick="showSuccessPopup(event)">Actualizar</button>
-													<button class="btn btn-secondary" type="submit">Cancelar</button>
-												</div>
+										<div class="row">
+											<div class="col-lg-6 col-12">
+												<label for="creatFinalUserPhone" class="form-label">Teléfono</label>
+												<input type="text" class="form-control" name="telefono" id="creatFinalUserPhone" th:value="${finalUser.get().getTelefono()}" required />
+												<div class="invalid-feedback">Por favor ingrese el número de teléfono</div>
+											</div>
+
+											<div class="col-lg-6 col-12">
+												<label class="form-label" for="creatFinalUserDistrict">Distrito</label>
+												<select class="form-control" id="creatFinalUserDistrict" name="distrito" required>
+													<option value="">Seleccione un distrito</option>
+													<option th:each="distrito : ${listaDistritos}"
+															th:value="${distrito.getId()}"
+															th:text="${distrito.getNombre()}"
+															th:selected="${distrito.getNombre() == finalUser.get().getDistrito().getNombre()}">
+														[Nombre del Distrito]
+													</option>
+												</select>
+												<div class="invalid-feedback">Por favor ingrese un distrito</div>
 											</div>
 										</div>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-4 col-12">
-						<div class="card card-lg border-0">
-							<div class="card-body p-6 d-flex flex-column gap-6">
-								<div>
-									<h4 class="mb-0 h6">Detalles del usuario final</h4>
-								</div>
-								<div class="d-flex flex-column gap-3">
-									<div class="d-flex flex-row justify-content-between">
-										<span class="fw-medium text-dark">Creado en</span>
-										<span class="fw-medium">8 meses atrás</span>
+
+										<div class="col-12 mt-3">
+											<div class="d-flex flex-column flex-md-row gap-2">
+												<button class="btn btn-primary" type="submit">Actualizar</button>
+												<button class="btn btn-secondary" th:href="@{/SuperAdmin/listaUsuarioFinal}">Cancelar</button>
+											</div>
+										</div>
 									</div>
-									<div class="d-flex flex-row justify-content-between">
-										<span class="fw-medium text-dark">Última modificación en</span>
-										<span class="fw-medium">2 month ago</span>
-									</div>
-								</div>
+								</form>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-12 text-center">
-						<ul class="nav nav-pills justify-content-center mb-6 bg-white border d-inline-flex rounded-3 p-2" id="myTab" role="tablist">
-							<!-- nav item -->
-							<li class="nav-item" role="presentation">
-								<!-- btn -->
-								<button
-										class="nav-link active"
-										id="address-tab"
-										data-bs-toggle="tab"
-										data-bs-target="#address-tab-pane"
-										type="button"
-										role="tab"
-										aria-controls="address-tab-pane"
-										aria-selected="true"
-								>
-									Address
-								</button>
-							</li>
-							<!-- nav item -->
-							<li class="nav-item" role="presentation">
-								<!-- btn -->
-								<button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment-tab-pane" type="button" role="tab" aria-controls="payment-tab-pane" aria-selected="false">
-									Payment
-								</button>
-							</li>
-						</ul>
-						<!-- tab content -->
-						<div class="tab-content" id="myTabContent">
-							<!-- tab pane -->
-							<div class="tab-pane fade show active" id="address-tab-pane" role="tabpanel" aria-labelledby="address-tab" tabindex="0">
-								<div class="card h-100 card-lg">
-									<div class="p-6">
-										<div class="d-flex justify-content-between flex-row align-items-center">
-											<div>
-												<h3 class="mb-0 h6">Addresses</h3>
-											</div>
-											<div>
-												<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#address">New Address</button>
-											</div>
-										</div>
-									</div>
-									<div class="card-body p-0">
-										<div class="table-responsive">
-											<table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
-												<thead class="bg-light">
-												<tr>
-													<th>
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" value="" id="addressOne" />
-															<label class="form-check-label" for="addressOne"></label>
-														</div>
-													</th>
-													<th>Street</th>
-													<th>State</th>
-													<th>City</th>
-													<th>Country</th>
 
-													<th>
-														<div class="dropdown">
-															<a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-																<i class="feather-icon icon-more-vertical fs-5"></i>
-															</a>
-															<ul class="dropdown-menu">
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-trash me-3"></i>
-																		Delete
-																	</a>
-																</li>
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-pencil-square me-3"></i>
-																		Edit
-																	</a>
-																</li>
-															</ul>
-														</div>
-													</th>
-												</tr>
-												</thead>
-												<tbody>
-												<tr>
-													<td>
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" value="" id="addressTwo" />
-															<label class="form-check-label" for="addressTwo"></label>
-														</div>
-													</td>
-
-													<td>123 Elm St.</td>
-
-													<td>IL</td>
-													<td>Springfield</td>
-													<td>USA</td>
-													<td>
-														<div class="dropdown">
-															<a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-																<i class="feather-icon icon-more-vertical fs-5"></i>
-															</a>
-															<ul class="dropdown-menu">
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-trash me-3"></i>
-																		Delete
-																	</a>
-																</li>
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-pencil-square me-3"></i>
-																		Edit
-																	</a>
-																</li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												</tbody>
-											</table>
-										</div>
-
-										<div class="border-top d-md-flex justify-content-between align-items-center p-6">
-											<span>Showing 1 result</span>
-											<nav class="mt-2 mt-md-0">
-												<ul class="pagination mb-0">
-													<li class="page-item disabled"><a class="page-link" href="#!">Previous</a></li>
-													<li class="page-item"><a class="page-link active" href="#!">1</a></li>
-													<li class="page-item"><a class="page-link" href="#!">2</a></li>
-													<li class="page-item"><a class="page-link" href="#!">3</a></li>
-													<li class="page-item"><a class="page-link" href="#!">Next</a></li>
-												</ul>
-											</nav>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- tab pane -->
-							<div class="tab-pane fade" id="payment-tab-pane" role="tabpanel" aria-labelledby="payment-tab" tabindex="0">
-								<div class="card h-100 card-lg">
-									<div class="p-6">
-										<div class="d-flex justify-content-between flex-row align-items-center">
-											<div>
-												<h3 class="mb-0 h6">Payments</h3>
-											</div>
-											<div>
-												<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#payment">New Payment</button>
-											</div>
-										</div>
-									</div>
-									<div class="card-body p-0">
-										<div class="table-responsive">
-											<table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
-												<thead class="bg-light">
-												<tr>
-													<th>
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" value="" id="paymentOne" />
-															<label class="form-check-label" for="paymentOne"></label>
-														</div>
-													</th>
-													<th>Order ID</th>
-													<th>Transaction Id</th>
-													<th>Date</th>
-													<th>Amount</th>
-													<th>Method</th>
-													<th>Status</th>
-													<th>
-														<div class="dropdown">
-															<a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-																<i class="feather-icon icon-more-vertical fs-5"></i>
-															</a>
-															<ul class="dropdown-menu">
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-trash me-3"></i>
-																		Delete
-																	</a>
-																</li>
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-pencil-square me-3"></i>
-																		Edit
-																	</a>
-																</li>
-															</ul>
-														</div>
-													</th>
-												</tr>
-												</thead>
-												<tbody>
-												<tr>
-													<td>
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" value="" id="paymentTwo" />
-															<label class="form-check-label" for="paymentTwo"></label>
-														</div>
-													</td>
-
-													<td>#101</td>
-
-													<td>TXN001</td>
-													<td>17 May, 2023 at 3:18pm</td>
-													<td>$34.00</td>
-													<td>Credit Card</td>
-													<td><span class="badge bg-light-success text-dark-success">Completed</span></td>
-													<td>
-														<div class="dropdown">
-															<a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-																<i class="feather-icon icon-more-vertical fs-5"></i>
-															</a>
-															<ul class="dropdown-menu">
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-trash me-3"></i>
-																		Delete
-																	</a>
-																</li>
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-pencil-square me-3"></i>
-																		Edit
-																	</a>
-																</li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" value="" id="paymentThree" />
-															<label class="form-check-label" for="paymentThree"></label>
-														</div>
-													</td>
-
-													<td>#102</td>
-
-													<td>TXN002</td>
-													<td>17 May, 2023 at 3:18pm</td>
-													<td>$34.00</td>
-													<td>PayPal</td>
-													<td><span class="badge bg-light-warning text-dark-warning">Pending</span></td>
-													<td>
-														<div class="dropdown">
-															<a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-																<i class="feather-icon icon-more-vertical fs-5"></i>
-															</a>
-															<ul class="dropdown-menu">
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-trash me-3"></i>
-																		Delete
-																	</a>
-																</li>
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-pencil-square me-3"></i>
-																		Edit
-																	</a>
-																</li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" value="" id="paymentFour" />
-															<label class="form-check-label" for="paymentFour"></label>
-														</div>
-													</td>
-
-													<td>#103</td>
-
-													<td>TXN003</td>
-													<td>17 May, 2023 at 3:18pm</td>
-													<td>$34.00</td>
-													<td>Debit Card</td>
-													<td><span class="badge bg-light-danger text-dark-danger">Failed</span></td>
-													<td>
-														<div class="dropdown">
-															<a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-																<i class="feather-icon icon-more-vertical fs-5"></i>
-															</a>
-															<ul class="dropdown-menu">
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-trash me-3"></i>
-																		Delete
-																	</a>
-																</li>
-																<li>
-																	<a class="dropdown-item" href="#">
-																		<i class="bi bi-pencil-square me-3"></i>
-																		Edit
-																	</a>
-																</li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												</tbody>
-											</table>
-										</div>
-
-										<div class="border-top d-md-flex justify-content-between align-items-center p-6">
-											<span>Showing 1 result</span>
-											<nav class="mt-2 mt-md-0">
-												<ul class="pagination mb-0">
-													<li class="page-item disabled"><a class="page-link" href="#!">Previous</a></li>
-													<li class="page-item"><a class="page-link active" href="#!">1</a></li>
-													<li class="page-item"><a class="page-link" href="#!">2</a></li>
-													<li class="page-item"><a class="page-link" href="#!">3</a></li>
-													<li class="page-item"><a class="page-link" href="#!">Next</a></li>
-												</ul>
-											</nav>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 		</main>
 	</div>
@@ -973,27 +334,31 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 <script>
-	function confirmDelete() {
+	function confirmDelete(url) {
 		Swal.fire({
 			title: '¿Estás seguro?',
 			text: "Los cambios no serán reversibles",
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonColor: '#28a745', // Color verde para el botón de eliminar
+			confirmButtonColor: '#28a745', // Color verde para el botón de confirmar
 			cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
 			confirmButtonText: 'Eliminar',
 			cancelButtonText: 'Cancelar'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				// Aquí puedes poner la lógica para eliminar el elemento
 				Swal.fire(
-					'¡Eliminado!',
-					'El elemento ha sido eliminado con éxito.',
-					'success'
-				);
+						'¡Eliminado!',
+						'El usuario ha sido baneado con éxito.',
+						'success'
+				).then((result) => {
+					if (result.isConfirmed) {
+						window.location.href = url; // Redirecciona al usuario a la URL del enlace
+					}
+				});
 			}
 		});
 	}
+
 </script>
 
 <script>
@@ -1001,7 +366,7 @@
         event.preventDefault(); // Evita el envío del formulario
         Swal.fire({
             title: '¡Éxito!',
-            text: 'Usuario creado correctamente',
+            text: 'Usuario actualizado correctamente',
             icon: 'success',
             confirmButtonColor: '#007bff',
             confirmButtonText: 'Aceptar',

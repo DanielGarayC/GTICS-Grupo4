@@ -19,6 +19,17 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- Theme CSS -->
     <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+    <style>
+
+        .logoImagen{
+            height: 80px;
+            width: 250px;
+        }
+        .logoImagenCelulares{
+            height: 80px;
+            width: 220px;
+        }
+    </style>
 
 </head>
 
@@ -161,321 +172,12 @@
 
 
     <div class="main-wrapper">
-        <!-- navbar vertical (para pc)-->
         <!-- navbar -->
-        <nav class="navbar-vertical-nav d-none d-xl-block">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.svg}" alt="" />
-                    </a>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column" id="sideNavbar">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{dashboard}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-                                    <span class="nav-link-text">DashBoard</span>
-                                </div>
-                            </a>
-                        </li>
+        <!-- navbar vertical (para pc)-->
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaAdminZonal')"></div>
 
-
-
-
-                        <li class="nav-item mt-6 mb-3">
-                            <span class="nav-label">Opciones</span>
-                        </li>
-
-                        <!-- Desplegable de los Clientes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link collapsed"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navCustomer"
-                                    aria-expanded="false"
-                                    aria-controls="navCustomer"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-people"></i></span>
-                                    <span class="nav-link-text">Usuarios</span>
-
-                                </div>
-                            </a>
-                            <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- Desplegable de los Administradores Zonales-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAdminZonal"
-                                    aria-expanded="false"
-                                    aria-controls="navAdminZonal"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
-                                    <span class="nav-link-text">Administrador Zonal</span>
-                                </div>
-                            </a>
-                            <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link active" th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Agentes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    x              href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAgent"
-                                    aria-expanded="false"
-                                    aria-controls="navAgent"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
-                                    <span class="nav-link-text">Agente</span>
-                                </div>
-                            </a>
-                            <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Proveedores-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-                                    <span class="nav-link-text">Proveedores</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <!-- Opción de los productor-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/categorias}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-                                    <span class="nav-link-text">Inventario de productos</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-                        <!-- Opción de solicitudes de Agente-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-                                    <span class="nav-link-text">Solicitudes para Agente</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-
-                    </ul>
-                </div>
-        </nav>
-
-        <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5 d-flex justify-content-between align-items-center">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.svg}" alt="" />
-                    </a>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{dashboard}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-                                    <span class="nav-link-text">DashBoard</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-                        <li class="nav-item mt-6 mb-3">
-                            <span class="nav-label">Opciones</span>
-                        </li>
-
-                        <!-- Desplegable de los Clientes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link collapsed"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navCustomer"
-                                    aria-expanded="false"
-                                    aria-controls="navCustomer"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-people"></i></span>
-                                    <span class="nav-link-text">Usuarios</span>
-                                </div>
-                            </a>
-                            <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- Desplegable de los Administradores Zonales-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAdminZonal"
-                                    aria-expanded="false"
-                                    aria-controls="navAdminZonal"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
-                                    <span class="nav-link-text">Administrador Zonal</span>
-                                </div>
-                            </a>
-                            <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link active" th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Agentes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    x              href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAgent"
-                                    aria-expanded="false"
-                                    aria-controls="navAgent"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
-                                    <span class="nav-link-text">Agente</span>
-                                </div>
-                            </a>
-                            <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Proveedores-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-                                    <span class="nav-link-text">Proveedores</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <!-- Opción de los productor-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/categorias}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-                                    <span class="nav-link-text">Inventario de productos</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-                        <!-- Opción de solicitudes de Agente-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-                                    <span class="nav-link-text">Solicitudes para Agente</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
+        <!-- navbar vertical (para celular)-->
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaAdminZonal')"></div>
         <!-- COONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">
             <div class="container">
@@ -494,9 +196,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-                    <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="row" style="min-height: 100vh;">
+                    <div class="col-12">
                         <div class="card shadow border-0">
+
                             <div class="card-body d-flex flex-column gap-8 p-7">
                                 <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
                                     <div>
@@ -521,7 +224,7 @@
                                         <div class="row g-3">
 
                                             <!-- Nombres -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="creatCustomerName" class="form-label">
                                                     Nombres: <span style="visibility: hidden;">*</span>
                                                 </label>
@@ -530,14 +233,14 @@
                                             </div>
 
                                             <!-- Apellidos -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="creatFinalUserLastNameP" class="form-label">
                                                     Apellido Paterno: <span style="visibility: hidden;">*</span>
                                                 </label>
                                                 <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidoPaterno" placeholder="Apellido paterno del admin zonal" required />
                                                 <div class="invalid-feedback">Por favor ingrese el apellido paterno del admin zonal</div>
                                             </div>
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="creatFinalUserLastNameM" class="form-label">
                                                     Apellido Materno: <span style="visibility: hidden;">*</span>
                                                 </label>
@@ -545,7 +248,7 @@
                                                 <div class="invalid-feedback">Por favor ingrese el apellido materno del admin zonal</div>
                                             </div>
                                             <!-- DNI -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="DNIFinalUser" class="form-label">
                                                     DNI: <span style="visibility: hidden;">*</span>
                                                 </label>
@@ -554,7 +257,7 @@
                                             </div>
 
                                             <!-- Número telefónico -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="phoneAdminZonal" class="form-label">
                                                     Número telefónico: <span style="visibility: hidden;">*</span>
                                                 </label>
@@ -563,7 +266,7 @@
                                             </div>
 
                                             <!-- Email -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="creatFinalUserEmail" class="form-label">
                                                     Email: <span style="visibility: hidden;">*</span>
                                                 </label>
@@ -572,14 +275,14 @@
                                             </div>
 
                                             <!-- Dirección -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="creatFinalUserDirection" class="form-label">Dirección</label>
                                                 <input type="text" class="form-control" id="creatFinalUserDirection" name="direccion" placeholder="Dirección" required />
                                                 <div class="invalid-feedback">Por favor ingrese la dirección del admin zonal</div>
                                             </div>
 
                                             <!-- Selección de zona -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label for="selectZone" class="form-label">Zona</label>
                                                 <select class="form-select" name="zonaId" id="selectZone" required>
                                                     <option value="" selected disabled>--Seleccione una zona--</option>
@@ -589,14 +292,14 @@
                                             </div>
 
                                             <!-- Fecha de nacimiento -->
-                                            <div class="col-12">
+                                            <div class="col-lg-6 col-12">
                                                 <label class="form-label" for="creatFinalUserDate">Fecha de nacimiento</label>
                                                 <input type="date" class="form-control" id="creatFinalUserDate" name="azFechanacimiento" placeholder="Fecha de nacimiento" required />
                                                 <div class="invalid-feedback" id="fecha-feedback">Por favor ingrese una fecha válida de nacimiento</div>
                                             </div>
 
                                             <!-- Contraseña temporal -->
-                                            <div class="col-12">
+                                            <div class="col-6">
                                                 <label class="form-label" for="passwordAdminZonal">Contraseña temporal</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="passwordAdminZonal" name="contrasena" required />

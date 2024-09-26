@@ -22,4 +22,7 @@ public class Distrito {
     @JoinColumn(name = "idzona", nullable = false)
     private Zona zona;
 
+    @Column(name = "codigosJurisdiccion")
+    private String codigosJurisdiccion;
+
 }

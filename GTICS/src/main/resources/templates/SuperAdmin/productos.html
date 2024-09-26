@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="Codescandy" name="author">
-    <title>Lista de agentes</title>
+    <title>Productos</title>
     <!-- Favicon icon-->
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
@@ -18,6 +18,7 @@
 
     <!-- Theme CSS -->
     <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+
     <style>
 
         .logoImagen{
@@ -145,8 +146,7 @@
                         </li>
                         <li class="dropdown ms-4">
                             <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
-                            </a>
+                                <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />                            </a>
 
                             <div class="dropdown-menu dropdown-menu-end p-0">
                                 <div class="lh-1 px-5 py-4 border-bottom">
@@ -155,7 +155,7 @@
                                 </div>
 
                                 <div class="border-top px-5 py-3">
-                                    <a th:href="@{perfil}">Mi perfil</a>
+                                    <a href="perfilSuperAdmin.html">Mi perfil</a>
                                 </div>
                                 <div class="border-top px-5 py-3">
                                     <a href="#">Cerrar sesión</a>
@@ -170,90 +170,87 @@
 
 
     <div class="main-wrapper">
-        <!-- navbar vertical (para pc)-->
         <!-- navbar -->
-        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaAgente')"></div>
-
-        <!-- navbar vertical (para celular)-->
-        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaAgente')"></div>
-
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('productos')"></div>
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('productos')"></div>
 
         <!-- COONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">
             <div class="container">
+                <!-- row -->
                 <div class="row mb-8">
                     <div class="col-md-12">
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+                            <!-- pageheader -->
                             <div>
-                                <h2>Lista de agentes</h2>
+                                <h2>Inventario de productos</h2>
                                 <!-- breacrumb -->
-
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Opciones</a></li>
+                                        <li class="breadcrumb-item" aria-current="page">Productos</li>
+                                    </ol>
+                                </nav>
                             </div>
-
+                            <!-- button -->
+                            <div>
+                                <a th:href="@{/SuperAdmin/agregarProducto}" class="btn btn-primary">Agregar producto</a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-12 col-12 mb-5">
+                        <!-- card -->
                         <div class="card h-100 card-lg">
-                            <div class="p-6">
+                            <div class="px-6 py-6">
                                 <div class="row justify-content-between">
-                                    <div class="col-md-4 col-12">
+                                    <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
+                                        <!-- form -->
                                         <form class="d-flex" role="search">
-                                            <label for="searchCustomers" class="visually-hidden">Buscar usuario finales</label>
-                                            <input class="form-control" type="search" id="searchCustomers" placeholder="Buscar usuario finales" aria-label="Search" />
+                                            <input class="form-control" type="search" placeholder="Buscar" aria-label="Search" />
                                         </form>
+                                    </div>
+                                    <!-- select option -->
+                                    <div class="col-xl-2 col-md-4 col-12">
+                                        <select class="form-select">
+                                            <option selected>Categoría</option>
+                                            <option value="1">Electrónica y Tecnología</option>
+                                            <option value="2">Salud y Belleza</option>
+                                            <option value="3">Moda y Ropa</option>
+                                            <option value="4">Hogar y Cocina</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="alert alert-success" role="alert" th:if="${message != null}" th:text="${message}">
-
-                            </div>
-                            <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
-
-                            </div>
+                            <!-- card body -->
                             <div class="card-body p-0">
+                                <!-- table -->
                                 <div class="table-responsive">
-                                    <table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
-
+                                    <table class="table table-centered table-hover mb-0 text-nowrap table-borderless table-with-checkbox">
                                         <thead class="bg-light">
-                                        <tr >
-                                            <th></th>
-                                            <th>Nombres</th>
-                                            <th>Apellido paterno</th>
-                                            <th>Apellido materno</th>
-                                            <th>DNI</th>
-                                            <th>Teléfono</th>
-                                            <th>Correo electrónico</th>
-                                            <th>Razón social</th>
-                                            <th>Código de Despachador Aduanero</th>
-                                            <th>Estado del Código</th>
-                                            <th>Código de Jurisdicción</th>
-                                            <th>Zona</th>
-                                            <th></th>
+                                        <tr>
+                                            <th class="text-center">Nombre del Producto</th>
+                                            <th class="text-center">Categoría</th>
+                                            <th class="text-center">Cantidad Disponible</th>
+                                            <th class="text-center">Precio</th>
+                                            <th class="text-center">Proveedor</th>
+                                            <th class="text-center"></th>
                                         </tr>
                                         </thead>
                                         <tbody>
 
-                                        <tr th:each="agente : ${agentes}">
+                                        <tr th:if="${productos.size() == 0}">
+                                            <td colspan="7" class="text-center">Todavía no ha añadido productos.</td>
+                                        </tr>
 
+                                        <tr th:each="producto : ${productos}" th:if="${producto.borrado == 0}">
+                                            <td class="text-center" th:text="${producto.nombreProducto}">Nombre del producto</td>
+                                            <td class="text-center" th:text="${producto.idCategoria.nombreCategoria}">Categoría</td>
+                                            <td class="text-center" th:text="${producto.cantidadDisponible}">Cantidad Disponible</td>
+                                            <td class="text-center" th:text="${producto.precio}">Precio</td>
+                                            <td class="text-center" th:text="${producto.idProveedor.tienda.nombreTienda}">Proveedor</td>
 
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-2.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                </div>
-                                            </td>
-                                            <td th:text="${agente.nombre}"></td>
-                                            <td th:text="${agente.apellidoPaterno}"></td>
-                                            <td th:text="${agente.apellidoMaterno}"></td>
-                                            <td th:text="${agente.dni}"></td>
-                                            <td th:text="${agente.telefono}"> </td>
-                                            <td th:text="${agente.email}"> </td>
-                                            <td th:text="${agente.agtRazonsocial != null ? agente.agtRazonsocial : '-'}"> </td>
-                                            <td th:text="${agente.agtCodigoaduana != null ? agente.agtCodigoaduana : '-'}"> </td>
-                                            <td >Habilitado</td>
-                                            <td th:text="${agente.agtCodigojurisdiccion != null ? agente.agtCodigojurisdiccion : '-'}"></td>
-                                            <td th:text="${agente.zona.getNombreZona() != null ? agente.zona.getNombreZona() : '-'}">Norte</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -261,42 +258,37 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/editarAgente/{id}(id=${agente.id})}">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Editar
+                                                            <a class="dropdown-item" th:href="@{'/SuperAdmin/editarProducto/' + ${producto.id}}">
+                                                                <i class="bi bi-pencil-square me-3"></i> Editar
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a class="dropdown-item" href="javascript:void(0);" th:onclick="'confirmDelete(' + ${agente.id} + ')'">
-
-                                                            <i class="bi bi-trash me-3"></i>
+                                                            <a class="dropdown-item" href="javascript:void(0);" th:onclick="'confirmDelete(' + ${producto.id} + ')'">
+                                                                <i class="bi bi-trash me-3"></i>
                                                                 Eliminar
                                                             </a>
                                                         </li>
-
                                                     </ul>
                                                 </div>
                                             </td>
                                         </tr>
-
                                         </tbody>
                                     </table>
 
 
                                 </div>
-
-                                <div class="border-top d-md-flex justify-content-between align-items-center p-6">
-                                    <span>Mostrando del 1 al 8 de 12 entradas</span>
-                                    <nav class="mt-2 mt-md-0">
-                                        <ul class="pagination mb-0">
-                                            <li class="page-item disabled"><a class="page-link" href="#!">Anterior</a></li>
-                                            <li class="page-item"><a class="page-link active" href="#!">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#!">Siguiente</a></li>
-                                        </ul>
-                                    </nav>
-                                </div>
+                            </div>
+                            <div class="border-top d-flex justify-content-between align-items-md-center px-6 py-6 flex-md-row flex-column gap-4">
+                                <span>Showing 1 to 8 of 12 entries</span>
+                                <nav>
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item disabled"><a class="page-link" href="#!">Previous</a></li>
+                                        <li class="page-item"><a class="page-link active" href="#!">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#!">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#!">Next</a></li>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
@@ -322,31 +314,25 @@
 
 <!-- SweetAlert2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 <script>
-function confirmDelete(id) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "Los cambios no serán reversibles",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#28a745', // Color verde para el botón de eliminar
-        cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
-        confirmButtonText: 'Eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = `/SuperAdmin/eliminarAgente?id=${id}`;
-            Swal.fire(
-                '¡Eliminado!',
-                'El elemento ha sido eliminado con éxito.',
-                'success'
-            );
-        }
-    });
-}
-
-
+    function confirmDelete(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Los cambios no serán reversibles",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#dc3545',
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirigir a la URL de eliminación con el ID del producto
+                window.location.href = `/SuperAdmin/eliminarProducto/${id}`;
+            }
+        });
+    }
 </script>
-
 </body>
 </html>

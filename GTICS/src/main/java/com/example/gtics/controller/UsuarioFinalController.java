@@ -1,15 +1,63 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.entity.Solicitudagente;
+import com.example.gtics.entity.Usuario;
+import com.example.gtics.entity.Validacionescodigosagente;
+import com.example.gtics.repository.SolicitudAgenteRepository;
+import com.example.gtics.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UsuarioFinalController {
-    @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
-    public String mostrarPagPrincipal(){
+    private final UsuarioRepository usuarioRepository;
+    private final SolicitudAgenteRepository solicitudAgenteRepository;
 
-        return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
+    public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository, UsuarioRepository usuarioRepository) {
+        this.solicitudAgenteRepository = solicitudAgenteRepository;
+        this.usuarioRepository = usuarioRepository;
     }
+
+    @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
+    public String mostrarPagPrincipal(Model model){
+
+        Optional<Usuario> optUsuario = usuarioRepository.findById(7);
+        if(optUsuario.isPresent()){
+            Usuario us = optUsuario.get(); // usuario random que solicita ser agente
+            model.addAttribute("usuario",us);
+            return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
+        }else{
+            return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
+        }
+
+    }
+    @PostMapping("/UsuarioFinal/solicitudAgente")
+    public String enviarSolicitudaSerAgente(Solicitudagente solicitudagente){
+        solicitudagente.setIndicadorSolicitud(0);
+        solicitudagente.setValidaciones(1);
+        //solicitudagente.setValidaciones(new Validacionescodigosagente());
+        /*
+        System.out.println(solicitudagente.getCodigoAduana());
+        System.out.println(solicitudagente.getCodigoJurisdiccion());
+        System.out.println(solicitudagente.getIndicadorSolicitud());
+        */
+        solicitudAgenteRepository.save(solicitudagente);
+        Optional<Usuario> optUsuario = usuarioRepository.findById(7);
+        Solicitudagente ultimaSolicitud = solicitudAgenteRepository.findTopByOrderByIdDesc();
+
+        if(optUsuario.isPresent()) {
+            Usuario us = optUsuario.get(); // usuario random que solicita ser agente
+            usuarioRepository.asignarSolictudAusuario(ultimaSolicitud.getId(), us.getId());
+        }
+        return "redirect:/UsuarioFinal";
+    }
+
+
     @GetMapping("/UsuarioFinal/miPerfil")
     public String miPerfil(){
 

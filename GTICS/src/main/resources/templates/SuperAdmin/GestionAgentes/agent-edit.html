@@ -1,997 +1,432 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta content="Codescandy" name="author">
-    <title>Editar Agente</title>
-    <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta content="Codescandy" name="author">
+        <title>Editar agente</title>
+        <!-- Favicon icon-->
+        <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
 
-    <!-- Libs CSS -->
-    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
-    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
-    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+        <!-- Libs CSS -->
+        <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+        <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+        <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
 
-    <!-- Theme CSS -->
-    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
-</head>
+        <!-- Theme CSS -->
+        <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+        <style>
 
-<body>
-<!-- main -->
-<div>
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-glass">
-        <div class="container-fluid">
-            <div class="d-flex justify-content-between align-items-center w-100">
-                <div class="d-flex align-items-center">
-                    <a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
-                            <path
-                                    d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
-                            />
-                        </svg>
-                    </a>
+            .logoImagen{
+                height: 80px;
+                width: 250px;
+            }
+            .logoImagenCelulares{
+                height: 80px;
+                width: 220px;
+            }
+        </style>
+    </head>
 
-                </div>
-                <div>
-                    <ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
-                        <li class="dropdown-center">
-                            <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-bell fs-5"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+    <body>
+        <!-- main -->
+        <div>
+            <!-- navbar -->
+            <nav class="navbar navbar-expand-lg navbar-glass">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="d-flex align-items-center">
+                            <a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
+                                    <path
+                                            d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
+                                    />
+                                </svg>
+                            </a>
+
+                        </div>
+                        <div>
+                            <ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
+                                <li class="dropdown-center">
+                                    <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-bell fs-5"></i>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
 								2
 								<span class="visually-hidden">Mensajes sin leer</span>
 							</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
-                                <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="mb-1">Notificaciones</h5>
-                                        <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
-                                    </div>
-                                    <a href="#!" class="text-muted">
-                                        <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
-                                                <path
-                                                        d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
-                                                />
-                                                <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
-                                            </svg>
-                                        </a>
                                     </a>
-                                </div>
-                                <div data-simplebar style="height: 250px">
-                                    <!-- List group -->
-                                    <ul class="list-group list-group-flush notification-list-scroll fs-6">
-                                        <!-- List group item -->
-                                        <li class="list-group-item px-5 py-4 list-group-item-action active">
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+                                        <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5 class="mb-1">Notificaciones</h5>
+                                                <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
+                                            </div>
                                             <a href="#!" class="text-muted">
-                                                <div class="d-flex">
-                                                    <div class="ms-4">
-                                                        <p class="mb-1">
-                                                            <span class="text-dark">Nombre de la persona</span>
-                                                            Descripción notificación 1
-                                                        </p>
-                                                        <span>
+                                                <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+                                                        <path
+                                                                d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+                                                        />
+                                                        <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+                                                    </svg>
+                                                </a>
+                                            </a>
+                                        </div>
+                                        <div data-simplebar style="height: 250px">
+                                            <!-- List group -->
+                                            <ul class="list-group list-group-flush notification-list-scroll fs-6">
+                                                <!-- List group item -->
+                                                <li class="list-group-item px-5 py-4 list-group-item-action active">
+                                                    <a href="#!" class="text-muted">
+                                                        <div class="d-flex">
+                                                            <div class="ms-4">
+                                                                <p class="mb-1">
+                                                                    <span class="text-dark">Nombre de la persona</span>
+                                                                    Descripción notificación 1
+                                                                </p>
+                                                                <span>
 														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
 															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
 															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
 														</svg>
 														<small class="ms-2">Hace 1 minuto</small>  <!--Se puede eliminar-->
 													</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="list-group-item px-5 py-4 list-group-item-action">
-                                            <a href="#!" class="text-muted">
-                                                <div class="d-flex">
-                                                    <div class="ms-4">
-                                                        <p class="mb-1">
-                                                            <span class="text-dark">Título de notificación 2</span>
-                                                            Descripción notificación 2
-                                                        </p>
-                                                        <span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="list-group-item px-5 py-4 list-group-item-action">
+                                                    <a href="#!" class="text-muted">
+                                                        <div class="d-flex">
+                                                            <div class="ms-4">
+                                                                <p class="mb-1">
+                                                                    <span class="text-dark">Título de notificación 2</span>
+                                                                    Descripción notificación 2
+                                                                </p>
+                                                                <span>
 														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
 															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
 															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
 														</svg>
 														<small class="ms-2">Hace 2 días</small>
 													</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="list-group-item px-5 py-4 list-group-item-action">
-                                            <a href="#!" class="text-muted">
-                                                <div class="d-flex">
-                                                    <div class="ms-4">
-                                                        <p class="mb-1">
-                                                            <span class="text-dark">Título de notificación 3</span>
-                                                            Descripción notificación 3
-                                                        </p>
-                                                        <span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="list-group-item px-5 py-4 list-group-item-action">
+                                                    <a href="#!" class="text-muted">
+                                                        <div class="d-flex">
+                                                            <div class="ms-4">
+                                                                <p class="mb-1">
+                                                                    <span class="text-dark">Título de notificación 3</span>
+                                                                    Descripción notificación 3
+                                                                </p>
+                                                                <span>
 														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
 															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
 															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
 														</svg>
 														<small class="ms-2">Hace 5 horas</small>
 													</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="border-top px-5 py-4 text-center">
+                                            <a href="#!">Ver todas</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="dropdown ms-4">
+                                    <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-end p-0">
+                                        <div class="lh-1 px-5 py-4 border-bottom">
+                                            <h5 class="mb-1 h6">Nombre Apellido</h5>
+                                            <small>rol en la pagina</small>
+                                        </div>
+
+                                        <div class="border-top px-5 py-3">
+                                            <a th:href="@{perfil}">Mi perfil</a>
+                                        </div>
+                                        <div class="border-top px-5 py-3">
+                                            <a href="#">Cerrar sesión</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+
+            <div class="main-wrapper">
+                <!-- navbar -->
+                <!-- navbar vertical (para pc)-->
+                <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('editarAgente')"></div>
+
+                <!-- navbar vertical (para celular)-->
+                <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('editarAgente')"></div>
+
+                <!-- COONTENIDO DE LA PAGINA -->
+                <main class="main-content-wrapper">
+                    <div class="container">
+                        <div class="row mb-8">
+                            <div class="col-md-12">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+                                    <div>
+                                        <h2>Editar agente</h2>
+                                        <!-- breacrumb -->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${error}" class="alert alert-danger">
+                            <span th:text="${error}"></span>
+                        </div>
+                        <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+                            <div class="col-lg-8 col-md-10 col-sm-12">
+                                <div class="card card-lg border-0">
+                                    <div class="card-body d-flex flex-column gap-8 p-7">
+                                        <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
+                                            <div>
+                                                <img class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/placeholder-img.jpg}" alt="Image" />
+                                            </div>
+
+                                            <div class="file-upload btn btn-light ms-md-4">
+                                                <input type="file" class="file-input opacity-0" />
+                                                Actualizar foto
+                                            </div>
+
+                                            <span class="ms-md-2">JPG, GIF or PNG. 1MB Max.</span>
+                                        </div>
+
+                                        <div class="d-flex flex-column gap-4">
+                                            <h3 class="mb-0 h6">Información del agente</h3>
+                                            <form id="adminZonalForm" th:action="@{/SuperAdmin/Agente/guardar}" method="post" class="row g-3 needs-validation" novalidate>
+                                                <!-- ID (Campo oculto) -->
+                                                <input type="hidden" name="id" th:value="${agente.id}" />
+
+                                                <!-- Contraseña (Campo oculto, si se requiere) -->
+                                                <input type="hidden" name="contrasena" th:value="${agente.contrasena}" />
+
+                                                <!-- Nombres -->
+                                                <div class="col-12">
+                                                    <label for="creatCustomerName" class="form-label">Nombres:</label>
+                                                    <input type="text" class="form-control" id="creatCustomerName" name="nombre" th:value="${agente.nombre}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese los nombres del agente</div>
+                                                </div>
+
+                                                <!-- Apellidos -->
+                                                <div class="col-12">
+                                                    <label for="creatFinalUserLastNameP" class="form-label">Apellido Paterno:</label>
+                                                    <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidoPaterno" th:value="${agente.apellidoPaterno}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese el apellido paterno del agente</div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label for="creatFinalUserLastNameM" class="form-label">Apellido Materno:</label>
+                                                    <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidoMaterno" th:value="${agente.apellidoMaterno}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese el apellido materno del agente</div>
+                                                </div>
+
+                                                <!-- DNI -->
+                                                <div class="col-12">
+                                                    <label for="DNIFinalUser" class="form-label">DNI:</label>
+                                                    <input type="text" class="form-control" id="DNIFinalUser" name="dni" minlength="8" maxlength="8" pattern="\d{8}" th:value="${agente.dni}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese un DNI válido con 8 dígitos</div>
+                                                </div>
+
+                                                <!-- Número telefónico -->
+                                                <div class="col-12">
+                                                    <label for="phoneAdminZonal" class="form-label">Número telefónico:</label>
+                                                    <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" minlength="9" maxlength="9" pattern="\d{9}" th:value="${agente.telefono}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese un número telefónico válido</div>
+                                                </div>
+
+                                                <!-- Email -->
+                                                <div class="col-12">
+                                                    <label for="creatFinalUserEmail" class="form-label">Email:</label>
+                                                    <input type="email" class="form-control" id="creatFinalUserEmail" name="email" th:value="${agente.email}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese un correo electrónico válido</div>
+                                                </div>
+
+                                                <!-- Razón Social -->
+                                                <div class="col-12">
+                                                    <label for="razonSocial" class="form-label">Razón Social:</label>
+                                                    <input type="text" class="form-control" id="razonSocial" name="agtRazonsocial" th:value="${agente.agtRazonsocial}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese la razón social</div>
+                                                </div>
+
+                                                <!-- Código de Despachador Aduanero -->
+                                                <div class="col-12">
+                                                    <label for="despachador" class="form-label">Código de Despachador Aduanero:</label>
+                                                    <input type="text" class="form-control" id="despachador" name="agtCodigoaduana" th:value="${agente.agtCodigoaduana}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese el código de aduana</div>
+                                                </div>
+
+                                                <!-- Estado del Código (Valor fijo para esta versión) -->
+                                                <div class="col-12">
+                                                    <label for="valorAduana" class="form-label">Estado del Código:</label>
+                                                    <input type="text" class="form-control" id="valorAduana" name="estado" value="Habilitado" readonly required />
+                                                </div>
+
+                                                <!-- Código de Jurisdicción -->
+                                                <div class="col-12">
+                                                    <label for="jurisdiccion" class="form-label">Código de Jurisdicción:</label>
+                                                    <input type="text" class="form-control" id="jurisdiccion" name="agtCodigojurisdiccion" th:value="${agente.agtCodigojurisdiccion}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese el código de jurisdicción</div>
+                                                </div>
+
+                                                <!-- Selección de Zona -->
+                                                <div class="col-12">
+                                                    <label for="selectZone" class="form-label">Zona</label>
+                                                    <select class="form-select" id="selectZone" name="zona.id" required>
+                                                        <option th:each="zona : ${zonas}"
+                                                                th:value="${zona.getId()}"
+                                                                th:text="${zona.getNombreZona()}"
+                                                                th:selected="${agente.zona != null && agente.zona.getId() == zona.getId()}"></option>
+                                                    </select>
+                                                    <div class="invalid-feedback">Por favor seleccione una zona</div>
+                                                </div>
+
+                                                <!-- Botones de acción -->
+                                                <div class="col-12 mt-3">
+                                                    <div class="d-flex flex-column flex-md-row gap-2">
+                                                        <button class="btn btn-primary" type="submit">Guardar</button>
+                                                        <a th:href="@{/SuperAdmin/listaAgente}" class="btn btn-secondary">Cancelar</a>
                                                     </div>
                                                 </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="border-top px-5 py-4 text-center">
-                                    <a href="#!">Ver todas</a>
+                                            </form>
+
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </li>
-                        <li class="dropdown ms-4">
-                            <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
-                            </a>
 
-                            <div class="dropdown-menu dropdown-menu-end p-0">
-                                <div class="lh-1 px-5 py-4 border-bottom">
-                                    <h5 class="mb-1 h6">Nombre Apellido</h5>
-                                    <small>rol en la pagina</small>
-                                </div>
+                        </div>
 
-                                <div class="border-top px-5 py-3">
-                                    <a th:href="@{perfil}">Mi perfil</a>
-                                </div>
-                                <div class="border-top px-5 py-3">
-                                    <a href="#">Cerrar sesión</a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                    </div>
+                </main>
             </div>
         </div>
-    </nav>
 
+        <!-- Libs JS -->
+        <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
-    <div class="main-wrapper">
-        <!-- navbar vertical (para pc)-->
-        <!-- navbar -->
-        <nav class="navbar-vertical-nav d-none d-xl-block">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.svg}" alt="" />
-                    </a>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column" id="sideNavbar">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-                                    <span class="nav-link-text">DashBoard</span>
-                                </div>
-                            </a>
-                        </li>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <!-- Theme JS -->
+        <script th:src="@{/js/theme.min.js}"></script>
+
+        <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+        <script th:src="@{/js/vendors/chart.js}"></script>
 
 
 
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-                        <li class="nav-item mt-6 mb-3">
-                            <span class="nav-label">Opciones</span>
-                        </li>
-
-                        <!-- Desplegable de los Clientes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link collapsed"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navCustomer"
-                                    aria-expanded="false"
-                                    aria-controls="navCustomer"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-people"></i></span>
-                                    <span class="nav-link-text">Usuarios</span>
-                                </div>
-                            </a>
-                            <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- Desplegable de los Administradores Zonales-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAdminZonal"
-                                    aria-expanded="false"
-                                    aria-controls="navAdminZonal"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
-                                    <span class="nav-link-text">Administrador Zonal</span>
-                                </div>
-                            </a>
-                            <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Agentes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    x              href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAgent"
-                                    aria-expanded="false"
-                                    aria-controls="navAgent"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
-                                    <span class="nav-link-text">Agente</span>
-                                </div>
-                            </a>
-                            <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link active" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Proveedores-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-                                    <span class="nav-link-text">Proveedores</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <!-- Opción de los productor-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/categorias}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-                                    <span class="nav-link-text">Inventario de productos</span>
-                                </div>
-                            </a>
-                        </li>
+        <!-- SweetAlert2 JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 
-                        <!-- Opción de solicitudes de Agente-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-                                    <span class="nav-link-text">Solicitudes para Agente</span>
-                                </div>
-                            </a>
-                        </li>
+        <script>
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('adminZonalForm');
+                const dniInput = document.getElementById('DNIFinalUser');
+                const phoneInput = document.getElementById('phoneAdminZonal');
+                const dateInput = document.getElementById('creatFinalUserDate');
+
+                // Validar fecha de nacimiento (no puede ser futura)
+                dateInput.addEventListener('blur', function () {
+                    const currentDate = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
+                    if (dateInput.value > currentDate) {
+                        dateInput.setCustomValidity("La fecha de nacimiento no puede ser futura.");
+                        dateInput.classList.add('is-invalid');
+                    } else {
+                        dateInput.setCustomValidity(""); // Restablecer si la fecha es válida
+                        dateInput.classList.remove('is-invalid');
+                        dateInput.classList.add('is-valid');
+                    }
+                });
+
+                // Evento blur para validación en campo DNI
+                dniInput.addEventListener('blur', function() {
+                    this.classList.remove('is-valid', 'is-invalid');
+                    if (!this.validity.valid) {
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.classList.add('is-valid');
+                    }
+                });
+
+                // Evento blur para validación en campo Teléfono
+                phoneInput.addEventListener('blur', function() {
+                    this.classList.remove('is-valid', 'is-invalid');
+                    if (!this.validity.valid) {
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.classList.add('is-valid');
+                    }
+                });
+
+                // Validar todo el formulario al enviarlo
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated'); // Forzar mostrar validaciones si no es válido
+                });
+            });
+
+            // Función para mostrar el popup de confirmación con validación del formulario
+            function showSuccessPopup() {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Confirma que deseas actualizar la información del Admin Zonal",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, actualizar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    const form = document.getElementById('adminZonalForm');
+                    if (result.isConfirmed) {
+                        if (form.checkValidity()) {
+                            form.submit();
+                        } else {
+                            form.classList.add('was-validated'); // Forzar mostrar validaciones si no es válido
+                        }
+                    }
+                });
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                flatpickr("#creatFinalUserDate", {
+                    dateFormat: "Y-m-d"  // Esto asegura que la fecha se envíe en formato yyyy-MM-dd
+                });
+            });
 
 
-
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5 d-flex justify-content-between align-items-center">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.svg}" alt="" />
-                    </a>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-                                    <span class="nav-link-text">DashBoard</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-                        <li class="nav-item mt-6 mb-3">
-                            <span class="nav-label">Opciones</span>
-                        </li>
-
-                        <!-- Desplegable de los Clientes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link collapsed"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navCustomer"
-                                    aria-expanded="false"
-                                    aria-controls="navCustomer"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-people"></i></span>
-                                    <span class="nav-link-text">Usuarios</span>
-                                </div>
-                            </a>
-                            <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- Desplegable de los Administradores Zonales-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAdminZonal"
-                                    aria-expanded="false"
-                                    aria-controls="navAdminZonal"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
-                                    <span class="nav-link-text">Administrador Zonal</span>
-                                </div>
-                            </a>
-                            <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Agentes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    x              href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAgent"
-                                    aria-expanded="false"
-                                    aria-controls="navAgent"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
-                                    <span class="nav-link-text">Agente</span>
-                                </div>
-                            </a>
-                            <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link active" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Proveedores-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-                                    <span class="nav-link-text">Proveedores</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <!-- Opción de los productor-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/categorias}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-                                    <span class="nav-link-text">Inventario de productos</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-                        <!-- Opción de solicitudes de Agente-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-                                    <span class="nav-link-text">Solicitudes para Agente</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <!-- COONTENIDO DE LA PAGINA -->
-        <main class="main-content-wrapper">
-            <div class="container">
-                <div class="row mb-8">
-                    <div class="col-md-12">
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
-                            <div>
-                                <h2>Editar agente</h2>
-                                <!-- breacrumb -->
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a th:href="@{dashborad}" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Editar agente</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                            <div>
-								<button type="button" class="btn btn-danger" onclick="confirmDelete()" data-bs-toggle="modal" data-bs-target="#delete">Eliminar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-8 g-5">
-                    <div class="col-lg-8 col-12">
-                        <div class="card card-lg border-0">
-                            <div class="card-body d-flex flex-column gap-8 p-7">
-                                <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
-                                    <div>
-                                        <img class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/placeholder-img.jpg}" alt="Image" />
-                                    </div>
-
-                                    <div class="file-upload btn btn-light ms-md-4">
-                                        <input type="file" class="file-input opacity-0" />
-                                        Subir Foto
-                                    </div>
-
-                                    <span class="ms-md-2">JPG, GIF or PNG. 1MB Max.</span>
-                                </div>
-
-                                <div class="d-flex flex-column gap-4">
-                                    <h4 class="mb-0 h6">Información del agente</h4>
-                                    <form class="row g-3 needs-validation" novalidate>
-                                        <div class="col-lg-6 col-12">
-                                            <div>
-                                                <!-- input -->
-                                                <label for="DNIFinalUser" class="form-label">
-                                                    DNI:
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="DNIFinalUser" placeholder="DNI del usuario final" required />
-                                                <div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-12">
-                                            <div>
-                                                <!-- input -->
-                                                <label for="creatCustomerName" class="form-label">
-                                                    Nombres:
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="creatCustomerName" placeholder="Nombre del usuario final" required />
-                                                <div class="invalid-feedback">Por favor ingrese los nombres del usuario</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-12">
-                                            <div>
-                                                <!-- input -->
-                                                <label for="creatFinalUserLastName" class="form-label">
-                                                    Apellidos:
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastName" placeholder="Apellidos del usuario final" required />
-                                                <div class="invalid-feedback">Por favor ingrese los apellidos del usuario</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-12">
-                                            <div>
-                                                <!-- input -->
-                                                <label for="creatFinalUserEmail" class="form-label">
-                                                    Email
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="email" class="form-control" id="creatFinalUserEmail" placeholder="Correo Electrónico" required />
-                                                <div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-12">
-                                            <div>
-                                                <!-- input -->
-                                                <label for="creatFinalUserDirection" class="form-label">Dirección</label>
-                                                <input type="text" class="form-control" id="creatFinalUserDirection" placeholder="Dirección" required />
-                                                <div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6 col-12">
-                                            <label class="form-label" for="creatFinalUserDate">Distrito</label>
-                                            <input type="text" class="form-control flatpickr" id="creatFinalUserDate" placeholder="Distrito" required />
-                                            <div class="invalid-feedback">Por favor ingrese un distrito</div>
-                                        </div>
-                                        <div>
-                                            <div class="col-12 mt-3">
-                                                <div class="d-flex flex-column flex-md-row gap-2">
-													<button class="btn btn-primary" type="submit" onclick="showSuccessPopup(event)">Actualizar</button>
-                                                    <button class="btn btn-secondary" type="submit">Cancelar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-12">
-                        <div class="card card-lg border-0">
-                            <div class="card-body p-6 d-flex flex-column gap-6">
-                                <div>
-                                    <h4 class="mb-0 h6">Detalles del usuario final</h4>
-                                </div>
-                                <div class="d-flex flex-column gap-3">
-                                    <div class="d-flex flex-row justify-content-between">
-                                        <span class="fw-medium text-dark">Creado en</span>
-                                        <span class="fw-medium">8 meses atrás</span>
-                                    </div>
-                                    <div class="d-flex flex-row justify-content-between">
-                                        <span class="fw-medium text-dark">Última modificación en</span>
-                                        <span class="fw-medium">2 month ago</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <ul class="nav nav-pills justify-content-center mb-6 bg-white border d-inline-flex rounded-3 p-2" id="myTab" role="tablist">
-                            <!-- nav item -->
-                            <li class="nav-item" role="presentation">
-                                <!-- btn -->
-                                <button
-                                        class="nav-link active"
-                                        id="address-tab"
-                                        data-bs-toggle="tab"
-                                        data-bs-target="#address-tab-pane"
-                                        type="button"
-                                        role="tab"
-                                        aria-controls="address-tab-pane"
-                                        aria-selected="true"
-                                >
-                                    Address
-                                </button>
-                            </li>
-                            <!-- nav item -->
-                            <li class="nav-item" role="presentation">
-                                <!-- btn -->
-                                <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment-tab-pane" type="button" role="tab" aria-controls="payment-tab-pane" aria-selected="false">
-                                    Payment
-                                </button>
-                            </li>
-                        </ul>
-                        <!-- tab content -->
-                        <div class="tab-content" id="myTabContent">
-                            <!-- tab pane -->
-                            <div class="tab-pane fade show active" id="address-tab-pane" role="tabpanel" aria-labelledby="address-tab" tabindex="0">
-                                <div class="card h-100 card-lg">
-                                    <div class="p-6">
-                                        <div class="d-flex justify-content-between flex-row align-items-center">
-                                            <div>
-                                                <h3 class="mb-0 h6">Addresses</h3>
-                                            </div>
-                                            <div>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#address">New Address</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body p-0">
-                                        <div class="table-responsive">
-                                            <table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
-                                                <thead class="bg-light">
-                                                <tr>
-                                                    <th>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="addressOne" />
-                                                            <label class="form-check-label" for="addressOne"></label>
-                                                        </div>
-                                                    </th>
-                                                    <th>Street</th>
-                                                    <th>State</th>
-                                                    <th>City</th>
-                                                    <th>Country</th>
-
-                                                    <th>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-trash me-3"></i>
-                                                                        Delete
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-pencil-square me-3"></i>
-                                                                        Edit
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="addressTwo" />
-                                                            <label class="form-check-label" for="addressTwo"></label>
-                                                        </div>
-                                                    </td>
-
-                                                    <td>123 Elm St.</td>
-
-                                                    <td>IL</td>
-                                                    <td>Springfield</td>
-                                                    <td>USA</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-trash me-3"></i>
-                                                                        Delete
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-pencil-square me-3"></i>
-                                                                        Edit
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        <div class="border-top d-md-flex justify-content-between align-items-center p-6">
-                                            <span>Showing 1 result</span>
-                                            <nav class="mt-2 mt-md-0">
-                                                <ul class="pagination mb-0">
-                                                    <li class="page-item disabled"><a class="page-link" href="#!">Previous</a></li>
-                                                    <li class="page-item"><a class="page-link active" href="#!">1</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#!">Next</a></li>
-                                                </ul>
-                                            </nav>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- tab pane -->
-                            <div class="tab-pane fade" id="payment-tab-pane" role="tabpanel" aria-labelledby="payment-tab" tabindex="0">
-                                <div class="card h-100 card-lg">
-                                    <div class="p-6">
-                                        <div class="d-flex justify-content-between flex-row align-items-center">
-                                            <div>
-                                                <h3 class="mb-0 h6">Payments</h3>
-                                            </div>
-                                            <div>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#payment">New Payment</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body p-0">
-                                        <div class="table-responsive">
-                                            <table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
-                                                <thead class="bg-light">
-                                                <tr>
-                                                    <th>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="paymentOne" />
-                                                            <label class="form-check-label" for="paymentOne"></label>
-                                                        </div>
-                                                    </th>
-                                                    <th>Order ID</th>
-                                                    <th>Transaction Id</th>
-                                                    <th>Date</th>
-                                                    <th>Amount</th>
-                                                    <th>Method</th>
-                                                    <th>Status</th>
-                                                    <th>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-trash me-3"></i>
-                                                                        Delete
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-pencil-square me-3"></i>
-                                                                        Edit
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="paymentTwo" />
-                                                            <label class="form-check-label" for="paymentTwo"></label>
-                                                        </div>
-                                                    </td>
-
-                                                    <td>#101</td>
-
-                                                    <td>TXN001</td>
-                                                    <td>17 May, 2023 at 3:18pm</td>
-                                                    <td>$34.00</td>
-                                                    <td>Credit Card</td>
-                                                    <td><span class="badge bg-light-success text-dark-success">Completed</span></td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-trash me-3"></i>
-                                                                        Delete
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-pencil-square me-3"></i>
-                                                                        Edit
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="paymentThree" />
-                                                            <label class="form-check-label" for="paymentThree"></label>
-                                                        </div>
-                                                    </td>
-
-                                                    <td>#102</td>
-
-                                                    <td>TXN002</td>
-                                                    <td>17 May, 2023 at 3:18pm</td>
-                                                    <td>$34.00</td>
-                                                    <td>PayPal</td>
-                                                    <td><span class="badge bg-light-warning text-dark-warning">Pending</span></td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-trash me-3"></i>
-                                                                        Delete
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-pencil-square me-3"></i>
-                                                                        Edit
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="paymentFour" />
-                                                            <label class="form-check-label" for="paymentFour"></label>
-                                                        </div>
-                                                    </td>
-
-                                                    <td>#103</td>
-
-                                                    <td>TXN003</td>
-                                                    <td>17 May, 2023 at 3:18pm</td>
-                                                    <td>$34.00</td>
-                                                    <td>Debit Card</td>
-                                                    <td><span class="badge bg-light-danger text-dark-danger">Failed</span></td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-trash me-3"></i>
-                                                                        Delete
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <i class="bi bi-pencil-square me-3"></i>
-                                                                        Edit
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        <div class="border-top d-md-flex justify-content-between align-items-center p-6">
-                                            <span>Showing 1 result</span>
-                                            <nav class="mt-2 mt-md-0">
-                                                <ul class="pagination mb-0">
-                                                    <li class="page-item disabled"><a class="page-link" href="#!">Previous</a></li>
-                                                    <li class="page-item"><a class="page-link active" href="#!">1</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#!">Next</a></li>
-                                                </ul>
-                                            </nav>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-</div>
-
-<!-- Libs JS -->
-<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
-
-<!-- Theme JS -->
-<script th:src="@{/js/theme.min.js}"></script>
-
-<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
-<script th:src="@{/js/vendors/chart.js}"></script>
-
-
-<!-- SweetAlert2 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
-<!-- SweetAlert2 JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-<script>
-	function confirmDelete() {
-		Swal.fire({
-			title: '¿Estás seguro?',
-			text: "Los cambios no serán reversibles",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#28a745', // Color verde para el botón de eliminar
-			cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
-			confirmButtonText: 'Eliminar',
-			cancelButtonText: 'Cancelar'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				// Aquí puedes poner la lógica para eliminar el elemento
-				Swal.fire(
-					'¡Eliminado!',
-					'El elemento ha sido eliminado con éxito.',
-					'success'
-				);
-			}
-		});
-	}
-</script>
-
-<script>
-    function showSuccessPopup(event) {
-        event.preventDefault(); // Evita el envío del formulario
-        Swal.fire({
-            title: '¡Éxito!',
-            text: 'Usuario creado correctamente',
-            icon: 'success',
-            confirmButtonColor: '#007bff',
-            confirmButtonText: 'Aceptar',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            allowEnterKey: true
-        });
-    }
-</script>
-
-</body>
+        </script>
+    </body>
 </html>
 
 
