@@ -87,6 +87,16 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "WHERE u.idSolicitudAgente > 0 AND u.idRol = 4 " +
             "GROUP BY u.idusuario, u.idSolicitudAgente")
     List<Object[]> mostrarSolicitudesConEstadosAleatorios();
+    @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
+            "u.agt_codigoaduana, 'Habilitado' AS estadoCodigoAduana, " +
+            "u.agt_codigojurisdiccion, 'Habilitado' AS estadoCodigoJurisdiccion, " +
+            "u.agt_razonsocial, z.nombrezona " +
+            "FROM usuario u " +
+            "JOIN zona z ON u.idzona = z.idzona " +
+            "WHERE u.idRol = 3 " +
+            "GROUP BY u.idusuario")
+    List<Object[]> mostrarAgentesConEstadosYRazonSocial();
+
 
 
 

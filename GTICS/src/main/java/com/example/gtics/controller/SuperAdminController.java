@@ -10,10 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class SuperAdminController {
@@ -184,24 +181,45 @@ public class SuperAdminController {
 
     }
     @GetMapping("SuperAdmin/listaAgente")
-    public String listaGestionAgente(Model model ){
+    public String listaGestionAgente(Model model) {
 
         try {
-            List<Usuario> agentes = usuarioRepository.findByIdRol_Id(3);
-            if (agentes.isEmpty()){
-                model.addAttribute("message", "No hay agentes registrados");
-            }else {
-                model.addAttribute("agentes", agentes);
+            List<Object[]> agentesData = usuarioRepository.mostrarAgentesConEstadosYRazonSocial();
 
+            if (agentesData.isEmpty()) {
+                model.addAttribute("message", "No hay agentes registrados");
+            } else {
+                List<Map<String, String>> agentes = new ArrayList<>();
+
+                for (Object[] row : agentesData) {
+                    Map<String, String> agente = new HashMap<>();
+                    agente.put("idusuario", row[0].toString());
+                    agente.put("nombre", row[1].toString());
+                    agente.put("apellidopaterno", row[2].toString());
+                    agente.put("apellidomaterno", row[3].toString());
+                    agente.put("dni", row[4].toString());
+                    agente.put("telefono", row[5].toString());
+                    agente.put("agt_codigoaduana", row[6] != null ? row[6].toString() : "");  // Maneja nulos para código aduana
+                    agente.put("estadoCodigoAduana", row[7] != null ? row[7].toString() : "");  // Maneja nulos para estado de código aduana
+                    agente.put("agt_codigojurisdiccion", row[8] != null ? row[8].toString() : "");  // Maneja nulos para código jurisdicción
+                    agente.put("estadoCodigoJurisdiccion", row[9] != null ? row[9].toString() : "");  // Maneja nulos para estado de código jurisdicción
+                    agente.put("agt_razonsocial", row[10] != null ? row[10].toString() : "");  // Maneja nulos para razón social
+
+                    agente.put("nombrezona", row[11].toString());
+
+                    agentes.add(agente);
+                }
+
+                model.addAttribute("agentes", agentes);
             }
-        }catch (Exception e){
-            model.addAttribute("error","Error al cargar la lista de agentes.");
+        } catch (Exception e) {
+            model.addAttribute("error", "Error al cargar la lista de agentes.");
             e.printStackTrace();
         }
 
-
         return "SuperAdmin/GestionAgentes/agent-list";
     }
+
 
     @GetMapping("SuperAdmin/editarAgente/{id}")
     public String editarAgente(@PathVariable("id") Integer id, Model model){

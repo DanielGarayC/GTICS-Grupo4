@@ -200,8 +200,7 @@
                                 <div class="row justify-content-between">
                                     <div class="col-md-4 col-12">
                                         <form class="d-flex" role="search">
-                                            <label for="searchCustomers" class="visually-hidden">Buscar usuario finales</label>
-                                            <input class="form-control" type="search" id="searchCustomers" placeholder="Buscar usuario finales" aria-label="Search" />
+                                            <input class="form-control me-2" type="search" id="searchAgentes" placeholder="Buscar agentes" aria-label="Search" th:value="${param.busqueda}" oninput="filterTable()"/>
                                         </form>
                                     </div>
                                 </div>
@@ -220,40 +219,41 @@
                                         <tr >
                                             <th></th>
                                             <th>Nombres</th>
-                                            <th>Apellido paterno</th>
-                                            <th>Apellido materno</th>
+                                            <th>Apellidos</th>
                                             <th>DNI</th>
                                             <th>Teléfono</th>
-                                            <th>Correo electrónico</th>
-                                            <th>Razón social</th>
                                             <th>Código de Despachador Aduanero</th>
-                                            <th>Estado del Código</th>
                                             <th>Código de Jurisdicción</th>
+                                            <th>Razón Social</th>
                                             <th>Zona</th>
                                             <th></th>
                                         </tr>
                                         </thead>
                                         <tbody>
 
-                                        <tr th:each="agente : ${agentes}">
+                                            <tr th:each="agente,var : ${agentes}">
 
+                                                <td th:text="${var.index+1}"></td>
+                                                <td th:text="${agente['nombre']}"></td>
+                                                <td th:text="${agente['apellidopaterno']} + ' ' + ${agente['apellidomaterno']}"></td>
+                                                <td th:text="${agente['dni']}"></td>
+                                                <td th:text="${agente['telefono']}"></td>
+                                                <td>
+                                                    <span th:text="${agente['agt_codigoaduana']}"></span>
+                                                    <span th:text="${agente['estadoCodigoAduana']}"
+                                                          th:classappend="${agente['estadoCodigoAduana']} == 'Habilitado' ? 'badge bg-success' : ''">
+                                                    </span>
 
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-2.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                </div>
-                                            </td>
-                                            <td th:text="${agente.nombre}"></td>
-                                            <td th:text="${agente.apellidoPaterno}"></td>
-                                            <td th:text="${agente.apellidoMaterno}"></td>
-                                            <td th:text="${agente.dni}"></td>
-                                            <td th:text="${agente.telefono}"> </td>
-                                            <td th:text="${agente.email}"> </td>
-                                            <td th:text="${agente.agtRazonsocial != null ? agente.agtRazonsocial : '-'}"> </td>
-                                            <td th:text="${agente.agtCodigoaduana != null ? agente.agtCodigoaduana : '-'}"> </td>
-                                            <td >Habilitado</td>
-                                            <td th:text="${agente.agtCodigojurisdiccion != null ? agente.agtCodigojurisdiccion : '-'}"></td>
-                                            <td th:text="${agente.zona.getNombreZona() != null ? agente.zona.getNombreZona() : '-'}">Norte</td>
+                                                </td>
+                                                <td>
+                                                    <span th:text="${agente['agt_codigojurisdiccion']}"></span>
+                                                    <span th:text="${agente['estadoCodigoJurisdiccion']}"
+                                                          th:classappend="${agente['estadoCodigoJurisdiccion']} == 'Habilitado' ? 'badge bg-success' : ''">
+                                                    </span>
+
+                                                </td>
+                                                <td th:text="${agente['agt_razonsocial']}"></td>
+                                            <td th:text="${agente['nombrezona']}"></td>
                                             <td>
                                                 <div class="dropdown">
                                                     <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -261,18 +261,22 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/editarAgente/{id}(id=${agente.id})}">
+                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/editarAgente/{id}(id=${agente['idusuario']})}">
                                                                 <i class="bi bi-pencil-square me-3"></i>
                                                                 Editar
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a class="dropdown-item" href="javascript:void(0);" th:onclick="'confirmDelete(' + ${agente.id} + ')'">
-
-                                                            <i class="bi bi-trash me-3"></i>
+                                                            <a class="dropdown-item" href="javascript:void(0);"
+                                                               data-idusuario="[[${agente['idusuario']}]]"
+                                                               onclick="confirmDelete(this)">
+                                                                <i class="bi bi-trash me-3"></i>
                                                                 Eliminar
                                                             </a>
                                                         </li>
+
+
+
 
                                                     </ul>
                                                 </div>
@@ -347,6 +351,26 @@ function confirmDelete(id) {
 
 
 </script>
+<script>
+    function filterTable() {
+        const input = document.getElementById("searchAgentes");
+        const filter = input.value.toLowerCase();
+        const table = document.querySelector("table tbody");
+        const rows = table.getElementsByTagName("tr");
 
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let match = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j].innerText.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+            rows[i].style.display = match ? "" : "none";
+        }
+    }
+</script>
 </body>
 </html>
