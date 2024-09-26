@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
-    // Consulta JPQL, referenciando la clase Producto
-    @Query("SELECT p FROM Producto p WHERE p.borrado = 0")
+    // Consulta nativa para obtener productos activos
+    @Query(value="SELECT * FROM producto p WHERE p.borrado = 0", nativeQuery = true)
     List<Producto> findAllActive();
 
     // Consulta nativa para obtener productos relevantes

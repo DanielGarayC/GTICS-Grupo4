@@ -24,15 +24,15 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "         UNION SELECT MONTH(CURDATE() - INTERVAL 1 MONTH)\n" +
             "         UNION SELECT MONTH(CURDATE())\n" +
             "     ) meses\n" +
-            "         LEFT JOIN Orden o ON MONTH(o.fechaOrden) = meses.mes\n" +
+            "         LEFT JOIN orden o ON MONTH(o.fechaOrden) = meses.mes\n" +
             "    AND o.fechaOrden >= CURDATE() - INTERVAL 6 MONTH\n" +
             "GROUP BY meses.mes\n" +
             "ORDER BY meses.mes;", nativeQuery = true)
     List<FindCantOrdenesPorMes> getOrdenesMes();
 
     @Query(value="SELECT eo.nombreEstado, COUNT(o.idOrden) AS totalOrdenes\n" +
-            "FROM Estadoorden eo\n" +
-            "         LEFT JOIN Orden o ON eo.idEstadoOrden = o.idEstadoOrden\n" +
+            "FROM estadoorden eo\n" +
+            "         LEFT JOIN orden o ON eo.idEstadoOrden = o.idEstadoOrden\n" +
             "GROUP BY eo.nombreEstado;", nativeQuery = true)
     List<FindCantOrdenesPorEstado> getOrdenesEstado();
 }

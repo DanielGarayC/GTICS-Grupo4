@@ -28,10 +28,10 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Integer> {
     FindProveeodresBaneados countProveedoresBaneados();
 
     @Query(value = "SELECT CONCAT(p.nombreProveedor, ' ', p.apellidoProveedor) AS nombreCompleto, AVG(c.idcalidad) AS promedioCalidad\n" +
-            "FROM Proveedor p\n" +
-            "         JOIN Producto prod ON p.idProveedor = prod.idProveedor\n" +
-            "         JOIN Resena r ON r.idProducto = prod.idProducto\n" +
-            "         JOIN Calidad c ON r.idCalidad = c.idCalidad\n" +
+            "FROM proveedor p\n" +
+            "         JOIN producto prod ON p.idProveedor = prod.idProveedor\n" +
+            "         JOIN resena r ON r.idProducto = prod.idProducto\n" +
+            "         JOIN calidad c ON r.idCalidad = c.idCalidad\n" +
             "GROUP BY nombreCompleto\n" +
             "ORDER BY promedioCalidad ASC\n" +
             "LIMIT 5;", nativeQuery = true)
