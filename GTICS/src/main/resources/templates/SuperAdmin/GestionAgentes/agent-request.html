@@ -241,8 +241,8 @@
                                                         <th>Teléfono</th>
                                                         <th>Postulación</th>
                                                         <th>Código de Despachador Aduanero </th>
-                                                        <th>Estado del código</th>
                                                         <th>Código de jurisdicción </th>
+
                                                         <th>Zona </th>
                                                         <th></th>
 
@@ -252,20 +252,33 @@
                                                     <tr th:each="usuario,var : ${listaUsuariosSolicitudes}">
 
                                                         <td th:text="${var.index+1}"></td>
-                                                        <td th:text="${usuario.nombre}"></td>
-                                                        <td th:text="${usuario.apellidoPaterno} + ' '+ ${usuario.apellidoMaterno}"></td>
-                                                        <td th:text="${usuario.dni}"></td>
-                                                        <td th:text="${usuario.telefono}"></td>
-                                                        <td th:switch="${usuario.idSolicitudAgente.indicadorSolicitud}">
+                                                        <td th:text="${usuario[1]}"></td> <!-- Nombre -->
+                                                        <td th:text="${usuario[2]} + ' ' + ${usuario[3]}"></td> <!-- Apellidos -->
+                                                        <td th:text="${usuario[4]}"></td> <!-- DNI -->
+                                                        <td th:text="${usuario[5]}"></td> <!-- Teléfono -->
+                                                        <td th:switch="${usuario[7]}"> <!-- Indicador de solicitud -->
                                                             <span th:case="0" class="badge bg-light-primary text-dark-primary">Directa</span>
                                                             <span th:case="1" class="badge bg-light-info text-dark-info">Por coordinador</span>
-
                                                         </td>
-
-                                                        <td th:text="${usuario.idSolicitudAgente.codigoAduana}"></td>
-                                                        <td >estado</td>
-                                                        <td th:text="${usuario.idSolicitudAgente.codigoJurisdiccion}"></td>
-                                                        <td th:text="${usuario.zona.nombreZona}"></td>
+                                                        <td>
+                                                            <span th:text="${usuario[8]}"></span> <!-- Código Aduana -->
+                                                            <span th:text="${usuario[9]}"
+                                                                  th:classappend="${usuario[9]} == 'Habilitado' ? 'badge bg-success' :
+                          (${usuario[9]} == 'Multado' ? 'badge bg-warning' :
+                          (${usuario[9]} == 'Cancelado' ? 'badge bg-danger' :
+                          (${usuario[9]} == 'Suspendido' ? 'badge bg-info' : 'badge bg-secondary')))">
+    </span> <!-- Estado Código Aduana -->
+                                                        </td> <!-- Código Aduana -->
+                                                        <td>
+                                                            <span th:text="${usuario[10]}"></span> <!-- Código Aduana -->
+                                                            <span th:text="${usuario[11]}"
+                                                                  th:classappend="${usuario[11]} == 'Habilitado' ? 'badge bg-success' :
+                          (${usuario[11]} == 'Multado' ? 'badge bg-warning' :
+                          (${usuario[11]} == 'Cancelado' ? 'badge bg-danger' :
+                          (${usuario[11]} == 'Suspendido' ? 'badge bg-info' : 'badge bg-secondary')))">
+    </span> <!-- Estado Código Aduana -->
+                                                        </td>
+                                                        <td th:text="${usuario[12]}"></td> <!-- Zona -->
                                                         <td>
                                                             <div class="dropdown">
                                                                 <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -275,7 +288,7 @@
                                                                     <li>
                                                                         <a class="dropdown-item"
                                                                            href="javascript:void(0);"
-                                                                           th:attr="data-id=${usuario.getId()}, data-nombre=${usuario.getNombre()}"
+                                                                           th:attr="data-id=${usuario[0]}, data-nombre=${usuario[1]}"
                                                                            onclick="confirmDelete(this)">
                                                                             <i class="bi bi-trash me-3"></i>
                                                                             Rechazar
@@ -283,13 +296,13 @@
                                                                     </li>
 
                                                                     <li>
-                                                                        <a class="dropdown-item" th:href="@{'/SuperAdmin/cambiarRolaAgente?id=' + ${usuario.getId()}}">
+                                                                        <a class="dropdown-item" th:href="@{'/SuperAdmin/cambiarRolaAgente?id=' + ${usuario[0]}}">
                                                                             <i class="bi bi-check-circle me-3"></i> <!-- Icono de aceptar -->
                                                                             Aceptar
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a class="dropdown-item" th:href="@{/SuperAdmin/verUsuario/{id}(id=${usuario.getId()})}">
+                                                                        <a class="dropdown-item" th:href="@{/SuperAdmin/verUsuario/{id}(id=${usuario[0]})}">
                                                                             <i class="bi bi-person me-3"></i> <!-- Icono de usuario individual -->
                                                                             Ver Usuario
                                                                         </a>

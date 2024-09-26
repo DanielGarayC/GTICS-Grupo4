@@ -249,113 +249,140 @@
 
             <!-- COONTENIDO DE LA PAGINA -->
             <main class="main-content-wrapper">
-               <div class="container">
-					<!-- row -->
-					<div class="row mb-8">
-						<div class="col-md-12">
-						  <div class="d-md-flex justify-content-between align-items-center">
-							<!-- page header -->
-							<div>
-							  <h2>Registrar agente</h2>
-							  <!-- breacrumb -->
+				<form action="/AdminZonal/Agentes/Guardar" method="POST" class="needs-validation" novalidate>
+					<div class="container">
+						<!-- row -->
+						<div class="row mb-8">
+							<div class="col-md-12">
+								<div class="d-md-flex justify-content-between align-items-center">
+									<!-- page header -->
+									<div>
+										<h2>Registrar agente</h2>
+										<!-- breadcrumb -->
+									</div>
+									<div>
+										<a th:href="@{/AdminZonal/Agentes}" class="btn btn-primary">Regresar</a>
+									</div>
+								</div>
 							</div>
-							<div>
-							  <a th:href="@{/AdminZonal/Agentes}" class="btn btn-primary">Regresar</a>
-							</div>
-						  </div>
 						</div>
-					  </div>
-					  <div class="row">
-						<div class="col-lg-12 col-12">
-						  <!-- card -->
-						  <div class="card mb-6 shadow border-0">
-							<!-- card body -->
-							
-			  
-							  <div class="row">
-								<!-- input -->
-								<div class="mb-3 col-lg-6">
-								  <label class="form-label">Nombres:</label>
-								  <input type="text" class="form-control"  required />
-								</div>
-								<!-- input -->
-								<div class="mb-3 col-lg-6">
-								  <label class="form-label">Apellidos:</label>
-								  <input type="text" class="form-control"  required />
-								</div>
-								<!-- input -->
-								<div class="mb-3 col-lg-6">
-								  <label class="form-label">DNI:</label>
-								  <input type="text" class="form-control"  required />
-								</div>
-								<!-- input -->
-								<div class="mb-3 col-lg-6">
-								  <label class="form-label">Teléfono:</label>
-								  <input type="text" class="form-control"  required />
-								</div>
-								<!-- input -->
-								<div class="mb-3 col-lg-12">
-									<label class="form-label">Correo electrónico:</label>
-									<input type="text" class="form-control flatpickr"  />
-								</div>
-								<!-- input -->
-								<div class="mb-3 col-lg-12">
-									<label class="form-label">Dirección:</label>
-									<input type="text" class="form-control flatpickr"  />
-								</div>
-								<div class="mb-3 col-lg-6">
-								  <label class="form-label">Distrito:</label>
-								  <select class="form-select">
-									<option selected>---Ingrese un distrito---</option>
-									<option value="Dairy, Bread & Eggs">San Miguel</option>
-									<option value="Dairy, Bread & Eggs">Jesús María</option>
-									<option value="Snacks & Munchies">Sanjuan</option>
-									<option value="Fruits & Vegetables">Venezuela</option>
-								  </select>
-								</div>
-								<div class="mb-3 col-lg-6">
-									<label class="form-label">Zona:</label>
-									<input type="text" class="form-control" value="Zona Ejemplo" disabled />
-								  </div>
-								<div class="mb-3 col-lg-6">
-									<label class="form-label">Razón social:</label>
-									<input type="text" class="form-control"  required />
-								  </div>
-								  <!-- input -->
-								  <div class="mb-3 col-lg-6">
-									<label class="form-label">Código de jurisdicción:</label>
-									<input type="text" class="form-control"  required />
-								  </div>
-								  <div class="mb-3 col-lg-6">
-									<label class="form-label">Código aduanero:</label>
-									<input type="text" class="form-control"  required />
-								  </div>
-								  <!-- input -->
-								  <div class="mb-3 col-lg-6">
-									<label class="form-label">RUC:</label>
-									<input type="text" class="form-control"  required />
-								  </div>
-								
-								
-			  
-								<div></div>
-			  
-			  
-								<!-- input -->
-			  
-								
-								<div class="col-lg-12">
-								  <a th:href="@{/AdminZonal/Agentes}" class="btn btn-success mb-2">Crear Agente</a>
-								  <a th:href="@{/AdminZonal/Agentes}" class="btn btn-danger mb-2">Cancelar</a>
-								</div>
-							  </div>
-							</div>
-						  </div>
-						</div>
-					  </div>
 
-			   </div>
-            </main>
+						<div class="row">
+							<div class="col-lg-12 col-12">
+								<!-- card -->
+								<div class="card mb-6 shadow border-0">
+
+
+									<!-- card body -->
+									<div class="row">
+
+											<!-- input Nombres -->
+											<div class="mb-3 col-lg-4">
+												<label class="form-label">Nombres:</label>
+												<input type="text" class="form-control" name="nombre" required />
+												<div class="invalid-feedback">El nombre es obligatorio.</div>
+											</div>
+
+											<!-- input apellido paterno -->
+											<div class="mb-3 col-lg-4">
+												<label class="form-label">Apellido Paterno:</label>
+												<input type="text" class="form-control" name="apellidoPaterno" required />
+												<div class="invalid-feedback">El apellido paterno es obligatorio.</div>
+											</div>
+
+											<!-- input Apellido Materno -->
+											<div class="mb-3 col-lg-4">
+												<label class="form-label">Apellido Materno:</label>
+												<input type="text" class="form-control" name="apellidoMaterno" required />
+												<div class="invalid-feedback">El apellido materno es obligatorio.</div>
+											</div>
+
+											<!-- input DNI -->
+											<div class="mb-3 col-lg-6">
+												<label class="form-label">DNI:</label>
+												<input type="text" class="form-control" name="dni" required maxlength="10" />
+												<div class="invalid-feedback">El DNI debe ser numérico y tener hasta 10 dígitos.</div>
+											</div>
+
+											<!-- input Teléfono -->
+											<div class="mb-3 col-lg-6">
+												<label class="form-label">Teléfono:</label>
+												<input type="text" class="form-control" name="telefono" required maxlength="10" />
+												<div class="invalid-feedback">El teléfono debe ser numérico y tener hasta 10 dígitos.</div>
+											</div>
+
+											<!-- input Correo electrónico -->
+											<div class="mb-3 col-lg-12">
+												<label class="form-label">Correo electrónico:</label>
+												<input type="email" class="form-control" name="email" required />
+												<div class="invalid-feedback">El correo electrónico es obligatorio y debe tener un formato válido.</div>
+											</div>
+
+											<!-- input Dirección -->
+											<div class="mb-3 col-lg-12">
+												<label class="form-label">Dirección:</label>
+												<input type="text" class="form-control" name="direccion" required />
+												<div class="invalid-feedback">La dirección es obligatoria.</div>
+											</div>
+
+											<!-- input Distrito -->
+											<div class="mb-3 col-lg-6">
+												<label class="form-label">Distrito:</label>
+												<select class="form-select" name="distritoId" id="distritoSelect" required onchange="actualizarCodigoJurisdiccion()">
+													<option selected disabled>---Seleccione un distrito---</option>
+													<th:block th:each="distrito : ${distritos}">
+														<option th:value="${distrito.id}" th:data-codigo="${distrito.codigosJurisdiccion}" th:text="${distrito.nombre}"></option>
+													</th:block>
+												</select>
+												<div class="invalid-feedback">El distrito es obligatorio.</div>
+											</div>
+
+											<!-- input Código de Jurisdicción -->
+											<div class="mb-3 col-lg-6">
+												<label class="form-label">Código de Jurisdicción:</label>
+												<input type="text" class="form-control" name="codigoJurisdiccion" id="codigoJurisdiccion" readonly required />
+												<div class="invalid-feedback">El código de jurisdicción es obligatorio.</div>
+											</div>
+
+											<!-- input Zona (deshabilitado porque se asigna automáticamente) -->
+											<div class="mb-3 col-lg-6">
+												<label class="form-label">Zona:</label>
+												<input type="text" class="form-control" th:value="${adminzonal.zona.nombreZona}" disabled />
+											</div>
+
+											<!-- input Razón social -->
+											<div class="mb-3 col-lg-6">
+												<label class="form-label">Razón social (opcional):</label>
+												<input type="text" class="form-control" name="razonSocial" />
+											</div>
+
+											<!-- input Código Aduanero -->
+											<div class="mb-3 col-lg-6">
+												<label class="form-label">Código Aduanero:</label>
+												<input type="text" class="form-control" name="codigoAduana" required />
+												<div class="invalid-feedback">El código aduanero es obligatorio.</div>
+											</div>
+
+											<!-- input RUC -->
+											<div class="mb-3 col-lg-6">
+												<label class="form-label">RUC:</label>
+												<input type="text" class="form-control" name="ruc" required />
+												<div class="invalid-feedback">El RUC es obligatorio.</div>
+											</div>
+
+											<!-- Botones -->
+											<div class="col-lg-12">
+												<button type="submit" class="btn btn-success mb-2">Crear Agente</button>
+												<a th:href="@{/AdminZonal/Agentes}" class="btn btn-danger mb-2">Cancelar</a>
+											</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</main>
          </div>
 	  </div>
 
@@ -369,5 +396,31 @@
 
 	  <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
 	  <script th:src="@{/js/vendors/chart.js}"></script>
+	   <script>
+		   function actualizarCodigoJurisdiccion() {
+			   var select = document.getElementById("distritoSelect");
+			   var codigoJurisdiccion = select.options[select.selectedIndex].getAttribute("data-codigo");
+			   document.getElementById("codigoJurisdiccion").value = codigoJurisdiccion;
+		   }
+	   </script>
+	   <script>
+		   // Script para activar la validación de Bootstrap
+		   (function () {
+			   'use strict'
+			   // Obtener todos los formularios a los que se les aplicará la validación
+			   var forms = document.querySelectorAll('.needs-validation')
+			   // Hacer un loop sobre ellos y prevenir el envío si no cumplen con la validación
+			   Array.prototype.slice.call(forms)
+					   .forEach(function (form) {
+						   form.addEventListener('submit', function (event) {
+							   if (!form.checkValidity()) {
+								   event.preventDefault()
+								   event.stopPropagation()
+							   }
+							   form.classList.add('was-validated')
+						   }, false)
+					   })
+		   })()
+	   </script>
    </body>
 </html>

@@ -46,25 +46,14 @@ public class UsuarioFinalController {
         System.out.println(solicitudagente.getCodigoJurisdiccion());
         System.out.println(solicitudagente.getIndicadorSolicitud());
         */
-
         solicitudAgenteRepository.save(solicitudagente);
         Optional<Usuario> optUsuario = usuarioRepository.findById(7);
         Solicitudagente ultimaSolicitud = solicitudAgenteRepository.findTopByOrderByIdDesc();
 
-
-
         if(optUsuario.isPresent()) {
             Usuario us = optUsuario.get(); // usuario random que solicita ser agente
-
-
             usuarioRepository.asignarSolictudAusuario(ultimaSolicitud.getId(), us.getId());
         }
-
-
-
-
-
-
         return "redirect:/UsuarioFinal";
     }
 
