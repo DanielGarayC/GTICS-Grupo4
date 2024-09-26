@@ -488,13 +488,16 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Editar adminstrador zonal</li>
+                                        <li class="breadcrumb-item active" aria-current="page">Editar administrador zonal</li>
                                     </ol>
                                 </nav>
                             </div>
 
                         </div>
                     </div>
+                </div>
+                <div th:if="${error}" class="alert alert-danger">
+                    <span th:text="${error}"></span>
                 </div>
                 <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
                     <div class="col-lg-8 col-md-10 col-sm-12">

@@ -17,8 +17,14 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     // Método personalizado para encontrar usuarios por rol
-    @Query("SELECT u from Usuario u WHERE u.rol.id = :idRol AND u.baneado = 0")
+    @Query("SELECT u from Usuario u WHERE u.rol.id = :idRol AND u.baneado = false ")
     List<Usuario> findByIdRol_Id(Integer idRol);
+
+    @Query("SELECT COUNT(u) " +
+            "    FROM Usuario u " +
+            "    WHERE u.rol.id = 2 " +
+            "    AND u.zona.id = :zonaId")
+    Integer countCoordinadoresByZona(@Param("zonaId") Integer zonaId);
 
     //Método para el buscador de la lista de Admin Zonal para Superadmin (adrian chambea)
     @Query("SELECT u from Usuario u WHERE LOWER(u.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%')) "+
@@ -30,13 +36,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     List<Usuario>FiltroBuscador(@Param("busqueda") String busqueda);
 
 
-    @Query("SELECT u FROM Usuario u WHERE u.rol.id = :idRol AND u.idAgente = :agente AND (u.baneado IS NULL OR u.baneado = 0)")
+    @Query("SELECT u FROM Usuario u WHERE u.rol.id = :idRol AND u.idAgente = :agente AND (u.baneado IS NULL OR u.baneado = false)")
     List<Usuario> findUsuariosFiltrados(@Param("idRol") Integer idRol, @Param("agente") Usuario agente);
 
     //Banear Usuario por id
     @Transactional
     @Modifying
-    @Query("UPDATE Usuario u SET u.baneado = 1 WHERE u.id = :idUsuario AND u.baneado = 0")
+    @Query("UPDATE Usuario u SET u.baneado = true WHERE u.id = :idUsuario AND u.baneado = false")
     void banUsuario(Integer idUsuario);
 
     //Metodo para mostrar solicitudes de agente

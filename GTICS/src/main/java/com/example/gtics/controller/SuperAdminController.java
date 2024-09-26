@@ -111,8 +111,14 @@ public class SuperAdminController {
     }
     @PostMapping("/SuperAdmin/AdminZonal/guardar")
     public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario,@RequestParam("zonaId") Integer zonaId, RedirectAttributes attr) {
-        System.out.println("hola");
+
         try {
+            // Verificar si ya existen 2 coordinadores en la zona
+            int cantidadCoordinadores = usuarioRepository.countCoordinadoresByZona(zonaId);
+            if (cantidadCoordinadores >= 2) {
+                attr.addFlashAttribute("error", "Ya existen 2 coordinadores en esta zona.");
+                return "redirect:/SuperAdmin/crearAdminZonal";
+            }
             Optional<Rol> optionalAZRol = rolRepository.findById(2);
             if (optionalAZRol.isPresent()) {
                 usuario.setRol(optionalAZRol.get());
@@ -135,12 +141,13 @@ public class SuperAdminController {
             } else {
                 throw new RuntimeException("Distrito 'No Registrado' no encontrado");
             }
-            usuarioRepository.save(usuario);
+            usuario.setBaneado(false);
             if (usuario.getId() == null) {
                 attr.addFlashAttribute("msg", "Admin Zonal creado exitosamente");
             } else {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
             }
+            usuarioRepository.save(usuario);
         } catch (Exception e) {
             attr.addFlashAttribute("error", "Ocurrió un error al guardar el Admin Zonal.");
             e.printStackTrace();

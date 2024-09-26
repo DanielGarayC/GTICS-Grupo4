@@ -35,7 +35,7 @@ public class Usuario {
     private Rol rol;
 
     @Column(name = "baneado")
-    private Byte baneado;
+    private boolean baneado;
 
     @Column(name = "agt_codigoaduana", length = 45)
     private String agtCodigoaduana;

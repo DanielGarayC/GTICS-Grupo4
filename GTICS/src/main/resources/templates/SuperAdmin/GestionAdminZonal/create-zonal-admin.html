@@ -513,6 +513,9 @@
                                 </div>
                                 <div class="d-flex flex-column gap-4">
                                     <h3 class="mb-0 h5">Información del administrador zonal</h3>
+                                    <div th:if="${error}" class="alert alert-danger">
+                                        <span th:text="${error}"></span>
+                                    </div>
                                     <form id="adminZonalForm" th:action="@{/SuperAdmin/AdminZonal/guardar}" method="post" class="needs-validation" novalidate>
                                         <input type="hidden" name="idusuario" th:value="${usuario.id != null ? usuario.id : ''}" />
                                         <div class="row g-3">
