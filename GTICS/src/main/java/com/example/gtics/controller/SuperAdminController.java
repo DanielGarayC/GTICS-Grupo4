@@ -375,6 +375,13 @@ public class SuperAdminController {
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
     }
 
+    @GetMapping("SuperAdmin/verUsuarioFinal/{id}")
+    public String verUsuarioFinal(Model model, @PathVariable("id") Integer idUsuarioFinal){
+        Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
+        model.addAttribute("finalUser", finalUser);
+        return "SuperAdmin/GestionUsuarioFinal/final-user-info";
+    }
+
     @PostMapping("SuperAdmin/Actualizar/{id}")
     public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal){
 
