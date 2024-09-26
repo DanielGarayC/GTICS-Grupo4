@@ -194,9 +194,6 @@
 									</ol>
 								</nav>
 							</div>
-							<div>
-								<a th:href="@{crearUsuarioFinal}" class="btn btn-primary">Agregar nuevo usuario</a>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -208,7 +205,7 @@
 									<div class="col-md-4 col-12">
 										<form class="d-flex" role="search">
 											<label for="searchCustomers" class="visually-hidden">Buscar usuario finales</label>
-											<input class="form-control" type="search" id="searchCustomers" placeholder="Buscar usuario finales" aria-label="Search" />
+											<input class="form-control" type="search" id="searchCustomers" placeholder="Buscar usuario finales" aria-label="Search" onkeyup="filterTable()" />
 										</form>
 									</div>
 								</div>
@@ -342,6 +339,38 @@
 
 </script>
 
+<script>
+	function filterTable() {
+		// Obtener el valor de búsqueda
+		const filter = document.getElementById('searchCustomers').value.toLowerCase();
+		const table = document.querySelector('.table tbody');
+		const rows = table.getElementsByTagName('tr');
+
+		// Iterar sobre todas las filas de la tabla
+		for (let i = 0; i < rows.length; i++) {
+			const cells = rows[i].getElementsByTagName('td');
+			let found = false;
+
+			// Comprobar si alguna celda contiene el texto de búsqueda
+			for (let j = 0; j < cells.length; j++) {
+				const cell = cells[j];
+				if (cell) {
+					if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
+						found = true;
+						break;
+					}
+				}
+			}
+
+			// Mostrar o esconder la fila
+			if (found) {
+				rows[i].style.display = '';
+			} else {
+				rows[i].style.display = 'none';
+			}
+		}
+	}
+</script>
 
 
 </body>
