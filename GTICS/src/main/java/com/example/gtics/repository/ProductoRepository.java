@@ -12,4 +12,5 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
     @Query(value ="SELECT p.idProducto, p.nombreProducto, p.cantVentas FROM Producto p ORDER BY p.cantVentas DESC LIMIT 10", nativeQuery = true)
     List<ProductoRelevanteDTO> findProductosRelevantes();
+
 }
