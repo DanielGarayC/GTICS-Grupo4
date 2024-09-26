@@ -1,14 +1,33 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.entity.Usuario;
+import com.example.gtics.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+
+import java.util.Optional;
 
 @Controller
 public class UsuarioFinalController {
-    @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
-    public String mostrarPagPrincipal(){
+    private final UsuarioRepository usuarioRepository;
 
-        return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
+    public UsuarioFinalController(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
+
+    @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
+    public String mostrarPagPrincipal(Model model){
+
+        Optional<Usuario> optUsuario = usuarioRepository.findById(7);
+        if(optUsuario.isPresent()){
+            Usuario us = optUsuario.get(); // usuario random que solicita ser agente
+            model.addAttribute("usuario",us);
+            return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
+        }else{
+            return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
+        }
+
     }
     @GetMapping("/UsuarioFinal/miPerfil")
     public String miPerfil(){
