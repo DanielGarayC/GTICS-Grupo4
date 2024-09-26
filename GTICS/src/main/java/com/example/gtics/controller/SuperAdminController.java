@@ -18,40 +18,52 @@ public class SuperAdminController {
 
     private final UsuarioRepository usuarioRepository;
     private final ZonaRepository zonaRepository;
-    private final DashboardRepository dashboardRepository;
+    
     private final RolRepository rolRepository;
 
-    public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository, DashboardRepository dashboardRepository,
+    private final ProveedorRepository proveedorRepository;
+
+    public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository,
                                 RolRepository rolRepository,
-                                DistritoRepository distritoRepository) {
+                                DistritoRepository distritoRepository, ProveedorRepository proveedorRepository,
+                                ProductoRepository productoRepository,
+                                OrdenRepository ordenRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
-        this.dashboardRepository = dashboardRepository;
         this.rolRepository = rolRepository;
         this.distritoRepository = distritoRepository;
+        this.proveedorRepository = proveedorRepository;
+        this.productoRepository = productoRepository;
+        this.ordenRepository = ordenRepository;
     }
 
 
     private final DistritoRepository distritoRepository;
+    private final ProductoRepository productoRepository;
+    private final OrdenRepository ordenRepository;
 
     @GetMapping({"SuperAdmin/dashboard","SuperAdmin"})
-    public String dashboard(){
-        //Cantidad de ordenes por mes
-
+    public String dashboard(Model model){
+       //Cantidad de ordenes por mes
+        model.addAttribute("OrdenesPormes", ordenRepository.getOrdenesMes());
         // Cantidad de ordenes por estado de seguimiento
-
+        model.addAttribute("OrdenesPorEstado", ordenRepository.getOrdenesEstado());
         // Productos mas importantes (10), entity producto
-
+        model.addAttribute("ProductosMasImportados", productoRepository.findProductosRelevantes());
+        model.addAttribute("TotalVentas", productoRepository.getCantidadProductos());
         // Proveedores mas solicitados, entity: usuario
-
+        model.addAttribute("ProveedoresMasSolicitados", proveedorRepository.findProveedoresMasSolicitados());
         // Proveedores con peores comentarios, entity: usuario
-
-        // Cantidad de agentes //Cantidad de usuarios registrados vs activos
-
+        model.addAttribute("PeoresProveedores", proveedorRepository.findProveedoresPorCalidadASC());
+        // Cantidad de agentes
+        model.addAttribute("CantidadAgentes", usuarioRepository.getCantidadAgentes());
+        // Cantidad de usuarios inactivos vs activos
+        model.addAttribute("CantidadUsuariosInactivos",usuarioRepository.getCantidadInactivos());
+        model.addAttribute("CantidadUsuariosActivos", usuarioRepository.getCantidadActivos());
         // Cantidad de usuarios baneados
-
+        model.addAttribute("CantidadUsuariosBaneados", usuarioRepository.getCantidadBaneados());
         // Cantidad de proveedores baneados
-
+        model.addAttribute("CantidadProveedoresBaneados", proveedorRepository.countProveedoresBaneados());
         return "SuperAdmin/Dashboard/dashboard-superadmin";
     }
     @GetMapping("SuperAdmin/listaAdminZonal")
@@ -99,8 +111,14 @@ public class SuperAdminController {
     }
     @PostMapping("/SuperAdmin/AdminZonal/guardar")
     public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario,@RequestParam("zonaId") Integer zonaId, RedirectAttributes attr) {
-        System.out.println("hola");
+
         try {
+            // Verificar si ya existen 2 coordinadores en la zona
+            int cantidadCoordinadores = usuarioRepository.countCoordinadoresByZona(zonaId);
+            if (cantidadCoordinadores >= 2) {
+                attr.addFlashAttribute("error", "Ya existen 2 coordinadores en esta zona.");
+                return "redirect:/SuperAdmin/crearAdminZonal";
+            }
             Optional<Rol> optionalAZRol = rolRepository.findById(2);
             if (optionalAZRol.isPresent()) {
                 usuario.setRol(optionalAZRol.get());
@@ -123,12 +141,13 @@ public class SuperAdminController {
             } else {
                 throw new RuntimeException("Distrito 'No Registrado' no encontrado");
             }
-            usuarioRepository.save(usuario);
+            usuario.setBaneado(false);
             if (usuario.getId() == null) {
                 attr.addFlashAttribute("msg", "Admin Zonal creado exitosamente");
             } else {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
             }
+            usuarioRepository.save(usuario);
         } catch (Exception e) {
             attr.addFlashAttribute("error", "Ocurrió un error al guardar el Admin Zonal.");
             e.printStackTrace();
@@ -158,7 +177,7 @@ public class SuperAdminController {
         try {
             List<Usuario> agentes = usuarioRepository.findByIdRol_Id(3);
             if (agentes.isEmpty()){
-                model.addAttribute("message", "No hay agentes Registrados");
+                model.addAttribute("message", "No hay agentes registrados");
             }else {
                 model.addAttribute("agentes", agentes);
 
@@ -171,11 +190,12 @@ public class SuperAdminController {
 
         return "SuperAdmin/GestionAgentes/agent-list";
     }
+
     @GetMapping("SuperAdmin/editarAgente/{id}")
     public String editarAgente(@PathVariable("id") Integer id, Model model){
         try {
             Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
-            if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 2){
+            if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 3){
                 model.addAttribute("agente",optionalAgente.get());
             } else {
                 model.addAttribute("error","Agente no encontrado o el rol no es válido");
@@ -185,40 +205,78 @@ public class SuperAdminController {
             model.addAttribute("error", "Error al cargar el agente para editar.");
             e.printStackTrace();
         }
+        model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAgentes/agent-edit";
     }
 
-    @PostMapping("/guardarAgente")
+    @PostMapping("/SuperAdmin/Agente/guardar")
     public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model) {
         try {
-            if (agente.getRol().getId() == 2) {  // Asegura que el rol del usuario sea de agente
-                usuarioRepository.save(agente);
-            } else {
-                model.addAttribute("error", "El rol del usuario no es válido para un agente.");
-                return "SuperAdmin/GestionAgentes/agent-edit";
+            // Buscar el agente existente
+            Usuario agenteExistente = usuarioRepository.findById(agente.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Agente no encontrado"));
+
+            // Actualizar solo los campos modificados
+            if (!agente.getNombre().equals(agenteExistente.getNombre())) {
+                agenteExistente.setNombre(agente.getNombre());
             }
+            if (!agente.getApellidoPaterno().equals(agenteExistente.getApellidoPaterno())) {
+                agenteExistente.setApellidoPaterno(agente.getApellidoPaterno());
+            }
+            if (!agente.getApellidoMaterno().equals(agenteExistente.getApellidoMaterno())) {
+                agenteExistente.setApellidoMaterno(agente.getApellidoMaterno());
+            }
+            if (!agente.getDni().equals(agenteExistente.getDni())) {
+                agenteExistente.setDni(agente.getDni());
+            }
+            if (!agente.getTelefono().equals(agenteExistente.getTelefono())) {
+                agenteExistente.setTelefono(agente.getTelefono());
+            }
+            if (!agente.getEmail().equals(agenteExistente.getEmail())) {
+                agenteExistente.setEmail(agente.getEmail());
+            }
+            if (!agente.getAgtRazonsocial().equals(agenteExistente.getAgtRazonsocial())) {
+                agenteExistente.setAgtRazonsocial(agente.getAgtRazonsocial());
+            }
+            if (!agente.getAgtCodigoaduana().equals(agenteExistente.getAgtCodigoaduana())) {
+                agenteExistente.setAgtCodigoaduana(agente.getAgtCodigoaduana());
+            }
+            if (!agente.getAgtCodigojurisdiccion().equals(agenteExistente.getAgtCodigojurisdiccion())) {
+                agenteExistente.setAgtCodigojurisdiccion(agente.getAgtCodigojurisdiccion());
+            }
+
+            // Si no tiene zona o ha cambiado, actualizarla
+            if (agente.getZona() != null && !agente.getZona().equals(agenteExistente.getZona())) {
+                agenteExistente.setZona(agente.getZona());
+            }
+
+            // Guardar solo si algo ha cambiado
+            usuarioRepository.save(agenteExistente);
+
         } catch (Exception e) {
             model.addAttribute("error", "Error al guardar el agente.");
             e.printStackTrace();
             return "SuperAdmin/GestionAgentes/agent-edit";
         }
+
         return "redirect:/SuperAdmin/listaAgente";
     }
 
-    @PostMapping("/SuperAdmin/eliminarAgente/{id}")
-    public String eliminarAgente(@PathVariable("id") Integer id, Model model) {
-        try {
-            Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
-            if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 2) {
+
+    @GetMapping("/SuperAdmin/eliminarAgente")
+    public String eliminarAgente(@RequestParam("id") int id, RedirectAttributes attr) {
+        Optional<Usuario> optProduct = usuarioRepository.findById(id);
+
+        if (optProduct.isPresent()) {
+            try {
                 usuarioRepository.deleteById(id);
-            } else {
-                model.addAttribute("error", "Agente no encontrado o el rol no es válido.");
-                return "redirect:/SuperAdmin/listaAgente?error";
+                attr.addFlashAttribute("msg", "El agente ha sido eliminado exitosamente");
+            } catch (Exception e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("error", "El agente no se pudo borrar correctamente =(.");
             }
-        } catch (Exception e) {
-            model.addAttribute("error", "Error al eliminar el agente.");
-            e.printStackTrace();
-            return "redirect:/SuperAdmin/listaAgente?error";
+        } else {
+            attr.addFlashAttribute("error", "El Agente no fue encontrado.");
         }
         return "redirect:/SuperAdmin/listaAgente";
     }
@@ -233,6 +291,54 @@ public class SuperAdminController {
 
         return "SuperAdmin/GestionAgentes/agent-request";
     }
+
+    @GetMapping("/SuperAdmin/rechazarSolicitudAgente")
+    public String RechazarSolicitudAgente(@RequestParam Integer id,
+                                          RedirectAttributes redirectAttributes) {
+
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+
+        if (optUsuario.isPresent()) {
+
+            Usuario usuario = optUsuario.get();
+
+            usuario.setIdSolicitudAgente(null);
+            usuarioRepository.save(usuario);
+
+            redirectAttributes.addFlashAttribute("successMessage", "El usuario ha sido rechazado éxitosamente.");
+
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+
+        }else {
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+        }
+
+    }
+
+    @GetMapping("SuperAdmin/verUsuario/{id}")
+    public String verUsuario(@PathVariable("id") Integer id, Model model){
+        try {
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent() && optionalUsuario.get().getRol().getId() == 4){
+                model.addAttribute("usuario",optionalUsuario.get());
+                String nombre = optionalUsuario.get().getNombre();
+                model.addAttribute("nombre",nombre);
+
+            } else {
+                model.addAttribute("error","Agente no encontrado o el rol no es válido");
+                return "SuperAdmin/GestionAgentes/agent-request";  // Redirigir a la lista si no se encuentra el agente
+            }
+        }catch (Exception e) {
+            model.addAttribute("error", "Error al cargar el usuario");
+            e.printStackTrace();
+        }
+        return "SuperAdmin/GestionAgentes/agent-ver-usuario";
+    }
+
+
+
+
+
 
     @GetMapping("SuperAdmin/cambiarRolaAgente")
     public String cambiarRolaAgente(Model model,@RequestParam("id") Integer id){
@@ -254,10 +360,20 @@ public class SuperAdminController {
 
         return "SuperAdmin/GestionUsuarioFinal/create-final-user";
     }
-    @GetMapping("SuperAdmin/editarUsuarioFinal")
-    public String editarUsuarioFinal(){
-
+    @GetMapping("SuperAdmin/editarUsuarioFinal/{id}")
+    public String editarUsuarioFinal(Model model, @PathVariable("id") Integer idUsuarioFinal){
+        Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
+        List<Distrito> listaDistritos = distritoRepository.findAll();
+        model.addAttribute("listaDistritos", listaDistritos);
+        model.addAttribute("finalUser", finalUser);
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
+    }
+
+    @PostMapping("SuperAdmin/Actualizar/{id}")
+    public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal){
+
+        usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), idUsuarioFinal);
+        return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 
     @GetMapping("SuperAdmin/banearUsuarioFinal/{id}")

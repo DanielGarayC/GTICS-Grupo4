@@ -183,12 +183,16 @@
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end p-0">
                                        <div class="lh-1 px-5 py-4 border-bottom">
-                                          <h5 class="mb-1 h6">Nombre Apellido</h5>
+                                          <h5 class="mb-1 h6" th:text="${usuario.nombre} + ' ' + ${usuario.apellidoPaterno}"></h5>
                                           <small>rol en la página</small>
                                        </div>
                                        <div class="border-top px-5 py-3">
                                           <a th:href="@{UsuarioFinal/miPerfil}">Mi perfil</a>
                                        </div>
+                                       <div class="border-top px-5 py-3">
+                                          <a th:href="@{'UsuarioFinal/solicitudAgente?idUsuario=' + ${usuario.id}}" data-bs-toggle="modal" data-bs-target="#addAddressModal">Solicitar ser agente</a>
+                                       </div>
+
                                        <div class="border-top px-5 py-3">
                                           <a th:href="@{/Login}">Cerrar sesión</a>
                                        </div>
@@ -197,6 +201,82 @@
                               </ul>
                            </div>
                         </div>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- Modal -->
+               <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-content">
+                        <!-- modal body -->
+                        <form class="modal-body p-6" method="post" th:action="@{/UsuarioFinal/solicitudAgente}">
+                           <div class="d-flex justify-content-between mb-5">
+                              <!-- heading -->
+                              <div>
+                                 <h5 class="h6 mb-1" id="addAddressModalLabel">Solicitud de agente</h5>
+                                 <p class="small mb-0">Ingresa tus datos </p>
+                              </div>
+                              <div>
+                                 <!-- button -->
+                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                           </div>
+                           <!-- row -->
+                           <div class="row g-3">
+
+                              <!-- col -->
+                              <div class="col-12">
+                                 <label for="ContactName" class="form-label">Información personal</label>
+                                 <input type="text" class="form-control" th:value="${usuario.nombre} + ' ' + ${usuario.apellidoPaterno}" aria-label="Nombre del contacto" required="" disabled/>
+                              </div>
+
+
+                              <!-- col -->
+                              <div class="col-12">
+                                 <label for="direction" class="form-label">Dirección </label>
+                                 <input type="text" class="form-control" th:value="${usuario.direccion} " aria-label="Dirección" required="" disabled/>
+                              </div>
+
+                              <!-- col -->
+                              <div class="col-12">
+                                 <label for="direction" class="form-label">Zona </label>
+                                 <input type="text" class="form-control" th:value="${usuario.zona.nombreZona}" aria-label="Dirección" required="" disabled/>
+                              </div>
+
+                              <!-- col -->
+                              <div class="col-12">
+                                 <label for="direction" class="form-label">Distrto </label>
+                                 <input type="text" class="form-control" th:value="${usuario.distrito.nombre}"  aria-label="Dirección" required="" disabled/>
+                              </div>
+
+                              <!-- col -->
+                              <div class="col-12">
+                                 <label for="direction" class="form-label">Código de jurisdicción </label>
+                                 <input type="text" class="form-control" th:name="codigoJurisdiccion" th:value="${usuario.distrito.codigosJurisdiccion}" aria-label="Dirección" required="" readonly/>
+                              </div>
+
+                              <!-- col -->
+                              <div class="col-12">
+                                 <label for="direction" class="form-label">Código de aduana </label>
+                                 <input type="text" class="form-control"  th:name="codigoAduana" value="222" aria-label="Dirección" required="" readonly/> <!--Valor aleatorio, momentaneamente le pongo222-->
+                              </div>
+
+
+
+
+                           </div>
+
+
+                           <div class="col-12" style="margin-bottom: 10px;">
+
+                           </div>
+                           <!-- button -->
+                           <div class="col-12 text-end">
+                              <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                              <button class="btn btn-primary" type="submit">Enviar solicitud</button>
+                           </div>
+                        </form>
                      </div>
                   </div>
                </div>

@@ -18,6 +18,17 @@
 
     <!-- Theme CSS -->
     <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+    <style>
+
+        .logoImagen{
+            height: 80px;
+            width: 250px;
+        }
+        .logoImagenCelulares{
+            height: 80px;
+            width: 220px;
+        }
+    </style>
 </head>
 
 <body>
@@ -161,318 +172,11 @@
     <div class="main-wrapper">
         <!-- navbar vertical (para pc)-->
         <!-- navbar -->
-        <nav class="navbar-vertical-nav d-none d-xl-block">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.svg}" alt="" />
-                    </a>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column" id="sideNavbar">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-                                    <span class="nav-link-text">DashBoard</span>
-                                </div>
-                            </a>
-                        </li>
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaAgente')"></div>
 
+        <!-- navbar vertical (para celular)-->
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaAgente')"></div>
 
-
-
-                        <li class="nav-item mt-6 mb-3">
-                            <span class="nav-label">Opciones</span>
-                        </li>
-
-                        <!-- Desplegable de los Clientes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link collapsed"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navCustomer"
-                                    aria-expanded="false"
-                                    aria-controls="navCustomer"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-people"></i></span>
-                                    <span class="nav-link-text">Usuarios</span>
-                                </div>
-                            </a>
-                            <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- Desplegable de los Administradores Zonales-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAdminZonal"
-                                    aria-expanded="false"
-                                    aria-controls="navAdminZonal"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
-                                    <span class="nav-link-text">Administrador Zonal</span>
-                                </div>
-                            </a>
-                            <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Agentes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    x              href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAgent"
-                                    aria-expanded="false"
-                                    aria-controls="navAgent"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
-                                    <span class="nav-link-text">Agente</span>
-                                </div>
-                            </a>
-                            <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link active" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Proveedores-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-                                    <span class="nav-link-text">Proveedores</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <!-- Opción de los productor-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/categorias}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-                                    <span class="nav-link-text">Inventario de productos</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-                        <!-- Opción de solicitudes de Agente-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-                                    <span class="nav-link-text">Solicitudes para Agente</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5 d-flex justify-content-between align-items-center">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.svg}" alt="" />
-                    </a>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/dashboard}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>  <!-- icono de gráfica -->
-                                    <span class="nav-link-text">DashBoard</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-                        <li class="nav-item mt-6 mb-3">
-                            <span class="nav-label">Opciones</span>
-                        </li>
-
-                        <!-- Desplegable de los Clientes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link collapsed"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navCustomer"
-                                    aria-expanded="false"
-                                    aria-controls="navCustomer"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-people"></i></span>
-                                    <span class="nav-link-text">Usuarios</span>
-                                </div>
-                            </a>
-                            <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- Desplegable de los Administradores Zonales-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAdminZonal"
-                                    aria-expanded="false"
-                                    aria-controls="navAdminZonal"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-badge"></i></span>
-                                    <span class="nav-link-text">Administrador Zonal</span>
-                                </div>
-                            </a>
-                            <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link " th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Agentes-->
-                        <li class="nav-item">
-                            <a
-                                    class="nav-link"
-                                    x              href="#"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navAgent"
-                                    aria-expanded="false"
-                                    aria-controls="navAgent"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon active"><i class="bi bi-person-circle"></i></span>
-                                    <span class="nav-link-text">Agente</span>
-                                </div>
-                            </a>
-                            <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item active">
-                                        <a class="nav-link active" th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
-                                    </li>
-                                    <!-- Nav item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- Desplegable de los Proveedores-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/proveedores}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
-                                    <span class="nav-link-text">Proveedores</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <!-- Opción de los productor-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/categorias}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-                                    <span class="nav-link-text">Inventario de productos</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-                        <!-- Opción de solicitudes de Agente-->
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-envelope"></i></span> <!-- Icono de sobre -->
-                                    <span class="nav-link-text">Solicitudes para Agente</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
 
         <!-- COONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">
@@ -483,16 +187,9 @@
                             <div>
                                 <h2>Lista de agentes</h2>
                                 <!-- breacrumb -->
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Agentes</li>
-                                    </ol>
-                                </nav>
+
                             </div>
-                            <div>
-                                <a href="create-customers.html" class="btn btn-primary">Agregar nuevo usuario</a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -509,94 +206,54 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="alert alert-success" role="alert" th:if="${message != null}" th:text="${message}">
+
+                            </div>
+                            <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
+
+                            </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
                                     <table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
-                                        <thead class="bg-light">
-                                        <tr>
-                                            <th>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="checkAll" />
-                                                    <label class="form-check-label" for="checkAll"></label>
-                                                </div>
-                                            </th>
-                                            <th>Nombres</th>
-                                            <th>Correo electrónico</th>
-                                            <th>Fecha de registro</th>
-                                            <th>Teléfono</th>
-                                            <th>DNI</th>
 
+                                        <thead class="bg-light">
+                                        <tr >
+                                            <th></th>
+                                            <th>Nombres</th>
+                                            <th>Apellido paterno</th>
+                                            <th>Apellido materno</th>
+                                            <th>DNI</th>
+                                            <th>Teléfono</th>
+                                            <th>Correo electrónico</th>
+                                            <th>Razón social</th>
+                                            <th>Código de Despachador Aduanero</th>
+                                            <th>Estado del Código</th>
+                                            <th>Código de Jurisdicción</th>
+                                            <th>Zona</th>
                                             <th></th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerOne" />
-                                                    <label class="form-check-label" for="customerOne"></label>
-                                                </div>
-                                            </td>
 
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Bonnie Howe</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>bonniehowe@gmail.com</td>
+                                        <tr th:each="agente : ${agentes}">
 
-                                            <td>17 May, 2023 at 3:18pm</td>
-                                            <td>-</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerTwo" />
-                                                    <label class="form-check-label" for="customerTwo"></label>
-                                                </div>
-                                            </td>
 
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <img th:src="@{/images/avatar/avatar-2.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Judy Nelson</a>
-                                                    </div>
                                                 </div>
                                             </td>
-                                            <td>judynelson@gmail.com</td>
-
-                                            <td>27 April, 2023 at 2:47pm</td>
-                                            <td>435-239-6436</td>
-                                            <td>71235456</td>
-
+                                            <td th:text="${agente.nombre}"></td>
+                                            <td th:text="${agente.apellidoPaterno}"></td>
+                                            <td th:text="${agente.apellidoMaterno}"></td>
+                                            <td th:text="${agente.dni}"></td>
+                                            <td th:text="${agente.telefono}"> </td>
+                                            <td th:text="${agente.email}"> </td>
+                                            <td th:text="${agente.agtRazonsocial != null ? agente.agtRazonsocial : '-'}"> </td>
+                                            <td th:text="${agente.agtCodigoaduana != null ? agente.agtCodigoaduana : '-'}"> </td>
+                                            <td >Habilitado</td>
+                                            <td th:text="${agente.agtCodigojurisdiccion != null ? agente.agtCodigojurisdiccion : '-'}"></td>
+                                            <td th:text="${agente.zona.getNombreZona() != null ? agente.zona.getNombreZona() : '-'}">Norte</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -604,419 +261,28 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
-                                                                <i class="bi bi-trash me-3"></i>
+                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/editarAgente/{id}(id=${agente.id})}">
+                                                                <i class="bi bi-pencil-square me-3"></i>
+                                                                Editar
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="javascript:void(0);" th:onclick="'confirmDelete(' + ${agente.id} + ')'">
+
+                                                            <i class="bi bi-trash me-3"></i>
                                                                 Eliminar
                                                             </a>
                                                         </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
+
                                                     </ul>
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerThree" />
-                                                    <label class="form-check-label" for="customerThree"></label>
-                                                </div>
-                                            </td>
 
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-3.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">John Mattox</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>johnmattox@gmail.com</td>
-
-                                            <td>27 April, 2023 at 2:47pm</td>
-                                            <td>347-424-9526</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerFour" />
-                                                    <label class="form-check-label" for="customerFour"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Wayne Rossman</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>waynerossman@gmail.com</td>
-
-                                            <td>27 April, 2023 at 2:47pm</td>
-                                            <td>-</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerFive" />
-                                                    <label class="form-check-label" for="customerFive"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-5.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Rhonda Pinson</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>rhondapinson@gmail.com</td>
-
-                                            <td>18 March, 2023 at 2:47pm</td>
-                                            <td>304-471-8451</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerSix" />
-                                                    <label class="form-check-label" for="customerSix"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-6.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">John Mattox</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>johnmattox@gmail.com</td>
-
-                                            <td>18 March, 2023 at 2:47pm</td>
-                                            <td>410-636-2682</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerSeven" />
-                                                    <label class="form-check-label" for="customerSeven"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-7.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Wayne Rossman</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>waynerossman@gmail.com</td>
-
-                                            <td>18 March, 2023 at 2:47pm</td>
-                                            <td>845-294-6681</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerEight" />
-                                                    <label class="form-check-label" for="customerEight"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-8.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Richard Shelton</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>richarddhelton@jourrapide.com</td>
-
-                                            <td>12 March, 2023 at 9:47am</td>
-                                            <td>313-887-8495</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerNine" />
-                                                    <label class="form-check-label" for="customerNine"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-9.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Stephanie Morales</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>stephaniemorales@gmail.com</td>
-
-                                            <td>22 Feb, 2023 at 9:47pm</td>
-                                            <td>812-682-1588</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerTen" />
-                                                    <label class="form-check-label" for="customerTen"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-10.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Stephanie Morales</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>stephaniemorales@gmail.com</td>
-
-                                            <td>22 Feb, 2023 at 9:47pm</td>
-                                            <td>812-682-1588</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Delete
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="pe-0">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="customerEleven" />
-                                                    <label class="form-check-label" for="customerEleven"></label>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-11.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Pasquale Kidd</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>pasqualekidd@rhyta.com</td>
-
-                                            <td>22 Feb, 2023 at 9:47pm</td>
-                                            <td>336-396-0658</td>
-                                            <td>71235456</td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#" onclick="confirmDelete()">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../dashboard/customers-edits.html">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Edit
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
                                         </tbody>
                                     </table>
+
+
                                 </div>
 
                                 <div class="border-top d-md-flex justify-content-between align-items-center p-6">
@@ -1057,7 +323,7 @@
 <!-- SweetAlert2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
-function confirmDelete() {
+function confirmDelete(id) {
     Swal.fire({
         title: '¿Estás seguro?',
         text: "Los cambios no serán reversibles",
@@ -1069,7 +335,7 @@ function confirmDelete() {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Aquí puedes poner la lógica para eliminar el elemento
+            window.location.href = `/SuperAdmin/eliminarAgente?id=${id}`;
             Swal.fire(
                 '¡Eliminado!',
                 'El elemento ha sido eliminado con éxito.',
