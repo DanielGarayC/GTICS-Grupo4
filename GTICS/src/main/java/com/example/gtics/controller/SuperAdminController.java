@@ -254,6 +254,12 @@ public class SuperAdminController {
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
     }
 
+    @GetMapping("SuperAdmin/banearUsuarioFinal/{id}")
+    public String banearUsuarioFinal(@PathVariable("id") Integer idUsuarioFinal, Model model) {
+        usuarioRepository.banUsuario(idUsuarioFinal);
+        return "redirect:/SuperAdmin/listaUsuarioFinal";
+    }
+
     @GetMapping("SuperAdmin/agregarCategoria")
     public String agregarCategoria(){
 
