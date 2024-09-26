@@ -282,6 +282,13 @@ public class SuperAdminController {
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
     }
 
+    @PostMapping("SuperAdmin/Actualizar/{id}")
+    public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal){
+
+        usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), idUsuarioFinal);
+        return "redirect:/SuperAdmin/listaUsuarioFinal";
+    }
+
     @GetMapping("SuperAdmin/banearUsuarioFinal/{id}")
     public String banearUsuarioFinal(@PathVariable("id") Integer idUsuarioFinal, Model model) {
         usuarioRepository.banUsuario(idUsuarioFinal);
