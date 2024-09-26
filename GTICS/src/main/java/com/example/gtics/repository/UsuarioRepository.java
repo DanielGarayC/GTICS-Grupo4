@@ -18,49 +18,56 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     // Método personalizado para encontrar usuarios por rol
-    @Query("SELECT u from Usuario u WHERE u.rol.id = :idRol AND u.baneado = false ")
-    List<Usuario> findByIdRol_Id(Integer idRol);
+    @Query(value = "SELECT * FROM usuario u WHERE u.rol_id = :idRol AND u.baneado = false", nativeQuery = true)
+    List<Usuario> findByIdRol_Id(@Param("idRol") Integer idRol);
 
-    @Query("SELECT COUNT(u) " +
-            "    FROM Usuario u " +
-            "    WHERE u.rol.id = 2 " +
-            "    AND u.zona.id = :zonaId")
+    @Query(value = "SELECT COUNT(*) " +
+            "FROM usuario u " +
+            "WHERE u.rol_id = 2 " +
+            "AND u.zona_id = :zonaId", nativeQuery = true)
     Integer countCoordinadoresByZona(@Param("zonaId") Integer zonaId);
 
     //Método para el buscador de la lista de Admin Zonal para Superadmin (adrian chambea)
-    @Query("SELECT u from Usuario u WHERE LOWER(u.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%')) "+
-            "OR LOWER(u.apellidoPaterno) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
-            "OR LOWER(u.apellidoMaterno) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
+    @Query(value = "SELECT * FROM usuario u " +
+            "WHERE LOWER(u.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
+            "OR LOWER(u.apellido_paterno) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
+            "OR LOWER(u.apellido_materno) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
             "OR LOWER(u.dni) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
             "OR LOWER(u.telefono) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
-            "OR LOWER(u.zona.nombreZona) LIKE LOWER(CONCAT('%', :busqueda, '%'))")
-    List<Usuario>FiltroBuscador(@Param("busqueda") String busqueda);
+            "OR LOWER(z.nombre_zona) LIKE LOWER(CONCAT('%', :busqueda, '%'))",
+            nativeQuery = true)
+    List<Usuario> FiltroBuscador(@Param("busqueda") String busqueda);
 
 
-    @Query("SELECT u FROM Usuario u WHERE u.rol.id = :idRol AND u.idAgente = :agente AND (u.baneado IS NULL OR u.baneado = false)")
-    List<Usuario> findUsuariosFiltrados(@Param("idRol") Integer idRol, @Param("agente") Usuario agente);
+    @Query(value = "SELECT * FROM usuario u " +
+            "WHERE u.rol_id = :idRol " +
+            "AND u.id_agente = :agente " +
+            "AND (u.baneado IS NULL OR u.baneado = false)",
+            nativeQuery = true)
+    List<Usuario> findUsuariosFiltrados(@Param("idRol") Integer idRol, @Param("agente") Integer agente);
 
     //Banear Usuario por id
     @Transactional
     @Modifying
-    @Query("UPDATE Usuario u SET u.baneado = true WHERE u.id = :idUsuario AND u.baneado = false")
-    void banUsuario(Integer idUsuario);
+    @Query(value = "UPDATE usuario u SET u.baneado = true WHERE u.id = :idUsuario AND u.baneado = false", nativeQuery = true)
+    void banUsuario(@Param("idUsuario") Integer idUsuario);
 
     //Actualizar Usuario Final
     @Transactional
     @Modifying
-    @Query("UPDATE Usuario u SET u.dni = :dni, u.nombre = :nombre, u.apellidoPaterno = :apellidoPaterno, " +
-            "u.apellidoMaterno = :apellidoMaterno, u.email = :email, u.direccion = :direccion, " +
-            "u.telefono = :telefono, u.distrito.id = :idDistrito WHERE u.id = :idUsuario")
-    void actualizarUsuarioFinal(String dni,
-                                String nombre,
-                                String apellidoPaterno,
-                                String apellidoMaterno,
-                                String email,
-                                String direccion,
-                                String telefono,
-                                Integer idDistrito,
-                                Integer idUsuario);
+    @Query(value = "UPDATE usuario u SET u.dni = :dni, u.nombre = :nombre, u.apellido_paterno = :apellidoPaterno, " +
+            "u.apellido_materno = :apellidoMaterno, u.email = :email, u.direccion = :direccion, " +
+            "u.telefono = :telefono, u.distrito_id = :idDistrito WHERE u.id = :idUsuario",
+            nativeQuery = true)
+    void actualizarUsuarioFinal(@Param("dni") String dni,
+                                @Param("nombre") String nombre,
+                                @Param("apellidoPaterno") String apellidoPaterno,
+                                @Param("apellidoMaterno") String apellidoMaterno,
+                                @Param("email") String email,
+                                @Param("direccion") String direccion,
+                                @Param("telefono") String telefono,
+                                @Param("idDistrito") Integer idDistrito,
+                                @Param("idUsuario") Integer idUsuario);
 
     //Metodo para mostrar solicitudes de agente
     @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
@@ -106,10 +113,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(nativeQuery=true,value="update usuario set idRol = 3 where idUsuario= ?1")
     void actualizarRolAAgente(int idUsuario);
 
-    @Query(value = "SELECT COUNT(u.idUsuario) as cantUsuariosBaneados FROM Usuario u WHERE u.baneado = 1 AND u.idRol = 4", nativeQuery = true)
+    @Query(value = "SELECT COUNT(u.id_usuario) as cantUsuariosBaneados " +
+            "FROM usuario u WHERE u.baneado = 1 AND u.rol_id = 4", nativeQuery = true)
     CantUsuariosBaneados getCantidadBaneados();
 
-    @Query(value="SELECT COUNT(u.idUsuario) as cantUsuariosActivos FROM Usuario u WHERE u.activo = 1 AND u.idRol = 4", nativeQuery = true)
+    @Query(value = "SELECT COUNT(u.id_usuario) as cantUsuariosActivos " +
+            "FROM usuario u WHERE u.activo = 1 AND u.rol_id = 4", nativeQuery = true)
     CantUsuariosActivos getCantidadActivos();
 
     @Query(value = "SELECT COUNT(u.idUsuario) as cantUsuariosRegistrados FROM Usuario u WHERE u.idRol = 4", nativeQuery = true)

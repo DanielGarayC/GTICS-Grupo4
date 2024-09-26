@@ -57,7 +57,7 @@ public class AgenteController {
 
             Usuario agente = optUsuario.get();
             // Filtrar usuarios con idRol=4, agente asignado y no baneados
-            List<Usuario> usuariosAsignados = usuarioRepository.findUsuariosFiltrados(4, agente);
+            List<Usuario> usuariosAsignados = usuarioRepository.findUsuariosFiltrados(4, 1);
 
             model.addAttribute("listaUsuariosAsignados", usuariosAsignados);
 
