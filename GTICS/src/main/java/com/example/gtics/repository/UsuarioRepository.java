@@ -1,5 +1,9 @@
 package com.example.gtics.repository;
 
+import com.example.gtics.dto.CantUsuariosActivos;
+import com.example.gtics.dto.CantUsuariosBaneados;
+import com.example.gtics.dto.CantUsuariosInactivos;
+import com.example.gtics.dto.CantidadAgentes;
 import com.example.gtics.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -43,4 +47,16 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Modifying
     @Query(nativeQuery=true,value="update usuario set idRol = 3 where idUsuario= ?1")
     void actualizarRolAAgente(int idUsuario);
+    
+    @Query(value = "SELECT COUNT(u.idUsuario) as cantUsuariosBaneados FROM Usuario u WHERE u.baneado = 1 AND u.idRol = 4", nativeQuery = true)
+    CantUsuariosBaneados getCantidadBaneados();
+
+    @Query(value="SELECT COUNT(u.idUsuario) as cantUsuariosActivos FROM Usuario u WHERE u.activo = 1 AND u.idRol = 4", nativeQuery = true)
+    CantUsuariosActivos getCantidadActivos();
+
+    @Query(value = "SELECT COUNT(u.idUsuario) as cantUsuariosInactivos FROM Usuario u WHERE u.activo = 0 AND u.idRol = 4", nativeQuery = true)
+    CantUsuariosInactivos getCantidadInactivos();
+
+    @Query(value = "SELECT COUNT(u.idUsuario) as cantAgentes FROM Usuario u WHERE u.idRol = 3", nativeQuery = true)
+    CantidadAgentes getCantidadAgentes();
 }
