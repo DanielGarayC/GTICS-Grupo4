@@ -177,7 +177,7 @@ public class SuperAdminController {
         try {
             List<Usuario> agentes = usuarioRepository.findByIdRol_Id(3);
             if (agentes.isEmpty()){
-                model.addAttribute("message", "No hay agentes Registrados");
+                model.addAttribute("message", "No hay agentes registrados");
             }else {
                 model.addAttribute("agentes", agentes);
 
@@ -205,40 +205,78 @@ public class SuperAdminController {
             model.addAttribute("error", "Error al cargar el agente para editar.");
             e.printStackTrace();
         }
+        model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAgentes/agent-edit";
     }
 
-    @PostMapping("/guardarAgente")
+    @PostMapping("/SuperAdmin/Agente/guardar")
     public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model) {
         try {
-            if (agente.getRol().getId() == 2) {  // Asegura que el rol del usuario sea de agente
-                usuarioRepository.save(agente);
-            } else {
-                model.addAttribute("error", "El rol del usuario no es válido para un agente.");
-                return "SuperAdmin/GestionAgentes/agent-edit";
+            // Buscar el agente existente
+            Usuario agenteExistente = usuarioRepository.findById(agente.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Agente no encontrado"));
+
+            // Actualizar solo los campos modificados
+            if (!agente.getNombre().equals(agenteExistente.getNombre())) {
+                agenteExistente.setNombre(agente.getNombre());
             }
+            if (!agente.getApellidoPaterno().equals(agenteExistente.getApellidoPaterno())) {
+                agenteExistente.setApellidoPaterno(agente.getApellidoPaterno());
+            }
+            if (!agente.getApellidoMaterno().equals(agenteExistente.getApellidoMaterno())) {
+                agenteExistente.setApellidoMaterno(agente.getApellidoMaterno());
+            }
+            if (!agente.getDni().equals(agenteExistente.getDni())) {
+                agenteExistente.setDni(agente.getDni());
+            }
+            if (!agente.getTelefono().equals(agenteExistente.getTelefono())) {
+                agenteExistente.setTelefono(agente.getTelefono());
+            }
+            if (!agente.getEmail().equals(agenteExistente.getEmail())) {
+                agenteExistente.setEmail(agente.getEmail());
+            }
+            if (!agente.getAgtRazonsocial().equals(agenteExistente.getAgtRazonsocial())) {
+                agenteExistente.setAgtRazonsocial(agente.getAgtRazonsocial());
+            }
+            if (!agente.getAgtCodigoaduana().equals(agenteExistente.getAgtCodigoaduana())) {
+                agenteExistente.setAgtCodigoaduana(agente.getAgtCodigoaduana());
+            }
+            if (!agente.getAgtCodigojurisdiccion().equals(agenteExistente.getAgtCodigojurisdiccion())) {
+                agenteExistente.setAgtCodigojurisdiccion(agente.getAgtCodigojurisdiccion());
+            }
+
+            // Si no tiene zona o ha cambiado, actualizarla
+            if (agente.getZona() != null && !agente.getZona().equals(agenteExistente.getZona())) {
+                agenteExistente.setZona(agente.getZona());
+            }
+
+            // Guardar solo si algo ha cambiado
+            usuarioRepository.save(agenteExistente);
+
         } catch (Exception e) {
             model.addAttribute("error", "Error al guardar el agente.");
             e.printStackTrace();
             return "SuperAdmin/GestionAgentes/agent-edit";
         }
+
         return "redirect:/SuperAdmin/listaAgente";
     }
 
-    @PostMapping("/SuperAdmin/eliminarAgente/{id}")
-    public String eliminarAgente(@PathVariable("id") Integer id, Model model) {
-        try {
-            Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
-            if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 2) {
+
+    @GetMapping("/SuperAdmin/eliminarAgente")
+    public String eliminarAgente(@RequestParam("id") int id, RedirectAttributes attr) {
+        Optional<Usuario> optProduct = usuarioRepository.findById(id);
+
+        if (optProduct.isPresent()) {
+            try {
                 usuarioRepository.deleteById(id);
-            } else {
-                model.addAttribute("error", "Agente no encontrado o el rol no es válido.");
-                return "redirect:/SuperAdmin/listaAgente?error";
+                attr.addFlashAttribute("msg", "El agente ha sido eliminado exitosamente");
+            } catch (Exception e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("error", "El agente no se pudo borrar correctamente =(.");
             }
-        } catch (Exception e) {
-            model.addAttribute("error", "Error al eliminar el agente.");
-            e.printStackTrace();
-            return "redirect:/SuperAdmin/listaAgente?error";
+        } else {
+            attr.addFlashAttribute("error", "El Agente no fue encontrado.");
         }
         return "redirect:/SuperAdmin/listaAgente";
     }

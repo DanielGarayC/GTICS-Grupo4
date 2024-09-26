@@ -187,12 +187,7 @@
                             <div>
                                 <h2>Lista de agentes</h2>
                                 <!-- breacrumb -->
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item active" aria-current="page">Agente</li>
-                                        <li class="breadcrumb-item active" aria-current="page">Agentes</li>
-                                    </ol>
-                                </nav>
+
                             </div>
 
                         </div>
@@ -211,7 +206,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}">
+                            <div class="alert alert-success" role="alert" th:if="${message != null}" th:text="${message}">
 
                             </div>
                             <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
@@ -273,7 +268,8 @@
                                                         </li>
                                                         <li>
                                                             <a class="dropdown-item" href="javascript:void(0);" th:onclick="'confirmDelete(' + ${agente.id} + ')'">
-                                                                <i class="bi bi-trash me-3"></i>
+
+                                                            <i class="bi bi-trash me-3"></i>
                                                                 Eliminar
                                                             </a>
                                                         </li>
@@ -283,9 +279,10 @@
                                             </td>
                                         </tr>
 
-
                                         </tbody>
                                     </table>
+
+
                                 </div>
 
                                 <div class="border-top d-md-flex justify-content-between align-items-center p-6">
@@ -326,7 +323,7 @@
 <!-- SweetAlert2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
-function confirmDelete() {
+function confirmDelete(id) {
     Swal.fire({
         title: '¿Estás seguro?',
         text: "Los cambios no serán reversibles",
@@ -338,7 +335,7 @@ function confirmDelete() {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `/AdminZonal/eliminar?id=${id}`;
+            window.location.href = `/SuperAdmin/eliminarAgente?id=${id}`;
             Swal.fire(
                 '¡Eliminado!',
                 'El elemento ha sido eliminado con éxito.',
