@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:fragment="navbarVerticalPc(paginaActiva)">
+    <nav class="navbar-vertical-nav d-none d-xl-block">
+        <div class="navbar-vertical">
+            <div class="px-4 py-5">
+                <a class="navbar-brand">
+                    <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagen" />
+                </a>
+            </div>
+            <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+                <ul class="navbar-nav flex-column" id="sideNavbar">
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActiva == 'dashboard'} ? ' active'" th:href="@{/SuperAdmin/dashboard}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>
+                                <span class="nav-link-text">DashBoard</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li class="nav-item mt-6 mb-3">
+                        <span class="nav-label">Opciones</span>
+                    </li>
+
+                    <!-- Desplegable de los Clientes -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navCustomer"
+                           aria-expanded="false" aria-controls="navCustomer">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-people"></i></span>
+                                <span class="nav-link-text">Usuarios</span>
+                            </div>
+                        </a>
+                        <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:classappend="${paginaActiva == 'listaUsuarioFinal'} ? ' active'"
+                                       th:href="@{/SuperAdmin/listaUsuarioFinal}">Usuarios</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:classappend="${paginaActiva == 'crearUsuarioFinal'} ? ' active'"
+                                       th:href="@{/SuperAdmin/crearUsuarioFinal}">Crear Usuario</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:classappend="${paginaActiva == 'editarUsuarioFinal'} ? ' active'"
+                                       th:href="@{/SuperAdmin/editarUsuarioFinal}">Editar Usuario</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Desplegable de los Administradores Zonales -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navAdminZonal"
+                           aria-expanded="false" aria-controls="navAdminZonal">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-person-badge"></i></span>
+                                <span class="nav-link-text">Administrador Zonal</span>
+                            </div>
+                        </a>
+                        <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:classappend="${paginaActiva == 'listaAdminZonal'} ? ' active'"
+                                       th:href="@{/SuperAdmin/listaAdminZonal}">Administradores Zonales</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:classappend="${paginaActiva == 'crearAdminZonal'} ? ' active'"
+                                       th:href="@{/SuperAdmin/crearAdminZonal}">Crear Administrador Zonal</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:classappend="${paginaActiva == 'editarAdminZonal'} ? ' active'"
+                                       th:href="@{/SuperAdmin/editarAdminZonal}">Editar Administrador Zonal</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Desplegable de los Agentes -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navAgent"
+                           aria-expanded="false" aria-controls="navAgent">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-person-circle"></i></span>
+                                <span class="nav-link-text">Agente</span>
+                            </div>
+                        </a>
+                        <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:classappend="${paginaActiva == 'listaAgente'} ? ' active'"
+                                       th:href="@{/SuperAdmin/listaAgente}">Agentes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:classappend="${paginaActiva == 'editarAgente'} ? ' active'"
+                                       th:href="@{/SuperAdmin/editarAgente}">Editar Agente</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Opción de Proveedores -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActiva == 'proveedores'} ? ' active'"
+                           th:href="@{/SuperAdmin/proveedores}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
+                                <span class="nav-link-text">Proveedores</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- Opción de Inventario de productos -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActiva == 'categorias'} ? ' active'"
+                           th:href="@{/SuperAdmin/categorias}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+                                <span class="nav-link-text">Inventario de productos</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- Opción de Solicitudes de Agentes -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActiva == 'listaSolicitudesAgentes'} ? ' active'"
+                           th:href="@{/SuperAdmin/listaSolicitudesAgentes}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-envelope"></i></span>
+                                <span class="nav-link-text">Solicitudes para Agente</span>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</th:block>
+
+    <!-- navbar vertical (para celular)-->
+
+<th:block th:fragment="navbarVerticalCelulares(paginaActiva)">
+    <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
+        <div class="navbar-vertical">
+            <div class="px-4 py-5 d-flex justify-content-between align-items-center">
+                <a class="navbar-brand">
+                    <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagenCelulares" />
+                </a>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+                <ul class="navbar-nav flex-column">
+                    <!-- DashBoard -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/SuperAdmin/dashboard}"
+                           th:classappend="${paginaActiva == 'dashboard'} ? ' active'">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-bar-chart"></i></span>
+                                <span class="nav-link-text">DashBoard</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- Sección Opciones -->
+                    <li class="nav-item mt-6 mb-3">
+                        <span class="nav-label">Opciones</span>
+                    </li>
+
+                    <!-- Usuarios -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navCustomer"
+                           aria-expanded="false" aria-controls="navCustomer">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-people"></i></span>
+                                <span class="nav-link-text">Usuarios</span>
+                            </div>
+                        </a>
+                        <div id="navCustomer" class="collapse" data-bs-parent="#sideNavbar">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/SuperAdmin/listaUsuarioFinal}"
+                                       th:classappend="${paginaActiva == 'listaUsuario'} ? ' active'">
+                                        Usuarios
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/SuperAdmin/crearUsuarioFinal}"
+                                       th:classappend="${paginaActiva == 'crearUsuario'} ? ' active'">
+                                        Crear Usuario
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/SuperAdmin/editarUsuarioFinal}"
+                                       th:classappend="${paginaActiva == 'editarUsuario'} ? ' active'">
+                                        Editar Usuario
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Administrador Zonal -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#navAdminZonal"
+                           aria-expanded="false" aria-controls="navAdminZonal">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-person-badge"></i></span>
+                                <span class="nav-link-text">Administrador Zonal</span>
+                            </div>
+                        </a>
+                        <div id="navAdminZonal" class="collapse" data-bs-parent="#sideNavbar">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/SuperAdmin/listaAdminZonal}"
+                                       th:classappend="${paginaActiva == 'listaAdminZonal'} ? ' active'">
+                                        Administradores Zonales
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/SuperAdmin/crearAdminZonal}"
+                                       th:classappend="${paginaActiva == 'crearAdminZonal'} ? ' active'">
+                                        Crear Administrador Zonal
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/SuperAdmin/editarAdminZonal}"
+                                       th:classappend="${paginaActiva == 'editarAdminZonal'} ? ' active'">
+                                        Editar Administrador Zonal
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Agente -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navAgent"
+                           aria-expanded="false" aria-controls="navAgent">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-person-circle"></i></span>
+                                <span class="nav-link-text">Agente</span>
+                            </div>
+                        </a>
+                        <div id="navAgent" class="collapse" data-bs-parent="#sideNavbar">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/SuperAdmin/listaAgente}"
+                                       th:classappend="${paginaActiva == 'listaAgente'} ? ' active'">
+                                        Agentes
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/SuperAdmin/editarAgente}"
+                                       th:classappend="${paginaActiva == 'editarAgente'} ? ' active'">
+                                        Editar Agente
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Proveedores -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/SuperAdmin/proveedores}"
+                           th:classappend="${paginaActiva == 'proveedores'} ? ' active'">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
+                                <span class="nav-link-text">Proveedores</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- Inventario de productos -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/SuperAdmin/categorias}"
+                           th:classappend="${paginaActiva == 'categorias'} ? ' active'">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+                                <span class="nav-link-text">Inventario de productos</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- Solicitudes para Agente -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes}"
+                           th:classappend="${paginaActiva == 'listaSolicitudesAgentes'} ? ' active'">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-envelope"></i></span>
+                                <span class="nav-link-text">Solicitudes para Agente</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</th:block>
+
+
+</body>
+</html>

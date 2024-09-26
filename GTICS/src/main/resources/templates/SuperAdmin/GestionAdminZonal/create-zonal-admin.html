@@ -500,12 +500,13 @@
                             <div class="card-body d-flex flex-column gap-8 p-7">
                                 <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
                                     <div>
-                                        <img class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/placeholder-img.jpg}" alt="Image" />
+                                        <img id="imagePreviewForm" class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/placeholder-img.jpg}" alt="Image" />
                                     </div>
+                                    <label for="fileInput" class="form-label">Subir foto:</label>
 
                                     <div class="file-upload btn btn-light ms-md-4">
-                                        <input type="file" class="file-input opacity-0" />
-                                        Subir foto
+                                        <input type="file" class="file-input opacity-0" id="fileInput" name="foto" accept="image/png, image/jpeg, image/gif" required />
+                                        <span>Subir foto</span>
                                     </div>
 
                                     <span class="ms-2">JPG, GIF or PNG. 1MB Max.</span>
@@ -513,6 +514,7 @@
                                 <div class="d-flex flex-column gap-4">
                                     <h3 class="mb-0 h5">Información del administrador zonal</h3>
                                     <form id="adminZonalForm" th:action="@{/SuperAdmin/AdminZonal/guardar}" method="post" class="needs-validation" novalidate>
+                                        <input type="hidden" name="idusuario" th:value="${usuario.id != null ? usuario.id : ''}" />
                                         <div class="row g-3">
 
                                             <!-- Nombres -->
@@ -529,23 +531,23 @@
                                                 <label for="creatFinalUserLastNameP" class="form-label">
                                                     Apellido Paterno: <span style="visibility: hidden;">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidopaterno" placeholder="Apellido paterno del admin zonal" required />
-                                                <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
+                                                <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidoPaterno" placeholder="Apellido paterno del admin zonal" required />
+                                                <div class="invalid-feedback">Por favor ingrese el apellido paterno del admin zonal</div>
                                             </div>
                                             <div class="col-12">
                                                 <label for="creatFinalUserLastNameM" class="form-label">
                                                     Apellido Materno: <span style="visibility: hidden;">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidomaterno" placeholder="Apellido materno del admin zonal" required />
-                                                <div class="invalid-feedback">Por favor ingrese los apellidos del admin zonal</div>
+                                                <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidoMaterno" placeholder="Apellido materno del admin zonal" required />
+                                                <div class="invalid-feedback">Por favor ingrese el apellido materno del admin zonal</div>
                                             </div>
                                             <!-- DNI -->
                                             <div class="col-12">
                                                 <label for="DNIFinalUser" class="form-label">
                                                     DNI: <span style="visibility: hidden;">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="DNIFinalUser" name="dni" placeholder="DNI del admin zonal" required />
-                                                <div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
+                                                <input type="text" class="form-control" id="DNIFinalUser" name="dni" minlength="8" maxlength="8" pattern="\d{8}" placeholder="Ejemplo: 12345678" required />
+                                                <div class="invalid-feedback" id="dni-feedback">Por favor ingrese un DNI válido con 8 dígitos</div>
                                             </div>
 
                                             <!-- Número telefónico -->
@@ -553,8 +555,8 @@
                                                 <label for="phoneAdminZonal" class="form-label">
                                                     Número telefónico: <span style="visibility: hidden;">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" placeholder="Teléfono" required />
-                                                <div class="invalid-feedback">Por favor ingrese el teléfono</div>
+                                                <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" placeholder="Teléfono" minlength="9" maxlength="9" pattern="\d{9}" required />
+                                                <div class="invalid-feedback" id="phone-feedback">El teléfono debe contener exactamente 9 dígitos</div>
                                             </div>
 
                                             <!-- Email -->
@@ -576,9 +578,9 @@
                                             <!-- Selección de zona -->
                                             <div class="col-12">
                                                 <label for="selectZone" class="form-label">Zona</label>
-                                                <select class="form-select" name="zona" id="selectZone" required>
+                                                <select class="form-select" name="zonaId" id="selectZone" required>
                                                     <option value="" selected disabled>--Seleccione una zona--</option>
-                                                    <option th:each="zona : ${zonas}" th:text="${zona.getNombreZona()}" th:value="${zona.getId()}"></option>
+                                                    <option th:each="zona : ${zonas}" th:text="${zona.getNombreZona()}" th:value="${zona.id}"></option>
                                                 </select>
                                                 <div class="invalid-feedback">Por favor seleccione una zona</div>
                                             </div>
@@ -586,15 +588,15 @@
                                             <!-- Fecha de nacimiento -->
                                             <div class="col-12">
                                                 <label class="form-label" for="creatFinalUserDate">Fecha de nacimiento</label>
-                                                <input type="text" class="form-control flatpickr" id="creatFinalUserDate" name="azFechanacimiento" placeholder="Fecha de nacimiento" required />
-                                                <div class="invalid-feedback">Por favor ingrese la fecha de nacimiento</div>
+                                                <input type="date" class="form-control" id="creatFinalUserDate" name="azFechanacimiento" placeholder="Fecha de nacimiento" required />
+                                                <div class="invalid-feedback" id="fecha-feedback">Por favor ingrese una fecha válida de nacimiento</div>
                                             </div>
 
                                             <!-- Contraseña temporal -->
                                             <div class="col-12">
                                                 <label class="form-label" for="passwordAdminZonal">Contraseña temporal</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="passwordAdminZonal" name="contraseña" required />
+                                                    <input type="text" class="form-control" id="passwordAdminZonal" name="contrasena" required />
                                                     <button class="btn btn-outline-secondary" type="button" id="generatePassword">Generar</button>
                                                 </div>
                                             </div>
@@ -631,43 +633,132 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
 <script>
-    function confirmarRegistro() {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "¿Deseas crear un nuevo administrador zonal?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#28a745',
-            cancelButtonColor: '#dc3545',
-            confirmButtonText: 'Sí, crear',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreviewForm'); // Asegúrate de seleccionar solo la imagen del formulario
 
-                document.getElementById('adminZonalForm').submit(); // Envía el formulario con el id 'adminZonalForm'
+        fileInput.addEventListener('change', function () {
+            const file = fileInput.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;  // Cambia solo la imagen del formulario
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.src = '/images/docs/placeholder-img.jpg';  // Vuelve a la imagen por defecto si no es válida
             }
         });
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("generatePassword").addEventListener("click", generatePassword);
     });
+    </script>
+    <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('adminZonalForm');
+            const dateInput = document.getElementById('creatFinalUserDate');
+            const phoneInput = document.getElementById('phoneAdminZonal');
+            const dniInput = document.getElementById('DNIFinalUser');
 
-    function generatePassword() {
-        console.log("Botón de generar contraseña presionado");
-        const length = 12;
-        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
-        let password = "";
+            const phoneFeedback = document.getElementById('phone-feedback');
+            const dniFeedback = document.getElementById('dni-feedback');
 
-        for (let i = 0; i < length; i++) {
+            // Validar fecha de nacimiento (no puede ser futura)
+            dateInput.addEventListener('blur', function () {
+            const currentDate = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
+            if (dateInput.value > currentDate) {
+            dateInput.setCustomValidity("La fecha de nacimiento no puede ser futura.");
+            dateInput.classList.add('is-invalid');
+        } else {
+            dateInput.setCustomValidity(""); // Restablecer si la fecha es válida
+            dateInput.classList.remove('is-invalid');
+            dateInput.classList.add('is-valid');
+        }
+        });
+
+            // Validar teléfono al salir del campo
+            phoneInput.addEventListener('blur', function () {
+            if (phoneInput.validity.valueMissing) {
+            phoneFeedback.textContent = 'Por favor ingrese el número de teléfono';
+            phoneInput.classList.add('is-invalid');
+        } else if (phoneInput.validity.patternMismatch) {
+            phoneFeedback.textContent = 'El número de teléfono debe contener exactamente 9 dígitos';
+            phoneInput.classList.add('is-invalid');
+        } else {
+            phoneInput.classList.remove('is-invalid');
+            phoneInput.classList.add('is-valid'); // Marca como válido
+        }
+        });
+
+            // Validar DNI al salir del campo
+            dniInput.addEventListener('blur', function () {
+            if (dniInput.validity.valueMissing) {
+            dniFeedback.textContent = 'Por favor ingrese el DNI del Admin Zonal';
+            dniInput.classList.add('is-invalid');
+        } else if (dniInput.validity.patternMismatch) {
+            dniFeedback.textContent = 'El DNI debe contener exactamente 8 dígitos';
+            dniInput.classList.add('is-invalid');
+        } else {
+            dniInput.classList.remove('is-invalid');
+            dniInput.classList.add('is-valid'); // Marca como válido
+        }
+        });
+
+            // Validar todo el formulario al enviarlo
+            form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+            form.classList.add('was-validated'); // Forzar mostrar validaciones
+        });
+        });
+
+            // Función para mostrar el popup de confirmación con validación del formulario
+            function confirmarRegistro() {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¿Deseas crear un nuevo administrador zonal?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Sí, crear',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('adminZonalForm');
+                    if (form.checkValidity()) {
+                        form.submit();
+                    } else {
+                        form.classList.add('was-validated'); // Forzar la validación si es incorrecta
+                    }
+                }
+            });
+        }
+
+            document.addEventListener("DOMContentLoaded", function() {
+            flatpickr("#creatFinalUserDate", {
+                dateFormat: "Y-m-d"  // Esto asegura que la fecha se envíe en formato yyyy-MM-dd
+            });
+        });
+
+            document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("generatePassword").addEventListener("click", generatePassword);
+        });
+
+            function generatePassword() {
+            console.log("Botón de generar contraseña presionado");
+            const length = 12;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+            let password = "";
+
+            for (let i = 0; i < length; i++) {
             const randomIndex = Math.floor(Math.random() * charset.length);
             password += charset[randomIndex];
         }
 
-        document.getElementById("passwordAdminZonal").value = password;
-    }
+            document.getElementById("passwordAdminZonal").value = password;
+        }
 </script>
 
 </body>

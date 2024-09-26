@@ -290,7 +290,7 @@
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item" th:href="@{/Agente/Ordenes/Detalles}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
 												   </li>
 												   <li>
 													<a class="dropdown-item" href="#" onclick="eliminarOrden()">
