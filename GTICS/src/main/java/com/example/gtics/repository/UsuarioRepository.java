@@ -17,7 +17,32 @@ import java.util.List;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
-    
+    // Método personalizado para buscar agentes con paginación
+    @Query(value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
+            "u.agt_codigoaduana, " +
+            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "WHEN 1 THEN 'Habilitado' " +
+            "WHEN 2 THEN 'Multado' " +
+            "WHEN 3 THEN 'Cancelado' " +
+            "WHEN 4 THEN 'Suspendido' " +
+            "WHEN 5 THEN 'Anulado de jurisdicción' " +
+            "END AS estadoCodigoAduana, " +
+            "u.agt_codigojurisdiccion, " +
+            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "WHEN 1 THEN 'Habilitado' " +
+            "WHEN 2 THEN 'Multado' " +
+            "WHEN 3 THEN 'Cancelado' " +
+            "WHEN 4 THEN 'Suspendido' " +
+            "WHEN 5 THEN 'Anulado de jurisdicción' " +
+            "END AS estadoCodigoJurisdiccion, " +
+            "u.agt_razonsocial, z.nombrezona " +
+            "FROM usuario u " +
+            "JOIN zona z ON u.idzona = z.idzona " +
+            "WHERE u.idRol = 3 " +
+            "GROUP BY u.idusuario",
+            countQuery = "SELECT COUNT(*) FROM usuario u WHERE u.idRol = 3",
+            nativeQuery = true)
+    Page<Object[]> mostrarAgentesConPaginacion(Pageable pageable);
     // Método personalizado para buscar usuarios por el ID del rol con paginación
     Page<Usuario> findByRol_Id(int rolId, Pageable pageable);
 
