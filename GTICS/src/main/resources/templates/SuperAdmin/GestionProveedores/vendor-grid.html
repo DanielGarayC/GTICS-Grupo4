@@ -222,6 +222,7 @@
 						</div>
 					</div>
 				</div>
+
 				<!-- fila -->
 				<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 g-lg-6">
 					<!-- Iterar sobre la lista de vendedores -->
@@ -232,9 +233,8 @@
 								<div class="card-body p-6">
 									<div>
 										<!-- imagen -->
-										<img th:src="@{/images/stores-logo/stores-logo-${vendedor.id}.svg}"
-											 alt=""
-											 class="rounded-circle icon-shape icon-xxl mb-6" />
+										<img th:if="*{vendedor.fotoTienda != null}" th:src="@{'/proveedores/fototienda/' + ${vendedor.idTienda}}" alt="Imagen de la tienda" class="rounded-circle icon-shape icon-xxl mb-6" />
+
 
 
 

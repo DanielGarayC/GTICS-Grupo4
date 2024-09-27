@@ -2,9 +2,12 @@ package com.example.gtics.controller;
 
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -324,6 +327,23 @@ public class SuperAdminController {
         // Redireccionar a la vista correspondiente
         return "SuperAdmin/GestionAgentes/agent-request";
     }
+
+    @PostMapping("SuperAdmin/listaSolicitudesAgentesFiltro")
+    public String listaSolicitudesAgentesFiltro(Model model,@RequestParam("indicador") Integer indicador) {
+        System.out.println(indicador);
+        if(indicador==2) {
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+        }
+
+        List<Object[]> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesConEstadosAleatoriosFiltro(indicador);
+
+        // Añadir la lista de solicitudes al modelo
+        model.addAttribute("listaUsuariosSolicitudes", listaUsuariosSolicitudes);
+
+        // Redireccionar a la vista correspondiente
+        return "SuperAdmin/GestionAgentes/agent-request";
+    }
+
 
 
     @GetMapping("/SuperAdmin/rechazarSolicitudAgente")
@@ -678,9 +698,22 @@ public class SuperAdminController {
         return "redirect:/SuperAdmin/listaProveedores";
     }
 
+    @GetMapping("/proveedores/fototienda/{id}")
+    public ResponseEntity<ByteArrayResource> obtenerFotoTienda(@PathVariable Integer id) {
+        Tienda tienda = tiendaRepository.findById(id).orElseThrow(() -> new RuntimeException("Tienda no encontrada"));
+
+        byte[] foto = tienda.getFotoTienda();
+        ByteArrayResource resource = new ByteArrayResource(foto);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"foto_tienda_" + id + ".jpg\"")
+                .contentLength(foto.length)
+                .body(resource);
+    }
+
 
     @GetMapping("SuperAdmin/perfil")
-    public String añadirCategoria(){
+    public String anadirCategoria(){
 
         return "SuperAdmin/perfilSuperAdmin";
     }
