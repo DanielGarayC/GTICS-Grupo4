@@ -49,7 +49,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     //Banear Usuario por id
     @Transactional
     @Modifying
-    @Query(value = "UPDATE usuario u SET u.baneado = true WHERE u.id = :idUsuario AND u.baneado = false", nativeQuery = true)
+    @Query(nativeQuery = true, value = "UPDATE usuario u SET u.baneado = true WHERE u.idUsuario = ?1 AND u.baneado = false")
     void banUsuario(@Param("idUsuario") Integer idUsuario);
 
     //Actualizar Usuario Final
