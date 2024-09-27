@@ -665,27 +665,27 @@
                     <!-- input -->
                     <div class="mb-3">
                         <label class="form-label">Nombre Completo</label>
-                        <input type="text" class="form-control" placeholder="Nadia Hernandez" disabled />
+                        <input type="text" class="form-control"  th:value="${usuario.nombre} + ' ' + ${usuario.apellidoPaterno} + ' ' + ${usuario.apellidoMaterno}" disabled />
                     </div>
                     <!-- input -->
                     <div class="mb-3">
                         <label class="form-label">DNI</label>
-                        <input type="text" class="form-control" placeholder="87678987" disabled />
+                        <input type="text" class="form-control" th:value="${usuario.dni}" disabled />
                     </div>
                     <!-- input -->
                     <div class="mb-3">
                         <label class="form-label">Distrito</label>
-                        <input type="text" class="form-control" placeholder="San Miguel" disabled />
+                        <input type="text" class="form-control" th:value="${usuario.distrito.nombre}" disabled />
                     </div>
                     <!-- input -->
                     <div class="mb-3">
                         <label class="form-label">Dirección</label>
-                        <input type="text" class="form-control" placeholder="Calle Urubamba 123" disabled />
+                        <input type="text" class="form-control" th:value="${usuario.direccion}" disabled />
                     </div>
                     <!-- input -->
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" placeholder="lala.fgh@gmail.com" disabled />
+                        <input type="email" class="form-control" th:value="${usuario.email}" disabled />
                     </div>
                     <!-- button -->
                     <div class="mb-3 text-center">
