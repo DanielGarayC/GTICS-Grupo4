@@ -216,13 +216,15 @@
 
                                             </div>
                                             <!-- select option -->
-                                            <div class="col-xl-2 col-md-4 col-12">
-                                                <select class="form-select">
-                                                    <option selected>Postulación</option>
-                                                    <option value="directa">Directa</option>
-                                                    <option value="coordinador">Por Coordinador</option>
+                                            <form class="col-xl-3 col-md-5 col-12 d-flex align-items-center" method="post" th:action="@{/SuperAdmin/listaSolicitudesAgentesFiltro}">
+                                                <select class="form-select me-2" name="indicador">
+                                                    <option selected value="2">Postulación</option>
+                                                    <option value="0">Directa</option>
+                                                    <option value="1">Por Coordinador</option>
                                                 </select>
-                                            </div>
+                                                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+                                            </form>
+
                                         </div>
                                     </div>
                                     <!-- card body -->

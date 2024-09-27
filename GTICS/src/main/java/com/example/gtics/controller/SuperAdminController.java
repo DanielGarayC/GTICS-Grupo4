@@ -328,6 +328,23 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAgentes/agent-request";
     }
 
+    @PostMapping("SuperAdmin/listaSolicitudesAgentesFiltro")
+    public String listaSolicitudesAgentesFiltro(Model model,@RequestParam("indicador") Integer indicador) {
+        System.out.println(indicador);
+        if(indicador==2) {
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+        }
+
+        List<Object[]> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesConEstadosAleatoriosFiltro(indicador);
+
+        // Añadir la lista de solicitudes al modelo
+        model.addAttribute("listaUsuariosSolicitudes", listaUsuariosSolicitudes);
+
+        // Redireccionar a la vista correspondiente
+        return "SuperAdmin/GestionAgentes/agent-request";
+    }
+
+
 
     @GetMapping("/SuperAdmin/rechazarSolicitudAgente")
     public String RechazarSolicitudAgente(@RequestParam Integer id,
