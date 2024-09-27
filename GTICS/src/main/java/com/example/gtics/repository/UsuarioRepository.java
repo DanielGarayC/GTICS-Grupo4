@@ -22,20 +22,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     // Método personalizado para buscar agentes con paginación
     @Query(value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
             "u.agt_codigoaduana, " +
-            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "CASE FLOOR(1) " +
             "WHEN 1 THEN 'Habilitado' " +
-            "WHEN 2 THEN 'Multado' " +
-            "WHEN 3 THEN 'Cancelado' " +
-            "WHEN 4 THEN 'Suspendido' " +
-            "WHEN 5 THEN 'Anulado de jurisdicción' " +
             "END AS estadoCodigoAduana, " +
             "u.agt_codigojurisdiccion, " +
-            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "CASE FLOOR(1) " +
             "WHEN 1 THEN 'Habilitado' " +
-            "WHEN 2 THEN 'Multado' " +
-            "WHEN 3 THEN 'Cancelado' " +
-            "WHEN 4 THEN 'Suspendido' " +
-            "WHEN 5 THEN 'Anulado de jurisdicción' " +
             "END AS estadoCodigoJurisdiccion, " +
             "u.agt_razonsocial, z.nombrezona " +
             "FROM usuario u " +
