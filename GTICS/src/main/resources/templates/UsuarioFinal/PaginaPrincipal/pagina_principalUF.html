@@ -1,580 +1,572 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-   <head>
-      <!-- Required meta tags -->
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-      <meta content="Codescandy" name="author" />
-      <title>Página Inicio - Usuario Final</title>
-      <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
-      <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
-      <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
-      <!-- Favicon icon-->
-      <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}" />
+<head>
+   <!-- Required meta tags -->
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+   <meta content="Codescandy" name="author" />
+   <title>Página Inicio - Usuario Final</title>
+   <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
+   <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
+   <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
+   <!-- Favicon icon-->
+   <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}" />
 
-      <!-- Libs CSS -->
-      <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
-      <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
-      <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+   <!-- Libs CSS -->
+   <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+   <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+   <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
-      <!-- Theme CSS -->
-      <link rel="stylesheet" th:href="@{/css/theme.min.css}">
-      <style>
-         .navbar-brand img {
-            max-width: 250px; /* Ajusta este valor según el tamaño que prefieras */
-            height: auto; /* Para mantener la proporción */
-          }
-         .info-box {
-            display: flex;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: -100px;
-         }
-         .highlight-text {
-            font-style: italic; /* Texto en cursiva */
-            font-weight: bold; /* Texto en negritas */
-            color:black;
-            letter-spacing: 1px; /* Espaciado entre letras */
-            text-align: center; /* Centrar el texto */
-            font-family: 'Arial', sans-serif; /* Puedes cambiar la fuente si lo prefieres */
-            font-size: 1.2em; /* Tamaño del texto ajustable */
-            text-transform: uppercase; /* Convertir el texto a mayúsculas */
-            margin-top: 20px;
-         }
-         .button-container {
-            text-align: center; /* Centra el botón horizontalmente */
-         }
-         .table {
-            width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
-            text-align: center; /* Centra el contenido horizontalmente */
-         }
-         .table tbody td {
-            color: black; /* Texto negro para el cuerpo de la tabla */
-         }
-      </style>
-   </head>
+   <!-- Theme CSS -->
+   <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+   <style>
+      .navbar-brand img {
+         max-width: 250px; /* Ajusta este valor según el tamaño que prefieras */
+         height: auto; /* Para mantener la proporción */
+      }
+      .info-box {
+         display: flex;
+         padding: 20px;
+         border-radius: 8px;
+         margin-top: -100px;
+      }
+      .highlight-text {
+         font-style: italic; /* Texto en cursiva */
+         font-weight: bold; /* Texto en negritas */
+         color:black;
+         letter-spacing: 1px; /* Espaciado entre letras */
+         text-align: center; /* Centrar el texto */
+         font-family: 'Arial', sans-serif; /* Puedes cambiar la fuente si lo prefieres */
+         font-size: 1.2em; /* Tamaño del texto ajustable */
+         text-transform: uppercase; /* Convertir el texto a mayúsculas */
+         margin-top: 20px;
+      }
+      .button-container {
+         text-align: center; /* Centra el botón horizontalmente */
+      }
+      .table {
+         width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
+         text-align: center; /* Centra el contenido horizontalmente */
+      }
+      .table tbody td {
+         color: black; /* Texto negro para el cuerpo de la tabla */
+      }
+   </style>
+</head>
 
-   <body>
-      <!-- navigation -->
-      <header>
-         <!-- main -->
-         <div>
-            <!-- navbar -->
+<body>
+<!-- navigation -->
+<header>
+   <!-- main -->
+   <div>
+      <!-- navbar -->
 
-            <!-- navbar horizontal -->
-            <!-- navbar -->
-            <div class="border-bottom">
-               <!-- navbar -->
-               <!-- barra superior (para pc)-->
-               <div th:insert="fragments/navbarUsuarioFinal.html :: navbarSuperiorPc()"></div>
-
-
-               <!-- navbar -->
-               <!-- navbar vertical (para pc)-->
-               <div th:insert="fragments/navbarUsuarioFinal.html :: navbarHorizontalPc()"></div>
-
-
-
-            </div>
-         </div>
-         <!-- Modal -->
-         <!-- Modal -->
-         <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-               <div class="modal-content">
-                  <!-- modal body -->
-                  <form class="modal-body p-6" method="post" th:action="@{/UsuarioFinal/solicitudAgente}">
-                     <div class="d-flex justify-content-between mb-5">
-                        <!-- heading -->
-                        <div>
-                           <h5 class="h6 mb-1" id="addAddressModalLabel">Solicitud de agente</h5>
-                           <p class="small mb-0">Ingresa tus datos </p>
-                        </div>
-                        <div>
-                           <!-- button -->
-                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                     </div>
-                     <!-- row -->
-                     <div class="row g-3">
-
-                        <!-- col -->
-                        <div class="col-12">
-                           <label for="ContactName" class="form-label">Información personal</label>
-                           <input type="text" class="form-control" th:value="${usuario.nombre} + ' ' + ${usuario.apellidoPaterno}" aria-label="Nombre del contacto" required="" disabled/>
-                        </div>
-
-
-                        <!-- col -->
-                        <div class="col-12">
-                           <label for="direction" class="form-label">Dirección </label>
-                           <input type="text" class="form-control" th:value="${usuario.direccion} " aria-label="Dirección" required="" disabled/>
-                        </div>
-
-                        <!-- col -->
-                        <div class="col-12">
-                           <label for="direction" class="form-label">Zona </label>
-                           <input type="text" class="form-control" th:value="${usuario.zona.nombreZona}" aria-label="Dirección" required="" disabled/>
-                        </div>
-
-                        <!-- col -->
-                        <div class="col-12">
-                           <label for="direction" class="form-label">Distrto </label>
-                           <input type="text" class="form-control" th:value="${usuario.distrito.nombre}"  aria-label="Dirección" required="" disabled/>
-                        </div>
-
-                        <!-- col -->
-                        <div class="col-12">
-                           <label for="direction" class="form-label">Código de jurisdicción </label>
-                           <input type="text" class="form-control" th:name="codigoJurisdiccion" th:value="${usuario.distrito.codigosJurisdiccion}" aria-label="Dirección" required="" readonly/>
-                        </div>
-
-                        <!-- col -->
-                        <div class="col-12">
-                           <label for="direction" class="form-label">Código de aduana </label>
-                           <input type="text" class="form-control"  th:name="codigoAduana" value="222" aria-label="Dirección" required="" readonly/> <!--Valor aleatorio, momentaneamente le pongo222-->
-                        </div>
-
-
-
-
-                     </div>
-
-
-                     <div class="col-12" style="margin-bottom: 10px;">
-
-                     </div>
+      <!-- navbar horizontal -->
+      <!-- navbar -->
+      <div class="border-bottom">
+         <!-- navbar -->
+         <!-- barra superior (para pc)-->
+         <div th:insert="fragments/navbarUsuarioFinal :: navbar"></div>
+      </div>
+   </div>
+   <!-- Modal -->
+   <!-- Modal -->
+   <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <!-- modal body -->
+            <form class="modal-body p-6" method="post" th:action="@{/UsuarioFinal/solicitudAgente}">
+               <div class="d-flex justify-content-between mb-5">
+                  <!-- heading -->
+                  <div>
+                     <h5 class="h6 mb-1" id="addAddressModalLabel">Solicitud de agente</h5>
+                     <p class="small mb-0">Ingresa tus datos </p>
+                  </div>
+                  <div>
                      <!-- button -->
-                     <div class="col-12 text-end">
-                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
-                        <button class="btn btn-primary" type="submit">Enviar solicitud</button>
-                     </div>
-                  </form>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
                </div>
-            </div>
+               <!-- row -->
+               <div class="row g-3">
+
+                  <!-- col -->
+                  <div class="col-12">
+                     <label for="ContactName" class="form-label">Información personal</label>
+                     <input type="text" class="form-control" th:value="${usuario.nombre} + ' ' + ${usuario.apellidoPaterno}" aria-label="Nombre del contacto" required="" disabled/>
+                  </div>
+
+
+                  <!-- col -->
+                  <div class="col-12">
+                     <label for="direction" class="form-label">Dirección </label>
+                     <input type="text" class="form-control" th:value="${usuario.direccion} " aria-label="Dirección" required="" disabled/>
+                  </div>
+
+                  <!-- col -->
+                  <div class="col-12">
+                     <label for="direction" class="form-label">Zona </label>
+                     <input type="text" class="form-control" th:value="${usuario.zona.nombreZona}" aria-label="Dirección" required="" disabled/>
+                  </div>
+
+                  <!-- col -->
+                  <div class="col-12">
+                     <label for="direction" class="form-label">Distrto </label>
+                     <input type="text" class="form-control" th:value="${usuario.distrito.nombre}"  aria-label="Dirección" required="" disabled/>
+                  </div>
+
+                  <!-- col -->
+                  <div class="col-12">
+                     <label for="direction" class="form-label">Código de jurisdicción </label>
+                     <input type="text" class="form-control" th:name="codigoJurisdiccion" th:value="${usuario.distrito.codigosJurisdiccion}" aria-label="Dirección" required="" readonly/>
+                  </div>
+
+                  <!-- col -->
+                  <div class="col-12">
+                     <label for="direction" class="form-label">Código de aduana </label>
+                     <input type="text" class="form-control"  th:name="codigoAduana" value="222" aria-label="Dirección" required="" readonly/> <!--Valor aleatorio, momentaneamente le pongo222-->
+                  </div>
+
+
+
+
+               </div>
+
+
+               <div class="col-12" style="margin-bottom: 10px;">
+
+               </div>
+               <!-- button -->
+               <div class="col-12 text-end">
+                  <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                  <button class="btn btn-primary" type="submit">Enviar solicitud</button>
+               </div>
+            </form>
          </div>
+      </div>
+   </div>
 
-         <!-- Shop Cart -->
+   <!-- Shop Cart -->
 
-         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-            <div class="offcanvas-header border-bottom">
-               <div class="text-start">
-                  <h5 id="offcanvasRightLabel" class="mb-0 fs-4">Carrito de Compras</h5>
-
-               </div>
-               <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-               <div>
-                  <!-- alert -->
-                  <div class="alert alert-danger p-2" role="alert">
-                     Tenemos los mejores productos.
-                     <a href="#!" class="alert-link">Ve a la sección proceso de compras ya!</a>
-                  </div>
-                  <ul class="list-group list-group-flush">
-                     <!-- list group -->
-                     <li class="list-group-item py-3 ps-0 border-top">
-                        <!-- row -->
-                        <div class="row align-items-center">
-                           <div class="col-6 col-md-6 col-lg-7">
-                              <div class="d-flex">
-                                 <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                 <div class="ms-3">
-                                    <!-- title -->
-                                    <a th:href="@{../pages/shop-single.html}" class="text-inherit">
-                                       <h6 class="mb-0">Laptop HP</h6>
-                                    </a>
-                                    <span><small class="text-muted"></small></span>
-                                    <!-- text -->
-                                    <div class="mt-2 small lh-1">
-                                       <a href="#!" class="text-decoration-none text-inherit">
-                                       <span class="me-1 align-text-bottom">
-                                          <svg
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                  width="14"
-                                                  height="14"
-                                                  viewBox="0 0 24 24"
-                                                  fill="none"
-                                                  stroke="currentColor"
-                                                  stroke-width="2"
-                                                  stroke-linecap="round"
-                                                  stroke-linejoin="round"
-                                                  class="feather feather-trash-2 text-success">
-                                             <polyline points="3 6 5 6 21 6"></polyline>
-                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                             <line x1="10" y1="11" x2="10" y2="17"></line>
-                                             <line x1="14" y1="11" x2="14" y2="17"></line>
-                                          </svg>
-                                       </span>
-                                          <span class="text-muted">Eliminar</span>
-                                       </a>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <!-- input group -->
-                           <div class="col-4 col-md-3 col-lg-3">
-                              <!-- input -->
-                              <!-- input -->
-                              <div class="input-group input-spinner">
-                                 <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                 <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                 <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                              </div>
-                           </div>
-                           <!-- price -->
-                           <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                              <span class="fw-bold">S/. 145.00</span>
-                           </div>
-                        </div>
-                     </li>
-                     <!-- list group -->
-                     <li class="list-group-item py-3 ps-0 border-top">
-                        <!-- row -->
-                        <div class="row align-items-center">
-                           <div class="col-6 col-md-6 col-lg-7">
-                              <div class="d-flex">
-                                 <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                 <div class="ms-3">
-                                    <!-- title -->
-                                    <a th:href="@{../pages/shop-single.html}" class="text-inherit">
-                                       <h6 class="mb-0">Laptop HP</h6>
-                                    </a>
-                                    <span><small class="text-muted"></small></span>
-                                    <!-- text -->
-                                    <div class="mt-2 small lh-1">
-                                       <a href="#!" class="text-decoration-none text-inherit">
-                                       <span class="me-1 align-text-bottom">
-                                          <svg
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                  width="14"
-                                                  height="14"
-                                                  viewBox="0 0 24 24"
-                                                  fill="none"
-                                                  stroke="currentColor"
-                                                  stroke-width="2"
-                                                  stroke-linecap="round"
-                                                  stroke-linejoin="round"
-                                                  class="feather feather-trash-2 text-success">
-                                             <polyline points="3 6 5 6 21 6"></polyline>
-                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                             <line x1="10" y1="11" x2="10" y2="17"></line>
-                                             <line x1="14" y1="11" x2="14" y2="17"></line>
-                                          </svg>
-                                       </span>
-                                          <span class="text-muted">Eliminar</span>
-                                       </a>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <!-- input group -->
-                           <div class="col-4 col-md-3 col-lg-3">
-                              <!-- input -->
-                              <!-- input -->
-                              <div class="input-group input-spinner">
-                                 <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                 <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                 <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                              </div>
-                           </div>
-                           <!-- price -->
-                           <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                              <span class="fw-bold">S/. 145.00</span>
-                           </div>
-                        </div>
-                     </li>
-                     <!-- list group -->
-                     <li class="list-group-item py-3 ps-0 border-top">
-                        <!-- row -->
-                        <div class="row align-items-center">
-                           <div class="col-6 col-md-6 col-lg-7">
-                              <div class="d-flex">
-                                 <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                 <div class="ms-3">
-                                    <!-- title -->
-                                    <a th:href="@{../pages/shop-single.html}" class="text-inherit">
-                                       <h6 class="mb-0">Laptop HP</h6>
-                                    </a>
-                                    <span><small class="text-muted"></small></span>
-                                    <!-- text -->
-                                    <div class="mt-2 small lh-1">
-                                       <a href="#!" class="text-decoration-none text-inherit">
-                                       <span class="me-1 align-text-bottom">
-                                          <svg
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                  width="14"
-                                                  height="14"
-                                                  viewBox="0 0 24 24"
-                                                  fill="none"
-                                                  stroke="currentColor"
-                                                  stroke-width="2"
-                                                  stroke-linecap="round"
-                                                  stroke-linejoin="round"
-                                                  class="feather feather-trash-2 text-success">
-                                             <polyline points="3 6 5 6 21 6"></polyline>
-                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                             <line x1="10" y1="11" x2="10" y2="17"></line>
-                                             <line x1="14" y1="11" x2="14" y2="17"></line>
-                                          </svg>
-                                       </span>
-                                          <span class="text-muted">Eliminar</span>
-                                       </a>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <!-- input group -->
-                           <div class="col-4 col-md-3 col-lg-3">
-                              <!-- input -->
-                              <!-- input -->
-                              <div class="input-group input-spinner">
-                                 <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                 <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                 <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                              </div>
-                           </div>
-                           <!-- price -->
-                           <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                              <span class="fw-bold">S/. 145.00</span>
-                           </div>
-                        </div>
-                     </li>
-                     <!-- list group -->
-                     <li class="list-group-item py-3 ps-0 border-top">
-                        <!-- row -->
-                        <div class="row align-items-center">
-                           <div class="col-6 col-md-6 col-lg-7">
-                              <div class="d-flex">
-                                 <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                 <div class="ms-3">
-                                    <!-- title -->
-                                    <a th:href="@{../pages/shop-single.html}" class="text-inherit">
-                                       <h6 class="mb-0">Laptop HP</h6>
-                                    </a>
-                                    <span><small class="text-muted"></small></span>
-                                    <!-- text -->
-                                    <div class="mt-2 small lh-1">
-                                       <a href="#!" class="text-decoration-none text-inherit">
-                                       <span class="me-1 align-text-bottom">
-                                          <svg
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                  width="14"
-                                                  height="14"
-                                                  viewBox="0 0 24 24"
-                                                  fill="none"
-                                                  stroke="currentColor"
-                                                  stroke-width="2"
-                                                  stroke-linecap="round"
-                                                  stroke-linejoin="round"
-                                                  class="feather feather-trash-2 text-success">
-                                             <polyline points="3 6 5 6 21 6"></polyline>
-                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                             <line x1="10" y1="11" x2="10" y2="17"></line>
-                                             <line x1="14" y1="11" x2="14" y2="17"></line>
-                                          </svg>
-                                       </span>
-                                          <span class="text-muted">Eliminar</span>
-                                       </a>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <!-- input group -->
-                           <div class="col-4 col-md-3 col-lg-3">
-                              <!-- input -->
-                              <!-- input -->
-                              <div class="input-group input-spinner">
-                                 <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                 <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                 <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                              </div>
-                           </div>
-                           <!-- price -->
-                           <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                              <span class="fw-bold">S/. 145.00</span>
-                           </div>
-                        </div>
-                     </li>
-                     <!-- list group -->
-                     <li class="list-group-item py-3 ps-0 border-top">
-                        <!-- row -->
-                        <div class="row align-items-center">
-                           <div class="col-6 col-md-6 col-lg-7">
-                              <div class="d-flex">
-                                 <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
-                                 <div class="ms-3">
-                                    <!-- title -->
-                                    <a th:href="@{../pages/shop-single.html}" class="text-inherit">
-                                       <h6 class="mb-0">Laptop HP</h6>
-                                    </a>
-                                    <span><small class="text-muted"></small></span>
-                                    <!-- text -->
-                                    <div class="mt-2 small lh-1">
-                                       <a href="#!" class="text-decoration-none text-inherit">
-                                       <span class="me-1 align-text-bottom">
-                                          <svg
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                  width="14"
-                                                  height="14"
-                                                  viewBox="0 0 24 24"
-                                                  fill="none"
-                                                  stroke="currentColor"
-                                                  stroke-width="2"
-                                                  stroke-linecap="round"
-                                                  stroke-linejoin="round"
-                                                  class="feather feather-trash-2 text-success">
-                                             <polyline points="3 6 5 6 21 6"></polyline>
-                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                             <line x1="10" y1="11" x2="10" y2="17"></line>
-                                             <line x1="14" y1="11" x2="14" y2="17"></line>
-                                          </svg>
-                                       </span>
-                                          <span class="text-muted">Eliminar</span>
-                                       </a>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <!-- input group -->
-                           <div class="col-4 col-md-3 col-lg-3">
-                              <!-- input -->
-                              <!-- input -->
-                              <div class="input-group input-spinner">
-                                 <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                 <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                                 <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                              </div>
-                           </div>
-                           <!-- price -->
-                           <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                              <span class="fw-bold">S/. 145.00</span>
-                           </div>
-                        </div>
-                     </li>
-                  </ul>
-                  <!-- btn -->
-                  <div class="d-flex justify-content-between mt-4">
-                     <a th:href="@{/UsuarioFinal/listaProductos}" class="btn btn-primary">Continuar comprando</a>
-                     <a th:href="@{/UsuarioFinal/procesoCompra}" class="btn btn-dark">Ir a Proceso de Compra</a>
-                  </div>
-               </div>
-            </div>
-         </div>
-
-            <script th:src="@{/js/vendors/validation.js}"></script>
-
-      <main>
-         <section class="mt-8">
-            <div class="container">
-               <div class="hero-slider">
-                  <div style="background: url(/images/slider/hero-img-slider-UF.png) no-repeat; background-size: cover; border-radius: 0.5rem; background-position: center; ">
-                     <div class="ps-lg-12 py-lg-16 col-xxl-5 col-lg-7 col-md-8 py-14 px-8 text-xs-center" style="margin-left:  590px;">
-                        <h2 class="text-dark display-5 fw-bold mt-4" style="margin-left: 70px;">
-                           ¡Bienvenido a ExpressDeals!
-                        </h2>
-                        <p class="lead" style="margin-left: 50px;">Aquí podrás explorar y gestionar tus compras  <br>de manera segura con la posibilidad de <br> solicitar ayuda de agentes de compra. </p>
-                        <a th:href="@{/UsuarioFinal/listaProductos}" class="btn btn-dark mt-3" style="margin-left: 120px; ">
-                           Explorar
-                           <i class="feather-icon icon-arrow-right ms-1"></i>
-                        </a>
-                     </div>
-                  </div>
-                  <div style="background: url(/images/slider/hero-img-slider-UF3.png) no-repeat; background-size: cover; border-radius: 0.5rem; background-position: center">
-                     <div class="ps-lg-12 py-lg-16 col-xxl-5 col-lg-7 col-md-8 py-14 px-8 text-xs-center">
-                        <h1 class="text-dark display-5 fw-bold mt-4">
-                           Órdenes de compra
-                        </h1>
-                        <p class="lead">Podrás generar órdenes de compra con los productos<br> de tu preferencia. Recuerda que puedes visualizar <br>y gestionar todas tus órdenes generadas en el <br>siguiente botón </p>
-                        <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-dark mt-3">
-                           Ver órdenes
-                           <i class="feather-icon icon-arrow-right ms-1"></i>
-                        </a>
-                     </div>
-                  </div>
-                  <div style="background: url(/images/slider/hero-img-slider-UF2.png) no-repeat; background-size: cover; border-radius: 0.5rem; background-position: center">
-                     <div class="ps-lg-12 py-lg-16 col-xxl-5 col-lg-7 col-md-8 py-14 px-8 text-xs-center">
-                        <h1 class="text-dark display-5 fw-bold mt-4">Interactúa con nuestro ChatBot</h1>
-                        <p class="lead">El chatbot Carricardo te brindará soporte para tus consultas sobre la página o algún reclamo en cualquier momento!</p>
-                        <a th:href="@{/UsuarioFinal/chatbot}" class="btn btn-dark mt-3">
-                           Ir ahora
-                           <i class="feather-icon icon-arrow-right ms-1"></i>
-                        </a>
-                     </div>
-                  </div>
-               </div>
-               <h2>Órdenes realizadas</h2>
-               <div class="table-responsive">
-                  <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
-                     <thead class="bg-light">
-                     <tr>
-                        <th scope="col">Pedido</th>
-                        <th scope="col">Monto total</th>
-                        <th scope="col">Estado</th>
-                     </tr>
-                     </thead>
-                     <tbody>
-                     <tr>
-                        <th scope="row">Audifonos RedmiBuds</th>
-                        <td>S/.500</td>
-                        <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
-                     </tr>
-                     <tr>
-                        <th scope="row">Laptop Acer Nitro V</th>
-                        <td>S/.300</td>
-                        <td><span class="badge bg-light-danger text-dark-danger">En validación</span></td>
-                     </tr>
-                     <tr>
-                        <th scope="row">20 poleras Telecom</th>
-                        <td>S/.400</td>
-                        <td><span class="badge bg-light-warning text-dark-warning">En proceso</span></td>
-                     </tr>
-                     <tr></tr>
-                     <th scope="row">iPad 10.9</th>
-                     <td>S/.450</td>
-                     <td><span class="badge bg-light-primary text-dark-primary">Recibido</span></td>
-                     </tr>
-                     </tbody>
-                  </table>
-                 <div class="button-container">
-                    <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-outline-info mb-2">Ver más</a>
-                </div>
-            </div>
-         </section>
-
-         
-
+   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+      <div class="offcanvas-header border-bottom">
+         <div class="text-start">
+            <h5 id="offcanvasRightLabel" class="mb-0 fs-4">Carrito de Compras</h5>
 
          </div>
-      </main>
+         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+         <div>
+            <!-- alert -->
+            <div class="alert alert-danger p-2" role="alert">
+               Tenemos los mejores productos.
+               <a href="#!" class="alert-link">Ve a la sección proceso de compras ya!</a>
+            </div>
+            <ul class="list-group list-group-flush">
+               <!-- list group -->
+               <li class="list-group-item py-3 ps-0 border-top">
+                  <!-- row -->
+                  <div class="row align-items-center">
+                     <div class="col-6 col-md-6 col-lg-7">
+                        <div class="d-flex">
+                           <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                           <div class="ms-3">
+                              <!-- title -->
+                              <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                 <h6 class="mb-0">Laptop HP</h6>
+                              </a>
+                              <span><small class="text-muted"></small></span>
+                              <!-- text -->
+                              <div class="mt-2 small lh-1">
+                                 <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                    <span class="text-muted">Eliminar</span>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- input group -->
+                     <div class="col-4 col-md-3 col-lg-3">
+                        <!-- input -->
+                        <!-- input -->
+                        <div class="input-group input-spinner">
+                           <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                           <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                           <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                        </div>
+                     </div>
+                     <!-- price -->
+                     <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                        <span class="fw-bold">S/. 145.00</span>
+                     </div>
+                  </div>
+               </li>
+               <!-- list group -->
+               <li class="list-group-item py-3 ps-0 border-top">
+                  <!-- row -->
+                  <div class="row align-items-center">
+                     <div class="col-6 col-md-6 col-lg-7">
+                        <div class="d-flex">
+                           <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                           <div class="ms-3">
+                              <!-- title -->
+                              <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                 <h6 class="mb-0">Laptop HP</h6>
+                              </a>
+                              <span><small class="text-muted"></small></span>
+                              <!-- text -->
+                              <div class="mt-2 small lh-1">
+                                 <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                    <span class="text-muted">Eliminar</span>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- input group -->
+                     <div class="col-4 col-md-3 col-lg-3">
+                        <!-- input -->
+                        <!-- input -->
+                        <div class="input-group input-spinner">
+                           <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                           <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                           <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                        </div>
+                     </div>
+                     <!-- price -->
+                     <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                        <span class="fw-bold">S/. 145.00</span>
+                     </div>
+                  </div>
+               </li>
+               <!-- list group -->
+               <li class="list-group-item py-3 ps-0 border-top">
+                  <!-- row -->
+                  <div class="row align-items-center">
+                     <div class="col-6 col-md-6 col-lg-7">
+                        <div class="d-flex">
+                           <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                           <div class="ms-3">
+                              <!-- title -->
+                              <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                 <h6 class="mb-0">Laptop HP</h6>
+                              </a>
+                              <span><small class="text-muted"></small></span>
+                              <!-- text -->
+                              <div class="mt-2 small lh-1">
+                                 <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                    <span class="text-muted">Eliminar</span>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- input group -->
+                     <div class="col-4 col-md-3 col-lg-3">
+                        <!-- input -->
+                        <!-- input -->
+                        <div class="input-group input-spinner">
+                           <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                           <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                           <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                        </div>
+                     </div>
+                     <!-- price -->
+                     <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                        <span class="fw-bold">S/. 145.00</span>
+                     </div>
+                  </div>
+               </li>
+               <!-- list group -->
+               <li class="list-group-item py-3 ps-0 border-top">
+                  <!-- row -->
+                  <div class="row align-items-center">
+                     <div class="col-6 col-md-6 col-lg-7">
+                        <div class="d-flex">
+                           <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                           <div class="ms-3">
+                              <!-- title -->
+                              <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                 <h6 class="mb-0">Laptop HP</h6>
+                              </a>
+                              <span><small class="text-muted"></small></span>
+                              <!-- text -->
+                              <div class="mt-2 small lh-1">
+                                 <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                    <span class="text-muted">Eliminar</span>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- input group -->
+                     <div class="col-4 col-md-3 col-lg-3">
+                        <!-- input -->
+                        <!-- input -->
+                        <div class="input-group input-spinner">
+                           <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                           <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                           <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                        </div>
+                     </div>
+                     <!-- price -->
+                     <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                        <span class="fw-bold">S/. 145.00</span>
+                     </div>
+                  </div>
+               </li>
+               <!-- list group -->
+               <li class="list-group-item py-3 ps-0 border-top">
+                  <!-- row -->
+                  <div class="row align-items-center">
+                     <div class="col-6 col-md-6 col-lg-7">
+                        <div class="d-flex">
+                           <img th:src="@{/images/products/laptop.jpg}" alt="Ecommerce" class="icon-shape icon-xxl" />
+                           <div class="ms-3">
+                              <!-- title -->
+                              <a th:href="@{../pages/shop-single.html}" class="text-inherit">
+                                 <h6 class="mb-0">Laptop HP</h6>
+                              </a>
+                              <span><small class="text-muted"></small></span>
+                              <!-- text -->
+                              <div class="mt-2 small lh-1">
+                                 <a href="#!" class="text-decoration-none text-inherit">
+                                       <span class="me-1 align-text-bottom">
+                                          <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="14"
+                                                  height="14"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  class="feather feather-trash-2 text-success">
+                                             <polyline points="3 6 5 6 21 6"></polyline>
+                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                             <line x1="10" y1="11" x2="10" y2="17"></line>
+                                             <line x1="14" y1="11" x2="14" y2="17"></line>
+                                          </svg>
+                                       </span>
+                                    <span class="text-muted">Eliminar</span>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- input group -->
+                     <div class="col-4 col-md-3 col-lg-3">
+                        <!-- input -->
+                        <!-- input -->
+                        <div class="input-group input-spinner">
+                           <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
+                           <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
+                           <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
+                        </div>
+                     </div>
+                     <!-- price -->
+                     <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
+                        <span class="fw-bold">S/. 145.00</span>
+                     </div>
+                  </div>
+               </li>
+            </ul>
+            <!-- btn -->
+            <div class="d-flex justify-content-between mt-4">
+               <a th:href="@{/UsuarioFinal/listaProductos}" class="btn btn-primary">Continuar comprando</a>
+               <a th:href="@{/UsuarioFinal/procesoCompra}" class="btn btn-dark">Ir a Proceso de Compra</a>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <script th:src="@{/js/vendors/validation.js}"></script>
+
+   <main>
+      <section class="mt-8">
+         <div class="container">
+            <div class="hero-slider">
+               <div style="background: url(/images/slider/hero-img-slider-UF.png) no-repeat; background-size: cover; border-radius: 0.5rem; background-position: center; ">
+                  <div class="ps-lg-12 py-lg-16 col-xxl-5 col-lg-7 col-md-8 py-14 px-8 text-xs-center" style="margin-left:  590px;">
+                     <h2 class="text-dark display-5 fw-bold mt-4" style="margin-left: 70px;">
+                        ¡Bienvenido a ExpressDeals!
+                     </h2>
+                     <p class="lead" style="margin-left: 50px;">Aquí podrás explorar y gestionar tus compras  <br>de manera segura con la posibilidad de <br> solicitar ayuda de agentes de compra. </p>
+                     <a th:href="@{/UsuarioFinal/listaProductos}" class="btn btn-dark mt-3" style="margin-left: 120px; ">
+                        Explorar
+                        <i class="feather-icon icon-arrow-right ms-1"></i>
+                     </a>
+                  </div>
+               </div>
+               <div style="background: url(/images/slider/hero-img-slider-UF3.png) no-repeat; background-size: cover; border-radius: 0.5rem; background-position: center">
+                  <div class="ps-lg-12 py-lg-16 col-xxl-5 col-lg-7 col-md-8 py-14 px-8 text-xs-center">
+                     <h1 class="text-dark display-5 fw-bold mt-4">
+                        Órdenes de compra
+                     </h1>
+                     <p class="lead">Podrás generar órdenes de compra con los productos<br> de tu preferencia. Recuerda que puedes visualizar <br>y gestionar todas tus órdenes generadas en el <br>siguiente botón </p>
+                     <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-dark mt-3">
+                        Ver órdenes
+                        <i class="feather-icon icon-arrow-right ms-1"></i>
+                     </a>
+                  </div>
+               </div>
+               <div style="background: url(/images/slider/hero-img-slider-UF2.png) no-repeat; background-size: cover; border-radius: 0.5rem; background-position: center">
+                  <div class="ps-lg-12 py-lg-16 col-xxl-5 col-lg-7 col-md-8 py-14 px-8 text-xs-center">
+                     <h1 class="text-dark display-5 fw-bold mt-4">Interactúa con nuestro ChatBot</h1>
+                     <p class="lead">El chatbot Carricardo te brindará soporte para tus consultas sobre la página o algún reclamo en cualquier momento!</p>
+                     <a th:href="@{/UsuarioFinal/chatbot}" class="btn btn-dark mt-3">
+                        Ir ahora
+                        <i class="feather-icon icon-arrow-right ms-1"></i>
+                     </a>
+                  </div>
+               </div>
+            </div>
+            <h2>Órdenes realizadas</h2>
+            <div class="table-responsive">
+               <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
+                  <thead class="bg-light">
+                  <tr>
+                     <th scope="col">Pedido</th>
+                     <th scope="col">Monto total</th>
+                     <th scope="col">Estado</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                     <th scope="row">Audifonos RedmiBuds</th>
+                     <td>S/.500</td>
+                     <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
+                  </tr>
+                  <tr>
+                     <th scope="row">Laptop Acer Nitro V</th>
+                     <td>S/.300</td>
+                     <td><span class="badge bg-light-danger text-dark-danger">En validación</span></td>
+                  </tr>
+                  <tr>
+                     <th scope="row">20 poleras Telecom</th>
+                     <td>S/.400</td>
+                     <td><span class="badge bg-light-warning text-dark-warning">En proceso</span></td>
+                  </tr>
+                  <tr></tr>
+                  <th scope="row">iPad 10.9</th>
+                  <td>S/.450</td>
+                  <td><span class="badge bg-light-primary text-dark-primary">Recibido</span></td>
+                  </tr>
+                  </tbody>
+               </table>
+               <div class="button-container">
+                  <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-outline-info mb-2">Ver más</a>
+               </div>
+            </div>
+      </section>
 
 
 
-      <!-- Javascript-->
-      <!-- Libs JS -->
-      <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+
+      </div>
+   </main>
 
 
-      <!-- Theme JS -->
+
+   <!-- Javascript-->
+   <!-- Libs JS -->
+   <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
 
 
-      <script th:src="@{/libs/jquery/dist/jquery.min.js}"></script> -->
-      <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-      <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+   <!-- Theme JS -->
 
-      <!-- Theme JS -->
-      <script th:src="@{/js/theme.min.js}"></script>
 
-      <script th:src="@{/js/vendors/jquery.min.js}"></script>
-      <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
-      <script th:src="@{/js/vendors/slick-slider.js}"></script>
-      <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
-      <script th:src="@{/js/vendors/tns-slider.js}"></script>
-      <script th:src="@{/js/vendors/zoom.js}"></script>
+   <script th:src="@{/libs/jquery/dist/jquery.min.js}"></script> -->
+   <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+   <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
-      <script th:src="@{/js/vendors/countdown.js}"></script>
-      <script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
-      <script th:src="@{/js/vendors/sticky.js}"></script>
-      <script th:src="@{/js/vendors/modal.js}"></script>
-   </body>
+   <!-- Theme JS -->
+   <script th:src="@{/js/theme.min.js}"></script>
+
+   <script th:src="@{/js/vendors/jquery.min.js}"></script>
+   <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+   <script th:src="@{/js/vendors/slick-slider.js}"></script>
+   <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+   <script th:src="@{/js/vendors/tns-slider.js}"></script>
+   <script th:src="@{/js/vendors/zoom.js}"></script>
+
+   <script th:src="@{/js/vendors/countdown.js}"></script>
+   <script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
+   <script th:src="@{/js/vendors/sticky.js}"></script>
+   <script th:src="@{/js/vendors/modal.js}"></script>
+</body>
 </html>

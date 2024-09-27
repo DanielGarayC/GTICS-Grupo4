@@ -24,7 +24,7 @@
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
 </head>
 <body>
-    <!-- Fragmento de Navbar -->
+    <!-- Fragmento de Navbar --->
     <div th:fragment="navbar">
         <!-- navbar -->
         <!-- Navbar para pantallas grandes -->
@@ -200,24 +200,63 @@
                         </div>
                         <div class="offcanvas-body">
                             <div class="d-block d-lg-none mb-4">
-                                <a class="btn btn-primary w-100 d-flex justify-content-center align-items-center" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                     <span class="me-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid">
-                           <rect x="3" y="3" width="7" height="7"></rect>
-                           <rect x="14" y="3" width="7" height="7"></rect>
-                           <rect x="14" y="14" width="7" height="7"></rect>
-                           <rect x="3" y="14" width="7" height="7"></rect>
-                        </svg>
-                     </span>
-                                    All Departments
-                                </a>
-                                <div class="collapse mt-2" id="collapseExample">
-                                    <div class="card card-body">
-                                        <ul class="mb-0 list-unstyled">
-                                            <li><a class="dropdown-item" href="./pages/shop-grid.html">Dairy, Bread & Eggs</a></li>
-                                            <li><a class="dropdown-item" href="./pages/shop-grid.html">Snacks & Munchies</a></li>
-                                        </ul>
-                                    </div>
+                                <div class="dropdown me-3 d-none d-lg-block">
+                                    <button class="btn btn-primary px-6" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                           <span class="me-1">
+                              <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="feather feather-grid">
+                                 <rect x="3" y="3" width="7" height="7"></rect>
+                                 <rect x="14" y="3" width="7" height="7"></rect>
+                                 <rect x="14" y="14" width="7" height="7"></rect>
+                                 <rect x="3" y="14" width="7" height="7"></rect>
+                              </svg>
+                           </span>
+                                        Todas las categorías
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Salud y Belleza</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Electrónica y tecnología</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Moda y ropa</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Hogar y cocina</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Arte y manualidades</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Deportes y ocio</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul class="navbar-nav align-items-center">
+                                        <li class="nav-item dropdown w-100 w-lg-auto">
+                                            <a class="nav-link " th:href="@{/UsuarioFinal/pagPrincipal}"   aria-expanded="false">Inicio</a>
+
+                                        </li>
+                                        <li class="nav-item dropdown w-100 w-lg-auto">
+                                            <a class="nav-link " th:href="@{/UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
+
+                                        </li>
+                                        <li class="nav-item dropdown w-100 w-lg-auto">
+                                            <a class="nav-link " th:href="@{/UsuarioFinal/listaMisOrdenes}"  aria-expanded="false">Mis compras</a>
+
+                                        </li>
+                                        <li class="nav-item dropdown w-100 w-lg-auto">
+                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mensajería</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Review}">Reseñas</a></li>
+                                                <li><a class="dropdown-item" th:href="@{/UsuarioFinal/faq}">Preguntas frecuentes</a></li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item dropdown w-100 w-lg-auto">
+                                            <a class="nav-link " th:href="@{/UsuarioFinal/chatbot}" role="button" data-bs-toggle="dropdown" aria-expanded="false">Soporte Técnico</a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -228,46 +267,78 @@
 
         <!--- fin navbar pantallas pequeñas -->
 
-        <!-- Modal -->
-        <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content p-4">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title fs-3 fw-bold" id="userModalLabel">Sign Up</h5>
+        <!--- modal postular a agente -->
+        <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- modal body -->
+                    <form class="modal-body p-6" method="post" th:action="@{/UsuarioFinal/solicitudAgente}">
+                        <div class="d-flex justify-content-between mb-5">
+                            <!-- heading -->
+                            <div>
+                                <h5 class="h6 mb-1" id="addAddressModalLabel">Solicitud de agente</h5>
+                                <p class="small mb-0">Ingresa tus datos </p>
+                            </div>
+                            <div>
+                                <!-- button -->
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <!-- row -->
+                        <div class="row g-3">
 
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form class="needs-validation" novalidate>
-                            <div class="mb-3">
-                                <label for="fullName" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="fullName" placeholder="Enter Your Name" required />
-                                <div class="invalid-feedback">Please enter name.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter Email address" required />
-                                <div class="invalid-feedback">Please enter email.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Enter Password" required />
-                                <div class="invalid-feedback">Please enter password.</div>
-                                <small class="form-text">
-                                    By Signup, you agree to our
-                                    <a href="#!">Terms of Service</a>
-                                    &
-                                    <a href="#!">Privacy Policy</a>
-                                </small>
+                            <!-- col -->
+                            <div class="col-12">
+                                <label for="ContactName" class="form-label">Información personal</label>
+                                <input type="text" class="form-control" th:value="${usuario.nombre} + ' ' + ${usuario.apellidoPaterno}" aria-label="Nombre del contacto" required="" disabled/>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Sign Up</button>
-                        </form>
-                    </div>
-                    <div class="modal-footer border-0 justify-content-center">
-                        Already have an account?
-                        <a href="#">Sign in</a>
-                    </div>
+
+                            <!-- col -->
+                            <div class="col-12">
+                                <label for="direction" class="form-label">Dirección </label>
+                                <input type="text" class="form-control" th:value="${usuario.direccion} " aria-label="Dirección" required="" disabled/>
+                            </div>
+
+                            <!-- col -->
+                            <div class="col-12">
+                                <label for="direction" class="form-label">Zona </label>
+                                <input type="text" class="form-control" th:value="${usuario.zona.nombreZona}" aria-label="Dirección" required="" disabled/>
+                            </div>
+
+                            <!-- col -->
+                            <div class="col-12">
+                                <label for="direction" class="form-label">Distrto </label>
+                                <input type="text" class="form-control" th:value="${usuario.distrito.nombre}"  aria-label="Dirección" required="" disabled/>
+                            </div>
+
+                            <!-- col -->
+                            <div class="col-12">
+                                <label for="direction" class="form-label">Código de jurisdicción </label>
+                                <input type="text" class="form-control" th:name="codigoJurisdiccion" th:value="${usuario.distrito.codigosJurisdiccion}" aria-label="Dirección" required="" readonly/>
+                            </div>
+
+                            <!-- col -->
+                            <div class="col-12">
+                                <label for="direction" class="form-label">Código de aduana </label>
+                                <input type="text" class="form-control"  th:name="codigoAduana" value="222" aria-label="Dirección" required="" readonly/> <!--Valor aleatorio, momentaneamente le pongo222-->
+                            </div>
+
+
+
+
+                        </div>
+
+
+                        <div class="col-12" style="margin-bottom: 10px;">
+
+                        </div>
+                        <!-- button -->
+                        <div class="col-12 text-end">
+                            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                            <button class="btn btn-primary" type="submit">Enviar solicitud</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
