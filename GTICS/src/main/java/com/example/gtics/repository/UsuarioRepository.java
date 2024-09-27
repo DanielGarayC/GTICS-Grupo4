@@ -17,6 +17,7 @@ import java.util.List;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
+
     // Método personalizado para encontrar usuarios por rol
     @Query(value = "SELECT * FROM usuario u WHERE u.idRol = :idRol AND u.baneado = false", nativeQuery = true)
     List<Usuario> findByIdRol_Id(@Param("idRol") Integer idRol);
@@ -158,4 +159,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Modifying
     @Query(nativeQuery=true,value="update usuario set idSolicitudAgente = ?1 where idUsuario= ?2")
     void asignarSolictudAusuario(int idSolicitud,int idUsuario);
+
+    @Query(value = "SELECT * FROM usuario WHERE idusuario = :idUsuario", nativeQuery = true)
+    Usuario findUsuarioById(@Param("idUsuario") Long idUsuario);
 }

@@ -59,8 +59,12 @@ public class UsuarioFinalController {
 
 
     @GetMapping("/UsuarioFinal/miPerfil")
-    public String miPerfil(){
+    public String miPerfil(Model model){
+        // Obtén los datos del usuario con id = 7
+        Usuario usuario = usuarioRepository.findUsuarioById(7L);
 
+        // Pasamos los datos del usuario al modelo para usarlos en la vista
+        model.addAttribute("usuario", usuario);
         return "UsuarioFinal/Perfil/miperfil";
     }
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
