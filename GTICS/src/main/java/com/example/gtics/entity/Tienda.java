@@ -36,4 +36,8 @@ public class Tienda {
     // Relación OneToMany con Proveedor
     @OneToMany(mappedBy = "tienda")
     private Set<Proveedor> proveedores = new LinkedHashSet<>();
+
+    @Lob
+    @Column(name = "fotoTienda", nullable = false)
+    private byte[] fotoTienda;
 }
