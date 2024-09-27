@@ -79,14 +79,20 @@ public class SuperAdminController {
         return "SuperAdmin/Dashboard/dashboard-superadmin";
     }
     @GetMapping("SuperAdmin/listaAdminZonal")
-    public String listaGestionAdminZonal(Model model, @RequestParam(value = "busqueda", required = false) String busqueda){
+    public String listaGestionAdminZonal(Model model, @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(value = "busqueda", required = false) String busqueda){
         try {
-            List<Usuario> listaAZ = usuarioRepository.findByIdRol_Id(2);
-            if (listaAZ.isEmpty()){
+            int pageSize = 3;
+            Pageable pageable = PageRequest.of(page, pageSize);
+
+            Page<Usuario> finalUsersList = usuarioRepository.findByRol_Id(2, pageable);
+            if (finalUsersList.isEmpty()){
                 model.addAttribute("msg", "No hay coordinadores zonales registrados");
             }else {
 
-                model.addAttribute("usuarios", listaAZ);
+                model.addAttribute("usuarios", finalUsersList.getContent());
+                model.addAttribute("currentPage", page);
+                model.addAttribute("totalPages", finalUsersList.getTotalPages());
             }
         }catch (Exception e){
             model.addAttribute("error","Error al cargar la lista de coordinadores zonales.");
@@ -402,10 +408,19 @@ public class SuperAdminController {
         return "redirect:/SuperAdmin/listaSolicitudesAgentes";
     }
 
-    @GetMapping("SuperAdmin/listaUsuarioFinal")
-    public String listaGestionUsuarioFinal(Model model){
-        List<Usuario> finalUsersList = usuarioRepository.findByIdRol_Id(4);
-        model.addAttribute("finalUsersList", finalUsersList);
+     @GetMapping("SuperAdmin/listaUsuarioFinal")
+    public String listaGestionUsuarioFinal( @RequestParam(defaultValue = "0") int page,
+                                            Model model){
+
+        int pageSize = 3;
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Page<Usuario> finalUsersList = usuarioRepository.findByRol_Id(4, pageable);
+
+        model.addAttribute("finalUsersList", finalUsersList.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", finalUsersList.getTotalPages());
+
         return "SuperAdmin/GestionUsuarioFinal/final-users-list";
     }
 

@@ -17,6 +17,9 @@ import java.util.List;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
+    
+    // Método personalizado para buscar usuarios por el ID del rol con paginación
+    Page<Usuario> findByRol_Id(int rolId, Pageable pageable);
 
     // Método personalizado para encontrar usuarios por rol
     @Query(value = "SELECT * FROM usuario u WHERE u.idRol = :idRol AND u.baneado = false", nativeQuery = true)

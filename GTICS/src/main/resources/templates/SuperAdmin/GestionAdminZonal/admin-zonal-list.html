@@ -279,15 +279,29 @@
                                     </table>
                                 </div>
 
-                                <div class="border-top d-md-flex justify-content-between align-items-center p-6">
-                                    <span>Mostrando del 1 al 8 de 12 entradas</span>
-                                    <nav class="mt-2 mt-md-0">
-                                        <ul class="pagination mb-0">
-                                            <li class="page-item disabled"><a class="page-link" href="#!">Anterior</a></li>
-                                            <li class="page-item"><a class="page-link active" href="#!">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#!">Siguiente</a></li>
+                                <div class="d-flex flex-column align-items-center">
+                                    <!-- Texto de paginación centrado -->
+                                    <span id="paginationInfo" class="mb-2">
+                                        Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
+                                    </span>
+
+                                    <!-- Paginación centrada -->
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination justify-content-center">
+                                            <!-- Botón de "Previo" -->
+                                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                <a class="page-link" th:href="@{/SuperAdmin/listaAdminZonal(page=${currentPage - 1})}">Previo</a>
+                                            </li>
+
+                                            <!-- Páginas numeradas -->
+                                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                                <a class="page-link" th:href="@{/SuperAdmin/listaAdminZonal(page=${i})}" th:text="${i + 1}"></a>
+                                            </li>
+
+                                            <!-- Botón de "Siguiente" -->
+                                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                                                <a class="page-link" th:href="@{/SuperAdmin/listaAdminZonal(page=${currentPage + 1})}">Siguiente</a>
+                                            </li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -317,6 +331,35 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- SweetAlert2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Función para manejar clic en las páginas
+        $('a.page-link').on('click', function () {
+            const page = $(this).data('page');
+            if (page !== undefined) {
+                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + page;
+            }
+        });
+
+        // Función para manejar clic en "Previo"
+        $('#prevPage').on('click', function () {
+            const currentPage = parseInt($('li.active a').data('page'));
+            if (currentPage > 0) {
+                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + (currentPage - 1);
+            }
+        });
+
+        // Función para manejar clic en "Siguiente"
+        $('#nextPage').on('click', function () {
+            const currentPage = parseInt($('li.active a').data('page'));
+            const totalPages = parseInt([[${totalPages}]]);
+            if (currentPage < totalPages - 1) {
+                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + (currentPage + 1);
+            }
+        });
+    });
+
+</script>
 <script>
     function confirmDelete(id) {
         Swal.fire({
