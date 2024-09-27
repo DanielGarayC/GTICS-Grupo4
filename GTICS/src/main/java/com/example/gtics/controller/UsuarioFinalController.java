@@ -8,6 +8,7 @@ import com.example.gtics.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -23,19 +24,18 @@ public class UsuarioFinalController {
         this.usuarioRepository = usuarioRepository;
     }
 
+    @ModelAttribute
+    public void addUsuarioToModel(Model model) {
+        Optional<Usuario> optUsuario = usuarioRepository.findById(7);  // Aquí cambias el ID según el usuario que necesites
+        // Usuario agregado globalmente
+        optUsuario.ifPresent(usuario -> model.addAttribute("usuario", usuario));
+    }
+
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
     public String mostrarPagPrincipal(Model model){
-
-        Optional<Usuario> optUsuario = usuarioRepository.findById(7);
-        if(optUsuario.isPresent()){
-            Usuario us = optUsuario.get(); // usuario random que solicita ser agente
-            model.addAttribute("usuario",us);
             return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
-        }else{
-            return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
-        }
-
     }
+
     @PostMapping("/UsuarioFinal/solicitudAgente")
     public String enviarSolicitudaSerAgente(Solicitudagente solicitudagente){
         solicitudagente.setIndicadorSolicitud(0);
@@ -60,11 +60,7 @@ public class UsuarioFinalController {
 
     @GetMapping("/UsuarioFinal/miPerfil")
     public String miPerfil(Model model){
-        // Obtén los datos del usuario con id = 7
-        Usuario usuario = usuarioRepository.findUsuarioById(7L);
 
-        // Pasamos los datos del usuario al modelo para usarlos en la vista
-        model.addAttribute("usuario", usuario);
         return "UsuarioFinal/Perfil/miperfil";
     }
     @GetMapping("/UsuarioFinal/listaMisOrdenes")

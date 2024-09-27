@@ -161,5 +161,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     void asignarSolictudAusuario(int idSolicitud,int idUsuario);
 
     @Query(value = "SELECT * FROM usuario WHERE idusuario = :idUsuario", nativeQuery = true)
-    Usuario findUsuarioById(@Param("idUsuario") Long idUsuario);
+    Usuario findUsuarioById(@Param("idUsuario") Integer idUsuario);
 }
