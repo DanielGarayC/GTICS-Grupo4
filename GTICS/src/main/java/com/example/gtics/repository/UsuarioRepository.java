@@ -24,7 +24,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(value = "SELECT COUNT(*) " +
             "FROM usuario u " +
             "WHERE u.idRol = 2 " +
-            "AND u.zona_id = :zonaId", nativeQuery = true)
+            "AND u.idZona = :zonaId", nativeQuery = true)
     Integer countCoordinadoresByZona(@Param("zonaId") Integer zonaId);
 
     //Método para el buscador de la lista de Admin Zonal para Superadmin (adrian chambea)

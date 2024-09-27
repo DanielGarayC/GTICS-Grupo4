@@ -75,7 +75,7 @@ public class AdminZonalController {
 
         // Verifica que llega al controlador
         System.out.println("Llega al método guardarAgente");
-        try {
+
             // Crear la nueva solicitud de agente
             Solicitudagente solicitudAgente = new Solicitudagente();
             solicitudAgente.setCodigoAduana(codigoAduana);
@@ -133,10 +133,7 @@ public class AdminZonalController {
             } else {
                 attr.addFlashAttribute("error", "No se pudo encontrar el distrito seleccionado.");
             }
-        } catch (Exception e) {
-            attr.addFlashAttribute("error", "Ocurrió un error al crear el agente.");
-            e.printStackTrace();
-        }
+
         return "redirect:/AdminZonal/Agentes";
     }
 
