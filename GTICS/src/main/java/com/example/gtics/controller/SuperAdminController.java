@@ -190,16 +190,21 @@ public class SuperAdminController {
 
     }
     @GetMapping("SuperAdmin/listaAgente")
-    public String listaGestionAgente(Model model) {
-
+    public String listaGestionAgente(
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
         try {
-            List<Object[]> agentesData = usuarioRepository.mostrarAgentesConEstadosYRazonSocial();
+            int size=6;
+            // Configuramos el Pageable
+            Pageable pageable = PageRequest.of(page, size);
+
+            // Si tienes una consulta personalizada, la adaptamos a un método paginado
+            Page<Object[]> agentesData = usuarioRepository.mostrarAgentesConPaginacion(pageable);
 
             if (agentesData.isEmpty()) {
                 model.addAttribute("message", "No hay agentes registrados");
             } else {
                 List<Map<String, String>> agentes = new ArrayList<>();
-
                 for (Object[] row : agentesData) {
                     Map<String, String> agente = new HashMap<>();
                     agente.put("idusuario", row[0].toString());
@@ -208,24 +213,24 @@ public class SuperAdminController {
                     agente.put("apellidomaterno", row[3].toString());
                     agente.put("dni", row[4].toString());
                     agente.put("telefono", row[5].toString());
-                    agente.put("agt_codigoaduana", row[6] != null ? row[6].toString() : "");  // Maneja nulos para código aduana
-                    agente.put("estadoCodigoAduana", row[7] != null ? row[7].toString() : "");  // Maneja nulos para estado de código aduana
-                    agente.put("agt_codigojurisdiccion", row[8] != null ? row[8].toString() : "");  // Maneja nulos para código jurisdicción
-                    agente.put("estadoCodigoJurisdiccion", row[9] != null ? row[9].toString() : "");  // Maneja nulos para estado de código jurisdicción
-                    agente.put("agt_razonsocial", row[10] != null ? row[10].toString() : "");  // Maneja nulos para razón social
-
+                    agente.put("agt_codigoaduana", row[6] != null ? row[6].toString() : ""); // Maneja nulos para código aduana
+                    agente.put("estadoCodigoAduana", row[7] != null ? row[7].toString() : ""); // Maneja nulos para estado aduana
+                    agente.put("agt_codigojurisdiccion", row[8] != null ? row[8].toString() : ""); // Maneja nulos para código jurisdicción
+                    agente.put("estadoCodigoJurisdiccion", row[9] != null ? row[9].toString() : ""); // Maneja nulos para estado jurisdicción
+                    agente.put("agt_razonsocial", row[10] != null ? row[10].toString() : ""); // Maneja nulos para razón social
                     agente.put("nombrezona", row[11].toString());
 
                     agentes.add(agente);
                 }
 
                 model.addAttribute("agentes", agentes);
+                model.addAttribute("currentPage", page);
+                model.addAttribute("totalPages", agentesData.getTotalPages());
             }
         } catch (Exception e) {
             model.addAttribute("error", "Error al cargar la lista de agentes.");
             e.printStackTrace();
         }
-
         return "SuperAdmin/GestionAgentes/agent-list";
     }
 
