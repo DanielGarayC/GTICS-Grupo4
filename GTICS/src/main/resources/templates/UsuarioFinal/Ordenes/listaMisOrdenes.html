@@ -745,10 +745,10 @@
                                                             </a>
                                                             <ul class="dropdown-menu">
                                                                 <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                    <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                    <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
                                                                 </li>
                                                                 <li>
                                                                     <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
@@ -772,22 +772,56 @@
                                                             <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <i class="feather-icon icon-more-vertical fs-5"></i>
                                                             </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+
+                                                                <ul class="dropdown-menu">
+                                                                    <li>
+                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                            <i class="bi bi-trash me-3"></i>Eliminar
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#1234</td>
+                                                    <td>07-07-24</td>
+                                                    <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
+                                                    <td> S/. 145.00 </td>
+                                                    <td>
+                                                        <div class="dropdown">
+
+                                                            <div class="dropdown">
+                                                                <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                                </a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li>
+                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                            <i class="bi bi-trash me-3"></i>Eliminar
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                        </div>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -801,51 +835,23 @@
                                                             <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <i class="feather-icon icon-more-vertical fs-5"></i>
                                                             </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
-                                                    <td> S/. 145.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+
+                                                                <ul class="dropdown-menu">
+                                                                    <li>
+                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                            <i class="bi bi-trash me-3"></i>Eliminar
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -859,22 +865,23 @@
                                                             <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <i class="feather-icon icon-more-vertical fs-5"></i>
                                                             </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+
+                                                                <ul class="dropdown-menu">
+                                                                    <li>
+                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                            <i class="bi bi-trash me-3"></i>Eliminar
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -888,22 +895,23 @@
                                                             <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <i class="feather-icon icon-more-vertical fs-5"></i>
                                                             </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" th:href="@{UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+
+                                                                <ul class="dropdown-menu">
+                                                                    <li>
+                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#" onclick="eliminarOrden()">
+                                                                            <i class="bi bi-trash me-3"></i>Eliminar
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
                                                         </div>
                                                     </td>
                                                 </tr>
