@@ -55,10 +55,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     //Actualizar Usuario Final
     @Transactional
     @Modifying
-    @Query(value = "UPDATE usuario u SET u.dni = :dni, u.nombre = :nombre, u.apellido_paterno = :apellidoPaterno, " +
-            "u.apellido_materno = :apellidoMaterno, u.email = :email, u.direccion = :direccion, " +
-            "u.telefono = :telefono, u.distrito_id = :idDistrito WHERE u.id = :idUsuario",
-            nativeQuery = true)
+    @Query(nativeQuery = true, value = "UPDATE usuario SET dni = ?1, nombre = ?2, apellidoPaterno = ?3, " +
+            "apellidoMaterno = ?4, email = ?5, direccion = ?6, " +
+            "telefono = ?7, idDistrito = ?8 WHERE idUsuario = ?9")
     void actualizarUsuarioFinal(@Param("dni") String dni,
                                 @Param("nombre") String nombre,
                                 @Param("apellidoPaterno") String apellidoPaterno,
@@ -68,6 +67,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
                                 @Param("telefono") String telefono,
                                 @Param("idDistrito") Integer idDistrito,
                                 @Param("idUsuario") Integer idUsuario);
+
 
     //Metodo para mostrar solicitudes de agente
     @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
