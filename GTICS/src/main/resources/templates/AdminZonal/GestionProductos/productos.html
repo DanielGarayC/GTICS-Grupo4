@@ -78,6 +78,17 @@
 
     <!-- Theme CSS -->
     <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+    <style>
+
+        .logoImagen{
+            height: 80px;
+            width: 250px;
+        }
+        .logoImagenCelulares{
+            height: 80px;
+            width: 220px;
+        }
+    </style>
 
 </head>
 
@@ -220,93 +231,12 @@
 
 
     <div class="main-wrapper">
-        <!-- navbar vertical (para pc)-->
         <!-- navbar -->
-        <nav class="navbar-vertical-nav d-none d-xl-block">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.png}" alt="" style="width: 100%;"/>
-                    </a>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column" id="sideNavbar">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/AdminZonal/Dashboard}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
-                                    <span class="nav-link-text">Dashboard</span>
-                                </div>
-                            </a>
-                        </li>
+        <!-- navbar vertical (para pc)-->
+        <div th:insert="fragments/navbarAdminZonal.html :: navbarVerticalPc('Productos')"></div>
 
-
-
-
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/AdminZonal/Agentes}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-person"></i></span>
-                                    <span class="nav-link-text">Agentes</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" th:href="@{/AdminZonal/Productos}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-shop"></i></span>
-                                    <span class="nav-link-text">Productos</span>
-                                </div>
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
-            <div class="navbar-vertical">
-                <div class="px-4 py-5 d-flex justify-content-between align-items-center">
-                    <a class="navbar-brand">
-                        <img th:src="@{/images/logo/logo.png}" alt="" style="width: 100%;"/>
-                    </a>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-                    <ul class="navbar-nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/AdminZonal/Dashboard}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-house"></i></span>
-                                    <span>Dashboard</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link " th:href="@{/AdminZonal/Agentes}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-person"></i></span>
-                                    <span class="nav-link-text">Agentes</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link active" th:href="@{/AdminZonal/Productos}">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><i class="bi bi-shop"></i></span>
-                                    <span class="nav-link-text">Productos</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <!-- navbar vertical (para celular)-->
+        <div th:insert="fragments/navbarAdminZonal.html :: navbarVerticalCelulares('Productos')"></div>
 
         <!-- COONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">

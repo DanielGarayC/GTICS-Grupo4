@@ -17,6 +17,7 @@ import java.util.List;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
+
     // Método personalizado para encontrar usuarios por rol
     @Query(value = "SELECT * FROM usuario u WHERE u.idRol = :idRol AND u.baneado = false", nativeQuery = true)
     List<Usuario> findByIdRol_Id(@Param("idRol") Integer idRol);
@@ -24,7 +25,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(value = "SELECT COUNT(*) " +
             "FROM usuario u " +
             "WHERE u.idRol = 2 " +
-            "AND u.zona_id = :zonaId", nativeQuery = true)
+            "AND u.idZona = :zonaId", nativeQuery = true)
     Integer countCoordinadoresByZona(@Param("zonaId") Integer zonaId);
 
     //Método para el buscador de la lista de Admin Zonal para Superadmin (adrian chambea)
@@ -49,16 +50,15 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     //Banear Usuario por id
     @Transactional
     @Modifying
-    @Query(value = "UPDATE usuario u SET u.baneado = true WHERE u.id = :idUsuario AND u.baneado = false", nativeQuery = true)
+    @Query(nativeQuery = true, value = "UPDATE usuario u SET u.baneado = true WHERE u.idUsuario = ?1 AND u.baneado = false")
     void banUsuario(@Param("idUsuario") Integer idUsuario);
 
     //Actualizar Usuario Final
     @Transactional
     @Modifying
-    @Query(value = "UPDATE usuario u SET u.dni = :dni, u.nombre = :nombre, u.apellido_paterno = :apellidoPaterno, " +
-            "u.apellido_materno = :apellidoMaterno, u.email = :email, u.direccion = :direccion, " +
-            "u.telefono = :telefono, u.distrito_id = :idDistrito WHERE u.id = :idUsuario",
-            nativeQuery = true)
+    @Query(nativeQuery = true, value = "UPDATE usuario SET dni = ?1, nombre = ?2, apellidoPaterno = ?3, " +
+            "apellidoMaterno = ?4, email = ?5, direccion = ?6, " +
+            "telefono = ?7, idDistrito = ?8 WHERE idUsuario = ?9")
     void actualizarUsuarioFinal(@Param("dni") String dni,
                                 @Param("nombre") String nombre,
                                 @Param("apellidoPaterno") String apellidoPaterno,
@@ -68,6 +68,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
                                 @Param("telefono") String telefono,
                                 @Param("idDistrito") Integer idDistrito,
                                 @Param("idUsuario") Integer idUsuario);
+
 
     //Metodo para mostrar solicitudes de agente
     @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
@@ -95,6 +96,32 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "WHERE u.idSolicitudAgente > 0 AND u.idRol = 4 " +
             "GROUP BY u.idusuario, u.idSolicitudAgente")
     List<Object[]> mostrarSolicitudesConEstadosAleatorios();
+    //Metodo para mostrar solicitudes de agente con filtro
+    @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
+            "u.idSolicitudAgente AS solicitudId, s.indicadorSolicitud, " +
+            "u.agt_codigoaduana, " +
+            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "WHEN 1 THEN 'Habilitado' " +
+            "WHEN 2 THEN 'Multado' " +
+            "WHEN 3 THEN 'Cancelado' " +
+            "WHEN 4 THEN 'Suspendido' " +
+            "WHEN 5 THEN 'Anulado de jurisdicción' " +
+            "END AS estadoCodigoAduana, " +
+            "u.agt_codigojurisdiccion, " +
+            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "WHEN 1 THEN 'Habilitado' " +
+            "WHEN 2 THEN 'Multado' " +
+            "WHEN 3 THEN 'Cancelado' " +
+            "WHEN 4 THEN 'Suspendido' " +
+            "WHEN 5 THEN 'Anulado de jurisdicción' " +
+            "END AS estadoCodigoJurisdiccion, " +
+            "z.nombrezona " +
+            "FROM usuario u " +
+            "LEFT JOIN solicitudagente s ON u.idSolicitudAgente = s.idSolicitudAgente " +
+            "JOIN zona z ON u.idzona = z.idzona " +
+            "WHERE u.idSolicitudAgente > 0 AND u.idRol = 4 and s.indicadorSolicitud= ?1 " +
+            "GROUP BY u.idusuario, u.idSolicitudAgente")
+    List<Object[]> mostrarSolicitudesConEstadosAleatoriosFiltro(Integer indicador);
     @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
             "u.agt_codigoaduana, 'Habilitado' AS estadoCodigoAduana, " +
             "u.agt_codigojurisdiccion, 'Habilitado' AS estadoCodigoJurisdiccion, " +
@@ -132,4 +159,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Modifying
     @Query(nativeQuery=true,value="update usuario set idSolicitudAgente = ?1 where idUsuario= ?2")
     void asignarSolictudAusuario(int idSolicitud,int idUsuario);
+
+    @Query(value = "SELECT * FROM usuario WHERE idusuario = :idUsuario", nativeQuery = true)
+    Usuario findUsuarioById(@Param("idUsuario") Long idUsuario);
 }
