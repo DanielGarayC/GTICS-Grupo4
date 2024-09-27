@@ -82,7 +82,7 @@ public class SuperAdminController {
     public String listaGestionAdminZonal(Model model, @RequestParam(defaultValue = "0") int page,
                                                       @RequestParam(value = "busqueda", required = false) String busqueda){
         try {
-            int pageSize = 3;
+            int pageSize = 6;
             Pageable pageable = PageRequest.of(page, pageSize);
 
             Page<Usuario> finalUsersList = usuarioRepository.findByRol_Id(2, pageable);
@@ -417,7 +417,7 @@ public class SuperAdminController {
     public String listaGestionUsuarioFinal( @RequestParam(defaultValue = "0") int page,
                                             Model model){
 
-        int pageSize = 3;
+        int pageSize = 6;
         Pageable pageable = PageRequest.of(page, pageSize);
 
         Page<Usuario> finalUsersList = usuarioRepository.findByRol_Id(4, pageable);
