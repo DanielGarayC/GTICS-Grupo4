@@ -327,13 +327,26 @@ public class SuperAdminController {
 
 
 
-    @GetMapping("SuperAdmin/listaSolicitudesAgentes")
-    public String listaSolicitudesAgentes(Model model) {
-        // Realiza la consulta que devuelve los datos con los estados aleatorios
-        List<Object[]> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesConEstadosAleatorios();
+   @GetMapping("SuperAdmin/listaSolicitudesAgentes")
+    public String listaSolicitudesAgentes(
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+        int size=6;
+        // Configurar la paginación
+        Pageable pageable = PageRequest.of(page, size);
 
-        // Añadir la lista de solicitudes al modelo
-        model.addAttribute("listaUsuariosSolicitudes", listaUsuariosSolicitudes);
+        // Realizar la consulta paginada
+        Page<Object[]> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesConEstadosAleatoriosConPaginacion(pageable);
+
+        // Verificar si hay resultados
+        if (listaUsuariosSolicitudes.isEmpty()) {
+            model.addAttribute("message", "No hay solicitudes registradas");
+        } else {
+            // Añadir la lista de solicitudes al modelo
+            model.addAttribute("listaUsuariosSolicitudes", listaUsuariosSolicitudes.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", listaUsuariosSolicitudes.getTotalPages());
+        }
 
         // Redireccionar a la vista correspondiente
         return "SuperAdmin/GestionAgentes/agent-request";
