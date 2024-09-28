@@ -171,8 +171,8 @@
 
     <div class="main-wrapper">
         <!-- navbar -->
-        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('productos')"></div>
-        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('productos')"></div>
+        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('productos')}"></div>
+        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('productos')}"></div>
 
         <!-- COONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">

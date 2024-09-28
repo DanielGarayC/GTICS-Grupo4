@@ -173,10 +173,10 @@
     <div class="main-wrapper">
         <!-- navbar vertical (para pc)-->
         <!-- navbar -->
-        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('proveedores')"></div>
+        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('proveedores')}"></div>
 
         <!-- navbar vertical (para celular)-->
-        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('proveedores')"></div>
+        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('proveedores')}"></div>
 
         <!-- COONTENIDO DE LA PAGINA -->
         <!-- main -->
