@@ -340,7 +340,7 @@ public class SuperAdminController {
 
         // Verificar si hay resultados
         if (listaUsuariosSolicitudes.isEmpty()) {
-            model.addAttribute("message", "No hay solicitudes registradas");
+            model.addAttribute("msg", "No hay solicitudes registradas");
         } else {
             // Añadir la lista de solicitudes al modelo
             model.addAttribute("listaUsuariosSolicitudes", listaUsuariosSolicitudes.getContent());
