@@ -353,9 +353,9 @@ public class SuperAdminController {
     }
 
     @PostMapping("SuperAdmin/listaSolicitudesAgentesFiltro")
-    public String listaSolicitudesAgentesFiltro(Model model,@RequestParam("indicador") Integer indicador) {
-        System.out.println(indicador);
-        if(indicador==2) {
+    public String listaSolicitudesAgentesFiltro(Model model,@RequestParam(value = "indicador", required  = false) Integer indicador) {
+
+        if(indicador==null) {
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }
 
