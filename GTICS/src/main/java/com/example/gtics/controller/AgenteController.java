@@ -1,11 +1,8 @@
 package com.example.gtics.controller;
 
-import com.example.gtics.entity.Distrito;
-import com.example.gtics.entity.Orden;
-import com.example.gtics.entity.Usuario;
-import com.example.gtics.repository.DistritoRepository;
-import com.example.gtics.repository.OrdenRepository;
-import com.example.gtics.repository.UsuarioRepository;
+import com.example.gtics.entity.*;
+import com.example.gtics.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
@@ -20,20 +17,16 @@ import java.util.Optional;
 @Controller
 
 public class AgenteController {
-
-    final UsuarioRepository usuarioRepository;
-    final DistritoRepository distritoRepository;
-    final OrdenRepository ordenRepository;
-
-    // Constructor que recibe los tres repositorios
-    public AgenteController(UsuarioRepository usuarioRepository,
-                            DistritoRepository distritoRepository,
-                            OrdenRepository ordenRepository) {
-        this.usuarioRepository = usuarioRepository;
-        this.distritoRepository = distritoRepository;
-        this.ordenRepository = ordenRepository;
-    }
-
+    @Autowired
+    UsuarioRepository usuarioRepository;
+    @Autowired
+    DistritoRepository distritoRepository;
+    @Autowired
+    OrdenRepository ordenRepository;
+    @Autowired
+    ControlOrdenRepository controlOrdenRepository;
+    @Autowired
+    EstadoOrdenRepository estadoOrdenRepository;
 
 
     @GetMapping({"Agente", "AdminZonal/Inicio"})
@@ -130,14 +123,38 @@ public class AgenteController {
 
         return "Agente/OrdenesDeUsuario/ordenesDeUsuario";
     }
+
+
+    @PostMapping({"/Agente/Orden/editarOrden"})
+    public String editarOrden(Orden orden,RedirectAttributes attr){
+        ordenRepository.save(orden);
+        attr.addFlashAttribute("msg", "Se actualizó exitosamente");
+        try {
+
+
+        }catch (Exception e){
+            attr.addFlashAttribute("msg", "no se pudo actualizar");
+        }
+
+
+        return "redirect:/Agente/Ordenes";
+    }
+
     @GetMapping({"Agente/Ordenes/Detalles"})
-    public String DetalleOrden(@RequestParam("idOrden") Integer idOrden,Model model){
+    public String DetalleOrden(@RequestParam("idOrden") Integer idOrden,@RequestParam("numOrden") Integer numOrden,Model model){
         List<Distrito> listaDistritos   = distritoRepository.findAll();
+        List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
+        List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
         
         if(ordenOpt.isPresent()){
             model.addAttribute("orden",ordenOpt.get());
             model.addAttribute("listaDistritos",listaDistritos);
+            model.addAttribute("numOrden",numOrden);
+            model.addAttribute("listaControlOrden",listaControlOrden);
+            model.addAttribute("listaEstadoOrden",listaEstadoOrden);
+
+
             return "Agente/OrdenesDeUsuario/detalleOrden";
 
         }else{

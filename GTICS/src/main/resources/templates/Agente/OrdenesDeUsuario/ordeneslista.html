@@ -226,6 +226,7 @@
 		   <!-- row -->
 		   <div class="row">
 			   <div class="col-xl-12 col-12 mb-5">
+				   <div class="alert alert-success" role="alert" th:if="${msg!=null}" th:text="${msg}"></div>
 				   <!-- card -->
 				   <div class="card h-100 card-lg">
 					   <div class="p-6">
@@ -267,11 +268,11 @@
 									   </tr>
 								   </thead>
 								   <tbody>
-								   <tr th:each="orden: ${ordenesLista}">
+								   <tr th:each="orden,var: ${ordenesLista}">
 									   <td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td>
-									   <td>#1234</td>
+									   <td th:text="${var.index+1}"></td>
 									   <td th:text="${orden.fechaOrden}"></td>
-									   <td th:text="${orden.estadoOrden.nombreEstado}"></td>
+									   <td th:text="${orden.getEstadoorden.nombreEstado}"></td>
 									   <!--<td>	<span class="badge bg-light-primary text-dark-primary">Resuelta</span></td>-->
 									   <!--<td th:text="${orden.estadoOrden.nombreEstado}"></td>-->
 
@@ -290,7 +291,7 @@
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
 												   </li>
 												   <li>
 													<a class="dropdown-item" href="#" onclick="eliminarOrden()">
