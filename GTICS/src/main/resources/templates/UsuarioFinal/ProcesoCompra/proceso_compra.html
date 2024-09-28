@@ -31,7 +31,7 @@
       <main>
          <nav class="navbar navbar-light d-flex justify-content-between" style="border-bottom: 2px solid #959ea9">
             <a class="navbar-brand">
-               <img th:src="@{/images/logo/logoGTICS.jpeg}" width="220" height="auto" class="d-inline-block align-top" alt="Logo de la Empresa">
+               <img th:src="@{/images/logo/logoGTICS.jpeg}" width="220" height="auto" class="d-inline-block align-top" alt="Logo de la Empresa" style="margin-left: 50px;">
             </a>
          </nav>
          <!-- section-->
@@ -44,7 +44,7 @@
                      <!-- breadcrumb -->
                      <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
-                           <li class="breadcrumb-item"><a href="#!">Tienda</a></li>
+                           <li class="breadcrumb-item"><a th:href="@{/UsuarioFinal/listaProductos}">Tienda</a></li>
                            <li class="breadcrumb-item active" aria-current="page">Proceso de pago</li>
                         </ol>
                      </nav>
