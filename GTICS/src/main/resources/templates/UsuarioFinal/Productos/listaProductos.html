@@ -31,13 +31,15 @@
 <!-- navbar -->
 
 <div class="border-bottom">
-    <!-- navbar vertical (para pc)-->
+
     <div th:insert="~{fragments/navbarUsuarioFinal :: navbar}"></div>
 
 </div>
 
 
 <main>
+
+    <div th:replace="fragments/navbarUsuarioFinal :: buscadorProducto"></div>
     <!-- Category Section Start-->
     <section class="mb-lg-6 mt-lg-6 my-2">
         <div class="container">
