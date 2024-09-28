@@ -583,10 +583,19 @@ public class SuperAdminController {
         return "redirect:/SuperAdmin/productos";
     }
 
-    @GetMapping("SuperAdmin/productos")
-    public String productos(Model model) {
-        List<Producto> listaProductos = productoRepository.findAllActive();
-        model.addAttribute("productos", listaProductos);
+   @GetMapping("SuperAdmin/productos")
+    public String productos(Model model,
+                            @RequestParam(defaultValue = "0") int page
+                            ) {
+        int size=10;
+        Pageable pageable = PageRequest.of(page, size); // Crea el objeto Pageable con la página y el tamaño
+        Page<Producto> productosPage = productoRepository.findAllActiveConpaginacion(pageable); // Recupera los productos paginados
+
+        model.addAttribute("productos", productosPage.getContent()); // Añade los productos al modelo
+        model.addAttribute("currentPage", page); // Añade el número de la página actual
+        model.addAttribute("totalPages", productosPage.getTotalPages()); // Añade el número total de páginas
+        model.addAttribute("totalItems", productosPage.getTotalElements()); // Añade el número total de productos
+
         return "SuperAdmin/productos";
     }
     //
