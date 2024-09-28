@@ -19,8 +19,118 @@
       <link rel="stylesheet" th:href="@{/css/theme.min.css}">
 
       <!-- Flag Icons -->
+      <!-- Incluir la hoja de estilos de Font Awesome -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">      <style>
+         #cvv-eye-toggle {
+            cursor: pointer;
+            color: #999;
+         }
 
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.14/css/bootstrap-select.min.css">
+         #cvv-eye-toggle:hover {
+            color: #333;
+         }
+         /* Contenedor de la tarjeta para asegurar que siempre esté centrada */
+         #unique-card-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Centra verticalmente la tarjeta */
+            height: 200px; /* Asegura que el contenedor tenga suficiente altura para la tarjeta */
+            margin-bottom: 20px;
+            perspective: 1000px;
+            position: relative;
+         }
+
+         #unique-card-front, #unique-card-back {
+            width: 300px;
+            height: 180px;
+            background: linear-gradient(135deg, #3b3b3b, #2a2a2a);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            position: absolute; /* Se asegura que tanto la parte frontal como la trasera estén en la misma posición */
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+         }
+
+         #unique-card-back {
+            transform: rotateY(180deg);
+         }
+
+         #unique-card-chip {
+            width: 50px;
+            height: 40px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+         }
+
+         #unique-card-chip img {
+            width: 100%;
+            height: 100%;
+         }
+
+         #unique-card-number {
+            font-size: 20px;
+            letter-spacing: 2px;
+            margin-top: 40px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+         }
+
+         #unique-card-name {
+            font-size: 14px;
+            text-align: left;
+            margin-top: 20px;
+         }
+
+         #unique-card-expiry {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+         }
+
+         #unique-card-cvv-back {
+            text-align: right;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+         }
+
+         #unique-card-preview.flipped #unique-card-front {
+            transform: rotateY(180deg);
+         }
+
+         #unique-card-preview.flipped #unique-card-back {
+            transform: rotateY(0deg);
+         }
+
+         /* Estilos únicos para el grupo de input del CVV */
+         #unique-input-group-cvv {
+            position: relative;
+         }
+
+         #unique-input-group-cvv .btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+         }
+
+         #unique-input-group-cvv .btn i {
+            font-size: 18px;
+            color: #999;
+         }
+      </style>
+
+
+
 
    </head>
 
@@ -376,18 +486,7 @@
                                        </div>
                                  
                                        <!-- card -->
-                                       <div class="card card-bordered shadow-none">
-                                          <div class="card-body p-6">
-                                             <!-- check input -->
-                                             <div class="d-flex">
-                                                <div class="form-check">
-                                                   <input class="form-check-input" type="radio" name="flexRadioDefault" id="cashonDelivery" />
-                                                   <label class="form-check-label ms-2" for="cashonDelivery"></label>
-                                                </div>
 
-                                             </div>
-                                          </div>
-                                       </div>
                                        <!-- Button -->
                                        <div class="mt-5 d-flex justify-content-end">
                                           <a
@@ -797,116 +896,116 @@
       
          <!-- Modal -->
       <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
-         <div class="modal-dialog modal-lg modal-dialog-centered" >
+         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-              
-               <!-- modal body -->
                <div class="modal-body p-6">
                   <div class="d-flex justify-content-between mb-5">
                      <!-- heading -->
                      <div>
                         <h5 class="h6 mb-1" id="addAddressModalLabel">Añadir una nueva tarjeta</h5>
                         <p class="small mb-0 d-inline-block me-2">Lista de tarjetas válidas:</p>
-                                       <!-- Lista de tarjetas -->
-                     <ul class="list-inline mb-0 d-inline-block">
-                        <li class="list-inline-item">
-                           <a href="#!"><img th:src="@{/images/payment/american-express.svg}" alt="" /></a>
-                        </li>
-                        <li class="list-inline-item">
-                           <a href="#!"><img th:src="@{/images/payment//mastercard.svg}" alt="" /></a>
-                        </li>
-
-                        <li class="list-inline-item">
-                           <a href="#!"><img th:src="@{/images/payment/visa.svg}" alt="" /></a>
-                        </li>
-                     </ul>
+                        <!-- Lista de tarjetas -->
+                        <ul class="list-inline mb-0 d-inline-block">
+                           <li class="list-inline-item">
+                              <a href="#!"><img src="../images/payment/american-express.svg" alt="" /></a>
+                           </li>
+                           <li class="list-inline-item">
+                              <a href="#!"><img src="../images/payment/mastercard.svg" alt="" /></a>
+                           </li>
+                           <li class="list-inline-item">
+                              <a href="#!"><img src="../images/payment/visa.svg" alt="" /></a>
+                           </li>
+                        </ul>
                      </div>
                      <div>
                         <!-- button -->
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                      </div>
                   </div>
-                  <!-- row -->
-                 
-                        
-                        <div class="row g-2">
-                           <div class="col-md-6 col-12">
-                              <!-- Input: Número de tarjeta -->
-                              <div class="mb-3">
-                                 <label for="card-number" class="form-label">Número de tarjeta</label>
-                                 <input type="text" class="form-control" id="card-number2" placeholder="xxxx-xxxx-xxxx-xxxx" required maxlength="19" inputmode="numeric"  />
-                              </div>
-                           </div>
-                           <div class="col-md-6 col-12">
-                              <!-- Input: Nombre del titular -->
-                              <div class="mb-3">
-                                 <label class="form-label" for="nameoncard">Nombre del titular de la tarjeta</label>
-                                 <input type="text" class="form-control" placeholder="Ingrese nombre" id="nameoncard" />
-                              </div>
-                           </div>
-                           <div class="col-md-6 col-6">
-                              <!-- Input: Mes de expiración -->
-                              <div class="mb-3 mb-lg-0">
-                                 <label class="form-label" for="expiry-month">Fecha de expiración</label>
-                                 <div class="d-flex">
-                                             <!-- select -->
-                                 <select class="form-select">
-                                    <option value="" selected disabled hidden>MM</option>
-                                    <option >01</option>
-                                    <option >02</option>
-                                    <option >03</option>
-                                    <option >04</option>
-                                    <option >05</option>
-                                    <option >06</option>
-                                    <option >07</option>
-                                    <option >08</option>
-                                 </select>
-                                    <span class="mx-1">/</span>
-                                    <select class="form-select">
-                                       <option value="" selected disabled hidden>YY</option>
-                                       <option >2024</option>
-                                       <option >2025</option>
-                                       <option >2026</option>
-                                       <option >2027</option>
-                                       <option >2028</option>
-                                       <option >2029</option>
-                                       <option >2030</option>
-                                       <option >2031</option>
-                                    </select>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="col">
-                              <!-- Input: CVV -->
-                              <div class="mb-3 mb-lg-0">
-                                 <label for="digit-mask" class="form-label">
-                                    Código CVV
-                                    <i class="fe fe-help-circle ms-1" data-bs-toggle="tooltip" data-placement="top" title="Un número de 3 dígitos, normalmente impreso en el reverso de la tarjeta."></i>
-                                 </label>
-                                 <input type="password" class="form-control" name="digit-mask" id="digit-mask" placeholder="xxx" maxlength="3" inputmode="numeric" required />
-                              </div>
-                           </div>
-                           <div class="col-12 mt-3">
-                              <!-- Guardar datos de la tarjeta -->
-                              <div class="form-check">
-                                 <input class="form-check-input" type="checkbox" id="save-card" />
-                                 <label class="form-check-label" for="save-card">Guardar datos de la tarjeta</label>
-                              </div>
-                           </div>
-                           <div class="col-12 text-center">
-                              <button class="btn btn-primary w-30" type="button">Guardar y confirmar</button>
-                           </div>
-                           
+
+                  <!-- Vista previa de la tarjeta -->
+                  <div id="unique-card-preview" class="card-preview">
+                     <div id="unique-card-front" class="card-front">
+                        <div id="unique-card-chip" class="card-chip">
+                           <img src="../images/products/chip.png" alt="Imagen de la tarjeta">
                         </div>
-                     
-            
+                        <div id="unique-card-number" class="card-number">**** **** **** ****</div>
+                        <div id="unique-card-expiry" class="card-expiry">
+                           <span id="unique-card-expiry-month">MM</span>/<span id="unique-card-expiry-year">AA</span>
+                        </div>
+                        <div id="unique-card-name" class="card-name">NOMBRE DEL TITULAR</div>
 
+                     </div>
+                     <div id="unique-card-back" class="card-back">
+                        <div id="unique-card-cvv-back" class="card-cvv-back">
+                           <span id="unique-cvv-back-display">***</span>
+                        </div>
+                     </div>
+                  </div>
 
+                  <!-- Formulario para ingresar los datos de la tarjeta -->
+                  <div class="row g-2">
+                     <div class="col-md-6 col-12">
+                        <div class="mb-3">
+                           <label for="unique-card-number-input" class="form-label">Número de tarjeta</label>
+                           <input type="text" class="form-control" id="unique-card-number-input" placeholder="xxxx-xxxx-xxxx-xxxx" required maxlength="19" inputmode="numeric" />
+                        </div>
+                     </div>
+
+                     <div class="col-md-6 col-12">
+                        <div class="mb-3">
+                           <label class="form-label" for="unique-nameoncard">Nombre del titular de la tarjeta</label>
+                           <input type="text" class="form-control" placeholder="Ingrese nombre" id="unique-nameoncard" />
+                        </div>
+                     </div>
+
+                     <div class="col-md-6 col-6">
+                        <div class="mb-3 mb-lg-0">
+                           <label class="form-label" for="unique-expiry-month">Fecha de expiración</label>
+                           <div class="d-flex">
+                              <select class="form-select" id="unique-expiry-month">
+                                 <option value="" selected disabled hidden>MM</option>
+                                 <option value="01">01</option>
+                                 <option value="02">02</option>
+                                 <option value="03">03</option>
+                              </select>
+                              <span class="mx-1">/</span>
+                              <select class="form-select" id="unique-expiry-year">
+                                 <option value="" selected disabled hidden>YY</option>
+                                 <option value="2024">2024</option>
+                                 <option value="2025">2025</option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-md-6 col-6">
+                        <div class="mb-3 mb-lg-0">
+                           <label for="unique-cvv-input" class="form-label">Código CVV</label>
+                           <div id="unique-input-group-cvv" class="input-group">
+                              <input type="password" class="form-control" id="unique-cvv-input" placeholder="xxx" maxlength="3" inputmode="numeric" required />
+                              <span class="input-group-text" id="cvv-eye-toggle" style="cursor: pointer;">
+                                    <i class="fa fa-eye"></i>
+                                </span>
+                           </div>
+                        </div>
+                     </div>
+
+                  </div>
+
+                  <div class="col-12 text-center mt-3">
+                     <button class="btn btn-primary" type="button">Guardar y confirmar</button>
+                  </div>
                </div>
             </div>
          </div>
       </div>
-     
+
+
+
+
+
+
 
       <!-- Footer -->
       
@@ -937,7 +1036,67 @@
 
       <script th:src="@{/libs/imask/dist/imask.min.js}"></script>
       <script th:src="@{/js/vendors/inputmask.js}"></script>
-      
+
+      <script>
+         document.getElementById('unique-card-number-input').addEventListener('input', function () {
+            const cardNumber = this.value.replace(/\D/g, '').slice(0, 16);
+            this.value = cardNumber.replace(/(\d{4})(?=\d)/g, '$1-');
+            document.getElementById('unique-card-number').innerText = cardNumber.padEnd(16, '*').replace(/(\d{4})(?=\d)/g, '$1 ');
+         });
+
+         document.getElementById('unique-nameoncard').addEventListener('input', function () {
+            const cardName = this.value.toUpperCase();
+            document.getElementById('unique-card-name').innerText = cardName || 'NOMBRE DEL TITULAR';
+         });
+
+         document.getElementById('unique-expiry-month').addEventListener('change', function () {
+            const month = this.value;
+            document.getElementById('unique-card-expiry-month').innerText = month || 'MM';
+         });
+
+         document.getElementById('unique-expiry-year').addEventListener('change', function () {
+            const year = this.value.slice(2);
+            document.getElementById('unique-card-expiry-year').innerText = year || 'AA';
+         });
+
+         const cvvInput = document.getElementById('unique-cvv-input');
+         const cvvDisplay = document.getElementById('unique-cvv-back-display');
+         const eyeToggle = document.getElementById('cvv-eye-toggle');
+
+         eyeToggle.addEventListener('click', function () {
+            if (cvvInput.type === 'password') {
+               // Mostrar el CVV
+               cvvInput.type = 'text';
+               cvvDisplay.innerText = cvvInput.value || '***';
+               // Mostrar el icono del ojo sin tachar
+               eyeToggle.innerHTML = '<i class="fa fa-eye"></i>';
+            } else {
+               // Ocultar el CVV
+               cvvInput.type = 'password';
+               cvvDisplay.innerText = '***';
+               // Mostrar el icono del ojo tachado
+               eyeToggle.innerHTML = '<i class="fa fa-eye-slash"></i>';
+            }
+         });
+
+         cvvInput.addEventListener('input', function () {
+            const cvv = this.value;
+            cvvDisplay.innerText = cvv || '***';
+         });
+
+         cvvInput.addEventListener('focus', function () {
+            document.getElementById('unique-card-preview').classList.add('flipped');
+         });
+
+         cvvInput.addEventListener('blur', function () {
+            document.getElementById('unique-card-preview').classList.remove('flipped');
+         });
+      </script>
+
+
+
+
+
 
    </body>
 </html>
