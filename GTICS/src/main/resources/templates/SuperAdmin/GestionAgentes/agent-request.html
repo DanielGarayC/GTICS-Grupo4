@@ -173,10 +173,10 @@
             <div class="main-wrapper">
                 <!-- navbar -->
                 <!-- navbar vertical (para pc)-->
-                <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaSolicitudesAgentes')"></div>
+                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaSolicitudesAgentes')}"></div>
 
                 <!-- navbar vertical (para celular)-->
-                <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaSolicitudesAgentes')"></div>
+                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaSolicitudesAgentes')}"></div>
 
                 <!-- COONTENIDO DE LA PAGINA -->
                 <main class="main-content-wrapper">
@@ -203,6 +203,7 @@
                         <div class="row">
                             <div class="col-xl-12 col-12 mb-5">
                                 <div th:if="${successMessage}" class="alert alert-success"><p th:text="${successMessage}"></p></div>
+                                <div class="alert alert-success" role="alert" th:if="${msg != null}"><p th:text="${msg}"></p></div>
 
                                 <!-- card -->
                                 <div class="card h-100 card-lg">
@@ -210,15 +211,15 @@
                                         <div class="row justify-content-between">
                                             <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
                                                 <!-- form -->
-                                                <form class="d-flex" role="search">
-                                                    <input id="searchAgente" class="form-control" type="search" placeholder="Buscar" aria-label="Search" oninput="filterTable()" />
-                                                </form>
+                                                <div class="d-flex" role="search">
+                                                    <input id="searchAgente" class="form-control" type="search" placeholder="Buscar por nombre o apellido" aria-label="Search" oninput="filterTable()" />
+                                                </div>
 
                                             </div>
                                             <!-- select option -->
                                             <form class="col-xl-3 col-md-5 col-12 d-flex align-items-center" method="post" th:action="@{/SuperAdmin/listaSolicitudesAgentesFiltro}">
                                                 <select class="form-select me-2" name="indicador">
-                                                    <option selected value="2">Postulación</option>
+                                                    <option value="" selected disabled>Postulación</option>
                                                     <option value="0">Directa</option>
                                                     <option value="1">Por Coordinador</option>
                                                 </select>
@@ -331,28 +332,31 @@
                                     <!-- Mostrar información de paginación y botones -->
                                     <div class="d-flex flex-column align-items-center">
                                         <!-- Texto de paginación centrado -->
-                                        <span id="paginationInfo" class="mb-2">Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]</span>
+                                        <span id="paginationInfo" class="mb-2">
+                                            Mostrando página [[${currentPage != null ? currentPage + 1 : 1}]] de [[${totalPages != null ? totalPages : 1}]]
+                                        </span>
 
                                         <!-- Paginación centrada -->
                                         <nav aria-label="Page navigation example">
                                             <ul class="pagination justify-content-center">
                                                 <!-- Botón de "Previo" -->
-                                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                                    <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${currentPage - 1})}">Previo</a>
+                                                <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
+                                                    <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
                                                 </li>
 
                                                 <!-- Páginas numeradas -->
-                                                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                                <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
                                                     <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${i})}" th:text="${i + 1}"></a>
                                                 </li>
 
                                                 <!-- Botón de "Siguiente" -->
-                                                <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                                                    <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${currentPage + 1})}">Siguiente</a>
+                                                <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
+                                                    <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
                                                 </li>
                                             </ul>
                                         </nav>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
