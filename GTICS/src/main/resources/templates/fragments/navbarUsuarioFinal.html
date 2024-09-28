@@ -349,45 +349,46 @@
                             </div>
                         </div>
                         <!-- row -->
-                        <div class="row g-3">
+                        <form class="row g-3" method="post" th:action="@{/UsuarioFinal/solicitudAgente}">
                             <!-- col -->
                             <div class="col-12">
                                 <label for="ContactName" class="form-label">Información personal</label>
-                                <input type="text" class="form-control" th:value="${usuario.nombre} + ' ' + ${usuario.apellidoPaterno}" aria-label="Nombre del contacto" required="" disabled/>
+                                <input type="text" class="form-control" th:field="${usuario.nombre} " aria-label="Nombre del contacto" required="" disabled/>
                             </div>
                             <!-- col -->
                             <div class="col-12">
                                 <label for="direction" class="form-label">Dirección </label>
-                                <input type="text" class="form-control" th:value="${usuario.direccion} " aria-label="Dirección" required="" disabled/>
+                                <input type="text" class="form-control" th:field="${usuario.direccion} " aria-label="Dirección" required="" disabled/>
                             </div>
                             <!-- col -->
                             <div class="col-12">
                                 <label for="direction" class="form-label">Zona </label>
-                                <input type="text" class="form-control" th:value="${usuario.zona.nombreZona}" aria-label="Dirección" required="" disabled/>
+                                <input type="text" class="form-control" th:field="${usuario.zona.nombreZona}" aria-label="Dirección" required="" disabled/>
                             </div>
                             <!-- col -->
                             <div class="col-12">
                                 <label for="direction" class="form-label">Distrto </label>
-                                <input type="text" class="form-control" th:value="${usuario.distrito.nombre}"  aria-label="Dirección" required="" disabled/>
+                                <input type="text" class="form-control" th:field="${usuario.distrito.nombre}"  aria-label="Dirección" required="" disabled/>
                             </div>
                             <!-- col -->
                             <div class="col-12">
                                 <label for="direction" class="form-label">Código de jurisdicción </label>
-                                <input type="text" class="form-control" th:value="${usuario.distrito.codigosJurisdiccion}" aria-label="Dirección" required="" disabled/>
+                                <input type="text" class="form-control" th:field="${usuario.distrito.codigosJurisdiccion}" aria-label="Dirección" required="" disabled/>
                             </div>
                             <!-- col -->
                             <div class="col-12">
                                 <label for="direction" class="form-label">Código de aduana </label>
-                                <input type="text" class="form-control" placeholder="numeroAleatorio" aria-label="Dirección" required="" />
+                                <input type="text" class="form-control" name="codigoAduana" placeholder="numeroAleatorio" aria-label="Dirección" required="" />
                             </div>
-                        </div>
-                        <div class="col-12" style="margin-bottom: 10px;">
-                        </div>
-                        <!-- button -->
-                        <div class="col-12 text-end">
-                            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
-                            <button class="btn btn-primary" type="button">Enviar solicitud</button>
-                        </div>
+
+                            <div class="col-12" style="margin-bottom: 10px;">
+                            </div>
+                            <!-- button -->
+                            <div class="col-12 text-end">
+                                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                                <button class="btn btn-primary" type="submit">Enviar solicitud</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

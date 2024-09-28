@@ -40,6 +40,8 @@ public class UsuarioFinalController {
     public String enviarSolicitudaSerAgente(Solicitudagente solicitudagente){
         solicitudagente.setIndicadorSolicitud(0);
         solicitudagente.setValidaciones(1);
+        solicitudagente.setCodigoJurisdiccion("333");
+
         //solicitudagente.setValidaciones(new Validacionescodigosagente());
         /*
         System.out.println(solicitudagente.getCodigoAduana());
@@ -52,6 +54,8 @@ public class UsuarioFinalController {
 
         if(optUsuario.isPresent()) {
             Usuario us = optUsuario.get(); // usuario random que solicita ser agente
+
+
             usuarioRepository.asignarSolictudAusuario(ultimaSolicitud.getId(), us.getId());
         }
         return "redirect:/UsuarioFinal";
