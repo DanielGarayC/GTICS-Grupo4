@@ -293,39 +293,41 @@
                                 <div class="d-flex flex-column align-items-center">
                                     <!-- Texto de paginación centrado -->
                                     <span id="paginationInfo" class="mb-2">
-                                        Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
+                                        Mostrando página [[${currentPage != null ? currentPage + 1 : 1}]] de [[${totalPages != null ? totalPages : 1}]]
                                     </span>
 
                                     <!-- Paginación centrada -->
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination justify-content-center">
                                             <!-- Botón de "Previo" -->
-                                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                                <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${currentPage - 1})}">Previo</a>
+                                            <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
+                                                <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
                                             </li>
 
                                             <!-- Páginas numeradas -->
-                                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                            <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
                                                 <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${i})}" th:text="${i + 1}"></a>
                                             </li>
 
                                             <!-- Botón de "Siguiente" -->
-                                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                                                <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${currentPage + 1})}">Siguiente</a>
+                                            <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
+                                                <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
                                             </li>
                                         </ul>
                                     </nav>
                                 </div>
 
                             </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </main>
     </div>
-</div>
+
+    </div>
+
 
 <!-- Libs JS -->
 <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
