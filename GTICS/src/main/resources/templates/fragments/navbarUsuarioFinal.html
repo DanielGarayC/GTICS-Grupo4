@@ -170,7 +170,7 @@
                                     <!-- Avatar -->
                                     <li class="list-inline-item dropdown">
                                         <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+                                            <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end p-0">
                                             <div class="lh-1 px-5 py-4 border-bottom">
@@ -178,7 +178,7 @@
                                                 <small>rol en la página</small>
                                             </div>
                                             <div class="border-top px-5 py-3">
-                                                <a href="perfil.html">Mi perfil</a>
+                                                <a th:href="@{UsuarioFinal/miPerfil}">Mi perfil</a>
                                             </div>
                                             <div class="border-top px-5 py-3">
                                                 <a th:href="@{'UsuarioFinal/solicitudAgente?idUsuario=' + ${usuario.id}}" data-bs-toggle="modal" data-bs-target="#addRequestAgent">Solicitar ser agente</a>
