@@ -154,6 +154,38 @@
         </div>
     </section>
 
+    <div id="chatbot-container">
+        <!-- Botón flotante del chatbot -->
+        <div id="chatbot-button" onclick="toggleChat()">
+            <img src="chat-icon.png" alt="Chat Icon" />
+            <span>¿Necesitas ayuda?</span>
+        </div>
+
+        <!-- Panel del chatbot oculto al inicio -->
+        <div id="chatbot-window" class="hidden">
+            <div class="chat-header">
+                <h4>Eva</h4>
+                <button onclick="toggleChat()">X</button>
+            </div>
+            <div class="chat-body">
+                <p>Haz clic en una opción:</p>
+                <ul>
+                    <li onclick="sendOption('Pedido no recibido')">Pedido no recibido</li>
+                    <li onclick="sendOption('Problemas de reembolso')">Problemas de reembolso</li>
+                    <li onclick="sendOption('Artículo no como se describe')">Artículo no como se describe</li>
+                    <li onclick="sendOption('Cancelar pedido')">Cancelar pedido</li>
+                </ul>
+            </div>
+            <div class="chat-footer">
+                <input type="text" placeholder="Escribe tu mensaje" />
+                <button>Enviar</button>
+            </div>
+        </div>
+    </div>
+    v>
+    </div>
+
+
     <section class="my-lg-8 my-8">
         <div class="container">
             <div class="row">
@@ -813,44 +845,7 @@
 
 <!-- Javascript-->
 
-<script>
-    $(document).ready(function(){
-        $('.product-slider').slick({
-            infinite: true,          // Deslizar infinitamente
-            slidesToShow: 5,         // Cuántos productos mostrar por fila
-            slidesToScroll: 1,       // Cuántos productos se deslizan por vez
-            arrows: true,            // Mostrar flechas de navegación
-            dots: true,              // Mostrar indicadores de paginación
-            responsive: [            // Opciones de responsividad para pantallas más pequeñas
-                {
-                    breakpoint: 1200,
-                    settings: {
-                        slidesToShow: 4,
-                    }
-                },
-                {
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 3,
-                    }
-                },
-                {
-                    breakpoint: 768,
-                    settings: {
-                        slidesToShow: 2,
-                    }
-                },
-                {
-                    breakpoint: 576,
-                    settings: {
-                        slidesToShow: 1,
-                    }
-                }
-            ]
-        });
-    });
 
-</script>
 
 <!-- Libs JS -->
 <!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
@@ -869,5 +864,59 @@
 <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
 <script th:src="@{/js/vendors/tns-slider.js}"></script>
 <script th:src="@{/js/vendors/zoom.js}"></script>
+    <script>
+        $(document).ready(function(){
+            $('.product-slider').slick({
+                infinite: true,          // Deslizar infinitamente
+                slidesToShow: 5,         // Cuántos productos mostrar por fila
+                slidesToScroll: 1,       // Cuántos productos se deslizan por vez
+                arrows: true,            // Mostrar flechas de navegación
+                dots: true,              // Mostrar indicadores de paginación
+                responsive: [            // Opciones de responsividad para pantallas más pequeñas
+                    {
+                        breakpoint: 1200,
+                        settings: {
+                            slidesToShow: 4,
+                        }
+                    },
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 3,
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 2,
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1,
+                        }
+                    }
+                ]
+            });
+        });
+
+    </script>
+    <script>
+        function toggleChat() {
+            const chatWindow = document.getElementById('chatbot-window');
+            if (chatWindow.classList.contains('hidden')) {
+                chatWindow.classList.remove('hidden');
+            } else {
+                chatWindow.classList.add('hidden');
+            }
+        }
+
+        function sendOption(option) {
+            alert(`Opción seleccionada: ${option}`);
+            // Aquí puedes añadir lógica para manejar las opciones seleccionadas
+        }
+
+    </script>
 </body>
 </html>
