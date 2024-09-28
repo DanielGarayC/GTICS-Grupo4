@@ -19,6 +19,34 @@ import java.util.List;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
+
+    @Query(value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
+            "u.idSolicitudAgente AS solicitudId, s.indicadorSolicitud, " +
+            "u.agt_codigoAduana, " +
+            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "WHEN 1 THEN 'Habilitado' " +
+            "WHEN 2 THEN 'Multado' " +
+            "WHEN 3 THEN 'Cancelado' " +
+            "WHEN 4 THEN 'Suspendido' " +
+            "WHEN 5 THEN 'Anulado de jurisdicción' " +
+            "END AS estadoCodigoAduana, " +
+            "u.agt_codigoJurisdiccion, " +
+            "CASE FLOOR(1 + (RAND() * 5)) " +
+            "WHEN 1 THEN 'Habilitado' " +
+            "WHEN 2 THEN 'Multado' " +
+            "WHEN 3 THEN 'Cancelado' " +
+            "WHEN 4 THEN 'Suspendido' " +
+            "WHEN 5 THEN 'Anulado de jurisdicción' " +
+            "END AS estadoCodigoJurisdiccion, " +
+            "z.nombrezona " +
+            "FROM usuario u " +
+            "LEFT JOIN solicitudagente s ON u.idSolicitudAgente = s.idSolicitudAgente " +
+            "JOIN zona z ON u.idzona = z.idzona " +
+            "WHERE u.idSolicitudAgente > 0 AND u.idRol = 4 " +
+            "GROUP BY u.idusuario, u.idSolicitudAgente",
+            countQuery = "SELECT COUNT(u.idusuario) FROM usuario u WHERE u.idSolicitudAgente > 0 AND u.idRol = 4",
+            nativeQuery = true)
+    Page<Object[]> mostrarSolicitudesConEstadosAleatoriosConPaginacion(Pageable pageable);
     // Método personalizado para buscar agentes con paginación
     @Query(value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
             "u.agt_codigoaduana, " +
@@ -62,11 +90,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     List<Usuario> FiltroBuscador(@Param("busqueda") String busqueda);
 
 
-    @Query(value = "SELECT * FROM usuario u " +
-            "WHERE u.idRol = :idRol " +
-            "AND u.id_agente = :agente " +
-            "AND (u.baneado IS NULL OR u.baneado = false)",
-            nativeQuery = true)
+    @Query(nativeQuery = true, value = "SELECT * FROM usuario u " +
+            "WHERE u.idRol = ?1 " +
+            "AND u.idAgente = ?2 " +
+            "AND (u.baneado IS NULL OR u.baneado = false)")
     List<Usuario> findUsuariosFiltrados(@Param("idRol") Integer idRol, @Param("agente") Integer agente);
 
     //Banear Usuario por id

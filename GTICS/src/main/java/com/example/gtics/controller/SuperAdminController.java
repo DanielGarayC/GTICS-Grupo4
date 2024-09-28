@@ -327,13 +327,26 @@ public class SuperAdminController {
 
 
 
-    @GetMapping("SuperAdmin/listaSolicitudesAgentes")
-    public String listaSolicitudesAgentes(Model model) {
-        // Realiza la consulta que devuelve los datos con los estados aleatorios
-        List<Object[]> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesConEstadosAleatorios();
+   @GetMapping("SuperAdmin/listaSolicitudesAgentes")
+    public String listaSolicitudesAgentes(
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+        int size=6;
+        // Configurar la paginación
+        Pageable pageable = PageRequest.of(page, size);
 
-        // Añadir la lista de solicitudes al modelo
-        model.addAttribute("listaUsuariosSolicitudes", listaUsuariosSolicitudes);
+        // Realizar la consulta paginada
+        Page<Object[]> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesConEstadosAleatoriosConPaginacion(pageable);
+
+        // Verificar si hay resultados
+        if (listaUsuariosSolicitudes.isEmpty()) {
+            model.addAttribute("message", "No hay solicitudes registradas");
+        } else {
+            // Añadir la lista de solicitudes al modelo
+            model.addAttribute("listaUsuariosSolicitudes", listaUsuariosSolicitudes.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", listaUsuariosSolicitudes.getTotalPages());
+        }
 
         // Redireccionar a la vista correspondiente
         return "SuperAdmin/GestionAgentes/agent-request";
@@ -380,28 +393,14 @@ public class SuperAdminController {
 
     }
 
-    @GetMapping("SuperAdmin/verUsuario/{id}")
-    public String verUsuario(@PathVariable("id") Integer id, Model model){
-        try {
-            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-            if (optionalUsuario.isPresent() && optionalUsuario.get().getRol().getId() == 4){
-                model.addAttribute("usuario",optionalUsuario.get());
-                String nombre = optionalUsuario.get().getNombre();
-                model.addAttribute("nombre",nombre);
 
-            } else {
-                model.addAttribute("error","Agente no encontrado o el rol no es válido");
-                return "SuperAdmin/GestionAgentes/agent-request";  // Redirigir a la lista si no se encuentra el agente
-            }
-        }catch (Exception e) {
-            model.addAttribute("error", "Error al cargar el usuario");
-            e.printStackTrace();
-        }
+
+    @GetMapping("SuperAdmin/verUsuarioDeSolicitud/{id}")
+    public String verUsuarioDeSolicitud(Model model, @PathVariable("id") Integer idUsuarioFinal){
+        Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
+        model.addAttribute("finalUser", finalUser);
         return "SuperAdmin/GestionAgentes/agent-ver-usuario";
     }
-
-
-
 
 
 
@@ -584,10 +583,19 @@ public class SuperAdminController {
         return "redirect:/SuperAdmin/productos";
     }
 
-    @GetMapping("SuperAdmin/productos")
-    public String productos(Model model) {
-        List<Producto> listaProductos = productoRepository.findAllActive();
-        model.addAttribute("productos", listaProductos);
+   @GetMapping("SuperAdmin/productos")
+    public String productos(Model model,
+                            @RequestParam(defaultValue = "0") int page
+                            ) {
+        int size=10;
+        Pageable pageable = PageRequest.of(page, size); // Crea el objeto Pageable con la página y el tamaño
+        Page<Producto> productosPage = productoRepository.findAllActiveConpaginacion(pageable); // Recupera los productos paginados
+
+        model.addAttribute("productos", productosPage.getContent()); // Añade los productos al modelo
+        model.addAttribute("currentPage", page); // Añade el número de la página actual
+        model.addAttribute("totalPages", productosPage.getTotalPages()); // Añade el número total de páginas
+        model.addAttribute("totalItems", productosPage.getTotalElements()); // Añade el número total de productos
+
         return "SuperAdmin/productos";
     }
     //

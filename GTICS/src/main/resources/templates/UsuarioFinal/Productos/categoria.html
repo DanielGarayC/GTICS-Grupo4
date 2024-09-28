@@ -23,8 +23,14 @@
 </head>
 
 <body>
-
-<div th:insert="fragments/navbarUsuarioFinal :: navbar"></div>
+  <div>
+    <!-- navbar -->
+    <!-- navbar -->
+    <div class="border-bottom">
+      <!-- navbar vertical (para pc)-->
+      <div th:insert="~{fragments/navbarUsuarioFinal :: navbar}"></div>
+    </div>
+  </div>
 <main>
   <div th:replace="fragments/navbarUsuarioFinal :: buscadorProducto"></div>
   <!-- section -->

@@ -3,6 +3,8 @@ package com.example.gtics.repository;
 import com.example.gtics.dto.CantidadProductos;
 import com.example.gtics.dto.ProductoRelevanteDTO;
 import com.example.gtics.entity.Producto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,7 +12,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
-
+    @Query(value = "SELECT * FROM producto p WHERE p.borrado = 0", nativeQuery = true)
+    Page<Producto> findAllActiveConpaginacion(Pageable pageable);
     // Consulta nativa para obtener productos activos
     @Query(value="SELECT * FROM producto p WHERE p.borrado = 0", nativeQuery = true)
     List<Producto> findAllActive();
