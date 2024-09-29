@@ -198,10 +198,10 @@
 
 	   <!-- navbar -->
 	   <!-- navbar vertical (para pc)-->
-	   <div th:insert="fragments/navbarAgente.html :: navbarVerticalPc('usuariosAsignados')"></div>
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('usuariosAsignados')}"></div>
 
 	   <!-- navbar vertical (para celular)-->
-	   <div th:insert="fragments/navbarAgente.html :: navbarVerticalCelulares('usuariosAsignados')"></div>
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('usuariosAsignados')}"></div>
 
 
 

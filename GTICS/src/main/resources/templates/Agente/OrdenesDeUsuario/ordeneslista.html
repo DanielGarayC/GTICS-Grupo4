@@ -197,10 +197,10 @@
 
 	   <!-- navbar -->
 	   <!-- navbar vertical (para pc)-->
-	   <div th:insert="fragments/navbarAgente.html :: navbarVerticalPc('ordenes')"></div>
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('ordenes')}"></div>
 
 	   <!-- navbar vertical (para celular)-->
-	   <div th:insert="fragments/navbarAgente.html :: navbarVerticalCelulares('ordenes')"></div>
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('ordenes')}"></div>
 
 
 
@@ -224,30 +224,37 @@
 			   </div>
 		   </div>
 		   <!-- row -->
-		   <div class="row">
+		   <div class="row text-center">
 			   <div class="col-xl-12 col-12 mb-5">
+				   <div class="alert alert-success" role="alert" th:if="${msg!=null}" th:text="${msg}"></div>
 				   <!-- card -->
-				   <div class="card h-100 card-lg">
+				   <div class="card h-100 card-lg" >
 					   <div class="p-6">
 						   <div class="row justify-content-between">
 							   <div class="col-md-4 col-12 mb-2 mb-md-0">
 								   <!-- form -->
-								   <form class="d-flex" role="search">
+								   <div class="d-flex" role="search">
 									   <input class="form-control" type="search" placeholder="Buscar por número o monto" aria-label="Search" />
-								   </form>
+								   </div>
 							   </div>
-							   <div class="col-lg-2 col-md-4 col-12">
+							   <form class="col-xl-4 col-md-6 col-12 d-flex align-items-center" method="post" th:action="@{/Agente/OrdenesPost}">
 								   <!-- select -->
-								   <select class="form-select">
-									   <option selected>Control</option>
-									   <option value="Success">Todos las órdenes</option>
-									   <option value="Pending">Ordenes sin aginar</option>
-									   <option value="Pending">Ordenes pendientes</option>
-									   <option value="Cancel">Ordenes en progreso</option>
-									   <option value="Cancel">Ordenes resueltas</option>
-
+								   <select class="form-select me-2" name="idEstado">
+									   <option value="0" th:selected="${idEstado == 0}">Todos</option>
+									   <option th:each="estado: ${listaEstadoOrden}" th:value="${estado.id}" th:text="${estado.nombreEstado}" th:selected="${idEstado == estado.id}"></option>
 								   </select>
-							   </div>
+								   <!-- select -->
+								   <select class="form-select me-2" name="idControl">
+									   <option value="0" th:selected="${idControl == 0}">Todos</option>
+									   <option th:each="control: ${listaControlOrden}" th:value="${control.id}" th:text="${control.nombreControl}" th:selected="${idControl == control.id}"></option>
+								   </select>
+								   <button class="btn btn-primary me-2" type="submit"><i class="bi bi-search"></i></button>
+							   </form>
+
+
+
+
+
 						   </div>
 					   </div>
 					   <!-- card body -->
@@ -257,9 +264,8 @@
 							   <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
 								   <thead class="bg-light">
 									   <tr>
-										   <th></th>
 										   <th>Nº de orden</th>
-										   <th>Fecha</th>
+										   <th>Fecha de entrega</th>
 										   <th>Estado</th>
 										   <th>Control</th>
 										   <th>Monto total</th>
@@ -267,14 +273,20 @@
 									   </tr>
 								   </thead>
 								   <tbody>
-								   <tr th:each="orden: ${ordenesLista}">
-									   <td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td>
-									   <td>#1234</td>
+								   <tr th:each="orden,var: ${ordenesLista}">
+									   <!--<td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td> Agregar si incluimos imagen a la orden -->
+									   <td th:text="${var.index+1}"></td>
 									   <td th:text="${orden.fechaOrden}"></td>
-									   <td th:text="${orden.estadoOrden.nombreEstado}"></td>
-									   <!--<td>	<span class="badge bg-light-primary text-dark-primary">Resuelta</span></td>-->
-									   <!--<td th:text="${orden.estadoOrden.nombreEstado}"></td>-->
+									   <td th:switch="${orden.controlOrden.id}">
+										   <span th:case="1" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-primary text-dark-primary"></span>
+										   <span th:case="2" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-secondary text-dark-secondary"></span>
+										   <span th:case="3" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-info text-dark-info"> </span>
+										   <span th:case="4" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-warning text-dark-warning"></span>
+										   <span th:case="5" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-danger text-dark-danger"></span>
+										   <span th:case="6" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-warning text-dark-warning"></span>
+										   <span th:case="7" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-success text-dark-success"></span>
 
+									   </td>
 									   <td th:switch="${orden.controlOrden.id}">
 										   <span th:case="1" class="badge bg-light-danger text-dark-danger">Sin asignar</span>
 										   <span th:case="2" class="badge bg-light-warning text-dark-warning">Pendiente</span>
@@ -290,7 +302,7 @@
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
 												   </li>
 												   <li>
 													<a class="dropdown-item" href="#" onclick="eliminarOrden()">

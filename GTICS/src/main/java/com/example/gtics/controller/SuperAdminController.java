@@ -398,7 +398,7 @@ public class SuperAdminController {
     @GetMapping("SuperAdmin/verUsuarioDeSolicitud/{id}")
     public String verUsuarioDeSolicitud(Model model, @PathVariable("id") Integer idUsuarioFinal){
         Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
-        model.addAttribute("finalUser", finalUser);
+        model.addAttribute("usuario", finalUser.get());
         return "SuperAdmin/GestionAgentes/agent-ver-usuario";
     }
 

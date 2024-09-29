@@ -3,6 +3,7 @@ package com.example.gtics.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -25,13 +26,14 @@ public class Orden {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idEstadoOrden", nullable = false)
-    private Estadoorden EstadoOrden;
+    private Estadoorden estadoorden;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idControlOrden", nullable = false)
     private ControlOrden controlOrden;
 
     @Column(name = "fechaOrden", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaOrden;
 
 }

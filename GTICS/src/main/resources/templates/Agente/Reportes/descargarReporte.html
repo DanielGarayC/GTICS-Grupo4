@@ -198,10 +198,10 @@
          <div class="main-wrapper">
 			 <!-- navbar -->
 			 <!-- navbar vertical (para pc)-->
-			 <div th:insert="fragments/navbarAgente.html :: navbarVerticalPc('reportes')"></div>
+			 <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('reportes')}"></div>
 
 			 <!-- navbar vertical (para celular)-->
-			 <div th:insert="fragments/navbarAgente.html :: navbarVerticalCelulares('reportes')"></div>
+			 <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('reportes')}"></div>
 
 
 
