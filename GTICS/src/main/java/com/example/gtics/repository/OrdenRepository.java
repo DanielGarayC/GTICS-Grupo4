@@ -80,9 +80,8 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     List <OrdenCarritoDto> obtenerCarritoConDto(Integer idUsuario);
 
     @Query(nativeQuery = true, value = "SELECT \n" +
-            "\to.idOrden,\n" +
+            "    o.idOrden,\n" +
             "    SUM(p.precio) AS montoTotal\n" +
-            "    \n" +
             "FROM usuario u\n" +
             "JOIN carritocompra c ON u.idUsuario = c.idUsuario\n" +
             "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra\n" +
@@ -90,8 +89,85 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "JOIN producto p ON phc.idProducto = p.idProducto\n" +
             "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden\n" +
             "JOIN controlorden co ON o.idControlOrden = co.idControlOrden\n" +
-            "where o.idAgente = 13\n" +
-            "\n" +
-            "GROUP BY o.idOrden;")
+            "WHERE o.idAgente = ?1 or o.idControlOrden=1\n" +
+            "GROUP BY o.idOrden\n" +
+            "order by o.idOrden;")
     List <MontoTotalOrdenDto> obtenerMontoTotalConDto(Integer idAgente);
+
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden,\n" +
+            "    SUM(p.precio) AS montoTotal\n" +
+            "FROM usuario u\n" +
+            "JOIN carritocompra c ON u.idUsuario = c.idUsuario\n" +
+            "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra\n" +
+            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra\n" +
+            "JOIN producto p ON phc.idProducto = p.idProducto\n" +
+            "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden\n" +
+            "JOIN controlorden co ON o.idControlOrden = co.idControlOrden\n" +
+            "WHERE o.idAgente = ?3 AND o.idControlOrden = ?2 AND o.idEstadoOrden = ?1\n" +
+            "GROUP BY o.idOrden\n" +
+            "order by o.idOrden;")
+    List <MontoTotalOrdenDto> obtenerMontoTotalDeOrdenesByEstadoAndControl(Integer idEstado, Integer idControl,Integer idAgente);
+
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden,\n" +
+            "    SUM(p.precio) AS montoTotal\n" +
+            "FROM usuario u\n" +
+            "JOIN carritocompra c ON u.idUsuario = c.idUsuario\n" +
+            "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra\n" +
+            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra\n" +
+            "JOIN producto p ON phc.idProducto = p.idProducto\n" +
+            "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden\n" +
+            "JOIN controlorden co ON o.idControlOrden = co.idControlOrden\n" +
+            "WHERE o.idAgente = ?2 AND o.idEstadoOrden = ?1\n" +
+            "GROUP BY o.idOrden\n" +
+            "order by o.idOrden;")
+    List<MontoTotalOrdenDto> obtenerMontoTotalDeOrdenesByEstado(Integer idEstado,Integer idAgente);
+
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden,\n" +
+            "    SUM(p.precio) AS montoTotal\n" +
+            "FROM usuario u\n" +
+            "JOIN carritocompra c ON u.idUsuario = c.idUsuario\n" +
+            "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra\n" +
+            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra\n" +
+            "JOIN producto p ON phc.idProducto = p.idProducto\n" +
+            "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden\n" +
+            "JOIN controlorden co ON o.idControlOrden = co.idControlOrden\n" +
+            "WHERE o.idAgente = ?2 AND o.idControlOrden =?1\n" +
+            "GROUP BY o.idOrden\n" +
+            "order by o.idOrden;")
+    List<MontoTotalOrdenDto> obtenerMontoTotalDeOrdenesByControl(Integer idControl,Integer idAgente);
+
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden,\n" +
+            "    SUM(p.precio) AS montoTotal\n" +
+            "FROM usuario u\n" +
+            "JOIN carritocompra c ON u.idUsuario = c.idUsuario\n" +
+            "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra\n" +
+            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra\n" +
+            "JOIN producto p ON phc.idProducto = p.idProducto\n" +
+            "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden\n" +
+            "JOIN controlorden co ON o.idControlOrden = co.idControlOrden\n" +
+            "WHERE o.idAgente = ?1 or o.idControlOrden =1\n" +
+            "GROUP BY o.idOrden\n" +
+            "order by o.idOrden;")
+    List<MontoTotalOrdenDto> obtenerMontoTotalMisOrdenesYOrdenesSinAsignar(Integer idAgente);
+
+
+
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden,\n" +
+            "    SUM(p.precio) AS montoTotal\n" +
+            "FROM usuario u\n" +
+            "JOIN carritocompra c ON u.idUsuario = c.idUsuario\n" +
+            "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra\n" +
+            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra\n" +
+            "JOIN producto p ON phc.idProducto = p.idProducto\n" +
+            "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden\n" +
+            "JOIN controlorden co ON o.idControlOrden = co.idControlOrden\n" +
+            "WHERE o.idControlOrden = 1\n" +
+            "GROUP BY o.idOrden\n" +
+            "order by o.idOrden; ")
+    List<MontoTotalOrdenDto> obtenerMontoTotalOrdenesSinAsignar(Integer idControl);
 }

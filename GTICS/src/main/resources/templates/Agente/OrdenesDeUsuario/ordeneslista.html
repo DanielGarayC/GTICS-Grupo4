@@ -295,10 +295,10 @@
 										   <span th:case="4" class="badge bg-light-primary text-dark-primary">Resuelta</span>
 									   </td>
 
-									   <!-- FALTA CORREGIR PARA VER EL MONTO
-									   <td th:text="${listaMontos[var.index].montoTotal}"></td>
-										-->
-									   <td></td>
+
+									   <td th:text="${listaMonto[var.index].montoTotal}"></td>
+
+
 									   <!-- si la orden ya esta asignada al agente -->
 									   <td th:if="${orden.controlOrden.id != 1}">
 										   <div class="dropdown">
@@ -331,7 +331,7 @@
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver </a>
+													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver </a>
 												   </li>
 												   <li>
 													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/AsignarOrden?idOrden='+ ${orden.id}}"><i class="bi bi-pencil-fill me-3"></i> Autoasignar  </a>

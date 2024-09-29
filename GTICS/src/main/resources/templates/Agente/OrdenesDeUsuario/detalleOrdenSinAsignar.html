@@ -5,7 +5,7 @@
 	   <meta charset="utf-8" />
 	   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 	   <meta content="Codescandy" name="author" />
-	   <title>Usuarios asignados</title>
+	   <title>Orden</title>
 	   <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
 	   <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
 	   <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
@@ -34,7 +34,6 @@
 			   width: 220px;
 		   }
 	   </style>
-
 	   <!--POP UP-->
 	   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	   <style>
@@ -198,10 +197,10 @@
 
 	   <!-- navbar -->
 	   <!-- navbar vertical (para pc)-->
-	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('usuariosAsignados')}"></div>
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('ordenes')}"></div>
 
 	   <!-- navbar vertical (para celular)-->
-	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('usuariosAsignados')}"></div>
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('ordenes')}"></div>
 
 
 
@@ -211,193 +210,266 @@
 		   <!-- row -->
 		   <div class="row mb-8">
 			   <div class="col-md-12">
-				   <!-- page header -->
-				   <div>
-					   <h2>Usuarios</h2>
-					   <!-- breacrumb -->
-					   <nav aria-label="breadcrumb">
-						   <ol class="breadcrumb mb-0">
-							   <li class="breadcrumb-item"><a th:href="@{/Agente}">Inicio</a></li>
-							   <li class="breadcrumb-item active" aria-current="page">Lista de usuarios</li>
-						   </ol>
-					   </nav>
+				   <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+					   <div>
+						   <!-- page header -->
+						   <h2>Orden</h2>
+						   <!-- breacrumb -->
+						   <nav aria-label="breadcrumb">
+							   <ol class="breadcrumb mb-0">
+								   <li class="breadcrumb-item"><a th:href="@{/Agente}" class="text-inherit">Inicio</a></li>
+								   <li class="breadcrumb-item"><a th:href="@{/Agente/Ordenes}" class="text-inherit">Lista de órdenes</a></li>
+								   <li class="breadcrumb-item active" aria-current="page">Orden </li>
+							   </ol>
+						   </nav>
+
+					   </div>
+					   <!-- button -->
+					   <div>
+						   <a th:href="@{/Agente/Ordenes}" class="btn btn-primary">Regresar</a>
+					   </div>
 				   </div>
 			   </div>
 		   </div>
 		   <!-- row -->
 		   <div class="row">
 			   <div class="col-xl-12 col-12 mb-5">
-				   <div th:if="${successMessage}" class="alert alert-success"><p th:text="${successMessage}"></p></div>
-
 				   <!-- card -->
-				   <div class="card h-100 card-lg shadow-sm border">
-					   <div class="p-6">
-						   <div class="row justify-content-between">
-							   <div class="col-md-4 col-12 mb-2 mb-md-0">
-								   <!-- form -->
-								   <form class="d-flex" role="search">
-									   <input class="form-control" type="search" placeholder="Buscar por nombre, ID o apellido" aria-label="Search" />
-								   </form>
+				   <div class="card h-100 card-lg" th:action="@{/Agente/Orden/editarOrden}">
+					   <div class="card-body p-6">
+						   <div class="d-md-flex justify-content-between">
+							   <div class="d-flex align-items-center mb-2 mb-md-0">
+								   <h2 class="mb-0" th:text="|Orden: ${numOrden}|"></h2>
+
+								   <input type="hidden" th:field="${orden.id}">
+								   <input type="hidden" th:name="idCarritoCompra" th:value="${orden.idCarritoCompra.id}">
+
+
+								   <div th:switch="${orden.controlOrden.id}">
+									   <span th:case="1" class="badge bg-light-danger text-dark-danger ms-2">Sin asignar</span>
+									   <span th:case="2" class="badge bg-light-warning text-dark-warning ms-2">Pendiente</span>
+									   <span th:case="3" class="badge bg-light-info text-dark-info ms-2">En progreso</span>
+									   <span th:case="4" class="badge bg-light-primary text-dark-primary ms-2">Resuelta</span>
+								   </div>
+							   </div>
+							   <!-- select option -->
+							   <div class="d-md-flex">
+
+
+								   <!-- button -->
+								   <div class="ms-md-3">
+									   <a th:href="@{'/Agente/Ordenes/AsignarOrden?idOrden='+ ${orden.id}}"><button class="btn btn-outline-success">Autoasignar orden</button></a> <!--onclick="mostrarAlerta()" -->
+								   </div>
+							   </div>
+						   </div>
+						   <div class="mt-8">
+							   <div class="row">
+								   <!-- address -->
+								   <div class="col-lg-4 col-md-4 col-12">
+									   <div class="mb-6">
+										<h6 class="mb-0 me-2" ><strong>Detalles de usuario:</strong></h6>
+										   <p class="mb-1 lh-lg" style="margin-top: 6px;">
+											   <span th:text="${orden.idCarritoCompra.idUsuario.nombre}"></span>
+											   <br />
+											   <span th:text="${orden.idCarritoCompra.idUsuario.email}"></span>
+											   <br />
+											   <span th:text="${orden.idCarritoCompra.idUsuario.telefono}"></span>
+										   </p>
+										   <a href="#">Ver perfil</a>
+									   </div>
+								   </div>
+								   <!-- address -->
+								   <div class="col-lg-4 col-md-4 col-12">
+									   <div class="mb-6">
+										<h6 class="mb-0 me-2"><strong>Ubicación de envío:</strong></h6>
+										<div class="d-flex align-items-center mb-3" style="margin-top: 6px;">
+											<h6 class="mb-0 me-2">Dirección: </h6>
+											<input type="text" class="form-control flex-fill" th:field="${orden.idCarritoCompra.idUsuario.direccion}" style="color: #6c757d;" disabled>
+										</div>
+										<div class="d-flex align-items-center mb-3" style="margin-top: 25px;">
+											<h6 class="mb-0 me-2">Distrito: </h6>
+											<input type="text" class="form-control flex-fill" th:value="${orden.idCarritoCompra.idUsuario.distrito.nombre}" disabled>
+										</div>
+
+
+									   </div>
+								   </div>
+								   <!-- address -->
+								   <div class="col-lg-4 col-md-4 col-12">
+									   <div class="mb-6" >
+										<h6 class="mb-0 me-2"><strong>Detalles de la orden:</strong></h6>
+											   <br />
+											   <div class="d-flex align-items-center mb-3">
+												<h6 class="mb-0 me-2">Día de entrega: </h6>
+												<input type="date" class="form-control flex-fill" name="fechaOrden" th:value="${orden.fechaOrden}" style="color: #6c757d; margin-left: 14px;" disabled>
+											</div>
+											   Total:
+											   <span class="text-dark">S/. 135.00</span>
+										   </p>
+									   </div>
+								   </div>
+							   </div>
+						   </div>
+					   </div>
+					   <div class="row">
+						   <div class="col-12">
+							   <div class="table-responsive">
+								   <!-- Table -->
+								   <table class="table mb-0 text-nowrap table-centered">
+									   <!-- Table Head -->
+									   <thead class="bg-light">
+									   <tr>
+										   <th>Productos</th>
+										   <th>Precio</th>
+										   <th>Cantidad</th>
+										   <th>Total</th>
+									   </tr>
+									   </thead>
+									   <!-- tbody -->
+									   <tbody>
+									   <tr>
+										   <td>
+											   <a href="#" class="text-inherit">
+												   <div class="d-flex align-items-center">
+													   <div>
+														   <img th:src="@{/images/products/product-img-1.jpg}" alt="" class="icon-shape icon-lg" />
+													   </div>
+													   <div class="ms-lg-4 mt-2 mt-lg-0">
+														   <h5 class="mb-0 h6">Producto 1</h5>
+													   </div>
+												   </div>
+											   </a>
+										   </td>
+										   <td><span class="text-body">S/. 45.00</span></td>
+										   <td>1</td>
+										   <td>S/. 45.00</td>
+									   </tr>
+									   <tr>
+										   <td>
+											   <a href="#" class="text-inherit">
+												   <div class="d-flex align-items-center">
+													   <div>
+														   <img th:src="@{/images/products/product-img-2.jpg}" alt="" class="icon-shape icon-lg" />
+													   </div>
+													   <div class="ms-lg-4 mt-2 mt-lg-0">
+														   <h5 class="mb-0 h6">Producto 2</h5>
+													   </div>
+												   </div>
+											   </a>
+										   </td>
+										   <td><span class="text-body">S/. 45.00</span></td>
+										   <td>2</td>
+										   <td>S/. 90.00</td>
+									   </tr>
+
+									   <tr>
+										<td class="border-bottom-0 pb-0"></td>
+										<td class="border-bottom-0 pb-0"></td>
+										<td colspan="1" class="fw-medium text-dark">
+											<!-- text -->
+											Sub-Total
+										</td>
+										<td class="fw-medium text-dark">
+											<!-- text -->
+											S/. 135.00
+										</td>
+										</tr>
+
+									   <tr>
+										   <td class="border-bottom-0 pb-0"></td>
+										   <td class="border-bottom-0 pb-0"></td>
+										   <td colspan="1" class="fw-medium text-dark">
+											   <!-- text -->
+											   Costo de envío
+										   </td>
+										   <td class="fw-medium text-dark">
+											   <!-- text -->
+											   S/. 10.00
+										   </td>
+									   </tr>
+
+									   <tr>
+										   <td></td>
+										   <td></td>
+										   <td colspan="1" class="fw-semibold text-dark">
+											   <!-- text -->
+											   Total
+										   </td>
+										   <td class="fw-semibold text-dark">
+											   <!-- text -->
+											   S/. 145.00
+										   </td>
+									   </tr>
+									   </tbody>
+								   </table>
+							   </div>
+						   </div>
+					   </div>
+					   <div class="card-body p-6">
+						   <div class="row">
+							   <div class="col-md-6 mb-4 mb-lg-0">
+								   <h6>Información de pago</h6>
+								   <span>PayPal</span>
 							   </div>
 
 						   </div>
 					   </div>
-					   <!-- card body -->
-					   <div class="card-body p-0">
-
-						   <!-- table responsive -->
-						   <div class="table-responsive text-center">
-							   <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
-								   <thead class="bg-light">
-								   <tr>
-
-									   <th></th>
-									   <th>Nombre</th>
-									   <th>Apellido</th>
-									   <th>Correo</th>
-									   <th>Distrito</th>
-									   <th></th>
-								   </tr>
-								   </thead>
-								   <tbody>
-								   <tr th:each="usuarioAsignado: ${listaUsuariosAsignados}">
-									   <td>
-										   <a ><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
-
-									   <td th:text="${usuarioAsignado.nombre}"></td>
-									   <td th:text="${usuarioAsignado.apellidoPaterno} + ' ' + ${usuarioAsignado.apellidoMaterno}"></td>
-									   <td th:text="${usuarioAsignado.email}"></td>
-									   <td th:text="${usuarioAsignado.distrito.nombre}"></td>
-									   <td>
-										   <div class="dropdown">
-											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												   <i class="feather-icon icon-more-vertical fs-5"></i>
-											   </a>
-											   <ul class="dropdown-menu">
-												   <li>
-													   <a class="dropdown-item banearUsuario btn"
-														  href="javascript:void(0);"
-														  th:attr="data-id=${usuarioAsignado.id}, data-nombre=${usuarioAsignado.nombre}"
-														  data-bs-toggle="tooltip"
-														  data-bs-placement="bottom">
-														   <i class="bi bi-person-fill-slash me-3"></i> Banear
-													   </a>
-												   </li>
-
-												   <li>
-													   <a class="dropdown-item"
-														  th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${usuarioAsignado.id} }">
-														   <i class="bi bi-cart-check me-3"></i>Ver órdenes
-													   </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" th:href="@{/Agente/Chat}"><i class="bi bi-wechat me-3"></i>Chat </a>
-												   </li>
-												   <li>
-													   <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#modal2" ><i class="bi bi-person-fill me-3"></i>Ver perfil </a>
-												   </li>
-											   </ul>
-										   </div>
-									   </td>
-								   </tr>
-
-
-
-								   </tbody>
-							   </table>
-						   </div>
-					   </div>
-					   <div class="border-top d-md-flex justify-content-between align-items-center p-6">
-						   <span> </span>
-						   <nav class="mt-2 mt-md-0">
-							   <ul class="pagination mb-0">
-								   <li class="page-item disabled"><a class="page-link" href="#!">Anterior</a></li>
-								   <li class="page-item"><a class="page-link active" href="#!">1</a></li>
-								   <li class="page-item"><a class="page-link" href="#!">2</a></li>
-								   <li class="page-item"><a class="page-link" href="#!">3</a></li>
-								   <li class="page-item"><a class="page-link" href="#!">Siguiente</a></li>
-							   </ul>
-						   </nav>
-					   </div>
 				   </div>
 			   </div>
 		   </div>
 	   </div>
-
-
-
-	   <!-- Modal: PERFIL DE USUARIO -->
-	   <div class="modal fade " id="modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		   <div class="modal-dialog modal-dialog-centered " role="document">
-			   <div class="modal-content">
-
-				   <div class="modal-body">
-
-					   <div class="text-center position-relative">
-
-						   <a href="#!">
-							   <img th:src="@{/images/avatar/avatar-4.jpg}"
-									alt="Imagen del agente"
-									class="mt-3 mb-3 img-fluid" style="border-radius: 8px; height: 40vh;" />
-						   </a>
-					   </div>
-					   <hr style="border: 1px solid #949494;">
-					   <div>
-						   <h1 class="text-center">
-							   <!-- Nombre completo del usuario -->
-							   Jesus alvarado
-						   </h1>
-						   <div class="text-small mb-1 text-center" >
-							   <h5  class="text-decoration-none" style="color: #696969"><small>a20211688@pucp.edu.pe</small></h5>
-							   <h5  class="text-decoration-none" style="color: #696969"><small>Total gastado: S/. 1100.00</small></h5>
-							   <h5  class="text-decoration-none" style="color: #696969"><small>Total de órdenes: 5</small></h5>
-
-						   </div>
-					   </div>
-
-
-				   </div>
-
-				   <div class="modal-footer">
-						<a href="ordenesDeUsuario.html"><button type="button" class="btn btn-primary" >Ver órdenes</button></a>
-					   <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
-
-				   </div>
-			   </div>
-		   </div>
-	   </div>
-	   <!--POP UP BANEAR USUARIOS-->
+	   <!--POP UP ELIMINAR ORDEN-->
 	   <script>
-		   document.querySelectorAll('.banearUsuario').forEach(button => {
+		   document.querySelectorAll('.eliminarOrden').forEach(button => {
 			   button.addEventListener('click', function() {
-				   // Obtenemos el ID y nombre del usuario
-				   const userId = this.getAttribute('data-id');
-				   const userName = this.getAttribute('data-nombre');
-
-				   // SweetAlert de confirmación
 				   Swal.fire({
 					   showCloseButton: true,
-					   title: 'Confirmar',
-					   text: `¿Está seguro de que deseas banear al usuario ${userName}?`,
+					   title: 'Confirmar ',
+					   text: "¿Está seguro de que deseas eliminar esta orden?",
 					   icon: 'warning',
 					   showCancelButton: true,
-					   confirmButtonText: 'Confirmar',
+					   confirmButtonText: 'Eliminar',
 					   cancelButtonText: 'Cancelar',
 					   customClass: {
 						   popup: 'custom-popup'
 					   }
 				   }).then((result) => {
 					   if (result.isConfirmed) {
-						   // Redirigir al controlador de baneo con el ID del usuario
-						   window.location.href = `/Agente/banear?id=${userId}`;
+						   Swal.fire('Orden eliminada', 'Se ha eliminado la orden exitosamente.', 'success');
 					   }
 				   });
 			   });
 		   });
 	   </script>
 
+		<!--POP UP PARA GUARDAR/EDITAR ORDEN-->
+		<script>
+			function mostrarAlerta() {
+				Swal.fire({
+					title: "¿Estás seguro de guardar los cambios realizados?",
+					showDenyButton: true,
+					showCancelButton: true,
+					confirmButtonText: "Guardar",
+					denyButtonText: "No guardar",
+					cancelButtonText: "Cancelar",
+					buttonsStyling: false,
+					customClass: {
+						confirmButton: 'btn btn-success mx-2',  // Botón verde
+						denyButton: 'btn btn-danger mx-2',      // Botón rojo
+						cancelButton: 'btn btn-secondary mx-2'  // Botón plomo
+					}
+				}).then((result) => {
+					if (result.isConfirmed) {
+						Swal.fire("¡Guardado!", "", "success");
+					} else if (result.isDenied) {
+						Swal.fire("No se guardaron los cambios", "", "info");
+					}
+				});
+			}
+		</script>
 
-   </main>
+
+	   </main>
 
 
 
@@ -426,12 +498,7 @@
 		<script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
 		<script th:src="@{/js/vendors/sticky.js}"></script>
 		<script th:src="@{/js/vendors/modal.js}"></script>
-
 	</div>
-
-
-
-
 
    </body>
 </html>

@@ -89,12 +89,12 @@ public class AgenteController {
         List<Orden> ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        List<MontoTotalOrdenDto> monto =  ordenRepository.obtenerMontoTotalConDto(idAgente);
+        List<MontoTotalOrdenDto> listaMonto =  ordenRepository.obtenerMontoTotalConDto(idAgente);
 
         model.addAttribute("ordenesLista", ordenesLista);
         model.addAttribute("listaControlOrden",listaControlOrden);
         model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-        model.addAttribute("monto",monto);
+        model.addAttribute("listaMonto",listaMonto);
 
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
@@ -126,36 +126,42 @@ public class AgenteController {
 
 
         List<Orden> ordenesLista;
+        List<MontoTotalOrdenDto> listaMonto;
 
         if (idEstado == 0 && idControl == 0) {
             ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
+            listaMonto = ordenRepository.obtenerMontoTotalMisOrdenesYOrdenesSinAsignar(idAgente);
         }
         else if (idEstado > 0 && idControl > 0) {
             ordenesLista = ordenRepository.findOrdenesByEstadoAndControl(idEstado, idControl,idAgente);
+            listaMonto = ordenRepository.obtenerMontoTotalDeOrdenesByEstadoAndControl(idEstado, idControl,idAgente);
         }
         else if (idEstado > 0 && idControl == 0 ) {
             ordenesLista = ordenRepository.findOrdenesByEstado(idEstado,idAgente);
+            listaMonto = ordenRepository.obtenerMontoTotalDeOrdenesByEstado(idEstado,idAgente);
         }
         else if (idControl > 0&& idEstado == 0) {
             if(idControl==1){
                 ordenesLista = ordenRepository.findOrdenesSinAsignar(idControl);
+                listaMonto = ordenRepository.obtenerMontoTotalOrdenesSinAsignar(idAgente);
             }else{
                 ordenesLista = ordenRepository.findOrdenesByControl(idControl,idAgente);
+                listaMonto = ordenRepository.obtenerMontoTotalDeOrdenesByControl(idControl,idAgente);
             }
 
         } else {
             ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
+            listaMonto = ordenRepository.obtenerMontoTotalMisOrdenesYOrdenesSinAsignar(idAgente);
         }
 
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        List<MontoTotalOrdenDto> listaMontos =  ordenRepository.obtenerMontoTotalConDto(idAgente);
         model.addAttribute("ordenesLista", ordenesLista);
         model.addAttribute("listaControlOrden",listaControlOrden);
         model.addAttribute("listaEstadoOrden",listaEstadoOrden);
         model.addAttribute("idEstado",idEstado);
         model.addAttribute("idControl",idControl);
-        model.addAttribute("listaMontos",listaMontos);
+        model.addAttribute("listaMonto",listaMonto);
 
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
@@ -185,13 +191,37 @@ public class AgenteController {
         return "redirect:/Agente/Ordenes";
     }
 
+    @GetMapping({"Agente/Ordenes/DetallesOrdenSinAsignar"})
+    public String detalleOrdenSinAsignar(@RequestParam("idOrden") Integer idOrden,@RequestParam("numOrden") Integer numOrden,Model model){
+        List<Distrito> listaDistritos   = distritoRepository.findAll();
+        List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
+        List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        
+        if(ordenOpt.isPresent()){
+            model.addAttribute("orden",ordenOpt.get());
+            model.addAttribute("listaDistritos",listaDistritos);
+            model.addAttribute("numOrden",numOrden);
+            model.addAttribute("listaControlOrden",listaControlOrden);
+            model.addAttribute("listaEstadoOrden",listaEstadoOrden);
+
+
+            return "Agente/OrdenesDeUsuario/detalleOrdenSinAsignar";
+
+        }else{
+            return "Agente/Ordenes";
+        }
+
+
+    }
+
     @GetMapping({"Agente/Ordenes/Detalles"})
     public String DetalleOrden(@RequestParam("idOrden") Integer idOrden,@RequestParam("numOrden") Integer numOrden,Model model){
         List<Distrito> listaDistritos   = distritoRepository.findAll();
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
-        
+
         if(ordenOpt.isPresent()){
             model.addAttribute("orden",ordenOpt.get());
             model.addAttribute("listaDistritos",listaDistritos);
