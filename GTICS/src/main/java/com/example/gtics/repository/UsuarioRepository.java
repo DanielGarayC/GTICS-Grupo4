@@ -91,10 +91,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
 
     @Query(nativeQuery = true, value = "SELECT * FROM usuario u " +
-            "WHERE u.idRol = ?1 " +
-            "AND u.idAgente = ?2 " +
-            "AND (u.baneado IS NULL OR u.baneado = false)")
-    List<Usuario> findUsuariosFiltrados(@Param("idRol") Integer idRol, @Param("agente") Integer agente);
+            "WHERE u.idRol = 4 " +
+            "AND u.idAgente = ?1 " +
+            "AND u.baneado  =0")
+    List<Usuario> findUsuariosAsignadosAlAgente(Integer idAgente);
 
     //Banear Usuario por id
     @Transactional

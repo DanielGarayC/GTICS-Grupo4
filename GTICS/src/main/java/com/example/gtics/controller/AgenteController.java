@@ -29,7 +29,7 @@ public class AgenteController {
     EstadoOrdenRepository estadoOrdenRepository;
 
 
-    @GetMapping({"Agente", "AdminZonal/Inicio"})
+    @GetMapping({"Agente"})
     public String Inicio(){
 
         return "Agente/inicio";
@@ -43,22 +43,13 @@ public class AgenteController {
     @GetMapping({"Agente/UsuariosAsignados"})
     public String UsuariosAsignados(Model model){
 
+        //asumiendo que el agente tiene id = 13
+        Integer idAgente = 13;
+        List<Usuario> usuariosAsignados = usuarioRepository.findUsuariosAsignadosAlAgente(idAgente);
 
-        Optional<Usuario> optUsuario = usuarioRepository.findById(1);
+        model.addAttribute("listaUsuariosAsignados", usuariosAsignados);
 
-        if (optUsuario.isPresent()) {
-
-            Usuario agente = optUsuario.get();
-            // Filtrar usuarios con idRol=4, agente asignado y no baneados
-            List<Usuario> usuariosAsignados = usuarioRepository.findUsuariosFiltrados(4, 1);
-
-            model.addAttribute("listaUsuariosAsignados", usuariosAsignados);
-
-            return "Agente/UsuariosAsignados/usuariosAsignados";
-
-        }else {
-            return "redirect:/Agente";
-        }
+        return "Agente/UsuariosAsignados/usuariosAsignados";
 
     }
 
@@ -163,7 +154,8 @@ public class AgenteController {
 
 
     @GetMapping({"Agente/Ordenes/Usuario"})
-    public String OrdenesUsuario(){
+    public String OrdenesUsuario(@RequestParam("idUsuario") Integer idUsuario){
+
 
         return "Agente/OrdenesDeUsuario/ordenesDeUsuario";
     }
