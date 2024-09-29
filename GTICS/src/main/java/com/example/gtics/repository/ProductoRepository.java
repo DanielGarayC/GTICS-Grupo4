@@ -25,4 +25,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     // Consulta nativa para obtener la cantidad total de ventas
     @Query(value = "SELECT SUM(p.cantVentas) AS totalVentas FROM producto p", nativeQuery = true)
     CantidadProductos getCantidadProductos();
+
+    List<Producto> findByNombreProducto(String nombreProducto);
+
 }
