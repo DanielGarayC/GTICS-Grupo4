@@ -78,14 +78,18 @@
             </div>
 
             <!-- Profile Picture Section -->
-            <div class="col-lg-2 text-center mx-auto"> <!-- Adjust margin here -->
-                <img th:src="@{/images/avatar/avatar-1.jpg}" alt="Profile Picture" class="rounded-circle img-fluid" style="max-width: 200px;">
-                <div class="mt-3">
-                    <button class="btn btn-secondary btn-sm">Cambiar foto de perfil</button>
+            <div id="profile-container" class="col-lg-2 text-center mx-auto d-flex flex-column align-items-center">
+                <div>
+                    <!-- La imagen sigue usando th:src para que se cargue dinámicamente desde la entidad de usuario -->
+                    <img id="profileImage-1" th:src="@{/images/avatar/avatar-1.jpg}" alt="Profile Picture" class="rounded-circle img-fluid" style="max-width: 200px; height: 200px; object-fit: cover;">
                 </div>
 
-
+                <div class="file-upload btn btn-light mt-3">
+                    <input type="file" class="file-input opacity-0" id="fileInput-1" name="foto" accept="image/png, image/jpeg, image/gif" required />
+                    <span>Cambiar foto de perfil</span>
+                </div>
             </div>
+
         </div>
     </div>
 
@@ -109,5 +113,26 @@
 <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
 <script th:src="@{/js/vendors/tns-slider.js}"></script>
 <script th:src="@{/js/vendors/zoom.js}"></script>
+    <script>
+        // Seleccionar el input y la imagen específicos para este contenedor
+        const fileInput1 = document.getElementById('fileInput-1');
+        const profileImage1 = document.getElementById('profileImage-1');
+
+        // Escuchar el evento 'change' del input de archivo
+        fileInput1.addEventListener('change', function(event) {
+            const file = event.target.files[0]; // Obtener el archivo seleccionado
+
+            if (file) {
+                // Crear un objeto URL temporal para mostrar la imagen seleccionada
+                const imageUrl = URL.createObjectURL(file);
+                profileImage1.src = imageUrl; // Actualizar el src de la imagen con el nuevo archivo
+
+                // Asegurar que la imagen sigue siendo circular y mantiene el tamaño
+                profileImage1.style.objectFit = 'cover';
+                profileImage1.style.width = '200px';
+                profileImage1.style.height = '200px';
+            }
+        });
+    </script>
 </body>
 </html>
