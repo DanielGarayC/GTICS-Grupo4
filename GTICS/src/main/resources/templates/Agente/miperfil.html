@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta content="Codescandy" name="author" />
+    <title>Perfil Agente</title>
+    <link th:href="@{/libs/dropzone/dist/min/dropzone.min.css}" rel="stylesheet" />
+    <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
+    <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
+    <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
+    <!-- Favicon icon-->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}" />
+
+    <!-- Libs CSS -->
+    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet" />
+    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}" />
+    <style>
+
+        .logoImagen{
+            height: 80px;
+            width: 250px;
+        }
+        .logoImagenCelulares{
+            height: 80px;
+            width: 220px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- BARRA SUPERIOR -->
+
+    <div th:insert="~{fragments/navbarAgente.html :: barraSuperior}"></div>
+    <!-- CONTENIDO DE PÁGINA -->
+    <div class="main-wrapper">
+        <!-- navbar -->
+        <!-- navbar vertical (para pc)-->
+        <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('inicio')}"></div>
+        <!-- navbar vertical (para celular)-->
+        <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('inicio')}"></div>
+    </div>
+    <main class="py-5 mt-11">
+        <div class="container">
+            <div class="row justify-content-center g-4">
+                <!-- Formulario del perfil -->
+                <div class="col-lg-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="card-title text-center mb-4">Mi perfil</h2>
+
+                            <!-- Formulario de edición del perfil -->
+                            <form id="profileForm">
+                                <!-- Nombre Completo (no editable) -->
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre Completo</label>
+                                    <input type="text" class="form-control" th:value="${usuarioLogueado.nombre} + ' ' + ${usuarioLogueado.apellidoPaterno} + ' ' + ${usuarioLogueado.apellidoMaterno}" disabled />
+                                </div>
+
+                                <!-- DNI (no editable) -->
+                                <div class="mb-3">
+                                    <label class="form-label">DNI</label>
+                                    <input type="text" class="form-control" th:value="${usuarioLogueado.dni}" disabled />
+                                </div>
+
+                                <!-- Distrito (editable) -->
+                                <div class="mb-3">
+                                    <label class="form-label">Distrito</label>
+                                    <input type="text" class="form-control editable-field" id="distrito" th:value="${usuarioLogueado.distrito.nombre}" disabled />
+                                </div>
+
+                                <!-- Dirección (editable) -->
+                                <div class="mb-3">
+                                    <label class="form-label">Dirección</label>
+                                    <input type="text" class="form-control editable-field" id="direccion" th:value="${usuarioLogueado.direccion}" disabled />
+                                </div>
+
+                                <!-- Email (editable) -->
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control editable-field" id="email" th:value="${usuarioLogueado.email}" disabled />
+                                </div>
+
+                                <!-- Botones de acción -->
+                                <div class="text-center mt-4">
+                                    <button type="button" id="editButton" class="btn btn-primary ">Editar</button>
+                                    <button type="submit" id="saveButton" class="btn btn-primary d-none">Guardar cambios</button>
+                                    <button type="button" id="cancelButton" class="btn btn-secondary d-none">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección de la foto de perfil -->
+                <div class="col-lg-3 d-flex flex-column align-items-center">
+                    <div class="card shadow-sm p-3 text-center">
+                        <div class="mb-3">
+                            <img id="profileImage-1" th:src="@{/images/avatar/avatar-1.jpg}" alt="Profile Picture"
+                                 class="rounded-circle img-fluid" style="width: 200px; height: 200px; object-fit: cover;">
+                        </div>
+                        <div class="file-upload btn btn-light">
+                            <input type="file" class="file-input opacity-0" id="fileInput-1" name="foto"
+                                   accept="image/png, image/jpeg, image/gif" required />
+                            <span>Cambiar foto de perfil</span>
+                        </div>
+                    </div>
+
+                    <!-- Sección adicional de opciones -->
+                    <div class="card shadow-sm mt-4 p-3">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Opciones de cuenta</h5>
+
+                            <!-- Cambiar Contraseña -->
+                            <div class="d-grid mb-3">
+                                <button type="button" class="btn btn-outline-primary"
+                                        data-bs-toggle="modal" data-bs-target="#changePasswordModal">Cambiar Contraseña</button>
+                            </div>
+
+                            <!-- Eliminar Cuenta -->
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-danger">Eliminar Cuenta</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+        <!-- Modal para cambiar contraseña -->
+        <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePasswordLabel">Cambiar Contraseña</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="changePasswordForm">
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña Actual</label>
+                                <input type="password" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nueva Contraseña</label>
+                                <input type="password" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Confirmar Nueva Contraseña</label>
+                                <input type="password" class="form-control" required />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="savePasswordButton">Guardar Contraseña</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+
+
+    <!-- Javascript-->
+
+    <!-- LIBRERIAS -->
+    <div>
+        <!-- Javascript-->
+        <!-- Libs JS -->
+        <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+        <!-- Theme JS -->
+        <script th:src="@{/js/theme.min.js}"></script>
+
+        <script th:src="@{/js/vendors/jquery.min.js}"></script>
+        <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+        <script th:src="@{/js/vendors/slick-slider.js}"></script>
+        <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+        <script th:src="@{/js/vendors/tns-slider.js}"></script>
+        <script th:src="@{/js/vendors/zoom.js}"></script>
+
+        <script th:src="@{/js/vendors/countdown.js}"></script>
+        <script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
+        <script th:src="@{/js/vendors/sticky.js}"></script>
+        <script th:src="@{/js/vendors/modal.js}"></script>
+    </div>
+    <script>
+        // Seleccionar el input y la imagen específicos para este contenedor
+        const fileInput1 = document.getElementById('fileInput-1');
+        const profileImage1 = document.getElementById('profileImage-1');
+
+        // Escuchar el evento 'change' del input de archivo
+        fileInput1.addEventListener('change', function(event) {
+            const file = event.target.files[0]; // Obtener el archivo seleccionado
+
+            if (file) {
+                // Crear un objeto URL temporal para mostrar la imagen seleccionada
+                const imageUrl = URL.createObjectURL(file);
+                profileImage1.src = imageUrl; // Actualizar el src de la imagen con el nuevo archivo
+
+                // Asegurar que la imagen sigue siendo circular y mantiene el tamaño
+                profileImage1.style.objectFit = 'cover';
+                profileImage1.style.width = '200px';
+                profileImage1.style.height = '200px';
+            }
+        });
+    </script>
+    <script>
+        // Referencias a botones y campos
+        const editButton = document.getElementById('editButton');
+        const saveButton = document.getElementById('saveButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const editableFields = document.querySelectorAll('.editable-field'); // Solo campos editables
+
+        // Función para habilitar solo los campos Distrito, Dirección y Email
+        editButton.addEventListener('click', () => {
+            editableFields.forEach(field => field.disabled = false); // Habilitar solo campos editables
+            editButton.classList.add('d-none'); // Ocultar botón Editar
+            saveButton.classList.remove('d-none'); // Mostrar botón Guardar
+            cancelButton.classList.remove('d-none'); // Mostrar botón Cancelar
+        });
+
+        // Función para cancelar la edición
+        cancelButton.addEventListener('click', () => {
+            editableFields.forEach(field => field.disabled = true); // Deshabilitar campos
+            editButton.classList.remove('d-none'); // Mostrar botón Editar
+            saveButton.classList.add('d-none'); // Ocultar botón Guardar
+            cancelButton.classList.add('d-none'); // Ocultar botón Cancelar
+        });
+
+        // Validación del formulario y guardado
+        document.getElementById('profileForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevenir el envío real del formulario
+
+            // Validaciones adicionales (ej. validación de email)
+            let emailField = document.getElementById('email');
+            if (!validateEmail(emailField.value)) {
+                alert('Por favor, ingresa un email válido.');
+                return;
+            }
+
+        });
+
+        // Función para validar email
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+    </script>
+</body>
+</html>
