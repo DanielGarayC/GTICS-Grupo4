@@ -295,7 +295,10 @@
 										   <span th:case="4" class="badge bg-light-primary text-dark-primary">Resuelta</span>
 									   </td>
 
-									   <td> S/. 145.00 </td>
+									   <!-- FALTA CORREGIR PARA VER EL MONTO
+									   <td th:text="${listaMontos[var.index].montoTotal}"></td>
+										-->
+									   <td></td>
 									   <!-- si la orden ya esta asignada al agente -->
 									   <td th:if="${orden.controlOrden.id != 1}">
 										   <div class="dropdown">

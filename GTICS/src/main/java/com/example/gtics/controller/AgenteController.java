@@ -1,5 +1,6 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.dto.MontoTotalOrdenDto;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,10 +89,12 @@ public class AgenteController {
         List<Orden> ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
+        List<MontoTotalOrdenDto> monto =  ordenRepository.obtenerMontoTotalConDto(idAgente);
 
         model.addAttribute("ordenesLista", ordenesLista);
         model.addAttribute("listaControlOrden",listaControlOrden);
         model.addAttribute("listaEstadoOrden",listaEstadoOrden);
+        model.addAttribute("monto",monto);
 
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
@@ -146,11 +149,13 @@ public class AgenteController {
 
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
+        List<MontoTotalOrdenDto> listaMontos =  ordenRepository.obtenerMontoTotalConDto(idAgente);
         model.addAttribute("ordenesLista", ordenesLista);
         model.addAttribute("listaControlOrden",listaControlOrden);
         model.addAttribute("listaEstadoOrden",listaEstadoOrden);
         model.addAttribute("idEstado",idEstado);
         model.addAttribute("idControl",idControl);
+        model.addAttribute("listaMontos",listaMontos);
 
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
@@ -159,9 +164,8 @@ public class AgenteController {
 
 
     @GetMapping({"Agente/Ordenes/Usuario"})
-    public String OrdenesUsuario(@RequestParam("idUsuario") Integer idUsuario){
-
-
+    public String OrdenesUsuario(@RequestParam("idUsuario") Integer idUsuario,Model model){
+        model.addAttribute("ordenCarrito",ordenRepository.obtenerCarritoConDto(idUsuario));
         return "Agente/OrdenesDeUsuario/ordenesDeUsuario";
     }
 

@@ -228,7 +228,7 @@
 			   <!-- row -->
 			   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 g-lg-6">
 				   <!-- col -->
-				   <div class="col">
+				   <div class="col" th:each="orden,var : ${ordenCarrito}" >
 					   <!-- card -->
 					   <div class="card border-0 text-center card-lg">
 						   <div class="card-body p-6">
@@ -236,93 +236,16 @@
 								   <!-- img -->
 								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
 								   <!-- content -->
-								   <h2 class="mb-2 h5"><a th:href="@{/Agente/Ordenes/Detalles}" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
+								   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/Detalles?numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: ${var.index+1}|"></a></h2>
+								   <div class="mb-2" th:text="|Fecha: ${orden.fechaOrden}|"></div>
+								   <div class="mb-2" th:text="|Monto total: ${orden.montoTotal}|"> </div>
+								   <div class="mb-2" th:text="|Estado: ${orden.estadoOrden}|"></div>
+								   <div class="mb-2" th:text="|Control: ${orden.controlOrden}|"> </div>
 							   </div>
 						   </div>
 					   </div>
 				   </div>
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a href="#!" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a href="#!" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a href="#!" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a href="#!" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a href="#!" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
+
 				   <div class="border-top d-md-flex justify-content-between align-items-center p-6">
 					   <!-- disabled and active states -->
 					   <nav aria-label="...">
