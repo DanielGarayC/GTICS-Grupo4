@@ -6,6 +6,7 @@ import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 
 import jakarta.validation.Valid;
+import org.springframework.boot.Banner;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
@@ -291,8 +292,12 @@ public class AdminZonalController {
         return "redirect:/AdminZonal/Productos";
     }
     @GetMapping({ "AdminZonal/Perfil"})
-    public String Perfil(){
-
+    public String Perfil(Model model){
+        //Actualizar para el entregable de sesiones
+        Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(3);
+        if(OptAdminZonal.isPresent()){
+            model.addAttribute("adminZonal",OptAdminZonal.get());
+        }
         return "AdminZonal/Perfil/perfilAdminZonal";
     }
 

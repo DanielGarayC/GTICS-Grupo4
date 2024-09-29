@@ -90,9 +90,9 @@ public class Usuario {
     private String telefono;
 
     @Column(name = "dni", nullable = false, length = 45)
-    @Size(min = 8, max = 8, message = "El teléfono debe tener exactamente 8 dígitos")
+    @Size(min = 8, max = 8, message = "El dni debe tener exactamente 8 dígitos")
     @NotBlank(message = "Debe ingresar un número de dni")
-    @Pattern(regexp = "\\d+", message = "El teléfono debe contener solo dígitos")
+    @Pattern(regexp = "\\d+", message = "El dni debe contener solo dígitos")
     private String dni;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -116,7 +116,7 @@ public class Usuario {
     private Integer activo;
 
     @Column(name = "u_cantImportaciones", nullable = false, length = 45)
-    @PositiveOrZero(message = "Las importaciones no pueden ser negativas")
+    @Pattern(regexp = "\\d+", message = "Las importaciones deben contener solo números positivos")
     private String uCantimportaciones;
 
 }
