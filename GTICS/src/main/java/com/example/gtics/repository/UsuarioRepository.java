@@ -1,10 +1,7 @@
 package com.example.gtics.repository;
 
-import com.example.gtics.dto.CantUsuariosActivos;
-import com.example.gtics.dto.CantUsuariosBaneados;
+import com.example.gtics.dto.*;
 
-import com.example.gtics.dto.CantUsuariosRegistrados;
-import com.example.gtics.dto.CantidadAgentes;
 import com.example.gtics.entity.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -197,8 +194,15 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "FROM usuario u WHERE u.activo = 1 AND u.idRol = 4", nativeQuery = true)
     CantUsuariosActivos getCantidadActivos();
 
+    @Query(value = "SELECT COUNT(u.idusuario) as cantUsuariosActivos " +
+            "FROM usuario u WHERE u.activo = 1 AND u.idRol = 4 and u.idZona =?1", nativeQuery = true)
+    CantUsuariosActivos getCantidadActivosZona(int idZona);
+
     @Query(value = "SELECT COUNT(u.idusuario) as cantUsuariosRegistrados FROM usuario u WHERE u.idRol = 4", nativeQuery = true)
     CantUsuariosRegistrados getCantidadRegistrados();
+
+    @Query(value = "SELECT COUNT(u.idusuario) as cantUsuariosRegistrados FROM usuario u WHERE u.idRol = 4 and u.idZona =?1", nativeQuery = true)
+    CantUsuariosRegistrados getCantidadRegistradosZona(int idZona);
 
     @Query(value = "SELECT COUNT(u.idusuario) as cantAgentes FROM usuario u WHERE u.idRol = 3", nativeQuery = true)
     CantidadAgentes getCantidadAgentes();
@@ -210,5 +214,45 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     void asignarSolictudAusuario(int idSolicitud,int idUsuario);
 
     @Query(value = "SELECT * FROM usuario WHERE idusuario = :idUsuario", nativeQuery = true)
-    Usuario findUsuarioById(@Param("idUsuario") Integer idUsuario);
+    Usuario findUsuarioById(@Param("idUsuario") int idUsuario);
+
+    @Query(value = "SELECT usuario.*,\n" +
+            "       (SELECT SUM(CAST(u2.u_cantImportaciones AS UNSIGNED))\n" +
+            "        FROM (SELECT u_cantImportaciones\n" +
+            "              FROM usuario\n" +
+            "              WHERE usuario.idRol = 4\n" +
+            "              ORDER BY CAST(usuario.u_cantImportaciones AS UNSIGNED) DESC\n" +
+            "              LIMIT 10) AS u2) AS totalImportaciones\n" +
+            "FROM usuario\n" +
+            "WHERE usuario.idRol = 4\n" +
+            "ORDER BY CAST(usuario.u_cantImportaciones AS UNSIGNED) DESC\n" +
+            "LIMIT 10", nativeQuery = true)
+    List<UsuarioImportante> getTopImportadores(); //para los top importadores
+
+    @Query(value="SELECT u.*,\n" +
+            "                   (SELECT COUNT(*)\n" +
+            "                    FROM usuario u2\n" +
+            "                    WHERE u2.idRol = 4\n" +
+            "                      AND u2.idAgente = u.idUsuario) AS cantidadUsuarios,\n" +
+            "                   (SELECT COUNT(*)\n" +
+            "                    FROM orden o\n" +
+            "                    WHERE o.idAgente = u.idUsuario) AS cantidadOrdenes\n" +
+            "            FROM usuario u where activo = 1 and\n" +
+            "             u.idAdminZonal = ?1", nativeQuery = true)
+    List<Agente> findAgentesByAdminZonal(int idAdminZonal);
+
+    @Query(value="SELECT COUNT(*) AS totalEntradas\n" +
+            "FROM (\n" +
+            "         SELECT u.*,\n" +
+            "                (SELECT COUNT(*)\n" +
+            "                 FROM usuario u2\n" +
+            "                 WHERE u2.idRol = 4\n" +
+            "                   AND u2.idAgente = u.idUsuario) AS cantidadUsuarios,\n" +
+            "                (SELECT COUNT(*)\n" +
+            "                 FROM orden o\n" +
+            "                 WHERE o.idAgente = u.idUsuario) AS cantidadOrdenes\n" +
+            "         FROM usuario u\n" +
+            "         WHERE u.idAdminZonal = ?1 and activo = 1\n" +
+            "     ) AS subquery", nativeQuery = true)
+    Integer cantAgentesByAZ(int idAdminZonal);
 }

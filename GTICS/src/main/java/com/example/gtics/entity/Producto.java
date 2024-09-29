@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Entity
@@ -48,8 +50,8 @@ public class Producto {
     @Column(name = "cantVentas", nullable = false, length = 45)
     private Integer cantVentas;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idSubcategoria", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "idSubcategoria", nullable = true)
     private Subcategoria idSubcategoria;
 
     @Column(name = "borrado", nullable = false)
@@ -58,5 +60,8 @@ public class Producto {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "zona_idZona", nullable = false)
     private Zona zona;
+
+    @Column(name = "fechaArribo")
+    private LocalDate fechaArribo;
 
 }

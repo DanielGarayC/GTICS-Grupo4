@@ -87,4 +87,10 @@ public class Usuario {
     @Column(name = "contrasena", nullable = false, length = 45)
     private String contrasena;
 
+    @Column(name = "activo")
+    private Integer activo;
+
+    @Column(name = "u_cantImportaciones", nullable = false, length = 45)
+    private String uCantimportaciones;
+
 }
