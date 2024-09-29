@@ -47,7 +47,10 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idControlOrden = ?1 AND idAgente = ?2")
     List<Orden> findOrdenesByControl(Integer idControl,Integer idAgente);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idAgente = ?1 or idEstadoOrden = 1 ")
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idControlOrden = ?1 ")
+    List<Orden> findOrdenesSinAsignar(Integer idControl);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idAgente = ?1 or idControlOrden = 1 ")
     List<Orden> buscarMisOrdenesYOrdenesSinAsignar(Integer idAgente);
 
     @Transactional

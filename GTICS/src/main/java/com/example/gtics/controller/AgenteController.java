@@ -130,11 +130,16 @@ public class AgenteController {
         else if (idEstado > 0 && idControl > 0) {
             ordenesLista = ordenRepository.findOrdenesByEstadoAndControl(idEstado, idControl,idAgente);
         }
-        else if (idEstado > 0) {
+        else if (idEstado > 0 && idControl == 0 ) {
             ordenesLista = ordenRepository.findOrdenesByEstado(idEstado,idAgente);
         }
-        else if (idControl > 0) {
-            ordenesLista = ordenRepository.findOrdenesByControl(idControl,idAgente);
+        else if (idControl > 0&& idEstado == 0) {
+            if(idControl==1){
+                ordenesLista = ordenRepository.findOrdenesSinAsignar(idControl);
+            }else{
+                ordenesLista = ordenRepository.findOrdenesByControl(idControl,idAgente);
+            }
+
         } else {
             ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
         }
