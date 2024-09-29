@@ -90,7 +90,11 @@ public class AgenteController {
 
     @GetMapping({"Agente/Ordenes"})
     public String Ordenes(Model model){
-        List<Orden> ordenesLista = ordenRepository.findAll();
+
+        //Asumiendo que somos el agente con id 13 (esto se cambiará luego con login y session)
+        Integer idAgente = 13;
+
+        List<Orden> ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
 
@@ -101,26 +105,47 @@ public class AgenteController {
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
 
+
+    @GetMapping({"/Agente/Ordenes/AsignarOrden"})
+    public String AutoAsignarOrden(Model model,@RequestParam("idOrden") Integer idOrden,RedirectAttributes attr ){
+        //Asumiendo que somos el agente con id 13 (esto se cambiará luego con login y session)
+        Integer idAgente = 13;
+
+        try{
+            ordenRepository.autoAsignarOrden(idAgente,idOrden);
+            attr.addFlashAttribute("msg","Se ha autoasignado la orden con éxito");
+        }catch (Exception e){
+            attr.addFlashAttribute("msg","No se pudo autoasignar la orden");
+        }
+
+
+        return "redirect:/Agente/Ordenes";
+    }
+
+
     @PostMapping({"Agente/OrdenesPost"})
     public String OrdenesFiltro(Model model,
                                 @RequestParam(value = "idEstado", defaultValue = "0") Integer idEstado,
                                 @RequestParam(value = "idControl", defaultValue = "0") Integer idControl) {
+        //Asumiendo que somos el agente con id 13 (esto se cambiará luego con login y session)
+        Integer idAgente = 13;
+
 
         List<Orden> ordenesLista;
 
         if (idEstado == 0 && idControl == 0) {
-            ordenesLista = ordenRepository.findAll();
+            ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
         }
         else if (idEstado > 0 && idControl > 0) {
-            ordenesLista = ordenRepository.findOrdenesByEstadoAndControl(idEstado, idControl);
+            ordenesLista = ordenRepository.findOrdenesByEstadoAndControl(idEstado, idControl,idAgente);
         }
         else if (idEstado > 0) {
-            ordenesLista = ordenRepository.findOrdenesByEstado(idEstado);
+            ordenesLista = ordenRepository.findOrdenesByEstado(idEstado,idAgente);
         }
         else if (idControl > 0) {
-            ordenesLista = ordenRepository.findOrdenesByControl(idControl);
+            ordenesLista = ordenRepository.findOrdenesByControl(idControl,idAgente);
         } else {
-            ordenesLista = ordenRepository.findAll();
+            ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
         }
 
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
@@ -135,26 +160,6 @@ public class AgenteController {
     }
 
 
-/*
-    @GetMapping("/Agente/Ordenes/Usuario/Lista")
-    public String verOrdenesPorUsuario(@RequestParam("id") Integer idUsuario,
-                                       Model model) {
-
-        Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
-
-        if (optUsuario.isPresent()) {
-            Usuario usuario = optUsuario.get();
-            List<Orden> ordenes = ordenRepository.findByUsuarioId(idUsuario);
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("ordenes", ordenes);
-            return "Agente/OrdenesDeUsuario/ordenesDeUsuarioLista";
-
-        }else {
-            return "redirect:/Agente/UsuariosAsignados";
-        }
-
-    }
-*/
 
 
     @GetMapping({"Agente/Ordenes/Usuario"})
@@ -166,10 +171,10 @@ public class AgenteController {
 
     @PostMapping({"/Agente/Orden/editarOrden"})
     public String editarOrden(Orden orden,RedirectAttributes attr){
-        ordenRepository.save(orden);
-        attr.addFlashAttribute("msg", "Se actualizó exitosamente");
-        try {
 
+        try {
+            ordenRepository.save(orden);
+            attr.addFlashAttribute("msg", "La orden se ha actualizado exitosamente");
 
         }catch (Exception e){
             attr.addFlashAttribute("msg", "no se pudo actualizar");
