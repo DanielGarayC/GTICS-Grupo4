@@ -171,11 +171,26 @@ public class AgenteController {
     @GetMapping({"Agente/Ordenes/Usuario"})
     public String OrdenesUsuario(@RequestParam("idUsuario") Integer idUsuario,Model model){
         List<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoConDto(idUsuario);
+        Optional<Usuario> usr = usuarioRepository.findById(idUsuario);
         if (ordenCarrito == null) {
             ordenCarrito = new ArrayList<>();
         }
         model.addAttribute("ordenCarrito",ordenCarrito);
+        model.addAttribute("usuario",usr.get());
         return "Agente/OrdenesDeUsuario/ordenesDeUsuario";
+    }
+
+    @GetMapping({"Agente/Ordenes/Usuario/Lista"})
+    public String OrdenesUsuarioLista(@RequestParam("idUsuario") Integer idUsuario,Model model){
+        List<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoConDto(idUsuario);
+        Optional<Usuario> usr = usuarioRepository.findById(idUsuario);
+
+        if (ordenCarrito == null) {
+            ordenCarrito = new ArrayList<>();
+        }
+        model.addAttribute("ordenCarrito",ordenCarrito);
+        model.addAttribute("usuario",usr.get());
+        return "Agente/OrdenesDeUsuario/ordenesDeUsuarioLista";
     }
 
 
