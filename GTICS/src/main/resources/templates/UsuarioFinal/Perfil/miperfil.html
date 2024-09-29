@@ -37,68 +37,132 @@
         </div>
     </div>
 
-<main>
-    <div class="container">
-        <div class="row d-flex justify-content-center align-items-center g-4"> <!-- Use gap between columns -->
-            <div class="col-lg-5 mx-auto"> <!-- Centered column -->
-                <h2 class="mb-3 text-center">Mi perfil</h2> <!-- Adjusted margin and centered -->
-                <h6 class="mb-4 text-center">Detalles de mi cuenta</h6>
-                <!-- form -->
-                <form>
-                    <!-- input -->
-                    <div class="mb-3">
-                        <label class="form-label">Nombre Completo</label>
-                        <input type="text" class="form-control"  th:value="${usuario.nombre} + ' ' + ${usuario.apellidoPaterno} + ' ' + ${usuario.apellidoMaterno}" disabled />
-                    </div>
-                    <!-- input -->
-                    <div class="mb-3">
-                        <label class="form-label">DNI</label>
-                        <input type="text" class="form-control" th:value="${usuario.dni}" disabled />
-                    </div>
-                    <!-- input -->
-                    <div class="mb-3">
-                        <label class="form-label">Distrito</label>
-                        <input type="text" class="form-control" th:value="${usuario.distrito.nombre}" disabled />
-                    </div>
-                    <!-- input -->
-                    <div class="mb-3">
-                        <label class="form-label">Dirección</label>
-                        <input type="text" class="form-control" th:value="${usuario.direccion}" disabled />
-                    </div>
-                    <!-- input -->
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" th:value="${usuario.email}" disabled />
-                    </div>
-                    <!-- button -->
-                    <div class="mb-3 text-center">
-                        <button class="btn btn-primary">Editar información</button>
-                    </div>
-                </form>
-            </div>
+    <main class="py-5">
+        <div class="container">
+            <div class="row justify-content-center g-4">
 
-            <!-- Profile Picture Section -->
-            <div id="profile-container" class="col-lg-2 text-center mx-auto d-flex flex-column align-items-center">
-                <div>
-                    <!-- La imagen sigue usando th:src para que se cargue dinámicamente desde la entidad de usuario -->
-                    <img id="profileImage-1" th:src="@{/images/avatar/avatar-1.jpg}" alt="Profile Picture" class="rounded-circle img-fluid" style="max-width: 200px; height: 200px; object-fit: cover;">
+                <!-- Formulario del perfil -->
+                <div class="col-lg-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="card-title text-center mb-4">Mi perfil</h2>
+
+                            <!-- Formulario de edición del perfil -->
+                            <form id="profileForm">
+                                <!-- Nombre Completo (no editable) -->
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre Completo</label>
+                                    <input type="text" class="form-control" th:value="${usuario.nombre} + ' ' + ${usuario.apellidoPaterno} + ' ' + ${usuario.apellidoMaterno}" disabled />
+                                </div>
+
+                                <!-- DNI (no editable) -->
+                                <div class="mb-3">
+                                    <label class="form-label">DNI</label>
+                                    <input type="text" class="form-control" th:value="${usuario.dni}" disabled />
+                                </div>
+
+                                <!-- Distrito (editable) -->
+                                <div class="mb-3">
+                                    <label class="form-label">Distrito</label>
+                                    <input type="text" class="form-control editable-field" id="distrito" th:value="${usuario.distrito.nombre}" disabled />
+                                </div>
+
+                                <!-- Dirección (editable) -->
+                                <div class="mb-3">
+                                    <label class="form-label">Dirección</label>
+                                    <input type="text" class="form-control editable-field" id="direccion" th:value="${usuario.direccion}" disabled />
+                                </div>
+
+                                <!-- Email (editable) -->
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control editable-field" id="email" th:value="${usuario.email}" disabled />
+                                </div>
+
+                                <!-- Botones de acción -->
+                                <div class="text-center mt-4">
+                                    <button type="button" id="editButton" class="btn btn-primary ">Editar</button>
+                                    <button type="submit" id="saveButton" class="btn btn-primary d-none">Guardar cambios</button>
+                                    <button type="button" id="cancelButton" class="btn btn-secondary d-none">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección de la foto de perfil -->
+                <div class="col-lg-3 d-flex flex-column align-items-center">
+                    <div class="card shadow-sm p-3 text-center">
+                        <div class="mb-3">
+                            <img id="profileImage-1" th:src="@{/images/avatar/avatar-1.jpg}" alt="Profile Picture"
+                                 class="rounded-circle img-fluid" style="width: 200px; height: 200px; object-fit: cover;">
+                        </div>
+                        <div class="file-upload btn btn-light">
+                            <input type="file" class="file-input opacity-0" id="fileInput-1" name="foto"
+                                   accept="image/png, image/jpeg, image/gif" required />
+                            <span>Cambiar foto de perfil</span>
+                        </div>
+                    </div>
+
+                    <!-- Sección adicional de opciones -->
+                    <div class="card shadow-sm mt-4 p-3">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Opciones de cuenta</h5>
+
+                            <!-- Cambiar Contraseña -->
+                            <div class="d-grid mb-3">
+                                <button type="button" class="btn btn-outline-primary"
+                                        data-bs-toggle="modal" data-bs-target="#changePasswordModal">Cambiar Contraseña</button>
+                            </div>
+
+                            <!-- Eliminar Cuenta -->
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-danger">Eliminar Cuenta</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
-
-                <div class="file-upload btn btn-light mt-3">
-                    <input type="file" class="file-input opacity-0" id="fileInput-1" name="foto" accept="image/png, image/jpeg, image/gif" required />
-                    <span>Cambiar foto de perfil</span>
-                </div>
             </div>
-
         </div>
-    </div>
+        <!-- Modal para cambiar contraseña -->
+        <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePasswordLabel">Cambiar Contraseña</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="changePasswordForm">
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña Actual</label>
+                                <input type="password" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nueva Contraseña</label>
+                                <input type="password" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Confirmar Nueva Contraseña</label>
+                                <input type="password" class="form-control" required />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="savePasswordButton">Guardar Contraseña</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-</main>
+    </main>
 
-<!-- Javascript-->
+
+    <!-- Javascript-->
 
 <!-- Libs JS -->
 <!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
@@ -135,6 +199,48 @@
                 profileImage1.style.height = '200px';
             }
         });
+    </script>
+    <script>
+        // Referencias a botones y campos
+        const editButton = document.getElementById('editButton');
+        const saveButton = document.getElementById('saveButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const editableFields = document.querySelectorAll('.editable-field'); // Solo campos editables
+
+        // Función para habilitar solo los campos Distrito, Dirección y Email
+        editButton.addEventListener('click', () => {
+            editableFields.forEach(field => field.disabled = false); // Habilitar solo campos editables
+            editButton.classList.add('d-none'); // Ocultar botón Editar
+            saveButton.classList.remove('d-none'); // Mostrar botón Guardar
+            cancelButton.classList.remove('d-none'); // Mostrar botón Cancelar
+        });
+
+        // Función para cancelar la edición
+        cancelButton.addEventListener('click', () => {
+            editableFields.forEach(field => field.disabled = true); // Deshabilitar campos
+            editButton.classList.remove('d-none'); // Mostrar botón Editar
+            saveButton.classList.add('d-none'); // Ocultar botón Guardar
+            cancelButton.classList.add('d-none'); // Ocultar botón Cancelar
+        });
+
+        // Validación del formulario y guardado
+        document.getElementById('profileForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevenir el envío real del formulario
+
+            // Validaciones adicionales (ej. validación de email)
+            let emailField = document.getElementById('email');
+            if (!validateEmail(emailField.value)) {
+                alert('Por favor, ingresa un email válido.');
+                return;
+            }
+
+        });
+
+        // Función para validar email
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
     </script>
 </body>
 </html>
