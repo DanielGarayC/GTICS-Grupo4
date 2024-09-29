@@ -4,7 +4,9 @@ package com.example.gtics.repository;
 import com.example.gtics.dto.FindCantOrdenesPorEstado;
 import com.example.gtics.dto.FindCantOrdenesPorMes;
 import com.example.gtics.entity.Orden;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -36,12 +38,22 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "GROUP BY eo.nombreEstado;", nativeQuery = true)
     List<FindCantOrdenesPorEstado> getOrdenesEstado();
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idEstadoOrden = ?1 AND idControlOrden = ?2")
-    List<Orden> findOrdenesByEstadoAndControl(Integer idEstado, Integer idControl);
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idEstadoOrden = ?1 AND idControlOrden = ?2 AND idAgente = ?3")
+    List<Orden> findOrdenesByEstadoAndControl(Integer idEstado, Integer idControl,Integer idAgente);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idEstadoOrden = ?1")
-    List<Orden> findOrdenesByEstado(Integer idEstado);
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idEstadoOrden = ?1 AND idAgente = ?2")
+    List<Orden> findOrdenesByEstado(Integer idEstado,Integer idAgente);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idControlOrden = ?1")
-    List<Orden> findOrdenesByControl(Integer idControl);
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idControlOrden = ?1 AND idAgente = ?2")
+    List<Orden> findOrdenesByControl(Integer idControl,Integer idAgente);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idAgente = ?1 or idEstadoOrden = 1 ")
+    List<Orden> buscarMisOrdenesYOrdenesSinAsignar(Integer idAgente);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE orden\n" +
+            "SET idControlOrden = 2, idAgente = ?1\n" +
+            "WHERE idOrden = ?2;\n",nativeQuery = true)
+    void autoAsignarOrden(Integer idAgente,Integer idOrden);
 }

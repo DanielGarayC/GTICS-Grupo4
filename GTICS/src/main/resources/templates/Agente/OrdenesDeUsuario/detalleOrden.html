@@ -197,10 +197,10 @@
 
 	   <!-- navbar -->
 	   <!-- navbar vertical (para pc)-->
-	   <div th:insert="fragments/navbarAgente.html :: navbarVerticalPc('ordenes')"></div>
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('ordenes')}"></div>
 
 	   <!-- navbar vertical (para celular)-->
-	   <div th:insert="fragments/navbarAgente.html :: navbarVerticalCelulares('ordenes')"></div>
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('ordenes')}"></div>
 
 
 
@@ -243,6 +243,7 @@
 
 								   <input type="hidden" th:field="${orden.id}">
 								   <input type="hidden" th:name="idCarritoCompra" th:value="${orden.idCarritoCompra.id}">
+								   <input type="hidden" th:name="idAgente" th:value="${orden.idAgente.id}">
 
 								   <div th:switch="${orden.controlOrden.id}">
 									   <span th:case="1" class="badge bg-light-danger text-dark-danger ms-2">Sin asignar</span>
@@ -254,14 +255,14 @@
 							   <!-- select option -->
 							   <div class="d-md-flex">
 								   <div class="mb-2 mb-md-0">
-									   <select class="form-select" style="cursor: pointer;" name="controlOrden">
-										   <option th:each="control : ${listaControlOrden}" th:text="${control.nombreControl}" th:value="${control.id}" th:selected="${control.id == orden.controlOrden.id }"></option>
+									   <select class="form-select" style="cursor: pointer;" name="estadoorden">
+										   <option th:each="estado : ${listaEstadoOrden}" th:text="${estado.nombreEstado}" th:value="${estado.id}" th:selected="${estado.id == orden.estadoorden.id }"></option>
 									   </select>
 								   </div>
 								<div class="mb-2 mb-md-0">
-									<select class="form-select" style="cursor: pointer;" name="estadoorden">
-										<option th:each="estado : ${listaEstadoOrden}" th:text="${estado.nombreEstado}" th:value="${estado.id}" th:selected="${estado.id == orden.estadoorden.id }"></option>
-									</select>
+										<select class="form-select" style="cursor: pointer;" name="controlOrden">
+											<option th:each="control : ${listaControlOrden}" th:text="${control.nombreControl}" th:value="${control.id}" th:selected="${control.id == orden.controlOrden.id }"></option>
+										</select>
 								</div>
 								   <!-- button -->
 								   <div class="ms-md-3">
