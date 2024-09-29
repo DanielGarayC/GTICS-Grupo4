@@ -180,7 +180,7 @@
 
 			 <!-- COONTENIDO DE LA PAGINA -->
             <main class="main-content-wrapper">
-				<form action="/AdminZonal/Agentes/Guardar" method="POST" class="needs-validation" novalidate>
+				<form th:action="@{/AdminZonal/Agentes/Guardar}" method="POST" th:object="${agente}" class="needs-validation" novalidate>
 					<div class="container">
 						<!-- row -->
 						<div class="row mb-8">
@@ -199,7 +199,7 @@
 						</div>
 
 						<div class="row">
-							<div class="col-lg-12 col-12">
+							<div class=" col-12">
 								<!-- card -->
 								<div class="card mb-6 shadow border-0">
 
@@ -207,60 +207,60 @@
 									<!-- card body -->
 									<div class="row">
 
-											<!-- input Nombres -->
-											<div class="mb-3 col-lg-4">
+											<!-- Nombres -->
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Nombres:</label>
-												<input type="text" class="form-control" name="nombre" required />
-												<div class="invalid-feedback">El nombre es obligatorio.</div>
+												<input type="text" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}"  />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
 											</div>
 
 											<!-- input apellido paterno -->
-											<div class="mb-3 col-lg-4">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Apellido Paterno:</label>
-												<input type="text" class="form-control" name="apellidoPaterno" required />
-												<div class="invalid-feedback">El apellido paterno es obligatorio.</div>
+												<input type="text" class="form-control" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}"  />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}" ></div>
 											</div>
 
 											<!-- input Apellido Materno -->
-											<div class="mb-3 col-lg-4">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Apellido Materno:</label>
-												<input type="text" class="form-control" name="apellidoMaterno" required />
-												<div class="invalid-feedback">El apellido materno es obligatorio.</div>
+												<input type="text" class="form-control" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}"  />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}" ></div>
 											</div>
 
 											<!-- input DNI -->
-											<div class="mb-3 col-lg-6">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">DNI:</label>
-												<input type="text" class="form-control" name="dni" required maxlength="10" />
-												<div class="invalid-feedback">El DNI debe ser numérico y tener hasta 10 dígitos.</div>
+												<input type="text" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}"/>
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" ></div>
 											</div>
 
 											<!-- input Teléfono -->
-											<div class="mb-3 col-lg-6">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Teléfono:</label>
-												<input type="text" class="form-control" name="telefono" required maxlength="10" />
-												<div class="invalid-feedback">El teléfono debe ser numérico y tener hasta 10 dígitos.</div>
+												<input type="text" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" ></div>
 											</div>
 
 											<!-- input Correo electrónico -->
-											<div class="mb-3 col-lg-12">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Correo electrónico:</label>
-												<input type="email" class="form-control" name="email" required />
-												<div class="invalid-feedback">El correo electrónico es obligatorio y debe tener un formato válido.</div>
+												<input type="email" class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" ></div>
 											</div>
 
 											<!-- input Dirección -->
-											<div class="mb-3 col-lg-12">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Dirección:</label>
-												<input type="text" class="form-control" name="direccion" required />
-												<div class="invalid-feedback">La dirección es obligatoria.</div>
+												<input type="text" class="form-control" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid' :  ''}" />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" ></div>
 											</div>
 
 											<!-- input Distrito -->
-											<div class="mb-3 col-lg-6">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Distrito:</label>
-												<select class="form-select" name="distritoId" id="distritoSelect" required onchange="actualizarCodigoJurisdiccion()">
-													<option selected disabled>---Seleccione un distrito---</option>
+												<select class="form-select" th:field="*{distrito.id}" id="distritoSelect" required onchange="actualizarCodigoJurisdiccion()">
+													<option value="" selected disabled>---Seleccione un distrito---</option>
 													<th:block th:each="distrito : ${distritos}">
 														<option th:value="${distrito.id}" th:data-codigo="${distrito.codigosJurisdiccion}" th:text="${distrito.nombre}"></option>
 													</th:block>
@@ -269,40 +269,40 @@
 											</div>
 
 											<!-- input Código de Jurisdicción -->
-											<div class="mb-3 col-lg-6">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Código de Jurisdicción:</label>
-												<input type="text" class="form-control" name="codigoJurisdiccion" id="codigoJurisdiccion" readonly required />
-												<div class="invalid-feedback">El código de jurisdicción es obligatorio.</div>
+												<input type="text" class="form-control" th:field="*{agtCodigojurisdiccion}" id="codigoJurisdiccion" th:classappend="${#fields.hasErrors('agtCodigojurisdiccion')?'is-invalid':''}" readonly/>
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('agtCodigojurisdiccion')}" th:errors="*{agtCodigojurisdiccion}" ></div>
 											</div>
 
 											<!-- input Zona (deshabilitado porque se asigna automáticamente) -->
-											<div class="mb-3 col-lg-6">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Zona:</label>
 												<input type="text" class="form-control" th:value="${adminzonal.zona.nombreZona}" disabled />
 											</div>
 
 											<!-- input Razón social -->
-											<div class="mb-3 col-lg-6">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Razón social (opcional):</label>
-												<input type="text" class="form-control" name="razonSocial" />
+												<input type="text" class="form-control" th:field="*{agtRazonsocial}" />
 											</div>
 
 											<!-- input Código Aduanero -->
-											<div class="mb-3 col-lg-6">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">Código Aduanero:</label>
-												<input type="text" class="form-control" name="codigoAduana" required />
-												<div class="invalid-feedback">El código aduanero es obligatorio.</div>
+												<input type="text" class="form-control" th:field="*{agtCodigoaduana}" th:classappend="${#fields.hasErrors('agtCodigoaduana')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('agtCodigoaduana')}" th:errors="*{agtCodigoaduana}" ></div>
 											</div>
 
 											<!-- input RUC -->
-											<div class="mb-3 col-lg-6">
+											<div class="col-lg-6 col-12">
 												<label class="form-label">RUC:</label>
-												<input type="text" class="form-control" name="ruc" required />
-												<div class="invalid-feedback">El RUC es obligatorio.</div>
+												<input type="text" class="form-control" th:field="*{agtRuc}" th:classappend="${#fields.hasErrors('agtRuc')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('agtRuc')}" th:errors="*{agtRuc}" ></div>
 											</div>
 
 											<!-- Botones -->
-											<div class="col-lg-12">
+											<div class="col-12 mt-3">
 												<button type="submit" class="btn btn-success mb-2">Crear Agente</button>
 												<a th:href="@{/AdminZonal/Agentes}" class="btn btn-danger mb-2">Cancelar</a>
 											</div>
@@ -330,7 +330,8 @@
 	   <script>
 		   function actualizarCodigoJurisdiccion() {
 			   var select = document.getElementById("distritoSelect");
-			   var codigoJurisdiccion = select.options[select.selectedIndex].getAttribute("data-codigo");
+			   var selectedOption = select.options[select.selectedIndex];
+			   var codigoJurisdiccion = selectedOption.getAttribute("data-codigo");
 			   document.getElementById("codigoJurisdiccion").value = codigoJurisdiccion;
 		   }
 	   </script>
