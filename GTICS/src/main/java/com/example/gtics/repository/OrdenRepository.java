@@ -35,4 +35,13 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "         LEFT JOIN orden o ON eo.idEstadoOrden = o.idEstadoOrden\n" +
             "GROUP BY eo.nombreEstado;", nativeQuery = true)
     List<FindCantOrdenesPorEstado> getOrdenesEstado();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idEstadoOrden = ?1 AND idControlOrden = ?2")
+    List<Orden> findOrdenesByEstadoAndControl(Integer idEstado, Integer idControl);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idEstadoOrden = ?1")
+    List<Orden> findOrdenesByEstado(Integer idEstado);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idControlOrden = ?1")
+    List<Orden> findOrdenesByControl(Integer idControl);
 }

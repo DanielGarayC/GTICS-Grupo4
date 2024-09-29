@@ -91,11 +91,50 @@ public class AgenteController {
     @GetMapping({"Agente/Ordenes"})
     public String Ordenes(Model model){
         List<Orden> ordenesLista = ordenRepository.findAll();
-        model.addAttribute("ordenesLista", ordenesLista);
+        List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
+        List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
 
+        model.addAttribute("ordenesLista", ordenesLista);
+        model.addAttribute("listaControlOrden",listaControlOrden);
+        model.addAttribute("listaEstadoOrden",listaEstadoOrden);
 
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
+
+    @PostMapping({"Agente/OrdenesPost"})
+    public String OrdenesFiltro(Model model,
+                                @RequestParam(value = "idEstado", defaultValue = "0") Integer idEstado,
+                                @RequestParam(value = "idControl", defaultValue = "0") Integer idControl) {
+
+        List<Orden> ordenesLista;
+
+        if (idEstado == 0 && idControl == 0) {
+            ordenesLista = ordenRepository.findAll();
+        }
+        else if (idEstado > 0 && idControl > 0) {
+            ordenesLista = ordenRepository.findOrdenesByEstadoAndControl(idEstado, idControl);
+        }
+        else if (idEstado > 0) {
+            ordenesLista = ordenRepository.findOrdenesByEstado(idEstado);
+        }
+        else if (idControl > 0) {
+            ordenesLista = ordenRepository.findOrdenesByControl(idControl);
+        } else {
+            ordenesLista = ordenRepository.findAll();
+        }
+
+        List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
+        List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
+        model.addAttribute("ordenesLista", ordenesLista);
+        model.addAttribute("listaControlOrden",listaControlOrden);
+        model.addAttribute("listaEstadoOrden",listaEstadoOrden);
+        model.addAttribute("idEstado",idEstado);
+        model.addAttribute("idControl",idControl);
+
+        return "Agente/OrdenesDeUsuario/ordeneslista";
+    }
+
+
 /*
     @GetMapping("/Agente/Ordenes/Usuario/Lista")
     public String verOrdenesPorUsuario(@RequestParam("id") Integer idUsuario,
