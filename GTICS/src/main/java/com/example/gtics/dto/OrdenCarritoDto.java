@@ -8,4 +8,6 @@ public interface OrdenCarritoDto{
     String getEstadoOrden();
     String getControlOrden();
     Integer getIdOrden();
+    String getNombre();
+    String getApellidoPaterno();
 }

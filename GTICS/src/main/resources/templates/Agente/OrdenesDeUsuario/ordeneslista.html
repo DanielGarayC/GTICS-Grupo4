@@ -307,7 +307,7 @@
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?indicadorVistaARegresar=0&numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
 												   </li>
 												   <li>
 													<a class="dropdown-item" href="#" onclick="eliminarOrden()">
@@ -331,7 +331,7 @@
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver </a>
+													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?indicadorVistaARegresar=0&numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver </a>
 												   </li>
 												   <li>
 													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/AsignarOrden?idOrden='+ ${orden.id}}"><i class="bi bi-pencil-fill me-3"></i> Autoasignar  </a>

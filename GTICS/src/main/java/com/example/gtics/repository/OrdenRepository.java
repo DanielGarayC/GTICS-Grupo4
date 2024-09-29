@@ -63,11 +63,13 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     void autoAsignarOrden(Integer idAgente,Integer idOrden);
 
     @Query(nativeQuery = true, value = "SELECT \n" +
-            "o.idOrden, \n" +
+            "    o.idOrden, \n" +
             "    o.fechaOrden, \n" +
             "    SUM(p.precio) AS montoTotal, \n" +
             "    eo.nombreEstado AS estadoOrden, \n" +
-            "    co.nombreControl AS controlOrden\n" +
+            "    co.nombreControl AS controlOrden,\n" +
+            "    u.nombre,\n" +
+            "    u.apellidoPaterno\n" +
             "FROM usuario u\n" +
             "JOIN carritocompra c ON u.idUsuario = c.idUsuario\n" +
             "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra\n" +

@@ -195,111 +195,12 @@
 	<!-- NAVBAR  -->
    <div class="main-wrapper">
 
-	   <!-- navbar vertical (para pc)-->
 	   <!-- navbar -->
-	   <nav class="navbar-vertical-nav d-none d-xl-block">
-		   <div class="navbar-vertical">
-			   <div class="px-4 py-5">
-				   <a class="navbar-brand">
-					   <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagen " />
-				   </a>
-			   </div>
-			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-				   <ul class="navbar-nav flex-column" id="sideNavbar">
-					   <li class="nav-item">
-						   <a class="nav-link   " th:href="@{/Agente}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
-								   <span class="nav-link-text">Inicio</span>
-							   </div>
-						   </a>
-					   </li>
+	   <!-- navbar vertical (para pc)-->
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('usuariosAsignados')}"></div>
 
-
-					   <li class="nav-item">
-						   <a class="nav-link" th:href="@{/Agente/UsuariosAsignados}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
-								   <span class="nav-link-text">Usuarios asignados</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link active" th:href="@{/Agente/Ordenes}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-								   <span class="nav-link-text">Órdenes</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link" th:href="@{/Agente/Reportes/Descargar}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
-								   <span class="nav-link-text">Reportes</span>
-							   </div>
-						   </a>
-					   </li>
-
-				   </ul>
-			   </div>
-		   </div>
-	   </nav>
 	   <!-- navbar vertical (para celular)-->
-	   <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
-		   <div class="navbar-vertical">
-			   <div class="px-4 py-5 d-flex justify-content-between align-items-center">
-				   <a class="navbar-brand">
-					   <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagenCelulares"/>
-				   </a>
-				   <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-			   </div>
-			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-				   <ul class="navbar-nav flex-column">
-
-					   <li class="nav-item">
-						   <a class="nav-link active " th:href="@{/Agente}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>
-								   <span>Inicio</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link " th:href="@{/Agente/UsuariosAsignados}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
-								   <span>Usuarios asignados</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link active" th:href="@{/Agente/Ordenes}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-								   <span class="nav-link-text">Órdenes</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link " th:href="@{/Agente/Reportes/Descargar}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
-								   <span class="nav-link-text">Reportes</span>
-							   </div>
-						   </a>
-					   </li>
-
-
-				   </ul>
-			   </div>
-		   </div>
-	   </nav>
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('usuariosAsignados')}"></div>
 
 
 

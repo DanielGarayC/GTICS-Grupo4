@@ -236,7 +236,7 @@
 							   <div class="col-md-4 col-12 mb-2 mb-md-0">
 								   <!-- form -->
 								   <form class="d-flex" role="search">
-									   <input class="form-control" type="search" placeholder="Buscar por nombre, ID o apellido" aria-label="Search" />
+									   <input class="form-control" type="search" placeholder="Buscar por nombre o apellido" aria-label="Search" />
 								   </form>
 							   </div>
 
@@ -275,18 +275,18 @@
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item banearUsuario btn"
-														  href="javascript:void(0);"
+													   <a class="dropdown-item banearUsuario btn" th:href="@{'/Agente/banear?id='+ ${usuarioAsignado.id}}">
+														  <!--href="javascript:void(0);"
 														  th:attr="data-id=${usuarioAsignado.id}, data-nombre=${usuarioAsignado.nombre}"
 														  data-bs-toggle="tooltip"
-														  data-bs-placement="bottom">
+														  data-bs-placement="bottom">-->
 														   <i class="bi bi-person-fill-slash me-3"></i> Banear
 													   </a>
 												   </li>
 
 												   <li>
 													   <a class="dropdown-item"
-														  th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${usuarioAsignado.id} }">
+														  th:href="@{'/Agente/Ordenes/Usuario?indicadorVistaARegresar=1&idUsuario=' + ${usuarioAsignado.id} }">
 														   <i class="bi bi-cart-check me-3"></i>Ver órdenes
 													   </a>
 												   </li>

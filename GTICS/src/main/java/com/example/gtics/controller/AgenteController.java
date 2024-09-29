@@ -1,6 +1,7 @@
 package com.example.gtics.controller;
 
 import com.example.gtics.dto.MontoTotalOrdenDto;
+import com.example.gtics.dto.OrdenCarritoDto;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,7 @@ public class AgenteController {
     ControlOrdenRepository controlOrdenRepository;
     @Autowired
     EstadoOrdenRepository estadoOrdenRepository;
+
 
 
     @GetMapping({"Agente"})
@@ -63,11 +66,7 @@ public class AgenteController {
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
 
         if (optUsuario.isPresent()) {
-            Usuario usuario = optUsuario.get();
-
-            usuario.setBaneado((true) );
-            usuarioRepository.save(usuario);
-
+            usuarioRepository.banUsuario(id);
             redirectAttributes.addFlashAttribute("successMessage", "El usuario ha sido baneado éxitosamente.");
 
             return "redirect:/Agente/UsuariosAsignados";
@@ -171,7 +170,11 @@ public class AgenteController {
 
     @GetMapping({"Agente/Ordenes/Usuario"})
     public String OrdenesUsuario(@RequestParam("idUsuario") Integer idUsuario,Model model){
-        model.addAttribute("ordenCarrito",ordenRepository.obtenerCarritoConDto(idUsuario));
+        List<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoConDto(idUsuario);
+        if (ordenCarrito == null) {
+            ordenCarrito = new ArrayList<>();
+        }
+        model.addAttribute("ordenCarrito",ordenCarrito);
         return "Agente/OrdenesDeUsuario/ordenesDeUsuario";
     }
 
@@ -192,7 +195,7 @@ public class AgenteController {
     }
 
     @GetMapping({"Agente/Ordenes/DetallesOrdenSinAsignar"})
-    public String detalleOrdenSinAsignar(@RequestParam("idOrden") Integer idOrden,@RequestParam("numOrden") Integer numOrden,Model model){
+    public String detalleOrdenSinAsignar(@RequestParam("idOrden") Integer idOrden,@RequestParam("numOrden") Integer numOrden,Model model,@RequestParam("indicadorVistaARegresar") Integer indicadorVistaARegresar){
         List<Distrito> listaDistritos   = distritoRepository.findAll();
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
@@ -204,7 +207,7 @@ public class AgenteController {
             model.addAttribute("numOrden",numOrden);
             model.addAttribute("listaControlOrden",listaControlOrden);
             model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-
+            model.addAttribute("indicadorVistaARegresar",indicadorVistaARegresar);
 
             return "Agente/OrdenesDeUsuario/detalleOrdenSinAsignar";
 
@@ -216,7 +219,7 @@ public class AgenteController {
     }
 
     @GetMapping({"Agente/Ordenes/Detalles"})
-    public String DetalleOrden(@RequestParam("idOrden") Integer idOrden,@RequestParam("numOrden") Integer numOrden,Model model){
+    public String DetalleOrden(@RequestParam("idOrden") Integer idOrden,@RequestParam("numOrden") Integer numOrden,Model model,@RequestParam("indicadorVistaARegresar") Integer indicadorVistaARegresar){
         List<Distrito> listaDistritos   = distritoRepository.findAll();
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
@@ -228,7 +231,7 @@ public class AgenteController {
             model.addAttribute("numOrden",numOrden);
             model.addAttribute("listaControlOrden",listaControlOrden);
             model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-
+            model.addAttribute("indicadorVistaARegresar",indicadorVistaARegresar);
 
             return "Agente/OrdenesDeUsuario/detalleOrden";
 

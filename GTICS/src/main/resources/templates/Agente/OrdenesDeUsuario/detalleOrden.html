@@ -226,7 +226,13 @@
 					   </div>
 					   <!-- button -->
 					   <div>
-						   <a th:href="@{/Agente/Ordenes}" class="btn btn-primary">Regresar</a>
+						   <div th:if="${indicadorVistaARegresar == 1}"> <!--si es 1, regresa a ordenes de usuario-->
+							   <a th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${orden.idCarritoCompra.idUsuario.id}}" class="btn btn-primary">Regresar</a>
+						   </div>
+						   <div th:unless="${indicadorVistaARegresar == 1}"><!--si es 0, regresa a lista de ordenes -->
+							   <a th:href="@{/Agente/Ordenes}" class="btn btn-primary">Regresar</a>
+						   </div>
+
 					   </div>
 				   </div>
 			   </div>

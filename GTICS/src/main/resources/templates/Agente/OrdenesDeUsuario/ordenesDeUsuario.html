@@ -194,15 +194,20 @@
 					   <!-- pageheader -->
 					   <div class="d-flex justify-content-between align-items-center">
 						   <div>
-							   <h2>Órdenes del usuario: <span class="text-primary">Jesus Alvarado</span></h2>
-							   <!-- breacrumb -->
-							   <nav aria-label="breadcrumb">
-								   <ol class="breadcrumb mb-0">
-									   <li class="breadcrumb-item"><a th:href="@{/Agente}" class="text-inherit">Inicio</a></li>
-									   <li class="breadcrumb-item"><a th:href="@{/Agente/UsuariosAsignados}" class="text-inherit">Lista de usuarios</a></li>
-									   <li class="breadcrumb-item active" aria-current="page">Órdenes</li>
-								   </ol>
-							   </nav>
+							   <div th:if="${ordenCarrito.isEmpty()}">
+								   <h3>El usuario no presenta ordenes</h3>
+							   </div>
+							   <div th:unless="${ordenCarrito.isEmpty()}">
+								   <h2>Órdenes del usuario: <span class="text-primary" th:text="${ordenCarrito[0].nombre}  + ' ' + ${ordenCarrito[0].apellidoPaterno}"></span></h2>
+								   <!-- breacrumb -->
+								   <nav aria-label="breadcrumb">
+									   <ol class="breadcrumb mb-0">
+										   <li class="breadcrumb-item"><a th:href="@{/Agente}" class="text-inherit">Inicio</a></li>
+										   <li class="breadcrumb-item"><a th:href="@{/Agente/UsuariosAsignados}" class="text-inherit">Lista de usuarios</a></li>
+										   <li class="breadcrumb-item active" aria-current="page">Órdenes</li>
+									   </ol>
+								   </nav>
+							   </div>
 						   </div>
 						   <div>
 							<!-- button -->
@@ -228,19 +233,21 @@
 			   <!-- row -->
 			   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 g-lg-6">
 				   <!-- col -->
-				   <div class="col" th:each="orden,var : ${ordenCarrito}" >
+
+				   <div  th:if="${!ordenCarrito.isEmpty()}" class="col" th:each="orden,var : ${ordenCarrito}">
+
 					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
+					   <div class="card border-0 text-center card-lg" >
 						   <div class="card-body p-6">
 							   <div>
 								   <!-- img -->
 								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
 								   <!-- content -->
 								   <div th:if="${orden.controlOrden == 'Sin asignar'}">
-									   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: ${var.index+1}|"></a></h2>
+									   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: ${var.index+1}|"></a></h2>
 								   </div>
 								   <div th:unless="${orden.controlOrden == 'Sin asignar'}">
-									   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/Detalles?numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: ${var.index+1}|"></a></h2>
+									   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/Detalles?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: ${var.index+1}|"></a></h2>
 								   </div>
 
 								   <div class="mb-2" th:text="|Fecha: ${orden.fechaOrden}|"></div>
@@ -268,7 +275,6 @@
 						   </div>
 					   </div>
 				   </div>
-
 				   <div class="border-top d-md-flex justify-content-between align-items-center p-6">
 					   <!-- disabled and active states -->
 					   <nav aria-label="...">
