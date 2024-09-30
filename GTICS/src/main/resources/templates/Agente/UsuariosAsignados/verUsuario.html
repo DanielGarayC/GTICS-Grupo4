@@ -140,7 +140,8 @@
                                                     <a class="btn btn-secondary" th:href="@{/Agente/UsuariosAsignados}">Regresar</a>
 
                                                     <!-- Botón Ver órdenes -->
-                                                    <a class="btn btn-primary" th:href="@{/Agente/UsuariosAsignados}">
+                                                    <!-- Botón Ver órdenes -->
+                                                    <a class="btn btn-primary" th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${usuario.id}}">
                                                         Ver órdenes
                                                     </a>
                                                 </div>

@@ -173,13 +173,14 @@
 									   <div class="mb-6" >
 										<h6 class="mb-0 me-2"><strong>Detalles de la orden:</strong></h6>
 											   <br />
-											   <div class="d-flex align-items-center mb-3">
+											   <div class="d-flex align-items-center mb-3" style="margin-top: -17px">
 												<h6 class="mb-0 me-2">Día de entrega: </h6>
 												<input type="date" class="form-control flex-fill" name="fechaOrden" th:value="${orden.fechaOrden}" style="color: #6c757d; margin-left: 14px;" disabled>
 											</div>
-											   Total:
-										   <span th:text="'S/. ' + (${subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00)})"></span>
-										   </p>
+										   <div style="margin-top: 35px"> Total:
+
+											   <span th:text="'S/. ' + (${subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00)})"></span></div>
+
 									   </div>
 								   </div>
 							   </div>
