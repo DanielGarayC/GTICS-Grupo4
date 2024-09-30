@@ -1,10 +1,7 @@
 
 package com.example.gtics.repository;
 
-import com.example.gtics.dto.FindCantOrdenesPorEstado;
-import com.example.gtics.dto.FindCantOrdenesPorMes;
-import com.example.gtics.dto.MontoTotalOrdenDto;
-import com.example.gtics.dto.OrdenCarritoDto;
+import com.example.gtics.dto.*;
 import com.example.gtics.entity.Orden;
 import com.example.gtics.entity.Usuario;
 import jakarta.transaction.Transactional;
@@ -84,7 +81,15 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "GROUP BY o.idOrden;")
     Page <OrdenCarritoDto> obtenerCarritoConDto(Integer idUsuario, Pageable pageable);
 
-
+    @Query(value = "SELECT p.fotoProducto, p.nombreProducto, t.nombreTienda, p.modelo, p.color, phc.cantidadProducto, " +
+            "p.precio AS precioUnidad, (phc.cantidadProducto * p.precio) AS precioTotalPorProducto, p.costoEnvio " +
+            "FROM producto_has_carritocompra phc " +
+            "INNER JOIN producto p ON p.idProducto = phc.idProducto " +
+            "INNER JOIN proveedor pr ON pr.idProveedor = p.idProveedor " +
+            "INNER JOIN tienda t ON t.idTienda = pr.idTienda " +
+            "INNER JOIN orden o ON o.idCarritoCompra = phc.idCarritoCompra " +
+            "WHERE o.idOrden = :idOrden", nativeQuery = true)
+    List<ProductosxOrden> obtenerProductosPorOrden(Integer idOrden);
 
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    o.idOrden,\n" +

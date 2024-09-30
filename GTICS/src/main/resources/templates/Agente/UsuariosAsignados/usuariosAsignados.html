@@ -131,7 +131,9 @@
 								   </tr>
 								   </thead>
 								   <tbody>
-								   <tr th:each="usuarioAsignado: ${listaUsuariosAsignados}">
+
+
+									   <tr th:each="usuarioAsignado: ${listaUsuariosAsignados}">
 									   <td>
 										   <a ><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
 
@@ -157,7 +159,7 @@
 
 												   <li>
 													   <a class="dropdown-item"
-														  th:href="@{'/Agente/Ordenes/Usuario?indicadorVistaARegresar=1&idUsuario=' + ${usuarioAsignado.id} }">
+														  th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${usuarioAsignado.id} }">
 														   <i class="bi bi-cart-check me-3"></i>Ver órdenes
 													   </a>
 												   </li>

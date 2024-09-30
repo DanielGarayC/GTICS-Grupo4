@@ -114,10 +114,10 @@
 									   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
 									   <!-- content -->
 									   <div th:if="${orden.controlOrden == 'Sin asignar'}">
-										   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: ${var.index+1}|"></a></h2>
+										   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: #${var.index+1}|"></a></h2>
 									   </div>
 									   <div th:unless="${orden.controlOrden == 'Sin asignar'}">
-										   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/Detalles?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: ${var.index+1}|"></a></h2>
+										   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/Detalles?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: #${var.index+1}|"></a></h2>
 									   </div>
 									   <div class="mb-2" th:text="|Fecha: ${orden.getFechaOrden()}|"></div>
 									   <div class="mb-2" th:text="|Monto total: ${orden.montoTotal}|"> </div>

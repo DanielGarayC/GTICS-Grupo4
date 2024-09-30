@@ -2,6 +2,7 @@ package com.example.gtics.controller;
 
 import com.example.gtics.dto.MontoTotalOrdenDto;
 import com.example.gtics.dto.OrdenCarritoDto;
+import com.example.gtics.dto.ProductosxOrden;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,6 +131,7 @@ public class AgenteController {
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
         List<MontoTotalOrdenDto> listaMonto =  ordenRepository.obtenerMontoTotalConDto(idAgente);
+
 
         model.addAttribute("ordenesLista", ordenesLista);
         model.addAttribute("listaControlOrden",listaControlOrden);
@@ -268,11 +270,25 @@ public class AgenteController {
     }
 
     @GetMapping({"Agente/Ordenes/Detalles"})
-    public String DetalleOrden(@RequestParam("idOrden") Integer idOrden,@RequestParam("numOrden") Integer numOrden,Model model,@RequestParam("indicadorVistaARegresar") Integer indicadorVistaARegresar){
+    public String DetalleOrden(@RequestParam("idOrden") Integer idOrden,
+                               @RequestParam("numOrden") Integer numOrden,
+                               Model model,
+                               @RequestParam("indicadorVistaARegresar") Integer indicadorVistaARegresar){
+
         List<Distrito> listaDistritos   = distritoRepository.findAll();
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+        // Calcular el subtotal sumando precioTotalPorProducto
+        double subtotal = productosOrden.stream()
+                .mapToDouble(ProductosxOrden::getPrecioTotalPorProducto)
+                .sum();
+        // Encontrar el costo de envío más alto
+        double maxCostoEnvio = productosOrden.stream()
+                .mapToDouble(ProductosxOrden::getCostoEnvio)
+                .max()
+                .orElse(0.0);
 
         if(ordenOpt.isPresent()){
             model.addAttribute("orden",ordenOpt.get());
@@ -281,11 +297,16 @@ public class AgenteController {
             model.addAttribute("listaControlOrden",listaControlOrden);
             model.addAttribute("listaEstadoOrden",listaEstadoOrden);
             model.addAttribute("indicadorVistaARegresar",indicadorVistaARegresar);
+            model.addAttribute("productosOrden", productosOrden);
+            model.addAttribute("subtotal", subtotal);  // Enviar subtotal al modelo
+            model.addAttribute("maxCostoEnvio", maxCostoEnvio);  // Enviar costo de envío más alto
+
+
 
             return "Agente/OrdenesDeUsuario/detalleOrden";
 
         }else{
-            return "Agente/Ordenes";
+            return "redirect:/Agente/Ordenes";
         }
 
 
