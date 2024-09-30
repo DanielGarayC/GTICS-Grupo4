@@ -259,36 +259,36 @@
                     <!-- Table -->
                     <table id="productosTable" class="table mb-0 text-nowrap" style ="padding-top: 3vh; border-color: #d5d7d7;">
                         <!-- Table Head -->
-                        <thead class="table-light" >
-                        <tr >
-                            <th>&nbsp;</th>
-                            <th>Producto</th>
-                            <th>Stock</th>
-                            <th>Fecha de arribo</th>
-                            <th>Solicitud de reposición</th>
+                        <thead class="table-light">
+                        <tr>
+                            <!-- Centrar el encabezado de la imagen -->
+                            <th class="text-center" style="width: 10%;">&nbsp;</th>
+                            <th class="text-center">Producto</th>
+                            <th class="text-center">Stock</th>
+                            <th class="text-center">Fecha de arribo</th>
+                            <th class="text-center">Solicitud de reposición</th>
                         </tr>
                         </thead>
                         <tbody>
-
-                        <tr th:each="producto: ${listaProductos}">
-                            <td class="align-middle">
+                        <tr th:each="producto : ${listaProductos}">
+                            <td class="align-middle text-center" style="width: 10%;">
+                                <!-- Imagen del producto -->
                                 <a href="#" disabled="">
                                     <img th:if="${producto.primeraFoto != null}" th:src="@{'/AdminZonal/Productos/fotoproducto/' + ${producto.idProducto}}" alt="Imagen del producto" class="icon-shape icon-xl">
                                 </a>
                             </td>
-                            <td class="align-middle" th:text="${producto.nombreProducto}"></td>
-                            <td class="align-middle" th:text="${producto.cantidadDisponible}"></td>
-                            <td class="align-middle">
-                                <button th:if="${producto.fechaArribo} == null" class="btn btn-primary addDate" style="width: 80%" th:data-product-id="${producto.idProducto}">
-                                    <p style="margin-bottom: 0px;"> Agregar fecha <i class="bi-calendar-plus" style="margin-left: 5px;"></i></p>
+                            <td class="align-middle text-center" th:text="${producto.nombreProducto}"></td>
+                            <td class="align-middle text-center" th:text="${producto.cantidadDisponible}"></td>
+                            <td class="align-middle text-center">
+                                <button th:if="${producto.fechaArribo} == null" class="btn btn-outline-primary addDate" style="width: 80%" th:data-product-id="${producto.idProducto}">
+                                    <p style="margin-bottom: 0px;">Agregar fecha <i class="bi-calendar-plus" style="margin-left: 5px;"></i></p>
                                 </button>
 
-                                <button th:if="${producto.fechaArribo} != null" class="btn btn-primary viewDate" th:text="${#dates.format(producto.fechaArribo, 'dd/MM/yyyy')}" style="width: 60%;"></button>
-                                <button th:if="${producto.fechaArribo} != null" type="submit" class="btn btn-primary saveButton saveAlert" th:data-product-id="${producto.idProducto}">
+                                <button th:if="${producto.fechaArribo} != null" class="btn btn-outline-primary viewDate" th:text="${#dates.format(producto.fechaArribo, 'dd/MM/yyyy')}" style="width: 60%;"></button>
+                                <button th:if="${producto.fechaArribo} != null" type="submit" class="btn btn-outline-primary saveButton saveAlert" th:data-product-id="${producto.idProducto}">
                                     <i class="bi-pencil-fill"></i>
                                 </button>
                             </td>
-
                             <td class="align-middle text-center">
                                 <!-- Si cantidadSolicitada no es null, mostrar los botones Ver, Editar y Eliminar -->
                                 <button th:if="${producto.cantidadSolicitada != null}"
@@ -333,9 +333,7 @@
                                     <i class="fas fa-check-circle"></i> Stock adecuado
                                 </button>
                             </td>
-
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
