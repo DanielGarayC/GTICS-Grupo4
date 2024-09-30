@@ -241,7 +241,19 @@
         <!-- COONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">
             <section class="container">
-                <h1 class="mb-6">Lista de productos</h1>
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="mb-6">Lista de productos</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <form class="d-flex mb-4" role="search" onsubmit="return false;">
+                            <label for="searchCustomers" class="visually-hidden">Buscar producto</label>
+                            <input class="form-control" type="search" id="searchCustomers" placeholder="Buscar producto" aria-label="Search" oninput="filterTable()" />
+                        </form>
+                    </div>
+                </div>
                 <div class="table-responsive border-0">
                     <!-- Table -->
                     <table id="productosTable" class="table mb-0 text-nowrap" style ="padding-top: 3vh; border-color: #d5d7d7;">
@@ -299,7 +311,32 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="d-flex flex-column align-items-center">
+                    <!-- Texto de paginación centrado -->
+                    <span id="paginationInfo" class="mb-2">
+                                        Mostrando página [[${currentPage != null ? currentPage + 1 : 1}]] de [[${totalPages != null ? totalPages : 1}]]
+                                    </span>
 
+                    <!-- Paginación centrada -->
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <!-- Botón de "Previo" -->
+                            <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
+                                <a class="page-link" th:href="@{/AdminZonal/Productos(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
+                            </li>
+
+                            <!-- Páginas numeradas -->
+                            <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                <a class="page-link" th:href="@{/AdminZonal/Productos(page=${i})}" th:text="${i + 1}"></a>
+                            </li>
+
+                            <!-- Botón de "Siguiente" -->
+                            <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
+                                <a class="page-link" th:href="@{/AdminZonal/Productos(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </section>
         </main>
     </div>
@@ -317,14 +354,26 @@
 <script th:src="@{/js/vendors/chart.js}"></script>
 <script>
     $(document).ready(function () {
-        $('#productosTable').DataTable({
-            // Configuración adicional
-            "paging": true,       // Habilita la paginación
-            "searching": true,    // Habilita la búsqueda
-            "ordering": true,     // Habilita el ordenamiento de columnas
-            "info": true,         // Muestra información adicional
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json" // URL correcta en HTTPS
+        // Funciones para paginación adicional, si es necesario
+        $('a.page-link').on('click', function () {
+            const page = $(this).data('page');
+            if (page !== undefined) {
+                window.location.href = '/AdminZonal/Productos?page=' + page;
+            }
+        });
+
+        $('#prevPage').on('click', function () {
+            const currentPage = parseInt($('li.active a').data('page'));
+            if (currentPage > 0) {
+                window.location.href = '/AdminZonal/Productos?page=' + (currentPage - 1);
+            }
+        });
+
+        $('#nextPage').on('click', function () {
+            const currentPage = parseInt($('li.active a').data('page'));
+            const totalPages = parseInt([[${totalPages}]]);
+            if (currentPage < totalPages - 1) {
+                window.location.href = '/AdminZonal/Productos?page=' + (currentPage + 1);
             }
         });
     });
@@ -504,8 +553,27 @@
         });
     });
 </script>
+<script>
+    function filterTable() {
+    const input = document.getElementById("searchCustomers");
+    const filter = input.value.toLowerCase();
+    const table = document.querySelector("table tbody");
+    const rows = table.getElementsByTagName("tr");
 
+    for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].getElementsByTagName("td");
+    let match = false;
 
+    for (let j = 0; j < cells.length; j++) {
+    if (cells[j].innerText.toLowerCase().includes(filter)) {
+    match = true;
+    break;
+    }
+    }
+    rows[i].style.display = match ? "" : "none";
+    }
+    }
+</script>
 <script>
 
     document.querySelectorAll('.addDate').forEach(button => {
