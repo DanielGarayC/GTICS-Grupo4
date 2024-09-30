@@ -105,7 +105,8 @@
 							   <div class="col-md-4 col-12 mb-2 mb-md-0">
 								   <!-- form -->
 								   <form class="d-flex" role="search">
-									   <input class="form-control" type="search" placeholder="Buscar por nombre o apellido" aria-label="Search" />
+									   <input class="form-control" type="search" id="searchUsuario"   placeholder="Buscar Usuario" aria-label="Search" th:value="${param.busqueda}" oninput="filterTable()" />
+
 								   </form>
 							   </div>
 
@@ -117,6 +118,7 @@
 						   <!-- table responsive -->
 						   <div class="table-responsive text-center">
 							   <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
+
 								   <thead class="bg-light">
 								   <tr>
 
@@ -263,6 +265,27 @@
 				   });
 			   });
 		   });
+
+
+		   function filterTable() {
+			   const input = document.getElementById("searchUsuario");
+			   const filter = input.value.toLowerCase();
+			   const table = document.querySelector("table tbody");
+			   const rows = table.getElementsByTagName("tr");
+
+			   for (let i = 0; i < rows.length; i++) {
+				   const cells = rows[i].getElementsByTagName("td");
+				   let match = false;
+
+				   for (let j = 0; j < cells.length; j++) {
+					   if (cells[j].innerText.toLowerCase().includes(filter)) {
+						   match = true;
+						   break;
+					   }
+				   }
+				   rows[i].style.display = match ? "" : "none";
+			   }
+		   }
 	   </script>
 
 
