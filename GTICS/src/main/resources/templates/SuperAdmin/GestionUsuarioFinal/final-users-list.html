@@ -227,11 +227,12 @@
 										<tbody>
 										<tr th:each="finalUser : ${finalUsersList}">
 
-											<td th:text="${finalUser.getApellidoPaterno() +' '+ finalUser.getApellidoMaterno() + ', '+ finalUser.getNombre()}">
+
+											<td>
 												<div class="d-flex align-items-center">
-													<img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+													<img th:if="*{finalUser.getFoto() != null}" th:src="@{'/usuarioFinal/'+${finalUser.getId()}}" alt="" class="avatar avatar-xs rounded-circle" />
 													<div class="ms-2">
-														<a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></a>
+														<a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" th:text="${finalUser.getNombre() + ' ' + finalUser.getApellidoPaterno() + ' ' + finalUser.getApellidoMaterno()}"></a>
 													</div>
 												</div>
 											</td>

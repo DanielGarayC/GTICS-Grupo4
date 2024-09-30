@@ -450,11 +450,35 @@ public class SuperAdminController {
 
     @PostMapping("SuperAdmin/Actualizar/{id}")
     public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal, @RequestParam("UserPhoto")MultipartFile foto) throws IOException {
+        if (foto.isEmpty()) {
+            Usuario finalUser = usuarioRepository.findById(idUsuarioFinal).get();
+            usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(),idUsuarioFinal);
+        }else{
+            try {
+                byte[] fotoBytes = foto.getBytes();
+                usuario.setFoto(fotoBytes);
+                usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(),idUsuarioFinal);
+            } catch (IOException ignored) {
 
-        byte[] fotoBytes = foto.getBytes();
-        usuario.setFoto(fotoBytes);
-        usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(),idUsuarioFinal);
+            }
+        }
+
+
+
         return "redirect:/SuperAdmin/listaUsuarioFinal";
+    }
+
+    @GetMapping("/usuarioFinal/{id}")
+    public ResponseEntity<ByteArrayResource> obtenerFotoUsuarioFinal(@PathVariable Integer id) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Tienda no encontrada"));
+
+        byte[] foto = usuario.getFoto();
+        ByteArrayResource resource = new ByteArrayResource(foto);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"foto_" + usuario.getApellidoPaterno()+"_"+ usuario.getNombre()+".jpg\"")
+                .contentLength(foto.length)
+                .body(resource);
     }
 
     @GetMapping("SuperAdmin/banearUsuarioFinal/{id}")
