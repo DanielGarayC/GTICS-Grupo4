@@ -103,7 +103,9 @@
 							   <div class="col-md-4 col-12 mb-2 mb-md-0">
 								   <!-- form -->
 								   <div class="d-flex" role="search">
-									   <input class="form-control" type="search" placeholder="Buscar por número o monto" aria-label="Search" />
+									   <input class="form-control" type="search" id="searchOrden" placeholder="Buscar órden" aria-label="Search" oninput="filterTable()" />
+
+
 								   </div>
 							   </div>
 							   <form class="col-xl-4 col-md-6 col-12 d-flex align-items-center" method="post" th:action="@{/Agente/OrdenesPost}">
@@ -132,6 +134,7 @@
 						   <!-- table responsive -->
 						   <div class="table-responsive">
 							   <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
+
 								   <thead class="bg-light">
 									   <tr>
 										   <th>Nº de orden</th>
@@ -279,28 +282,25 @@
 
 
 
-		   function asignacion() {
-			Swal.fire({
-					   showCloseButton: true,
-					   title: 'Auto-asignación',
-					   text: '¿Estás seguro de auto-asignarte esta orden?',
-					   icon: 'warning',
-					   showCancelButton: true,
-					   confirmButtonText: 'Sí',
-					   cancelButtonText: 'Cancelar',
-					   customClass: {
-						   popup: 'custom-popup'
-					   }
-				   }).then((result) => {
-					   if (result.isConfirmed) {
-						Swal.fire(
-                    'Auto-asignado',
-                    'Se ha auto-asignado la orden.',
-                    'success'
+		   function filterTable() {
+			   const input = document.getElementById("searchOrden");
+			   const filter = input.value.toLowerCase();
+			   const table = document.querySelector("table tbody");
+			   const rows = table.getElementsByTagName("tr");
 
-                );}
-				   });
-    }
+			   for (let i = 0; i < rows.length; i++) {
+				   const cells = rows[i].getElementsByTagName("td");
+				   let match = false;
+
+				   for (let j = 0; j < cells.length; j++) {
+					   if (cells[j].innerText.toLowerCase().includes(filter)) {
+						   match = true;
+						   break;
+					   }
+				   }
+				   rows[i].style.display = match ? "" : "none";
+			   }
+		   }
 	   </script>
 
 
