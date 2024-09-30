@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -447,9 +449,11 @@ public class SuperAdminController {
     }
 
     @PostMapping("SuperAdmin/Actualizar/{id}")
-    public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal){
+    public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal, @RequestParam("UserPhoto")MultipartFile foto) throws IOException {
 
-        usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), idUsuarioFinal);
+        byte[] fotoBytes = foto.getBytes();
+        usuario.setFoto(fotoBytes);
+        usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(),idUsuarioFinal);
         return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 

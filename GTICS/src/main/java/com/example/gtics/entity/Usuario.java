@@ -79,6 +79,7 @@ public class Usuario {
     @JoinColumn(name = "idadminzonal")
     private Usuario idAdminZonal;
 
+    @Lob
     @Column(name = "foto")
     private byte[] foto;
 
