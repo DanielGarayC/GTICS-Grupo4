@@ -146,11 +146,11 @@
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item banearUsuario btn" th:href="@{'/Agente/banear?id='+ ${usuarioAsignado.id}}">
-														  <!--href="javascript:void(0);"
-														  th:attr="data-id=${usuarioAsignado.id}, data-nombre=${usuarioAsignado.nombre}"
+													   <a class="dropdown-item banearUsuario btn" href="javascript:void(0);"
+														  th:data-id="${usuarioAsignado.id}"
+														  th:data-nombre="${usuarioAsignado.nombre}"
 														  data-bs-toggle="tooltip"
-														  data-bs-placement="bottom">-->
+														  data-bs-placement="bottom">
 														   <i class="bi bi-person-fill-slash me-3"></i> Banear
 													   </a>
 												   </li>
@@ -254,8 +254,11 @@
 	   </div>
 	   <!--POP UP BANEAR USUARIOS-->
 	   <script>
-		   document.querySelectorAll('.banearUsuario').forEach(button => {
-			   button.addEventListener('click', function() {
+		   <!-- POP UP BANEAR USUARIOS -->
+			   document.querySelectorAll('.banearUsuario').forEach(button => {
+			   button.addEventListener('click', function (event) {
+				   event.preventDefault();  // Evita la redirección automática
+
 				   // Obtenemos el ID y nombre del usuario
 				   const userId = this.getAttribute('data-id');
 				   const userName = this.getAttribute('data-nombre');
@@ -274,12 +277,13 @@
 					   }
 				   }).then((result) => {
 					   if (result.isConfirmed) {
-						   // Redirigir al controlador de baneo con el ID del usuario
+						   // Si se confirma, redirige al controlador de baneo con el ID del usuario
 						   window.location.href = `/Agente/banear?id=${userId}`;
 					   }
 				   });
 			   });
 		   });
+
 
 
 		   function filterTable() {
