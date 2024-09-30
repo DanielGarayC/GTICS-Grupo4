@@ -106,6 +106,18 @@ public class AgenteController {
 
     }
 
+    @GetMapping("/Agente/verUsuarioFinal")
+    public String verUsuarioFinal(Model model, @RequestParam Integer id) {
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+
+        if (optUsuario.isPresent()) {
+            model.addAttribute("usuario", optUsuario.get());
+            return "Agente/UsuariosAsignados/verUsuario";
+        } else {
+            return "redirect:/Agente/UsuariosAsignados";
+        }
+    }
+
 
 
     @GetMapping({"Agente/Ordenes"})

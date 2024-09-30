@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta content="Codescandy" name="author">
+        <title>Ver Usuario</title>
+        <!-- Favicon icon-->
+        <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+
+
+        <!-- Libs CSS -->
+        <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+        <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+        <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+
+
+        <!-- Theme CSS -->
+        <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+
+        <style>
+
+            .logoImagen{
+                height: 80px;
+                width: 250px;
+            }
+            .logoImagenCelulares{
+                height: 80px;
+                width: 220px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- main -->
+        <div>
+            <!-- navbar -->
+            <div th:insert="~{fragments/navbarAgente.html :: barraSuperior}"></div>
+
+
+
+            <div class="main-wrapper">
+
+                <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('usuariosAsignados')}"></div>
+
+                <!-- navbar vertical (para celular)-->
+                <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('usuariosAsignados')}"></div>
+
+
+                <!-- COONTENIDO DE LA PAGINA -->
+                <main class="main-content-wrapper">
+                    <div class="container">
+                        <div class="row mb-8">
+                            <div class="col-md-12">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+                                    <div>
+                                        <h2> Información </h2>
+                                        <!-- breacrumb -->
+                                        <nav aria-label="breadcrumb">
+                                            <ol class="breadcrumb mb-0">
+                                                <li class="breadcrumb-item"><a th:href="@{/Agente/UsuariosAsignados}" class="text-inherit">Lista de Usuarios</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page">Ver</li>
+                                            </ol>
+                                        </nav>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="min-height: 100vh;">
+                            <div class="col-12">
+                                <div class="card card-lg border-0">
+                                    <div class="card-body d-flex flex-column gap-8 p-7">
+                                        <div class="d-flex flex-column gap-4">
+
+                                            <h4 class="mb-0 h5">Información del usuario</h4>
+
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-12">
+                                                    <label for="DNIFinalUser" class="form-label">DNI:</label>
+                                                    <input type="text" class="form-control" id="DNIFinalUser" disabled th:value="${usuario.dni}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
+                                                </div>
+
+                                                <div class="col-lg-6 col-12">
+                                                    <label for="creatCustomerName" class="form-label">Nombres:</label>
+                                                    <input type="text" class="form-control" id="creatCustomerName" disabled th:value="${usuario.nombre}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese los nombres del usuario</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-12">
+                                                    <label for="creatFinalUserLastName1" class="form-label">Apellido Paterno:</label>
+                                                    <input type="text" class="form-control" disabled id="creatFinalUserLastName1" th:value="${usuario.apellidoPaterno}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese el apellido paterno del usuario</div>
+                                                </div>
+
+                                                <div class="col-lg-6 col-12">
+                                                    <label for="creatFinalUserLastName" class="form-label">Apellido Materno:</label>
+                                                    <input type="text" class="form-control" disabled id="creatFinalUserLastName" th:value="${usuario.apellidoMaterno}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese el apellido materno del usuario</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-12">
+                                                    <label for="creatFinalUserEmail" class="form-label">Email:</label>
+                                                    <input type="email" class="form-control" disabled id="creatFinalUserEmail" th:value="${usuario.email}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
+                                                </div>
+
+                                                <div class="col-lg-6 col-12">
+                                                    <label for="creatFinalUserDirection" class="form-label">Dirección:</label>
+                                                    <input type="text" class="form-control" disabled id="creatFinalUserDirection" th:value="${usuario.direccion}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-12">
+                                                    <label for="creatFinalUserPhone" class="form-label">Teléfono:</label>
+                                                    <input type="text" disabled class="form-control" id="creatFinalUserPhone" th:value="${usuario.telefono}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese el número de teléfono</div>
+                                                </div>
+
+                                                <div class="col-lg-6 col-12">
+                                                    <label class="form-label" for="creatFinalUserDistrict">Distrito:</label>
+                                                    <input type="text" disabled class="form-control" id="creatFinalUserDistrict" th:value="${usuario.distrito.nombre}" required />
+                                                    <div class="invalid-feedback">Por favor ingrese un distrito</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 mt-3">
+                                                <div class="d-flex flex-column flex-md-row gap-2">
+                                                    <!-- Botón Regresar -->
+                                                    <a class="btn btn-secondary" th:href="@{/Agente/UsuariosAsignados}">Regresar</a>
+
+                                                    <!-- Botón Ver órdenes -->
+                                                    <a class="btn btn-primary" th:href="@{/Agente/UsuariosAsignados}">
+                                                        Ver órdenes
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Libs JS -->
+        <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+        <!-- Theme JS -->
+        <script th:src="@{/js/theme.min.js}"></script>
+
+        <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+        <script th:src="@{/js/vendors/chart.js}"></script>
+
+
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+        <!-- SweetAlert2 JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+        <script>
+
+
+        </script>
+
+
+
+    </body>
+</html>
+
+
+
+
+
+
+
+
