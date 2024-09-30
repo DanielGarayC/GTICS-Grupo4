@@ -280,12 +280,12 @@
                             <td class="align-middle text-center" th:text="${producto.nombreProducto}"></td>
                             <td class="align-middle text-center" th:text="${producto.cantidadDisponible}"></td>
                             <td class="align-middle text-center">
-                                <button th:if="${producto.fechaArribo} == null" class="btn btn-outline-primary addDate" style="width: 80%" th:data-product-id="${producto.idProducto}">
+                                <button th:if="${producto.fechaArribo} == null" class="btn btn-primary addDate" style="width: 80%" th:data-product-id="${producto.idProducto}">
                                     <p style="margin-bottom: 0px;">Agregar fecha <i class="bi-calendar-plus" style="margin-left: 5px;"></i></p>
                                 </button>
 
-                                <button th:if="${producto.fechaArribo} != null" class="btn btn-outline-primary viewDate" th:text="${#dates.format(producto.fechaArribo, 'dd/MM/yyyy')}" style="width: 60%;"></button>
-                                <button th:if="${producto.fechaArribo} != null" type="submit" class="btn btn-outline-primary saveButton saveAlert" th:data-product-id="${producto.idProducto}">
+                                <button th:if="${producto.fechaArribo} != null" class="btn btn-primary viewDate" th:text="${#dates.format(producto.fechaArribo, 'dd/MM/yyyy')}" style="width: 60%;"></button>
+                                <button th:if="${producto.fechaArribo} != null" type="submit" class="btn btn-primary saveButton saveAlert" th:data-product-id="${producto.idProducto}">
                                     <i class="bi-pencil-fill"></i>
                                 </button>
                             </td>
