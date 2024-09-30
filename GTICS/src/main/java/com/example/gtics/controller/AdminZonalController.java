@@ -221,7 +221,7 @@ public class AdminZonalController {
 
 
     @GetMapping({ "AdminZonal/Productos"})
-    public String Productos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size, Model model){
+    public String Productos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "4") int size, Model model){
         List<ProductoTabla> todosLosProductos = productoRepository.getProductosTabla();
 
         // Calcular el total de productos
