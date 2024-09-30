@@ -91,7 +91,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "WHERE u.idRol = 4 " +
             "AND u.idAgente = ?1 " +
             "AND u.baneado  =0")
-    List<Usuario> findUsuariosAsignadosAlAgente(Integer idAgente);
+
+    Page<Usuario> findUsuariosAsignadosAlAgente(Integer idAgente, Pageable pageable);
 
     //Banear Usuario por id
     @Transactional

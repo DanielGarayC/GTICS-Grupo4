@@ -5,6 +5,9 @@ import com.example.gtics.dto.OrdenCarritoDto;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -66,16 +69,21 @@ public class AgenteController {
     }
 
     @GetMapping({"Agente/UsuariosAsignados"})
-    public String UsuariosAsignados(Model model){
+    public String UsuariosAsignados(Model model,
+                                    @RequestParam(defaultValue = "0") int page){
 
-        //asumiendo que el agente tiene id = 13
-        Integer idAgente = 13;
-        List<Usuario> usuariosAsignados = usuarioRepository.findUsuariosAsignadosAlAgente(idAgente);
+            int pageSize = 6;
+            Pageable pageable = PageRequest.of(page, pageSize);
+            Integer idAgente = 13;
+            Page<Usuario> usuariosAsignados = usuarioRepository.findUsuariosAsignadosAlAgente(idAgente,pageable);
 
-        model.addAttribute("listaUsuariosAsignados", usuariosAsignados);
 
-        return "Agente/UsuariosAsignados/usuariosAsignados";
+            model.addAttribute("listaUsuariosAsignados", usuariosAsignados.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", usuariosAsignados.getTotalPages());
 
+
+            return "Agente/UsuariosAsignados/usuariosAsignados";
     }
 
 
