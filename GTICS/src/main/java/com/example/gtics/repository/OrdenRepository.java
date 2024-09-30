@@ -6,7 +6,10 @@ import com.example.gtics.dto.FindCantOrdenesPorMes;
 import com.example.gtics.dto.MontoTotalOrdenDto;
 import com.example.gtics.dto.OrdenCarritoDto;
 import com.example.gtics.entity.Orden;
+import com.example.gtics.entity.Usuario;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -79,7 +82,9 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "JOIN controlorden co ON o.idControlOrden = co.idControlOrden\n" +
             "WHERE u.idUsuario = ?1\n" +
             "GROUP BY o.idOrden;")
-    List <OrdenCarritoDto> obtenerCarritoConDto(Integer idUsuario);
+    Page <OrdenCarritoDto> obtenerCarritoConDto(Integer idUsuario, Pageable pageable);
+
+
 
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    o.idOrden,\n" +

@@ -210,13 +210,18 @@ public class AgenteController {
 
 
     @GetMapping({"Agente/Ordenes/Usuario"})
-    public String OrdenesUsuario(@RequestParam("idUsuario") Integer idUsuario,Model model){
-        List<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoConDto(idUsuario);
+    public String OrdenesUsuario(@RequestParam("idUsuario") Integer idUsuario,
+                                 Model model,
+                                 @RequestParam(defaultValue = "0") int page){
+        int pageSize = 6;
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoConDto(idUsuario, pageable);
         Optional<Usuario> usr = usuarioRepository.findById(idUsuario);
-        if (ordenCarrito == null) {
-            ordenCarrito = new ArrayList<>();
-        }
-        model.addAttribute("ordenCarrito",ordenCarrito);
+
+        model.addAttribute("ordenCarrito",ordenCarrito.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", ordenCarrito.getTotalPages());
         model.addAttribute("usuario",usr.get());
         return "Agente/OrdenesDeUsuario/ordenesDeUsuario";
     }
