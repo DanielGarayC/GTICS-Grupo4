@@ -105,7 +105,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE usuario SET dni = ?1, nombre = ?2, apellidoPaterno = ?3, " +
             "apellidoMaterno = ?4, email = ?5, direccion = ?6, " +
-            "telefono = ?7, idDistrito = ?8 WHERE idUsuario = ?9")
+            "telefono = ?7, idDistrito = ?8, foto = ?9 WHERE idUsuario = ?10")
     void actualizarUsuarioFinal(@Param("dni") String dni,
                                 @Param("nombre") String nombre,
                                 @Param("apellidoPaterno") String apellidoPaterno,
@@ -114,6 +114,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
                                 @Param("direccion") String direccion,
                                 @Param("telefono") String telefono,
                                 @Param("idDistrito") Integer idDistrito,
+                                byte [] foto,
                                 @Param("idUsuario") Integer idUsuario);
 
 

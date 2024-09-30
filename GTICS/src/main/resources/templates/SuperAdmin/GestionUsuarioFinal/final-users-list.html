@@ -28,6 +28,24 @@
 			height: 80px;
 			width: 220px;
 		}
+
+		.dot-green {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			background-color: green;
+			border-radius: 50%;
+			margin-right: 5px;
+		}
+
+		.dot-red {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			background-color: red;
+			border-radius: 50%;
+			margin-right: 5px;
+		}
 	</style>
 </head>
 
@@ -217,7 +235,7 @@
 										<tr>
 											<th>Nombres</th>
 											<th>Correo electrónico</th>
-											<th>Fecha de registro</th>
+											<th>Estado</th>
 											<th>Teléfono</th>
 											<th>DNI</th>
 
@@ -227,17 +245,21 @@
 										<tbody>
 										<tr th:each="finalUser : ${finalUsersList}">
 
-											<td th:text="${finalUser.getApellidoPaterno() +' '+ finalUser.getApellidoMaterno() + ', '+ finalUser.getNombre()}">
+
+											<td>
 												<div class="d-flex align-items-center">
-													<img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-xs rounded-circle" />
+													<img th:if="*{finalUser.getFoto() != null}" th:src="@{'/usuarioFinal/'+${finalUser.getId()}}" alt="" class="avatar avatar-xs rounded-circle" />
 													<div class="ms-2">
-														<a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></a>
+														<a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" th:text="${finalUser.getNombre() + ' ' + finalUser.getApellidoPaterno() + ' ' + finalUser.getApellidoMaterno()}"></a>
 													</div>
 												</div>
 											</td>
 											<td th:text="${finalUser.getEmail()}"></td>
 
-											<td>17 de mayo, 2023 a las 3:18 pm</td>
+											<td>
+												<span th:class="${finalUser.getActivo() == 1 ? 'dot-green' : 'dot-red'}"></span>
+												<span th:text="${finalUser.getActivo() == 1 ? 'Activo' : 'Inactivo'}"></span>
+											</td>
 											<td th:text="${finalUser.getTelefono()}"></td>
 											<td th:text="${finalUser.getDni()}"></td>
 
