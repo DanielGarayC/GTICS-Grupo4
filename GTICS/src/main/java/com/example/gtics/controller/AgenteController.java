@@ -228,6 +228,7 @@ public class AgenteController {
         Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoConDto(idUsuario, pageable);
         Optional<Usuario> usr = usuarioRepository.findById(idUsuario);
 
+
         model.addAttribute("ordenCarrito",ordenCarrito.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", ordenCarrito.getTotalPages());
