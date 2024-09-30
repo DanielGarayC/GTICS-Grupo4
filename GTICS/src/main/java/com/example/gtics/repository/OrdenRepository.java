@@ -41,19 +41,23 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     List<FindCantOrdenesPorEstado> getOrdenesEstado();
 
     @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idEstadoOrden = ?1 AND idControlOrden = ?2 AND idAgente = ?3")
-    List<Orden> findOrdenesByEstadoAndControl(Integer idEstado, Integer idControl,Integer idAgente);
+    Page<Orden> findOrdenesByEstadoAndControl(Integer idEstado, Integer idControl,Integer idAgente, Pageable pageable);
 
     @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idEstadoOrden = ?1 AND idAgente = ?2")
-    List<Orden> findOrdenesByEstado(Integer idEstado,Integer idAgente);
+    Page<Orden> findOrdenesByEstado(Integer idEstado,Integer idAgente, Pageable pageable);
 
     @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idControlOrden = ?1 AND idAgente = ?2")
-    List<Orden> findOrdenesByControl(Integer idControl,Integer idAgente);
+    Page<Orden> findOrdenesByControl(Integer idControl,Integer idAgente, Pageable pageable);
 
     @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idControlOrden = ?1 ")
-    List<Orden> findOrdenesSinAsignar(Integer idControl);
+    Page<Orden> findOrdenesSinAsignar(Integer idControl, Pageable pageable);
 
     @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idAgente = ?1 or idControlOrden = 1 ")
     List<Orden> buscarMisOrdenesYOrdenesSinAsignar(Integer idAgente);
+
+
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idAgente = ?1 or idControlOrden = 1 ")
+    Page<Orden> buscarMisOrdenesYOrdenesSinAsignarPage(Integer idAgente, Pageable pageable);
 
     @Transactional
     @Modifying

@@ -133,13 +133,14 @@ public class AgenteController {
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
         List<MontoTotalOrdenDto> listaMonto =  ordenRepository.obtenerMontoTotalConDto(idAgente);
-        Page<Orden> ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente, pageable);
+        Page<Orden> ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignarPage(idAgente, pageable);
 
         model.addAttribute("ordenesLista", ordenesLista.getContent());
         model.addAttribute("listaControlOrden",listaControlOrden);
         model.addAttribute("listaEstadoOrden",listaEstadoOrden);
         model.addAttribute("listaMonto",listaMonto);
-
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", ordenesLista.getTotalPages());
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
 
@@ -163,48 +164,53 @@ public class AgenteController {
     @PostMapping({"Agente/OrdenesPost"})
     public String OrdenesFiltro(Model model,
                                 @RequestParam(value = "idEstado", defaultValue = "0") Integer idEstado,
-                                @RequestParam(value = "idControl", defaultValue = "0") Integer idControl) {
+                                @RequestParam(value = "idControl", defaultValue = "0") Integer idControl,
+                                @RequestParam(defaultValue = "0") int page) {
+
+        int pageSize = 6;
+        Pageable pageable = PageRequest.of(page, pageSize);
         //Asumiendo que somos el agente con id 13 (esto se cambiará luego con login y session)
         Integer idAgente = 13;
 
-
-        List<Orden> ordenesLista;
+        Page<Orden> ordenesLista;
         List<MontoTotalOrdenDto> listaMonto;
 
         if (idEstado == 0 && idControl == 0) {
-            ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
+            ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignarPage(idAgente, pageable);
             listaMonto = ordenRepository.obtenerMontoTotalMisOrdenesYOrdenesSinAsignar(idAgente);
         }
         else if (idEstado > 0 && idControl > 0) {
-            ordenesLista = ordenRepository.findOrdenesByEstadoAndControl(idEstado, idControl,idAgente);
+            ordenesLista = ordenRepository.findOrdenesByEstadoAndControl(idEstado, idControl,idAgente, pageable);
             listaMonto = ordenRepository.obtenerMontoTotalDeOrdenesByEstadoAndControl(idEstado, idControl,idAgente);
         }
         else if (idEstado > 0 && idControl == 0 ) {
-            ordenesLista = ordenRepository.findOrdenesByEstado(idEstado,idAgente);
+            ordenesLista = ordenRepository.findOrdenesByEstado(idEstado,idAgente, pageable);
             listaMonto = ordenRepository.obtenerMontoTotalDeOrdenesByEstado(idEstado,idAgente);
         }
         else if (idControl > 0&& idEstado == 0) {
             if(idControl==1){
-                ordenesLista = ordenRepository.findOrdenesSinAsignar(idControl);
+                ordenesLista = ordenRepository.findOrdenesSinAsignar(idControl, pageable);
                 listaMonto = ordenRepository.obtenerMontoTotalOrdenesSinAsignar(idAgente);
             }else{
-                ordenesLista = ordenRepository.findOrdenesByControl(idControl,idAgente);
+                ordenesLista = ordenRepository.findOrdenesByControl(idControl,idAgente, pageable);
                 listaMonto = ordenRepository.obtenerMontoTotalDeOrdenesByControl(idControl,idAgente);
             }
 
         } else {
-            ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
+            ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignarPage(idAgente, pageable);
             listaMonto = ordenRepository.obtenerMontoTotalMisOrdenesYOrdenesSinAsignar(idAgente);
         }
 
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        model.addAttribute("ordenesLista", ordenesLista);
+        model.addAttribute("ordenesLista", ordenesLista.getContent());
         model.addAttribute("listaControlOrden",listaControlOrden);
         model.addAttribute("listaEstadoOrden",listaEstadoOrden);
         model.addAttribute("idEstado",idEstado);
         model.addAttribute("idControl",idControl);
         model.addAttribute("listaMonto",listaMonto);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", ordenesLista.getTotalPages());
 
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
