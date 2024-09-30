@@ -119,7 +119,17 @@ public class AgenteController {
         }
     }
 
+    @GetMapping("/Agente/verPerfilDesdeDetalle")
+    public String verPerfilDesdeDetalle(Model model, @RequestParam Integer id) {
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
 
+        if (optUsuario.isPresent()) {
+            model.addAttribute("usuario", optUsuario.get());
+            return "Agente/OrdenesDeUsuario/verPerfilUsuario";
+        } else {
+            return "redirect:/Agente/Ordenes";
+        }
+    }
 
     @GetMapping({"Agente/Ordenes"})
     public String Ordenes(Model model,
