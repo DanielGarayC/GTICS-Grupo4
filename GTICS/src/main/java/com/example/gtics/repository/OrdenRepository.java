@@ -85,15 +85,33 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "GROUP BY o.idOrden;")
     Page <OrdenCarritoDto> obtenerCarritoConDto(Integer idUsuario, Pageable pageable);
 
-    @Query(value = "SELECT p.fotoProducto, p.nombreProducto, t.nombreTienda, p.modelo, p.color, phc.cantidadProducto, " +
-            "p.precio AS precioUnidad, (phc.cantidadProducto * p.precio) AS precioTotalPorProducto, p.costoEnvio " +
-            "FROM producto_has_carritocompra phc " +
-            "INNER JOIN producto p ON p.idProducto = phc.idProducto " +
-            "INNER JOIN proveedor pr ON pr.idProveedor = p.idProveedor " +
-            "INNER JOIN tienda t ON t.idTienda = pr.idTienda " +
-            "INNER JOIN orden o ON o.idCarritoCompra = phc.idCarritoCompra " +
-            "WHERE o.idOrden = :idOrden", nativeQuery = true)
+    @Query(value = "SELECT \n" +
+            "    (SELECT fp.foto FROM fotosproducto fp WHERE fp.idProducto = p.idProducto LIMIT 1) AS primeraFotoProducto,\n" +
+            "    p.nombreProducto, \n" +
+            "    t.nombreTienda, \n" +
+            "    p.modelo, \n" +
+            "    p.color, \n" +
+            "    phc.cantidadProducto, \n" +
+            "    p.precio AS precioUnidad, \n" +
+            "    (phc.cantidadProducto * p.precio) AS precioTotalPorProducto, \n" +
+            "    p.costoEnvio\n" +
+            "FROM \n" +
+            "    producto_has_carritocompra phc \n" +
+            "INNER JOIN \n" +
+            "    producto p ON p.idProducto = phc.idProducto \n" +
+            "INNER JOIN \n" +
+            "    proveedor pr ON pr.idProveedor = p.idProveedor \n" +
+            "INNER JOIN \n" +
+            "    tienda t ON t.idTienda = pr.idTienda \n" +
+            "INNER JOIN \n" +
+            "    orden o ON o.idCarritoCompra = phc.idCarritoCompra \n" +
+            "WHERE \n" +
+            "    o.idOrden = :idOrden", nativeQuery = true)
     List<ProductosxOrden> obtenerProductosPorOrden(Integer idOrden);
+
+
+    @Query(value = "SELECT o.costosAdicionales FROM gticsdb.orden o WHERE o.idOrden = :idOrden", nativeQuery = true)
+    Double obtenerCostoAdicionalxOrden(Integer idOrden);
 
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    o.idOrden,\n" +

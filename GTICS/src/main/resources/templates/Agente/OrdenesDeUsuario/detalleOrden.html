@@ -289,6 +289,20 @@
 										   </tr>
 
 										   <tr>
+											   <td class="border-bottom-0 pb-0"></td>
+											   <td class="border-bottom-0 pb-0"></td>
+											   <td colspan="1" class="fw-medium text-dark">
+												   <!-- texto -->
+												   Costos adicionales
+											   </td>
+											   <td class="fw-medium text-dark">
+												   <!-- Mostrar el costo adicional, y si es null, mostrar S/. 0.00 -->
+												   <span th:text="'S/. ' + (${costoAdicioal != null ? costoAdicioal : '0.00'})"></span>
+											   </td>
+										   </tr>
+
+
+										   <tr>
 											   <td></td>
 											   <td></td>
 											   <td colspan="1" class="fw-semibold text-dark">

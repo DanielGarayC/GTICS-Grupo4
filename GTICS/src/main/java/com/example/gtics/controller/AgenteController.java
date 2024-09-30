@@ -288,6 +288,7 @@ public class AgenteController {
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
         List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+        Double costoAdicioal = ordenRepository.obtenerCostoAdicionalxOrden(idOrden);
         // Calcular el subtotal sumando precioTotalPorProducto
         double subtotal = productosOrden.stream()
                 .mapToDouble(ProductosxOrden::getPrecioTotalPorProducto)
@@ -308,6 +309,7 @@ public class AgenteController {
             model.addAttribute("productosOrden", productosOrden);
             model.addAttribute("subtotal", subtotal);  // Enviar subtotal al modelo
             model.addAttribute("maxCostoEnvio", maxCostoEnvio);  // Enviar costo de envío más alto
+            model.addAttribute("costoAdicioal", costoAdicioal);  // Enviar costo de envío más alto
 
 
 
