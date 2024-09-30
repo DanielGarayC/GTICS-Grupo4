@@ -254,24 +254,44 @@ public class AgenteController {
     }
 
     @GetMapping({"Agente/Ordenes/DetallesOrdenSinAsignar"})
-    public String detalleOrdenSinAsignar(@RequestParam("idOrden") Integer idOrden,@RequestParam("numOrden") Integer numOrden,Model model,@RequestParam("indicadorVistaARegresar") Integer indicadorVistaARegresar){
+    public String detalleOrdenSinAsignar(@RequestParam("idOrden")Integer idOrden,
+                                         @RequestParam("numOrden") Integer numOrden,
+                                         Model model,
+                                         @RequestParam("indicadorVistaARegresar") Integer indicadorVistaARegresar){
+
         List<Distrito> listaDistritos   = distritoRepository.findAll();
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
-        
-        if(ordenOpt.isPresent()){
-            model.addAttribute("orden",ordenOpt.get());
-            model.addAttribute("listaDistritos",listaDistritos);
-            model.addAttribute("numOrden",numOrden);
-            model.addAttribute("listaControlOrden",listaControlOrden);
-            model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-            model.addAttribute("indicadorVistaARegresar",indicadorVistaARegresar);
+        List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+        Double costoAdicional = ordenRepository.obtenerCostoAdicionalxOrden(idOrden);
+
+        // Calcular el subtotal sumando precioTotalPorProducto
+        double subtotal = productosOrden.stream()
+                .mapToDouble(ProductosxOrden::getPrecioTotalPorProducto)
+                .sum();
+
+        // Encontrar el costo de envío más alto
+        double maxCostoEnvio = productosOrden.stream()
+                .mapToDouble(ProductosxOrden::getCostoEnvio)
+                .max()
+                .orElse(0.0);
+
+        if (ordenOpt.isPresent()) {
+            model.addAttribute("orden", ordenOpt.get());
+            model.addAttribute("listaDistritos", listaDistritos);
+            model.addAttribute("numOrden", numOrden);
+            model.addAttribute("listaControlOrden", listaControlOrden);
+            model.addAttribute("listaEstadoOrden", listaEstadoOrden);
+            model.addAttribute("indicadorVistaARegresar", indicadorVistaARegresar);
+            model.addAttribute("productosOrden", productosOrden);
+            model.addAttribute("subtotal", subtotal);  // Enviar subtotal al modelo
+            model.addAttribute("maxCostoEnvio", maxCostoEnvio);  // Enviar costo de envío más alto
+            model.addAttribute("costoAdicional", costoAdicional);  // Enviar costo adicional
 
             return "Agente/OrdenesDeUsuario/detalleOrdenSinAsignar";
-
-        }else{
-            return "Agente/Ordenes";
+        } else {
+            return "redirect:/Agente/Ordenes";
         }
 
 
@@ -309,7 +329,7 @@ public class AgenteController {
             model.addAttribute("productosOrden", productosOrden);
             model.addAttribute("subtotal", subtotal);  // Enviar subtotal al modelo
             model.addAttribute("maxCostoEnvio", maxCostoEnvio);  // Enviar costo de envío más alto
-            model.addAttribute("costoAdicioal", costoAdicioal);  // Enviar costo de envío más alto
+            model.addAttribute("costoAdicional", costoAdicioal);  // Enviar costo de envío más alto
 
 
 

@@ -178,7 +178,7 @@
 												<input type="date" class="form-control flex-fill" name="fechaOrden" th:value="${orden.fechaOrden}" style="color: #6c757d; margin-left: 14px;" disabled>
 											</div>
 											   Total:
-											   <span class="text-dark">S/. 135.00</span>
+										   <span th:text="'S/. ' + (${subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00)})"></span>
 										   </p>
 									   </div>
 								   </div>
@@ -186,98 +186,115 @@
 						   </div>
 					   </div>
 					   <div class="row">
+
+
 						   <div class="col-12">
 							   <div class="table-responsive">
 								   <!-- Table -->
 								   <table class="table mb-0 text-nowrap table-centered">
 									   <!-- Table Head -->
 									   <thead class="bg-light">
-									   <tr>
-										   <th>Productos</th>
-										   <th>Precio</th>
-										   <th>Cantidad</th>
-										   <th>Total</th>
-									   </tr>
+										   <tr>
+											   <th>Productos</th>
+											   <th>Precio Unidad</th>
+											   <th>Cantidad</th>
+
+											   <th>Total por Producto</th>
+										   </tr>
 									   </thead>
 									   <!-- tbody -->
 									   <tbody>
-									   <tr>
-										   <td>
-											   <a href="#" class="text-inherit">
+										   <!-- Iterar sobre la lista de productos -->
+										   <tr th:each="producto : ${productosOrden}">
+											   <td>
 												   <div class="d-flex align-items-center">
 													   <div>
 														   <img th:src="@{/images/products/product-img-1.jpg}" alt="" class="icon-shape icon-lg" />
 													   </div>
 													   <div class="ms-lg-4 mt-2 mt-lg-0">
-														   <h5 class="mb-0 h6">Producto 1</h5>
+														   <!-- Nombre del Producto -->
+														   <h5 class="mb-0 h6" th:text="${producto.nombreProducto}"></h5>
+														   <!-- Detalles: Tienda, Modelo, Color (con fuente más pequeña) -->
+														   <div class="text-muted" style="font-size: 0.875em;">
+															   <!-- Tienda -->
+															   <span th:text="'Tienda: ' + ${producto.nombreTienda}"></span><br>
+
+															   <!-- Modelo: Si es null o vacío, muestra "No especificado" -->
+															   <span th:text="'Modelo: ' + (${#strings.isEmpty(producto.modelo) ? 'No especificado' : producto.modelo})"></span><br>
+
+															   <!-- Color: Si es null o vacío, muestra "No especificado" -->
+															   <span th:text="'Color: ' + (${#strings.isEmpty(producto.color) ? 'No especificado' : producto.color})"></span>
+														   </div>
 													   </div>
 												   </div>
-											   </a>
-										   </td>
-										   <td><span class="text-body">S/. 45.00</span></td>
-										   <td>1</td>
-										   <td>S/. 45.00</td>
-									   </tr>
-									   <tr>
-										   <td>
-											   <a href="#" class="text-inherit">
-												   <div class="d-flex align-items-center">
-													   <div>
-														   <img th:src="@{/images/products/product-img-2.jpg}" alt="" class="icon-shape icon-lg" />
-													   </div>
-													   <div class="ms-lg-4 mt-2 mt-lg-0">
-														   <h5 class="mb-0 h6">Producto 2</h5>
-													   </div>
-												   </div>
-											   </a>
-										   </td>
-										   <td><span class="text-body">S/. 45.00</span></td>
-										   <td>2</td>
-										   <td>S/. 90.00</td>
-									   </tr>
+											   </td>
+											   <td><span class="text-body" th:text="'S/. ' + ${producto.precioUnidad}"></span></td>
+											   <td th:text="${producto.cantidadProducto}"></td>
 
-									   <tr>
-										<td class="border-bottom-0 pb-0"></td>
-										<td class="border-bottom-0 pb-0"></td>
-										<td colspan="1" class="fw-medium text-dark">
-											<!-- text -->
-											Sub-Total
-										</td>
-										<td class="fw-medium text-dark">
-											<!-- text -->
-											S/. 135.00
-										</td>
-										</tr>
+											   <td th:text="'S/. ' + ${producto.precioTotalPorProducto}"></td>
+										   </tr>
 
-									   <tr>
-										   <td class="border-bottom-0 pb-0"></td>
-										   <td class="border-bottom-0 pb-0"></td>
-										   <td colspan="1" class="fw-medium text-dark">
-											   <!-- text -->
-											   Costo de envío
-										   </td>
-										   <td class="fw-medium text-dark">
-											   <!-- text -->
-											   S/. 10.00
-										   </td>
-									   </tr>
+										   <!-- Subtotal de la Orden -->
 
-									   <tr>
-										   <td></td>
-										   <td></td>
-										   <td colspan="1" class="fw-semibold text-dark">
-											   <!-- text -->
-											   Total
-										   </td>
-										   <td class="fw-semibold text-dark">
-											   <!-- text -->
-											   S/. 145.00
-										   </td>
-									   </tr>
+										   <tr>
+											   <td class="border-bottom-0 pb-0"></td>
+											   <td class="border-bottom-0 pb-0"></td>
+											   <td colspan="1" class="fw-medium text-dark">
+												   <!-- text -->
+												   Sub-Total
+											   </td>
+											   <td class="fw-medium text-dark">
+												   <!-- Mostrar el subtotal calculado -->
+												   <span th:text="'S/. ' + ${subtotal}"></span>
+											   </td>
+										   </tr>
+
+										   <tr>
+											   <td class="border-bottom-0 pb-0"></td>
+											   <td class="border-bottom-0 pb-0"></td>
+											   <td colspan="1" class="fw-medium text-dark">
+												   <!-- text -->
+												   Costo de envío
+											   </td>
+											   <td class="fw-medium text-dark">
+												   <!-- Mostrar el costo de envío más alto -->
+												   <span th:text="'S/. ' + ${maxCostoEnvio}"></span>
+											   </td>
+										   </tr>
+
+										   <tr>
+											   <td class="border-bottom-0 pb-0"></td>
+											   <td class="border-bottom-0 pb-0"></td>
+											   <td colspan="1" class="fw-medium text-dark">
+												   <!-- texto -->
+												   Costos adicionales
+											   </td>
+											   <td class="fw-medium text-dark">
+												   <!-- Mostrar el costo adicional, y si es null, mostrar S/. 0.00 -->
+												   <span th:text="'S/. ' + (${costoAdicional != null ? costoAdicional : '0.00'})"></span>
+											   </td>
+										   </tr>
+
+
+										   <tr>
+											   <td></td>
+											   <td></td>
+											   <td colspan="1" class="fw-semibold text-dark">
+												   <!-- text -->
+												   Total
+											   </td>
+											   <td class="fw-semibold text-dark">
+												   <!-- Mostrar el total (subtotal + maxCostoEnvio + costoAdicional) y asegurar que costoAdicional nunca sea null -->
+												   <span th:text="'S/. ' + (${subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00)})"></span>
+											   </td>
+										   </tr>
+
 									   </tbody>
 								   </table>
 							   </div>
 						   </div>
+
+
 					   </div>
 					   <div class="card-body p-6">
 						   <div class="row">

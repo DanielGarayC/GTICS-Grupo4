@@ -168,7 +168,9 @@
 									   </td>
 
 
-									   <td th:text="${listaMonto[var.index].montoTotal}"></td>
+									   <td>
+										   <span th:each="monto : ${listaMonto}" th:if="${monto.idOrden == orden.id}" th:text="'S/. ' + ${monto.montoTotal}"></span>
+									   </td>
 
 
 									   <!-- si la orden ya esta asignada al agente -->

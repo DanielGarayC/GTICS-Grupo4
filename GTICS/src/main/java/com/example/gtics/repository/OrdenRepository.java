@@ -114,19 +114,22 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     Double obtenerCostoAdicionalxOrden(Integer idOrden);
 
     @Query(nativeQuery = true, value = "SELECT \n" +
-            "    o.idOrden,\n" +
-            "    SUM(p.precio) AS montoTotal\n" +
-            "FROM usuario u\n" +
-            "JOIN carritocompra c ON u.idUsuario = c.idUsuario\n" +
-            "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra\n" +
-            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra\n" +
-            "JOIN producto p ON phc.idProducto = p.idProducto\n" +
-            "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden\n" +
-            "JOIN controlorden co ON o.idControlOrden = co.idControlOrden\n" +
-            "WHERE o.idAgente = ?1 or o.idControlOrden=1\n" +
-            "GROUP BY o.idOrden\n" +
-            "order by o.idOrden;")
-    List <MontoTotalOrdenDto> obtenerMontoTotalConDto(Integer idAgente);
+            "    o.idOrden AS idOrden,                                       -- ID de la orden\n" +
+            "    SUM(phc.cantidadProducto * p.precio) AS subtotal,           -- Subtotal (productos * cantidad)\n" +
+            "    MAX(p.costoEnvio) AS maxCostoEnvio,                         -- Mayor costo de envío\n" +
+            "    COALESCE(o.costosAdicionales, 0.00) AS costosAdicionales,   -- Reemplaza NULL con 0\n" +
+            "    (SUM(phc.cantidadProducto * p.precio) + MAX(p.costoEnvio) + COALESCE(o.costosAdicionales, 0.00)) AS montoTotal  -- Monto total\n" +
+            "FROM \n" +
+            "    producto_has_carritocompra phc\n" +
+            "INNER JOIN \n" +
+            "    producto p ON p.idProducto = phc.idProducto\n" +
+            "INNER JOIN \n" +
+            "    orden o ON o.idCarritoCompra = phc.idCarritoCompra\n" +
+            "WHERE \n" +
+            "    (o.idAgente = :idAgente OR o.idControlOrden = 1)            -- Condición: asignado o sin asignar\n" +
+            "GROUP BY \n" +
+            "    o.idOrden;")
+    List<MontoTotalOrdenDto> obtenerMontoTotalConDto(Integer idAgente);
 
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    o.idOrden,\n" +

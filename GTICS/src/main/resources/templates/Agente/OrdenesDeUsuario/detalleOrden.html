@@ -203,7 +203,7 @@
 											</div>
 											   Total:
 
-										   		<span th:text="'S/. ' + ${subtotal + maxCostoEnvio}"></span>
+										   <span th:text="'S/. ' + (${subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00)})"></span>
 
 										   </p>
 									   </div>
@@ -297,7 +297,7 @@
 											   </td>
 											   <td class="fw-medium text-dark">
 												   <!-- Mostrar el costo adicional, y si es null, mostrar S/. 0.00 -->
-												   <span th:text="'S/. ' + (${costoAdicioal != null ? costoAdicioal : '0.00'})"></span>
+												   <span th:text="'S/. ' + (${costoAdicional != null ? costoAdicional : '0.00'})"></span>
 											   </td>
 										   </tr>
 
@@ -310,8 +310,8 @@
 												   Total
 											   </td>
 											   <td class="fw-semibold text-dark">
-												   <!-- text -->
-												   <span th:text="'S/. ' + ${subtotal + maxCostoEnvio}"></span>
+												   <!-- Mostrar el total (subtotal + maxCostoEnvio + costoAdicional) y asegurar que costoAdicional nunca sea null -->
+												   <span th:text="'S/. ' + (${subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00)})"></span>
 											   </td>
 										   </tr>
 
