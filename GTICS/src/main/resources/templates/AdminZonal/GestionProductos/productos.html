@@ -9,6 +9,7 @@
     <!-- Favicon icon-->
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <!-- jQuery (necesario para DataTables) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -241,7 +242,19 @@
         <!-- COONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">
             <section class="container">
-                <h1 class="mb-6">Lista de productos</h1>
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="mb-6">Lista de productos</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <form class="d-flex mb-4" role="search" onsubmit="return false;">
+                            <label for="searchCustomers" class="visually-hidden">Buscar producto</label>
+                            <input class="form-control" type="search" id="searchCustomers" placeholder="Buscar producto" aria-label="Search" oninput="filterTable()" />
+                        </form>
+                    </div>
+                </div>
                 <div class="table-responsive border-0">
                     <!-- Table -->
                     <table id="productosTable" class="table mb-0 text-nowrap" style ="padding-top: 3vh; border-color: #d5d7d7;">
@@ -252,7 +265,7 @@
                             <th>Producto</th>
                             <th>Stock</th>
                             <th>Fecha de arribo</th>
-                            <th></th>
+                            <th>Solicitud de reposición</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -276,22 +289,49 @@
                                 </button>
                             </td>
 
-                            <td class="align-middle">
-                                <!-- Si cantidadSolicitada no es null, mostrar "Revisar solicitud" -->
+                            <td class="align-middle text-center">
+                                <!-- Si cantidadSolicitada no es null, mostrar los botones Ver, Editar y Eliminar -->
                                 <button th:if="${producto.cantidadSolicitada != null}"
-                                        style="width: 100%"
                                         type="button"
-                                        class="btn btn-outline-warning reposicionRevisar"
+                                        class="btn btn-outline-primary"
                                         th:data-product-id="${producto.idProducto}"
-                                        th:data-cantidad-solicitada="${producto.cantidadSolicitada}">
-                                    Revisar solicitud
+                                        th:data-cantidad-solicitada="${producto.cantidadSolicitada}"
+                                        title="Ver solicitud"
+                                        style="border-color: #007bff; color: #007bff;">
+                                    <i class="fas fa-eye"></i>
                                 </button>
 
-                                <!-- Si cantidadSolicitada es null y cantidadDisponible > 25, mostrar botón deshabilitado -->
-                                <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible > 25}" style="width: 100%" type="button" class="btn btn-outline-info reposicion" disabled>Solicitar reposición</button>
+                                <button th:if="${producto.cantidadSolicitada != null}"
+                                        type="button"
+                                        class="btn btn-outline-success"
+                                        title="Editar solicitud">
+                                    <i class="fas fa-edit"></i>
+                                </button>
 
-                                <!-- Si cantidadSolicitada es null y cantidadDisponible <= 25, mostrar botón habilitado -->
-                                <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible <= 25}" style="width: 100%" type="button" class="btn btn-outline-info reposicion" th:data-product-id="${producto.idProducto}">Solicitar reposición</button>
+                                <button th:if="${producto.cantidadSolicitada != null}"
+                                        type="button"
+                                        class="btn btn-outline-danger"
+                                        title="Eliminar solicitud">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+
+                                <!-- Si cantidadSolicitada es null y cantidadDisponible <= 25, mostrar botón habilitado para Solicitar Reposición -->
+                                <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible <= 25}"
+                                        type="button"
+                                        class="btn btn-outline-primary reposicion"
+                                        th:data-product-id="${producto.idProducto}"
+                                        title="Solicitar reposición">
+                                    <i class="fas fa-cart-plus"></i> Solicitar
+                                </button>
+
+                                <!-- Si cantidadSolicitada es null y cantidadDisponible > 25, mostrar botón deshabilitado indicando Stock adecuado -->
+                                <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible > 25}"
+                                        type="button"
+                                        class="btn btn-outline-secondary"
+                                        disabled
+                                        title="Stock adecuado">
+                                    <i class="fas fa-check-circle"></i> Stock adecuado
+                                </button>
                             </td>
 
                         </tr>
@@ -299,7 +339,32 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="d-flex flex-column align-items-center">
+                    <!-- Texto de paginación centrado -->
+                    <span id="paginationInfo" class="mb-2">
+                                        Mostrando página [[${currentPage != null ? currentPage + 1 : 1}]] de [[${totalPages != null ? totalPages : 1}]]
+                                    </span>
 
+                    <!-- Paginación centrada -->
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <!-- Botón de "Previo" -->
+                            <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
+                                <a class="page-link" th:href="@{/AdminZonal/Productos(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
+                            </li>
+
+                            <!-- Páginas numeradas -->
+                            <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                <a class="page-link" th:href="@{/AdminZonal/Productos(page=${i})}" th:text="${i + 1}"></a>
+                            </li>
+
+                            <!-- Botón de "Siguiente" -->
+                            <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
+                                <a class="page-link" th:href="@{/AdminZonal/Productos(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </section>
         </main>
     </div>
@@ -317,14 +382,26 @@
 <script th:src="@{/js/vendors/chart.js}"></script>
 <script>
     $(document).ready(function () {
-        $('#productosTable').DataTable({
-            // Configuración adicional
-            "paging": true,       // Habilita la paginación
-            "searching": true,    // Habilita la búsqueda
-            "ordering": true,     // Habilita el ordenamiento de columnas
-            "info": true,         // Muestra información adicional
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json" // URL correcta en HTTPS
+        // Funciones para paginación adicional, si es necesario
+        $('a.page-link').on('click', function () {
+            const page = $(this).data('page');
+            if (page !== undefined) {
+                window.location.href = '/AdminZonal/Productos?page=' + page;
+            }
+        });
+
+        $('#prevPage').on('click', function () {
+            const currentPage = parseInt($('li.active a').data('page'));
+            if (currentPage > 0) {
+                window.location.href = '/AdminZonal/Productos?page=' + (currentPage - 1);
+            }
+        });
+
+        $('#nextPage').on('click', function () {
+            const currentPage = parseInt($('li.active a').data('page'));
+            const totalPages = parseInt([[${totalPages}]]);
+            if (currentPage < totalPages - 1) {
+                window.location.href = '/AdminZonal/Productos?page=' + (currentPage + 1);
             }
         });
     });
@@ -504,8 +581,27 @@
         });
     });
 </script>
+<script>
+    function filterTable() {
+    const input = document.getElementById("searchCustomers");
+    const filter = input.value.toLowerCase();
+    const table = document.querySelector("table tbody");
+    const rows = table.getElementsByTagName("tr");
 
+    for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].getElementsByTagName("td");
+    let match = false;
 
+    for (let j = 0; j < cells.length; j++) {
+    if (cells[j].innerText.toLowerCase().includes(filter)) {
+    match = true;
+    break;
+    }
+    }
+    rows[i].style.display = match ? "" : "none";
+    }
+    }
+</script>
 <script>
 
     document.querySelectorAll('.addDate').forEach(button => {

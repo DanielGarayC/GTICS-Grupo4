@@ -8,6 +8,9 @@ import com.example.gtics.repository.*;
 import jakarta.validation.Valid;
 import org.springframework.boot.Banner;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -218,8 +221,26 @@ public class AdminZonalController {
 
 
     @GetMapping({ "AdminZonal/Productos"})
-    public String Productos(Model model){
-        model.addAttribute("listaProductos", productoRepository.getProductosTabla());
+    public String Productos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size, Model model){
+        List<ProductoTabla> todosLosProductos = productoRepository.getProductosTabla();
+
+        // Calcular el total de productos
+        int totalProductos = todosLosProductos.size();
+
+        // Calcular el número total de páginas
+        int totalPages = (int) Math.ceil((double) totalProductos / size);
+
+        // Calcular el índice inicial y final para la sublista
+        int fromIndex = page * size;
+        int toIndex = Math.min(fromIndex + size, totalProductos);
+
+        // Obtener la sublista de productos para la página actual
+        List<ProductoTabla> productosPaginados = todosLosProductos.subList(fromIndex, toIndex);
+
+        // Añadir la lista paginada de productos al modelo
+        model.addAttribute("listaProductos", productosPaginados);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page);
         return "AdminZonal/GestionProductos/productos";
     }
 
