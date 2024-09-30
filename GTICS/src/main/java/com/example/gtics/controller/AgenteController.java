@@ -122,25 +122,26 @@ public class AgenteController {
 
 
     @GetMapping({"Agente/Ordenes"})
-    public String Ordenes(Model model){
+    public String Ordenes(Model model,
+                          @RequestParam(defaultValue = "0") int page){
 
+
+        int pageSize = 6;
+        Pageable pageable = PageRequest.of(page, pageSize);
         //Asumiendo que somos el agente con id 13 (esto se cambiará luego con login y session)
         Integer idAgente = 13;
-
-        List<Orden> ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente);
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
         List<MontoTotalOrdenDto> listaMonto =  ordenRepository.obtenerMontoTotalConDto(idAgente);
+        Page<Orden> ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignar(idAgente, pageable);
 
-
-        model.addAttribute("ordenesLista", ordenesLista);
+        model.addAttribute("ordenesLista", ordenesLista.getContent());
         model.addAttribute("listaControlOrden",listaControlOrden);
         model.addAttribute("listaEstadoOrden",listaEstadoOrden);
         model.addAttribute("listaMonto",listaMonto);
 
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
-
 
     @GetMapping({"/Agente/Ordenes/AsignarOrden"})
     public String AutoAsignarOrden(Model model,@RequestParam("idOrden") Integer idOrden,RedirectAttributes attr ){
