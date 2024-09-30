@@ -149,7 +149,7 @@
 											   <br />
 											   <span th:text="${orden.idCarritoCompra.idUsuario.telefono}"></span>
 										   </p>
-										   <a href="#">Ver perfil</a>
+										   <a th:href="@{/Agente/verPerfilDesdeDetalle(id=${orden.idCarritoCompra.idUsuario.id})}">Ver perfil</a>
 									   </div>
 								   </div>
 								   <!-- address -->
