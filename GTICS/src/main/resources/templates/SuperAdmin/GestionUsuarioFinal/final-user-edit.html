@@ -204,7 +204,9 @@
 								<form class="row g-3 needs-validation" enctype="multipart/form-data"  novalidate method="post" th:action="@{/SuperAdmin/Actualizar/{id}(id=${finalUser.get().getId()})}">
 									<div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
 										<div>
-											<img class="image avatar avatar-lg rounded-3" th:if="*{finalUser.get().getFoto() != null}" th:src="@{'/usuarioFinal/'+${finalUser.get().getId()}}" alt="Image" />
+											<img class="image avatar avatar-lg rounded-3"
+												 th:src="@{${finalUser.get().getFoto() != null} ? '/usuarioFinal/' + ${finalUser.get().getId()} : '/images/docs/placeholder-img.jpg'}"
+												 alt="Image" />
 										</div>
 
 										<div class="file-upload btn btn-light ms-md-4">
