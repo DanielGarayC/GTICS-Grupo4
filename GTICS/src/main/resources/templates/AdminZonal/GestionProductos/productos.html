@@ -9,6 +9,7 @@
     <!-- Favicon icon-->
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <!-- jQuery (necesario para DataTables) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -264,7 +265,7 @@
                             <th>Producto</th>
                             <th>Stock</th>
                             <th>Fecha de arribo</th>
-                            <th></th>
+                            <th>Solicitud de reposición</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -288,22 +289,49 @@
                                 </button>
                             </td>
 
-                            <td class="align-middle">
-                                <!-- Si cantidadSolicitada no es null, mostrar "Revisar solicitud" -->
+                            <td class="align-middle text-center">
+                                <!-- Si cantidadSolicitada no es null, mostrar los botones Ver, Editar y Eliminar -->
                                 <button th:if="${producto.cantidadSolicitada != null}"
-                                        style="width: 100%"
                                         type="button"
-                                        class="btn btn-outline-warning reposicionRevisar"
+                                        class="btn btn-outline-primary"
                                         th:data-product-id="${producto.idProducto}"
-                                        th:data-cantidad-solicitada="${producto.cantidadSolicitada}">
-                                    Revisar solicitud
+                                        th:data-cantidad-solicitada="${producto.cantidadSolicitada}"
+                                        title="Ver solicitud"
+                                        style="border-color: #007bff; color: #007bff;">
+                                    <i class="fas fa-eye"></i>
                                 </button>
 
-                                <!-- Si cantidadSolicitada es null y cantidadDisponible > 25, mostrar botón deshabilitado -->
-                                <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible > 25}" style="width: 100%" type="button" class="btn btn-outline-info reposicion" disabled>Solicitar reposición</button>
+                                <button th:if="${producto.cantidadSolicitada != null}"
+                                        type="button"
+                                        class="btn btn-outline-success"
+                                        title="Editar solicitud">
+                                    <i class="fas fa-edit"></i>
+                                </button>
 
-                                <!-- Si cantidadSolicitada es null y cantidadDisponible <= 25, mostrar botón habilitado -->
-                                <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible <= 25}" style="width: 100%" type="button" class="btn btn-outline-info reposicion" th:data-product-id="${producto.idProducto}">Solicitar reposición</button>
+                                <button th:if="${producto.cantidadSolicitada != null}"
+                                        type="button"
+                                        class="btn btn-outline-danger"
+                                        title="Eliminar solicitud">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+
+                                <!-- Si cantidadSolicitada es null y cantidadDisponible <= 25, mostrar botón habilitado para Solicitar Reposición -->
+                                <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible <= 25}"
+                                        type="button"
+                                        class="btn btn-outline-primary reposicion"
+                                        th:data-product-id="${producto.idProducto}"
+                                        title="Solicitar reposición">
+                                    <i class="fas fa-cart-plus"></i> Solicitar
+                                </button>
+
+                                <!-- Si cantidadSolicitada es null y cantidadDisponible > 25, mostrar botón deshabilitado indicando Stock adecuado -->
+                                <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible > 25}"
+                                        type="button"
+                                        class="btn btn-outline-secondary"
+                                        disabled
+                                        title="Stock adecuado">
+                                    <i class="fas fa-check-circle"></i> Stock adecuado
+                                </button>
                             </td>
 
                         </tr>
