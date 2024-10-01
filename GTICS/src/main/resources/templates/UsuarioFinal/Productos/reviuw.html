@@ -6,6 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       <meta content="Codescandy" name="author" />
       <title>Reseña</title>
+      <link th:href="@{/libs/dropzone/dist/min/dropzone.min.css}" rel="stylesheet" />
       <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
       <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
       <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
@@ -56,12 +57,12 @@
                         <div>
                             <!-- rating -->
                             <h2 class="mb-5">Crear reseña</h2>
-                          
-                            <div class="border-bottom py-4 mb-4">
-                               <h5>Subir foto del producto recibido aquí</h5>
-                               <!-- form -->
-                               <div id="my-dropzone" class="dropzone mt-4 border-dashed rounded-2 min-h-0"></div>
-                            </div>
+
+                           <div class="border-bottom py-4 mb-4">
+                              <h5>Subir foto del producto recibido aquí</h5>
+                              <!-- form -->
+                              <div id="my-dropzone" class="dropzone mt-4 border-dashed rounded-2 min-h-0"></div>
+                           </div>
                             <div class="border-bottom py-4 mb-4">
                                 <h4 class="mb-0">Califación del producto</h4>
                                 <div class="my-5">
@@ -289,5 +290,34 @@
    <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
    <script th:src="@{/js/vendors/slick-slider.js}"></script>
    <script th:src="@{/js/vendors/dropzone.js}"></script>
+      <script>
+         document.addEventListener("DOMContentLoaded", function() {
+            if (Dropzone.instances.length > 0) {
+               var existingDropzone = Dropzone.instances[0];
+
+               // Modificar el mensaje de "Suelte los archivos aquí para subirlos"
+               existingDropzone.options.dictDefaultMessage = "Suelte los archivos aquí para subirlos";
+
+               // Modificar otros mensajes de Dropzone a español
+               existingDropzone.options.dictRemoveFile = "Eliminar archivo";
+               existingDropzone.options.dictCancelUpload = "Cancelar carga";
+               existingDropzone.options.dictCancelUploadConfirmation = "¿Estás seguro de que deseas cancelar esta carga?";
+               existingDropzone.options.dictFileTooBig = "El archivo es demasiado grande ({{filesize}} MB). Tamaño máximo permitido: {{maxFilesize}} MB.";
+               existingDropzone.options.dictInvalidFileType = "No puedes subir archivos de este tipo.";
+               existingDropzone.options.dictMaxFilesExceeded = "No puedes subir más archivos.";
+
+               // Actualizar el DOM para el nuevo mensaje
+               existingDropzone.element.querySelector(".dz-message").textContent = existingDropzone.options.dictDefaultMessage;
+
+               console.log("Todos los mensajes fueron actualizados.");
+
+            } else {
+               console.log("No se encontró ninguna instancia de Dropzone.");
+            }
+         });
+
+
+      </script>
+
    </body>
 </html>
