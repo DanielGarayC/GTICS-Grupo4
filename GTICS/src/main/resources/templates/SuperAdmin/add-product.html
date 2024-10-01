@@ -251,12 +251,7 @@
                                             </select>
                                             <div class="invalid-feedback">Por favor seleccione una subcategoría</div>
                                         </div>
-                                        <!-- cantidad de productos -->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="cantidadDisponible" class="form-label">Cantidad Disponible</label>
-                                            <input type="text" class="form-control" id="cantidadDisponible" name="cantidadDisponible" placeholder="Cantidad disponible" required />
-                                            <div class="invalid-feedback">Por favor ingrese la cantidad disponible</div>
-                                        </div>
+
                                         <!-- Precio -->
                                         <div class="mb-3 col-lg-6">
                                             <label for="precio" class="form-label">Precio</label>
@@ -286,8 +281,7 @@
                                         <div class="mb-3 col-lg-6" th:each="zona : ${zonas}">
                                             <label th:for="'cantidadZona' + ${zona.id}" th:text="'Cantidad para ' + ${zona.nombreZona}"></label>
                                             <input type="number" class="form-control" th:id="'cantidadZona' + ${zona.id}"
-                                                   th:name="'zona-' + ${zona.id}" min="0"
-                                                   th:value="${#lists.contains(productoZonas, zona.id) ? productoZonas[zona.id].cantidad : 0}" />
+                                                   th:name="'zona-' + ${zona.id}" min="0" />
                                         </div>
 
                                         <!-- Modelo (opcional) -->
@@ -357,7 +351,7 @@
             { id: 2, nombre: 'Electrodomésticos' },
             { id: 3, nombre: 'Cámaras y Fotografía' },
             { id: 4, nombre: 'Gaming' },
-            { id: 3, nombre: 'Otro' },
+            { id: 5, nombre: 'Otro' },
         ],
         2: [ // Id de categoría 2
             { id: 6, nombre: 'Maquillaje y Cosméticos' },
@@ -368,11 +362,22 @@
 
         ],
 
-        //3: [ // Id de categoría 3
-            //{ id: 5, nombre: 'Moda y Ropa' },
-            //{ id: 6, nombre: 'Zapatos' }
-        //]
-        // Puedes agregar más categorías y sus subcategorías aquí
+        3: [ // Id de categoría 3
+            { id: 11, nombre: 'Ropa' },
+            { id: 12, nombre: 'Calzado' },
+            { id: 13, nombre: 'Accesorios' },
+            { id: 14, nombre: 'Joyería y relojes' },
+            { id: 15, nombre: 'Otro' },
+
+        ],
+        4: [ // Id de categoría 4
+            { id: 16, nombre: 'Muebles y Decoración' },
+            { id: 17, nombre: 'Cocina y Utensilios' },
+            { id: 18, nombre: 'Organización y Almacenamiento' },
+            { id: 19, nombre: 'Limpieza y Cuidado del hogar' },
+            { id: 20, nombre: 'Otro' },
+
+        ],
     };
 
     function cargarSubcategorias() {

@@ -257,13 +257,6 @@
                                             <div class="invalid-feedback">Por favor seleccione una subcategoría</div>
                                         </div>
 
-                                        <!-- Cantidad Disponible -->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="cantidadDisponible" class="form-label">Cantidad Disponible</label>
-                                            <input type="text" class="form-control" id="cantidadDisponible" name="cantidadDisponible" th:value="${producto.cantidadDisponible}" required />
-                                            <div class="invalid-feedback">Por favor ingrese la cantidad disponible</div>
-                                        </div>
-
                                         <!-- Precio -->
                                         <div class="mb-3 col-lg-6">
                                             <label for="precio" class="form-label">Precio</label>
@@ -294,7 +287,7 @@
                                             <label th:for="'cantidadZona' + ${zona.id}" th:text="'Cantidad para ' + ${zona.nombreZona}"></label>
                                             <input type="number" class="form-control" th:id="'cantidadZona' + ${zona.id}"
                                                    th:name="'zona-' + ${zona.id}" min="0"
-                                                   th:value="${productoZonas.containsKey(zona.id) ? productoZonas[zona.id].cantidad : 0}" />
+                                                   th:value="${productoZonas.containsKey(zona.id) ? productoZonas.get(zona.id) : 0}" />
                                         </div>
                                         <!-- Modelo (opcional) -->
                                         <div class="mb-3 col-lg-6">
@@ -352,6 +345,64 @@
         });
     }
 </script>
+
+<script>
+    // Objeto que contiene las subcategorías asociadas a cada categoría
+    var subcategoriasPorCategoria = {
+        1: [ // Id de categoría 1
+            { id: 1, nombre: 'Teléfonos móviles y Accesorios' },
+            { id: 2, nombre: 'Electrodomésticos' },
+            { id: 3, nombre: 'Cámaras y Fotografía' },
+            { id: 4, nombre: 'Gaming' },
+            { id: 3, nombre: 'Otro' },
+        ],
+        2: [ // Id de categoría 2
+            { id: 6, nombre: 'Maquillaje y Cosméticos' },
+            { id: 7, nombre: 'Fragancias' },
+            { id: 8, nombre: 'Cuidado Corporal' },
+            { id: 9, nombre: 'Cuidado capilar' },
+            { id: 10, nombre: 'Otro' },
+
+        ],
+
+        3: [ // Id de categoría 3
+            { id: 11, nombre: 'Ropa' },
+            { id: 12, nombre: 'Calzado' },
+            { id: 13, nombre: 'Accesorios' },
+            { id: 14, nombre: 'Joyería y relojes' },
+            { id: 15, nombre: 'Otro' },
+
+        ],
+        4: [ // Id de categoría 4
+            { id: 16, nombre: 'Muebles y Decoración' },
+            { id: 17, nombre: 'Cocina y Utensilios' },
+            { id: 18, nombre: 'Organización y Almacenamiento' },
+            { id: 19, nombre: 'Limpieza y Cuidado del hogar' },
+            { id: 20, nombre: 'Otro' },
+
+        ],
+    };
+
+    function cargarSubcategorias() {
+        var categoriaId = document.getElementById("selectCategoria").value;
+        var selectSubcategoria = document.getElementById("selectSubcategoria");
+
+        // Limpiar las opciones previas de subcategorías
+        selectSubcategoria.innerHTML = '<option value="" selected disabled>--Seleccione una subcategoría--</option>';
+
+        // Obtener las subcategorías correspondientes a la categoría seleccionada
+        var subcategorias = subcategoriasPorCategoria[categoriaId] || [];
+
+        // Poblamos el menú de subcategorías
+        subcategorias.forEach(function(subcat) {
+            var option = document.createElement("option");
+            option.value = subcat.id;
+            option.text = subcat.nombre;
+            selectSubcategoria.appendChild(option);
+        });
+    }
+</script>
+
 
 <!-- Libs JS -->
 <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->

@@ -39,7 +39,7 @@ public class UsuarioFinalController {
     @PostMapping("/UsuarioFinal/solicitudAgente")
     public String enviarSolicitudaSerAgente(Solicitudagente solicitudagente){
         solicitudagente.setIndicadorSolicitud(0);
-        solicitudagente.setValidaciones(1);
+        //solicitudagente.setValidaciones(1);
         solicitudagente.setCodigoJurisdiccion("333");
 
         //solicitudagente.setValidaciones(new Validacionescodigosagente());

@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -24,7 +26,6 @@ public class SuperAdminController {
     private final ProveedorRepository proveedorRepository;
     private final CategoriaRepository categoriaRepository;
     private final SubcategoriaRepository subcategoriaRepository;
-    private final ProductoZonaRepository productoZonaRepository;
     private final TiendaRepository tiendaRepository;
 
     public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository,
@@ -34,7 +35,6 @@ public class SuperAdminController {
                                 OrdenRepository ordenRepository,
                                 CategoriaRepository categoriaRepository,
                                 SubcategoriaRepository subcategoriaRepository,
-                                ProductoZonaRepository productoZonaRepository,
                                 TiendaRepository tiendaRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
@@ -45,7 +45,6 @@ public class SuperAdminController {
         this.ordenRepository = ordenRepository;
         this.categoriaRepository = categoriaRepository;
         this.subcategoriaRepository = subcategoriaRepository;
-        this.productoZonaRepository = productoZonaRepository;
         this.tiendaRepository=tiendaRepository;
     }
 
@@ -128,7 +127,7 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAdminZonal/create-zonal-admin";
     }
     @PostMapping("/SuperAdmin/AdminZonal/guardar")
-    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario,@RequestParam("zonaId") Integer zonaId, RedirectAttributes attr) {
+    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario,@RequestParam("zonaId") Integer zonaId, RedirectAttributes attr, @RequestParam("zonalAdminPhoto") MultipartFile foto) {
 
         try {
             // Verificar si ya existen 2 coordinadores en la zona
@@ -165,6 +164,7 @@ public class SuperAdminController {
             } else {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
             }
+            usuario.setFoto(foto.getBytes());
             usuarioRepository.save(usuario);
         } catch (Exception e) {
             attr.addFlashAttribute("error", "Ocurrió un error al guardar el Admin Zonal.");
@@ -254,7 +254,7 @@ public class SuperAdminController {
     }
 
     @PostMapping("/SuperAdmin/Agente/guardar")
-    public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model) {
+    public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model, @RequestParam("agentPhoto") MultipartFile foto) {
         try {
             // Buscar el agente existente
             Usuario agenteExistente = usuarioRepository.findById(agente.getId())
@@ -295,6 +295,7 @@ public class SuperAdminController {
             }
 
             // Guardar solo si algo ha cambiado
+            agenteExistente.setFoto(foto.getBytes());
             usuarioRepository.save(agenteExistente);
 
         } catch (Exception e) {
@@ -450,10 +451,36 @@ public class SuperAdminController {
     }
 
     @PostMapping("SuperAdmin/Actualizar/{id}")
-    public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal){
+    public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal, @RequestParam("UserPhoto")MultipartFile foto) throws IOException {
+        if (foto.isEmpty()) {
+            Usuario finalUser = usuarioRepository.findById(idUsuarioFinal).get();
+            usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(),idUsuarioFinal);
+        }else{
+            try {
+                byte[] fotoBytes = foto.getBytes();
+                usuario.setFoto(fotoBytes);
+                usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(),idUsuarioFinal);
+            } catch (IOException ignored) {
 
-        usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), idUsuarioFinal);
+            }
+        }
+
+
+
         return "redirect:/SuperAdmin/listaUsuarioFinal";
+    }
+
+    @GetMapping("/usuarioFinal/{id}")
+    public ResponseEntity<ByteArrayResource> obtenerFotoUsuarioFinal(@PathVariable Integer id) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Tienda no encontrada"));
+
+        byte[] foto = usuario.getFoto();
+        ByteArrayResource resource = new ByteArrayResource(foto);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"foto_" + usuario.getApellidoPaterno()+"_"+ usuario.getNombre()+".jpg\"")
+                .contentLength(foto.length)
+                .body(resource);
     }
 
     @GetMapping("SuperAdmin/banearUsuarioFinal/{id}")
@@ -476,8 +503,7 @@ public class SuperAdminController {
             subcategorias = List.of();
         }
 
-        // Inicializar la lista de productoZonas para evitar que sea null
-        Map<Integer, ProductoZona> productoZonas = new HashMap<>();
+        Map<Integer, Integer> productoZonas = new HashMap<>();
 
         model.addAttribute("producto", producto);
         model.addAttribute("categorias", categorias);
@@ -492,24 +518,42 @@ public class SuperAdminController {
 
     @PostMapping("/SuperAdmin/guardarProducto")
     public String guardarProducto(@ModelAttribute("producto") Producto producto,
-                                  @RequestParam("zona-1") Integer cantidadZona1,
-                                  @RequestParam("zona-2") Integer cantidadZona2,
-                                  @RequestParam("zona-3") Integer cantidadZona3,
-                                  @RequestParam("zona-4") Integer cantidadZona4,
+                                  @RequestParam Map<String, String> allParams,
                                   RedirectAttributes attr) {
 
         try {
             if (producto.getCantVentas() == null) {
-                producto.setCantVentas("0");
+                producto.setCantVentas(0);
             }
             if (producto.getBorrado() == null) {
                 producto.setBorrado(0);
             }
-            productoRepository.save(producto);
-            guardarProductoZona(producto, 1, cantidadZona1);
-            guardarProductoZona(producto, 2, cantidadZona2);
-            guardarProductoZona(producto, 3, cantidadZona3);
-            guardarProductoZona(producto, 4, cantidadZona4);
+
+            for (Map.Entry<String, String> entry : allParams.entrySet()) {
+                if (entry.getKey().startsWith("zona-")) {
+                    Integer zonaId = Integer.parseInt(entry.getKey().split("-")[1]);
+                    Integer cantidad = Integer.parseInt(entry.getValue());
+
+                    if (cantidad > 0) {
+                        Producto newProducto = new Producto();
+                        setCommonProductAttributes(newProducto, producto.getNombreProducto(), producto.getDescripción(),
+                                producto.getPrecio(), producto.getCostoEnvio(), producto.getModelo(),
+                                producto.getColor(), producto.getIdCategoria(), producto.getIdProveedor(),
+                                producto.getIdSubcategoria());
+
+                        newProducto.setCantidadDisponible(cantidad);
+
+                        Optional<Zona> optionalZona = zonaRepository.findById(zonaId);
+                        if (optionalZona.isPresent()) {
+                            newProducto.setZona(optionalZona.get());
+                        } else {
+                            throw new RuntimeException("Zona no encontrada");
+                        }
+
+                        productoRepository.save(newProducto);
+                    }
+                }
+            }
 
             attr.addFlashAttribute("msg", "Producto creado exitosamente.");
         } catch (Exception e) {
@@ -517,22 +561,6 @@ public class SuperAdminController {
             e.printStackTrace();
         }
         return "redirect:/SuperAdmin/productos";
-    }
-
-    private void guardarProductoZona(Producto producto, Integer zonaId, Integer cantidad) {
-        Optional<ProductoZona> optionalProductoZona = productoZonaRepository.findByProductoIdAndZonaId(producto.getId(), zonaId);
-
-        ProductoZona productoZona;
-        if (optionalProductoZona.isPresent()) {
-            productoZona = optionalProductoZona.get();
-        } else {
-            productoZona = new ProductoZona();
-            productoZona.setProducto(producto);
-            Optional<Zona> zonaOpt = zonaRepository.findById(zonaId);
-            zonaOpt.ifPresent(productoZona::setZona);
-        }
-        productoZona.setCantidad(cantidad);
-        productoZonaRepository.save(productoZona);
     }
 
     @GetMapping("/SuperAdmin/editarProducto/{id}")
@@ -546,11 +574,16 @@ public class SuperAdminController {
             List<Zona> zonas = zonaRepository.findAll();
             List<Subcategoria> subcategorias = subcategoriaRepository.findAll();
 
-            // Cargar las cantidades por zona en un mapa
-            List<ProductoZona> productoZonas = productoZonaRepository.findByProductoId(id);
-            Map<Integer, ProductoZona> zonasMap = new HashMap<>();
-            for (ProductoZona productoZona : productoZonas) {
-                zonasMap.put(productoZona.getZona().getId(), productoZona);
+            // Cargar las cantidades por zona para este producto
+            Map<Integer, Integer> productoZonas = new HashMap<>();
+            List<Producto> productosPorZona = productoRepository.findByNombreProducto(producto.getNombreProducto());
+
+            for (Producto pz : productosPorZona) {
+                productoZonas.put(pz.getZona().getId(), pz.getCantidadDisponible());
+            }
+
+            if (productoZonas == null) {
+                productoZonas = new HashMap<>();
             }
 
             model.addAttribute("producto", producto);
@@ -558,7 +591,7 @@ public class SuperAdminController {
             model.addAttribute("proveedores", proveedores);
             model.addAttribute("zonas", zonas);
             model.addAttribute("subcategorias", subcategorias);
-            model.addAttribute("productoZonas", zonasMap);
+            model.addAttribute("productoZonas", productoZonas);
 
             return "SuperAdmin/edit-product";
         } else {
@@ -566,6 +599,21 @@ public class SuperAdminController {
         }
     }
 
+    private void setCommonProductAttributes(Producto producto, String nombreProducto, String descripcion, Double precio,
+                                            Double costoEnvio, String modelo, String color, Categoria categoria, Proveedor proveedor,
+                                            Subcategoria subcategoria) {
+        producto.setNombreProducto(nombreProducto);
+        producto.setDescripción(descripcion);
+        producto.setPrecio(precio);
+        producto.setCostoEnvio(costoEnvio);
+        producto.setModelo(modelo);
+        producto.setColor(color);
+        producto.setIdCategoria(categoria);
+        producto.setIdProveedor(proveedor);
+        producto.setIdSubcategoria(subcategoria);
+        producto.setCantVentas(0);
+        producto.setBorrado(0);
+    }
 
     @GetMapping("/SuperAdmin/eliminarProducto/{id}")
     public String eliminarProducto(@PathVariable("id") Integer id, RedirectAttributes attr) {

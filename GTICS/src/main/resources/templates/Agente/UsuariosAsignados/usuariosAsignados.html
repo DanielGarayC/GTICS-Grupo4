@@ -61,138 +61,7 @@
    <body>
 
    <!-- BARRA SUPERIOR -->
-   <nav class="navbar navbar-expand-lg navbar-glass">
-	   <div class="container-fluid">
-		   <div class="d-flex justify-content-between align-items-center w-100">
-			   <div class="d-flex align-items-center">
-				   <a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-					   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
-						   <path
-								   d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
-						   />
-					   </svg>
-				   </a>
-
-			   </div>
-			   <div>
-				   <ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
-					   <li class="dropdown-center">
-						   <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							   <i class="bi bi-bell fs-5"></i>
-							   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
-									2
-									<span class="visually-hidden">Mensajes sin leer</span>
-								</span>
-						   </a>
-						   <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
-							   <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
-								   <div>
-									   <h5 class="mb-1">Notificaciones</h5>
-									   <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
-								   </div>
-								   <a href="#!" class="text-muted">
-									   <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
-										   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
-											   <path
-													   d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
-											   />
-											   <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
-										   </svg>
-									   </a>
-								   </a>
-							   </div>
-							   <div data-simplebar style="height: 250px">
-								   <!-- List group -->
-								   <ul class="list-group list-group-flush notification-list-scroll fs-6">
-									   <!-- List group item -->
-									   <li class="list-group-item px-5 py-4 list-group-item-action active">
-										   <a href="#!" class="text-muted">
-											   <div class="d-flex">
-												   <div class="ms-4">
-													   <p class="mb-1">
-														   <span class="text-dark">Nombre de la persona</span>
-														   Descripción notificación 1
-													   </p>
-													   <span>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
-																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-															</svg>
-															<small class="ms-2">Hace 1 minuto</small>  <!--Se puede eliminar-->
-														</span>
-												   </div>
-											   </div>
-										   </a>
-									   </li>
-									   <li class="list-group-item px-5 py-4 list-group-item-action">
-										   <a href="#!" class="text-muted">
-											   <div class="d-flex">
-												   <div class="ms-4">
-													   <p class="mb-1">
-														   <span class="text-dark">Título de notificación 2</span>
-														   Descripción notificación 2
-													   </p>
-													   <span>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
-																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-															</svg>
-															<small class="ms-2">Hace 2 días</small>
-														</span>
-												   </div>
-											   </div>
-										   </a>
-									   </li>
-									   <li class="list-group-item px-5 py-4 list-group-item-action">
-										   <a href="#!" class="text-muted">
-											   <div class="d-flex">
-												   <div class="ms-4">
-													   <p class="mb-1">
-														   <span class="text-dark">Título de notificación 3</span>
-														   Descripción notificación 3
-													   </p>
-													   <span>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
-																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-															</svg>
-															<small class="ms-2">Hace 5 horas</small>
-														</span>
-												   </div>
-											   </div>
-										   </a>
-									   </li>
-								   </ul>
-							   </div>
-							   <div class="border-top px-5 py-4 text-center">
-								   <a href="#!">Ver todas</a>
-							   </div>
-						   </div>
-					   </li>
-					   <li class="dropdown ms-4">
-						   <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							   <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
-						   </a>
-
-						   <div class="dropdown-menu dropdown-menu-end p-0">
-							   <div class="lh-1 px-5 py-4 border-bottom">
-								   <h5 class="mb-1 h6">Nombre Apellido</h5>
-								   <small>rol en la pagina</small>
-							   </div>
-
-							   <div class="border-top px-5 py-3">
-								   <a href="#">Mi perfil</a>
-							   </div>
-							   <div class="border-top px-5 py-3">
-								   <a href="#">Cerrar sesión</a>
-							   </div>
-						   </div>
-					   </li>
-				   </ul>
-			   </div>
-		   </div>
-	   </div>
-   </nav>
+   <div th:insert="~{fragments/navbarAgente.html :: barraSuperior}"></div>
 	<!-- NAVBAR  -->
    <div class="main-wrapper">
 
@@ -213,7 +82,7 @@
 			   <div class="col-md-12">
 				   <!-- page header -->
 				   <div>
-					   <h2>Usuarios</h2>
+					   <h2>Usuarios Asignados</h2>
 					   <!-- breacrumb -->
 					   <nav aria-label="breadcrumb">
 						   <ol class="breadcrumb mb-0">
@@ -236,7 +105,8 @@
 							   <div class="col-md-4 col-12 mb-2 mb-md-0">
 								   <!-- form -->
 								   <form class="d-flex" role="search">
-									   <input class="form-control" type="search" placeholder="Buscar por nombre, ID o apellido" aria-label="Search" />
+									   <input class="form-control" type="search" id="searchUsuario"   placeholder="Buscar Usuario" aria-label="Search" th:value="${param.busqueda}" oninput="filterTable()" />
+
 								   </form>
 							   </div>
 
@@ -246,8 +116,9 @@
 					   <div class="card-body p-0">
 
 						   <!-- table responsive -->
-						   <div class="table-responsive">
+						   <div class="table-responsive text-center">
 							   <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
+
 								   <thead class="bg-light">
 								   <tr>
 
@@ -260,7 +131,9 @@
 								   </tr>
 								   </thead>
 								   <tbody>
-								   <tr th:each="usuarioAsignado: ${listaUsuariosAsignados}">
+
+
+									   <tr th:each="usuarioAsignado: ${listaUsuariosAsignados}">
 									   <td>
 										   <a ><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
 
@@ -275,9 +148,9 @@
 											   </a>
 											   <ul class="dropdown-menu">
 												   <li>
-													   <a class="dropdown-item banearUsuario btn"
-														  href="javascript:void(0);"
-														  th:attr="data-id=${usuarioAsignado.id}, data-nombre=${usuarioAsignado.nombre}"
+													   <a class="dropdown-item banearUsuario btn" href="javascript:void(0);"
+														  th:data-id="${usuarioAsignado.id}"
+														  th:data-nombre="${usuarioAsignado.nombre}"
 														  data-bs-toggle="tooltip"
 														  data-bs-placement="bottom">
 														   <i class="bi bi-person-fill-slash me-3"></i> Banear
@@ -286,7 +159,7 @@
 
 												   <li>
 													   <a class="dropdown-item"
-														  th:href="@{/Agente/Ordenes/Usuario/Lista(id=${usuarioAsignado.id})}">
+														  th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${usuarioAsignado.id} }">
 														   <i class="bi bi-cart-check me-3"></i>Ver órdenes
 													   </a>
 												   </li>
@@ -294,7 +167,9 @@
 													   <a class="dropdown-item" th:href="@{/Agente/Chat}"><i class="bi bi-wechat me-3"></i>Chat </a>
 												   </li>
 												   <li>
-													   <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#modal2" ><i class="bi bi-person-fill me-3"></i>Ver perfil </a>
+													   <a class="dropdown-item" th:href="@{/Agente/verUsuarioFinal(id=${usuarioAsignado.getId()})}">
+														   <i class="bi bi-eye me-3"></i> Ver
+													   </a>
 												   </li>
 											   </ul>
 										   </div>
@@ -307,18 +182,33 @@
 							   </table>
 						   </div>
 					   </div>
-					   <div class="border-top d-md-flex justify-content-between align-items-center p-6">
-						   <span> </span>
-						   <nav class="mt-2 mt-md-0">
-							   <ul class="pagination mb-0">
-								   <li class="page-item disabled"><a class="page-link" href="#!">Anterior</a></li>
-								   <li class="page-item"><a class="page-link active" href="#!">1</a></li>
-								   <li class="page-item"><a class="page-link" href="#!">2</a></li>
-								   <li class="page-item"><a class="page-link" href="#!">3</a></li>
-								   <li class="page-item"><a class="page-link" href="#!">Siguiente</a></li>
+
+					   <!-- Mostrar información de paginación y botones -->
+					   <div class="d-flex flex-column align-items-center">
+						   <!-- Texto de paginación centrado -->
+						   <span id="paginationInfo" class="mb-2">Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]</span>
+
+						   <!-- Paginación centrada -->
+						   <nav aria-label="Page navigation example">
+							   <ul class="pagination justify-content-center">
+								   <!-- Botón de "Previo" -->
+								   <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+									   <a class="page-link" th:href="@{/Agente/UsuariosAsignados(page=${currentPage - 1})}">Previo</a>
+								   </li>
+
+								   <!-- Páginas numeradas -->
+								   <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+									   <a class="page-link" th:href="@{/Agente/UsuariosAsignados(page=${i})}" th:text="${i + 1}"></a>
+								   </li>
+
+								   <!-- Botón de "Siguiente" -->
+								   <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+									   <a class="page-link" th:href="@{/Agente/UsuariosAsignados(page=${currentPage + 1})}">Siguiente</a>
+								   </li>
 							   </ul>
 						   </nav>
 					   </div>
+
 				   </div>
 			   </div>
 		   </div>
@@ -368,8 +258,11 @@
 	   </div>
 	   <!--POP UP BANEAR USUARIOS-->
 	   <script>
-		   document.querySelectorAll('.banearUsuario').forEach(button => {
-			   button.addEventListener('click', function() {
+		   <!-- POP UP BANEAR USUARIOS -->
+			   document.querySelectorAll('.banearUsuario').forEach(button => {
+			   button.addEventListener('click', function (event) {
+				   event.preventDefault();  // Evita la redirección automática
+
 				   // Obtenemos el ID y nombre del usuario
 				   const userId = this.getAttribute('data-id');
 				   const userName = this.getAttribute('data-nombre');
@@ -388,12 +281,63 @@
 					   }
 				   }).then((result) => {
 					   if (result.isConfirmed) {
-						   // Redirigir al controlador de baneo con el ID del usuario
+						   // Si se confirma, redirige al controlador de baneo con el ID del usuario
 						   window.location.href = `/Agente/banear?id=${userId}`;
 					   }
 				   });
 			   });
 		   });
+
+
+
+		   function filterTable() {
+			   const input = document.getElementById("searchUsuario");
+			   const filter = input.value.toLowerCase();
+			   const table = document.querySelector("table tbody");
+			   const rows = table.getElementsByTagName("tr");
+
+			   for (let i = 0; i < rows.length; i++) {
+				   const cells = rows[i].getElementsByTagName("td");
+				   let match = false;
+
+				   for (let j = 0; j < cells.length; j++) {
+					   if (cells[j].innerText.toLowerCase().includes(filter)) {
+						   match = true;
+						   break;
+					   }
+				   }
+				   rows[i].style.display = match ? "" : "none";
+			   }
+		   }
+
+		   $(document).ready(function () {
+			   // Función para manejar clic en las páginas
+			   $('a.page-link').on('click', function () {
+				   const page = $(this).data('page');
+				   if (page !== undefined) {
+					   window.location.href = '/UsuariosAsignados?page=' + page;
+				   }
+			   });
+
+			   // Función para manejar clic en "Previo"
+			   $('#prevPage').on('click', function () {
+				   const currentPage = parseInt($('li.active a').data('page'));
+				   if (currentPage > 0) {
+					   window.location.href = '/UsuariosAsignados?page=' + (currentPage - 1);
+				   }
+			   });
+
+			   // Función para manejar clic en "Siguiente"
+			   $('#nextPage').on('click', function () {
+				   const currentPage = parseInt($('li.active a').data('page'));
+				   const totalPages = parseInt([[${totalPages}]]);
+				   if (currentPage < totalPages - 1) {
+					   window.location.href = '/UsuariosAsignados?page=' + (currentPage + 1);
+				   }
+			   });
+		   });
+
+
 	   </script>
 
 

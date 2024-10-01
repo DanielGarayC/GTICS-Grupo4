@@ -24,9 +24,11 @@ public class Solicitudagente {
     private Integer indicadorSolicitud;
 
 
-    //@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    //@JoinColumn(name = "ValidacionesCodigosAgente_idValidacionesCodigosAgente", nullable = false)
-    @Column(name = "ValidacionesCodigosAgente_idValidacionesCodigosAgente", nullable = true)
-    private Integer validaciones;
+    @Column(name = "codigoRuc", length = 45)
+    private String codigoRuc;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idUsuario")
+    private Usuario idUsuario;
 
 }

@@ -9,6 +9,7 @@
     <!-- Favicon icon-->
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <!-- jQuery (necesario para DataTables) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -241,72 +242,127 @@
         <!-- COONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">
             <section class="container">
-                <h1 class="mb-6">Lista de productos</h1>
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="mb-6">Lista de productos</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <form class="d-flex mb-4" role="search" onsubmit="return false;">
+                            <label for="searchCustomers" class="visually-hidden">Buscar producto</label>
+                            <input class="form-control" type="search" id="searchCustomers" placeholder="Buscar producto" aria-label="Search" oninput="filterTable()" />
+                        </form>
+                    </div>
+                </div>
                 <div class="table-responsive border-0">
                     <!-- Table -->
                     <table id="productosTable" class="table mb-0 text-nowrap" style ="padding-top: 3vh; border-color: #d5d7d7;">
                         <!-- Table Head -->
-                        <thead class="table-light" >
-                        <tr >
-                            <th>&nbsp;</th>
-                            <th>Producto</th>
-                            <th>Fecha de arribo</th>
-                            <th>Stock</th>
-                            <th></th>
+                        <thead class="table-light">
+                        <tr>
+                            <!-- Centrar el encabezado de la imagen -->
+                            <th class="text-center" style="width: 10%;">&nbsp;</th>
+                            <th class="text-center">Producto</th>
+                            <th class="text-center">Stock</th>
+                            <th class="text-center">Fecha de arribo</th>
+                            <th class="text-center">Solicitud de reposición</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td class="align-middle">
+                        <tr th:each="producto : ${listaProductos}">
+                            <td class="align-middle text-center" style="width: 10%;">
+                                <!-- Imagen del producto -->
                                 <a href="#" disabled="">
-                                    <img th:src="@{/images/products/product-img-1.jpg}" alt="Imagen del producto" class="icon-shape icon-xl">
+                                    <img th:if="${producto.primeraFoto != null}" th:src="@{'/AdminZonal/Productos/fotoproducto/' + ${producto.idProducto}}" alt="Imagen del producto" class="icon-shape icon-xl">
                                 </a>
                             </td>
-                            <td class="align-middle">Producto 1</td>
-                            <td class="align-middle">
-                                <button class="btn btn-primary addDate" style="width: 60%" >
-                                    <p style="margin-bottom: 0px;"> Agregar fecha <i class="bi-calendar-plus" style="margin-left: 5px;"></i></p>
+                            <td class="align-middle text-center" th:text="${producto.nombreProducto}"></td>
+                            <td class="align-middle text-center" th:text="${producto.cantidadDisponible}"></td>
+                            <td class="align-middle text-center">
+                                <button th:if="${producto.fechaArribo} == null" class="btn btn-primary addDate" style="width: 80%" th:data-product-id="${producto.idProducto}">
+                                    <p style="margin-bottom: 0px;">Agregar fecha <i class="bi-calendar-plus" style="margin-left: 5px;"></i></p>
+                                </button>
+
+                                <button th:if="${producto.fechaArribo} != null" class="btn btn-primary viewDate" th:text="${#dates.format(producto.fechaArribo, 'dd/MM/yyyy')}" style="width: 60%;"></button>
+                                <button th:if="${producto.fechaArribo} != null" type="submit" class="btn btn-primary saveButton saveAlert" th:data-product-id="${producto.idProducto}">
+                                    <i class="bi-pencil-fill"></i>
                                 </button>
                             </td>
-                            <td class="align-middle">50</td>
-                            <td class="align-middle">
-                                <button style="width: 100%" type="button" class="btn btn-outline-info reposicion" disabled>Solicitar reposición</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                <a href="#" disabled="">
-                                    <img th:src="@{/images/products/product-img-2.jpg}" alt="Imagen del producto" class="icon-shape icon-xl">
-                                </a>
-                            </td>
-                            <td class="align-middle">Producto 2</td>
-                            <td class="align-middle">
-                                <button class="btn btn-primary viewDate" style="width: 60%" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Revisar fecha"> 14/08/2020 </button>
-                            </td>
-                            <td class="align-middle">20</td>
-                            <td class="align-middle">
-                                <button style="width: 100%" type="button" class="btn btn-outline-info reposicion">Solicitar reposición</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                <a href="#" disabled="">
-                                    <img th:src="@{/images/products/product-img-3.jpg}" alt="Imagen del producto" class="icon-shape icon-xl">
-                                </a>
-                            </td>
-                            <td class="align-middle">Producto 3</td>
-                            <td class="align-middle">
-                                <button class="btn btn-primary viewDate" style="width: 60%" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Revisar fecha"> 09/12/2018 </button>
-                            </td>
-                            <td class="align-middle">11</td>
-                            <td class="align-middle">
-                                <button style="width: 100%" type="button" class="btn btn-outline-warning reposicionRevisar">Revisar solicitud</button>
+                            <td class="align-middle text-center">
+                                <!-- Si cantidadSolicitada no es null, mostrar los botones Ver, Editar y Eliminar -->
+                                <button th:if="${producto.cantidadSolicitada != null}"
+                                        type="button"
+                                        class="btn btn-outline-primary"
+                                        th:data-product-id="${producto.idProducto}"
+                                        th:data-cantidad-solicitada="${producto.cantidadSolicitada}"
+                                        title="Ver solicitud"
+                                        style="border-color: #007bff; color: #007bff;">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+
+                                <button th:if="${producto.cantidadSolicitada != null}"
+                                        type="button"
+                                        class="btn btn-outline-success"
+                                        title="Editar solicitud">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <button th:if="${producto.cantidadSolicitada != null}"
+                                        type="button"
+                                        class="btn btn-outline-danger"
+                                        title="Eliminar solicitud">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+
+                                <!-- Si cantidadSolicitada es null y cantidadDisponible <= 25, mostrar botón habilitado para Solicitar Reposición -->
+                                <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible <= 25}"
+                                        type="button"
+                                        class="btn btn-outline-primary reposicion"
+                                        th:data-product-id="${producto.idProducto}"
+                                        title="Solicitar reposición">
+                                    <i class="fas fa-cart-plus"></i> Solicitar
+                                </button>
+
+                                <!-- Si cantidadSolicitada es null y cantidadDisponible > 25, mostrar botón deshabilitado indicando Stock adecuado -->
+                                <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible > 25}"
+                                        type="button"
+                                        class="btn btn-outline-secondary"
+                                        disabled
+                                        title="Stock adecuado">
+                                    <i class="fas fa-check-circle"></i> Stock adecuado
+                                </button>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="d-flex flex-column align-items-center">
+                    <!-- Texto de paginación centrado -->
+                    <span id="paginationInfo" class="mb-2">
+                                        Mostrando página [[${currentPage != null ? currentPage + 1 : 1}]] de [[${totalPages != null ? totalPages : 1}]]
+                                    </span>
 
+                    <!-- Paginación centrada -->
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <!-- Botón de "Previo" -->
+                            <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
+                                <a class="page-link" th:href="@{/AdminZonal/Productos(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
+                            </li>
+
+                            <!-- Páginas numeradas -->
+                            <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                <a class="page-link" th:href="@{/AdminZonal/Productos(page=${i})}" th:text="${i + 1}"></a>
+                            </li>
+
+                            <!-- Botón de "Siguiente" -->
+                            <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
+                                <a class="page-link" th:href="@{/AdminZonal/Productos(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </section>
         </main>
     </div>
@@ -324,39 +380,40 @@
 <script th:src="@{/js/vendors/chart.js}"></script>
 <script>
     $(document).ready(function () {
-        $('#productosTable').DataTable({
-            // Configuración adicional
-            "paging": true,       // Habilita la paginación
-            "searching": true,    // Habilita la búsqueda
-            "ordering": true,     // Habilita el ordenamiento de columnas
-            "info": true,         // Muestra información adicional
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json" // URL correcta en HTTPS
+        // Funciones para paginación adicional, si es necesario
+        $('a.page-link').on('click', function () {
+            const page = $(this).data('page');
+            if (page !== undefined) {
+                window.location.href = '/AdminZonal/Productos?page=' + page;
+            }
+        });
+
+        $('#prevPage').on('click', function () {
+            const currentPage = parseInt($('li.active a').data('page'));
+            if (currentPage > 0) {
+                window.location.href = '/AdminZonal/Productos?page=' + (currentPage - 1);
+            }
+        });
+
+        $('#nextPage').on('click', function () {
+            const currentPage = parseInt($('li.active a').data('page'));
+            const totalPages = parseInt([[${totalPages}]]);
+            if (currentPage < totalPages - 1) {
+                window.location.href = '/AdminZonal/Productos?page=' + (currentPage + 1);
             }
         });
     });
 
 </script>
-<script>
-    document.querySelectorAll('.arrivalDate').forEach((dateInput, index) => {
-        var saveButton = document.querySelectorAll('.saveButton')[index];
-        var deleteButton = document.querySelectorAll('.deleteButton')[index];
 
-        dateInput.addEventListener('input', function() {
-            if (dateInput.value) {
-                saveButton.style.display = 'inline-block'; // Muestra el botón si hay una fecha
-                deleteButton.style.display = 'inline-block'; // Muestra el botón de eliminar
-            } else {
-                saveButton.style.display = 'none'; // Oculta el botón si el campo está vacío
-                deleteButton.style.display = 'none'; // Oculta el botón de eliminar
-            }
-        });
-    });;
-</script>
 <script>
     //Popup reposicion
     document.querySelectorAll('.reposicion').forEach(button => {
         button.addEventListener('click', function() {
+            // Aquí obtenemos el valor del atributo data-product-id
+            const productoId = button.getAttribute('data-product-id');
+
+            // Aquí usas el productoId en el Swal popup y lo pasas en el formulario
             Swal.fire({
                 showCloseButton: true,
                 title: 'Solicitud de reposición',
@@ -376,28 +433,54 @@
                     if (!quantity || quantity <= 0) {
                         Swal.showValidationMessage(`Por favor ingrese una cantidad válida.`);
                     }
-                    return quantity;
+                    // Aquí retorna el productoId junto con la cantidad
+                    return { quantity, productoId };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire(`Se solicitaron ${result.value} productos`, '','success');
+                    // Crear y enviar un formulario con el productoId y la cantidad
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/AdminZonal/Productos/GuardarSolReposicion';  // Define la acción del formulario
+
+                    // Agregar campo oculto para el idProducto
+                    const inputProductoId = document.createElement('input');
+                    inputProductoId.type = 'hidden';
+                    inputProductoId.name = 'productoId';
+                    inputProductoId.value = result.value.productoId;
+                    form.appendChild(inputProductoId);
+
+                    // Agregar campo oculto para la cantidad
+                    const inputCantidad = document.createElement('input');
+                    inputCantidad.type = 'hidden';
+                    inputCantidad.name = 'cantidad';
+                    inputCantidad.value = result.value.quantity;
+                    form.appendChild(inputCantidad);
+
+                    document.body.appendChild(form);
+                    form.submit();
                 }
             });
         });
     });
 
 </script>
+
+
+</script>
 <script>
     //Popup reposicion REVISION
     document.querySelectorAll('.reposicionRevisar').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
+            const cantidadSolicitada = button.getAttribute('data-cantidad-solicitada');
+            const productoId = button.getAttribute('data-product-id');
+
             Swal.fire({
                 showCloseButton: true,
-
                 title: 'Solicitud de reposición',
                 html: `
                 <p>Se solicitaron</p>
-                <input type="number" id="productQuantity" class="swal2-input" value="20" min="0" disabled> <!--El valor tiene que coincidir con la cantidad registrada en la solicitud-->
+                <input type="number" id="productQuantity" class="swal2-input" value="${cantidadSolicitada}" min="0" disabled>
                 <p>productos</p>
             `,
                 showCancelButton: true,
@@ -415,7 +498,7 @@
                         title: 'Solicitud de reposición',
                         html: `
                         <p>Ingrese la cantidad de productos que desea solicitar:</p>
-                        <input type="number" id="productQuantity" class="swal2-input" value="0" min="0">
+                        <input type="number" id="productQuantityEdit" class="swal2-input"  min="0">
                     `,
                         showCancelButton: true,
                         confirmButtonText: 'Guardar',
@@ -425,85 +508,38 @@
                         },
                         focusConfirm: false,
                         preConfirm: () => {
-                            const quantity = Swal.getPopup().querySelector('#productQuantity').value;
-                            if (!quantity || quantity <= 0) {
-                                Swal.showValidationMessage(`Por favor ingrese una cantidad válida.`);
+                            const newQuantity = Swal.getPopup().querySelector('#productQuantityEdit').value;
+                            if (!newQuantity || newQuantity <= 0) {
+                                Swal.showValidationMessage('Por favor ingrese una cantidad válida.');
+                                return false;
                             }
-                            return quantity;
+                            return newQuantity;
                         }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire(`Se actualizó la orden a ${result.value} productos`,'' ,'success');
-                        }
-                    });
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // Delete action with confirmation
-                    Swal.fire({
-                        showCloseButton: true,
-                        title: 'Confirmar eliminación',
-                        text: "¿Está seguro de que deseas cancelar esta solicitud de reposición?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Confirmar',
-                        cancelButtonText: 'Cancelar',
-                        customClass: {
-                            popup: 'custom-popup'
-                        }
-                    }).then((confirmResult) => {
-                        if (confirmResult.isConfirmed) {
-                            Swal.fire('Eliminado', 'La solicitud ha sido eliminada.', 'success');
-                        }
-                    });
-                }
-            });
-        });
-    });
-</script>
-<script>
-    document.querySelectorAll('.viewDate').forEach(button => {
-        button.addEventListener('click', function() {
-            Swal.fire({
-                showCloseButton: true,
-                title: 'Fecha de arribo',
-                html: `
-                <p>Los productos llegarán en la siguiente fecha: </p>
-                <h2 style="color: #5e5e5e">09/12/2018</h2>
+                    }).then((editResult) => {
+                        if (editResult.isConfirmed) {
+                            // Crear y enviar un formulario para guardar los cambios
+                            const form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = '/AdminZonal/Productos/GuardarSolReposicion'; // Este es el endpoint del controlador para actualizar la solicitud
 
-            `,
-                showCancelButton: true,
-                confirmButtonText: 'Editar',
-                cancelButtonText: 'Eliminar',
-                customClass: {
-                    popup: 'custom-popup'
-                },
-                focusConfirm: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Edit action
-                    Swal.fire({
-                        showCloseButton: true,
-                        title: 'Fecha de arribo',
-                        html: `
-                        <p>Ingrese la nueva fecha de arribo:</p>
-                        <input type="date" id="productQuantity" class="swal2-input" value="0" min="0">
-                    `,
-                        showCancelButton: true,
-                        confirmButtonText: 'Guardar',
-                        cancelButtonText: 'Cancelar',
-                        customClass: {
-                            popup: 'custom-popup'
-                        },
-                        focusConfirm: false,
-                        preConfirm: () => {
-                            const quantity = Swal.getPopup().querySelector('#productQuantity').value;
-                            if (!quantity || quantity <= 0) {
-                                Swal.showValidationMessage(`Por favor ingrese una fecha válida.`);
-                            }
-                            return quantity;
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire(`Se actualizó correctamente la fecha de arribo`,'' ,'success');
+                            // Agregar campo oculto para el idProducto
+                            const inputProductoId = document.createElement('input');
+                            inputProductoId.type = 'hidden';
+                            inputProductoId.name = 'productoId';
+                            inputProductoId.value = productoId; // Se envía el ID del producto
+                            form.appendChild(inputProductoId);
+                            console.log(productoId)
+                            // Agregar campo oculto para la cantidad nueva
+                            const inputCantidad = document.createElement('input');
+                            inputCantidad.type = 'hidden';
+                            inputCantidad.name = 'cantidad';
+                            inputCantidad.value = editResult.value; // Nueva cantidad
+                            form.appendChild(inputCantidad);
+
+                            // Enviar el formulario
+                            document.body.appendChild(form);
+                            form.submit();
+                            console.log(inputCantidad)
                         }
                     });
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -511,17 +547,31 @@
                     Swal.fire({
                         showCloseButton: true,
                         title: 'Confirmar eliminación',
-                        text: "¿Está seguro de que deseas eliminar esta fecha de arribo?",
+                        text: "¿Está seguro de que deseas eliminar esta solicitud de reposición?",
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonText: 'Confirmar',
+                        confirmButtonText: 'Eliminar',
                         cancelButtonText: 'Cancelar',
                         customClass: {
                             popup: 'custom-popup'
                         }
-                    }).then((confirmResult) => {
-                        if (confirmResult.isConfirmed) {
-                            Swal.fire('Eliminado', 'La fecha de arribo ha sido eliminada.', 'success');
+                    }).then((deleteResult) => {
+                        if (deleteResult.isConfirmed) {
+                            // Crear y enviar un formulario para eliminar la solicitud
+                            const form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = '/AdminZonal/Productos/EliminarSolReposicion'; // Endpoint del backend para eliminar
+
+                            // Agregar campo oculto para el idProducto
+                            const inputProductoId = document.createElement('input');
+                            inputProductoId.type = 'hidden';
+                            inputProductoId.name = 'productoId';
+                            inputProductoId.value = productoId;
+                            form.appendChild(inputProductoId);
+
+                            // Enviar el formulario
+                            document.body.appendChild(form);
+                            form.submit();
                         }
                     });
                 }
@@ -530,13 +580,94 @@
     });
 </script>
 <script>
+    function filterTable() {
+    const input = document.getElementById("searchCustomers");
+    const filter = input.value.toLowerCase();
+    const table = document.querySelector("table tbody");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].getElementsByTagName("td");
+    let match = false;
+
+    for (let j = 0; j < cells.length; j++) {
+    if (cells[j].innerText.toLowerCase().includes(filter)) {
+    match = true;
+    break;
+    }
+    }
+    rows[i].style.display = match ? "" : "none";
+    }
+    }
+</script>
+<script>
+
     document.querySelectorAll('.addDate').forEach(button => {
         button.addEventListener('click', function() {
             Swal.fire({
                 showCloseButton: true,
-                title: 'Fecha de arribo',
+                title: 'Fecha de entrega',
                 html: `
-                    <p>Ingrese la fecha de arribo:</p>
+                <p>Ingrese la fecha de entrega:</p>
+                <input type="date" id="deliveryDate" class="swal2-input" required>
+            `,
+                showCancelButton: true,
+                confirmButtonText: 'Guardar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'custom-popup'
+                },
+                preConfirm: () => {
+                    const deliveryDate = Swal.getPopup().querySelector('#deliveryDate').value;
+                    if (!deliveryDate) {
+                        Swal.showValidationMessage('Por favor ingrese una fecha válida.');
+                        return false;
+                    }
+                    return deliveryDate;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Verifica si el productoId está siendo obtenido correctamente
+                    const productoId = button.getAttribute('data-product-id');
+                    console.log("Producto ID: ", productoId);  // Añadir log para comprobar
+
+                    if (productoId) {
+                        // Crear y enviar un formulario oculto con la fecha y el productoId al servidor
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '/AdminZonal/Productos/guardarFecha';  // Endpoint del backend
+
+                        const inputProductoId = document.createElement('input');
+                        inputProductoId.type = 'hidden';
+                        inputProductoId.name = 'productoId';
+                        inputProductoId.value = productoId; // Asegúrate de que este valor no sea null
+
+                        const inputFecha = document.createElement('input');
+                        inputFecha.type = 'hidden';
+                        inputFecha.name = 'fechaEntrega';
+                        inputFecha.value = result.value;
+
+                        form.appendChild(inputProductoId);
+                        form.appendChild(inputFecha);
+                        document.body.appendChild(form);
+                        form.submit();
+                    } else {
+                        console.error("El ID del producto no está disponible.");
+                    }
+                }
+            });
+        });
+    });
+
+</script>
+<script>
+    document.querySelectorAll('.saveAlert').forEach(button => {
+        button.addEventListener('click', function() {
+            Swal.fire({
+                showCloseButton: true,
+                title: 'Editar fecha de arribo',
+                html: `
+                    <p>Ingrese la nueva fecha de arribo:</p>
                     <input type="date" id="productQuantity" class="swal2-input" value="" min="0">
                 `,
                 showCancelButton: true,
@@ -556,12 +687,38 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('Se agregó correctamente la fecha de arribo', '', 'success');
+                    // Verifica si el productoId está siendo obtenido correctamente
+                    const productoId = button.getAttribute('data-product-id');
+                    console.log("Producto ID: ", productoId);  // Añadir log para comprobar
+
+                    if (productoId) {
+                        // Crear y enviar un formulario oculto con la fecha y el productoId al servidor
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '/AdminZonal/Productos/guardarFecha';  // Endpoint del backend
+
+                        const inputProductoId = document.createElement('input');
+                        inputProductoId.type = 'hidden';
+                        inputProductoId.name = 'productoId';
+                        inputProductoId.value = productoId; // Asegúrate de que este valor no sea null
+
+                        const inputFecha = document.createElement('input');
+                        inputFecha.type = 'hidden';
+                        inputFecha.name = 'fechaEntrega';
+                        inputFecha.value = result.value;
+
+                        form.appendChild(inputProductoId);
+                        form.appendChild(inputFecha);
+                        document.body.appendChild(form);
+                        form.submit();
+                    } else {
+                        console.error("El ID del producto no está disponible.");
+                    }
                 }
             });
         });
     });
-</script>
 
+</script>
 </body>
 </html>

@@ -41,416 +41,142 @@
    <body>
 
    <!-- BARRA SUPERIOR -->
-   <nav class="navbar navbar-expand-lg navbar-glass">
-	   <div class="container-fluid">
-		   <div class="d-flex justify-content-between align-items-center w-100">
-			   <div class="d-flex align-items-center">
-				   <a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-					   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
-						   <path
-								   d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
-						   />
-					   </svg>
-				   </a>
-
-			   </div>
-			   <div>
-				   <ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
-					   <li class="dropdown-center">
-						   <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							   <i class="bi bi-bell fs-5"></i>
-							   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
-									2
-									<span class="visually-hidden">Mensajes sin leer</span>
-								</span>
-						   </a>
-						   <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
-							   <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
-								   <div>
-									   <h5 class="mb-1">Notificaciones</h5>
-									   <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
-								   </div>
-								   <a href="#!" class="text-muted">
-									   <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
-										   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
-											   <path
-													   d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
-											   />
-											   <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
-										   </svg>
-									   </a>
-								   </a>
-							   </div>
-							   <div data-simplebar style="height: 250px">
-								   <!-- List group -->
-								   <ul class="list-group list-group-flush notification-list-scroll fs-6">
-									   <!-- List group item -->
-									   <li class="list-group-item px-5 py-4 list-group-item-action active">
-										   <a href="#!" class="text-muted">
-											   <div class="d-flex">
-												   <div class="ms-4">
-													   <p class="mb-1">
-														   <span class="text-dark">Nombre de la persona</span>
-														   Descripción notificación 1
-													   </p>
-													   <span>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
-																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-															</svg>
-															<small class="ms-2">Hace 1 minuto</small>  <!--Se puede eliminar-->
-														</span>
-												   </div>
-											   </div>
-										   </a>
-									   </li>
-									   <li class="list-group-item px-5 py-4 list-group-item-action">
-										   <a href="#!" class="text-muted">
-											   <div class="d-flex">
-												   <div class="ms-4">
-													   <p class="mb-1">
-														   <span class="text-dark">Título de notificación 2</span>
-														   Descripción notificación 2
-													   </p>
-													   <span>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
-																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-															</svg>
-															<small class="ms-2">Hace 2 días</small>
-														</span>
-												   </div>
-											   </div>
-										   </a>
-									   </li>
-									   <li class="list-group-item px-5 py-4 list-group-item-action">
-										   <a href="#!" class="text-muted">
-											   <div class="d-flex">
-												   <div class="ms-4">
-													   <p class="mb-1">
-														   <span class="text-dark">Título de notificación 3</span>
-														   Descripción notificación 3
-													   </p>
-													   <span>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
-																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-															</svg>
-															<small class="ms-2">Hace 5 horas</small>
-														</span>
-												   </div>
-											   </div>
-										   </a>
-									   </li>
-								   </ul>
-							   </div>
-							   <div class="border-top px-5 py-4 text-center">
-								   <a href="#!">Ver todas</a>
-							   </div>
-						   </div>
-					   </li>
-					   <li class="dropdown ms-4">
-						   <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							   <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
-						   </a>
-
-						   <div class="dropdown-menu dropdown-menu-end p-0">
-							   <div class="lh-1 px-5 py-4 border-bottom">
-								   <h5 class="mb-1 h6">Nombre Apellido</h5>
-								   <small>rol en la pagina</small>
-							   </div>
-
-							   <div class="border-top px-5 py-3">
-								   <a href="#">Mi perfil</a>
-							   </div>
-							   <div class="border-top px-5 py-3">
-								   <a href="#">Cerrar sesión</a>
-							   </div>
-						   </div>
-					   </li>
-				   </ul>
-			   </div>
-		   </div>
-	   </div>
-   </nav>
+   <div th:insert="~{fragments/navbarAgente.html :: barraSuperior}"></div>
 	<!-- NAVBAR  -->
    <div class="main-wrapper">
 
-	   <!-- navbar vertical (para pc)-->
 	   <!-- navbar -->
-	   <nav class="navbar-vertical-nav d-none d-xl-block">
-		   <div class="navbar-vertical">
-			   <div class="px-4 py-5">
-				   <a class="navbar-brand">
-					   <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagen " />
-				   </a>
-			   </div>
-			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-				   <ul class="navbar-nav flex-column" id="sideNavbar">
-					   <li class="nav-item">
-						   <a class="nav-link  active " th:href="@{/Agente}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>  <!-- icono-->
-								   <span class="nav-link-text">Inicio</span>
-							   </div>
-						   </a>
-					   </li>
+	   <!-- navbar vertical (para pc)-->
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('usuariosAsignados')}"></div>
 
-
-					   <li class="nav-item">
-						   <a class="nav-link" th:href="@{/Agente/UsuariosAsignados}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
-								   <span class="nav-link-text">Usuarios asignados</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link" th:href="@{Agente/Ordenes}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-								   <span class="nav-link-text">Órdenes</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link" th:href="@{/Agente/Reportes/Descargar}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
-								   <span class="nav-link-text">Reportes</span>
-							   </div>
-						   </a>
-					   </li>
-
-				   </ul>
-			   </div>
-		   </div>
-	   </nav>
 	   <!-- navbar vertical (para celular)-->
-	   <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
-		   <div class="navbar-vertical">
-			   <div class="px-4 py-5 d-flex justify-content-between align-items-center">
-				   <a class="navbar-brand">
-					   <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" class="logoImagenCelulares"/>
-				   </a>
-				   <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-			   </div>
-			   <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
-				   <ul class="navbar-nav flex-column">
-
-					   <li class="nav-item">
-						   <a class="nav-link active " th:href="@{/Agente}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-house"></i></span>
-								   <span>Inicio</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link " th:href="@{/Agente/UsuariosAsignados}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
-								   <span>Usuarios asignados</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link " th:href="@{/Agente/Ordenes/Usuario/Lista}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
-								   <span class="nav-link-text">Órdenes</span>
-							   </div>
-						   </a>
-					   </li>
-
-					   <li class="nav-item">
-						   <a class="nav-link " th:href="@{/Agente/Reportes/Descargar}">
-							   <div class="d-flex align-items-center">
-								   <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
-								   <span class="nav-link-text">Reportes</span>
-							   </div>
-						   </a>
-					   </li>
-
-
-				   </ul>
-			   </div>
-		   </div>
-	   </nav>
+	   <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('usuariosAsignados')}"></div>
 
 
 
 
-
-   <!-- COONTENIDO DE LA PAGINA -->
+	   <!-- COONTENIDO DE LA PAGINA -->
+	   <!-- Contenedor principal de la página -->
 	   <main class="main-content-wrapper">
 		   <div class="container">
+			   <!-- Título y breadcrumb -->
 			   <div class="row mb-8">
 				   <div class="col-md-12">
-					   <!-- pageheader -->
 					   <div class="d-flex justify-content-between align-items-center">
 						   <div>
-							   <h2>Órdenes del usuario: <span class="text-primary">Jesus Alvarado</span></h2>
-							   <!-- breacrumb -->
-							   <nav aria-label="breadcrumb">
-								   <ol class="breadcrumb mb-0">
-									   <li class="breadcrumb-item"><a th:href="@{/Agente}" class="text-inherit">Inicio</a></li>
-									   <li class="breadcrumb-item"><a th:href="@{/Agente/UsuariosAsignados}" class="text-inherit">Lista de usuarios</a></li>
-									   <li class="breadcrumb-item active" aria-current="page">Órdenes</li>
-								   </ol>
-							   </nav>
+							   <div th:if="${ordenCarrito.isEmpty()}">
+								   <h3>El usuario no presenta ordenes</h3>
+							   </div>
+							   <div th:unless="${ordenCarrito.isEmpty()}">
+								   <h2>Órdenes del usuario: <span class="text-primary" th:text="${usuario.nombre}  + ' ' + ${usuario.apellidoPaterno}"></span></h2>
+								   <!-- breacrumb -->
+								   <nav aria-label="breadcrumb">
+									   <ol class="breadcrumb mb-0">
+										   <li class="breadcrumb-item"><a th:href="@{/Agente}" class="text-inherit">Inicio</a></li>
+										   <li class="breadcrumb-item"><a th:href="@{/Agente/UsuariosAsignados}" class="text-inherit">Lista de usuarios</a></li>
+										   <li class="breadcrumb-item active" aria-current="page">Órdenes</li>
+									   </ol>
+								   </nav>
+							   </div>
 						   </div>
+
+						   <!-- botones
 						   <div>
-							<!-- button -->
-							<a th:href="@{/Agente/Ordenes/Usuario}" class="btn btn-primary btn-icon">
-							   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">
-								  <path
-									 d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
-							   </svg>
-							</a>
-							<a th:href="@{/Agente/Ordenes/Usuario/Lista}" class="btn btn-light btn-icon">
-							   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-list-task" viewBox="0 0 16 16">
-								  <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z" />
-								  <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z" />
-								  <path
-									 fill-rule="evenodd"
-									 d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z" />
-							   </svg>
-							</a>
-						 </div>
+							   <a th:href="@{/SuperAdmin/proveedores}" class="btn btn-primary btn-icon">
+								   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">
+									   <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/>
+								   </svg>
+							   </a>
+							   <a th:href="@{/SuperAdmin/listaProveedores}" class="btn btn-light btn-icon">
+								   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-list-task" viewBox="0 0 16 16">
+									   <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z"/>
+									   <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z"/>
+									   <path fill-rule="evenodd" d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z"/>
+								   </svg>
+							   </a>
+						   </div>
+						   -->
+
 					   </div>
 				   </div>
 			   </div>
-			   <!-- row -->
-			   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 g-lg-6">
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a th:href="@{/Agente/Ordenes/Detalles}" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a href="#!" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a href="#!" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a href="#!" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a href="#!" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
-				   <!-- col -->
-				   <div class="col">
-					   <!-- card -->
-					   <div class="card border-0 text-center card-lg">
-						   <div class="card-body p-6">
-							   <div>
-								   <!-- img -->
-								   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
-								   <!-- content -->
-								   <h2 class="mb-2 h5"><a href="#!" class="text-inherit">Número de orden: #1234</a></h2>
-								   <div class="mb-2">Fecha: 07-07-24</div>
-								   <div class="mb-2">Monto total: S/. 145</div>
-							   </div>
-						   </div>
-					   </div>
-				   </div>
-				   <div class="border-top d-md-flex justify-content-between align-items-center p-6">
-					   <!-- disabled and active states -->
-					   <nav aria-label="...">
-						   <ul class="pagination">
-							   <li class="page-item  disabled">
-								   <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
-							   </li>
-							   <li class="page-item active"><a class="page-link" href="#">1</a></li>
-							   <li class="page-item " aria-current="page">
-								   <a class="page-link" href="#">2 <span class="visually-hidden">(current)</span></a>
-							   </li>
-							   <li class="page-item"><a class="page-link" href="#">3</a></li>
-							   <li class="page-item">
-								   <a class="page-link" href="#">Siguiente</a>
-							   </li>
-						   </ul>
-					   </nav>
-				   </div>
 
+			   <!-- Aquí está la fila que contiene todas las cards -->
+			   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 g-lg-6">
+				   <!-- Cada card -->
+				   <div th:if="${!ordenCarrito.isEmpty()}" class="col" th:each="orden,var : ${ordenCarrito}">
+					   <div class="col">
+						   <!-- card -->
+						   <div class="card border-0 text-center card-lg">
+							   <div class="card-body p-6">
+								   <div>
+									   <!-- img -->
+									   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
+									   <!-- content -->
+									   <div th:if="${orden.controlOrden == 'Sin asignar'}">
+										   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: #${var.index+1}|"></a></h2>
+									   </div>
+									   <div th:unless="${orden.controlOrden == 'Sin asignar'}">
+										   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/Detalles?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: #${var.index+1}|"></a></h2>
+									   </div>
+									   <div class="mb-2" th:text="|Fecha: ${orden.getFechaOrden()}|"></div>
+									   <div class="mb-2" th:text="|Monto total: ${orden.montoTotal}|"> </div>
+									   <div th:switch="${orden.controlOrden}">
+										   <div class="mb-2" th:case="'Sin asignar'">Estado:<span th:text="|${orden.controlOrden}|" class="badge bg-light-danger text-dark-danger"></span></div>
+										   <div class="mb-2" th:case="'Pendiente'">Estado:<span th:text="|${orden.controlOrden}|" class="badge bg-light-warning text-dark-warning"></span></div>
+										   <div class="mb-2" th:case="'En progreso'">Estado:<span th:text="|${orden.controlOrden}|" class="badge bg-light-info text-dark-info"></span></div>
+										   <div class="mb-2" th:case="'Resuelta'">Estado:<span th:text="|${orden.controlOrden}|" class="badge bg-light-primary text-dark-primary"></span></div>
+									   </div>
+									   <div th:switch="${orden.estadoOrden}">
+										   <div class="mb-2" th:case="'Creado'">Control:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-primary text-dark-primary"></span></div>
+										   <div class="mb-2" th:case="'En validación'">Control:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-secondary text-dark-secondary"></span></div>
+										   <div class="mb-2" th:case="'En proceso'">Control:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-info text-dark-info"></span></div>
+										   <div class="mb-2" th:case="'Arribo al país'">Control:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-warning text-dark-warning"></span></div>
+										   <div class="mb-2" th:case="'En aduanas'">Control:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-danger text-dark-danger"></span></div>
+										   <div class="mb-2" th:case="'En ruta'">Control:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-warning text-dark-warning"></span></div>
+										   <div class="mb-2" th:case="'Recibido'">Control:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-success text-dark-success"></span></div>
+									   </div>
+								   </div>
+							   </div>
+						   </div>
+					   </div>
+				   </div>
+				   <!-- Fin del each de cards -->
+			   </div>
+
+			   <!-- Mostrar información de paginación y botones -->
+			   <div class="d-flex flex-column align-items-center">
+				   <!-- Texto de paginación centrado -->
+				   <span id="paginationInfo" class="mb-2">Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]</span>
+
+				   <!-- Paginación centrada -->
+				   <nav aria-label="Page navigation example">
+					   <ul class="pagination justify-content-center">
+						   <!-- Botón de "Previo" -->
+						   <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+							   <a class="page-link" th:href="@{'/Agente/Ordenes/Usuario?page=' + (${currentPage - 1}) + '&idUsuario=' + ${usuario.id} + '&indicadorVistaARegresar=1'}">Previo</a>
+						   </li>
+
+						   <!-- Páginas numeradas -->
+						   <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+							   <a class="page-link" th:href="@{'/Agente/Ordenes/Usuario?page=' + ${i} + '&idUsuario=' + ${usuario.id} + '&indicadorVistaARegresar=1'}" th:text="${i + 1}"></a>
+						   </li>
+
+						   <!-- Botón de "Siguiente" -->
+						   <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+							   <a class="page-link" th:href="@{'/Agente/Ordenes/Usuario?page=' + (${currentPage + 1}) + '&idUsuario=' + ${usuario.id} + '&indicadorVistaARegresar=1'}">Siguiente</a>
+						   </li>
+					   </ul>
+				   </nav>
 			   </div>
 
 		   </div>
-
 	   </main>
 
 
 
-	</div>
+
+   </div>
 
 
    	<!-- LIBRERIAS -->
