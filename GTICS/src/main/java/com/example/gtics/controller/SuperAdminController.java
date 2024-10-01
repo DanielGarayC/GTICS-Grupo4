@@ -127,7 +127,7 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAdminZonal/create-zonal-admin";
     }
     @PostMapping("/SuperAdmin/AdminZonal/guardar")
-    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario,@RequestParam("zonaId") Integer zonaId, RedirectAttributes attr) {
+    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario,@RequestParam("zonaId") Integer zonaId, RedirectAttributes attr, @RequestParam("zonalAdminPhoto") MultipartFile foto) {
 
         try {
             // Verificar si ya existen 2 coordinadores en la zona
@@ -164,6 +164,7 @@ public class SuperAdminController {
             } else {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
             }
+            usuario.setFoto(foto.getBytes());
             usuarioRepository.save(usuario);
         } catch (Exception e) {
             attr.addFlashAttribute("error", "Ocurrió un error al guardar el Admin Zonal.");
@@ -253,7 +254,7 @@ public class SuperAdminController {
     }
 
     @PostMapping("/SuperAdmin/Agente/guardar")
-    public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model) {
+    public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model, @RequestParam("agentPhoto") MultipartFile foto) {
         try {
             // Buscar el agente existente
             Usuario agenteExistente = usuarioRepository.findById(agente.getId())
@@ -294,6 +295,7 @@ public class SuperAdminController {
             }
 
             // Guardar solo si algo ha cambiado
+            agenteExistente.setFoto(foto.getBytes());
             usuarioRepository.save(agenteExistente);
 
         } catch (Exception e) {
