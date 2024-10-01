@@ -38,7 +38,7 @@
 
 
 <main>
-
+    <div th:insert="~{fragments/navbarUsuarioFinal :: buscadorProducto}"></div>
     <!-- Category Section Start-->
     <section class="mb-lg-6 mt-lg-6 my-2">
         <div class="container">
@@ -154,38 +154,6 @@
         </div>
     </section>
 
-    <div id="chatbot-container">
-        <!-- Botón flotante del chatbot -->
-        <div id="chatbot-button" onclick="toggleChat()">
-            <img src="chat-icon.png" alt="Chat Icon" />
-            <span>¿Necesitas ayuda?</span>
-        </div>
-
-        <!-- Panel del chatbot oculto al inicio -->
-        <div id="chatbot-window" class="hidden">
-            <div class="chat-header">
-                <h4>Eva</h4>
-                <button onclick="toggleChat()">X</button>
-            </div>
-            <div class="chat-body">
-                <p>Haz clic en una opción:</p>
-                <ul>
-                    <li onclick="sendOption('Pedido no recibido')">Pedido no recibido</li>
-                    <li onclick="sendOption('Problemas de reembolso')">Problemas de reembolso</li>
-                    <li onclick="sendOption('Artículo no como se describe')">Artículo no como se describe</li>
-                    <li onclick="sendOption('Cancelar pedido')">Cancelar pedido</li>
-                </ul>
-            </div>
-            <div class="chat-footer">
-                <input type="text" placeholder="Escribe tu mensaje" />
-                <button>Enviar</button>
-            </div>
-        </div>
-    </div>
-    v>
-    </div>
-
-
     <section class="my-lg-8 my-8">
         <div class="container">
             <div class="row">
@@ -205,9 +173,7 @@
                             <div class="card-body">
                                 <!-- Image and badge -->
                                 <div class="text-center position-relative">
-                                    <div class="position-absolute top-0 start-0">
-                                        <span class="badge bg-danger">Sale</span>
-                                    </div>
+
                                     <a th:href="@{/UsuarioFinal/detallesProducto}">
                                         <img th:src="@{/images/products/laptop.jpg}" alt="" class="mb-3 img-fluid" />
                                     </a>
@@ -844,8 +810,6 @@
 </div>
 
 <!-- Javascript-->
-
-
 
 <!-- Libs JS -->
 <!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->

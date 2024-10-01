@@ -1,16 +1,18 @@
 package com.example.gtics.controller;
 
-import com.example.gtics.entity.Solicitudagente;
-import com.example.gtics.entity.Usuario;
-import com.example.gtics.entity.Validacionescodigosagente;
+import com.example.gtics.entity.*;
+import com.example.gtics.repository.FotosProductoRepository;
 import com.example.gtics.repository.SolicitudAgenteRepository;
 import com.example.gtics.repository.UsuarioRepository;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +20,12 @@ import java.util.Optional;
 public class UsuarioFinalController {
     private final UsuarioRepository usuarioRepository;
     private final SolicitudAgenteRepository solicitudAgenteRepository;
-
-    public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository, UsuarioRepository usuarioRepository) {
+    private final FotosProductoRepository fotosProductoRepository;
+    public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository, UsuarioRepository usuarioRepository,
+                                  FotosProductoRepository fotosProductoRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
+        this.fotosProductoRepository = fotosProductoRepository;
     }
 
     @ModelAttribute
@@ -61,6 +65,19 @@ public class UsuarioFinalController {
         return "redirect:/UsuarioFinal";
     }
 
+    @GetMapping("/productos/foto/{id}")
+    public ResponseEntity<ByteArrayResource> obtenerFotoProducto(@PathVariable Integer id) {
+        Fotosproducto fotosProducto = fotosProductoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Foto del producto no encontrada"));
+
+        byte[] foto = fotosProducto.getFoto();
+        ByteArrayResource resource = new ByteArrayResource(foto);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"foto_producto_" + id + ".jpg\"")
+                .contentLength(foto.length)
+                .body(resource);
+    }
 
     @GetMapping("/UsuarioFinal/miPerfil")
     public String miPerfil(Model model){

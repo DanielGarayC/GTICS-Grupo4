@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,7 @@ public class SuperAdminController {
     private final CategoriaRepository categoriaRepository;
     private final SubcategoriaRepository subcategoriaRepository;
     private final TiendaRepository tiendaRepository;
+    private final FotosProductoRepository fotosProductoRepository;
 
     public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository,
                                 RolRepository rolRepository,
@@ -35,7 +38,7 @@ public class SuperAdminController {
                                 OrdenRepository ordenRepository,
                                 CategoriaRepository categoriaRepository,
                                 SubcategoriaRepository subcategoriaRepository,
-                                TiendaRepository tiendaRepository) {
+                                TiendaRepository tiendaRepository, FotosProductoRepository fotosProductoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
         this.rolRepository = rolRepository;
@@ -46,6 +49,7 @@ public class SuperAdminController {
         this.categoriaRepository = categoriaRepository;
         this.subcategoriaRepository = subcategoriaRepository;
         this.tiendaRepository=tiendaRepository;
+        this.fotosProductoRepository=fotosProductoRepository;
     }
 
 
@@ -465,8 +469,6 @@ public class SuperAdminController {
             }
         }
 
-
-
         return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 
@@ -515,51 +517,93 @@ public class SuperAdminController {
         return "SuperAdmin/add-product";
     }
 
+    @PostMapping("/SuperAdmin/subirFotos")
+    public String subirFotosProducto(@RequestParam("fotos") MultipartFile[] fotos,
+                                     @RequestParam("idProducto") Integer idProducto,
+                                     RedirectAttributes attr) {
+        if (fotos == null || fotos.length == 0 || fotos[0].isEmpty()) {
+            attr.addFlashAttribute("error", "No se han seleccionado fotos para subir.");
+            return "redirect:/SuperAdmin/agregarProducto";
+        }
+
+        Producto producto = productoRepository.findById(idProducto)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        for (MultipartFile foto : fotos) {
+            if (!foto.isEmpty()) {
+                try {
+                    String contentType = foto.getContentType();
+                    if (!contentType.equals("image/jpeg") && !contentType.equals("image/png")) {
+                        attr.addFlashAttribute("error", "Solo se permiten archivos JPEG o PNG.");
+                        return "redirect:/SuperAdmin/agregarProducto";
+                    }
+
+                    Fotosproducto fotosProducto = new Fotosproducto();
+                    fotosProducto.setFoto(foto.getBytes());
+                    fotosProducto.setFotoNombre(foto.getOriginalFilename());
+                    fotosProducto.setFotoContentType(foto.getContentType());
+                    fotosProducto.setProducto(producto);
+                    fotosProductoRepository.save(fotosProducto);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    attr.addFlashAttribute("error", "Ocurrió un error al subir la imagen.");
+                    return "redirect:/SuperAdmin/agregarProducto";
+                }
+            }
+        }
+
+        attr.addFlashAttribute("msg", "Fotos subidas correctamente.");
+        return "redirect:/SuperAdmin/productos";
+    }
 
     @PostMapping("/SuperAdmin/guardarProducto")
     public String guardarProducto(@ModelAttribute("producto") Producto producto,
                                   @RequestParam Map<String, String> allParams,
+                                  @RequestParam("fotos") MultipartFile[] fotos,
                                   RedirectAttributes attr) {
-
         try {
-            if (producto.getCantVentas() == null) {
-                producto.setCantVentas(0);
+            Producto existingProducto = null;
+
+            if (producto.getId() != null) {
+                Optional<Producto> optionalProducto = productoRepository.findById(producto.getId());
+                if (optionalProducto.isPresent()) {
+                    existingProducto = optionalProducto.get();
+                }
             }
-            if (producto.getBorrado() == null) {
-                producto.setBorrado(0);
+            if (existingProducto != null) {
+                existingProducto.setNombreProducto(producto.getNombreProducto());
+                existingProducto.setDescripción(producto.getDescripción());
+                existingProducto.setPrecio(producto.getPrecio());
+                existingProducto.setCostoEnvio(producto.getCostoEnvio());
+                existingProducto.setModelo(producto.getModelo());
+                existingProducto.setColor(producto.getColor());
+                existingProducto.setIdCategoria(producto.getIdCategoria());
+                existingProducto.setIdProveedor(producto.getIdProveedor());
+                existingProducto.setIdSubcategoria(producto.getIdSubcategoria());
+
+                productoRepository.save(existingProducto);
+                attr.addFlashAttribute("msg", "Producto actualizado correctamente.");
+            } else {
+                Producto savedProducto = productoRepository.save(producto);
+                attr.addFlashAttribute("msg", "Producto creado correctamente.");
             }
-
-            for (Map.Entry<String, String> entry : allParams.entrySet()) {
-                if (entry.getKey().startsWith("zona-")) {
-                    Integer zonaId = Integer.parseInt(entry.getKey().split("-")[1]);
-                    Integer cantidad = Integer.parseInt(entry.getValue());
-
-                    if (cantidad > 0) {
-                        Producto newProducto = new Producto();
-                        setCommonProductAttributes(newProducto, producto.getNombreProducto(), producto.getDescripción(),
-                                producto.getPrecio(), producto.getCostoEnvio(), producto.getModelo(),
-                                producto.getColor(), producto.getIdCategoria(), producto.getIdProveedor(),
-                                producto.getIdSubcategoria());
-
-                        newProducto.setCantidadDisponible(cantidad);
-
-                        Optional<Zona> optionalZona = zonaRepository.findById(zonaId);
-                        if (optionalZona.isPresent()) {
-                            newProducto.setZona(optionalZona.get());
-                        } else {
-                            throw new RuntimeException("Zona no encontrada");
-                        }
-
-                        productoRepository.save(newProducto);
+            if (fotos != null && fotos.length > 0) {
+                for (MultipartFile foto : fotos) {
+                    if (!foto.isEmpty()) {
+                        Fotosproducto fotosProducto = new Fotosproducto();
+                        fotosProducto.setFoto(foto.getBytes());
+                        fotosProducto.setFotoNombre(foto.getOriginalFilename());
+                        fotosProducto.setFotoContentType(foto.getContentType());
+                        fotosProducto.setProducto(producto);
+                        fotosProductoRepository.save(fotosProducto);
                     }
                 }
             }
-
-            attr.addFlashAttribute("msg", "Producto creado exitosamente.");
         } catch (Exception e) {
-            attr.addFlashAttribute("error", "Ocurrió un error al crear el producto.");
+            attr.addFlashAttribute("error", "Ocurrió un error al guardar el producto.");
             e.printStackTrace();
         }
+
         return "redirect:/SuperAdmin/productos";
     }
 
@@ -582,6 +626,8 @@ public class SuperAdminController {
                 productoZonas.put(pz.getZona().getId(), pz.getCantidadDisponible());
             }
 
+            List<Fotosproducto> fotosProductos = fotosProductoRepository.findByProducto(producto);
+
             if (productoZonas == null) {
                 productoZonas = new HashMap<>();
             }
@@ -593,26 +639,36 @@ public class SuperAdminController {
             model.addAttribute("subcategorias", subcategorias);
             model.addAttribute("productoZonas", productoZonas);
 
+            // Pass the image to the model (if it exists)
+            if (!fotosProductos.isEmpty()) {
+                model.addAttribute("imagenProducto", fotosProductos.get(0).getFoto()); // Assuming the first image is shown
+            }
+
             return "SuperAdmin/edit-product";
         } else {
             return "redirect:/SuperAdmin/productos";
         }
     }
 
-    private void setCommonProductAttributes(Producto producto, String nombreProducto, String descripcion, Double precio,
-                                            Double costoEnvio, String modelo, String color, Categoria categoria, Proveedor proveedor,
-                                            Subcategoria subcategoria) {
-        producto.setNombreProducto(nombreProducto);
-        producto.setDescripción(descripcion);
-        producto.setPrecio(precio);
-        producto.setCostoEnvio(costoEnvio);
-        producto.setModelo(modelo);
-        producto.setColor(color);
-        producto.setIdCategoria(categoria);
-        producto.setIdProveedor(proveedor);
-        producto.setIdSubcategoria(subcategoria);
-        producto.setCantVentas(0);
-        producto.setBorrado(0);
+    @GetMapping("/SuperAdmin/producto/foto/{id}")
+    public ResponseEntity<byte[]> obtenerFotoProducto(@PathVariable Integer id) {
+        List<Fotosproducto> fotosProductos = fotosProductoRepository.findByProducto_Id(id);
+
+        if (!fotosProductos.isEmpty()) {
+            Fotosproducto fotoProducto = fotosProductos.get(0);
+            byte[] imagenComoBytes = fotoProducto.getFoto();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(fotoProducto.getFotoContentType())); // Set the content type dynamically
+
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/SuperAdmin/eliminarProducto/{id}")
