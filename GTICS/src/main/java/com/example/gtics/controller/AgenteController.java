@@ -375,6 +375,7 @@ public class AgenteController {
 
 
     @GetMapping({"Agente/Ordenes/EliminarOrden"})
+    //me troleas yisus
     public String eliminadoLogicoDeOrden(RedirectAttributes attr,@RequestParam("idOrden") Integer idOrden,@RequestParam("razonEliminacion") String razonEliminacion  ){
         System.out.println(idOrden);
         System.out.println(razonEliminacion);
