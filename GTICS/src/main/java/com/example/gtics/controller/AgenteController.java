@@ -372,6 +372,24 @@ public class AgenteController {
         return "Agente/OrdenesDeUsuario/trackingOrdenUsuario";
     }
 
+
+
+    @GetMapping({"Agente/Ordenes/EliminarOrden"})
+    public String eliminadoLogicoDeOrden(RedirectAttributes attr,@RequestParam("idOrden") Integer idOrden,@RequestParam("razonEliminacion") String razonEliminacion  ){
+        System.out.println(idOrden);
+        System.out.println(razonEliminacion);
+        try{
+            ordenRepository.eliminadoLogicoDeOrden(idOrden,razonEliminacion);
+            attr.addFlashAttribute("msg","La orden se ha eliminado exitosamente");
+
+        }catch (Exception e){
+            attr.addFlashAttribute("msg","Error al elmiminar la orden");
+
+        }
+        return "redirect:/Agente/Ordenes";
+    }
+
+
     @GetMapping({"Agente/Ordenes/Descargar"})
     public String DescargarOrden(){
 

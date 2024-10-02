@@ -36,4 +36,13 @@ public class Orden {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaOrden;
 
+    @Column(name = "solicitarCancelarOrden")
+    private Integer solicitarCancelarOrden;
+
+    @Column(name = "ordenEliminada")
+    private Integer ordenEliminada;
+
+    @Column(name = "razonEliminacion")
+    private String razonEliminacion;
+
 }

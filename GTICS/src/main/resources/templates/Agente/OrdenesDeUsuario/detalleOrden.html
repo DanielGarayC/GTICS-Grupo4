@@ -145,7 +145,18 @@
 								   <!-- button -->
 								   <div class="ms-md-3">
 									   <a ><button type="submit" class="btn btn-primary">Guardar</button></a> <!--onclick="mostrarAlerta()" -->
-									<a class="btn btn-danger eliminarOrden" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-trash me-3"></i>Eliminar</a>
+									   <th:block th:if="${orden.solicitarCancelarOrden == 1}">
+										   <a class="btn btn-danger eliminarOrden " href="javascript:void(0);"
+											  th:data-id="${orden.id}"
+											  data-bs-toggle="tooltip"
+											  data-bs-placement="bottom">
+											   <i class="bi bi-trash me-3"></i> Eliminar
+										   </a>
+
+									   </th:block>
+
+
+
 									<div class="btn-group">
 										<a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 											<i class="bi bi-download me-2"></i>Descargar
@@ -343,21 +354,37 @@
 	   <!--POP UP ELIMINAR ORDEN-->
 	   <script>
 		   document.querySelectorAll('.eliminarOrden').forEach(button => {
-			   button.addEventListener('click', function() {
+			   button.addEventListener('click', function (event) {
+				   event.preventDefault();  // Evita la redirección automática
+
+				   // Obtenemos el ID de la orden
+				   const orderId = this.getAttribute('data-id');
+
+				   // SweetAlert para seleccionar la razón de cancelación
 				   Swal.fire({
-					   showCloseButton: true,
-					   title: 'Confirmar ',
-					   text: "¿Está seguro de que deseas eliminar esta orden?",
-					   icon: 'warning',
+					   title: 'Eliminar Orden',
+					   text: '¿Realmente desea eliminar esta orden?',
+					   input: 'select',
+					   inputOptions: {
+						   'Datos falsos': 'Datos falsos',
+						   'Duplicado': 'Duplicado',
+						   'Error en precio': 'Error en precio'
+					   },
+					   inputPlaceholder: 'Selecciona un motivo',
 					   showCancelButton: true,
 					   confirmButtonText: 'Eliminar',
 					   cancelButtonText: 'Cancelar',
-					   customClass: {
-						   popup: 'custom-popup'
+					   inputValidator: (value) => {
+						   if (!value) {
+							   return 'Debes seleccionar un motivo.';
+						   }
 					   }
 				   }).then((result) => {
 					   if (result.isConfirmed) {
-						   Swal.fire('Orden eliminada', 'Se ha eliminado la orden exitosamente.', 'success');
+						   const razonEliminacion = result.value;  // Obtener la razón seleccionada
+
+						   // Redirigir al controlador con el ID y la razón de eliminación como parámetros
+						   window.location.href = `/Agente/Ordenes/EliminarOrden?idOrden=${orderId}&razonEliminacion=${razonEliminacion}`;
 					   }
 				   });
 			   });

@@ -3,7 +3,6 @@ package com.example.gtics.repository;
 
 import com.example.gtics.dto.*;
 import com.example.gtics.entity.Orden;
-import com.example.gtics.entity.Usuario;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,23 +39,23 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "GROUP BY eo.nombreEstado;", nativeQuery = true)
     List<FindCantOrdenesPorEstado> getOrdenesEstado();
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idEstadoOrden = ?1 AND idControlOrden = ?2 AND idAgente = ?3")
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE ordenEliminada=0 and  idEstadoOrden = ?1 AND idControlOrden = ?2 AND idAgente = ?3")
     Page<Orden> findOrdenesByEstadoAndControl(Integer idEstado, Integer idControl,Integer idAgente, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idEstadoOrden = ?1 AND idAgente = ?2")
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE ordenEliminada=0 and idEstadoOrden = ?1 AND idAgente = ?2")
     Page<Orden> findOrdenesByEstado(Integer idEstado,Integer idAgente, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idControlOrden = ?1 AND idAgente = ?2")
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE ordenEliminada=0 and idControlOrden = ?1 AND idAgente = ?2")
     Page<Orden> findOrdenesByControl(Integer idControl,Integer idAgente, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idControlOrden = ?1 ")
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE ordenEliminada=0 and idControlOrden = ?1 ")
     Page<Orden> findOrdenesSinAsignar(Integer idControl, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idAgente = ?1 or idControlOrden = 1 ")
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE ordenEliminada=0 and idAgente = ?1 or idControlOrden = 1 ")
     List<Orden> buscarMisOrdenesYOrdenesSinAsignar(Integer idAgente);
 
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE idAgente = ?1 or idControlOrden = 1 ")
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE ordenEliminada=0 and idAgente = ?1 or idControlOrden = 1 ")
     Page<Orden> buscarMisOrdenesYOrdenesSinAsignarPage(Integer idAgente, Pageable pageable);
 
     @Transactional
@@ -81,7 +80,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "JOIN producto p ON phc.idProducto = p.idProducto \n" +
             "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden \n" +
             "JOIN controlorden co ON o.idControlOrden = co.idControlOrden \n" +
-            "WHERE u.idUsuario = :idUsuario \n" +
+            "WHERE u.idUsuario = :idUsuario and ordenEliminada=0\n" +
             "GROUP BY o.idOrden;")
     Page<OrdenCarritoDto> obtenerCarritoConDto(Integer idUsuario, Pageable pageable);
 
@@ -221,4 +220,10 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     List<Orden> ordenesenProceso(Integer idAgente);
     @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=4 and idAgente=?1;")
     List<Orden> ordenesResueltas(Integer idAgente);
+
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE orden SET ordenEliminada=1, razonEliminacion = ?2 WHERE (idOrden = ?1);")
+    void eliminadoLogicoDeOrden(Integer idOrden,String razonEliminacion);
 }
