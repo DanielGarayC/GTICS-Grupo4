@@ -250,7 +250,7 @@
                                     <table class="table table-centered table-hover text-nowrap table-borderless mb-0">
                                         <thead class="bg-light">
                                         <tr>
-                                            <th>Id</th>
+                                            <th></th>
                                             <th>Nombre del proveedor</th>
                                             <th>Email</th>
                                             <th>DNI</th>
@@ -262,7 +262,7 @@
                                         </thead>
                                         <tbody>
                                         <tr th:each="proveedor, info : ${proveedores}">
-                                            <td th:text="${proveedor.id}"></td>
+                                            <td th:text="${info.index+1}"></td>
                                             <td th:text="|${proveedor.nombreProveedor} ${proveedor.apellidoProveedor}|"><a href="#" class="text-reset">E-Grocery Super Market</a></td>
                                             <td th:text="${proveedor.contacto}">egrocery@dayrep.com</td>
                                             <td th:text="${proveedor.ruc}"></td>

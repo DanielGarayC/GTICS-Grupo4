@@ -224,8 +224,9 @@
                                     <table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
                                         <thead class="bg-light">
                                         <tr>
-
-                                            <th>Nombre completo</th>
+                                            <th></th>
+                                            <th>Nombres</th>
+                                            <th>Apellidos</th>
                                             <th>Correo electrónico</th>
                                             <th>DNI</th>
                                             <th>Teléfono</th>
@@ -235,8 +236,8 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="usuario : ${usuarios}">
-
+                                        <tr th:each="usuario,var : ${usuarios}">
+<!--
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <img th:src="@{/images/avatar/avatar-${usuario.id}.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
@@ -244,7 +245,10 @@
                                                         <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" th:text="${usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno}"></a>
                                                     </div>
                                                 </div>
-                                            </td>
+                                            </td>-->
+                                            <td th:text="${var.index+1}"></td>
+                                            <td th:text="${usuario.nombre}"></td>
+                                            <td th:text="${usuario.apellidoPaterno} + ' ' + ${usuario.apellidoMaterno} "></td>
                                             <td th:text="${usuario.email}"></td>
 
                                             <td th:text="${usuario.dni}"></td>
