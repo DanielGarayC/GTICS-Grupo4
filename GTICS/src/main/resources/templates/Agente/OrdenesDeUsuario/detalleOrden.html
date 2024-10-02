@@ -94,12 +94,15 @@
 
 					   </div>
 					   <!-- button -->
-					   <div>
-						   <div th:if="${indicadorVistaARegresar == 1}"> <!--si es 1, regresa a ordenes de usuario-->
+					   <div class="row">
+						   <div th:if="${indicadorVistaARegresar == 1}" class="col-6 ml-13"> <!--si es 1, regresa a ordenes de usuario-->
 							   <a th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${orden.idCarritoCompra.idUsuario.id}}" class="btn btn-primary">Regresar</a>
 						   </div>
-						   <div th:unless="${indicadorVistaARegresar == 1}"><!--si es 0, regresa a lista de ordenes -->
+						   <div th:unless="${indicadorVistaARegresar == 1}" class="col-6 ml-13"><!--si es 0, regresa a lista de ordenes -->
 							   <a th:href="@{/Agente/Ordenes}" class="btn btn-primary">Regresar</a>
+						   </div>
+						   <div class="row col-6">
+							   <a th:href="@{'/Agente/Ordenes/tracking?idOrden=' + ${orden.id}}" class="btn btn-soft-success">Ver tracking</a>
 						   </div>
 
 					   </div>

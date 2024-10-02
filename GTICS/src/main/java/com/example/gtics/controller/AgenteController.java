@@ -251,6 +251,12 @@ public class AgenteController {
     @PostMapping({"/Agente/Orden/editarOrden"})
     public String editarOrden(Orden orden,RedirectAttributes attr){
 
+        System.out.println( "nueva fecha: " + orden.getFechaOrden());
+        System.out.println("nuevo distrito: " + orden.getIdCarritoCompra().getIdUsuario().getDistrito().getNombre());
+        System.out.println( "nueva direccion: " + orden.getIdCarritoCompra().getIdUsuario().getDireccion());
+
+        //FALTA CORREGIR
+
         try {
             ordenRepository.save(orden);
             attr.addFlashAttribute("msg", "La orden se ha actualizado exitosamente");
@@ -258,6 +264,8 @@ public class AgenteController {
         }catch (Exception e){
             attr.addFlashAttribute("msg", "no se pudo actualizar");
         }
+
+
 
 
         return "redirect:/Agente/Ordenes";
@@ -350,7 +358,20 @@ public class AgenteController {
         }
 
 
+
+
     }
+    @GetMapping({"Agente/Ordenes/tracking"})
+    public String trackingUsuario(@RequestParam("idOrden") Integer idOrden,Model model){
+
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        if(ordenOpt.isPresent()){
+            model.addAttribute("orden",ordenOpt.get());
+        }
+
+        return "Agente/OrdenesDeUsuario/trackingOrdenUsuario";
+    }
+
     @GetMapping({"Agente/Ordenes/Descargar"})
     public String DescargarOrden(){
 
@@ -363,5 +384,7 @@ public class AgenteController {
 
         return "Agente/Reportes/descargarReporte";
     }
+
+
 }
 
