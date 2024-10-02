@@ -142,7 +142,7 @@
 										   <th>Fecha de entrega</th>
 										   <th>Estado</th>
 										   <th>Control</th>
-										   <th>Monto total</th>
+										   <th>Monto total (S/.)</th>
 										   <th></th>
 									   </tr>
 								   </thead>
@@ -150,7 +150,7 @@
 								   <tr th:each="orden,var: ${ordenesLista}">
 									   <!--<td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td> Agregar si incluimos imagen a la orden -->
 									   <td th:text="${var.index+1}"></td>
-									   <td th:text="${orden.fechaOrden}"></td>
+									   <td th:text="${#temporals.format(orden.fechaOrden, 'dd-MM-yyyy')}"></td>
 									   <td th:switch="${orden.estadoorden.id}">
 										   <span th:case="1" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-primary text-dark-primary"></span>
 										   <span th:case="2" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-secondary text-dark-secondary"></span>
@@ -170,7 +170,7 @@
 
 
 									   <td>
-										   <span th:each="monto : ${listaMonto}" th:if="${monto.idOrden == orden.id}" th:text="'S/. ' + ${monto.montoTotal}"></span>
+										   <span th:each="monto : ${listaMonto}" th:if="${monto.idOrden == orden.id}" th:text="${monto.montoTotal}"></span>
 									   </td>
 
 
