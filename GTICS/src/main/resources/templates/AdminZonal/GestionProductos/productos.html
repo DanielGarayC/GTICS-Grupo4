@@ -255,6 +255,10 @@
                         </form>
                     </div>
                 </div>
+                <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}">
+                </div>
+                <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
+                </div>
                 <div class="table-responsive border-0">
                     <!-- Table -->
                     <table id="productosTable" class="table mb-0 text-nowrap" style ="padding-top: 3vh; border-color: #d5d7d7;">
@@ -300,7 +304,7 @@
                                 <!-- Si cantidadSolicitada no es null, mostrar los botones Ver, Editar y Eliminar -->
                                 <button th:if="${producto.cantidadSolicitada != null}"
                                         type="button"
-                                        class="btn btn-outline-primary"
+                                        class="btn btn-outline-primary verSolicitud"
                                         th:data-product-id="${producto.idProducto}"
                                         th:data-cantidad-solicitada="${producto.cantidadSolicitada}"
                                         title="Ver solicitud"
@@ -310,14 +314,18 @@
 
                                 <button th:if="${producto.cantidadSolicitada != null}"
                                         type="button"
-                                        class="btn btn-outline-success"
+                                        class="btn btn-outline-success editarSolicitud"
+                                        th:data-product-id="${producto.idProducto}"
+                                        th:data-cantidad-solicitada="${producto.cantidadSolicitada}"
                                         title="Editar solicitud">
                                     <i class="fas fa-edit"></i>
                                 </button>
 
                                 <button th:if="${producto.cantidadSolicitada != null}"
                                         type="button"
-                                        class="btn btn-outline-danger"
+                                        class="btn btn-outline-danger eliminarSolicitud"
+                                        th:data-product-id="${producto.idProducto}"
+                                        th:data-cantidad-solicitada="${producto.cantidadSolicitada}"
                                         title="Eliminar solicitud">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -413,55 +421,129 @@
 
 </script>
 
+
 <script>
     //Popup reposicion
     document.querySelectorAll('.reposicion').forEach(button => {
-        button.addEventListener('click', function() {
-            // Aquí obtenemos el valor del atributo data-product-id
+    button.addEventListener('click', function() {
+    // Aquí obtenemos el valor del atributo data-product-id
+    const productoId = button.getAttribute('data-product-id');
+
+    // Aquí usas el productoId en el Swal popup y lo pasas en el formulario
+    Swal.fire({
+    showCloseButton: true,
+    title: 'Solicitud de reposición',
+    html: `
+    <p>Ingrese la cantidad de productos que desea solicitar:</p>
+    <input type="number" id="productQuantity" class="swal2-input" value="0" min="0">
+    `,
+    showCancelButton: true,
+    confirmButtonText: 'Enviar',
+    cancelButtonText: 'Cancelar',
+    customClass:{
+    popup: 'custom-popup'
+    },
+    focusConfirm: false,
+    preConfirm: () => {
+    const quantity = Swal.getPopup().querySelector('#productQuantity').value;
+    if (!quantity || quantity <= 0) {
+    Swal.showValidationMessage(`Por favor ingrese una cantidad válida.`);
+    }
+    // Aquí retorna el productoId junto con la cantidad
+    return { quantity, productoId };
+    }
+    }).then((result) => {
+    if (result.isConfirmed) {
+    // Crear y enviar un formulario con el productoId y la cantidad
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/AdminZonal/Productos/GuardarSolReposicion';  // Define la acción del formulario
+
+    // Agregar campo oculto para el idProducto
+    const inputProductoId = document.createElement('input');
+    inputProductoId.type = 'hidden';
+    inputProductoId.name = 'productoId';
+    inputProductoId.value = result.value.productoId;
+    form.appendChild(inputProductoId);
+
+    // Agregar campo oculto para la cantidad
+    const inputCantidad = document.createElement('input');
+    inputCantidad.type = 'hidden';
+    inputCantidad.name = 'cantidad';
+    inputCantidad.value = result.value.quantity;
+    form.appendChild(inputCantidad);
+
+    document.body.appendChild(form);
+    form.submit();
+    }
+    });
+    });
+    });
+</script>
+<script>
+    document.querySelectorAll('.verSolicitud').forEach(button => {
+    button.addEventListener('click', function () {
+        const cantidadSolicitada = button.getAttribute('data-cantidad-solicitada');
+        const productoId = button.getAttribute('data-product-id');
+
+        Swal.fire({
+            title: 'Solicitud de reposición',
+            html: `
+                <p>Se solicitaron</p>
+                <input type="number" id="productQuantity" class="swal2-input" value="${cantidadSolicitada}" min="0" disabled>
+                <p>productos</p>
+            `,
+            confirmButtonText: 'Cerrar',
+            confirmButtonColor: '#6c757d',  // Color gris para el botón "Cerrar"
+            customClass: {
+                popup: 'custom-popup'
+            }
+        });
+    });
+    });
+    document.querySelectorAll('.editarSolicitud').forEach(button => {
+        button.addEventListener('click', function () {
+            const cantidadSolicitada = button.getAttribute('data-cantidad-solicitada');
             const productoId = button.getAttribute('data-product-id');
 
-            // Aquí usas el productoId en el Swal popup y lo pasas en el formulario
             Swal.fire({
-                showCloseButton: true,
-                title: 'Solicitud de reposición',
+                title: 'Editar Solicitud de Reposición',
                 html: `
-                <p>Ingrese la cantidad de productos que desea solicitar:</p>
-                <input type="number" id="productQuantity" class="swal2-input" value="0" min="0">
+                <p>Ingrese la nueva cantidad de productos que desea solicitar:</p>
+                <input type="number" id="productQuantityEdit" class="swal2-input" value="${cantidadSolicitada}" min="0">
             `,
                 showCancelButton: true,
-                confirmButtonText: 'Enviar',
+                confirmButtonText: 'Guardar',
                 cancelButtonText: 'Cancelar',
-                customClass:{
+                customClass: {
                     popup: 'custom-popup'
                 },
                 focusConfirm: false,
                 preConfirm: () => {
-                    const quantity = Swal.getPopup().querySelector('#productQuantity').value;
-                    if (!quantity || quantity <= 0) {
-                        Swal.showValidationMessage(`Por favor ingrese una cantidad válida.`);
+                    const newQuantity = Swal.getPopup().querySelector('#productQuantityEdit').value;
+                    if (!newQuantity || newQuantity <= 0) {
+                        Swal.showValidationMessage('Por favor ingrese una cantidad válida.');
+                        return false;
                     }
-                    // Aquí retorna el productoId junto con la cantidad
-                    return { quantity, productoId };
+                    return newQuantity;
                 }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Crear y enviar un formulario con el productoId y la cantidad
+            }).then((editResult) => {
+                if (editResult.isConfirmed) {
+                    // Crear y enviar un formulario para guardar los cambios
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '/AdminZonal/Productos/GuardarSolReposicion';  // Define la acción del formulario
+                    form.action = '/AdminZonal/Productos/GuardarSolReposicion'; // Ruta del controller para guardar
 
-                    // Agregar campo oculto para el idProducto
                     const inputProductoId = document.createElement('input');
                     inputProductoId.type = 'hidden';
                     inputProductoId.name = 'productoId';
-                    inputProductoId.value = result.value.productoId;
+                    inputProductoId.value = productoId; // ID del producto
                     form.appendChild(inputProductoId);
 
-                    // Agregar campo oculto para la cantidad
                     const inputCantidad = document.createElement('input');
                     inputCantidad.type = 'hidden';
                     inputCantidad.name = 'cantidad';
-                    inputCantidad.value = result.value.quantity;
+                    inputCantidad.value = editResult.value; // Nueva cantidad
                     form.appendChild(inputCantidad);
 
                     document.body.appendChild(form);
@@ -470,117 +552,35 @@
             });
         });
     });
-
-</script>
-
-
-</script>
-<script>
-    //Popup reposicion REVISION
-    document.querySelectorAll('.reposicionRevisar').forEach(button => {
+    document.querySelectorAll('.eliminarSolicitud').forEach(button => {
         button.addEventListener('click', function () {
-            const cantidadSolicitada = button.getAttribute('data-cantidad-solicitada');
             const productoId = button.getAttribute('data-product-id');
 
             Swal.fire({
-                showCloseButton: true,
-                title: 'Solicitud de reposición',
-                html: `
-                <p>Se solicitaron</p>
-                <input type="number" id="productQuantity" class="swal2-input" value="${cantidadSolicitada}" min="0" disabled>
-                <p>productos</p>
-            `,
+                title: 'Confirmar eliminación',
+                text: "¿Está seguro de que deseas eliminar esta solicitud de reposición?",
+                icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Editar',
-                cancelButtonText: 'Eliminar',
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar',
                 customClass: {
                     popup: 'custom-popup'
-                },
-                focusConfirm: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Edit action
-                    Swal.fire({
-                        showCloseButton: true,
-                        title: 'Solicitud de reposición',
-                        html: `
-                        <p>Ingrese la cantidad de productos que desea solicitar:</p>
-                        <input type="number" id="productQuantityEdit" class="swal2-input"  min="0">
-                    `,
-                        showCancelButton: true,
-                        confirmButtonText: 'Guardar',
-                        cancelButtonText: 'Cancelar',
-                        customClass: {
-                            popup: 'custom-popup'
-                        },
-                        focusConfirm: false,
-                        preConfirm: () => {
-                            const newQuantity = Swal.getPopup().querySelector('#productQuantityEdit').value;
-                            if (!newQuantity || newQuantity <= 0) {
-                                Swal.showValidationMessage('Por favor ingrese una cantidad válida.');
-                                return false;
-                            }
-                            return newQuantity;
-                        }
-                    }).then((editResult) => {
-                        if (editResult.isConfirmed) {
-                            // Crear y enviar un formulario para guardar los cambios
-                            const form = document.createElement('form');
-                            form.method = 'POST';
-                            form.action = '/AdminZonal/Productos/GuardarSolReposicion'; // Este es el endpoint del controlador para actualizar la solicitud
+                }
+            }).then((deleteResult) => {
+                if (deleteResult.isConfirmed) {
+                    // Crear y enviar un formulario para eliminar la solicitud
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/AdminZonal/Productos/EliminarSolReposicion'; // Ruta del controller para eliminar
 
-                            // Agregar campo oculto para el idProducto
-                            const inputProductoId = document.createElement('input');
-                            inputProductoId.type = 'hidden';
-                            inputProductoId.name = 'productoId';
-                            inputProductoId.value = productoId; // Se envía el ID del producto
-                            form.appendChild(inputProductoId);
-                            console.log(productoId)
-                            // Agregar campo oculto para la cantidad nueva
-                            const inputCantidad = document.createElement('input');
-                            inputCantidad.type = 'hidden';
-                            inputCantidad.name = 'cantidad';
-                            inputCantidad.value = editResult.value; // Nueva cantidad
-                            form.appendChild(inputCantidad);
+                    const inputProductoId = document.createElement('input');
+                    inputProductoId.type = 'hidden';
+                    inputProductoId.name = 'productoId';
+                    inputProductoId.value = productoId; // ID del producto
+                    form.appendChild(inputProductoId);
 
-                            // Enviar el formulario
-                            document.body.appendChild(form);
-                            form.submit();
-                            console.log(inputCantidad)
-                        }
-                    });
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // Delete action with confirmation
-                    Swal.fire({
-                        showCloseButton: true,
-                        title: 'Confirmar eliminación',
-                        text: "¿Está seguro de que deseas eliminar esta solicitud de reposición?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Eliminar',
-                        cancelButtonText: 'Cancelar',
-                        customClass: {
-                            popup: 'custom-popup'
-                        }
-                    }).then((deleteResult) => {
-                        if (deleteResult.isConfirmed) {
-                            // Crear y enviar un formulario para eliminar la solicitud
-                            const form = document.createElement('form');
-                            form.method = 'POST';
-                            form.action = '/AdminZonal/Productos/EliminarSolReposicion'; // Endpoint del backend para eliminar
-
-                            // Agregar campo oculto para el idProducto
-                            const inputProductoId = document.createElement('input');
-                            inputProductoId.type = 'hidden';
-                            inputProductoId.name = 'productoId';
-                            inputProductoId.value = productoId;
-                            form.appendChild(inputProductoId);
-
-                            // Enviar el formulario
-                            document.body.appendChild(form);
-                            form.submit();
-                        }
-                    });
+                    document.body.appendChild(form);
+                    form.submit();
                 }
             });
         });

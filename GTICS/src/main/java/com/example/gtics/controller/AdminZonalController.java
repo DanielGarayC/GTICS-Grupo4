@@ -249,13 +249,16 @@ public class AdminZonalController {
 
     @PostMapping({"AdminZonal/Productos/guardarFecha"})
     public String GuardarFecha(@RequestParam("productoId") Integer productoId,
-                               @RequestParam("fechaEntrega") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fechaEntrega){
+                               @RequestParam("fechaEntrega") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fechaEntrega, RedirectAttributes attr){
         Optional<Producto> productoOPT = productoRepository.findById(productoId);
         System.out.println("ID: " + productoId);
         if(productoOPT.isPresent()){
             Producto producto = productoOPT.get();
             producto.setFechaArribo(fechaEntrega);
             productoRepository.save(producto);
+            attr.addFlashAttribute("msg", "La fecha de entrega se guardó correctamente.");
+        }else {
+            attr.addFlashAttribute("error", "No se encontró el producto para guardar la fecha de entrega.");
         }
 
         return "redirect:/AdminZonal/Productos";
@@ -263,7 +266,7 @@ public class AdminZonalController {
 
     @PostMapping({"AdminZonal/Productos/GuardarSolReposicion"})
     public String GuardarSolReposicion(@RequestParam("productoId") Integer productoId,
-                                       @RequestParam("cantidad") Integer cantSolicitada){
+                                       @RequestParam("cantidad") Integer cantSolicitada, RedirectAttributes redirectAttributes){
         int idAdminZonal = 11;
         Optional<Usuario> az = usuarioRepository.findById(idAdminZonal);
         Optional<Producto> productoOPT = productoRepository.findById(productoId);
@@ -277,15 +280,20 @@ public class AdminZonalController {
             if(solicitudExistente.isPresent()){
                 newSol = solicitudExistente.get();
                 newSol.setCantidadSolicitada(String.valueOf(cantSolicitada));
+                redirectAttributes.addFlashAttribute("msg", "La solicitud de reposición se editó correctamente.");
 
             }else{
                 newSol = new Solicitudreposicion();
                 newSol.setIdProducto(producto);
                 newSol.setCantidadSolicitada(String.valueOf(cantSolicitada));
                 newSol.setIdUsuario(az.get());
+                redirectAttributes.addFlashAttribute("msg", "La solicitud de reposición se creó correctamente.");
             }
             solicitudreposicionRepository.save(newSol);
 
+        }else {
+            // En caso de error
+            redirectAttributes.addFlashAttribute("error", "Error al procesar la solicitud.");
         }
 
         return "redirect:/AdminZonal/Productos";
@@ -305,13 +313,17 @@ public class AdminZonalController {
     }
 
     @PostMapping({"AdminZonal/Productos/EliminarSolReposicion"})
-    public String EliminarSolicitudReposicion(@RequestParam("productoId") Integer productoId){
+    public String EliminarSolicitudReposicion(@RequestParam("productoId") Integer productoId, RedirectAttributes attr){
         int idAdminZonal = 11;
         Optional<Usuario> az = usuarioRepository.findById(idAdminZonal);
         Producto producto = productoRepository.findById(productoId).orElseThrow(() -> new RuntimeException("Foto no encontrada"));
         Optional<Solicitudreposicion> solRepoOPT = solicitudreposicionRepository.findByIdProducto(producto);
         if (solRepoOPT.isPresent()) {
             solicitudreposicionRepository.delete(solRepoOPT.get());
+            attr.addFlashAttribute("msg", "La solicitud de reposición se eliminó correctamente.");
+
+        }else {
+            attr.addFlashAttribute("error", "No se encontró la solicitud de reposición para eliminar.");
         }
         return "redirect:/AdminZonal/Productos";
     }
