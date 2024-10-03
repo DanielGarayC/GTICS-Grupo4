@@ -245,7 +245,7 @@
 								<!-- heading -->
 								<h3 class="mb-0 fs-5">Usuarios registrados vs activos</h3>
 								<div class="mt-4" style="height: 40vh;"> <!-- Ajuste de altura a 300px -->
-									<div id="usersChart" style="height: 40vh; width: 100%;"></div> <!-- Ajuste de max-width a 400px -->
+									<div id="usersChart" style="height: 100%; width: 100%;"></div> <!-- Ajuste de max-width a 400px -->
 								</div>
 							</div>
 						</div>
@@ -259,7 +259,7 @@
 								<!-- heading -->
 								<h3 class="mb-0 fs-5">Agentes</h3>
 								<div class="mt-4" style="height: 40vh;"> <!-- Ajuste de altura a 300px -->
-									<div id="usuariosPorAgenteChart" style="height: 40vh; width: 100%;"></div> <!-- Ajuste de max-width a 400px -->
+									<div id="usuariosPorAgenteChart" style="height: 100%; width: 100%;"></div> <!-- Ajuste de max-width a 400px -->
 								</div>
 							</div>
 						</div>
@@ -376,7 +376,7 @@
 	var options = {
 		chart: {
 			type: 'donut',
-			height: '380vh',
+			height: '100%',
 			width: '100%'
 		},
 		series: [CantusuariosRegistrados, CantusuariosActivos],
@@ -384,14 +384,12 @@
 		responsive: [{
 			breakpoint: 480,
 			options: {
-
 				legend: {
 					position: 'bottom'
 				}
 			}
 		}],
 		colors: ['#008FFB', '#FF4560'],
-
 	};
 
 	var chart = new ApexCharts(document.querySelector("#usersChart"), options);
@@ -411,7 +409,7 @@
 	var options = {
 		chart: {
 			type: 'donut',
-			height: '380vh',
+			height: '100%',
 			width: '100%'
 		},
 		series: dataRaw,

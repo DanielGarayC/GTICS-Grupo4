@@ -300,8 +300,8 @@
                                     </button>
 
                                     <!-- Botón de eliminar -->
-                                    <button type="submit" class="btn btn-danger deleteButton" style="margin-left: 5px;" th:data-product-id="${producto.idProducto}">
-                                        <i class="bi-trash"></i> <!-- Aquí se usa el icono de X (bootstrap icon) -->
+                                    <button type="submit" class="btn btn-danger eliminarFechaArribo" style="margin-left: 5px;" th:data-product-id="${producto.idProducto}">
+                                        <i class="bi-trash"></i>
                                     </button>
                                 </div>
                             </td>
@@ -577,6 +577,40 @@
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = '/AdminZonal/Productos/EliminarSolReposicion'; // Ruta del controller para eliminar
+
+                    const inputProductoId = document.createElement('input');
+                    inputProductoId.type = 'hidden';
+                    inputProductoId.name = 'productoId';
+                    inputProductoId.value = productoId; // ID del producto
+                    form.appendChild(inputProductoId);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.eliminarFechaArribo').forEach(button => {
+        button.addEventListener('click', function () {
+            const productoId = button.getAttribute('data-product-id');
+
+            Swal.fire({
+                title: 'Confirmar eliminación',
+                text: "¿Está seguro de que deseas eliminar esta fecha de arribo?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'custom-popup'
+                }
+            }).then((deleteResult) => {
+                if (deleteResult.isConfirmed) {
+                    // Crear y enviar un formulario para eliminar la solicitud
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/AdminZonal/Productos/EliminarFechaArribo'; // Ruta del controller para eliminar
 
                     const inputProductoId = document.createElement('input');
                     inputProductoId.type = 'hidden';
