@@ -4,6 +4,7 @@ import com.example.gtics.dto.CantidadProductos;
 import com.example.gtics.dto.ProductoRelevanteDTO;
 import com.example.gtics.dto.ProductoTabla;
 import com.example.gtics.entity.Producto;
+import com.example.gtics.entity.Zona;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     @Query(value = "SELECT * FROM producto p WHERE p.borrado = 0", nativeQuery = true)
@@ -83,5 +86,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     ProductoTabla getProductosTablaId(int id);
 
     List<Producto> findByNombreProducto(String nombreProducto);
+    Optional<Producto> findByNombreProductoAndZona(String nombreProducto, Zona zona);
+
 
 }
