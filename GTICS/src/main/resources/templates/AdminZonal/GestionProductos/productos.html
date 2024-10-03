@@ -685,12 +685,22 @@
                 },
                 focusConfirm: false,
                 preConfirm: () => {
-                    const quantity = Swal.getPopup().querySelector('#productQuantity').value;
-                    if (!quantity) {
+                    const fechaIngresada = Swal.getPopup().querySelector('#productQuantity').value;
+                    const fechaHoy = new Date().toISOString().split('T')[0]; // Fecha de hoy en formato yyyy-mm-dd
+
+                    // Verificar si la fecha fue ingresada
+                    if (!fechaIngresada) {
                         Swal.showValidationMessage('Por favor ingrese una fecha válida.');
-                        return false; // Para detener el diálogo
+                        return false;
                     }
-                    return quantity; // Retorna el valor si es válido
+
+                    // Validar que la fecha ingresada sea una fecha futura
+                    if (new Date(fechaIngresada) <= new Date(fechaHoy)) {
+                        Swal.showValidationMessage('La fecha de arribo debe ser una fecha futura.');
+                        return false;
+                    }
+
+                    return fechaIngresada; // Retornar la fecha si es válida
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
