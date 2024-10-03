@@ -224,7 +224,7 @@ public class AdminZonalController {
 
 
     @GetMapping({ "AdminZonal/Productos"})
-    public String Productos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "4") int size, Model model){
+    public String Productos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size, Model model){
         List<ProductoTabla> todosLosProductos = productoRepository.getProductosTabla();
 
         // Calcular el total de productos
@@ -259,6 +259,27 @@ public class AdminZonalController {
             attr.addFlashAttribute("msg", "La fecha de entrega se guardó correctamente.");
         }else {
             attr.addFlashAttribute("error", "No se encontró el producto para guardar la fecha de entrega.");
+        }
+
+        return "redirect:/AdminZonal/Productos";
+    }
+
+    @PostMapping({"AdminZonal/Productos/EliminarFechaArribo"})
+    public String EliminarFechaArribo(@RequestParam("productoId") Integer productoId, RedirectAttributes attr) {
+        Optional<Producto> productoOPT = productoRepository.findById(productoId);
+
+
+        if (productoOPT.isPresent()) {
+            Producto producto = productoOPT.get();
+            if (producto.getFechaArribo() != null) {
+                producto.setFechaArribo(null);
+                productoRepository.save(producto);
+                attr.addFlashAttribute("msg", "La fecha de arribo se eliminó correctamente.");
+            } else {
+                attr.addFlashAttribute("error", "No se encontró una fecha de arribo para eliminar.");
+            }
+        } else {
+            attr.addFlashAttribute("error", "No se encontró el producto para eliminar la fecha de arribo.");
         }
 
         return "redirect:/AdminZonal/Productos";

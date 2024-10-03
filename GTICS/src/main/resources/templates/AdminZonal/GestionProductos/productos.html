@@ -244,7 +244,7 @@
             <section class="container">
                 <div class="row">
                     <div class="col-12">
-                        <h1 class="mb-6">Lista de productos</h1>
+                        <h2 class="mb-6">Lista de productos</h2>
                     </div>
                 </div>
                 <div class="row">
@@ -297,6 +297,11 @@
                                     <!-- Botón de editar -->
                                     <button type="submit" class="btn btn-primary saveButton saveAlert" style="margin-left: 5px;" th:data-product-id="${producto.idProducto}">
                                         <i class="bi-pencil-fill"></i>
+                                    </button>
+
+                                    <!-- Botón de eliminar -->
+                                    <button type="submit" class="btn btn-danger deleteButton" style="margin-left: 5px;" th:data-product-id="${producto.idProducto}">
+                                        <i class="bi-x-lg"></i> <!-- Aquí se usa el icono de X (bootstrap icon) -->
                                     </button>
                                 </div>
                             </td>
