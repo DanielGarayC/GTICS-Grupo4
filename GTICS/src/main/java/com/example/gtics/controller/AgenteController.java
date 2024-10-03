@@ -256,7 +256,8 @@ public class AgenteController {
         System.out.println( "nueva direccion: " + orden.getIdCarritoCompra().getIdUsuario().getDireccion());
 
         //FALTA CORREGIR
-
+        orden.setSolicitarCancelarOrden(0);
+        orden.setOrdenEliminada(0);
         try {
             ordenRepository.save(orden);
             attr.addFlashAttribute("msg", "La orden se ha actualizado exitosamente");
