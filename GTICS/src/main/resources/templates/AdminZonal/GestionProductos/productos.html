@@ -691,7 +691,7 @@
                 focusConfirm: false,
                 preConfirm: () => {
                     const fechaIngresada = Swal.getPopup().querySelector('#productQuantity').value;
-                    const fechaHoy = new Date().toISOString().split('T')[0]; // Fecha de hoy en formato yyyy-mm-dd
+                    const fechaHoy = new Date(new Date().toLocaleDateString('en-CA')).toISOString().split('T')[0]; // Obtener fecha de hoy en formato yyyy-mm-dd
 
                     // Verificar si la fecha fue ingresada
                     if (!fechaIngresada) {
