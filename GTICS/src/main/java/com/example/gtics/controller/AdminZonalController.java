@@ -1,5 +1,7 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.ValidationGroup.AdminZonalValidationGroup;
+import com.example.gtics.ValidationGroup.AgenteValidationGroup;
 import com.example.gtics.dto.Agente;
 import com.example.gtics.dto.ProductoTabla;
 import com.example.gtics.entity.*;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -116,7 +119,7 @@ public class AdminZonalController {
     }
 
     @PostMapping("/AdminZonal/Agentes/Guardar")
-    public String guardarAgente(@ModelAttribute("agente") @Valid Usuario agente, BindingResult bindingResult, Model model, RedirectAttributes attr) {
+    public String guardarAgente(@ModelAttribute("agente") @Validated(AgenteValidationGroup.class) Usuario agente, BindingResult bindingResult, Model model, RedirectAttributes attr) {
 
         //VALIDACIONES: codigo ruc 11 digitos | codigo aduanero tiene 3 digitos | codigo de jurisdiccion 4-6 digitos
         int idAdminZonal = 11;

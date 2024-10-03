@@ -1,5 +1,7 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.ValidationGroup.AdminZonalValidationGroup;
+import com.example.gtics.ValidationGroup.AgenteValidationGroup;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import org.springframework.core.io.ByteArrayResource;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -131,7 +134,7 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAdminZonal/create-zonal-admin";
     }
     @PostMapping("/SuperAdmin/AdminZonal/guardar")
-    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario,@RequestParam("zonaId") Integer zonaId, RedirectAttributes attr, @RequestParam("zonalAdminPhoto") MultipartFile foto) {
+    public String guardarAdminZonal(@ModelAttribute("usuario") @Validated(AdminZonalValidationGroup.class) Usuario usuario, @RequestParam("zonaId") Integer zonaId, RedirectAttributes attr, @RequestParam("zonalAdminPhoto") MultipartFile foto) {
 
         try {
             // Verificar si ya existen 2 coordinadores en la zona
