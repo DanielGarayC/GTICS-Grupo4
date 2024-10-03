@@ -199,9 +199,9 @@
 						</div>
 
 						<div class="row">
-							<div class=" col-12">
+							<div class=" col-12" >
 								<!-- card -->
-								<div class="card mb-6 shadow border-0">
+								<div class="card mb-6 shadow border-0" style="padding: 3vh;">
 
 
 									<!-- card body -->
@@ -271,7 +271,7 @@
 											<!-- input Código de Jurisdicción -->
 											<div class="col-lg-6 col-12">
 												<label class="form-label">Código de Jurisdicción:</label>
-												<input type="text" class="form-control" th:field="*{agtCodigojurisdiccion}" id="codigoJurisdiccion" th:classappend="${#fields.hasErrors('agtCodigojurisdiccion')?'is-invalid':''}" readonly/>
+												<input type="text" class="form-control" th:field="*{agtCodigojurisdiccion}" id="codigoJurisdiccion" th:classappend="${#fields.hasErrors('agtCodigojurisdiccion')?'is-invalid':''}"/>
 												<div class="invalid-feedback" th:if="${#fields.hasErrors('agtCodigojurisdiccion')}" th:errors="*{agtCodigojurisdiccion}" ></div>
 											</div>
 
