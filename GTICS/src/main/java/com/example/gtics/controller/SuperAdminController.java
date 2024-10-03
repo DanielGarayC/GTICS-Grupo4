@@ -673,15 +673,28 @@ public class SuperAdminController {
 
                     productoRepository.save(productoActualizado);
 
+                    // Check if there are new photos to update
                     if (fotos != null && fotos.length > 0) {
                         for (MultipartFile foto : fotos) {
                             if (!foto.isEmpty()) {
-                                Fotosproducto fotosProducto = new Fotosproducto();
-                                fotosProducto.setFoto(foto.getBytes());
-                                fotosProducto.setFotoNombre(foto.getOriginalFilename());
-                                fotosProducto.setFotoContentType(foto.getContentType());
-                                fotosProducto.setProducto(productoActualizado);
-                                fotosProductoRepository.save(fotosProducto);
+                                // Check if a photo already exists for the product
+                                List<Fotosproducto> existingFotos = fotosProductoRepository.findByProducto_Id(productoActualizado.getId());
+                                if (!existingFotos.isEmpty()) {
+                                    // Update the existing photo
+                                    Fotosproducto existingFoto = existingFotos.get(0);  // Assuming one photo per product
+                                    existingFoto.setFoto(foto.getBytes());
+                                    existingFoto.setFotoNombre(foto.getOriginalFilename());
+                                    existingFoto.setFotoContentType(foto.getContentType());
+                                    fotosProductoRepository.save(existingFoto);
+                                } else {
+                                    // If no photo exists, create a new one
+                                    Fotosproducto nuevaFoto = new Fotosproducto();
+                                    nuevaFoto.setFoto(foto.getBytes());
+                                    nuevaFoto.setFotoNombre(foto.getOriginalFilename());
+                                    nuevaFoto.setFotoContentType(foto.getContentType());
+                                    nuevaFoto.setProducto(productoActualizado);
+                                    fotosProductoRepository.save(nuevaFoto);
+                                }
                             }
                         }
                     }
@@ -700,7 +713,6 @@ public class SuperAdminController {
 
         return "redirect:/SuperAdmin/productos";
     }
-
 
     @GetMapping("/SuperAdmin/editarProducto/{id}")
     public String editarProducto(@PathVariable("id") Integer id,
