@@ -125,6 +125,17 @@
                         </a>
                     </li>
 
+                    <!-- Usuarios baneados -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActiva == 'listaUsuariosBaneados'} ? ' active'"
+                           th:href="@{/SuperAdmin/listaUsuariosBaneados}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-person-x"></i></span>
+                                <span class="nav-link-text">Usuarios baneados</span>
+                            </div>
+                        </a>
+                    </li>
+
                 </ul>
             </div>
         </div>
@@ -223,6 +234,17 @@
                             <div class="d-flex align-items-center">
                                 <span class="nav-link-icon"><i class="bi bi-envelope"></i></span>
                                 <span class="nav-link-text">Solicitudes para Agente</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- Usuarios baneados -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActiva == 'listaUsuariosBaneados'} ? ' active'"
+                           th:href="@{/SuperAdmin/listaUsuariosBaneados}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><i class="bi bi-person-x"></i></span>
+                                <span class="nav-link-text">Usuarios baneados</span>
                             </div>
                         </a>
                     </li>
