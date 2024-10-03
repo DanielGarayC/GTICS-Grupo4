@@ -233,7 +233,9 @@
 									<table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
 										<thead class="bg-light">
 										<tr>
+											<th></th>
 											<th>Nombres</th>
+											<th>Apellidos</th>
 											<th>Correo electrónico</th>
 											<th>Estado</th>
 											<th>Teléfono</th>
@@ -243,17 +245,20 @@
 										</tr>
 										</thead>
 										<tbody>
-										<tr th:each="finalUser : ${finalUsersList}">
+										<tr th:each="finalUser,var : ${finalUsersList}">
 
 
-											<td>
+											<!--<td>
 												<div class="d-flex align-items-center">
 													<img th:if="*{finalUser.getFoto() != null}" th:src="@{'/usuarioFinal/'+${finalUser.getId()}}" alt="" class="avatar avatar-xs rounded-circle" />
 													<div class="ms-2">
 														<a th:href="@{verUsuarioFinal/{id}(id=${finalUser.getId()})}" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" th:text="${finalUser.getNombre() + ' ' + finalUser.getApellidoPaterno() + ' ' + finalUser.getApellidoMaterno()}"></a>
 													</div>
 												</div>
-											</td>
+											</td>-->
+											<td th:text="${var.index+1}"></td>
+											<td th:text="${finalUser.getNombre()}"></td>
+											<td th:text="${finalUser.apellidoPaterno} + ' ' + ${finalUser.apellidoMaterno} "></td>
 											<td th:text="${finalUser.getEmail()}"></td>
 
 											<td>

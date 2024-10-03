@@ -123,20 +123,20 @@
 								   <tr>
 
 									   <th></th>
-									   <th>Nombre</th>
-									   <th>Apellido</th>
+									   <th>Nombres</th>
+									   <th>Apellidos</th>
 									   <th>Correo</th>
 									   <th>Distrito</th>
 									   <th></th>
+
 								   </tr>
 								   </thead>
 								   <tbody>
 
 
-									   <tr th:each="usuarioAsignado: ${listaUsuariosAsignados}">
-									   <td>
-										   <a ><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>
-
+									   <tr th:each="usuarioAsignado,var: ${listaUsuariosAsignados}">
+									   <!--<td><a ><img th:src="@{/images/avatar/avatar-4.jpg}" alt="" class="icon-shape icon-md" /></a>-->
+									   <td th:text="${var.index+1}"></td>
 									   <td th:text="${usuarioAsignado.nombre}"></td>
 									   <td th:text="${usuarioAsignado.apellidoPaterno} + ' ' + ${usuarioAsignado.apellidoMaterno}"></td>
 									   <td th:text="${usuarioAsignado.email}"></td>

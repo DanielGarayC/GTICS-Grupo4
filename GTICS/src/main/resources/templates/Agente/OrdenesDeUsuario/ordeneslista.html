@@ -35,6 +35,7 @@
 		   }
 	   </style>
 	   <!--POP UP-->
+	   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 	   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	   <style>
 		   .custom-popup{
@@ -141,7 +142,7 @@
 										   <th>Fecha de entrega</th>
 										   <th>Estado</th>
 										   <th>Control</th>
-										   <th>Monto total</th>
+										   <th>Monto total (S/.)</th>
 										   <th></th>
 									   </tr>
 								   </thead>
@@ -149,7 +150,7 @@
 								   <tr th:each="orden,var: ${ordenesLista}">
 									   <!--<td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td> Agregar si incluimos imagen a la orden -->
 									   <td th:text="${var.index+1}"></td>
-									   <td th:text="${orden.fechaOrden}"></td>
+									   <td th:text="${#temporals.format(orden.fechaOrden, 'dd-MM-yyyy')}"></td>
 									   <td th:switch="${orden.estadoorden.id}">
 										   <span th:case="1" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-primary text-dark-primary"></span>
 										   <span th:case="2" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-secondary text-dark-secondary"></span>
@@ -169,7 +170,7 @@
 
 
 									   <td>
-										   <span th:each="monto : ${listaMonto}" th:if="${monto.idOrden == orden.id}" th:text="'S/. ' + ${monto.montoTotal}"></span>
+										   <span th:each="monto : ${listaMonto}" th:if="${monto.idOrden == orden.id}" th:text="${monto.montoTotal}"></span>
 									   </td>
 
 
@@ -183,11 +184,21 @@
 												   <li>
 													   <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?indicadorVistaARegresar=0&numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
 												   </li>
-												   <li>
-													<a class="dropdown-item" href="#" onclick="eliminarOrden()">
-														<i class="bi bi-trash me-3"></i>Eliminar
-													</a>
-												</li>
+
+												   <th:block th:if="${orden.solicitarCancelarOrden == 1}">
+													   <li>
+
+														   <a class="dropdown-item eliminarOrden btn" href="javascript:void(0);"
+															  th:data-id="${orden.id}"
+															  data-bs-toggle="tooltip"
+															  data-bs-placement="bottom">
+															   <i class="bi bi-trash me-3"></i> Eliminar
+														   </a>
+													   </li>
+												   </th:block>
+
+
+
 												   <li>
 													   <a class="dropdown-item" th:href="@{/Agente/Chat}"><i class="bi bi-wechat me-3"></i>Chat </a>
 												   </li>
@@ -258,71 +269,7 @@
 			   </div>
 		   </div>
 	   </div>
-	   <!--POP UP ELIMINAR ORDEN-->
-	   <script>
-		   async function eliminarOrden() {
-            const { value: reason } = await Swal.fire({
-                title: "Eliminar Orden",
-                text: "¿Realmente desea eliminar esta orden?",
-                input: "select",
-                inputOptions: {
-                    "Motivos de eliminación": {
-                        "false-data": "Datos falsos",
-                        "duplicate": "Duplicado",
-                        "price-error": "Error en precio"
-                    }
-                },
-                inputPlaceholder: "Selecciona un motivo",
-                showCancelButton: true,
-                confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar',
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                inputValidator: (value) => {
-                    return new Promise((resolve) => {
-                        if (value) {
-                            resolve();
-                        } else {
-                            resolve("Debes seleccionar un motivo.");
-                        }
-                    });
-                }
-            });
 
-            if (reason) {
-                Swal.fire({
-                    title: 'Se ha eliminado la orden',
-                    html: '<small>Por favor revisar el apartado de órdenes eliminadas.</small>',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        }
-
-
-
-		   function filterTable() {
-			   const input = document.getElementById("searchOrden");
-			   const filter = input.value.toLowerCase();
-			   const table = document.querySelector("table tbody");
-			   const rows = table.getElementsByTagName("tr");
-
-			   for (let i = 0; i < rows.length; i++) {
-				   const cells = rows[i].getElementsByTagName("td");
-				   let match = false;
-
-				   for (let j = 0; j < cells.length; j++) {
-					   if (cells[j].innerText.toLowerCase().includes(filter)) {
-						   match = true;
-						   break;
-					   }
-				   }
-				   rows[i].style.display = match ? "" : "none";
-			   }
-		   }
-	   </script>
 
 
 
@@ -331,7 +278,69 @@
 
 
 	</div>
+   <!--POP UP ELIMINAR ORDEN-->
+   <script>
+	   document.querySelectorAll('.eliminarOrden').forEach(button => {
+		   button.addEventListener('click', function (event) {
+			   event.preventDefault();  // Evita la redirección automática
 
+			   // Obtenemos el ID de la orden
+			   const orderId = this.getAttribute('data-id');
+
+			   // SweetAlert para seleccionar la razón de cancelación
+			   Swal.fire({
+				   title: 'Eliminar Orden',
+				   text: '¿Realmente desea eliminar esta orden?',
+				   input: 'select',
+				   inputOptions: {
+					   'Datos falsos': 'Datos falsos',
+					   'Duplicado': 'Duplicado',
+					   'Error en precio': 'Error en precio'
+				   },
+				   inputPlaceholder: 'Selecciona un motivo',
+				   showCancelButton: true,
+				   confirmButtonText: 'Eliminar',
+				   cancelButtonText: 'Cancelar',
+				   inputValidator: (value) => {
+					   if (!value) {
+						   return 'Debes seleccionar un motivo.';
+					   }
+				   }
+			   }).then((result) => {
+				   if (result.isConfirmed) {
+					   const razonEliminacion = result.value;  // Obtener la razón seleccionada
+
+					   // Redirigir al controlador con el ID y la razón de eliminación como parámetros
+					   window.location.href = `/Agente/Ordenes/EliminarOrden?idOrden=${orderId}&razonEliminacion=${razonEliminacion}`;
+				   }
+			   });
+		   });
+	   });
+
+
+
+
+
+	   function filterTable() {
+		   const input = document.getElementById("searchOrden");
+		   const filter = input.value.toLowerCase();
+		   const table = document.querySelector("table tbody");
+		   const rows = table.getElementsByTagName("tr");
+
+		   for (let i = 0; i < rows.length; i++) {
+			   const cells = rows[i].getElementsByTagName("td");
+			   let match = false;
+
+			   for (let j = 0; j < cells.length; j++) {
+				   if (cells[j].innerText.toLowerCase().includes(filter)) {
+					   match = true;
+					   break;
+				   }
+			   }
+			   rows[i].style.display = match ? "" : "none";
+		   }
+	   }
+   </script>
 
    	<!-- LIBRERIAS -->
 	<div>
