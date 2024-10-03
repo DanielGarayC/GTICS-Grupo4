@@ -603,7 +603,7 @@ public class SuperAdminController {
 
                             Producto nuevoProductoPorZona = new Producto();
                             nuevoProductoPorZona.setNombreProducto(producto.getNombreProducto());
-                            nuevoProductoPorZona.setDescripción(producto.getDescripción());
+                            nuevoProductoPorZona.setDescripcion(producto.getDescripcion());
                             nuevoProductoPorZona.setPrecio(producto.getPrecio());
                             nuevoProductoPorZona.setCostoEnvio(producto.getCostoEnvio());
                             nuevoProductoPorZona.setModelo(producto.getModelo());
@@ -660,7 +660,7 @@ public class SuperAdminController {
 
                 if (productoEnZona.isPresent()) {
                     Producto productoActualizado = productoEnZona.get();
-                    productoActualizado.setDescripción(producto.getDescripción());
+                    productoActualizado.setDescripcion(producto.getDescripcion());
                     productoActualizado.setPrecio(producto.getPrecio());
                     productoActualizado.setCostoEnvio(producto.getCostoEnvio());
                     productoActualizado.setModelo(producto.getModelo());
