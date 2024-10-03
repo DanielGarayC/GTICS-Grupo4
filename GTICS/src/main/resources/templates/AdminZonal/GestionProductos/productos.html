@@ -284,10 +284,17 @@
                                     <p style="margin-bottom: 0px;">Agregar fecha <i class="bi-calendar-plus" style="margin-left: 5px;"></i></p>
                                 </button>
 
-                                <button th:if="${producto.fechaArribo} != null" class="btn btn-primary viewDate" th:text="${#dates.format(producto.fechaArribo, 'dd/MM/yyyy')}" style="width: 60%;"></button>
-                                <button th:if="${producto.fechaArribo} != null" type="submit" class="btn btn-primary saveButton saveAlert" th:data-product-id="${producto.idProducto}">
-                                    <i class="bi-pencil-fill"></i>
-                                </button>
+                                <div th:if="${producto.fechaArribo} != null" style="display: flex; align-items: center; width: 80%; margin-left: 30px;">
+                                    <!-- Label con la fecha -->
+                                    <label  style="flex: 1; padding: 5px; background-color: #ffffff; border-radius: 5px; text-align: center;">
+                                        <span th:text="${#dates.format(producto.fechaArribo, 'dd/MM/yyyy')}"></span>
+                                    </label>
+
+                                    <!-- Botón de editar -->
+                                    <button type="submit" class="btn btn-primary saveButton saveAlert" style="margin-left: 5px;" th:data-product-id="${producto.idProducto}">
+                                        <i class="bi-pencil-fill"></i>
+                                    </button>
+                                </div>
                             </td>
                             <td class="align-middle text-center">
                                 <!-- Si cantidadSolicitada no es null, mostrar los botones Ver, Editar y Eliminar -->

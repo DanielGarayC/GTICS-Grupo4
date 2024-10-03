@@ -67,6 +67,7 @@
 					   <h2 class="text-dark display-5 fw-bold mt-4">Órdenes </h2>
 					   <p class="lead">Observa, edita y elimina las órdenes de los usuarios que se te han asignado</p>
 					   <a th:href="@{/Agente/Ordenes}" class="btn btn-dark mt-3">Mostrar ahora<i class="feather-icon icon-arrow-right ms-1"></i></a>
+
 				   </div>
 			   </div>
 			   <div class=" "
@@ -148,7 +149,7 @@
 					   </div>
 				   </div>
 			   </div>
-			   <!--ORDENES RECIENTES-->
+			   <!--ORDENES SIN ASIGNAR-->
 			   <div class="row">
 				   <div class="col-12">
 					   <!-- tab -->
@@ -169,7 +170,10 @@
 												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
-													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+													   <a th:href="@{/Agente/Ordenes/DetallesOrdenSinAsignar(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.id})}"
+														  class="btn-action mb-1">
+														   <i class="bi bi-eye"></i>
+													   </a>
 												   </div>
 											   </div>
 											   <!-- title -->
@@ -200,7 +204,7 @@
 							   </div>
 						   </div>
 						   <!-- Pendiente-->
-						   <div class="tab-pane fade show active" id="pendiente_" role="tabpanel" aria-labelledby="pendiente" tabindex="0">
+						   <div class="tab-pane fade  " id="pendiente_" role="tabpanel" aria-labelledby="pendiente" tabindex="0">
 							   <!-- row -->
 							   <div class="row row-cols-2 row-cols-xl-5 row-cols-md-3 g-4">
 								   <!-- ORDENES-->
@@ -215,7 +219,10 @@
 												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
-													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+													   <a th:href="@{/Agente/Ordenes/Detalles(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.id})}"
+														  class="btn-action mb-1">
+														   <i class="bi bi-eye"></i>
+													   </a>
 												   </div>
 											   </div>
 											   <!-- title -->
@@ -245,7 +252,7 @@
 							   </div>
 						   </div>
 						   <!-- enProgreso-->
-						   <div class="tab-pane fade show active" id="enProgreso_" role="tabpanel" aria-labelledby="enProgreso" tabindex="0">
+						   <div class="tab-pane fade  " id="enProceso_" role="tabpanel" aria-labelledby="enProgreso" tabindex="0">
 							   <!-- row -->
 							   <div class="row row-cols-2 row-cols-xl-5 row-cols-md-3 g-4">
 								   <!-- ORDENES-->
@@ -260,7 +267,10 @@
 												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
-													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+													   <a th:href="@{/Agente/Ordenes/Detalles(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.id})}"
+														  class="btn-action mb-1">
+														   <i class="bi bi-eye"></i>
+													   </a>
 												   </div>
 											   </div>
 											   <!-- title -->
@@ -290,7 +300,7 @@
 							   </div>
 						   </div>
 						   <!-- Resuelta-->
-						   <div class="tab-pane fade show active" id="resuelta_" role="tabpanel" aria-labelledby="resuelta" tabindex="0">
+						   <div class="tab-pane fade " id="resuelta_" role="tabpanel" aria-labelledby="resuelta" tabindex="0">
 							   <!-- row -->
 							   <div class="row row-cols-2 row-cols-xl-5 row-cols-md-3 g-4">
 								   <!-- ORDENES-->
@@ -305,7 +315,10 @@
 												   <a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid" /></a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
-													   <a href="#!" class="btn-action mb-1" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="bi bi-eye"></i></a>
+													   <a th:href="@{/Agente/Ordenes/Detalles(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.id})}"
+														  class="btn-action mb-1">
+														   <i class="bi bi-eye"></i>
+													   </a>
 												   </div>
 											   </div>
 											   <!-- title -->
