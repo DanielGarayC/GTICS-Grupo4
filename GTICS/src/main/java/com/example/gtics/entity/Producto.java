@@ -23,8 +23,8 @@ public class Producto {
     private Integer cantidadDisponible;
 
     @Lob
-    @Column(name = "descripcion", nullable = false)
-    private String descripcion;
+    @Column(name = "`descripción`", nullable = false)
+    private String descripción;
 
     @Column(name = "precio", nullable = false, length = 45)
     private Double precio;

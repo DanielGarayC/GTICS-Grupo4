@@ -207,7 +207,7 @@
                         <!-- card -->
                         <div class="card mb-6 shadow border-0">
                             <!-- card body -->
-                            <form id="productoForm" th:action="@{/SuperAdmin/guardarProducto}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+                            <form id="productoForm" th:action="@{/SuperAdmin/editarProducto}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
                                 <input type="hidden" th:value="${producto.id}" name="id" />
                                 <div class="card-body p-6">
                                     <h4 class="mb-5 h5">Editar fotos del Producto</h4>
@@ -216,7 +216,7 @@
                                             <img id="imagePreviewForm" class="image avatar avatar-lg rounded-3"
                                                  th:if="${producto.id != null}"
                                                  th:src="@{'/SuperAdmin/producto/foto/' + ${producto.id}}"
-                                                 alt="Imagen del Producto" />
+                                                 alt="Imagen" />
                                         </div>
 
                                         <label for="fileInput" class="form-label">Cambiar foto:</label>
@@ -230,103 +230,94 @@
                                     </div>
 
                                     <h4 class="mb-4 h5 mt-5">Información del Producto</h4>
-                                        <input type="hidden" th:value="${producto.id}" name="id" />
-                                        <div class="row">
-                                            <!-- Nombre del producto -->
-                                            <div class="mb-3 col-lg-12">
-                                                <label for="nombreProducto" class="form-label">Nombre del producto</label>
-                                                <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" th:value="${producto.nombreProducto}" required />
-                                                <div class="invalid-feedback">Por favor ingrese el nombre del producto</div>
-                                            </div>
-
-                                            <!-- Categoría -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="selectCategoria" class="form-label">Categoría</label>
-                                                <select class="form-select" name="idCategoria" id="selectCategoria" onchange="cargarSubcategorias()" required>
-                                                    <option value="" disabled>--Seleccione una categoría--</option>
-                                                    <option th:each="categoria : ${categorias}" th:text="${categoria.nombreCategoria}" th:value="${categoria.id}"
-                                                            th:selected="${categoria.id == producto.idCategoria.id}"></option>
-                                                </select>
-                                                <div class="invalid-feedback">Por favor seleccione una categoría</div>
-                                            </div>
-
-                                            <!-- Subcategoría -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="selectSubcategoria" class="form-label">Subcategoría</label>
-                                                <select class="form-select" name="idSubcategoria" id="selectSubcategoria" required>
-                                                    <option value="" disabled>--Seleccione una subcategoría--</option>
-                                                    <option th:each="subcategoria : ${subcategorias}" th:text="${subcategoria.nombreSubcategoria}" th:value="${subcategoria.id}"
-                                                            th:selected="${subcategoria.id == producto.idSubcategoria.id}"></option>
-                                                </select>
-                                                <div class="invalid-feedback">Por favor seleccione una subcategoría</div>
-                                            </div>
-
-                                            <!-- Precio -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="precio" class="form-label">Precio</label>
-                                                <input type="text" class="form-control" id="precio" name="precio" th:value="${producto.precio}" required />
-                                                <div class="invalid-feedback">Por favor ingrese el precio del producto</div>
-                                            </div>
-                                            <!-- Costo de envío -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="costoEnvio" class="form-label">Costo de Envío</label>
-                                                <input type="text" class="form-control" id="costoEnvio" name="costoEnvio" th:value="${producto.costoEnvio}" required />
-                                                <div class="invalid-feedback">Por favor ingrese el costo de envío</div>
-                                            </div>
-                                            <!--Proveedor-->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
-                                                <select class="form-select" name="idProveedor" id="selectProveedor" required>
-                                                    <option value="" selected disabled>--Seleccione un proveedor--</option>
-                                                    <option th:each="proveedor : ${proveedores}"
-                                                            th:text="${proveedor.tienda.nombreTienda}"
-                                                            th:value="${proveedor.id}"
-                                                            th:selected="${proveedor.id == producto.idProveedor.id}">
-                                                    </option>
-                                                </select>
-                                                <div class="invalid-feedback">Por favor seleccione un proveedor</div>
-                                            </div>
-
-                                            <!--zona seleccionada-->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="selectZona" class="form-label">Zona</label>
-                                                <select class="form-select" name="zonaId" id="selectZona" required>
-                                                    <option value="" selected disabled>--Seleccione una zona--</option>
-                                                    <option th:each="zona : ${zonas}" th:text="${zona.nombreZona}" th:value="${zona.id}"
-                                                            th:selected="${zona.id == zonaSeleccionada}"></option>
-                                                </select>
-                                                <div class="invalid-feedback">Por favor seleccione una zona</div>
-                                            </div>
-
-                                            <!-- cantidad de productos de la zon -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="cantidadZona" class="form-label">Cantidad disponible en zona seleccionada</label>
-                                                <input type="number" class="form-control" id="cantidadZona" name="cantidadZona" min="0"
-                                                       th:value="${cantidadEnZona}" required />
-                                            </div>
-                                            <!-- Modelo (opcional) -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="modelo" class="form-label">Modelo (opcional)</label>
-                                                <input type="text" class="form-control" id="modelo" name="modelo" th:value="${producto.modelo}" />
-                                            </div>
-
-                                            <!-- Color (opcional) -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="color" class="form-label">Color (opcional)</label>
-                                                <input type="text" class="form-control" id="color" name="color" th:value="${producto.color}" />
-                                            </div>
-
-                                            <!-- Descripcion -->
-                                            <div class="mb-3 col-lg-12">
-                                                <label for="descripción" class="form-label">Descripción</label>
-                                                <textarea class="form-control" id="descripción" name="descripción" rows="3" th:text="${producto.descripción}" required></textarea>
-                                                <div class="invalid-feedback">Por favor ingrese una descripción</div>
-                                            </div>
+                                    <input type="hidden" th:value="${producto.id}" name="id" />
+                                    <div class="row">
+                                        <!-- Nombre del producto -->
+                                        <div class="mb-3 col-lg-12">
+                                            <label for="nombreProducto" class="form-label">Nombre del producto</label>
+                                            <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" th:value="${producto.nombreProducto}" required />
+                                            <div class="invalid-feedback">Por favor ingrese el nombre del producto</div>
                                         </div>
-                                        <div class="col-lg-12">
-                                            <button class="btn btn-primary" type="submit">Actualizar Producto</button>
-                                            <a th:href="@{/SuperAdmin/productos}" class="btn btn-secondary">Cancelar</a>
+
+                                        <!-- Categoría -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="selectCategoria" class="form-label">Categoría</label>
+                                            <select class="form-select" name="idCategoria" id="selectCategoria" onchange="cargarSubcategorias()" required>
+                                                <option value="" disabled>--Seleccione una categoría--</option>
+                                                <option th:each="categoria : ${categorias}" th:text="${categoria.nombreCategoria}" th:value="${categoria.id}"
+                                                        th:selected="${categoria.id == producto.idCategoria.id}"></option>
+                                            </select>
+                                            <div class="invalid-feedback">Por favor seleccione una categoría</div>
                                         </div>
+
+                                        <!-- Subcategoría -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="selectSubcategoria" class="form-label">Subcategoría</label>
+                                            <select class="form-select" name="idSubcategoria" id="selectSubcategoria" required>
+                                                <option value="" disabled>--Seleccione una subcategoría--</option>
+                                                <option th:each="subcategoria : ${subcategorias}" th:text="${subcategoria.nombreSubcategoria}" th:value="${subcategoria.id}"
+                                                        th:selected="${subcategoria.id == producto.idSubcategoria.id}"></option>
+                                            </select>
+                                            <div class="invalid-feedback">Por favor seleccione una subcategoría</div>
+                                        </div>
+
+                                        <!-- Precio -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="precio" class="form-label">Precio</label>
+                                            <input type="text" class="form-control" id="precio" name="precio" th:value="${producto.precio}" required />
+                                            <div class="invalid-feedback">Por favor ingrese el precio del producto</div>
+                                        </div>
+                                        <!-- Costo de envío -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="costoEnvio" class="form-label">Costo de Envío</label>
+                                            <input type="text" class="form-control" id="costoEnvio" name="costoEnvio" th:value="${producto.costoEnvio}" required />
+                                            <div class="invalid-feedback">Por favor ingrese el costo de envío</div>
+                                        </div>
+                                        <!--Proveedor-->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
+                                            <select class="form-select" name="idProveedor" id="selectProveedor" required>
+                                                <option value="" selected disabled>--Seleccione un proveedor--</option>
+                                                <option th:each="proveedor : ${proveedores}"
+                                                        th:text="${proveedor.tienda.nombreTienda}"
+                                                        th:value="${proveedor.id}"
+                                                        th:selected="${proveedor.id == producto.idProveedor.id}">
+                                                </option>
+                                            </select>
+                                            <div class="invalid-feedback">Por favor seleccione un proveedor</div>
+                                        </div>
+
+                                        <!-- Zona seleccionada -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="zonaSeleccionada" class="form-label">Zona</label>
+                                            <input type="text" class="form-control" id="zonaSeleccionada" name="zonaNombre" th:value="${producto.zona.nombreZona}" disabled />
+                                            <input type="hidden" name="zonaId" th:value="${producto.zona.id}" />
+                                        </div>
+
+                                        <!-- Cantidad disponible en la zona seleccionada -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="cantidadZona" class="form-label">Cantidad disponible en zona seleccionada</label>
+                                            <input type="number" class="form-control" id="cantidadZona" name="cantidadZona" min="0"
+                                                   th:value="${producto.cantidadDisponible}" required />
+                                        </div>
+
+                                        <!-- Color (opcional) -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="color" class="form-label">Color (opcional)</label>
+                                            <input type="text" class="form-control" id="color" name="color" th:value="${producto.color}" />
+                                        </div>
+
+                                        <!-- Descripcion -->
+                                        <div class="mb-3 col-lg-12">
+                                            <label for="descripción" class="form-label">Descripción</label>
+                                            <textarea class="form-control" id="descripción" name="descripción" rows="3" th:text="${producto.descripción}" required></textarea>
+                                            <div class="invalid-feedback">Por favor ingrese una descripción</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <button class="btn btn-primary" type="submit">Actualizar Producto</button>
+                                        <a th:href="@{/SuperAdmin/productos}" class="btn btn-secondary">Cancelar</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>

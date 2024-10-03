@@ -207,12 +207,12 @@
                         <!-- card -->
                         <div class="card mb-6 shadow border-0">
                             <!-- card body -->
-                            <form id="productoForm" enctype="multipart/form-data" th:action="@{/SuperAdmin/guardarProducto}" method="post" >
+                            <form id="productoForm" enctype="multipart/form-data" th:action="@{/SuperAdmin/crearProducto}" method="post" >
                                 <div class="card-body p-6">
                                     <h4 class="mb-5 h5">Subir fotos del Producto</h4>
                                     <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
                                         <div>
-                                            <img id="imagePreviewForm" class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/placeholder-img.jpg}" alt="Image" />
+                                            <img id="imagePreviewForm" class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/default-image.jpeg}" alt=" " />
                                         </div>
                                         <label for="fileInput" class="form-label">Subir foto:</label>
 
@@ -226,86 +226,86 @@
                                     <h4 class="mb-4 h5 mt-5">Información del Producto</h4>
 
                                     <div class="row">
-                                            <!-- nombre del producto -->
-                                            <div class="mb-3 col-lg-12">
-                                                <label for="nombreProducto" class="form-label">Nombre del producto</label>
-                                                <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Nombre del producto" required />
-                                                <div class="invalid-feedback">Por favor ingrese el nombre del producto</div>
-                                            </div>
-                                            <!-- categoría -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="selectCategoria" class="form-label">Categoría</label>
-                                                <select class="form-select" name="idCategoria" id="selectCategoria" onchange="cargarSubcategorias()" required>
-                                                    <option value="" selected disabled>--Seleccione una categoría--</option>
-                                                    <option th:each="categoria : ${categorias}" th:text="${categoria.nombreCategoria}" th:value="${categoria.id}"></option>
-                                                </select>
-                                                <div class="invalid-feedback">Por favor seleccione una categoría</div>
-                                            </div>
+                                        <!-- nombre del producto -->
+                                        <div class="mb-3 col-lg-12">
+                                            <label for="nombreProducto" class="form-label">Nombre del producto</label>
+                                            <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Nombre del producto" required />
+                                            <div class="invalid-feedback">Por favor ingrese el nombre del producto</div>
+                                        </div>
+                                        <!-- categoría -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="selectCategoria" class="form-label">Categoría</label>
+                                            <select class="form-select" name="idCategoria" id="selectCategoria" onchange="cargarSubcategorias()" required>
+                                                <option value="" selected disabled>--Seleccione una categoría--</option>
+                                                <option th:each="categoria : ${categorias}" th:text="${categoria.nombreCategoria}" th:value="${categoria.id}"></option>
+                                            </select>
+                                            <div class="invalid-feedback">Por favor seleccione una categoría</div>
+                                        </div>
 
-                                            <!-- Subcategoría (se cargará según la categoría seleccionada) -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="selectSubcategoria" class="form-label">Subcategoría</label>
-                                                <select class="form-select" name="idSubcategoria" id="selectSubcategoria" required>
-                                                    <option value="" selected disabled>--Seleccione una subcategoría--</option>
-                                                </select>
-                                                <div class="invalid-feedback">Por favor seleccione una subcategoría</div>
-                                            </div>
+                                        <!-- Subcategoría (se cargará según la categoría seleccionada) -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="selectSubcategoria" class="form-label">Subcategoría</label>
+                                            <select class="form-select" name="idSubcategoria" id="selectSubcategoria" required>
+                                                <option value="" selected disabled>--Seleccione una subcategoría--</option>
+                                            </select>
+                                            <div class="invalid-feedback">Por favor seleccione una subcategoría</div>
+                                        </div>
 
-                                            <!-- Precio -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="precio" class="form-label">Precio</label>
-                                                <input type="text" class="form-control" id="precio" name="precio" placeholder="Precio" required />
-                                                <div class="invalid-feedback">Por favor ingrese el precio del producto</div>
-                                            </div>
-                                            <!-- Costo de envío -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="costoEnvio" class="form-label">Costo de Envío</label>
-                                                <input type="text" class="form-control" id="costoEnvio" name="costoEnvio" placeholder="Costo de envío" required />
-                                                <div class="invalid-feedback">Por favor ingrese el costo de envío</div>
-                                            </div>
-                                            <!-- Proveedor -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
-                                                <select class="form-select" name="idProveedor" id="selectProveedor" required>
-                                                    <option value="" selected disabled>--Seleccione un proveedor--</option>
-                                                    <option th:each="proveedor : ${proveedores}"
-                                                            th:text="${proveedor.tienda.nombreTienda}"
-                                                            th:value="${proveedor.id}">
-                                                    </option>
-                                                </select>
-                                                <div class="invalid-feedback">Por favor seleccione un proveedor</div>
-                                            </div>
+                                        <!-- Precio -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="precio" class="form-label">Precio</label>
+                                            <input type="text" class="form-control" id="precio" name="precio" placeholder="Precio" required />
+                                            <div class="invalid-feedback">Por favor ingrese el precio del producto</div>
+                                        </div>
+                                        <!-- Costo de envío -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="costoEnvio" class="form-label">Costo de Envío</label>
+                                            <input type="text" class="form-control" id="costoEnvio" name="costoEnvio" placeholder="Costo de envío" required />
+                                            <div class="invalid-feedback">Por favor ingrese el costo de envío</div>
+                                        </div>
+                                        <!-- Proveedor -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
+                                            <select class="form-select" name="idProveedor" id="selectProveedor" required>
+                                                <option value="" selected disabled>--Seleccione un proveedor--</option>
+                                                <option th:each="proveedor : ${proveedores}"
+                                                        th:text="${proveedor.tienda.nombreTienda}"
+                                                        th:value="${proveedor.id}">
+                                                </option>
+                                            </select>
+                                            <div class="invalid-feedback">Por favor seleccione un proveedor</div>
+                                        </div>
 
-                                            <!-- Zonas -->
-                                            <div class="mb-3 col-lg-6" th:each="zona : ${zonas}">
-                                                <label th:for="'cantidadZona' + ${zona.id}" th:text="'Cantidad para ' + ${zona.nombreZona}"></label>
-                                                <input type="number" class="form-control" th:id="'cantidadZona' + ${zona.id}"
-                                                       th:name="'zona-' + ${zona.id}" min="0" />
-                                            </div>
+                                        <!-- Zonas -->
+                                        <div class="mb-3 col-lg-6" th:each="zona : ${zonas}">
+                                            <label th:for="'cantidadZona' + ${zona.id}" th:text="'Cantidad para ' + ${zona.nombreZona}"></label>
+                                            <input type="number" class="form-control" th:id="'cantidadZona' + ${zona.id}"
+                                                   th:name="'zona-' + ${zona.id}" min="0" />
+                                        </div>
 
-                                            <!-- Modelo (opcional) -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="modelo" class="form-label">Modelo (opcional)</label>
-                                                <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo" />
-                                            </div>
+                                        <!-- Modelo (opcional) -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="modelo" class="form-label">Modelo (opcional)</label>
+                                            <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo" />
+                                        </div>
 
-                                            <!-- Color (opcional) -->
-                                            <div class="mb-3 col-lg-6">
-                                                <label for="color" class="form-label">Color (opcional)</label>
-                                                <input type="text" class="form-control" id="color" name="color" placeholder="Color" />
-                                            </div>
+                                        <!-- Color (opcional) -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="color" class="form-label">Color (opcional)</label>
+                                            <input type="text" class="form-control" id="color" name="color" placeholder="Color" />
+                                        </div>
 
-                                            <!-- input -->
-                                            <div class="mb-3 col-lg-12">
-                                                <label for="descripcion" class="form-label">Descripción</label>
-                                                <textarea class="form-control" id="descripcion" name="descripción" rows="3" placeholder="Descripción" required></textarea>
-                                                <div class="invalid-feedback">Por favor ingrese una descripción</div>
-                                            </div>
+                                        <!-- input -->
+                                        <div class="mb-3 col-lg-12">
+                                            <label for="descripcion" class="form-label">Descripción</label>
+                                            <textarea class="form-control" id="descripcion" name="descripción" rows="3" placeholder="Descripción" required></textarea>
+                                            <div class="invalid-feedback">Por favor ingrese una descripción</div>
+                                        </div>
 
-                                            <div class="col-lg-12">
-                                                <button class="btn btn-primary" type="submit">Crear Producto</button>
-                                                <a th:href="@{/SuperAdmin/productos}" class="btn btn-secondary">Cancelar</a>
-                                            </div>
+                                        <div class="col-lg-12">
+                                            <button class="btn btn-primary" type="submit">Crear Producto</button>
+                                            <a th:href="@{/SuperAdmin/productos}" class="btn btn-secondary">Cancelar</a>
+                                        </div>
                                     </div>
                                 </div>
                             </form>

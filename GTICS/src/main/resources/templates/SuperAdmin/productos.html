@@ -235,6 +235,7 @@
                                             <th class="text-center">Cantidad Disponible</th>
                                             <th class="text-center">Precio</th>
                                             <th class="text-center">Proveedor</th>
+                                            <th class="text-center">Zona</th>
                                             <th class="text-center"></th>
                                         </tr>
                                         </thead>
@@ -250,7 +251,7 @@
                                             <td class="text-center" th:text="${producto.cantidadDisponible}">Cantidad Disponible</td>
                                             <td class="text-center" th:text="${producto.precio}">Precio</td>
                                             <td class="text-center" th:text="${producto.idProveedor.tienda.nombreTienda}">Proveedor</td>
-
+                                            <td class="text-center" th:text="${producto.zona.nombreZona}">Zona</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
