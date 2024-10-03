@@ -435,6 +435,26 @@ public class SuperAdminController {
         return "SuperAdmin/GestionUsuarioFinal/final-users-list";
     }
 
+    @GetMapping("SuperAdmin/listaUsuariosBaneados")
+    public String listaUsuariosBaneados(@RequestParam(defaultValue = "0") int page,
+                                        Model model){
+
+        int pageSize = 6;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Usuario> BannedUsersList = usuarioRepository.find_users_banned(pageable);
+        model.addAttribute("bannedUsersList", BannedUsersList.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", BannedUsersList.getTotalPages());
+        return "SuperAdmin/banned-users-list";
+
+    }
+
+    @GetMapping("SuperAdmin/desbanearUsuario/{id}")
+    public String desbanearUsuario(@PathVariable("id") Integer idUsuario, Model model) {
+        usuarioRepository.quitarBanUsuario(idUsuario);
+        return "redirect:/SuperAdmin/listaUsuariosBaneados";
+    }
+
     @GetMapping("SuperAdmin/crearUsuarioFinal")
     public String crearUsuarioFinal() {
 

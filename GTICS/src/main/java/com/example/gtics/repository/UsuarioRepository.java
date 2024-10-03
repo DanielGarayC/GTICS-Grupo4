@@ -63,17 +63,22 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             nativeQuery = true)
     Page<Object[]> mostrarAgentesConPaginacion(Pageable pageable);
     // Método personalizado para buscar usuarios por el ID del rol con paginación
-    Page<Usuario> findByRol_Id(int rolId, Pageable pageable);
+
 
     // Método personalizado para encontrar usuarios por rol
-    @Query(value = "SELECT * FROM usuario u WHERE u.idRol = :idRol AND u.baneado = false", nativeQuery = true)
-    List<Usuario> findByIdRol_Id(@Param("idRol") Integer idRol);
+    @Query(nativeQuery = true, value = "SELECT * FROM usuario u WHERE u.idRol = ?1 AND u.baneado = FALSE")
+    Page<Usuario> findByRol_Id(int rolId, Pageable pageable);
+
+    //Método para obtener la lista de los usuarios baneados
+    @Query(nativeQuery = true, value = "SELECT * FROM usuario u WHERE u.baneado = TRUE")
+    Page<Usuario> find_users_banned(Pageable pageable);
 
     @Query(value = "SELECT COUNT(*) " +
             "FROM usuario u " +
             "WHERE u.idRol = 2 " +
             "AND u.idZona = :zonaId", nativeQuery = true)
     Integer countCoordinadoresByZona(@Param("zonaId") Integer zonaId);
+
 
     //Método para el buscador de la lista de Admin Zonal para Superadmin (adrian chambea)
     @Query(value = "SELECT * FROM usuario u " +
@@ -99,6 +104,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE usuario u SET u.baneado = true WHERE u.idUsuario = ?1 AND u.baneado = false")
     void banUsuario(@Param("idUsuario") Integer idUsuario);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE usuario u SET u.baneado = false WHERE u.idUsuario = ?1 AND u.baneado = true")
+    void quitarBanUsuario(@Param("idUsuario") Integer idUsuario);
 
     //Actualizar Usuario Final
     @Transactional
