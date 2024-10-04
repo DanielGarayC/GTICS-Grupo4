@@ -123,6 +123,17 @@ public class SuperAdminController {
         model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/admin-zonal-edit";
     }
+    @GetMapping("SuperAdmin/verAdminZonal/{id}")
+    public String verAdminZonal(@PathVariable("id") Integer id, Model model){
+        Optional<Usuario> optionalAZ = usuarioRepository.findById(id);
+        if (optionalAZ.isPresent() && optionalAZ.get().getRol().getId() == 2) {
+            model.addAttribute("usuario", optionalAZ.get());
+        } else {
+            model.addAttribute("error", "Admin Zonal no encontrado o el rol no es válido");
+            return "redirect:/SuperAdmin/listaAdminZonal";
+        }
+        return "SuperAdmin/GestionAdminZonal/admin-zonal-info";
+    }
 
     @GetMapping("SuperAdmin/crearAdminZonal")
     public String crearAdminZonal(Model model) {

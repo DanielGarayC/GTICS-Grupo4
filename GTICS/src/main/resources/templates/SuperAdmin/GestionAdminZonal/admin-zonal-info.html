@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="Codescandy" name="author">
-    <title>Lista de administradores zonales</title>
+    <title>Ver administrador zonal</title>
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{images/favicon/favicon.ico}">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
 
     <!-- Libs CSS -->
@@ -17,7 +17,7 @@
 
 
     <!-- Theme CSS -->
-    <link rel="stylesheet" th:href="@{/css/theme.min.css}"}>
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
     <style>
 
         .logoImagen{
@@ -172,11 +172,10 @@
     <div class="main-wrapper">
         <!-- navbar -->
         <!-- navbar vertical (para pc)-->
-        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaAdminZonal')}"></div>
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaAdminZonal')"></div>
 
         <!-- navbar vertical (para celular)-->
-        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaAdminZonal')}"></div>
-
+        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaAdminZonal')"></div>
 
         <!-- COONTENIDO DE LA PAGINA -->
         <main class="main-content-wrapper">
@@ -185,140 +184,118 @@
                     <div class="col-md-12">
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
                             <div>
-                                <h2>Lista de administradores zonales</h2>
+                                <h2>Ver información del administrador zonal</h2>
                                 <!-- breacrumb -->
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Administrador zonal</li>
+                                        <li class="breadcrumb-item active" aria-current="page">Ver administrador zonal</li>
                                     </ol>
                                 </nav>
                             </div>
-                            <div>
-                                <a th:href="@{/SuperAdmin/crearAdminZonal}" class="btn btn-primary">Agregar nuevo Admin Zonal</a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xl-12 col-12 mb-5">
-                        <div class="card h-100 card-lg">
-                            <div class="p-6">
-                                <div class="row justify-content-between">
-                                    <div class="col-md-4 col-12">
-                                        <form class="d-flex" role="search" onsubmit="return false;">
-                                            <label for="searchCustomers" class="visually-hidden">Buscar administradores zonales</label>
-                                            <input class="form-control" type="search" id="searchCustomers" placeholder="Buscar admin zonal" aria-label="Search" th:value="${param.busqueda}" oninput="filterTable()" />
-                                        </form>
+                <div class="row" style="min-height: 100vh;">
+                    <div class="col-12">
+                        <div class="card card-lg border-0">
+                            <div class="card-body d-flex flex-column gap-8 p-7">
+                                <div class="d-flex flex-column gap-4">
+                                    <h3 class="mb-0 h5">Información del administrador zonal</h3>
+
+                                    <!-- Foto -->
+                                    <div class="row mb-4">
+                                        <div class="col-12 text-center">
+                                            <label for="userPhoto" class="form-label">Foto del administrador zonal:</label>
+                                            <div class="mb-3">
+                                                <img class="img-fluid rounded-circle"
+                                                     th:src="${usuario.getFoto() != null ? '/usuarioFinal/' + usuario.id : '/images/avatar/avatarGenerico.png'}"
+                                                     alt="Foto del Usuario"
+                                                     style="width: 150px; height: 150px; object-fit: cover;" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- Nombres -->
+                                        <div class="col-lg-6 col-12">
+                                            <label for="creatCustomerName" class="form-label">Nombres:</label>
+                                            <input type="text" class="form-control" id="creatCustomerName" name="nombre"
+                                                   th:value="${usuario.nombre}" disabled />
+                                        </div>
+
+                                        <!-- Apellido Paterno -->
+                                        <div class="col-lg-6 col-12">
+                                            <label for="creatFinalUserLastNameP" class="form-label">Apellido Paterno:</label>
+                                            <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidoPaterno"
+                                                   th:value="${usuario.apellidoPaterno}" disabled />
+                                        </div>
+
+                                        <!-- Apellido Materno -->
+                                        <div class="col-lg-6 col-12">
+                                            <label for="creatFinalUserLastNameM" class="form-label">Apellido Materno:</label>
+                                            <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidoMaterno"
+                                                   th:value="${usuario.apellidoMaterno}" disabled />
+                                        </div>
+
+                                        <!-- DNI -->
+                                        <div class="col-lg-6 col-12">
+                                            <label for="DNIFinalUser" class="form-label">DNI:</label>
+                                            <input type="text" class="form-control" id="DNIFinalUser" name="dni"
+                                                   th:value="${usuario.dni}" disabled />
+                                        </div>
+
+                                        <!-- Número telefónico -->
+                                        <div class="col-lg-6 col-12">
+                                            <label for="phoneAdminZonal" class="form-label">Número telefónico:</label>
+                                            <input type="text" class="form-control" id="phoneAdminZonal" name="telefono"
+                                                   th:value="${usuario.telefono}" disabled />
+                                        </div>
+
+                                        <!-- Email -->
+                                        <div class="col-lg-6 col-12">
+                                            <label for="creatFinalUserEmail" class="form-label">Email:</label>
+                                            <input type="email" class="form-control" id="creatFinalUserEmail" name="email"
+                                                   th:value="${usuario.email}" disabled />
+                                        </div>
+
+                                        <!-- Dirección -->
+                                        <div class="col-lg-6 col-12">
+                                            <label for="creatFinalUserDirection" class="form-label">Dirección:</label>
+                                            <input type="text" class="form-control" id="creatFinalUserDirection" name="direccion"
+                                                   th:value="${usuario.direccion}" disabled />
+                                        </div>
+
+                                        <!-- Zona -->
+                                        <div class="col-lg-6 col-12">
+                                            <label for="selectZone" class="form-label">Zona:</label>
+                                            <input type="text" class="form-control" id="selectZone"
+                                                   th:value="${usuario.getZona().getNombreZona()}" disabled />
+                                        </div>
+
+                                        <!-- Fecha de nacimiento -->
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label" for="creatFinalUserDate">Fecha de nacimiento:</label>
+                                            <input type="text" class="form-control" id="creatFinalUserDate" name="azFechanacimiento"
+                                                   th:value="${usuario.azFechanacimiento}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones de acción -->
+                                    <div class="col-12 mt-3">
+                                        <div class="d-flex flex-column flex-md-row gap-2">
+                                            <a th:href="@{/SuperAdmin/listaAdminZonal}" class="btn btn-secondary">Regresar</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}">
-
-                            </div>
-                            <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
-
-                            </div>
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
-                                        <thead class="bg-light">
-                                        <tr>
-                                            <th></th>
-                                            <th>Nombres</th>
-                                            <th>Apellidos</th>
-                                            <th>Correo electrónico</th>
-                                            <th>DNI</th>
-                                            <th>Teléfono</th>
-                                            <th>Zona</th>
-
-                                            <th></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="usuario,var : ${usuarios}">
-<!--
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img th:src="@{/images/avatar/avatar-${usuario.id}.jpg}" alt="" class="avatar avatar-xs rounded-circle" />
-                                                    <div class="ms-2">
-                                                        <a href="#!" class="text-inherit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" th:text="${usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno}"></a>
-                                                    </div>
-                                                </div>
-                                            </td>-->
-                                            <td th:text="${var.index+1}"></td>
-                                            <td th:text="${usuario.nombre}"></td>
-                                            <td th:text="${usuario.apellidoPaterno} + ' ' + ${usuario.apellidoMaterno} "></td>
-                                            <td th:text="${usuario.email}"></td>
-
-                                            <td th:text="${usuario.dni}"></td>
-                                            <td th:text="${usuario.telefono != null ? usuario.telefono : '-'}"></td>
-                                            <td th:text="${usuario.zona.getNombreZona()}"></td>
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/editarAdminZonal/{id}(id=${usuario.id})}">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Editar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="javascript:void(0);" th:onclick="'confirmDelete(' + ${usuario.id} + ')'">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" th:href="@{verAdminZonal/{id}(id=${usuario.id})}">
-                                                                <i class="bi bi-eye me-3"></i>
-                                                                Ver
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div class="d-flex flex-column align-items-center">
-                                    <!-- Texto de paginación centrado -->
-                                    <span id="paginationInfo" class="mb-2">
-                                        Mostrando página [[${currentPage != null ? currentPage + 1 : 1}]] de [[${totalPages != null ? totalPages : 1}]]
-                                    </span>
-
-                                    <!-- Paginación centrada -->
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination justify-content-center">
-                                            <!-- Botón de "Previo" -->
-                                            <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
-                                                <a class="page-link" th:href="@{/SuperAdmin/listaAdminZonal(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
-                                            </li>
-
-                                            <!-- Páginas numeradas -->
-                                            <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                                <a class="page-link" th:href="@{/SuperAdmin/listaAdminZonal(page=${i})}" th:text="${i + 1}"></a>
-                                            </li>
-
-                                            <!-- Botón de "Siguiente" -->
-                                            <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
-                                                <a class="page-link" th:href="@{/SuperAdmin/listaAdminZonal(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
                         </div>
                     </div>
+
                 </div>
+
+
             </div>
         </main>
     </div>
@@ -329,6 +306,8 @@
 <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <!-- Theme JS -->
 <script th:src="@{/js/theme.min.js}"></script>
 
@@ -336,77 +315,103 @@
 <script th:src="@{/js/vendors/chart.js}"></script>
 
 
+
 <!-- SweetAlert2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- SweetAlert2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+
 <script>
-    $(document).ready(function () {
-        // Función para manejar clic en las páginas
-        $('a.page-link').on('click', function () {
-            const page = $(this).data('page');
-            if (page !== undefined) {
-                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + page;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('adminZonalForm');
+        const dniInput = document.getElementById('DNIFinalUser');
+        const phoneInput = document.getElementById('phoneAdminZonal');
+        const dateInput = document.getElementById('creatFinalUserDate');
+
+        // Validar fecha de nacimiento (no puede ser futura)
+        dateInput.addEventListener('blur', function () {
+            const currentDate = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
+            if (dateInput.value > currentDate) {
+                dateInput.setCustomValidity("La fecha de nacimiento no puede ser futura.");
+                dateInput.classList.add('is-invalid');
+            } else {
+                dateInput.setCustomValidity(""); // Restablecer si la fecha es válida
+                dateInput.classList.remove('is-invalid');
+                dateInput.classList.add('is-valid');
             }
         });
 
-        // Función para manejar clic en "Previo"
-        $('#prevPage').on('click', function () {
-            const currentPage = parseInt($('li.active a').data('page'));
-            if (currentPage > 0) {
-                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + (currentPage - 1);
+        // Evento blur para validación en campo DNI
+        dniInput.addEventListener('blur', function() {
+            this.classList.remove('is-valid', 'is-invalid');
+            if (!this.validity.valid) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.add('is-valid');
             }
         });
 
-        // Función para manejar clic en "Siguiente"
-        $('#nextPage').on('click', function () {
-            const currentPage = parseInt($('li.active a').data('page'));
-            const totalPages = parseInt([[${totalPages}]]);
-            if (currentPage < totalPages - 1) {
-                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + (currentPage + 1);
+        // Evento blur para validación en campo Teléfono
+        phoneInput.addEventListener('blur', function() {
+            this.classList.remove('is-valid', 'is-invalid');
+            if (!this.validity.valid) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.add('is-valid');
             }
+        });
+
+        // Validar todo el formulario al enviarlo
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated'); // Forzar mostrar validaciones si no es válido
         });
     });
 
-</script>
-<script>
-    function confirmDelete(id) {
+    // Función para mostrar el popup de confirmación con validación del formulario
+    function showSuccessPopup() {
         Swal.fire({
             title: '¿Estás seguro?',
-            text: "Los cambios no serán reversibles",
+            text: "Confirma que deseas actualizar la información del Admin Zonal",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#28a745',
-            cancelButtonColor: '#dc3545',
-            confirmButtonText: 'Eliminar',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, actualizar',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
+            const form = document.getElementById('adminZonalForm');
             if (result.isConfirmed) {
-                window.location.href = `/AdminZonal/eliminar?id=${id}`;
+                if (form.checkValidity()) {
+                    form.submit();
+                } else {
+                    form.classList.add('was-validated'); // Forzar mostrar validaciones si no es válido
+                }
             }
         });
     }
-function filterTable() {
-    const input = document.getElementById("searchCustomers");
-    const filter = input.value.toLowerCase();
-    const table = document.querySelector("table tbody");
-    const rows = table.getElementsByTagName("tr");
 
-    for (let i = 0; i < rows.length; i++) {
-        const cells = rows[i].getElementsByTagName("td");
-        let match = false;
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr("#creatFinalUserDate", {
+            dateFormat: "Y-m-d"  // Esto asegura que la fecha se envíe en formato yyyy-MM-dd
+        });
+    });
 
-        for (let j = 0; j < cells.length; j++) {
-            if (cells[j].innerText.toLowerCase().includes(filter)) {
-                match = true;
-                break;
-            }
-        }
-        rows[i].style.display = match ? "" : "none";
-    }
-}
+
 </script>
-
 </body>
 </html>
+
+
+
+
+
+
+
+
