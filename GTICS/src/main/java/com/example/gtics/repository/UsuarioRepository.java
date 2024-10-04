@@ -17,33 +17,24 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
-    @Query(value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
-            "u.idSolicitudAgente AS solicitudId, s.indicadorSolicitud, " +
-            "u.agt_codigoAduana, " +
-            "CASE FLOOR(1 + (RAND() * 5)) " +
-            "WHEN 1 THEN 'Habilitado' " +
-            "WHEN 2 THEN 'Multado' " +
-            "WHEN 3 THEN 'Cancelado' " +
-            "WHEN 4 THEN 'Suspendido' " +
-            "WHEN 5 THEN 'Anulado de jurisdicción' " +
-            "END AS estadoCodigoAduana, " +
-            "u.agt_codigoJurisdiccion, " +
-            "CASE FLOOR(1 + (RAND() * 5)) " +
-            "WHEN 1 THEN 'Habilitado' " +
-            "WHEN 2 THEN 'Multado' " +
-            "WHEN 3 THEN 'Cancelado' " +
-            "WHEN 4 THEN 'Suspendido' " +
-            "WHEN 5 THEN 'Anulado de jurisdicción' " +
-            "END AS estadoCodigoJurisdiccion, " +
-            "z.nombrezona " +
-            "FROM usuario u " +
-            "LEFT JOIN solicitudagente s ON u.idSolicitudAgente = s.idSolicitudAgente " +
-            "JOIN zona z ON u.idzona = z.idzona " +
-            "WHERE u.idSolicitudAgente > 0 AND u.idRol = 4 " +
-            "GROUP BY u.idusuario, u.idSolicitudAgente",
-            countQuery = "SELECT COUNT(u.idusuario) FROM usuario u WHERE u.idSolicitudAgente > 0 AND u.idRol = 4",
+    @Query(value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono,\n" +
+            "       s.indicadorSolicitud,\n" +
+            "       s.codigoAduana as soladuana,\n" +
+            "       s.codigoRuc as solruc,\n" +
+            "       s.codigoJurisdiccion as soljurisdiccion,\n" +
+            "       COALESCE((SELECT cj.estadoCodigo\n" +
+            "                 FROM CodigosJurisdiccion cj\n" +
+            "                 WHERE cj.codigoJurisdiccion = s.codigoJurisdiccion), 'No encontrado') as estadoCodigoJurisdiccion,\n" +
+            "       COALESCE((SELECT ca.estadoCodigo\n" +
+            "                 FROM CodigosAduaneros ca\n" +
+            "                 WHERE ca.codigoAduanero = s.codigoAduana), 'No encontrado') as estadoCodigoAduana,\n" +
+            "       z.nombrezona\n" +
+            "FROM usuario u, solicitudagente s, zona z\n" +
+            "WHERE s.idSolicitudAgente > 0\n" +
+            "  AND s.idUsuario = u.idUsuario\n" +
+            "  AND z.idZona = u.idZona",
             nativeQuery = true)
-    Page<Object[]> mostrarSolicitudesConEstadosAleatoriosConPaginacion(Pageable pageable);
+    Page<solAgente> mostrarSolicitudesAgenteConPaginacion(Pageable pageable);
     // Método personalizado para buscar agentes con paginación
     @Query(value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
             "u.agt_codigoaduana, " +
@@ -107,6 +98,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
     @Transactional
     @Modifying
+    @Query(nativeQuery=true,value="update usuario set activo = 1 where idUsuario= ?1")
+    void activarCuenta(int idUsuario);
+
+    @Transactional
+    @Modifying
     @Query(nativeQuery = true, value = "UPDATE usuario u SET u.baneado = false WHERE u.idUsuario = ?1 AND u.baneado = true")
     void quitarBanUsuario(@Param("idUsuario") Integer idUsuario);
 
@@ -128,58 +124,27 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
                                 @Param("idUsuario") Integer idUsuario);
 
 
-    //Metodo para mostrar solicitudes de agente
-    @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
-            "u.idSolicitudAgente AS solicitudId, s.indicadorSolicitud, " +
-            "u.agt_codigoaduana, " +
-            "CASE FLOOR(1 + (RAND() * 5)) " +
-            "WHEN 1 THEN 'Habilitado' " +
-            "WHEN 2 THEN 'Multado' " +
-            "WHEN 3 THEN 'Cancelado' " +
-            "WHEN 4 THEN 'Suspendido' " +
-            "WHEN 5 THEN 'Anulado de jurisdicción' " +
-            "END AS estadoCodigoAduana, " +
-            "u.agt_codigojurisdiccion, " +
-            "CASE FLOOR(1 + (RAND() * 5)) " +
-            "WHEN 1 THEN 'Habilitado' " +
-            "WHEN 2 THEN 'Multado' " +
-            "WHEN 3 THEN 'Cancelado' " +
-            "WHEN 4 THEN 'Suspendido' " +
-            "WHEN 5 THEN 'Anulado de jurisdicción' " +
-            "END AS estadoCodigoJurisdiccion, " +
-            "z.nombrezona " +
-            "FROM usuario u " +
-            "LEFT JOIN solicitudagente s ON u.idSolicitudAgente = s.idSolicitudAgente " +
-            "JOIN zona z ON u.idzona = z.idzona " +
-            "WHERE u.idSolicitudAgente > 0 AND u.idRol = 4 " +
-            "GROUP BY u.idusuario, u.idSolicitudAgente")
-    List<Object[]> mostrarSolicitudesConEstadosAleatorios();
+
+
     //Metodo para mostrar solicitudes de agente con filtro
-    @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
-            "u.idSolicitudAgente AS solicitudId, s.indicadorSolicitud, " +
-            "u.agt_codigoaduana, " +
-            "CASE FLOOR(1 + (RAND() * 5)) " +
-            "WHEN 1 THEN 'Habilitado' " +
-            "WHEN 2 THEN 'Multado' " +
-            "WHEN 3 THEN 'Cancelado' " +
-            "WHEN 4 THEN 'Suspendido' " +
-            "WHEN 5 THEN 'Anulado de jurisdicción' " +
-            "END AS estadoCodigoAduana, " +
-            "u.agt_codigojurisdiccion, " +
-            "CASE FLOOR(1 + (RAND() * 5)) " +
-            "WHEN 1 THEN 'Habilitado' " +
-            "WHEN 2 THEN 'Multado' " +
-            "WHEN 3 THEN 'Cancelado' " +
-            "WHEN 4 THEN 'Suspendido' " +
-            "WHEN 5 THEN 'Anulado de jurisdicción' " +
-            "END AS estadoCodigoJurisdiccion, " +
-            "z.nombrezona " +
-            "FROM usuario u " +
-            "LEFT JOIN solicitudagente s ON u.idSolicitudAgente = s.idSolicitudAgente " +
-            "JOIN zona z ON u.idzona = z.idzona " +
-            "WHERE u.idSolicitudAgente > 0 AND u.idRol = 4 and s.indicadorSolicitud= ?1 " +
-            "GROUP BY u.idusuario, u.idSolicitudAgente")
-    List<Object[]> mostrarSolicitudesConEstadosAleatoriosFiltro(Integer indicador);
+    @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono,\n" +
+            "       s.indicadorSolicitud,\n" +
+            "       s.codigoAduana as soladuana,\n" +
+            "       s.codigoRuc as solruc,\n" +
+            "       s.codigoJurisdiccion as soljurisdiccion,\n" +
+            "       COALESCE((SELECT cj.estadoCodigo\n" +
+            "                 FROM CodigosJurisdiccion cj\n" +
+            "                 WHERE cj.codigoJurisdiccion = s.codigoJurisdiccion), 'No encontrado') as estadoCodigoJurisdiccion,\n" +
+            "       COALESCE((SELECT ca.estadoCodigo\n" +
+            "                 FROM CodigosAduaneros ca\n" +
+            "                 WHERE ca.codigoAduanero = s.codigoAduana), 'No encontrado') as estadoCodigoAduana,\n" +
+            "       z.nombrezona\n" +
+            "FROM usuario u, solicitudagente s, zona z\n" +
+            "WHERE s.idSolicitudAgente > 0\n" +
+            "  AND s.idUsuario = u.idUsuario\n" +
+            "  AND z.idZona = u.idZona\n" +
+            "  AND s.indicadorSolicitud= ?1")
+    List<solAgente> mostrarSolicitudesAgenteFiltro(Integer indicador);
     @Query(nativeQuery = true, value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono, " +
             "u.agt_codigoaduana, 'Habilitado' AS estadoCodigoAduana, " +
             "u.agt_codigojurisdiccion, 'Habilitado' AS estadoCodigoJurisdiccion, " +
@@ -249,7 +214,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "                   (SELECT COUNT(*)\n" +
             "                    FROM orden o\n" +
             "                    WHERE o.idAgente = u.idUsuario) AS cantidadOrdenes\n" +
-            "            FROM usuario u where activo = 1 and\n" +
+            "            FROM usuario u where activo = 1 and idRol = 3 and\n" +
             "             u.idAdminZonal = ?1", nativeQuery = true)
     List<Agente> findAgentesByAdminZonal(int idAdminZonal);
 

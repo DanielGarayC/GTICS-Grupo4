@@ -121,7 +121,6 @@ public class AdminZonalController {
     @PostMapping("/AdminZonal/Agentes/Guardar")
     public String guardarAgente(@ModelAttribute("agente") @Validated(AgenteValidationGroup.class) Usuario agente, BindingResult bindingResult, Model model, RedirectAttributes attr) {
 
-        //VALIDACIONES: codigo ruc 11 digitos | codigo aduanero tiene 3 digitos | codigo de jurisdiccion 4-6 digitos
         int idAdminZonal = 11;
         System.out.println("Llega al método guardarAgente");
         if(bindingResult.hasErrors()){
@@ -138,17 +137,7 @@ public class AdminZonalController {
             }
         }else {
             try {
-                // Crear la nueva solicitud de agente
-                Solicitudagente solicitudAgente = new Solicitudagente();
-                solicitudAgente.setCodigoAduana(agente.getAgtCodigoaduana());
-                solicitudAgente.setCodigoJurisdiccion(agente.getAgtCodigojurisdiccion());
-                solicitudAgente.setCodigoRuc(agente.getAgtRuc());
-                solicitudAgente.setIndicadorSolicitud(1); // Por defecto se guarda como "Por coordinador"
-                solicitudAgenteRepository.save(solicitudAgente); // Guardamos la solicitud
-
-                // Log para ver si la solicitud se ha guardado correctamente
-                System.out.println("Solicitud guardada con ID: " + solicitudAgente.getId());
-
+                int idUsuarioSol = 0;
                 // Obtener el distrito seleccionado
                 Optional<Distrito> distritoOpt = distritoRepository.findById(agente.getDistrito().getId());
                 if (distritoOpt.isPresent()) {
@@ -174,7 +163,6 @@ public class AdminZonalController {
                             nuevoAgente.setAgtRuc(agente.getAgtRuc());
                             nuevoAgente.setAgtRazonsocial(agente.getAgtRazonsocial() != null ? agente.getAgtRazonsocial() : "");
                             nuevoAgente.setAgtCodigojurisdiccion(agente.getAgtCodigojurisdiccion());
-                            nuevoAgente.setIdSolicitudAgente(solicitudAgente); // Asociar la solicitud al usuario
                             nuevoAgente.setBaneado(false); // El usuario no está baneado inicialmente
                             nuevoAgente.setRol(rolAgenteOpt.get()); // Asignar el rol de agente (ID 3)
                             nuevoAgente.setZona(zona); // Asignar la zona del Admin Zonal
@@ -188,9 +176,9 @@ public class AdminZonalController {
 
                             // Guardamos el nuevo usuario (agente)
                             Usuario savedAgente = usuarioRepository.save(nuevoAgente);
-
+                            idUsuarioSol = savedAgente.getId();
                             // Log para ver si el usuario se ha guardado correctamente
-                            System.out.println("Usuario (Agente) guardado con ID: " + savedAgente.getId());
+                            System.out.println("Usuario (Agente) guardado con ID: " + idUsuarioSol);
 
                             attr.addFlashAttribute("msg", "El nuevo agente fue creado exitosamente.");
                         } else {
@@ -202,6 +190,24 @@ public class AdminZonalController {
                 } else {
                     attr.addFlashAttribute("error", "No se pudo encontrar el distrito seleccionado.");
                 }
+
+
+                // Crear la nueva solicitud de agente
+                Solicitudagente solicitudAgente = new Solicitudagente();
+                if (idUsuarioSol > 0) {
+                    Usuario createdAgent = usuarioRepository.findUsuarioById(idUsuarioSol);
+                    solicitudAgente.setIdUsuario(createdAgent);
+                }
+                solicitudAgente.setCodigoAduana(agente.getAgtCodigoaduana());
+                solicitudAgente.setCodigoJurisdiccion(agente.getAgtCodigojurisdiccion());
+                solicitudAgente.setCodigoRuc(agente.getAgtRuc());
+                solicitudAgente.setIndicadorSolicitud(1); // Por defecto se guarda como "Por coordinador"
+                solicitudAgenteRepository.save(solicitudAgente); // Guardamos la solicitud
+
+                // Log para ver si la solicitud se ha guardado correctamente
+                System.out.println("Solicitud guardada con ID: " + solicitudAgente.getId());
+
+
             } catch (Exception e) {
                 attr.addFlashAttribute("error", "Ocurrió un error al crear el agente.");
                 e.printStackTrace();
