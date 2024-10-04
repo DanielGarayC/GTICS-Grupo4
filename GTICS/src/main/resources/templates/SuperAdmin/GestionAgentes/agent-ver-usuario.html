@@ -172,10 +172,11 @@
 
             <div class="main-wrapper">
 
-                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaSolicitudesAgentes')}"></div>
+                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc(${origin == 'listaAgente' ? 'listaAgente' : 'listaSolicitudesAgentes'})}"></div>
 
                 <!-- navbar vertical (para celular)-->
-                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaSolicitudesAgentes')}"></div>
+                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares(${origin == 'listaAgente' ? 'listaAgente' : 'listaSolicitudesAgentes'})}"></div>
+
                 <!-- COONTENIDO DE LA PAGINA -->
                 <main class="main-content-wrapper">
                     <div class="container">
@@ -183,7 +184,7 @@
                             <div class="col-md-12">
                                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
                                     <div>
-                                        <h2> Información </h2>
+                                        <h2 th:text="${origin == 'listaAgente' ? 'Información del agente' : 'Información'}"></h2>
                                         <!-- breacrumb -->
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb mb-0">
@@ -274,7 +275,7 @@
 
                                             <div class="col-12 mt-3">
                                                 <div class="d-flex flex-column flex-md-row gap-2">
-                                                    <a class="btn btn-secondary" th:href="@{/SuperAdmin/listaSolicitudesAgentes}">Regresar</a>
+                                                    <a class="btn btn-secondary" th:href="${origin == 'listaAgente' ? '/SuperAdmin/listaAgente' : '/SuperAdmin/listaSolicitudesAgentes'}">Regresar</a>
                                                 </div>
                                             </div>
                                         </div>
