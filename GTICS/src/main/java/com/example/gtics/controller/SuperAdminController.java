@@ -274,6 +274,18 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAgentes/agent-edit";
     }
 
+    @GetMapping("SuperAdmin/verAgente/{id}")
+    public String verAgente(@PathVariable("id") Integer id, Model model){
+        Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
+        if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 3) {
+            model.addAttribute("usuario", optionalAgente.get());
+        } else {
+            model.addAttribute("error", "Agente no encontrado o el rol no es válido");
+            return "SuperAdmin/GestionAgentes/agent-list";  // Redirigir a la lista si no se encuentra el agente
+        }
+        return "SuperAdmin/GestionAgentes/agent-ver-usuario";
+    }
+
     @PostMapping("/SuperAdmin/Agente/guardar")
     public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model, @RequestParam("agentPhoto") MultipartFile foto) {
         try {

@@ -202,9 +202,20 @@
                                     <div class="card-body d-flex flex-column gap-8 p-7">
                                         <div class="d-flex flex-column gap-4">
 
-                                            <h4 class="mb-0 h5">Información del usuario</h4>
+                                            <h4 class="mb-0 h5">Información del agente</h4>
 
-
+                                            <!-- Foto -->
+                                            <div class="row mb-4">
+                                                <div class="col-12 text-center">
+                                                    <label for="userPhoto" class="form-label">Foto del agente:</label>
+                                                    <div class="mb-3">
+                                                        <img class="img-fluid rounded-circle"
+                                                             th:src="${usuario.getFoto() != null ? '/usuarioFinal/' + usuario.id : '/images/avatar/avatarGenerico.png'}"
+                                                             alt="Foto del Usuario"
+                                                             style="width: 150px; height: 150px; object-fit: cover;" />
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="row">
                                                 <div class="col-lg-6 col-12">
                                                     <label for="DNIFinalUser" class="form-label">DNI:</label>
@@ -256,7 +267,7 @@
 
                                                 <div class="col-lg-6 col-12">
                                                     <label class="form-label" for="creatFinalUserDistrict">Distrito:</label>
-                                                    <input type="text" disabled class="form-control" id="creatFinalUserDistrict" th:value="${usuario.distrito}" required />
+                                                    <input type="text" disabled class="form-control" id="creatFinalUserDistrict" th:value="${usuario.getDistrito().getNombre()}" required />
                                                     <div class="invalid-feedback">Por favor ingrese un distrito</div>
                                                 </div>
                                             </div>
