@@ -117,6 +117,7 @@ public class UsuarioFinalController {
             model.addAttribute("costoAdicional",costoAdicional);
             model.addAttribute("subtotal",subtotal);
             model.addAttribute("maxCostoEnvio",maxCostoEnvio);
+            model.addAttribute("productosOrden",productosOrden);
             model.addAttribute("orden",ordenOpt.get());
 
             return "UsuarioFinal/Ordenes/detalleOrden";
