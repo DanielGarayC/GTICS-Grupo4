@@ -210,16 +210,16 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "ORDER BY o.idOrden;")
     List<MontoTotalOrdenDto> obtenerMontoTotalOrdenesSinAsignar(Integer idControl);
 
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlORden=1;")
-    List<Orden> ordenesSinAsignar();
+    @Query(nativeQuery = true, value = "SELECT * from orden where idControlORden=1 order by idOrden desc limit 5;")
+    List<Orden> ultimasOrdenesSinAsignar();
 
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=2 and idAgente=?1;")
-    List<Orden> ordenesPendientes(Integer idAgente);
+    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=2 and idAgente=?1 order by idOrden desc limit 5;")
+    List<Orden> ultimasOrdenesPendientes(Integer idAgente);
 
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=3 and idAgente=?1;")
-    List<Orden> ordenesenProceso(Integer idAgente);
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=4 and idAgente=?1;")
-    List<Orden> ordenesResueltas(Integer idAgente);
+    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=3 and idAgente=?1 order by idOrden desc limit 5;")
+    List<Orden> ultimasOrdenesenProceso(Integer idAgente);
+    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=4 and idAgente=?1 order by idOrden desc limit 5;")
+    List<Orden> ultimasOrdenesResueltas(Integer idAgente);
 
 
     @Transactional

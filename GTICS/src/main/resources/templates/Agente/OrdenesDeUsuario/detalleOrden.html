@@ -139,6 +139,9 @@
 			   <div class="col-xl-12 col-12 mb-5">
 				   <!-- card -->
 				   <form class="card h-100 card-lg" method="post" th:action="@{/Agente/Orden/editarOrden}">
+						<input type="hidden" th:field="${orden.solicitarCancelarOrden}">
+					    <input type="hidden" th:field="${orden.ordenEliminada}">
+
 					   <div class="card-body p-6">
 						   <div class="d-md-flex justify-content-between">
 							   <div class="d-flex align-items-center mb-2 mb-md-0">
