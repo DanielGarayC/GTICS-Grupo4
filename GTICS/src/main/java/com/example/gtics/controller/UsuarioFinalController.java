@@ -1,9 +1,7 @@
 package com.example.gtics.controller;
 
 import com.example.gtics.entity.*;
-import com.example.gtics.repository.FotosProductoRepository;
-import com.example.gtics.repository.SolicitudAgenteRepository;
-import com.example.gtics.repository.UsuarioRepository;
+import com.example.gtics.repository.*;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,11 +19,16 @@ public class UsuarioFinalController {
     private final UsuarioRepository usuarioRepository;
     private final SolicitudAgenteRepository solicitudAgenteRepository;
     private final FotosProductoRepository fotosProductoRepository;
+    private final OrdenRepository ordenRepository;
+    private final EstadoOrdenRepository estadoOrdenRepository;
+
     public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository, UsuarioRepository usuarioRepository,
-                                  FotosProductoRepository fotosProductoRepository) {
+                                  FotosProductoRepository fotosProductoRepository, OrdenRepository ordenRepository, EstadoOrdenRepository estadoOrdenRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.fotosProductoRepository = fotosProductoRepository;
+        this.ordenRepository = ordenRepository;
+        this.estadoOrdenRepository = estadoOrdenRepository;
     }
 
     @ModelAttribute
@@ -85,7 +88,8 @@ public class UsuarioFinalController {
         return "UsuarioFinal/Perfil/miperfil";
     }
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
-    public String mostrarListaMisOrdenes(){
+    public String mostrarListaMisOrdenes(Model model){
+        List<Estadoorden> listaEstadosOrden = estadoOrdenRepository.findAll();
 
         return "UsuarioFinal/Ordenes/listaMisOrdenes";
     }

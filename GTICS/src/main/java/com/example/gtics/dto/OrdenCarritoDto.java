@@ -7,8 +7,8 @@ public interface OrdenCarritoDto{
 
     LocalDate getFechaOrden();
     double getMontoTotal();
-    String getEstadoOrden();
-    String getControlOrden();
+    Integer getEstadoOrden();
+    Integer getControlOrden();
     Integer getIdOrden();
     String getNombre();
     String getApellidoPaterno();

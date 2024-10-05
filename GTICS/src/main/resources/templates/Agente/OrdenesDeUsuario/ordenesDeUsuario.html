@@ -113,10 +113,10 @@
 									   <!-- img -->
 									   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
 									   <!-- content -->
-									   <div th:if="${orden.controlOrden == 'Sin asignar'}">
+									   <div th:if="${orden.controlOrden == 1}">
 										   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: #${var.index+1}|"></a></h2>
 									   </div>
-									   <div th:unless="${orden.controlOrden == 'Sin asignar'}">
+									   <div th:unless="${orden.controlOrden == 1}">
 										   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/Detalles?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: #${var.index+1}|"></a></h2>
 									   </div>
 									   <div class="mb-2" th:text="|Fecha: ${orden.getFechaOrden()}|"></div>
@@ -126,19 +126,19 @@
 
 
 									   <div th:switch="${orden.controlOrden}">
-										   <div class="mb-2" th:case="'Sin asignar'">Control:<span th:text="|${orden.controlOrden}|" class="badge bg-light-danger text-dark-danger"></span></div>
-										   <div class="mb-2" th:case="'Pendiente'">Control:<span th:text="|${orden.controlOrden}|" class="badge bg-light-warning text-dark-warning"></span></div>
-										   <div class="mb-2" th:case="'En progreso'">Control:<span th:text="|${orden.controlOrden}|" class="badge bg-light-info text-dark-info"></span></div>
-										   <div class="mb-2" th:case="'Resuelta'">Control:<span th:text="|${orden.controlOrden}|" class="badge bg-light-primary text-dark-primary"></span></div>
+										   <div class="mb-2" th:case="1">Control:<span th:text="'Sin asignar'" class="badge bg-light-danger text-dark-danger"></span></div>
+										   <div class="mb-2" th:case="2">Control:<span th:text="'Pendiente'" class="badge bg-light-warning text-dark-warning"></span></div>
+										   <div class="mb-2" th:case="3">Control:<span th:text="'En progreso'" class="badge bg-light-info text-dark-info"></span></div>
+										   <div class="mb-2" th:case="4">Control:<span th:text="'Resuelta'" class="badge bg-light-primary text-dark-primary"></span></div>
 									   </div>
 									   <div th:switch="${orden.estadoOrden}">
-										   <div class="mb-2" th:case="'Creado'">Estado:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-primary text-dark-primary"></span></div>
-										   <div class="mb-2" th:case="'En validación'">Estado:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-secondary text-dark-secondary"></span></div>
-										   <div class="mb-2" th:case="'En proceso'">Estado:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-info text-dark-info"></span></div>
-										   <div class="mb-2" th:case="'Arribo al país'">Estado:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-warning text-dark-warning"></span></div>
-										   <div class="mb-2" th:case="'En aduanas'">Estado:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-danger text-dark-danger"></span></div>
-										   <div class="mb-2" th:case="'En ruta'">Estado:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-warning text-dark-warning"></span></div>
-										   <div class="mb-2" th:case="'Recibido'">Estado:<span th:text="|${orden.estadoOrden}|" class="badge bg-light-success text-dark-success"></span></div>
+										   <div class="mb-2" th:case="1">Estado:<span th:text="'Creado'" class="badge bg-light-primary text-dark-primary"></span></div>
+										   <div class="mb-2" th:case="2">Estado:<span th:text="'En validación'" class="badge bg-light-secondary text-dark-secondary"></span></div>
+										   <div class="mb-2" th:case="3">Estado:<span th:text="'En proceso'" class="badge bg-light-info text-dark-info"></span></div>
+										   <div class="mb-2" th:case="4">Estado:<span th:text="'Arribo al país'" class="badge bg-light-warning text-dark-warning"></span></div>
+										   <div class="mb-2" th:case="5">Estado:<span th:text="'En aduanas'" class="badge bg-light-danger text-dark-danger"></span></div>
+										   <div class="mb-2" th:case="6">Estado:<span th:text="'En ruta'" class="badge bg-light-warning text-dark-warning"></span></div>
+										   <div class="mb-2" th:case="7">Estado:<span th:text="'Recibido'" class="badge bg-light-success text-dark-success"></span></div>
 									   </div>
 								   </div>
 							   </div>
