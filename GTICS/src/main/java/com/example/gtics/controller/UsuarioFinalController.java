@@ -1,6 +1,7 @@
 package com.example.gtics.controller;
 
 import com.example.gtics.dto.OrdenCarritoDto;
+import com.example.gtics.dto.ProductosxOrden;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import org.springframework.core.io.ByteArrayResource;
@@ -98,9 +99,32 @@ public class UsuarioFinalController {
         return "UsuarioFinal/Ordenes/listaMisOrdenes";
     }
     @GetMapping("/UsuarioFinal/detallesOrden")
-    public String mostrarDetallesOrden(){
+    public String mostrarDetallesOrden(@RequestParam("idOrden") Integer idOrden,Model model) {
 
-        return "UsuarioFinal/Ordenes/detalleOrden";
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+        Double costoAdicional = ordenRepository.obtenerCostoAdicionalxOrden(idOrden);
+        // Calcular el subtotal sumando precioTotalPorProducto
+        double subtotal = productosOrden.stream()
+                .mapToDouble(ProductosxOrden::getPrecioTotalPorProducto)
+                .sum();
+        // Encontrar el costo de envío más alto
+        double maxCostoEnvio = productosOrden.stream()
+                .mapToDouble(ProductosxOrden::getCostoEnvio)
+                .max()
+                .orElse(0.0);
+        if(ordenOpt.isPresent()){
+            model.addAttribute("costoAdicional",costoAdicional);
+            model.addAttribute("subtotal",subtotal);
+            model.addAttribute("maxCostoEnvio",maxCostoEnvio);
+            model.addAttribute("orden",ordenOpt.get());
+
+            return "UsuarioFinal/Ordenes/detalleOrden";
+        }else{
+            return "UsuarioFinal/Ordenes/listaMisOrdenes";
+        }
+
+
     }
     @GetMapping("/UsuarioFinal/listaProductos")
     public String mostrarListaProductos(){

@@ -75,7 +75,7 @@
                                         <div class="col-lg-2 col-md-4 col-12">
                                             <!-- select -->
                                             <select class="form-select">
-                                                <option th:each="estado: ${listaEstadoOrden}" th:value="${estado.id}" th:text="${estado.nombreEstado}" ></option>
+                                                <option th:each="estado: ${listaEstadoOrden}" th:value="${estado.id}" th:text="${estado.nombreEstado}" th:if="${estado.id != 8}"></option>
                                             </select>
                                         </div>
                                     </div>
@@ -121,10 +121,10 @@
                                                                     <a class="dropdown-item" href="#"><i class="bi bi-question-circle me-3"></i>Solicitar apoyo </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a class="dropdown-item" th:href="@{/UsuarioFinal/ProcesoCompra/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                    <a class="dropdown-item" th:href="@{/UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
+                                                                    <a class="dropdown-item" th:href="@{'/UsuarioFinal/detallesOrden?idOrden=' + ${orden.idOrden}}"><i class="bi bi-eye-fill me-3"></i> Detalles</a>
                                                                 </li>
                                                                 <li>
                                                                     <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>

@@ -217,13 +217,64 @@
                             <div class="card h-100 card-lg">
                                 <div class="card-body p-6 text-center">
                                     <div class="d-flex flex-column justify-content-center align-items-center">
-                                        <h2 class="mb-0">Estado: Recibido</h2>
-                                        <h5 style="color: gray; margin-top: 5px" >N° de Orden: 1234223</h5>
+                                        <h2 class="mb-0" th:text="|Estado: ${orden.estadoorden.nombreEstado}|"></h2>
+                                        <h5 style="color: gray; margin-top: 5px" th:text="|Orden de usuario: ${orden.idCarritoCompra.idUsuario.nombre} ${orden.idCarritoCompra.idUsuario.apellidoPaterno}|"></h5>
                                     </div>
 
                                 </div>
 
-                                <div class="container">
+                                <div th:switch="${orden.estadoorden.id}">
+                                <div th:case="1" class="container">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12 hh-grayBox pt45 pb20">
+                                            <div class="row justify-content-between">
+                                                <div class="order-tracking active">
+                    <span class="is-complete">
+                        <i class="fas fa-file-alt"></i> <!-- Icono para 'Creado' -->
+                    </span>
+                                                    <p>Creado<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-spinner"></i> <!-- Icono para 'En validación' -->
+                    </span>
+                                                    <p>En validación<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-cogs"></i> <!-- Icono para 'En proceso' -->
+                    </span>
+                                                    <p>En proceso<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-plane-arrival"></i> <!-- Icono para 'Arribo al país' -->
+                    </span>
+                                                    <p>Arribo al país<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-box-open"></i> <!-- Icono para 'En aduanas' -->
+                    </span>
+                                                    <p>En aduanas<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-truck"></i> <!-- Icono para 'En ruta' -->
+                    </span>
+                                                    <p>En ruta<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-check"></i> <!-- Icono para 'Recibido' -->
+                    </span>
+                                                    <p>Recibido<br></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:case="2" class="container">
                                     <div class="row">
                                         <div class="col-12 col-md-12 hh-grayBox pt45 pb20">
                                             <div class="row justify-content-between">
@@ -231,48 +282,299 @@
                     <span class="is-complete">
                         <i class="fas fa-file-alt"></i> <!-- Icono para 'Creado' -->
                     </span>
-                                                    <p>Creado<br><span>Mon, June 24</span></p>
+                                                    <p>Creado<br></p>
                                                 </div>
-                                                <div class="order-tracking completed">
+                                                <div class="order-tracking active">
                     <span class="is-complete">
                         <i class="fas fa-spinner"></i> <!-- Icono para 'En validación' -->
                     </span>
-                                                    <p>En validación<br><span>Tue, June 25</span></p>
+                                                    <p>En validación<br></p>
                                                 </div>
-                                                <div class="order-tracking completed">
+                                                <div class="order-tracking inactive">
                     <span class="is-complete">
                         <i class="fas fa-cogs"></i> <!-- Icono para 'En proceso' -->
                     </span>
-                                                    <p>En proceso<br><span>Tue, June 25</span></p>
+                                                    <p>En proceso<br></p>
                                                 </div>
-                                                <div class="order-tracking completed">
+                                                <div class="order-tracking inactive">
                     <span class="is-complete">
                         <i class="fas fa-plane-arrival"></i> <!-- Icono para 'Arribo al país' -->
                     </span>
-                                                    <p>Arribo al país<br><span>Tue, June 25</span></p>
+                                                    <p>Arribo al país<br></p>
                                                 </div>
-                                                <div class="order-tracking completed">
+                                                <div class="order-tracking inactive">
                     <span class="is-complete">
                         <i class="fas fa-box-open"></i> <!-- Icono para 'En aduanas' -->
                     </span>
-                                                    <p>En aduanas<br><span>Fri, June 28</span></p>
+                                                    <p>En aduanas<br></p>
                                                 </div>
-                                                <div class="order-tracking completed">
+                                                <div class="order-tracking inactive">
                     <span class="is-complete">
                         <i class="fas fa-truck"></i> <!-- Icono para 'En ruta' -->
                     </span>
-                                                    <p>En ruta<br><span>Tue, June 25</span></p>
+                                                    <p>En ruta<br></p>
                                                 </div>
-                                                <div class="order-tracking">
+                                                <div class="order-tracking inactive">
                     <span class="is-complete">
                         <i class="fas fa-check"></i> <!-- Icono para 'Recibido' -->
                     </span>
-                                                    <p>Recibido<br><span>Fri, June 28</span></p>
+                                                    <p>Recibido<br></p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div th:case="3" class="container">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12 hh-grayBox pt45 pb20">
+                                            <div class="row justify-content-between">
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-file-alt"></i> <!-- Icono para 'Creado' -->
+                    </span>
+                                                    <p>Creado<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-spinner"></i> <!-- Icono para 'En validación' -->
+                    </span>
+                                                    <p>En validación<br></p>
+                                                </div>
+                                                <div class="order-tracking active">
+                    <span class="is-complete">
+                        <i class="fas fa-cogs"></i> <!-- Icono para 'En proceso' -->
+                    </span>
+                                                    <p>En proceso<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-plane-arrival"></i> <!-- Icono para 'Arribo al país' -->
+                    </span>
+                                                    <p>Arribo al país<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-box-open"></i> <!-- Icono para 'En aduanas' -->
+                    </span>
+                                                    <p>En aduanas<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-truck"></i> <!-- Icono para 'En ruta' -->
+                    </span>
+                                                    <p>En ruta<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-check"></i> <!-- Icono para 'Recibido' -->
+                    </span>
+                                                    <p>Recibido<br></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:case="4" class="container">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12 hh-grayBox pt45 pb20">
+                                            <div class="row justify-content-between">
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-file-alt"></i> <!-- Icono para 'Creado' -->
+                    </span>
+                                                    <p>Creado<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-spinner"></i> <!-- Icono para 'En validación' -->
+                    </span>
+                                                    <p>En validación<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-cogs"></i> <!-- Icono para 'En proceso' -->
+                    </span>
+                                                    <p>En proceso<br></p>
+                                                </div>
+                                                <div class="order-tracking active">
+                    <span class="is-complete">
+                        <i class="fas fa-plane-arrival"></i> <!-- Icono para 'Arribo al país' -->
+                    </span>
+                                                    <p>Arribo al país<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-box-open"></i> <!-- Icono para 'En aduanas' -->
+                    </span>
+                                                    <p>En aduanas<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-truck"></i> <!-- Icono para 'En ruta' -->
+                    </span>
+                                                    <p>En ruta<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-check"></i> <!-- Icono para 'Recibido' -->
+                    </span>
+                                                    <p>Recibido<br></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:case="5" class="container">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12 hh-grayBox pt45 pb20">
+                                            <div class="row justify-content-between">
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-file-alt"></i> <!-- Icono para 'Creado' -->
+                    </span>
+                                                    <p>Creado<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-spinner"></i> <!-- Icono para 'En validación' -->
+                    </span>
+                                                    <p>En validación<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-cogs"></i> <!-- Icono para 'En proceso' -->
+                    </span>
+                                                    <p>En proceso<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-plane-arrival"></i> <!-- Icono para 'Arribo al país' -->
+                    </span>
+                                                    <p>Arribo al país<br></p>
+                                                </div>
+                                                <div class="order-tracking active">
+                    <span class="is-complete">
+                        <i class="fas fa-box-open"></i> <!-- Icono para 'En aduanas' -->
+                    </span>
+                                                    <p>En aduanas<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-truck"></i> <!-- Icono para 'En ruta' -->
+                    </span>
+                                                    <p>En ruta<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-check"></i> <!-- Icono para 'Recibido' -->
+                    </span>
+                                                    <p>Recibido<br></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:case="6" class="container">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12 hh-grayBox pt45 pb20">
+                                            <div class="row justify-content-between">
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-file-alt"></i> <!-- Icono para 'Creado' -->
+                    </span>
+                                                    <p>Creado<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-spinner"></i> <!-- Icono para 'En validación' -->
+                    </span>
+                                                    <p>En validación<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-cogs"></i> <!-- Icono para 'En proceso' -->
+                    </span>
+                                                    <p>En proceso<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-plane-arrival"></i> <!-- Icono para 'Arribo al país' -->
+                    </span>
+                                                    <p>Arribo al país<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-box-open"></i> <!-- Icono para 'En aduanas' -->
+                    </span>
+                                                    <p>En aduanas<br></p>
+                                                </div>
+                                                <div class="order-tracking active">
+                    <span class="is-complete">
+                        <i class="fas fa-truck"></i> <!-- Icono para 'En ruta' -->
+                    </span>
+                                                    <p>En ruta<br></p>
+                                                </div>
+                                                <div class="order-tracking inactive">
+                    <span class="is-complete">
+                        <i class="fas fa-check"></i> <!-- Icono para 'Recibido' -->
+                    </span>
+                                                    <p>Recibido<br></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:case="7" class="container">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12 hh-grayBox pt45 pb20">
+                                            <div class="row justify-content-between">
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-file-alt"></i> <!-- Icono para 'Creado' -->
+                    </span>
+                                                    <p>Creado<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-spinner"></i> <!-- Icono para 'En validación' -->
+                    </span>
+                                                    <p>En validación<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-cogs"></i> <!-- Icono para 'En proceso' -->
+                    </span>
+                                                    <p>En proceso<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-plane-arrival"></i> <!-- Icono para 'Arribo al país' -->
+                    </span>
+                                                    <p>Arribo al país<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-box-open"></i> <!-- Icono para 'En aduanas' -->
+                    </span>
+                                                    <p>En aduanas<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-truck"></i> <!-- Icono para 'En ruta' -->
+                    </span>
+                                                    <p>En ruta<br></p>
+                                                </div>
+                                                <div class="order-tracking completed">
+                    <span class="is-complete">
+                        <i class="fas fa-check"></i> <!-- Icono para 'Recibido' -->
+                    </span>
+                                                    <p>Recibido<br></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
@@ -485,66 +787,7 @@
 
         <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
         <script th:src="@{/js/vendors/chart.js}"></script>
-        <script>
-            // Definir los diferentes estados con su icono y fecha
-            const estados = [
-                { estado: "Creado", icono: "fas fa-file-alt", fecha: "Mon, June 24" },
-                { estado: "En validación", icono: "fas fa-spinner", fecha: "Tue, June 25" },
-                { estado: "En proceso", icono: "fas fa-cogs", fecha: "Tue, June 25" },
-                { estado: "Arribo al país", icono: "fas fa-plane-arrival", fecha: "Tue, June 25" },
-                { estado: "En aduanas", icono: "fas fa-box-open", fecha: "Fri, June 28" },
-                { estado: "En ruta", icono: "fas fa-truck", fecha: "Tue, June 25" },
-                { estado: "Recibido", icono: "fas fa-check", fecha: "Fri, June 28" }
-            ];
 
-            let currentStateIndex = 0; // Índice del estado actual
-
-            // Función para actualizar el estado visualmente
-            function actualizarEstado() {
-                // Primero, removemos las clases previas de active, completed e inactive
-                const estadosElements = document.querySelectorAll(".order-tracking");
-                estadosElements.forEach((element, index) => {
-                    element.classList.remove("active", "completed", "inactive");
-
-                    if (index < currentStateIndex) {
-                        element.classList.add("completed"); // Estados completados
-                    } else if (index === currentStateIndex) {
-                        element.classList.add("active"); // Estado actual en curso (oro)
-                    } else {
-                        element.classList.add("inactive"); // Estados futuros (plomo)
-                    }
-                });
-
-                // Cambia el texto del estado actual
-                const estadoElement = document.querySelector("h2.mb-0");
-                const estadoActual = estados[currentStateIndex];
-                estadoElement.textContent = "Estado: " + estadoActual.estado;
-
-                // Cambia la fecha del estado
-                const ordenFechaElement = document.querySelector("h5");
-                ordenFechaElement.textContent = "Fecha: " + estadoActual.fecha;
-
-                // Actualizamos el icono del estado actual
-                const iconoElement = document.querySelectorAll(".order-tracking")[currentStateIndex].querySelector(".is-complete");
-                iconoElement.querySelector("i").className = estadoActual.icono;
-            }
-
-            // Función que avanza al siguiente estado
-            function avanzarEstado() {
-                if (currentStateIndex < estados.length - 1) {
-                    currentStateIndex++;
-                    actualizarEstado(); // Actualiza el estado visualmente
-                } else {
-                    clearInterval(intervalo); // Detenemos el temporizador cuando llega al último estado
-                }
-            }
-
-            // Inicializa el primer estado al cargar la página
-            actualizarEstado();
-
-            // Cambiar de estado cada 3 segundos (3000 milisegundos)
-            const intervalo = setInterval(avanzarEstado, 3000);
-        </script>
 
 
 
