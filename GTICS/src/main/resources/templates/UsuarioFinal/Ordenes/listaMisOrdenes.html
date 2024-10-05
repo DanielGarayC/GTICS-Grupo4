@@ -134,7 +134,14 @@
                                                             </a>
                                                             <ul class="dropdown-menu">
                                                                 <li>
-                                                                    <a class="dropdown-item" href="#"><i class="bi bi-question-circle me-3"></i>Solicitar apoyo </a>
+                                                                    <th:block th:if="${orden.idAgente == null}">
+                                                                        <a class="dropdown-item solicitarApoyo" href="#" th:data-id="${orden.idOrden}"><i class="bi bi-question-circle me-3"></i>Solicitar apoyo </a>
+                                                                    </th:block>
+                                                                    <th:block th:unless="${orden.idAgente == null}">
+                                                                        <a class="dropdown-item solicitarApoyoError" href="#"><i class="bi bi-question-circle me-3"></i>Solicitar apoyo </a>
+                                                                    </th:block>
+
+
                                                                 </li>
                                                                 <li>
                                                                     <a class="dropdown-item" th:href="@{/UsuarioFinal/chatbot}"><i class="bi bi-wechat me-3"></i>Soporte </a>
@@ -224,7 +231,7 @@
                    Swal.fire({
                        showCloseButton: true,
                        title: 'Confirmar',
-                       text: "¿Está seguro de que deseas solicitar eliminar esta orden?",
+                       text: "¿Está seguro que desea solicitar eliminar esta orden?",
                        icon: 'warning',
                        showCancelButton: true,
                        confirmButtonText: 'Eliminar',
@@ -250,12 +257,52 @@
                    });
                });
            });
+
+           document.querySelectorAll('.solicitarApoyo').forEach(button => {
+               button.addEventListener('click', function() {
+                   const idOrden = this.getAttribute('data-id');  // Obtener la ID de la orden
+                   Swal.fire({
+                       showCloseButton: true,
+                       title: 'Solicitar agente',
+                       text: "¿Estás seguro que deseas solicitar un agente para esta orden?",
+                       icon: 'warning',
+                       showCancelButton: true,
+                       confirmButtonText: 'Aceptar',
+                       cancelButtonText: 'Cancelar',
+                       customClass: {
+                           popup: 'custom-popup'
+                       }
+                   }).then((result) => {
+                       if (result.isConfirmed) {
+                           // Redirigir al controlador con la ID de la orden para eliminarla
+                           window.location.href = `/UsuarioFinal/solicitarApoyo?idOrden=${idOrden}`;
+                       }
+                   });
+               });
+           });
+
+           document.querySelectorAll('.solicitarApoyoError').forEach(button => {
+               button.addEventListener('click', function() {
+                   Swal.fire({
+                       icon: "info",
+
+                       text: "Esta orden ya ha sido asignada a un agente de compra. Por favor comunícate por chat.",
+                   });
+               });
+           });
        </script>
-       <!-- Verificar si la eliminación fue exitosa -->
+       <!-- Verificar si la eliminación o solicitud fue exitosa -->
        <script>
            const urlParams = new URLSearchParams(window.location.search);
-           if (urlParams.has('success')) {
-               Swal.fire('Orden eliminada', 'Se ha solicitado eliminar la orden exitosamente.', 'success');
+           if (urlParams.has('ordenEliminadaExitosamente')) {
+               Swal.fire('Eliminar orden', 'Se ha solicitado eliminar la orden exitosamente', 'ordenEliminadaExitosamente');
+
+           }
+           if (urlParams.has('solicitudAgenteExitosamente')) {
+               Swal.fire('Agente asignado', 'Se ha asignado la orden a un agente de forma exitosa', 'solicitudAgenteExitosamente');
+           }
+           if (urlParams.has('ordenEliminadaEstadoNoValido')) {
+               Swal.fire('Error', 'Solo se pueden elmiminar las órdenes que aún no llegan al estado en proceso ', 'ordenEliminadaEstadoNoValido');
            }
        </script>
 

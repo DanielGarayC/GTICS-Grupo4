@@ -130,8 +130,20 @@ public class UsuarioFinalController {
     }
     @GetMapping("/UsuarioFinal/eliminarOrden")
     public String solicitarEliminarOrden(@RequestParam Integer idOrden, RedirectAttributes attr){
-        ordenRepository.solicitarEliminarOrden(idOrden);
-        attr.addAttribute("success", true);
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        if(ordenOpt.get().getEstadoorden().getId()>=3){
+            attr.addAttribute("ordenEliminadaEstadoNoValido", true);
+        }else{
+            ordenRepository.solicitarEliminarOrden(idOrden);
+            attr.addAttribute("ordenEliminadaExitosamente", true);
+        }
+
+        return "redirect:/UsuarioFinal/listaMisOrdenes";
+    }
+    @GetMapping("/UsuarioFinal/solicitarApoyo")
+    public String solicitarApoyoOrden(@RequestParam Integer idOrden, RedirectAttributes attr){
+        ordenRepository.solicitarUnAgente(idOrden);//se le asigna la orden al agente de id = 13 -> arreglar mas adelante
+        attr.addAttribute("solicitudAgenteExitosamente", true);
         return "redirect:/UsuarioFinal/listaMisOrdenes";
     }
 

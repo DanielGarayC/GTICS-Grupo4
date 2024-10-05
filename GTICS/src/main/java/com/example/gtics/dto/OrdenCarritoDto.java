@@ -14,4 +14,5 @@ public interface OrdenCarritoDto{
     String getApellidoPaterno();
     Integer getSolicitarCancelarOrden();
     Integer getordenEliminada();
+    Integer getIdAgente();
 }

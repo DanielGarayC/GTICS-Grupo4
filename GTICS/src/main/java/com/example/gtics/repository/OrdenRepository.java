@@ -93,7 +93,8 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "    u.nombre, \n" +
             "    u.apellidoPaterno, \n" +
             "    o.solicitarCancelarOrden, \n" +
-            "    o.ordenEliminada \n" +
+            "    o.ordenEliminada, \n" +
+            "    o.idAgente \n" +
             "FROM usuario u \n" +
             "JOIN carritocompra c ON u.idUsuario = c.idUsuario \n" +
             "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra \n" +
@@ -252,4 +253,8 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE orden SET solicitarCancelarOrden=1 WHERE (idOrden = ?1);")
     void solicitarEliminarOrden(Integer idOrden);
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `gticsdb`.`orden` SET `idAgente` = '13' WHERE (`idOrden` = ?1);")
+    void solicitarUnAgente(Integer idOrden);
 }
