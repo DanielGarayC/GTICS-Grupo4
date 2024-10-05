@@ -8,7 +8,7 @@
       <title>Mis Órdenes</title>
       <!-- Favicon icon-->
 <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
-
+       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Libs CSS -->
        <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
@@ -45,6 +45,22 @@
       }
       .table tbody td {
          color: black; /* Texto negro para el cuerpo de la tabla */
+      }
+      /*Estilos popups*/
+      .custom-popup{
+          border-radius: 10px;
+      }
+      .swal2-styled{
+          border-radius: 8px;
+      }
+      .swal2-styled.swal2-confirm {
+          background-color: #28a745;
+          color: white;
+      }
+
+      .swal2-styled.swal2-cancel {
+          background-color: #dc3545;
+          color: white;
       }
    </style>
 
@@ -129,11 +145,24 @@
                                                                 <li>
                                                                     <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
                                                                 </li>
+
                                                                 <li>
-                                                                    <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                        <i class="bi bi-trash me-3"></i>Eliminar
-                                                                    </a>
+                                                                    <th:block th:switch="${orden.solicitarCancelarOrden}">
+                                                                        <th:block th:case="0">
+                                                                            <a class="dropdown-item eliminarOrden" href="#" th:data-id="${orden.idOrden}">
+                                                                                <i class="bi bi-trash me-3"></i>Eliminar
+                                                                            </a>
+                                                                        </th:block>
+                                                                        <th:block th:case="1">
+                                                                            <a class="dropdown-item eliminarOrdenError" href="#" th:data-id="${orden.idOrden}">
+                                                                                <i class="bi bi-trash me-3"></i>Eliminar
+                                                                            </a>
+                                                                        </th:block>
+
+                                                                    </th:block>
+
                                                                 </li>
+
                                                             </ul>
                                                         </div>
                                                     </td>
@@ -175,16 +204,61 @@
 
 	  </div>
 
-      <!-- Libs JS -->
-<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+    <!-- Libs JS -->
+    <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
 
-<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+    <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
-<!-- Theme JS -->
-<script src="../assets/js/theme.min.js"></script>
+    <!-- Theme JS -->
+    <script src="../assets/js/theme.min.js"></script>
 
-      <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
-      <script th:src="@{/js/vendors/chart.js}"></script>
+    <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+    <script th:src="@{/js/vendors/chart.js}"></script>
+
+       <!--POP UP ELIMINAR ORDEN-->
+       <script>
+           document.querySelectorAll('.eliminarOrden').forEach(button => {
+               button.addEventListener('click', function() {
+                   const idOrden = this.getAttribute('data-id');  // Obtener la ID de la orden
+                   Swal.fire({
+                       showCloseButton: true,
+                       title: 'Confirmar',
+                       text: "¿Está seguro de que deseas solicitar eliminar esta orden?",
+                       icon: 'warning',
+                       showCancelButton: true,
+                       confirmButtonText: 'Eliminar',
+                       cancelButtonText: 'Cancelar',
+                       customClass: {
+                           popup: 'custom-popup'
+                       }
+                   }).then((result) => {
+                       if (result.isConfirmed) {
+                           // Redirigir al controlador con la ID de la orden para eliminarla
+                           window.location.href = `/UsuarioFinal/eliminarOrden?idOrden=${idOrden}`;
+                       }
+                   });
+               });
+           });
+
+           document.querySelectorAll('.eliminarOrdenError').forEach(button => {
+               button.addEventListener('click', function() {
+                   Swal.fire({
+                       icon: "error",
+                       title: "Error",
+                       text: "Ya has solicitado eliminar esta orden",
+                   });
+               });
+           });
+       </script>
+       <!-- Verificar si la eliminación fue exitosa -->
+       <script>
+           const urlParams = new URLSearchParams(window.location.search);
+           if (urlParams.has('success')) {
+               Swal.fire('Orden eliminada', 'Se ha solicitado eliminar la orden exitosamente.', 'success');
+           }
+       </script>
+
+
    </body>
 </html>

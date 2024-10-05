@@ -91,7 +91,9 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "    eo.idEstadoOrden AS estadoOrden, \n" +
             "    co.idControlOrden AS controlOrden, \n" +
             "    u.nombre, \n" +
-            "    u.apellidoPaterno \n" +
+            "    u.apellidoPaterno, \n" +
+            "    o.solicitarCancelarOrden, \n" +
+            "    o.ordenEliminada \n" +
             "FROM usuario u \n" +
             "JOIN carritocompra c ON u.idUsuario = c.idUsuario \n" +
             "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra \n" +
@@ -99,9 +101,9 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "JOIN producto p ON phc.idProducto = p.idProducto \n" +
             "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden \n" +
             "JOIN controlorden co ON o.idControlOrden = co.idControlOrden \n" +
-            "WHERE u.idUsuario = ?1 and ordenEliminada=0\n" +
+            "WHERE u.idUsuario = ?1 and ordenEliminada=0 \n" +
             "GROUP BY o.idOrden;")
-    List<OrdenCarritoDto> obtenerCarritoConDto(Integer idUsuario);
+    List<OrdenCarritoDto> obtenerCarritoUFConDto(Integer idUsuario);
 
     @Query(value = "SELECT \n" +
             "    (SELECT fp.foto FROM fotosproducto fp WHERE fp.idProducto = p.idProducto LIMIT 1) AS primeraFotoProducto,\n" +
@@ -244,4 +246,10 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE orden SET ordenEliminada=1, razonEliminacion = ?2 WHERE (idOrden = ?1);")
     void eliminadoLogicoDeOrden(Integer idOrden,String razonEliminacion);
+
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE orden SET solicitarCancelarOrden=1 WHERE (idOrden = ?1);")
+    void solicitarEliminarOrden(Integer idOrden);
 }

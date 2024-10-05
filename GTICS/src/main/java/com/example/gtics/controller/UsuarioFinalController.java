@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.List;
@@ -93,7 +94,7 @@ public class UsuarioFinalController {
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
     public String mostrarListaMisOrdenes(Model model){
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        List<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoConDto(7); // Si el usuario tiene ID=7
+        List<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDto(7); // Si el usuario tiene ID=7
         model.addAttribute("listaEstadoOrden",listaEstadoOrden);
         model.addAttribute("ordenCarrito",ordenCarrito);
         return "UsuarioFinal/Ordenes/listaMisOrdenes";
@@ -127,6 +128,13 @@ public class UsuarioFinalController {
 
 
     }
+    @GetMapping("/UsuarioFinal/eliminarOrden")
+    public String solicitarEliminarOrden(@RequestParam Integer idOrden, RedirectAttributes attr){
+        ordenRepository.solicitarEliminarOrden(idOrden);
+        attr.addAttribute("success", true);
+        return "redirect:/UsuarioFinal/listaMisOrdenes";
+    }
+
     @GetMapping("/UsuarioFinal/listaProductos")
     public String mostrarListaProductos(){
 
