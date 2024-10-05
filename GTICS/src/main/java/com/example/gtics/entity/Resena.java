@@ -17,6 +17,9 @@ public class Resena {
     @Column(name = "opinion", length = 45)
     private String opinion;
 
+    @Column(name = "tema", length = 45)
+    private String tema;
+
     @Column(name = "entregaRapida", nullable = false)
     private Byte entregaRapida;
 
