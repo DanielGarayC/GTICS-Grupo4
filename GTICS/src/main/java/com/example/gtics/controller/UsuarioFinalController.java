@@ -1,8 +1,10 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.dto.OrdenCarritoDto;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -89,8 +91,10 @@ public class UsuarioFinalController {
     }
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
     public String mostrarListaMisOrdenes(Model model){
-        List<Estadoorden> listaEstadosOrden = estadoOrdenRepository.findAll();
-
+        List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
+        List<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoConDto(7); // Si el usuario tiene ID=7
+        model.addAttribute("listaEstadoOrden",listaEstadoOrden);
+        model.addAttribute("ordenCarrito",ordenCarrito);
         return "UsuarioFinal/Ordenes/listaMisOrdenes";
     }
     @GetMapping("/UsuarioFinal/detallesOrden")

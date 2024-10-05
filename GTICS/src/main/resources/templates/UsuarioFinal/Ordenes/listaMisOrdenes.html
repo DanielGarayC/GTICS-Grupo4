@@ -75,14 +75,7 @@
                                         <div class="col-lg-2 col-md-4 col-12">
                                             <!-- select -->
                                             <select class="form-select">
-                                                <option selected>Estado</option>
-                                                <option value="Success">Creado</option>
-                                                <option value="Pending">En validación</option>
-                                                <option value="Pending">En proceso</option>
-                                                <option value="Cancel">Arribo al país</option>
-                                                <option value="Cancel">En aduanas</option>
-                                                <option value="Cancel">En ruts</option>
-                                                <option value="Cancel">Recibido</option>
+                                                <option th:each="estado: ${listaEstadoOrden}" th:value="${estado.id}" th:text="${estado.nombreEstado}" ></option>
                                             </select>
                                         </div>
                                     </div>
@@ -93,21 +86,31 @@
                                     <div class="table-responsive">
                                         <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
                                             <thead class="bg-light">
-                                                <tr>
-
-                                                    <th>Nº de orden</th>
-                                                    <th>Fecha</th>
-                                                    <th>Estado</th>
-                                                    <th>Monto total</th>
-                                                    <th></th>
-                                                </tr>
+                                            <tr>
+                                                <th>Nº de orden</th>
+                                                <th>Fecha de entrega</th>
+                                                <th>Estado</th>
+                                                <th>Monto total (S/.)</th>
+                                                <th></th>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td>	<span class="badge bg-light-primary text-dark-primary">Recibido</span></td>
-                                                    <td> S/. 145.00 </td>
+                                                <tr th:each="orden,var: ${ordenCarrito}">
+                                                    <td th:text="${var.index+1}">#1234</td>
+                                                    <td th:text="${#temporals.format(orden.fechaOrden, 'dd-MM-yyyy')}"></td>
+                                                    <td th:switch="${orden.estadoOrden}">
+                                                        <div class="mb-2" th:case="1"><span th:text="'Creado'" class="badge bg-light-primary text-dark-primary"></span></div>
+                                                        <div class="mb-2" th:case="2"><span th:text="'En validación'" class="badge bg-light-secondary text-dark-secondary"></span></div>
+                                                        <div class="mb-2" th:case="3"><span th:text="'En proceso'" class="badge bg-light-info text-dark-info"></span></div>
+                                                        <div class="mb-2" th:case="4"><span th:text="'Arribo al país'" class="badge bg-light-warning text-dark-warning"></span></div>
+                                                        <div class="mb-2" th:case="5"><span th:text="'En aduanas'" class="badge bg-light-danger text-dark-danger"></span></div>
+                                                        <div class="mb-2" th:case="6"><span th:text="'En ruta'" class="badge bg-light-warning text-dark-warning"></span></div>
+                                                        <div class="mb-2" th:case="7"><span th:text="'Recibido'" class="badge bg-light-success text-dark-success"></span></div>
+                                                    </td>
+                                                    <td>
+										                <span th:text="${#numbers.formatDecimal(orden.montoTotal, 1, 2)}"></span>
+
+                                                    </td>
                                                     <td>
                                                         <div class="dropdown">
                                                             <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -115,7 +118,10 @@
                                                             </a>
                                                             <ul class="dropdown-menu">
                                                                 <li>
-                                                                    <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
+                                                                    <a class="dropdown-item" href="#"><i class="bi bi-question-circle me-3"></i>Solicitar apoyo </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{/UsuarioFinal/ProcesoCompra/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
                                                                 </li>
                                                                 <li>
                                                                     <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
@@ -132,159 +138,8 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td>	<span class="badge bg-light-primary text-dark-primary">Recibido</span></td>
-                                                    <td> S/. 145.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
 
-                                                                <ul class="dropdown-menu">
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                            <i class="bi bi-trash me-3"></i>Eliminar
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                        </div>
 
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
-                                                    <td> S/. 145.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-
-                                                            <div class="dropdown">
-                                                                <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                            <i class="bi bi-trash me-3"></i>Eliminar
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                        </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
-                                                    <td> S/. 145.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-
-                                                                <ul class="dropdown-menu">
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                            <i class="bi bi-trash me-3"></i>Eliminar
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td><span class="badge bg-light-warning text-dark-warning">En proceso</span></td>
-                                                    <td> S/. 145.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-
-                                                                <ul class="dropdown-menu">
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                            <i class="bi bi-trash me-3"></i>Eliminar
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#1234</td>
-                                                    <td>07-07-24</td>
-                                                    <td><span class="badge bg-light-warning text-dark-warning">En proceso</span></td>
-                                                    <td> S/. 135.00 </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                            </a>
-
-                                                                <ul class="dropdown-menu">
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat me-3"></i>Soporte </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/UsuarioFinal/detallesOrden}"><i class="bi bi-eye-fill me-3"></i> Detalles del pedido</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="#" onclick="eliminarOrden()">
-                                                                            <i class="bi bi-trash me-3"></i>Eliminar
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
 
                                             </tbody>
                                         </table>
