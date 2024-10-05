@@ -84,16 +84,18 @@
                                     <div class="row justify-content-between">
                                         <div class="col-md-4 col-12 mb-2 mb-md-0">
                                             <!-- form -->
-                                            <form class="d-flex" role="search">
+                                            <div class="d-flex" role="search">
                                                 <input class="form-control" type="search" placeholder="Buscar por número de orden" aria-label="Search" />
-                                            </form>
+                                            </div>
                                         </div>
-                                        <div class="col-lg-2 col-md-4 col-12">
+                                        <form class="col-xl-3 col-md-5 col-12 d-flex align-items-center" method="post" th:action="@{/UsuarioFinal/listaMisOrdenes/filtro}">
                                             <!-- select -->
-                                            <select class="form-select">
-                                                <option th:each="estado: ${listaEstadoOrden}" th:value="${estado.id}" th:text="${estado.nombreEstado}" th:if="${estado.id != 8}"></option>
+                                            <select class="form-select  me-2" name="idEstado">
+                                                <option th:each="estado: ${listaEstadoOrden}" th:value="${estado.id}" th:text="${estado.nombreEstado}" th:if="${estado.id != 8}" th:selected="${idEstado == estado.id}"></option>
                                             </select>
-                                        </div>
+                                            <button class="btn btn-primary me-2" type="submit"><i class="bi bi-search"></i></button>
+                                            <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-primary me-2"><i class="bi bi-eraser-fill"></i></a>
+                                        </form>
                                     </div>
                                 </div>
                                 <!-- card body -->

@@ -99,6 +99,18 @@ public class UsuarioFinalController {
         model.addAttribute("ordenCarrito",ordenCarrito);
         return "UsuarioFinal/Ordenes/listaMisOrdenes";
     }
+
+    @PostMapping("/UsuarioFinal/listaMisOrdenes/filtro")
+    public String mostrarListaMisOrdenesFiltro(Model model,@RequestParam("idEstado") Integer idEstado){
+        System.out.println(idEstado);
+        List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
+        List<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDtoFiltro(7,idEstado); // Si el usuario tiene ID=7
+        model.addAttribute("listaEstadoOrden",listaEstadoOrden);
+        model.addAttribute("ordenCarrito",ordenCarrito);
+        model.addAttribute("idEstado",idEstado);
+        return "UsuarioFinal/Ordenes/listaMisOrdenes";
+    }
+
     @GetMapping("/UsuarioFinal/detallesOrden")
     public String mostrarDetallesOrden(@RequestParam("idOrden") Integer idOrden,Model model) {
 
