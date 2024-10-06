@@ -86,15 +86,18 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM usuario u " +
             "WHERE u.idRol = 4 " +
             "AND u.idAgente = ?1 " +
-            "AND u.baneado  =0")
+            "AND u.baneado  =0 and u.activo=1")
 
     Page<Usuario> findUsuariosAsignadosAlAgente(Integer idAgente, Pageable pageable);
 
     //Banear Usuario por id
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE usuario u SET u.baneado = true WHERE u.idUsuario = ?1 AND u.baneado = false")
-    void banUsuario(@Param("idUsuario") Integer idUsuario);
+    @Query(nativeQuery = true, value = "UPDATE usuario u \n" +
+            "SET u.baneado = 1, \n" +
+            "    u.razonBaneado = ?2 \n" +
+            "WHERE u.idUsuario = ?1;")
+    void banUsuario(Integer idUsuario,String razonBaneado);
 
     @Transactional
     @Modifying

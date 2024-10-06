@@ -559,7 +559,7 @@ public class SuperAdminController {
 
     @GetMapping("SuperAdmin/banearUsuarioFinal/{id}")
     public String banearUsuarioFinal(@PathVariable("id") Integer idUsuarioFinal, Model model) {
-        usuarioRepository.banUsuario(idUsuarioFinal);
+        usuarioRepository.banUsuario(idUsuarioFinal,"Mal comportamiento"); // corregir y poner razon de baneado (copia y pega el pop up de agente) ROBERTO CHAMBEA
         return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 
