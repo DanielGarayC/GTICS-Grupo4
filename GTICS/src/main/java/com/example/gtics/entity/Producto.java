@@ -1,11 +1,15 @@
 package com.example.gtics.entity;
 
+import com.example.gtics.ValidationGroup.AdminZonalValidationGroup;
+import com.example.gtics.ValidationGroup.AgenteValidationGroup;
+import com.example.gtics.ValidationGroup.UsuarioFinalValidationGroup;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-
+import com.example.gtics.ValidationGroup.InventarioProductosValidationGroup;
 @Getter
 @Setter
 @Entity
@@ -17,6 +21,7 @@ public class Producto {
     private Integer id;
 
     @Column(name = "nombreProducto", nullable = false, length = 45)
+    @NotBlank(message = "Este campo es obligatorio", groups = {InventarioProductosValidationGroup.class})
     private String nombreProducto;
 
     @Column(name = "cantidadDisponible", nullable = false, length = 45)
