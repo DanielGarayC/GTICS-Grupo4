@@ -1,463 +1,464 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta content="Codescandy" name="author">
-        <title>Solicitud nuevo agente</title>
-        <!-- Favicon icon-->
-        <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Codescandy" name="author">
+    <title>Solicitud nuevo agente</title>
+    <!-- Favicon icon-->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
 
-        <!-- Libs CSS -->
-        <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
-        <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
-        <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+    <!-- Libs CSS -->
+    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
 
-        <!-- Theme CSS -->
-        <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
 
-        <style>
+    <style>
 
-            .logoImagen{
-                height: 80px;
-                width: 250px;
-            }
-            .logoImagenCelulares{
-                height: 80px;
-                width: 220px;
-            }
-        </style>
-    </head>
+        .logoImagen{
+            height: 80px;
+            width: 250px;
+        }
+        .logoImagenCelulares{
+            height: 80px;
+            width: 220px;
+        }
+    </style>
+</head>
 
-    <body>
-        <!-- main -->
-        <div>
-            <!-- navbar -->
-            <nav class="navbar navbar-expand-lg navbar-glass">
-                <div class="container-fluid">
-                    <div class="d-flex justify-content-between align-items-center w-100">
-                        <div class="d-flex align-items-center">
-                            <a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
-                                    <path
-                                            d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
-                                    />
-                                </svg>
-                            </a>
+<body>
+<!-- main -->
+<div>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-glass">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="d-flex align-items-center">
+                    <a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
+                            <path
+                                    d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"
+                            />
+                        </svg>
+                    </a>
 
-                        </div>
-                        <div>
-                            <ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
-                                <li class="dropdown-center">
-                                    <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-bell fs-5"></i>
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+                </div>
+                <div>
+                    <ul class="list-unstyled d-flex align-items-center mb-0 ms-5 ms-lg-0">
+                        <li class="dropdown-center">
+                            <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-bell fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
 								2
 								<span class="visually-hidden">Mensajes sin leer</span>
 							</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+                                <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-1">Notificaciones</h5>
+                                        <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
+                                    </div>
+                                    <a href="#!" class="text-muted">
+                                        <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+                                                <path
+                                                        d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+                                                />
+                                                <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+                                            </svg>
+                                        </a>
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
-                                        <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <h5 class="mb-1">Notificaciones</h5>
-                                                <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
-                                            </div>
+                                </div>
+                                <div data-simplebar style="height: 250px">
+                                    <!-- List group -->
+                                    <ul class="list-group list-group-flush notification-list-scroll fs-6">
+                                        <!-- List group item -->
+                                        <li class="list-group-item px-5 py-4 list-group-item-action active">
                                             <a href="#!" class="text-muted">
-                                                <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
-                                                        <path
-                                                                d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
-                                                        />
-                                                        <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
-                                                    </svg>
-                                                </a>
-                                            </a>
-                                        </div>
-                                        <div data-simplebar style="height: 250px">
-                                            <!-- List group -->
-                                            <ul class="list-group list-group-flush notification-list-scroll fs-6">
-                                                <!-- List group item -->
-                                                <li class="list-group-item px-5 py-4 list-group-item-action active">
-                                                    <a href="#!" class="text-muted">
-                                                        <div class="d-flex">
-                                                            <div class="ms-4">
-                                                                <p class="mb-1">
-                                                                    <span class="text-dark">Nombre de la persona</span>
-                                                                    Descripción notificación 1
-                                                                </p>
-                                                                <span>
+                                                <div class="d-flex">
+                                                    <div class="ms-4">
+                                                        <p class="mb-1">
+                                                            <span class="text-dark">Nombre de la persona</span>
+                                                            Descripción notificación 1
+                                                        </p>
+                                                        <span>
 														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
 															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
 															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
 														</svg>
 														<small class="ms-2">Hace 1 minuto</small>  <!--Se puede eliminar-->
 													</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="list-group-item px-5 py-4 list-group-item-action">
-                                                    <a href="#!" class="text-muted">
-                                                        <div class="d-flex">
-                                                            <div class="ms-4">
-                                                                <p class="mb-1">
-                                                                    <span class="text-dark">Título de notificación 2</span>
-                                                                    Descripción notificación 2
-                                                                </p>
-                                                                <span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="list-group-item px-5 py-4 list-group-item-action">
+                                            <a href="#!" class="text-muted">
+                                                <div class="d-flex">
+                                                    <div class="ms-4">
+                                                        <p class="mb-1">
+                                                            <span class="text-dark">Título de notificación 2</span>
+                                                            Descripción notificación 2
+                                                        </p>
+                                                        <span>
 														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
 															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
 															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
 														</svg>
 														<small class="ms-2">Hace 2 días</small>
 													</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="list-group-item px-5 py-4 list-group-item-action">
-                                                    <a href="#!" class="text-muted">
-                                                        <div class="d-flex">
-                                                            <div class="ms-4">
-                                                                <p class="mb-1">
-                                                                    <span class="text-dark">Título de notificación 3</span>
-                                                                    Descripción notificación 3
-                                                                </p>
-                                                                <span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="list-group-item px-5 py-4 list-group-item-action">
+                                            <a href="#!" class="text-muted">
+                                                <div class="d-flex">
+                                                    <div class="ms-4">
+                                                        <p class="mb-1">
+                                                            <span class="text-dark">Título de notificación 3</span>
+                                                            Descripción notificación 3
+                                                        </p>
+                                                        <span>
 														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
 															<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
 															<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
 														</svg>
 														<small class="ms-2">Hace 5 horas</small>
 													</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="border-top px-5 py-4 text-center">
-                                            <a href="#!">Ver todas</a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="dropdown ms-4">
-                                    <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
-                                    </a>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="border-top px-5 py-4 text-center">
+                                    <a href="#!">Ver todas</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="dropdown ms-4">
+                            <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
+                            </a>
 
-                                    <div class="dropdown-menu dropdown-menu-end p-0">
-                                        <div class="lh-1 px-5 py-4 border-bottom">
-                                            <h5 class="mb-1 h6">Nombre Apellido</h5>
-                                            <small>rol en la pagina</small>
-                                        </div>
+                            <div class="dropdown-menu dropdown-menu-end p-0">
+                                <div class="lh-1 px-5 py-4 border-bottom">
+                                    <h5 class="mb-1 h6">Nombre Apellido</h5>
+                                    <small>rol en la pagina</small>
+                                </div>
 
-                                        <div class="border-top px-5 py-3">
-                                            <a href="perfilSuperAdmin.html">Mi perfil</a>
-                                        </div>
-                                        <div class="border-top px-5 py-3">
-                                            <a href="#">Cerrar sesión</a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+                                <div class="border-top px-5 py-3">
+                                    <a href="perfilSuperAdmin.html">Mi perfil</a>
+                                </div>
+                                <div class="border-top px-5 py-3">
+                                    <a href="#">Cerrar sesión</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="main-wrapper">
+        <!-- navbar -->
+        <!-- navbar vertical (para pc)-->
+        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaSolicitudesAgentes')}"></div>
+
+        <!-- navbar vertical (para celular)-->
+        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaSolicitudesAgentes')}"></div>
+
+        <!-- COONTENIDO DE LA PAGINA -->
+        <main class="main-content-wrapper">
+            <div class="container">
+                <!-- row -->
+                <div class="row mb-8">
+                    <div class="col-md-12">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+                            <!-- pageheader -->
+                            <div>
+                                <h2>Lista de solicitudes para rol de Agente</h2>
+                                <!-- breacrumb -->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a th:href="@{/SuperAdmin}" class="text-inherit">Dashboard</a></li>
+                                        <li class="breadcrumb-item " aria-current="page">Solicitudes</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                            <!-- button -->
                         </div>
                     </div>
                 </div>
-            </nav>
+                <div class="row">
+                    <div class="col-xl-12 col-12 mb-5">
+                        <div th:if="${successMessage}" class="alert alert-success"><p th:text="${successMessage}"></p></div>
+                        <div class="alert alert-success" role="alert" th:if="${msg != null}"><p th:text="${msg}"></p></div>
 
+                        <!-- card -->
+                        <div class="card h-100 card-lg">
+                            <div class="px-6 py-6">
+                                <div class="row justify-content-between">
+                                    <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
+                                        <!-- form -->
+                                        <div class="d-flex" role="search">
+                                            <input id="searchAgente" class="form-control" type="search" placeholder="Buscar por nombre o apellido" aria-label="Search" oninput="filterTable()" />
+                                        </div>
 
-            <div class="main-wrapper">
-                <!-- navbar -->
-                <!-- navbar vertical (para pc)-->
-                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaSolicitudesAgentes')}"></div>
-
-                <!-- navbar vertical (para celular)-->
-                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaSolicitudesAgentes')}"></div>
-
-                <!-- COONTENIDO DE LA PAGINA -->
-                <main class="main-content-wrapper">
-                    <div class="container">
-                        <!-- row -->
-                        <div class="row mb-8">
-                            <div class="col-md-12">
-                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
-                                    <!-- pageheader -->
-                                    <div>
-                                        <h2>Lista de solicitudes para rol de Agente</h2>
-                                        <!-- breacrumb -->
-                                        <nav aria-label="breadcrumb">
-                                            <ol class="breadcrumb mb-0">
-                                                <li class="breadcrumb-item"><a th:href="@{/SuperAdmin}" class="text-inherit">Dashboard</a></li>
-                                                <li class="breadcrumb-item " aria-current="page">Solicitudes</li>
-                                            </ol>
-                                        </nav>
                                     </div>
-                                    <!-- button -->
+                                    <!-- select option -->
+                                    <form class="col-xl-3 col-md-5 col-12 d-flex align-items-center" method="post" th:action="@{/SuperAdmin/listaSolicitudesAgentesFiltro}">
+                                        <select class="form-select me-2" name="indicador">
+                                            <option value="" selected disabled>Postulación</option>
+                                            <option value="0">Directa</option>
+                                            <option value="1">Por Coordinador</option>
+                                        </select>
+                                        <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+                                    </form>
+
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-12 col-12 mb-5">
-                                <div th:if="${successMessage}" class="alert alert-success"><p th:text="${successMessage}"></p></div>
-                                <div class="alert alert-success" role="alert" th:if="${msg != null}"><p th:text="${msg}"></p></div>
+                            <!-- card body -->
+                            <div class="card-body p-0">
+                                <!-- table -->
+                                <div class="table-responsive">
+                                    <table class="table table-centered table-hover mb-0 text-nowrap table-borderless table-with-checkbox">
+                                        <thead class="bg-light">
+                                        <tr>
 
-                                <!-- card -->
-                                <div class="card h-100 card-lg">
-                                    <div class="px-6 py-6">
-                                        <div class="row justify-content-between">
-                                            <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
-                                                <!-- form -->
-                                                <div class="d-flex" role="search">
-                                                    <input id="searchAgente" class="form-control" type="search" placeholder="Buscar por nombre o apellido" aria-label="Search" oninput="filterTable()" />
+
+                                            <th></th>
+                                            <th>Nombres</th>
+                                            <th>Apellidos</th>
+                                            <th>DNI</th>
+                                            <th>Teléfono</th>
+                                            <th>Postulación</th>
+                                            <th>Código Aduanero </th>
+                                            <th>Código de jurisdicción </th>
+
+                                            <th>Zona </th>
+                                            <th></th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="agente,var : ${listaUsuariosSolicitudes}">
+
+                                            <td th:text="${var.index+1}"></td>
+                                            <td th:text="${agente.getNombre()}"></td> <!-- Nombre -->
+                                            <td th:text="${agente.getApellidoPaterno()} + ' ' + ${agente.getApellidoMaterno()}"></td> <!-- Apellidos -->
+                                            <td th:text="${agente.getDni()}"></td> <!-- DNI -->
+                                            <td th:text="${agente.getTelefono()}"></td> <!-- Teléfono -->
+                                            <td th:switch="${agente.getIndicadorSolicitud()}"> <!-- Indicador de solicitud -->
+                                                <span th:case="0" class="badge bg-light-primary text-dark-primary">Directa</span>
+                                                <span th:case="1" class="badge bg-light-info text-dark-info">Por coordinador</span>
+                                            </td>
+                                            <td>
+                                                <span th:text="${agente.getSoladuana()}"></span> <!-- Código Aduana -->
+                                                <span th:text="${agente.getEstadoCodigoAduana()}"
+                                                      th:classappend="${agente.getEstadoCodigoAduana()} == 'Habilitado' ? 'badge bg-success' :
+                                                                                  (${agente.getEstadoCodigoAduana()} == 'Multado' ? 'badge bg-warning' :
+                                                                                  (${agente.getEstadoCodigoAduana()} == 'Cancelado' ? 'badge bg-danger' :
+                                                                                  (${agente.getEstadoCodigoAduana()} == 'Suspendido' ? 'badge bg-info' : 'badge bg-secondary')))">
+                                                            </span> <!-- Estado Código Aduana -->
+                                            </td> <!-- Código Aduana -->
+                                            <td>
+                                                <span th:text="${agente.getSoljurisdiccion()}"></span> <!-- Código Aduana -->
+                                                <span th:text="${agente.getEstadoCodigoJurisdiccion()}"
+                                                      th:classappend="${agente.getEstadoCodigoJurisdiccion()} == 'Habilitado' ? 'badge bg-success' :
+                          (${agente.getEstadoCodigoJurisdiccion()} == 'Multado' ? 'badge bg-warning' :
+                          (${agente.getEstadoCodigoJurisdiccion()} == 'Cancelado' ? 'badge bg-danger' :
+                          (${agente.getEstadoCodigoJurisdiccion()} == 'Suspendido' ? 'badge bg-info' : 'badge bg-secondary')))">
+    </span> <!-- Estado Código Aduana -->
+                                            </td>
+                                            <td th:text="${agente.getNombreZona()}"></td> <!-- Zona -->
+                                            <td>
+                                                <div class="dropdown">
+                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item"
+                                                               href="javascript:void(0);"
+                                                               th:attr="data-id=${agente.getIdusuario()}, data-nombre=${agente.getNombre()}, data-indicador =${agente.getIndicadorSolicitud()}"
+                                                               onclick="confirmDelete(this)">
+                                                                <i class="bi bi-trash me-3"></i>
+                                                                Rechazar
+                                                            </a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/aceptarSolicitud(id=${agente.getIdusuario()}, indicador=${agente.getIndicadorSolicitud()})}">
+                                                                <i class="bi bi-check-circle me-3"></i> <!-- Icono de aceptar -->
+                                                                Aceptar
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/verUsuarioDeSolicitud/{id}(id=${agente.getIdusuario()})}">
+                                                                <i class="bi bi-person me-3"></i> <!-- Icono de usuario individual -->
+                                                                Ver Usuario
+                                                            </a>
+                                                        </li>
+                                                        <!-- FALTA AGREGAR A BD PARA PODER IDENTIFICAR AL COORDINADOR
+                                                        <li th:if="${usuario[7] == 1}">
+                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/verUsuarioDeSolicitud/{id}(id=${usuario[0]})}">
+                                                                <i class="bi bi-person me-3"></i>
+                                                                Ver informacion de coordinador
+                                                            </a>
+                                                        </li>-->
+
+
+                                                    </ul>
                                                 </div>
-
-                                            </div>
-                                            <!-- select option -->
-                                            <form class="col-xl-3 col-md-5 col-12 d-flex align-items-center" method="post" th:action="@{/SuperAdmin/listaSolicitudesAgentesFiltro}">
-                                                <select class="form-select me-2" name="indicador">
-                                                    <option value="" selected disabled>Postulación</option>
-                                                    <option value="0">Directa</option>
-                                                    <option value="1">Por Coordinador</option>
-                                                </select>
-                                                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                    <!-- card body -->
-                                    <div class="card-body p-0">
-                                        <!-- table -->
-                                        <div class="table-responsive">
-                                            <table class="table table-centered table-hover mb-0 text-nowrap table-borderless table-with-checkbox">
-                                                <thead class="bg-light">
-                                                    <tr>
+                                            </td>
 
 
-                                                        <th></th>
-                                                        <th>Nombres</th>
-                                                        <th>Apellidos</th>
-                                                        <th>DNI</th>
-                                                        <th>Teléfono</th>
-                                                        <th>Postulación</th>
-                                                        <th>Código de Despachador Aduanero </th>
-                                                        <th>Código de jurisdicción </th>
-
-                                                        <th>Zona </th>
-                                                        <th></th>
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr th:each="usuario,var : ${listaUsuariosSolicitudes}">
-
-                                                        <td th:text="${var.index+1}"></td>
-                                                        <td th:text="${usuario[1]}"></td> <!-- Nombre -->
-                                                        <td th:text="${usuario[2]} + ' ' + ${usuario[3]}"></td> <!-- Apellidos -->
-                                                        <td th:text="${usuario[4]}"></td> <!-- DNI -->
-                                                        <td th:text="${usuario[5]}"></td> <!-- Teléfono -->
-                                                        <td th:switch="${usuario[7]}"> <!-- Indicador de solicitud -->
-                                                            <span th:case="0" class="badge bg-light-primary text-dark-primary">Directa</span>
-                                                            <span th:case="1" class="badge bg-light-info text-dark-info">Por coordinador</span>
-                                                        </td>
-                                                        <td>
-                                                            <span th:text="${usuario[8]}"></span> <!-- Código Aduana -->
-                                                            <span th:text="${usuario[9]}"
-                                                                  th:classappend="${usuario[9]} == 'Habilitado' ? 'badge bg-success' :
-                          (${usuario[9]} == 'Multado' ? 'badge bg-warning' :
-                          (${usuario[9]} == 'Cancelado' ? 'badge bg-danger' :
-                          (${usuario[9]} == 'Suspendido' ? 'badge bg-info' : 'badge bg-secondary')))">
-    </span> <!-- Estado Código Aduana -->
-                                                        </td> <!-- Código Aduana -->
-                                                        <td>
-                                                            <span th:text="${usuario[10]}"></span> <!-- Código Aduana -->
-                                                            <span th:text="${usuario[11]}"
-                                                                  th:classappend="${usuario[11]} == 'Habilitado' ? 'badge bg-success' :
-                          (${usuario[11]} == 'Multado' ? 'badge bg-warning' :
-                          (${usuario[11]} == 'Cancelado' ? 'badge bg-danger' :
-                          (${usuario[11]} == 'Suspendido' ? 'badge bg-info' : 'badge bg-secondary')))">
-    </span> <!-- Estado Código Aduana -->
-                                                        </td>
-                                                        <td th:text="${usuario[12]}"></td> <!-- Zona -->
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li>
-                                                                        <a class="dropdown-item"
-                                                                           href="javascript:void(0);"
-                                                                           th:attr="data-id=${usuario[0]}, data-nombre=${usuario[1]}"
-                                                                           onclick="confirmDelete(this)">
-                                                                            <i class="bi bi-trash me-3"></i>
-                                                                            Rechazar
-                                                                        </a>
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{'/SuperAdmin/cambiarRolaAgente?id=' + ${usuario[0]}}">
-                                                                            <i class="bi bi-check-circle me-3"></i> <!-- Icono de aceptar -->
-                                                                            Aceptar
-                                                                        </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" th:href="@{/SuperAdmin/verUsuarioDeSolicitud/{id}(id=${usuario[0]})}">
-                                                                            <i class="bi bi-person me-3"></i> <!-- Icono de usuario individual -->
-                                                                            Ver Usuario
-                                                                        </a>
-                                                                    </li>
-                                                                    <!-- FALTA AGREGAR A BD PARA PODER IDENTIFICAR AL COORDINADOR
-                                                                    <li th:if="${usuario[7] == 1}">
-                                                                        <a class="dropdown-item" th:href="@{/SuperAdmin/verUsuarioDeSolicitud/{id}(id=${usuario[0]})}">
-                                                                            <i class="bi bi-person me-3"></i>
-                                                                            Ver informacion de coordinador
-                                                                        </a>
-                                                                    </li>-->
-
-
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-
-
-                                                    </tr>
+                                        </tr>
 
 
 
 
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <!-- Mostrar información de paginación y botones -->
-                                    <div class="d-flex flex-column align-items-center">
-                                        <!-- Texto de paginación centrado -->
-                                        <span id="paginationInfo" class="mb-2">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Mostrar información de paginación y botones -->
+                            <div class="d-flex flex-column align-items-center">
+                                <!-- Texto de paginación centrado -->
+                                <span id="paginationInfo" class="mb-2">
                                             Mostrando página [[${currentPage != null ? currentPage + 1 : 1}]] de [[${totalPages != null ? totalPages : 1}]]
                                         </span>
 
-                                        <!-- Paginación centrada -->
-                                        <nav aria-label="Page navigation example">
-                                            <ul class="pagination justify-content-center">
-                                                <!-- Botón de "Previo" -->
-                                                <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
-                                                    <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
-                                                </li>
+                                <!-- Paginación centrada -->
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-center">
+                                        <!-- Botón de "Previo" -->
+                                        <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
+                                            <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
+                                        </li>
 
-                                                <!-- Páginas numeradas -->
-                                                <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                                    <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${i})}" th:text="${i + 1}"></a>
-                                                </li>
+                                        <!-- Páginas numeradas -->
+                                        <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                            <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${i})}" th:text="${i + 1}"></a>
+                                        </li>
 
-                                                <!-- Botón de "Siguiente" -->
-                                                <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
-                                                    <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-
-                                </div>
+                                        <!-- Botón de "Siguiente" -->
+                                        <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
+                                            <a class="page-link" th:href="@{/SuperAdmin/listaSolicitudesAgentes(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
+                                        </li>
+                                    </ul>
+                                </nav>
                             </div>
+
                         </div>
                     </div>
-                </main>
+                </div>
             </div>
-        </div>
+        </main>
+    </div>
+</div>
 
-        <!-- Libs JS -->
-        <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+<!-- Libs JS -->
+<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
-        <!-- Theme JS -->
-        <script th:src="@{/js/theme.min.js}"></script>
+<!-- Theme JS -->
+<script th:src="@{/js/theme.min.js}"></script>
 
-        <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
-        <script th:src="@{/js/vendors/chart.js}"></script>
+<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+<script th:src="@{/js/vendors/chart.js}"></script>
 
 
-        <!-- SweetAlert2 CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-        <!-- SweetAlert2 JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-	  <script>
-            $(document).ready(function () {
-                // Función para manejar clic en las páginas
-                $('a.page-link').on('click', function () {
-                    const page = $(this).data('page');
-                    if (page !== undefined) {
-                        window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + page;
-                    }
-                });
-
-                // Función para manejar clic en "Previo"
-                $('#prevPage').on('click', function () {
-                    const currentPage = parseInt($('li.active a').data('page'));
-                    if (currentPage > 0) {
-                        window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + (currentPage - 1);
-                    }
-                });
-
-                // Función para manejar clic en "Siguiente"
-                $('#nextPage').on('click', function () {
-                    const currentPage = parseInt($('li.active a').data('page'));
-                    const totalPages = parseInt([[${totalPages}]]);
-                    if (currentPage < totalPages - 1) {
-                        window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + (currentPage + 1);
-                    }
-                });
-            });
-
-        </script>
-        <script>
-            function confirmDelete(element) {
-
-                var id = element.getAttribute("data-id");
-                var nombre = element.getAttribute("data-nombre");
-
-                Swal.fire({
-                    title: `¿Estás seguro de rechazar la solicitud de ${nombre}?`,
-                    text: "Una vez rechazada, no se podrá revertir esta acción",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#28a745', // Color verde para el botón de confirmar rechazo
-                    cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
-                    confirmButtonText: 'Rechazar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirigir al controlador con el ID del usuario
-                        window.location.href = `/SuperAdmin/rechazarSolicitudAgente?id=${id}`;
-                    }
-                });
+<!-- SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Función para manejar clic en las páginas
+        $('a.page-link').on('click', function () {
+            const page = $(this).data('page');
+            if (page !== undefined) {
+                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + page;
             }
+        });
+
+        // Función para manejar clic en "Previo"
+        $('#prevPage').on('click', function () {
+            const currentPage = parseInt($('li.active a').data('page'));
+            if (currentPage > 0) {
+                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + (currentPage - 1);
+            }
+        });
+
+        // Función para manejar clic en "Siguiente"
+        $('#nextPage').on('click', function () {
+            const currentPage = parseInt($('li.active a').data('page'));
+            const totalPages = parseInt([[${totalPages}]]);
+            if (currentPage < totalPages - 1) {
+                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + (currentPage + 1);
+            }
+        });
+    });
+
+</script>
+<script>
+    function confirmDelete(element) {
+
+        var id = element.getAttribute("data-id");
+        var nombre = element.getAttribute("data-nombre");
+        var indicador = element.getAttribute("data-indicador"); // Obtener el indicador
+
+        Swal.fire({
+            title: `¿Estás seguro de rechazar la solicitud de ${nombre}?`,
+            text: "Una vez rechazada, no se podrá revertir esta acción",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745', // Color verde para el botón de confirmar rechazo
+            cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
+            confirmButtonText: 'Rechazar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirigir al controlador con el ID del usuario y el indicador
+                window.location.href = `/SuperAdmin/rechazarSolicitudAgente?id=${id}&indicador=${indicador}`;
+            }
+        });
+    }
 
 
-            function filterTable() {
-                const input = document.getElementById("searchAgente");
-                const filter = input.value.toLowerCase();
-                const table = document.querySelector("table tbody");
-                const rows = table.getElementsByTagName("tr");
+    function filterTable() {
+        const input = document.getElementById("searchAgente");
+        const filter = input.value.toLowerCase();
+        const table = document.querySelector("table tbody");
+        const rows = table.getElementsByTagName("tr");
 
-                for (let i = 0; i < rows.length; i++) {
-                    const cells = rows[i].getElementsByTagName("td");
-                    let match = false;
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let match = false;
 
-                    for (let j = 0; j < cells.length; j++) {
-                        if (cells[j].innerText.toLowerCase().includes(filter)) {
-                            match = true;
-                            break;
-                        }
-                    }
-                    rows[i].style.display = match ? "" : "none";
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j].innerText.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
                 }
             }
-        </script>
-    </body>
+            rows[i].style.display = match ? "" : "none";
+        }
+    }
+</script>
+</body>
 </html>

@@ -66,7 +66,7 @@
       <div class="border-bottom">
          <!-- navbar -->
          <!-- barra superior (para pc)-->
-         <div th:insert="fragments/navbarUsuarioFinal :: navbar"></div>
+         <div th:insert="~{fragments/navbarUsuarioFinal :: navbar}"></div>
       </div>
    </div>
    <!-- Modal -->
@@ -118,7 +118,7 @@
                   <!-- col -->
                   <div class="col-12">
                      <label for="direction" class="form-label">Código de jurisdicción </label>
-                     <input type="text" class="form-control" th:name="codigoJurisdiccion" th:value="${usuario.distrito.codigosJurisdiccion}" aria-label="Dirección" required="" readonly/>
+                     <input type="text" class="form-control" th:name="codigoJurisdiccion" th:value="${usuario.agtCodigojurisdiccion}" aria-label="Dirección" required="" readonly/>
                   </div>
 
                   <!-- col -->

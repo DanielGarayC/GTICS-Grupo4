@@ -46,7 +46,7 @@ public class Usuario {
     private boolean baneado;
 
     @Column(name = "agt_codigoaduana", length = 45)
-    @Size(min = 3, max = 3, message = "El código aduanero debe tener exactamente 3 dígitos", groups = {AgenteValidationGroup.class})
+    @Size(min = 6, max = 6, message = "El código aduanero debe tener exactamente 6 dígitos", groups = {AgenteValidationGroup.class})
     @NotBlank(message = "El código aduanero no puede estar vacío", groups = {AgenteValidationGroup.class})
     @Pattern(regexp = "\\d+", message = "El código aduanero debe contener solo dígitos", groups = {AgenteValidationGroup.class})
     private String agtCodigoaduana;
@@ -63,9 +63,6 @@ public class Usuario {
     @Column(name = "az_fechanacimiento")
     private LocalDate azFechanacimiento;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "idsolicitudagente")
-    private Solicitudagente idSolicitudAgente;
 
     @Column(name = "agt_codigojurisdiccion", length = 45)
     @Size(min = 4, max = 6, message = "El código de jurisdicción debe tener entre 4 a 6 dígitos", groups = {AgenteValidationGroup.class})

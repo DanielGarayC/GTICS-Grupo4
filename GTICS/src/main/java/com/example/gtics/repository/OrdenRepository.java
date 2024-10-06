@@ -69,8 +69,8 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "    o.idOrden, \n" +
             "    o.fechaOrden, \n" +
             "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal,  -- Cálculo del monto total con máximo costo de envío\n" +
-            "    eo.nombreEstado AS estadoOrden, \n" +
-            "    co.nombreControl AS controlOrden, \n" +
+            "    eo.idEstadoOrden AS estadoOrden, \n" +
+            "    co.idControlOrden AS controlOrden, \n" +
             "    u.nombre, \n" +
             "    u.apellidoPaterno \n" +
             "FROM usuario u \n" +
@@ -84,6 +84,48 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "GROUP BY o.idOrden;")
     Page<OrdenCarritoDto> obtenerCarritoConDto(Integer idUsuario, Pageable pageable);
 
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden, \n" +
+            "    o.fechaOrden, \n" +
+            "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal,  -- Cálculo del monto total con máximo costo de envío\n" +
+            "    eo.idEstadoOrden AS estadoOrden, \n" +
+            "    co.idControlOrden AS controlOrden, \n" +
+            "    u.nombre, \n" +
+            "    u.apellidoPaterno, \n" +
+            "    o.solicitarCancelarOrden, \n" +
+            "    o.ordenEliminada, \n" +
+            "    o.idAgente \n" +
+            "FROM usuario u \n" +
+            "JOIN carritocompra c ON u.idUsuario = c.idUsuario \n" +
+            "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra \n" +
+            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra \n" +
+            "JOIN producto p ON phc.idProducto = p.idProducto \n" +
+            "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden \n" +
+            "JOIN controlorden co ON o.idControlOrden = co.idControlOrden \n" +
+            "WHERE u.idUsuario = ?1 and ordenEliminada=0 \n" +
+            "GROUP BY o.idOrden;")
+    List<OrdenCarritoDto> obtenerCarritoUFConDto(Integer idUsuario);
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden, \n" +
+            "    o.fechaOrden, \n" +
+            "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal,  -- Cálculo del monto total con máximo costo de envío\n" +
+            "    eo.idEstadoOrden AS estadoOrden, \n" +
+            "    co.idControlOrden AS controlOrden, \n" +
+            "    u.nombre, \n" +
+            "    u.apellidoPaterno, \n" +
+            "    o.solicitarCancelarOrden, \n" +
+            "    o.ordenEliminada, \n" +
+            "    o.idAgente \n" +
+            "FROM usuario u \n" +
+            "JOIN carritocompra c ON u.idUsuario = c.idUsuario \n" +
+            "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra \n" +
+            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra \n" +
+            "JOIN producto p ON phc.idProducto = p.idProducto \n" +
+            "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden \n" +
+            "JOIN controlorden co ON o.idControlOrden = co.idControlOrden \n" +
+            "WHERE u.idUsuario = ?1 and ordenEliminada=0 and o.idEstadoOrden=?2 \n" +
+            "GROUP BY o.idOrden;")
+    List<OrdenCarritoDto> obtenerCarritoUFConDtoFiltro(Integer idUsuario,Integer idEstadoOrden);
 
     @Query(value = "SELECT \n" +
             "    (SELECT fp.foto FROM fotosproducto fp WHERE fp.idProducto = p.idProducto LIMIT 1) AS primeraFotoProducto,\n" +
@@ -210,20 +252,30 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "ORDER BY o.idOrden;")
     List<MontoTotalOrdenDto> obtenerMontoTotalOrdenesSinAsignar(Integer idControl);
 
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlORden=1;")
-    List<Orden> ordenesSinAsignar();
+    @Query(nativeQuery = true, value = "SELECT * from orden where idControlORden=1 order by idOrden desc limit 5;")
+    List<Orden> ultimasOrdenesSinAsignar();
 
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=2 and idAgente=?1;")
-    List<Orden> ordenesPendientes(Integer idAgente);
+    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=2 and idAgente=?1 order by idOrden desc limit 5;")
+    List<Orden> ultimasOrdenesPendientes(Integer idAgente);
 
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=3 and idAgente=?1;")
-    List<Orden> ordenesenProceso(Integer idAgente);
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=4 and idAgente=?1;")
-    List<Orden> ordenesResueltas(Integer idAgente);
+    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=3 and idAgente=?1 order by idOrden desc limit 5;")
+    List<Orden> ultimasOrdenesenProceso(Integer idAgente);
+    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=4 and idAgente=?1 order by idOrden desc limit 5;")
+    List<Orden> ultimasOrdenesResueltas(Integer idAgente);
 
 
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE orden SET ordenEliminada=1, razonEliminacion = ?2 WHERE (idOrden = ?1);")
     void eliminadoLogicoDeOrden(Integer idOrden,String razonEliminacion);
+
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE orden SET solicitarCancelarOrden=1 WHERE (idOrden = ?1);")
+    void solicitarEliminarOrden(Integer idOrden);
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `gticsdb`.`orden` SET `idAgente` = '13' WHERE (`idOrden` = ?1);")
+    void solicitarUnAgente(Integer idOrden);
 }

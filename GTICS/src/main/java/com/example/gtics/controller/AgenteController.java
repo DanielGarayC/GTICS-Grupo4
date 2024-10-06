@@ -49,10 +49,10 @@ public class AgenteController {
     @GetMapping({"Agente"})
     public String Inicio(Model model){
         Integer idAgente = 13;
-        List<Orden> listaOrdenesSinAsignar = ordenRepository.ordenesSinAsignar();
-        List<Orden> listaOrdenesPendientes = ordenRepository.ordenesPendientes(idAgente);
-        List<Orden> listaOrdenesEnProceso = ordenRepository.ordenesenProceso(idAgente);
-        List<Orden> listaOrdenesResueltas = ordenRepository.ordenesResueltas(idAgente);
+        List<Orden> listaOrdenesSinAsignar = ordenRepository.ultimasOrdenesSinAsignar();
+        List<Orden> listaOrdenesPendientes = ordenRepository.ultimasOrdenesPendientes(idAgente);
+        List<Orden> listaOrdenesEnProceso = ordenRepository.ultimasOrdenesenProceso(idAgente);
+        List<Orden> listaOrdenesResueltas = ordenRepository.ultimasOrdenesResueltas(idAgente);
 
         model.addAttribute("listaOrdenesSinAsignar",listaOrdenesSinAsignar);
         model.addAttribute("listaOrdenesPendientes",listaOrdenesPendientes);
@@ -255,9 +255,11 @@ public class AgenteController {
         System.out.println("nuevo distrito: " + orden.getIdCarritoCompra().getIdUsuario().getDistrito().getNombre());
         System.out.println( "nueva direccion: " + orden.getIdCarritoCompra().getIdUsuario().getDireccion());
 
-        //FALTA CORREGIR
+        /*
         orden.setSolicitarCancelarOrden(0);
         orden.setOrdenEliminada(0);
+
+         */
         try {
             ordenRepository.save(orden);
             attr.addFlashAttribute("msg", "La orden se ha actualizado exitosamente");

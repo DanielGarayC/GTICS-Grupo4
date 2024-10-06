@@ -170,7 +170,9 @@
 
 
 									   <td>
-										   <span th:each="monto : ${listaMonto}" th:if="${monto.idOrden == orden.id}" th:text="${monto.montoTotal}"></span>
+										   <span th:each="monto : ${listaMonto}" th:if="${monto.idOrden == orden.id}"
+												 th:text="${#numbers.formatDecimal(monto.montoTotal, 1, 2)}"></span>
+
 									   </td>
 
 

@@ -1,5 +1,6 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.dto.solAgente;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import org.springframework.core.io.ByteArrayResource;
@@ -38,7 +39,8 @@ public class SuperAdminController {
                                 OrdenRepository ordenRepository,
                                 CategoriaRepository categoriaRepository,
                                 SubcategoriaRepository subcategoriaRepository,
-                                TiendaRepository tiendaRepository, FotosProductoRepository fotosProductoRepository) {
+                                TiendaRepository tiendaRepository, FotosProductoRepository fotosProductoRepository,
+                                SolicitudAgenteRepository solicitudAgenteRepository) {
         this.usuarioRepository = usuarioRepository;
         this.zonaRepository = zonaRepository;
         this.rolRepository = rolRepository;
@@ -50,12 +52,17 @@ public class SuperAdminController {
         this.subcategoriaRepository = subcategoriaRepository;
         this.tiendaRepository = tiendaRepository;
         this.fotosProductoRepository = fotosProductoRepository;
+        this.solicitudAgenteRepository = solicitudAgenteRepository;
+
     }
 
 
     private final DistritoRepository distritoRepository;
     private final ProductoRepository productoRepository;
     private final OrdenRepository ordenRepository;
+
+    private final SolicitudAgenteRepository solicitudAgenteRepository;
+
 
     @GetMapping({"SuperAdmin/dashboard", "SuperAdmin"})
     public String dashboard(Model model) {
@@ -122,6 +129,17 @@ public class SuperAdminController {
         }
         model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/admin-zonal-edit";
+    }
+    @GetMapping("SuperAdmin/verAdminZonal/{id}")
+    public String verAdminZonal(@PathVariable("id") Integer id, Model model){
+        Optional<Usuario> optionalAZ = usuarioRepository.findById(id);
+        if (optionalAZ.isPresent() && optionalAZ.get().getRol().getId() == 2) {
+            model.addAttribute("usuario", optionalAZ.get());
+        } else {
+            model.addAttribute("error", "Admin Zonal no encontrado o el rol no es válido");
+            return "redirect:/SuperAdmin/listaAdminZonal";
+        }
+        return "SuperAdmin/GestionAdminZonal/admin-zonal-info";
     }
 
     @GetMapping("SuperAdmin/crearAdminZonal")
@@ -263,6 +281,19 @@ public class SuperAdminController {
         return "SuperAdmin/GestionAgentes/agent-edit";
     }
 
+    @GetMapping("SuperAdmin/verAgente/{id}")
+    public String verAgente(@PathVariable("id") Integer id, Model model, @RequestParam(required = false) String origin){
+        Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
+        if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 3) {
+            model.addAttribute("usuario", optionalAgente.get());
+            model.addAttribute("origin", origin);
+        } else {
+            model.addAttribute("error", "Agente no encontrado o el rol no es válido");
+            return "SuperAdmin/GestionAgentes/agent-list";  // Redirigir a la lista si no se encuentra el agente
+        }
+        return "SuperAdmin/GestionAgentes/agent-ver-usuario";
+    }
+
     @PostMapping("/SuperAdmin/Agente/guardar")
     public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model, @RequestParam("agentPhoto") MultipartFile foto) {
         try {
@@ -346,7 +377,7 @@ public class SuperAdminController {
         Pageable pageable = PageRequest.of(page, size);
 
         // Realizar la consulta paginada
-        Page<Object[]> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesConEstadosAleatoriosConPaginacion(pageable);
+        Page<solAgente> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesAgenteConPaginacion(pageable);
 
         // Verificar si hay resultados
         if (listaUsuariosSolicitudes.isEmpty()) {
@@ -369,7 +400,7 @@ public class SuperAdminController {
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }
 
-        List<Object[]> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesConEstadosAleatoriosFiltro(indicador);
+        List<solAgente> listaUsuariosSolicitudes = usuarioRepository.mostrarSolicitudesAgenteFiltro(indicador);
 
         // Añadir la lista de solicitudes al modelo
         model.addAttribute("listaUsuariosSolicitudes", listaUsuariosSolicitudes);
@@ -380,7 +411,7 @@ public class SuperAdminController {
 
 
     @GetMapping("/SuperAdmin/rechazarSolicitudAgente")
-    public String RechazarSolicitudAgente(@RequestParam Integer id,
+    public String RechazarSolicitudAgente(@RequestParam Integer id, @RequestParam("indicador") Integer indicador,
                                           RedirectAttributes redirectAttributes) {
 
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
@@ -389,10 +420,19 @@ public class SuperAdminController {
 
             Usuario usuario = optUsuario.get();
 
-            usuario.setIdSolicitudAgente(null);
-            usuarioRepository.save(usuario);
+            solicitudAgenteRepository.deleteByIdUsuario(usuario);
 
             redirectAttributes.addFlashAttribute("successMessage", "El usuario ha sido rechazado éxitosamente.");
+
+            switch (indicador){
+                case 0:
+                    //No hace nada y elimina la solicitud
+                    break;
+                case 1:
+                    //Eliminar cuenta
+                    usuarioRepository.deleteById(id);
+                    break;
+            }
 
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
 
@@ -411,10 +451,19 @@ public class SuperAdminController {
     }
 
 
-    @GetMapping("SuperAdmin/cambiarRolaAgente")
-    public String cambiarRolaAgente(Model model, @RequestParam("id") Integer id) {
+    @GetMapping("SuperAdmin/aceptarSolicitud")
+    public String cambiarRolaAgente(Model model, @RequestParam("id") Integer id, @RequestParam("indicador") Integer indicador) {
 
-        usuarioRepository.actualizarRolAAgente(id);
+        switch (indicador){
+            case 0:
+                usuarioRepository.actualizarRolAAgente(id);
+                break;
+            case 1:
+                usuarioRepository.activarCuenta(id);
+                break;
+        }
+        solicitudAgenteRepository.deleteByIdUsuario(usuarioRepository.findUsuarioById(id));
+
 
         return "redirect:/SuperAdmin/listaSolicitudesAgentes";
     }
