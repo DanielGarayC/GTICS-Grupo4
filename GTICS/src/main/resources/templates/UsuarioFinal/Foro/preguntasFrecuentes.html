@@ -77,6 +77,8 @@
                       <span class="accordion-title" th:text="${pregunta.pregunta}"></span>
                       <span class="icon" aria-hidden="true"></span>
                     </button>
+                      <!-- Ver más -->
+
                     <div class="accordion-content">
                         <div th:each="respuesta : ${respuestas}" th:if="${respuesta.idPregunta.id} == ${pregunta.id}">
                           <p><strong th:text="${respuesta.getIdUsuario().nombre + ' ' + respuesta.getIdUsuario().apellidoPaterno} + ': '"></strong><span th:text="${respuesta.contenidoRespuesta}"></span></p>
@@ -379,12 +381,18 @@
                     const { value: formValues } = await Swal.fire({
                         title: "Redactar Pregunta",
                         html:
-                            '<textarea id="pregunta" class="swal2-input" placeholder="Escribe tu pregunta aquí..."></textarea>' +
-                            '<textarea id="descripcion" class="swal2-input" placeholder="Escribe una descripción (opcional)..."></textarea>',
+                            '<div style="margin-bottom: 10px;"><textarea id="pregunta" class="swal2-textarea" placeholder="Escribe tu pregunta aquí..." style="width: 80%; height: 60px;"></textarea></div>' +
+                            '<div><textarea id="descripcion" class="swal2-textarea" placeholder="Escribe una descripción (opcional)..." style="width: 80%; height: 120px;"></textarea></div>',
                         focusConfirm: false,
                         showCancelButton: true,
                         confirmButtonText: 'Enviar',
                         cancelButtonText: 'Cancelar',
+                        customClass: {
+                            confirmButton: 'swal2-confirm swal2-styled btn btn-primary',  // Aumentamos el tamaño y ajustamos el estilo
+                            cancelButton: 'swal2-cancel swal2-styled btn btn-secondary'
+                        },
+                        width: '700px',  // Ajustar el tamaño del modal
+                        buttonsStyling: false,
                         preConfirm: () => {
                             const pregunta = document.getElementById('pregunta').value;
                             const descripcion = document.getElementById('descripcion').value;
@@ -430,8 +438,19 @@
                         }
                     }
                 }
+                //Para el ver más (chambea bruno)
+                function toggleDescripcion(element) {
+                    const descripcionDiv = element.nextElementSibling;  // Selecciona el siguiente elemento (la descripción)
 
-
+                    // Alternar visibilidad
+                    if (descripcionDiv.style.display === "none" || descripcionDiv.style.display === "") {
+                        descripcionDiv.style.display = "block";
+                        element.textContent = "Ver menos";  // Cambiar el texto a "Ver menos"
+                    } else {
+                        descripcionDiv.style.display = "none";
+                        element.textContent = "Ver más";  // Cambiar el texto de nuevo a "Ver más"
+                    }
+                }
             </script>
 
    </body>
