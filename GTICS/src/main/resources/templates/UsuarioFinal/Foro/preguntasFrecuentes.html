@@ -72,27 +72,33 @@
 
                 <div class="accordion">
 
-                  <div class="accordion-item" th:each="pregunta : ${preguntas}">
+                  <div class="accordion-item" th:each="pregunta : ${preguntas}" th:data-id-pregunta="${pregunta.id}">
                     <button id="accordion-button-1" class="accordion-btn" aria-expanded="false">
-                      <span class="accordion-title" th:value="${pregunta.pregunta}"></span>
+                      <span class="accordion-title" th:text="${pregunta.pregunta}"></span>
                       <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
-                      <p><strong>María Angeles:</strong> Depende del método de envío y aduanas. Generalmente entre 15 y 30 días.</p>
-                      <hr>
-                      <p><strong>José Miguel:</strong> Yo pedí por envío express y me llegó en 7 días.</p>
-                      <hr>
-                      <div class="text-center">
-                        <button class="btn btn-outline-primary btn-sm small-reply-btn">Redactar Respuesta</button>
-                      </div>
-
-                      <div class="reply-section" style="display: none;">
-                        <h5>Escribe tu respuesta</h5>
-                        <textarea class="form-control mb-3" rows="3" placeholder="Escribe tu respuesta..."></textarea>
-                        <div class="text-right">
-                            <button class="btn btn-outline-primary btn-sm small-reply-btn btn-reply">Enviar Respuesta</button>
+                        <div th:each="respuesta : ${respuestas}" th:if="${respuesta.idPregunta.id} == ${pregunta.id}">
+                          <p><strong th:text="${respuesta.getIdUsuario().nombre + ' ' + respuesta.getIdUsuario().apellidoPaterno} + ': '"></strong><span th:text="${respuesta.contenidoRespuesta}"></span></p>
+                          <hr>
                         </div>
-                      </div>
+                        <div class="text-center">
+                            <button class="btn btn-outline-primary btn-sm small-reply-btn">Responder</button>
+                        </div>
+
+                      <form class="reply-section" style="display: none;">
+                        <h5>Escribe tu respuesta</h5>
+                          <form th:action="@{/UsuarioFinal/faq/newRespuesta}" method="POST">
+                              <!-- Campo oculto para enviar el ID de la pregunta -->
+                              <input type="hidden" name="idPregunta" th:value="${pregunta.id}" />
+
+                              <!-- Textarea para escribir la respuesta -->
+                              <textarea class="form-control mb-3" rows="3" name="contenidoRespuesta" placeholder="Escribe tu respuesta..."></textarea>
+                              <div class="text-right">
+                                  <button type="submit" class="btn btn-outline-primary btn-sm small-reply-btn btn-reply">Enviar Respuesta</button>
+                              </div>
+                          </form>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -371,26 +377,53 @@
             <script>
                 async function pregunta() {
                     const { value: text } = await Swal.fire({
-                      input: "textarea",
-                      inputLabel: "Redactar Pregunta",
-                      inputPlaceholder: "Escribe tu pregunta aquí...",
-                      inputAttributes: {
-                        "aria-label": "Escribe tu pregunta aquí"
-                      },
-                      showCancelButton: true,
-                      confirmButtonText: 'Enviar',
-                      cancelButtonText: 'Cancelar'
+                        input: "textarea",
+                        inputLabel: "Redactar Pregunta",
+                        inputPlaceholder: "Escribe tu pregunta aquí...",
+                        inputAttributes: {
+                            "aria-label": "Escribe tu pregunta aquí"
+                        },
+                        showCancelButton: true,
+                        confirmButtonText: 'Enviar',
+                        cancelButtonText: 'Cancelar'
                     });
-                  
+
                     if (text) {
-                      Swal.fire({
-                        title: 'Pregunta enviada',
-                        text: 'Tu pregunta es: ' + text,
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                      });
+                        // Si el usuario ha escrito una pregunta, enviamos la pregunta al servidor
+                        const response = await fetch('/UsuarioFinal/faq/newPregunta', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: new URLSearchParams({
+                                'pregunta': text
+                            })
+                        });
+
+                        if (response.ok) {
+                            // Si la petición fue exitosa, mostramos el mensaje de éxito
+                            Swal.fire({
+                                title: 'Pregunta enviada',
+                                text: 'Tu pregunta ha sido enviada: ' + text,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Recargar la página para mostrar la nueva pregunta
+                                window.location.reload();
+                            });
+                        } else {
+                            // Si hay un error en la petición, mostramos un error
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Hubo un problema al enviar la pregunta.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
                     }
-                  }
+                }
+
+
             </script>
 
    </body>

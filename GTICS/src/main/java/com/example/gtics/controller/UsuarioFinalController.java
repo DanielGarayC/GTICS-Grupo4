@@ -21,10 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 
 @Controller
 public class UsuarioFinalController {
@@ -312,6 +310,32 @@ public class UsuarioFinalController {
     @GetMapping("/UsuarioFinal/faq")
     public String preguntasFrecuentes(Model model){
         model.addAttribute("preguntas",foroPreguntaRepository.findAll());
+        model.addAttribute("respuestas",foroRespuestaRepository.findAll());
         return "UsuarioFinal/Foro/preguntasFrecuentes";
+    }
+    @PostMapping("/UsuarioFinal/faq/newPregunta")
+    public String crearPregunta(@RequestParam("pregunta") String pregunta) {
+        Usuario user = usuarioRepository.findUsuarioById(2); //estático por ahora
+        Foropregunta question = new Foropregunta();
+        question.setPregunta(pregunta);
+        question.setFechaCreacion(LocalDate.now());
+        question.setIdUsuario(user);
+        foroPreguntaRepository.save(question);
+        return "redirect:/UsuarioFinal/faq";
+    }
+    @PostMapping("/UsuarioFinal/faq/newRespuesta")
+    public String crearPregunta(@RequestParam("idPregunta") int idPregunta,@RequestParam("contenidoRespuesta") String contenidoRespuesta) {
+        Usuario user = usuarioRepository.findUsuarioById(2);  // Ejemplo estático
+        Optional<Foropregunta> pregunta = foroPreguntaRepository.findById(idPregunta);
+        System.out.println(pregunta.get().getPregunta());
+        System.out.println(contenidoRespuesta);
+        Fororespuesta respuesta = new Fororespuesta();
+        respuesta.setIdPregunta(pregunta.get());
+        respuesta.setContenidoRespuesta(contenidoRespuesta);
+        respuesta.setFechaRespuesta(LocalDate.now());
+        respuesta.setIdUsuario(user);  // Asignar el usuario que responde
+
+        foroRespuestaRepository.save(respuesta);  // Guardar la respuesta
+        return "redirect:/UsuarioFinal/faq";
     }
 }
