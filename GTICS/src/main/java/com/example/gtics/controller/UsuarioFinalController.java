@@ -196,124 +196,85 @@ public class UsuarioFinalController {
 
     @PostMapping("/UsuarioFinal/Resena/GuardarFotos")
     @ResponseBody
-    public ResponseEntity<?> guardarFotos(@RequestParam("fotos") List<MultipartFile> fotos, HttpSession session) {
-        List<String> tempFileNames = new ArrayList<>();
+    public ResponseEntity<?> guardarFotos(@RequestParam("fotos") List<MultipartFile> fotos) {
+        List<String> nombresFotos = new ArrayList<>();
 
         try {
-            // Obtener la ruta absoluta del directorio temporal dentro de la aplicación
-            String tempDirPath = session.getServletContext().getRealPath("/tempUploads/");
-            File tempDir = new File(tempDirPath);
-
-            // Verificar y crear el directorio si no existe
-            if (!tempDir.exists()) {
-                boolean dirCreated = tempDir.mkdirs();
-                if (!dirCreated) {
-                    return new ResponseEntity<>("No se pudo crear el directorio temporal para subir las fotos.", HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-
             for (MultipartFile foto : fotos) {
                 if (!foto.isEmpty()) {
-                    // Generar un nombre de archivo temporal único
-                    String tempFileName = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
-                    File tempFile = new File(tempDir, tempFileName);
+                    // Guardar cada archivo
+                    Fotosresena fotosresena = new Fotosresena();
+                    fotosresena.setFoto(foto.getBytes());
 
-                    // Guardar el archivo en el directorio temporal
-                    foto.transferTo(tempFile);
 
-                    tempFileNames.add(tempFileName);
+                    nombresFotos.add(foto.getOriginalFilename()); // Añadir el nombre del archivo
                 }
             }
-
-            // Almacenar los nombres de archivos temporales en la sesión para su uso posterior
-            session.setAttribute("uploadedPhotos", tempFileNames);
-
-            return new ResponseEntity<>(tempFileNames, HttpStatus.OK);
+            return new ResponseEntity<>(nombresFotos, HttpStatus.OK); // Respuesta exitosa con los nombres de los archivos subidos
         } catch (IOException e) {
             e.printStackTrace();
-            return new ResponseEntity<>("Error guardando las fotos", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error guardando las fotos", HttpStatus.INTERNAL_SERVER_ERROR); // Respuesta de error
         }
     }
 
-
     @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
-    @Transactional
+    @Transactional // Ensure both the review and photos are saved within the same transaction
     public String guardarResena(@ModelAttribute("resena") Resena resena,
                                 @RequestParam("reviewTitle") String reviewTitle,
                                 @RequestParam("reviewOpinion") String reviewOpinion,
                                 @RequestParam("calificacionAtencion") int calificacionAtencion,
                                 @RequestParam("calificacionCalidad") int calificacionCalidad,
-                                HttpSession session,
+                                @RequestParam("uploadedPhotos") String uploadedPhotos, // Receive the uploaded photos
                                 BindingResult bindingResult,
                                 RedirectAttributes attr,
                                 Model model) {
 
-        // Establecer los atributos de la reseña
+        // Set review attributes
         resena.setTema(reviewTitle);
         resena.setOpinion(reviewOpinion);
 
-        // Asignar calificaciones
+        // Assigning quality rating
         Calidad calidad = new Calidad();
         calidad.setId(calificacionCalidad);
         resena.setIdCalidad(calidad);
 
+        // Assigning agent attention rating
         Atencion atencion = new Atencion();
         atencion.setId(calificacionAtencion);
         resena.setIdAtencion(atencion);
 
-        // Asociar producto por defecto si es necesario
+        // Check if product is associated, otherwise set default product
         if (resena.getProducto() == null) {
             Producto productoDefault = new Producto();
-            productoDefault.setId(1);
+            productoDefault.setId(1); // Set the default product ID
             resena.setProducto(productoDefault);
         }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", "Por favor, revisa los campos e inténtalo nuevamente.");
-            return "UsuarioFinal/Productos/reviuw"; // Asegúrate de que esta es la vista correcta
+            return "UsuarioFinal/Resena/crearResena";
         }
 
         try {
-            // Guardar la reseña
+            // First, save the review and get the generated ID
             Resena nuevaResena = resenaRepository.save(resena);
-
-            // Recuperar los nombres de archivos temporales de la sesión
-            // Recuperar los nombres de archivos temporales de la sesión
-            List<String> tempFileNames = (List<String>) session.getAttribute("uploadedPhotos");
-
-            if (tempFileNames != null && !tempFileNames.isEmpty()) {
-                System.out.println("Archivos recibidos: " + tempFileNames);  // Depuración: Imprimir archivos
-
-                String tempDirPath = session.getServletContext().getRealPath("/tempUploads/");
-                File tempDir = new File(tempDirPath);
-
-                for (String tempFileName : tempFileNames) {
-                    File tempFile = new File(tempDir, tempFileName);
-                    if (tempFile.exists()) {
-                        System.out.println("Procesando archivo: " + tempFileName);  // Depuración: archivo procesado
-
-                        byte[] fileContent = Files.readAllBytes(tempFile.toPath());
-
-                        Fotosresena fotosresena = new Fotosresena();
-                        fotosresena.setFoto(fileContent);
-                        fotosresena.setIdResena(nuevaResena); // Asociar la foto con la reseña
-
-                        // Guardar en la base de datos
-                        fotosResenaRepository.save(fotosresena);
-                        System.out.println("Foto guardada en la base de datos: " + tempFileName);
-
-                        // Eliminar el archivo temporal después de guardarlo
-                        tempFile.delete();
-                    } else {
-                        System.out.println("Archivo no encontrado: " + tempFileName);
-                    }
-                }
-
-                session.removeAttribute("uploadedPhotos");
-            } else {
-                System.out.println("No se encontraron fotos en la sesión.");
+            if (nuevaResena.getId() == null) {
+                throw new RuntimeException("Error al guardar la reseña. El ID es nulo.");
             }
 
+            System.out.println("Reseña guardada con éxito. ID: " + nuevaResena.getId());
+
+            // Save photos if there are any uploaded
+            if (!uploadedPhotos.isEmpty()) {
+                String[] fotos = uploadedPhotos.split(",");
+                for (String foto : fotos) {
+                    Fotosresena fotosresena = new Fotosresena();
+                    fotosresena.setFoto(foto.getBytes()); // Adjust this to properly handle file content
+                    fotosresena.setIdResena(nuevaResena); // Associate the photos with the newly saved review
+                    fotosResenaRepository.save(fotosresena);
+                    System.out.println("Foto asociada a la reseña guardada correctamente.");
+                }
+            }
 
             attr.addFlashAttribute("msg", "Reseña creada exitosamente.");
         } catch (Exception e) {

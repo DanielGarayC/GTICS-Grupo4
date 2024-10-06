@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -304,33 +303,23 @@
       <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
       <script th:src="@{/js/vendors/slick-slider.js}"></script>
       <script th:src="@{/js/vendors/dropzone.js}"></script>
-
-
       <script>
-         document.addEventListener("DOMContentLoaded", function () {
+         document.addEventListener("DOMContentLoaded", function() {
             if (Dropzone.instances.length > 0) {
                var existingDropzone = Dropzone.instances[0];
 
-               existingDropzone.options.autoProcessQueue = false;  // No procesar automáticamente
-               existingDropzone.options.url = "/UsuarioFinal/Resena/GuardarFotos";  // URL a la que se enviarán las fotos
-               existingDropzone.options.paramName = "fotos";  // Nombre del parámetro en el backend, que Spring debe reconocer como una lista
+               existingDropzone.options.autoProcessQueue = false;  // No subir las fotos automáticamente
+               existingDropzone.options.url = "/UsuarioFinal/Resena/GuardarFotos";  // URL para subir fotos
+               existingDropzone.options.paramName = "fotos";  // Nombre del parámetro en el backend
                existingDropzone.options.parallelUploads = 5;  // Subir hasta 5 archivos en paralelo
 
-
-               // Mostrar archivos en cola para debugging
-               existingDropzone.on("addedfile", function(file) {
-                  console.log("Archivo añadido a la cola: ", file.name);
-               });
-
-               // Evento del botón de enviar reseña
-               document.getElementById("submitResena").addEventListener("click", function (e) {
+               // Evento al hacer clic en el botón de enviar
+               document.getElementById("submitResena").addEventListener("click", function(e) {
                   e.preventDefault();
-
-                  console.log("Archivos en cola:", existingDropzone.getQueuedFiles());
 
                   // Si hay archivos en la cola, subirlos primero
                   if (existingDropzone.getQueuedFiles().length > 0) {
-                     existingDropzone.on("queuecomplete", function () {
+                     existingDropzone.on("queuecomplete", function() {
                         // Llenar el campo oculto con los nombres de las fotos subidas
                         var uploadedPhotosField = document.getElementById('uploadedPhotos');
                         var uploadedFiles = existingDropzone.getAcceptedFiles().map(file => file.name).join(',');
@@ -340,9 +329,7 @@
                         document.getElementById("resenaForm").submit();
                      });
 
-                     // Procesar la cola
                      existingDropzone.processQueue();
-
                   } else {
                      // Si no hay archivos, enviar el formulario directamente
                      document.getElementById("resenaForm").submit();
@@ -350,15 +337,19 @@
                });
 
                // Manejar errores durante la subida
-               existingDropzone.on("error", function (file, errorMessage, xhr) {
-                  console.error("Error uploading file: " + file.name + ". Message: " + JSON.stringify(errorMessage));
+               existingDropzone.on("error", function(file, errorMessage, xhr) {
+                  console.error("Error al subir el archivo: " + file.name + ". Mensaje: " + errorMessage);
                   if (xhr) {
-                     console.error("Server response: " + xhr.responseText);
+                     console.error("Respuesta del servidor: " + xhr.responseText);
                   }
                });
             }
          });
+
+
       </script>
+
+
 
 
 
