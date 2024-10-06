@@ -314,18 +314,21 @@ public class UsuarioFinalController {
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
     @PostMapping("/UsuarioFinal/faq/newPregunta")
-    public String crearPregunta(@RequestParam("pregunta") String pregunta) {
+    public String crearPregunta(@RequestParam("pregunta") String pregunta, @RequestParam("descripcion") String descripcion) {
         Usuario user = usuarioRepository.findUsuarioById(2); //estático por ahora
         Foropregunta question = new Foropregunta();
         question.setPregunta(pregunta);
         question.setFechaCreacion(LocalDate.now());
         question.setIdUsuario(user);
+        //da igual si es nulo (es opcional creo xd)
+        question.setDescripcion(descripcion);
+
         foroPreguntaRepository.save(question);
         return "redirect:/UsuarioFinal/faq";
     }
     @PostMapping("/UsuarioFinal/faq/newRespuesta")
     public String crearPregunta(@RequestParam("idPregunta") int idPregunta,@RequestParam("contenidoRespuesta") String contenidoRespuesta) {
-        Usuario user = usuarioRepository.findUsuarioById(2);  // Ejemplo estático
+        Usuario user = usuarioRepository.findUsuarioById(27);  // Ejemplo estático
         Optional<Foropregunta> pregunta = foroPreguntaRepository.findById(idPregunta);
         System.out.println(pregunta.get().getPregunta());
         System.out.println(contenidoRespuesta);

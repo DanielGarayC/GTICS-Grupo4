@@ -86,7 +86,7 @@
                             <button class="btn btn-outline-primary btn-sm small-reply-btn">Responder</button>
                         </div>
 
-                      <form class="reply-section" style="display: none;">
+                      <div class="reply-section" style="display: none;">
                         <h5>Escribe tu respuesta</h5>
                           <form th:action="@{/UsuarioFinal/faq/newRespuesta}" method="POST">
                               <!-- Campo oculto para enviar el ID de la pregunta -->
@@ -376,43 +376,51 @@
         
             <script>
                 async function pregunta() {
-                    const { value: text } = await Swal.fire({
-                        input: "textarea",
-                        inputLabel: "Redactar Pregunta",
-                        inputPlaceholder: "Escribe tu pregunta aquí...",
-                        inputAttributes: {
-                            "aria-label": "Escribe tu pregunta aquí"
-                        },
+                    const { value: formValues } = await Swal.fire({
+                        title: "Redactar Pregunta",
+                        html:
+                            '<textarea id="pregunta" class="swal2-input" placeholder="Escribe tu pregunta aquí..."></textarea>' +
+                            '<textarea id="descripcion" class="swal2-input" placeholder="Escribe una descripción (opcional)..."></textarea>',
+                        focusConfirm: false,
                         showCancelButton: true,
                         confirmButtonText: 'Enviar',
-                        cancelButtonText: 'Cancelar'
+                        cancelButtonText: 'Cancelar',
+                        preConfirm: () => {
+                            const pregunta = document.getElementById('pregunta').value;
+                            const descripcion = document.getElementById('descripcion').value;
+                            if (!pregunta) {
+                                Swal.showValidationMessage('La pregunta es obligatoria');
+                                return;
+                            }
+                            return { pregunta: pregunta, descripcion: descripcion || null };
+                        }
                     });
 
-                    if (text) {
-                        // Si el usuario ha escrito una pregunta, enviamos la pregunta al servidor
+                    if (formValues) {
+                        const { pregunta, descripcion } = formValues;
+
+                        // Enviar los datos al servidor
                         const response = await fetch('/UsuarioFinal/faq/newPregunta', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
                             },
                             body: new URLSearchParams({
-                                'pregunta': text
+                                'pregunta': pregunta,
+                                'descripcion': descripcion  // Puede ser null si no se ingresó
                             })
                         });
 
                         if (response.ok) {
-                            // Si la petición fue exitosa, mostramos el mensaje de éxito
                             Swal.fire({
                                 title: 'Pregunta enviada',
-                                text: 'Tu pregunta ha sido enviada: ' + text,
+                                text: 'Tu pregunta ha sido enviada.',
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             }).then(() => {
-                                // Recargar la página para mostrar la nueva pregunta
                                 window.location.reload();
                             });
                         } else {
-                            // Si hay un error en la petición, mostramos un error
                             Swal.fire({
                                 title: 'Error',
                                 text: 'Hubo un problema al enviar la pregunta.',

@@ -23,6 +23,10 @@ public class Foropregunta {
     @Column(name = "pregunta", nullable = false)
     private String pregunta;
 
+    @Lob
+    @Column(name = "descripcion")
+    private String descripcion;
+
     @NotNull
     @Column(name = "fechaCreacion", nullable = false)
     private LocalDate fechaCreacion;
