@@ -88,16 +88,16 @@ public class AgenteController {
     }
 
 
-    // Método para banear a un usuario usando RequestParam
-    @GetMapping("/Agente/banear")
-    public String banearUsuario(@RequestParam Integer id,
-                                RedirectAttributes redirectAttributes) {
 
-        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+    @GetMapping("/Agente/banear")
+    public String banearUsuario(@RequestParam("idUsuario") Integer idUsuario,
+                                RedirectAttributes redirectAttributes,@RequestParam("razonBaneado") String razonBaneado) {
+
+        Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
 
         if (optUsuario.isPresent()) {
-            usuarioRepository.banUsuario(id);
-            redirectAttributes.addFlashAttribute("successMessage", "El usuario ha sido baneado éxitosamente.");
+            usuarioRepository.banUsuario(idUsuario,razonBaneado);
+            redirectAttributes.addAttribute("usuarioBaneado", true);
 
             return "redirect:/Agente/UsuariosAsignados";
 
@@ -161,9 +161,9 @@ public class AgenteController {
 
         try{
             ordenRepository.autoAsignarOrden(idAgente,idOrden);
-            attr.addFlashAttribute("msg","Se ha autoasignado la orden con éxito");
+            attr.addAttribute("autoasignacionExito",true);
         }catch (Exception e){
-            attr.addFlashAttribute("msg","No se pudo autoasignar la orden");
+            attr.addAttribute("autoasignacionError",true);
         }
 
 
@@ -262,10 +262,10 @@ public class AgenteController {
          */
         try {
             ordenRepository.save(orden);
-            attr.addFlashAttribute("msg", "La orden se ha actualizado exitosamente");
+            attr.addAttribute("editarOrdenExitoso", true);
 
         }catch (Exception e){
-            attr.addFlashAttribute("msg", "no se pudo actualizar");
+            attr.addAttribute("editarOrdenError", true);
         }
 
 
@@ -378,16 +378,15 @@ public class AgenteController {
 
 
     @GetMapping({"Agente/Ordenes/EliminarOrden"})
-    //me troleas yisus
     public String eliminadoLogicoDeOrden(RedirectAttributes attr,@RequestParam("idOrden") Integer idOrden,@RequestParam("razonEliminacion") String razonEliminacion  ){
         System.out.println(idOrden);
         System.out.println(razonEliminacion);
         try{
             ordenRepository.eliminadoLogicoDeOrden(idOrden,razonEliminacion);
-            attr.addFlashAttribute("msg","La orden se ha eliminado exitosamente");
+            attr.addAttribute("ordenEliminadaExitosamente",true);
 
         }catch (Exception e){
-            attr.addFlashAttribute("msg","Error al elmiminar la orden");
+            attr.addAttribute("ordenEliminadaEstadoNoValido",true);
 
         }
         return "redirect:/Agente/Ordenes";

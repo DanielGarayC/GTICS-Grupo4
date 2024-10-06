@@ -259,30 +259,38 @@
 	   <!--POP UP BANEAR USUARIOS-->
 	   <script>
 		   <!-- POP UP BANEAR USUARIOS -->
-			   document.querySelectorAll('.banearUsuario').forEach(button => {
+		   document.querySelectorAll('.banearUsuario').forEach(button => {
 			   button.addEventListener('click', function (event) {
 				   event.preventDefault();  // Evita la redirección automática
 
-				   // Obtenemos el ID y nombre del usuario
-				   const userId = this.getAttribute('data-id');
-				   const userName = this.getAttribute('data-nombre');
+				   // Obtenemos el ID de la orden
+				   const usuarioId = this.getAttribute('data-id');
 
-				   // SweetAlert de confirmación
+				   // SweetAlert para seleccionar la razón de cancelación
 				   Swal.fire({
-					   showCloseButton: true,
-					   title: 'Confirmar',
-					   text: `¿Está seguro de que deseas banear al usuario ${userName}?`,
-					   icon: 'warning',
+					   title: 'Banear usuario',
+					   text: '¿Realmente desea banear a este usuario?',
+					   input: 'select',
+					   inputOptions: {
+						   'Mal comportamiento': 'Mal comportamiento',
+						   'Datos falsos': 'Datos falsos',
+						   'Pagos incompletos': 'Pagos incompletos'
+					   },
+					   inputPlaceholder: 'Seleccione un motivo',
 					   showCancelButton: true,
-					   confirmButtonText: 'Confirmar',
+					   confirmButtonText: 'Banear',
 					   cancelButtonText: 'Cancelar',
-					   customClass: {
-						   popup: 'custom-popup'
+					   inputValidator: (value) => {
+						   if (!value) {
+							   return 'Debes seleccionar un motivo.';
+						   }
 					   }
 				   }).then((result) => {
 					   if (result.isConfirmed) {
-						   // Si se confirma, redirige al controlador de baneo con el ID del usuario
-						   window.location.href = `/Agente/banear?id=${userId}`;
+						   const razonEliminacion = result.value;  // Obtener la razón seleccionada
+
+						   // Redirigir al controlador con el ID y la razón de eliminación como parámetros
+						   window.location.href = `/Agente/banear?idUsuario=${usuarioId}&razonBaneado=${razonEliminacion}`;
 					   }
 				   });
 			   });
@@ -347,6 +355,15 @@
 
 	</div>
 
+   <!-- POP UPS EXITOSOS -->
+   <script>
+	   const urlParams = new URLSearchParams(window.location.search);
+	   if (urlParams.has('usuarioBaneado')) {
+		   Swal.fire('Usuario baneado', 'Se ha baneado al usuario exitosamente', 'success');
+
+	   }
+
+   </script>
 
    	<!-- LIBRERIAS -->
 	<div>
@@ -372,10 +389,6 @@
 		<script th:src="@{/js/vendors/modal.js}"></script>
 
 	</div>
-
-
-
-
 
    </body>
 </html>

@@ -33,6 +33,7 @@
 			   height: 80px;
 			   width: 220px;
 		   }
+
 	   </style>
 	   <!--POP UP-->
 	   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -209,7 +210,7 @@
 											</div>
 										   <div style="margin-top: 35px"> Total:
 
-											   <span th:text="'S/. ' + (${subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00)})"></span></div>
+											   <span th:text="'S/. ' + ${ #numbers.formatDecimal(subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00),1,2)}"></span></div>
 
 									   </div>
 								   </div>
@@ -227,98 +228,101 @@
 									   <thead class="bg-light">
 										   <tr>
 											   <th>Productos</th>
-											   <th>Precio Unidad</th>
+											   <th>Precio Unidad (S/.)</th>
 											   <th>Cantidad</th>
 
-											   <th>Total por Producto</th>
+											   <th>Total por Producto (S/.)</th>
 										   </tr>
 									   </thead>
 									   <!-- tbody -->
 									   <tbody>
-										   <!-- Iterar sobre la lista de productos -->
-										   <tr th:each="producto : ${productosOrden}">
-											   <td>
-												   <div class="d-flex align-items-center">
-													   <div>
-														   <img th:src="@{/images/products/product-img-1.jpg}" alt="" class="icon-shape icon-lg" />
-													   </div>
-													   <div class="ms-lg-4 mt-2 mt-lg-0">
-														   <!-- Nombre del Producto -->
-														   <h5 class="mb-0 h6" th:text="${producto.nombreProducto}"></h5>
-														   <!-- Detalles: Tienda, Modelo, Color (con fuente más pequeña) -->
-														   <div class="text-muted" style="font-size: 0.875em;">
-															   <!-- Tienda -->
-															   <span th:text="'Tienda: ' + ${producto.nombreTienda}"></span><br>
+									   <!-- Iterar sobre la lista de productos -->
+									   <tr th:each="producto : ${productosOrden}">
+										   <td>
+											   <div class="d-flex align-items-center">
+												   <div>
+													   <img th:src="@{/images/products/product-img-1.jpg}" alt="" class="icon-shape icon-lg" />
+												   </div>
+												   <div class="ms-lg-4 mt-2 mt-lg-0">
+													   <!-- Nombre del Producto -->
+													   <h5 class="mb-0 h6" th:text="${producto.nombreProducto}"></h5>
+													   <!-- Detalles: Tienda, Modelo, Color (con fuente más pequeña) -->
+													   <div class="text-muted" style="font-size: 0.875em;">
+														   <!-- Tienda -->
+														   <span th:text="'Tienda: ' + ${producto.nombreTienda}"></span><br>
 
-															   <!-- Modelo: Si es null o vacío, muestra "No especificado" -->
-															   <span th:text="'Modelo: ' + (${#strings.isEmpty(producto.modelo) ? 'No especificado' : producto.modelo})"></span><br>
+														   <!-- Modelo: Si es null o vacío, muestra "No especificado" -->
+														   <span th:text="'Modelo: ' + (${#strings.isEmpty(producto.modelo) ? 'No especificado' : producto.modelo})"></span><br>
 
-															   <!-- Color: Si es null o vacío, muestra "No especificado" -->
-															   <span th:text="'Color: ' + (${#strings.isEmpty(producto.color) ? 'No especificado' : producto.color})"></span>
-														   </div>
+														   <!-- Color: Si es null o vacío, muestra "No especificado" -->
+														   <span th:text="'Color: ' + (${#strings.isEmpty(producto.color) ? 'No especificado' : producto.color})"></span>
 													   </div>
 												   </div>
-											   </td>
-											   <td><span class="text-body" th:text="'S/. ' + ${producto.precioUnidad}"></span></td>
-											   <td th:text="${producto.cantidadProducto}"></td>
+											   </div>
+										   </td>
+										   <td><span class="text-body" th:text="${#numbers.formatDecimal(producto.precioUnidad,1,2)}"></span></td>
+										   <td th:text="${producto.cantidadProducto}"></td>
 
-											   <td th:text="'S/. ' + ${producto.precioTotalPorProducto}"></td>
-										   </tr>
+										   <td th:text="${#numbers.formatDecimal(producto.precioTotalPorProducto,1,2 )}"></td>
 
-										   <!-- Subtotal de la Orden -->
+									   </tr>
 
-										   <tr>
-											   <td class="border-bottom-0 pb-0"></td>
-											   <td class="border-bottom-0 pb-0"></td>
-											   <td colspan="1" class="fw-medium text-dark">
-												   <!-- text -->
-												   Sub-Total
-											   </td>
-											   <td class="fw-medium text-dark">
-												   <!-- Mostrar el subtotal calculado -->
-												   <span th:text="'S/. ' + ${subtotal}"></span>
-											   </td>
-										   </tr>
+									   <!-- Subtotal de la Orden -->
 
-										   <tr>
-											   <td class="border-bottom-0 pb-0"></td>
-											   <td class="border-bottom-0 pb-0"></td>
-											   <td colspan="1" class="fw-medium text-dark">
-												   <!-- text -->
-												   Costo de envío
-											   </td>
-											   <td class="fw-medium text-dark">
-												   <!-- Mostrar el costo de envío más alto -->
-												   <span th:text="'S/. ' + ${maxCostoEnvio}"></span>
-											   </td>
-										   </tr>
+									   <tr>
+										   <td class="border-bottom-0 pb-0"></td>
+										   <td class="border-bottom-0 pb-0"></td>
+										   <td colspan="1" class="fw-medium text-dark">
+											   <!-- text -->
+											   Sub-Total
+										   </td>
+										   <td class="fw-medium text-dark">
+											   <!-- Mostrar el subtotal calculado -->
+											   <span th:text="${#numbers.formatDecimal(subtotal,1,2)}"></span>
 
-										   <tr>
-											   <td class="border-bottom-0 pb-0"></td>
-											   <td class="border-bottom-0 pb-0"></td>
-											   <td colspan="1" class="fw-medium text-dark">
-												   <!-- texto -->
-												   Costos adicionales
-											   </td>
-											   <td class="fw-medium text-dark">
-												   <!-- Mostrar el costo adicional, y si es null, mostrar S/. 0.00 -->
-												   <span th:text="'S/. ' + (${costoAdicional != null ? costoAdicional : '0.00'})"></span>
-											   </td>
-										   </tr>
+										   </td>
+									   </tr>
+
+									   <tr>
+										   <td class="border-bottom-0 pb-0"></td>
+										   <td class="border-bottom-0 pb-0"></td>
+										   <td colspan="1" class="fw-medium text-dark">
+											   <!-- text -->
+											   Costo de envío
+										   </td>
+										   <td class="fw-medium text-dark">
+											   <!-- Mostrar el costo de envío más alto -->
+											   <span th:text=" ${#numbers.formatDecimal(maxCostoEnvio,1,2) }"></span>
+										   </td>
+
+									   </tr>
+
+									   <tr>
+										   <td class="border-bottom-0 pb-0"></td>
+										   <td class="border-bottom-0 pb-0"></td>
+										   <td colspan="1" class="fw-medium text-dark">
+											   <!-- texto -->
+											   Costos adicionales
+										   </td>
+										   <td class="fw-medium text-dark">
+											   <!-- Mostrar el costo adicional, y si es null, mostrar S/. 0.00 -->
+											   <span th:text="(${costoAdicional != null ? #numbers.formatDecimal(costoAdicional,1,2) : '0,00'})"></span>
+										   </td>
+									   </tr>
 
 
-										   <tr>
-											   <td></td>
-											   <td></td>
-											   <td colspan="1" class="fw-semibold text-dark">
-												   <!-- text -->
-												   Total
-											   </td>
-											   <td class="fw-semibold text-dark">
-												   <!-- Mostrar el total (subtotal + maxCostoEnvio + costoAdicional) y asegurar que costoAdicional nunca sea null -->
-												   <span th:text="'S/. ' + (${subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00)})"></span>
-											   </td>
-										   </tr>
+									   <tr>
+										   <td></td>
+										   <td></td>
+										   <td colspan="1" class="fw-semibold text-dark">
+											   <!-- text -->
+											   Total
+										   </td>
+										   <td class="fw-semibold text-dark">
+											   <!-- Mostrar el total (subtotal + maxCostoEnvio + costoAdicional) y asegurar que costoAdicional nunca sea null -->
+											   <span th:text="${ #numbers.formatDecimal(subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00),1,2)}"></span>
+										   </td>
+									   </tr>
 
 									   </tbody>
 								   </table>
@@ -333,12 +337,12 @@
 								   <h6>Información de pago</h6>
 								   <span>PayPal</span>
 							   </div>
-
 						   </div>
 					   </div>
 				   </div>
 			   </div>
 		   </div>
+	   </div>
 	   </div>
 	   <!--POP UP ELIMINAR ORDEN-->
 	   <script>
@@ -391,7 +395,7 @@
 		</script>
 
 
-	   </main>
+   </main>
 
 
 

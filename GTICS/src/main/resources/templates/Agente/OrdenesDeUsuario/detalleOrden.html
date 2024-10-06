@@ -162,12 +162,12 @@
 							   <div class="d-md-flex">
 								   <div class="mb-2 mb-md-0">
 									   <select class="form-select" style="cursor: pointer;" name="estadoorden">
-										   <option th:each="estado : ${listaEstadoOrden}" th:text="${estado.nombreEstado}" th:value="${estado.id}" th:selected="${estado.id == orden.estadoorden.id }"></option>
+										   <option th:each="estado : ${listaEstadoOrden}" th:text="${estado.nombreEstado}" th:value="${estado.id}" th:selected="${estado.id == orden.estadoorden.id }" th:if="${estado.id!=8}"></option>
 									   </select>
 								   </div>
 								<div class="mb-2 mb-md-0">
 										<select class="form-select" style="cursor: pointer;" name="controlOrden">
-											<option th:each="control : ${listaControlOrden}" th:text="${control.nombreControl}" th:value="${control.id}" th:selected="${control.id == orden.controlOrden.id }"></option>
+											<option th:each="control : ${listaControlOrden}" th:text="${control.nombreControl}" th:value="${control.id}" th:selected="${control.id == orden.controlOrden.id }" th:if="${control.id!=1}"></option>
 										</select>
 								</div>
 								   <!-- button -->

@@ -96,7 +96,7 @@
 		   <!-- row -->
 		   <div class="row text-center">
 			   <div class="col-xl-12 col-12 mb-5">
-				   <div class="alert alert-success" role="alert" th:if="${msg!=null}" th:text="${msg}"></div>
+				   <!--<div class="alert alert-success" role="alert" th:if="${msg!=null}" th:text="${msg}"></div>-->
 				   <!-- card -->
 				   <div class="card h-100 card-lg" >
 					   <div class="p-6">
@@ -320,9 +320,6 @@
 	   });
 
 
-
-
-
 	   function filterTable() {
 		   const input = document.getElementById("searchOrden");
 		   const filter = input.value.toLowerCase();
@@ -341,6 +338,29 @@
 			   }
 			   rows[i].style.display = match ? "" : "none";
 		   }
+	   }
+   </script>
+   <!-- POP UPS EXITOSOS -->
+   <script>
+	   const urlParams = new URLSearchParams(window.location.search);
+	   if (urlParams.has('ordenEliminadaExitosamente')) {
+		   Swal.fire('Eliminar orden', 'La orden se ha eliminado exitosamente', 'success');
+
+	   }
+	   if (urlParams.has('ordenEliminadaEstadoNoValido')) {
+		   Swal.fire('Error', 'No se pudo eliminar la orden ', 'error');
+	   }
+	   if (urlParams.has('editarOrdenExitoso')) {
+		   Swal.fire('Orden editada', 'La orden se ha actualizado exitosamente ', 'success');
+	   }
+	   if (urlParams.has('editarOrdenError')) {
+		   Swal.fire('Error', 'La orden no se ha podido editar ', 'error');
+	   }
+	   if (urlParams.has('autoasignacionExito')) {
+		   Swal.fire('Orden autoasignada', 'La orden se pudo autoasignar con éxito', 'success');
+	   }
+	   if (urlParams.has('autoasignacionError')) {
+		   Swal.fire('Error', 'No se pudo autoasignar la orden', 'error');
 	   }
    </script>
 
