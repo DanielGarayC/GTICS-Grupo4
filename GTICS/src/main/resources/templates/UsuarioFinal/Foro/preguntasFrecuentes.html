@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta content="Codescandy" name="author">
-      <title>Mis Órdenes</title>
+      <title>Preguntas Frecuentes</title>
       <!-- Favicon icon-->
 <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
@@ -69,11 +69,12 @@
                   <h2 style="margin-top: -50px; margin-bottom: 20px">Preguntas Frecuentes</h2>
                   <button class="btn btn-primary" id="ask-question-btn" onclick="pregunta()">Formular Pregunta</button>
                 </div>
-      
+
                 <div class="accordion">
-                  <div class="accordion-item">
+
+                  <div class="accordion-item" th:each="pregunta : ${preguntas}">
                     <button id="accordion-button-1" class="accordion-btn" aria-expanded="false">
-                      <span class="accordion-title">¿Cuánto tiempo tarda en llegar un producto desde China?</span>
+                      <span class="accordion-title" th:value="${pregunta.pregunta}"></span>
                       <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
@@ -84,35 +85,12 @@
                       <div class="text-center">
                         <button class="btn btn-outline-primary btn-sm small-reply-btn">Redactar Respuesta</button>
                       </div>
-      
+
                       <div class="reply-section" style="display: none;">
                         <h5>Escribe tu respuesta</h5>
                         <textarea class="form-control mb-3" rows="3" placeholder="Escribe tu respuesta..."></textarea>
                         <div class="text-right">
                             <button class="btn btn-outline-primary btn-sm small-reply-btn btn-reply">Enviar Respuesta</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-      
-                  <div class="accordion-item">
-                    <button id="accordion-button-2" class="accordion-btn" aria-expanded="false">
-                      <span class="accordion-title">¿Qué métodos de pago se aceptan para compras internacionales?</span>
-                      <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                      <p><strong>María Angeles:</strong> Se aceptan tarjetas de crédito y PayPal.</p>
-                      <p><strong>José Miguel:</strong> También puedes pagar con transferencia bancaria.</p>
-                  
-                      <div class="text-center">
-                        <button class="btn btn-outline-primary btn-sm small-reply-btn btn-reply">Responder</button>
-                      </div>
-                  
-                      <div class="reply-section" style="display: none;">
-                        <h5>Escribe tu respuesta</h5>
-                        <textarea class="form-control mb-3" rows="3" placeholder="Escribe tu respuesta..."></textarea>
-                        <div class="text-right">
-                          <button class="btn btn-outline-primary btn-sm small-reply-btn btn-reply">Enviar Respuesta</button>
                         </div>
                       </div>
                     </div>
