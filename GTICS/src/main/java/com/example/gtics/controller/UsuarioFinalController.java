@@ -35,11 +35,14 @@ public class UsuarioFinalController {
     private final EstadoOrdenRepository estadoOrdenRepository;
     private final FotosResenaRepository fotosResenaRepository;
     private final ResenaRepository resenaRepository;
+    private final ForoPreguntaRepository foroPreguntaRepository;
+    private final ForoRespuestaRepository foroRespuestaRepository;
 
     public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository, UsuarioRepository usuarioRepository,
                                   FotosProductoRepository fotosProductoRepository, OrdenRepository ordenRepository,
                                   EstadoOrdenRepository estadoOrdenRepository,
-                                  FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository) {
+                                  FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
+                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.fotosProductoRepository = fotosProductoRepository;
@@ -47,6 +50,8 @@ public class UsuarioFinalController {
         this.estadoOrdenRepository = estadoOrdenRepository;
         this.resenaRepository = resenaRepository;
         this.fotosResenaRepository = fotosResenaRepository;
+        this.foroPreguntaRepository = foroPreguntaRepository;
+        this.foroRespuestaRepository = foroRespuestaRepository;
     }
 
     @ModelAttribute
@@ -305,8 +310,8 @@ public class UsuarioFinalController {
         return "UsuarioFinal/Foro/foro";
     }
     @GetMapping("/UsuarioFinal/faq")
-    public String preguntasFrecuentes(){
-
+    public String preguntasFrecuentes(Model model){
+        model.addAttribute("preguntas",foroPreguntaRepository.findAll());
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
 }
