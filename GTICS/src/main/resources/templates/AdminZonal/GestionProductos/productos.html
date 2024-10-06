@@ -664,13 +664,24 @@
                     popup: 'custom-popup'
                 },
                 preConfirm: () => {
-                    const deliveryDate = Swal.getPopup().querySelector('#deliveryDate').value;
-                    if (!deliveryDate) {
+                    const fechaIngresada = Swal.getPopup().querySelector('#deliveryDate').value;
+                    const fechaHoy = new Date(new Date().toLocaleDateString('en-CA')).toISOString().split('T')[0]; // Obtener fecha de hoy en formato yyyy-mm-dd
+
+                    // Verificar si la fecha fue ingresada
+                    if (!fechaIngresada) {
                         Swal.showValidationMessage('Por favor ingrese una fecha válida.');
                         return false;
                     }
-                    return deliveryDate;
+
+                    // Validar que la fecha ingresada sea una fecha futura
+                    if (new Date(fechaIngresada) <= new Date(fechaHoy)) {
+                        Swal.showValidationMessage('La fecha de arribo debe ser una fecha futura.');
+                        return false;
+                    }
+
+                    return fechaIngresada; // Retornar la fecha si es válida
                 }
+
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Verifica si el productoId está siendo obtenido correctamente
