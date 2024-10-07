@@ -1,6 +1,7 @@
 package com.example.gtics.controller;
 
 import com.example.gtics.dto.OrdenCarritoDto;
+import com.example.gtics.dto.ProductosCarritoDto;
 import com.example.gtics.dto.ProductosxOrden;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
@@ -54,9 +55,24 @@ public class UsuarioFinalController {
 
     @ModelAttribute
     public void addUsuarioToModel(Model model) {
-        Optional<Usuario> optUsuario = usuarioRepository.findById(7);  // Aquí cambias el ID según el usuario que necesites
+        Optional<Usuario> optUsuario = usuarioRepository.findById(3);  // Aquí cambias el ID según el usuario que necesites
         // Usuario agregado globalmente
         optUsuario.ifPresent(usuario -> model.addAttribute("usuario", usuario));
+    }
+
+    @ModelAttribute
+    public void addUsuarioAndCarritoToModel(Model model) {
+        // Obtener el usuario actual (por ahora estático con ID = 3)
+        Optional<Usuario> optUsuario = usuarioRepository.findById(3);
+
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+            model.addAttribute("usuario", usuario);  // Añadir usuario al modelo
+
+            // Obtener productos del carrito para este usuario
+            List<ProductosCarritoDto> productosCarrito = ordenRepository.obtenerProductosPorUsuario(usuario.getId());
+            model.addAttribute("productosCarrito", productosCarrito);  // Añadir lista del carrito al modelo
+        }
     }
 
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
