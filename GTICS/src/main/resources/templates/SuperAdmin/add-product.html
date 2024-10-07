@@ -207,7 +207,7 @@
                         <!-- card -->
                         <div class="card mb-6 shadow border-0">
                             <!-- card body -->
-                            <form id="productoForm" enctype="multipart/form-data" th:action="@{/SuperAdmin/crearProducto}" method="post" >
+                            <form id="productoForm" enctype="multipart/form-data" th:action="@{/SuperAdmin/crearProducto}" method="post" class="needs-validation" novalidate>
                                 <div class="card-body p-6">
                                     <h4 class="mb-5 h5">Subir fotos del Producto</h4>
                                     <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
@@ -230,7 +230,7 @@
                                         <div class="mb-3 col-lg-12">
                                             <label for="nombreProducto" class="form-label">Nombre del producto</label>
                                             <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Nombre del producto" required />
-                                            <div class="invalid-feedback">Por favor ingrese el nombre del producto</div>
+                                            <div class="invalid-feedback">Debe ingresar el nombre del producto</div>
                                         </div>
                                         <!-- categoría -->
                                         <div class="mb-3 col-lg-6">
@@ -239,30 +239,31 @@
                                                 <option value="" selected disabled>--Seleccione una categoría--</option>
                                                 <option th:each="categoria : ${categorias}" th:text="${categoria.nombreCategoria}" th:value="${categoria.id}"></option>
                                             </select>
-                                            <div class="invalid-feedback">Por favor seleccione una categoría</div>
+                                            <div class="invalid-feedback">Debe seleccionar una categoría</div>
                                         </div>
 
                                         <!-- Subcategoría (se cargará según la categoría seleccionada) -->
                                         <div class="mb-3 col-lg-6">
-                                            <label for="selectSubcategoria" class="form-label">Subcategoría</label>
+                                            <label for="selectSubcategoria" class="form-label">Subcategoría (debe seleccionar primero una categoría)</label>
                                             <select class="form-select" name="idSubcategoria" id="selectSubcategoria" required>
                                                 <option value="" selected disabled>--Seleccione una subcategoría--</option>
                                             </select>
-                                            <div class="invalid-feedback">Por favor seleccione una subcategoría</div>
+                                            <div class="invalid-feedback">Debe seleccionar una subcategoría</div>
                                         </div>
 
                                         <!-- Precio -->
                                         <div class="mb-3 col-lg-6">
                                             <label for="precio" class="form-label">Precio</label>
                                             <input type="text" class="form-control" id="precio" name="precio" placeholder="Precio" required />
-                                            <div class="invalid-feedback">Por favor ingrese el precio del producto</div>
+                                            <div class="invalid-feedback" id="precio-vacio">Por favor ingrese el precio del producto</div>
+                                            <div class="invalid-feedback" id="precio-invalido">El precio debe ser un número válido con hasta 2 decimales</div>
                                         </div>
                                         <!-- Costo de envío -->
                                         <div class="mb-3 col-lg-6">
                                             <label for="costoEnvio" class="form-label">Costo de Envío</label>
                                             <input type="text" class="form-control" id="costoEnvio" name="costoEnvio" placeholder="Costo de envío" required />
-                                            <div class="invalid-feedback">Por favor ingrese el costo de envío</div>
-                                        </div>
+                                            <div class="invalid-feedback" id="costoEnvio-vacio">Por favor ingrese el costo de envío</div>
+                                            <div class="invalid-feedback" id="costoEnvio-invalido">El costo de envío debe ser un número válido con hasta 2 decimales</div>                                        </div>
                                         <!-- Proveedor -->
                                         <div class="mb-3 col-lg-6">
                                             <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
@@ -273,7 +274,7 @@
                                                         th:value="${proveedor.id}">
                                                 </option>
                                             </select>
-                                            <div class="invalid-feedback">Por favor seleccione un proveedor</div>
+                                            <div class="invalid-feedback">Debe seleccionar un proveedor</div>
                                         </div>
 
                                         <!-- Zonas -->
@@ -281,6 +282,8 @@
                                             <label th:for="'cantidadZona' + ${zona.id}" th:text="'Cantidad para ' + ${zona.nombreZona}"></label>
                                             <input type="number" class="form-control" th:id="'cantidadZona' + ${zona.id}"
                                                    th:name="'zona-' + ${zona.id}" min="0" />
+                                            <div class="invalid-feedback" id="cantidad-vacio">Debe ingresar una cantidad para esta zona</div>
+                                            <div class="invalid-feedback" id="cantidad-invalida">La cantidad debe ser un número mayor o igual a 0</div>
                                         </div>
 
                                         <!-- Modelo (opcional) -->
@@ -299,7 +302,7 @@
                                         <div class="mb-3 col-lg-12">
                                             <label for="descripcion" class="form-label">Descripción</label>
                                             <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Descripción" required></textarea>
-                                            <div class="invalid-feedback">Por favor ingrese una descripción</div>
+                                            <div class="invalid-feedback" id="descripcion-vacio">Debe ingresar una descripción</div>
                                         </div>
 
                                         <div class="col-lg-12">
@@ -424,6 +427,135 @@
         });
     }
 </script>
+<script>
+    document.getElementById('productoForm').addEventListener('submit', function(event) {
+        let formIsValid = true;
+
+        // Validar nombre del producto
+        const nombreProducto = document.getElementById('nombreProducto');
+        if (nombreProducto.value.trim() === "") {
+            nombreProducto.classList.add('is-invalid');
+            formIsValid = false;
+        } else {
+            nombreProducto.classList.remove('is-invalid');
+        }
+
+        // Expresión regular para enteros o decimales con hasta 2 decimales
+        const regexDecimal = /^\d+(\.\d{1,2})?$/;  // Permite enteros y decimales con hasta 2 decimales
+
+        // Validar precio
+        const precio = document.getElementById('precio');
+        const precioVacio = document.getElementById('precio-vacio');
+        const precioInvalido = document.getElementById('precio-invalido');
+
+        if (precio.value.trim() === "") {
+            precio.classList.add('is-invalid');
+            precioVacio.style.display = 'block';
+            precioInvalido.style.display = 'none';
+            formIsValid = false;
+        } else if (!regexDecimal.test(precio.value)) {
+            precio.classList.add('is-invalid');
+            precioVacio.style.display = 'none';
+            precioInvalido.style.display = 'block';
+            formIsValid = false;
+        } else {
+            precio.classList.remove('is-invalid');
+            precioVacio.style.display = 'none';
+            precioInvalido.style.display = 'none';
+        }
+
+        // Validar costo de envío
+        const costoEnvio = document.getElementById('costoEnvio');
+        const costoEnvioVacio = document.getElementById('costoEnvio-vacio');
+        const costoEnvioInvalido = document.getElementById('costoEnvio-invalido');
+
+        if (costoEnvio.value.trim() === "") {
+            costoEnvio.classList.add('is-invalid');
+            costoEnvioVacio.style.display = 'block';
+            costoEnvioInvalido.style.display = 'none';
+            formIsValid = false;
+        } else if (!regexDecimal.test(costoEnvio.value)) {
+            costoEnvio.classList.add('is-invalid');
+            costoEnvioVacio.style.display = 'none';
+            costoEnvioInvalido.style.display = 'block';
+            formIsValid = false;
+        } else {
+            costoEnvio.classList.remove('is-invalid');
+            costoEnvioVacio.style.display = 'none';
+            costoEnvioInvalido.style.display = 'none';
+        }
+
+        // Validar descripción
+        const descripcion = document.getElementById('descripcion');
+        const descripcionVacio = document.getElementById('descripcion-vacio');
+
+        if (descripcion.value.trim() === "") {
+            descripcion.classList.add('is-invalid');
+            descripcionVacio.style.display = 'block';
+            formIsValid = false;
+        } else {
+            descripcion.classList.remove('is-invalid');
+            descripcionVacio.style.display = 'none';
+        }
+
+        // Validar categoría
+        const selectCategoria = document.getElementById('selectCategoria');
+        if (selectCategoria.value === "") {
+            selectCategoria.classList.add('is-invalid');
+            formIsValid = false;
+        } else {
+            selectCategoria.classList.remove('is-invalid');
+        }
+
+        // Validar subcategoría
+        const selectSubcategoria = document.getElementById('selectSubcategoria');
+        if (selectSubcategoria.value === "") {
+            selectSubcategoria.classList.add('is-invalid');
+            formIsValid = false;
+        } else {
+            selectSubcategoria.classList.remove('is-invalid');
+        }
+
+        // Validar proveedor
+        const selectProveedor = document.getElementById('selectProveedor');
+        if (selectProveedor.value === "") {
+            selectProveedor.classList.add('is-invalid');
+            formIsValid = false;
+        } else {
+            selectProveedor.classList.remove('is-invalid');
+        }
+
+        // Validar cantidades por zona
+        const inputsZona = document.querySelectorAll('input[name^="zona-"]');
+        inputsZona.forEach(input => {
+            const cantidad = input.value.trim();
+            const errorVacio = input.nextElementSibling; // Div de error por valor vacío
+            const errorInvalido = input.nextElementSibling.nextElementSibling; // Div de error por valor inválido
+
+            if (cantidad === "") {
+                input.classList.add('is-invalid');
+                errorVacio.style.display = 'block';
+                errorInvalido.style.display = 'none';
+                formIsValid = false;
+            } else if (isNaN(cantidad) || parseFloat(cantidad) < 0) {
+                input.classList.add('is-invalid');
+                errorVacio.style.display = 'none';
+                errorInvalido.style.display = 'block';
+                formIsValid = false;
+            } else {
+                input.classList.remove('is-invalid');
+                errorVacio.style.display = 'none';
+                errorInvalido.style.display = 'none';
+            }
+        });
+
+        // Prevenir el envío del formulario si hay errores
+        if (!formIsValid) {
+            event.preventDefault();  // Prevenir que el formulario se envíe si hay algún error
+        }
+    });
+</script>
+
 
 <!-- Libs JS -->
 <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
