@@ -297,14 +297,20 @@
        <script>
            const urlParams = new URLSearchParams(window.location.search);
            if (urlParams.has('ordenEliminadaExitosamente')) {
-               Swal.fire('Eliminar orden', 'Se ha solicitado eliminar la orden exitosamente', 'ordenEliminadaExitosamente');
+               Swal.fire('Eliminar orden', 'Se ha solicitado eliminar la orden exitosamente', 'success');
 
            }
            if (urlParams.has('solicitudAgenteExitosamente')) {
-               Swal.fire('Agente asignado', 'Se ha asignado la orden a un agente de forma exitosa', 'solicitudAgenteExitosamente');
+               Swal.fire('Agente asignado', 'Se ha asignado la orden a un agente de forma exitosa', 'success');
            }
            if (urlParams.has('ordenEliminadaEstadoNoValido')) {
-               Swal.fire('Error', 'Solo se pueden elmiminar las órdenes que aún no llegan al estado en proceso ', 'ordenEliminadaEstadoNoValido');
+               Swal.fire('Error', 'Solo se pueden elmiminar las órdenes que aún no llegan al estado en proceso ', 'error');
+           }
+           if (urlParams.has('ordenEditadaExitosamente')) {
+               Swal.fire('Orden editada', 'Se ha editado la orden exitosamente ', 'success');
+           }
+           if (urlParams.has('ordenEditadaError')) {
+               Swal.fire('Error', 'Solo se pueden elmiminar las órdenes que aún no llegan al estado en proceso ', 'error');
            }
        </script>
 

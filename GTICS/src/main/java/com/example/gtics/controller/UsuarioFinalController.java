@@ -35,12 +35,13 @@ public class UsuarioFinalController {
     private final ResenaRepository resenaRepository;
     private final ForoPreguntaRepository foroPreguntaRepository;
     private final ForoRespuestaRepository foroRespuestaRepository;
+    private final DistritoRepository distritoRepository;
 
     public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository, UsuarioRepository usuarioRepository,
                                   FotosProductoRepository fotosProductoRepository, OrdenRepository ordenRepository,
                                   EstadoOrdenRepository estadoOrdenRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
-                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository) {
+                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository, DistritoRepository distritoRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.fotosProductoRepository = fotosProductoRepository;
@@ -50,6 +51,7 @@ public class UsuarioFinalController {
         this.fotosResenaRepository = fotosResenaRepository;
         this.foroPreguntaRepository = foroPreguntaRepository;
         this.foroRespuestaRepository = foroRespuestaRepository;
+        this.distritoRepository = distritoRepository;
     }
 
     @ModelAttribute
@@ -133,6 +135,7 @@ public class UsuarioFinalController {
 
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
         List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+        List<Distrito> listaDistritos = distritoRepository.findAll();
         Double costoAdicional = ordenRepository.obtenerCostoAdicionalxOrden(idOrden);
         // Calcular el subtotal sumando precioTotalPorProducto
         double subtotal = productosOrden.stream()
@@ -149,6 +152,7 @@ public class UsuarioFinalController {
             model.addAttribute("maxCostoEnvio",maxCostoEnvio);
             model.addAttribute("productosOrden",productosOrden);
             model.addAttribute("orden",ordenOpt.get());
+            model.addAttribute("listaDistritos",listaDistritos);
 
             return "UsuarioFinal/Ordenes/detalleOrden";
         }else{
@@ -156,6 +160,21 @@ public class UsuarioFinalController {
         }
 
 
+    }
+    @PostMapping("/UsuarioFinal/editarDireccionOrden")
+    public String editarOrden(Orden orden,RedirectAttributes redd){
+        System.out.println(orden.getId());
+        System.out.println(orden.getEstadoorden().getId());
+        System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDireccion());
+        System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDistrito().getNombre());
+        if(orden.getEstadoorden().getId() <=2){
+            redd.addAttribute("ordenEditadaError", true);
+        }else{
+            //ordenRepository.actualizarOrdenParaUsuarioFinal(orden.getId(),orden.getEstadoorden().getId(),orden.getIdCarritoCompra().getIdUsuario().getDireccion(),orden.getIdCarritoCompra().getIdUsuario().getDistrito().getId());
+            redd.addAttribute("ordenEditadaExitosamente", true);
+        }
+
+        return "redirect:/UsuarioFinal/listaMisOrdenes";
     }
     @GetMapping("/UsuarioFinal/eliminarOrden")
     public String solicitarEliminarOrden(@RequestParam Integer idOrden, RedirectAttributes attr){
