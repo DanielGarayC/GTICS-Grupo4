@@ -162,15 +162,12 @@ public class UsuarioFinalController {
 
     }
     @PostMapping("/UsuarioFinal/editarDireccionOrden")
-    public String editarOrden(Orden orden,RedirectAttributes redd){
-        System.out.println(orden.getId());
-        System.out.println(orden.getEstadoorden().getId());
-        System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDireccion());
-        System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDistrito().getNombre());
-        if(orden.getEstadoorden().getId() <=2){
+    public String editarOrden(Orden orden,RedirectAttributes redd,@RequestParam("idUsuario") Integer idUsuario){
+
+        if(orden.getEstadoorden().getId() >=3){
             redd.addAttribute("ordenEditadaError", true);
         }else{
-            //ordenRepository.actualizarOrdenParaUsuarioFinal(orden.getId(),orden.getEstadoorden().getId(),orden.getIdCarritoCompra().getIdUsuario().getDireccion(),orden.getIdCarritoCompra().getIdUsuario().getDistrito().getId());
+            ordenRepository.actualizarOrdenParaUsuarioFinal(idUsuario,orden.getIdCarritoCompra().getIdUsuario().getDireccion(),orden.getIdCarritoCompra().getIdUsuario().getDistrito().getId());
             redd.addAttribute("ordenEditadaExitosamente", true);
         }
 

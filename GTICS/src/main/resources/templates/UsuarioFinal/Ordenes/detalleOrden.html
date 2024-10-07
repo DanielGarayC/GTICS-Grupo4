@@ -689,8 +689,9 @@
                                 <div class="card-body p-6">
                                     <div class="row">
                                         <form class="col-md-6 mb-4 mb-lg-0" method="post" th:action="@{/UsuarioFinal/editarDireccionOrden}">
-                                            <input type="hidden" name="idOrden" th:field="${orden.id}">
-                                            <input type="hidden" name="idOrden" th:field="${orden.estadoorden.id}">
+                                            <input type="hidden" name="idUsuario" th:value="${usuario.id}">
+                                            <input type="hidden" th:field="${orden.id}">
+                                            <input type="hidden" th:field="${orden.estadoorden.id}">
                                             <h6>Información del pedido</h6>
 
                                             Dirección:
@@ -698,7 +699,7 @@
 
                                             </p>
                                             Distrito:
-                                            <div class="col-3">
+                                            <div class="col-5">
                                                 <select class="form-control flex-fill col-5" th:field="*{orden.idCarritoCompra.idUsuario.distrito}" style="color: #6c757d; ">
                                                     <option th:each="distrito : ${listaDistritos}" th:value="${distrito.id}" th:text="${distrito.nombre}"
                                                             th:selected="${distrito.id == orden.idCarritoCompra.idUsuario.distrito.id}">

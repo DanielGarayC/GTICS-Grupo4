@@ -438,4 +438,9 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE `gticsdb`.`orden` SET `idAgente` = '13' WHERE (`idOrden` = ?1);")
     void solicitarUnAgente(Integer idOrden);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE usuario SET direccion = ?2,idDistrito = ?3 WHERE idUsuario= ?1")
+    void actualizarOrdenParaUsuarioFinal(Integer idUsuario,String direccion, Integer idDistrito);
 }
