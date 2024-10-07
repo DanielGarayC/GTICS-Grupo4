@@ -8,7 +8,7 @@
         <title>Ver Usuario</title>
         <!-- Favicon icon-->
         <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
-
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- Libs CSS -->
         <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
@@ -28,6 +28,15 @@
             .logoImagenCelulares{
                 height: 80px;
                 width: 220px;
+            }
+            .swal2-styled.swal2-confirm {
+                background-color: #28a745;
+                color: white;
+            }
+
+            .swal2-styled.swal2-cancel {
+                background-color: #dc3545;
+                color: white;
             }
         </style>
     </head>
@@ -144,6 +153,12 @@
                                                     <a class="btn btn-primary" th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${usuario.id}}">
                                                         Ver órdenes
                                                     </a>
+                                                    <a class="btn btn-danger banearUsuario" href="javascript:void(0);"
+                                                       th:data-id="${usuario.id}"
+                                                       th:data-nombre="${usuario.nombre}">
+                                                        Banear
+                                                    </a>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -157,7 +172,49 @@
             </div>
         </div>
 
-        <!-- Libs JS -->
+        <!--POP UP BANEAR USUARIOS-->
+        <script>
+            <!-- POP UP BANEAR USUARIOS -->
+            document.querySelectorAll('.banearUsuario').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();  // Evita la redirección automática
+
+                    // Obtenemos el ID de la orden
+                    const usuarioId = this.getAttribute('data-id');
+
+                    // SweetAlert para seleccionar la razón de cancelación
+                    Swal.fire({
+                        title: 'Banear usuario',
+                        text: '¿Realmente desea banear a este usuario?',
+                        input: 'select',
+                        inputOptions: {
+                            'Mal comportamiento': 'Mal comportamiento',
+                            'Datos falsos': 'Datos falsos',
+                            'Pagos incompletos': 'Pagos incompletos'
+                        },
+                        inputPlaceholder: 'Seleccione un motivo',
+                        showCancelButton: true,
+                        confirmButtonText: 'Banear',
+                        cancelButtonText: 'Cancelar',
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return 'Debes seleccionar un motivo.';
+                            }
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const razonEliminacion = result.value;  // Obtener la razón seleccionada
+
+                            // Redirigir al controlador con el ID y la razón de eliminación como parámetros
+                            window.location.href = `/Agente/banear?idUsuario=${usuarioId}&razonBaneado=${razonEliminacion}`;
+                        }
+                    });
+                });
+            });
+
+            </script>
+
+            <!-- Libs JS -->
         <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
         <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
         <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>

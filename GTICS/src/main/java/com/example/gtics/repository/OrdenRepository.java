@@ -72,16 +72,30 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "    eo.idEstadoOrden AS estadoOrden, \n" +
             "    co.idControlOrden AS controlOrden, \n" +
             "    u.nombre, \n" +
-            "    u.apellidoPaterno \n" +
-            "FROM usuario u \n" +
-            "JOIN carritocompra c ON u.idUsuario = c.idUsuario \n" +
-            "JOIN orden o ON c.idCarritoCompra = o.idCarritoCompra \n" +
-            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra \n" +
-            "JOIN producto p ON phc.idProducto = p.idProducto \n" +
-            "JOIN estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden \n" +
-            "JOIN controlorden co ON o.idControlOrden = co.idControlOrden \n" +
-            "WHERE u.idUsuario = :idUsuario and ordenEliminada=0\n" +
-            "GROUP BY o.idOrden;")
+            "    u.apellidoPaterno,\n" +
+            "    (SELECT phc.idProducto \n" +
+            "     FROM producto_has_carritocompra phc \n" +
+            "     WHERE phc.idCarritoCompra = o.idCarritoCompra \n" +
+            "     ORDER BY phc.idProducto ASC LIMIT 1) AS primerIdProducto  -- Subconsulta para obtener el primer idProducto de la orden\n" +
+            "FROM \n" +
+            "    usuario u \n" +
+            "JOIN \n" +
+            "    carritocompra c ON u.idUsuario = c.idUsuario \n" +
+            "JOIN \n" +
+            "    orden o ON c.idCarritoCompra = o.idCarritoCompra \n" +
+            "JOIN \n" +
+            "    producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra \n" +
+            "JOIN \n" +
+            "    producto p ON phc.idProducto = p.idProducto \n" +
+            "JOIN \n" +
+            "    estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden \n" +
+            "JOIN \n" +
+            "    controlorden co ON o.idControlOrden = co.idControlOrden \n" +
+            "WHERE \n" +
+            "    u.idUsuario = ?1\n" +
+            "    AND ordenEliminada = 0\n" +
+            "GROUP BY \n" +
+            "    o.idOrden;\n")
     Page<OrdenCarritoDto> obtenerCarritoConDto(Integer idUsuario, Pageable pageable);
 
     @Query(nativeQuery = true, value = "SELECT \n" +
@@ -253,16 +267,161 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "ORDER BY o.idOrden;")
     List<MontoTotalOrdenDto> obtenerMontoTotalOrdenesSinAsignar(Integer idControl);
 
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlORden=1 order by idOrden desc limit 5;")
-    List<Orden> ultimasOrdenesSinAsignar();
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden, \n" +
+            "    o.fechaOrden, \n" +
+            "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal,  \n" +
+            "    eo.idEstadoOrden AS estadoOrden, \n" +
+            "    co.idControlOrden AS controlOrden, \n" +
+            "    u.nombre, \n" +
+            "    u.apellidoPaterno,\n" +
+            "    (SELECT phc2.idProducto \n" +
+            "     FROM producto_has_carritocompra phc2 \n" +
+            "     WHERE phc2.idCarritoCompra = o.idCarritoCompra \n" +
+            "     ORDER BY phc2.idProducto ASC LIMIT 1) AS primerIdProducto\n" +
+            "FROM \n" +
+            "    usuario u \n" +
+            "JOIN \n" +
+            "    carritocompra c ON u.idUsuario = c.idUsuario \n" +
+            "JOIN \n" +
+            "    orden o ON c.idCarritoCompra = o.idCarritoCompra \n" +
+            "JOIN \n" +
+            "    producto_has_carritocompra phc ON o.idCarritoCompra = phc.idCarritoCompra \n" +
+            "JOIN \n" +
+            "    producto p ON phc.idProducto = p.idProducto \n" +
+            "JOIN \n" +
+            "    estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden \n" +
+            "JOIN \n" +
+            "    controlorden co ON o.idControlOrden = co.idControlOrden \n" +
+            "WHERE \n" +
+            "    o.idControlOrden = 1\n" +
+            "GROUP BY \n" +
+            "    o.idOrden, \n" +
+            "    o.fechaOrden, \n" +
+            "    eo.idEstadoOrden, \n" +
+            "    co.idControlOrden, \n" +
+            "    u.nombre, \n" +
+            "    u.apellidoPaterno\n" +
+            "ORDER BY \n" +
+            "    o.idOrden DESC\n" +
+            "LIMIT 5;\n")
+    List<OrdenCarritoDto> ultimasOrdenesSinAsignar();
 
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=2 and idAgente=?1 order by idOrden desc limit 5;")
-    List<Orden> ultimasOrdenesPendientes(Integer idAgente);
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden, \n" +
+            "    o.fechaOrden, \n" +
+            "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal,  \n" +
+            "    eo.idEstadoOrden AS estadoOrden, \n" +
+            "    co.idControlOrden AS controlOrden, \n" +
+            "    u.nombre, \n" +
+            "    u.apellidoPaterno,\n" +
+            "    (SELECT phc2.idProducto \n" +
+            "     FROM producto_has_carritocompra phc2 \n" +
+            "     WHERE phc2.idCarritoCompra = o.idCarritoCompra \n" +
+            "     ORDER BY phc2.idProducto ASC LIMIT 1) AS primerIdProducto\n" +
+            "FROM \n" +
+            "    usuario u \n" +
+            "JOIN \n" +
+            "    carritocompra c ON u.idUsuario = c.idUsuario \n" +
+            "JOIN \n" +
+            "    orden o ON c.idCarritoCompra = o.idCarritoCompra \n" +
+            "JOIN \n" +
+            "    producto_has_carritocompra phc ON o.idCarritoCompra = phc.idCarritoCompra \n" +
+            "JOIN \n" +
+            "    producto p ON phc.idProducto = p.idProducto \n" +
+            "JOIN \n" +
+            "    estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden \n" +
+            "JOIN \n" +
+            "    controlorden co ON o.idControlOrden = co.idControlOrden \n" +
+            "where o.idControlOrden=2 and o.idAgente=?1\n" +
+            "GROUP BY \n" +
+            "    o.idOrden, \n" +
+            "    o.fechaOrden, \n" +
+            "    eo.idEstadoOrden, \n" +
+            "    co.idControlOrden, \n" +
+            "    u.nombre, \n" +
+            "    u.apellidoPaterno\n" +
+            "ORDER BY \n" +
+            "    o.idOrden DESC\n" +
+            "LIMIT 5;\n")
+    List<OrdenCarritoDto> ultimasOrdenesPendientes(Integer idAgente);
 
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=3 and idAgente=?1 order by idOrden desc limit 5;")
-    List<Orden> ultimasOrdenesenProceso(Integer idAgente);
-    @Query(nativeQuery = true, value = "SELECT * from orden where idControlOrden=4 and idAgente=?1 order by idOrden desc limit 5;")
-    List<Orden> ultimasOrdenesResueltas(Integer idAgente);
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden, \n" +
+            "    o.fechaOrden, \n" +
+            "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal,  \n" +
+            "    eo.idEstadoOrden AS estadoOrden, \n" +
+            "    co.idControlOrden AS controlOrden, \n" +
+            "    u.nombre, \n" +
+            "    u.apellidoPaterno,\n" +
+            "    (SELECT phc2.idProducto \n" +
+            "     FROM producto_has_carritocompra phc2 \n" +
+            "     WHERE phc2.idCarritoCompra = o.idCarritoCompra \n" +
+            "     ORDER BY phc2.idProducto ASC LIMIT 1) AS primerIdProducto\n" +
+            "FROM \n" +
+            "    usuario u \n" +
+            "JOIN \n" +
+            "    carritocompra c ON u.idUsuario = c.idUsuario \n" +
+            "JOIN \n" +
+            "    orden o ON c.idCarritoCompra = o.idCarritoCompra \n" +
+            "JOIN \n" +
+            "    producto_has_carritocompra phc ON o.idCarritoCompra = phc.idCarritoCompra \n" +
+            "JOIN \n" +
+            "    producto p ON phc.idProducto = p.idProducto \n" +
+            "JOIN \n" +
+            "    estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden \n" +
+            "JOIN \n" +
+            "    controlorden co ON o.idControlOrden = co.idControlOrden \n" +
+            "where o.idControlOrden=3 and o.idAgente=?1\n" +
+            "GROUP BY \n" +
+            "    o.idOrden, \n" +
+            "    o.fechaOrden, \n" +
+            "    eo.idEstadoOrden, \n" +
+            "    co.idControlOrden, \n" +
+            "    u.nombre, \n" +
+            "    u.apellidoPaterno\n" +
+            "ORDER BY \n" +
+            "    o.idOrden DESC\n" +
+            "LIMIT 5;\n")
+    List<OrdenCarritoDto> ultimasOrdenesenProceso(Integer idAgente);
+    @Query(nativeQuery = true, value = "SELECT \n" +
+            "    o.idOrden, \n" +
+            "    o.fechaOrden, \n" +
+            "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal,  \n" +
+            "    eo.idEstadoOrden AS estadoOrden, \n" +
+            "    co.idControlOrden AS controlOrden, \n" +
+            "    u.nombre, \n" +
+            "    u.apellidoPaterno,\n" +
+            "    (SELECT phc2.idProducto \n" +
+            "     FROM producto_has_carritocompra phc2 \n" +
+            "     WHERE phc2.idCarritoCompra = o.idCarritoCompra \n" +
+            "     ORDER BY phc2.idProducto ASC LIMIT 1) AS primerIdProducto\n" +
+            "FROM \n" +
+            "    usuario u \n" +
+            "JOIN \n" +
+            "    carritocompra c ON u.idUsuario = c.idUsuario \n" +
+            "JOIN \n" +
+            "    orden o ON c.idCarritoCompra = o.idCarritoCompra \n" +
+            "JOIN \n" +
+            "    producto_has_carritocompra phc ON o.idCarritoCompra = phc.idCarritoCompra \n" +
+            "JOIN \n" +
+            "    producto p ON phc.idProducto = p.idProducto \n" +
+            "JOIN \n" +
+            "    estadoorden eo ON o.idEstadoOrden = eo.idEstadoOrden \n" +
+            "JOIN \n" +
+            "    controlorden co ON o.idControlOrden = co.idControlOrden \n" +
+            "where o.idControlOrden=4 and o.idAgente=?1\n" +
+            "GROUP BY \n" +
+            "    o.idOrden, \n" +
+            "    o.fechaOrden, \n" +
+            "    eo.idEstadoOrden, \n" +
+            "    co.idControlOrden, \n" +
+            "    u.nombre, \n" +
+            "    u.apellidoPaterno\n" +
+            "ORDER BY \n" +
+            "    o.idOrden DESC\n" +
+            "LIMIT 5;\n")
+    List<OrdenCarritoDto> ultimasOrdenesResueltas(Integer idAgente);
 
 
     @Transactional

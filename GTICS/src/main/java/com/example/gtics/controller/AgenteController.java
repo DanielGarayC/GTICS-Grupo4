@@ -56,10 +56,10 @@ public class AgenteController {
     @GetMapping({"Agente"})
     public String Inicio(Model model){
         Integer idAgente = 13;
-        List<Orden> listaOrdenesSinAsignar = ordenRepository.ultimasOrdenesSinAsignar();
-        List<Orden> listaOrdenesPendientes = ordenRepository.ultimasOrdenesPendientes(idAgente);
-        List<Orden> listaOrdenesEnProceso = ordenRepository.ultimasOrdenesenProceso(idAgente);
-        List<Orden> listaOrdenesResueltas = ordenRepository.ultimasOrdenesResueltas(idAgente);
+        List<OrdenCarritoDto> listaOrdenesSinAsignar = ordenRepository.ultimasOrdenesSinAsignar();
+        List<OrdenCarritoDto> listaOrdenesPendientes = ordenRepository.ultimasOrdenesPendientes(idAgente);
+        List<OrdenCarritoDto> listaOrdenesEnProceso = ordenRepository.ultimasOrdenesenProceso(idAgente);
+        List<OrdenCarritoDto> listaOrdenesResueltas = ordenRepository.ultimasOrdenesResueltas(idAgente);
 
         model.addAttribute("listaOrdenesSinAsignar",listaOrdenesSinAsignar);
         model.addAttribute("listaOrdenesPendientes",listaOrdenesPendientes);

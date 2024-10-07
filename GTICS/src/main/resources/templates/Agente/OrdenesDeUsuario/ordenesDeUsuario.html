@@ -111,7 +111,8 @@
 							   <div class="card-body p-6">
 								   <div>
 									   <!-- img -->
-									   <img th:src="@{/images/stores-logo/stores-logo-1.svg}" alt="" class="rounded-circle icon-shape icon-xxl mb-6" />
+
+									   <img th:src="@{'/productos/' + ${orden.primerIdProducto}}" alt="Imagen del producto" class="rounded-circle icon-shape icon-xxl mb-6" />
 									   <!-- content -->
 									   <div th:if="${orden.controlOrden == 1}">
 										   <h2 class="mb-2 h5"><a th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?indicadorVistaARegresar=1&numOrden='+${var.index+1}+ '&idOrden=' + ${orden.idOrden}}" class="text-inherit" th:text="|Orden: #${var.index+1}|"></a></h2>
