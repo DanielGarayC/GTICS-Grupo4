@@ -3,14 +3,12 @@ package com.example.gtics.repository;
 import com.example.gtics.dto.CantidadProductos;
 import com.example.gtics.dto.ProductoRelevanteDTO;
 import com.example.gtics.dto.ProductoTabla;
-import com.example.gtics.dto.ProductosCarritoDto;
 import com.example.gtics.entity.Producto;
 import com.example.gtics.entity.Zona;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -89,13 +87,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
     List<Producto> findByNombreProducto(String nombreProducto);
     Optional<Producto> findByNombreProductoAndZona(String nombreProducto, Zona zona);
-    @Query(nativeQuery = true, value = "SELECT p.idProducto, p.nombreProducto, phc.cantidadProducto, p.precio AS precioUnidad, (phc.cantidadProducto * p.precio) AS precioTotalPorProducto " +
-            "FROM orden o " +
-            "JOIN carritocompra c ON o.idCarritoCompra = c.idCarritoCompra " +
-            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra " +
-            "JOIN producto p ON phc.idProducto = p.idProducto " +
-            "WHERE c.idUsuario = :idUsuario AND o.idEstadoOrden = 8 AND o.ordenEliminada = 0")
-    List<ProductosCarritoDto> obtenerProductosPorUsuario(@Param("idUsuario") Integer idUsuario);
 
 
 }
