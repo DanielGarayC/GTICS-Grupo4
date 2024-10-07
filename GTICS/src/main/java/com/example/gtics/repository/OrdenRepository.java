@@ -168,6 +168,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     List<ProductosxOrden> obtenerProductosPorOrden(Integer idOrden);
 
 
+
     @Query(value = "SELECT o.costosAdicionales FROM gticsdb.orden o WHERE o.idOrden = :idOrden", nativeQuery = true)
     Double obtenerCostoAdicionalxOrden(Integer idOrden);
 
