@@ -119,7 +119,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "JOIN controlorden co ON o.idControlOrden = co.idControlOrden \n" +
             "WHERE u.idUsuario = ?1 and ordenEliminada=0 \n" +
             "GROUP BY o.idOrden;")
-    List<OrdenCarritoDto> obtenerCarritoUFConDto(Integer idUsuario);
+    Page<OrdenCarritoDto> obtenerCarritoUFConDto(Integer idUsuario, Pageable pageable);
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    o.idOrden, \n" +
             "    o.fechaOrden, \n" +
@@ -450,5 +450,5 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "JOIN producto p ON phc.idProducto = p.idProducto " +
             "WHERE c.idUsuario = :idUsuario AND o.idEstadoOrden = 8 AND o.ordenEliminada = 0")
     List<ProductosCarritoDto> obtenerProductosPorUsuario(@Param("idUsuario") Integer idUsuario);
-    Page<OrdenCarritoDto> obtenerCarritoUFConDto(Integer idUsuario, Pageable pageable);
+
 }
