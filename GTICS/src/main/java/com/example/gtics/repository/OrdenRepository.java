@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -439,14 +438,4 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE `gticsdb`.`orden` SET `idAgente` = '13' WHERE (`idOrden` = ?1);")
     void solicitarUnAgente(Integer idOrden);
-
-
-    @Query(nativeQuery = true, value = "SELECT p.idProducto, p.nombreProducto, phc.cantidadProducto, p.precio AS precioUnidad, (phc.cantidadProducto * p.precio) AS precioTotalPorProducto " +
-            "FROM orden o " +
-            "JOIN carritocompra c ON o.idCarritoCompra = c.idCarritoCompra " +
-            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra " +
-            "JOIN producto p ON phc.idProducto = p.idProducto " +
-            "WHERE c.idUsuario = :idUsuario AND o.idEstadoOrden = 8 AND o.ordenEliminada = 0")
-    List<ProductosCarritoDto> obtenerProductosPorUsuario(@Param("idUsuario") Integer idUsuario);
-
 }
