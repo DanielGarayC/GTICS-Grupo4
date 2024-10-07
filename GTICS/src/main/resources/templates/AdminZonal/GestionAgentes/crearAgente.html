@@ -232,14 +232,13 @@
 									<div class="col-lg-6 col-12">
 										<label class="form-label">DNI:</label>
 										<input type="text" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}"/>
-										<div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" ></div>
+										<div class="invalid-feedback" th:if="${dniError}" th:text="${dniError}"></div>
 									</div>
-
 									<!-- input Teléfono -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Teléfono:</label>
 										<input type="text" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}" />
-										<div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" ></div>
+										<div class="invalid-feedback" th:if="${telefonoError}" th:text="${telefonoError}"></div>
 									</div>
 
 									<!-- input Correo electrónico -->
@@ -272,9 +271,8 @@
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Código de Jurisdicción:</label>
 										<input type="text" class="form-control" th:field="*{agtCodigojurisdiccion}" id="codigoJurisdiccion" th:classappend="${#fields.hasErrors('agtCodigojurisdiccion')?'is-invalid':''}"/>
-										<div class="invalid-feedback" th:if="${#fields.hasErrors('agtCodigojurisdiccion')}" th:errors="*{agtCodigojurisdiccion}" ></div>
+										<div class="invalid-feedback" th:if="${agtCodigojurisdiccionError}" th:text="${agtCodigojurisdiccionError}"></div>
 									</div>
-
 									<!-- input Zona (deshabilitado porque se asigna automáticamente) -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Zona:</label>
@@ -291,16 +289,14 @@
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Código Aduanero:</label>
 										<input type="text" class="form-control" th:field="*{agtCodigoaduana}" th:classappend="${#fields.hasErrors('agtCodigoaduana')?'is-invalid':''}" />
-										<div class="invalid-feedback" th:if="${#fields.hasErrors('agtCodigoaduana')}" th:errors="*{agtCodigoaduana}" ></div>
+										<div class="invalid-feedback" th:if="${agtCodigoaduanaError}" th:text="${agtCodigoaduanaError}"></div>
 									</div>
-
 									<!-- input RUC -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">RUC:</label>
 										<input type="text" class="form-control" th:field="*{agtRuc}" th:classappend="${#fields.hasErrors('agtRuc')?'is-invalid':''}" />
-										<div class="invalid-feedback" th:if="${#fields.hasErrors('agtRuc')}" th:errors="*{agtRuc}" ></div>
+										<div class="invalid-feedback" th:if="${agtRucError}" th:text="${agtRucError}"></div>
 									</div>
-
 									<!-- Botones -->
 									<div class="col-12 mt-3">
 										<button type="submit" class="btn btn-success mb-2">Crear Agente</button>
