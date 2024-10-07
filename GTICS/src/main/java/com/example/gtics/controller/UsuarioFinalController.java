@@ -143,13 +143,22 @@ public class UsuarioFinalController {
     }
 
     @PostMapping("/UsuarioFinal/listaMisOrdenes/filtro")
-    public String mostrarListaMisOrdenesFiltro(Model model,@RequestParam("idEstado") Integer idEstado){
+    public String mostrarListaMisOrdenesFiltro(Model model,
+                                               @RequestParam("idEstado") Integer idEstado,
+                                               @RequestParam(defaultValue = "0") int page){
+
+        int pageSize = 6;
+        Pageable pageable = PageRequest.of(page, pageSize);
         System.out.println(idEstado);
+
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        List<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDtoFiltro(7,idEstado); // Si el usuario tiene ID=7
+        Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDtoFiltro(7,idEstado,pageable); // Si el usuario tiene ID=7
         model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-        model.addAttribute("ordenCarrito",ordenCarrito);
+        model.addAttribute("ordenCarrito",ordenCarrito.getContent());
         model.addAttribute("idEstado",idEstado);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", ordenCarrito.getTotalPages());
+        model.addAttribute("paginaFiltro", 1);
         return "UsuarioFinal/Ordenes/listaMisOrdenes";
     }
 
