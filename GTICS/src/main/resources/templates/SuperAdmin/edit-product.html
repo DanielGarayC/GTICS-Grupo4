@@ -236,8 +236,7 @@
                                         <div class="mb-3 col-lg-12">
                                             <label for="nombreProducto" class="form-label">Nombre del producto</label>
                                             <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" th:value="${producto.nombreProducto}" required />
-                                            <div class="invalid-feedback">Por favor ingrese el nombre del producto</div>
-                                        </div>
+                                            <div class="invalid-feedback">Debe ingresar el nombre del producto</div>                                        </div>
 
                                         <!-- Categoría -->
                                         <div class="mb-3 col-lg-6">
@@ -247,7 +246,6 @@
                                                 <option th:each="categoria : ${categorias}" th:text="${categoria.nombreCategoria}" th:value="${categoria.id}"
                                                         th:selected="${categoria.id == producto.idCategoria.id}"></option>
                                             </select>
-                                            <div class="invalid-feedback">Por favor seleccione una categoría</div>
                                         </div>
 
                                         <!-- Subcategoría -->
@@ -258,24 +256,22 @@
                                                 <option th:each="subcategoria : ${subcategorias}" th:text="${subcategoria.nombreSubcategoria}" th:value="${subcategoria.id}"
                                                         th:selected="${subcategoria.id == producto.idSubcategoria.id}"></option>
                                             </select>
-                                            <div class="invalid-feedback">Por favor seleccione una subcategoría</div>
                                         </div>
 
                                         <!-- Precio -->
                                         <div class="mb-3 col-lg-6">
                                             <label for="precio" class="form-label">Precio</label>
-                                            <input type="text" class="form-control" id="precio" name="precio" th:value="${producto.precio}" required />
-                                            <div class="invalid-feedback">Por favor ingrese el precio del producto</div>
-                                        </div>
-                                        <!-- Costo de envío -->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="costoEnvio" class="form-label">Costo de Envío</label>
-                                            <input type="text" class="form-control" id="costoEnvio" name="costoEnvio" th:value="${producto.costoEnvio}" required />
-                                            <div class="invalid-feedback">Por favor ingrese el costo de envío</div>
-                                        </div>
-                                        <!--Proveedor-->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
+                                                <input type="text" class="form-control" id="precio" name="precio" th:value="${producto.precio}" required />
+                                            </div>
+                                            <!-- Costo de envío -->
+                                            <div class="mb-3 col-lg-6">
+                                                <label for="costoEnvio" class="form-label">Costo de Envío</label>
+                                                <input type="text" class="form-control" id="costoEnvio" name="costoEnvio" th:value="${producto.costoEnvio}" required />
+                                                <div class="invalid-feedback" id="envio-vacio">Debe ingresar el costo de envío</div>
+                                                <div class="invalid-feedback" id="envio-formato">El costo de envío debe ser un número válido con hasta 2 decimales</div>                                        </div>
+                                            <!--Proveedor-->
+                                            <div class="mb-3 col-lg-6">
+                                                <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
                                             <select class="form-select" name="idProveedor" id="selectProveedor" required>
                                                 <option value="" selected disabled>--Seleccione un proveedor--</option>
                                                 <option th:each="proveedor : ${proveedores}"
@@ -284,7 +280,7 @@
                                                         th:selected="${proveedor.id == producto.idProveedor.id}">
                                                 </option>
                                             </select>
-                                            <div class="invalid-feedback">Por favor seleccione un proveedor</div>
+
                                         </div>
 
                                         <!-- Zona seleccionada -->
@@ -299,6 +295,8 @@
                                             <label for="cantidadZona" class="form-label">Cantidad disponible en zona seleccionada</label>
                                             <input type="number" class="form-control" id="cantidadZona" name="cantidadZona" min="0"
                                                    th:value="${producto.cantidadDisponible}" required />
+                                            <div class="invalid-feedback" id="cantidad-vacio">Debe ingresar la cantidad disponible</div>
+                                            <div class="invalid-feedback" id="cantidad-positiva">La cantidad debe ser un número positivo</div>
                                         </div>
 
                                         <!-- Color (opcional) -->
@@ -311,11 +309,11 @@
                                         <div class="mb-3 col-lg-12">
                                             <label for="descripcion" class="form-label">Descripción</label>
                                             <textarea class="form-control" id="descripcion" name="descripcion" rows="3" th:text="${producto.descripcion}" required></textarea>
-                                            <div class="invalid-feedback">Por favor ingrese una descripción</div>
+                                            <div class="invalid-feedback">Debe ingresar una descripción</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
-                                        <button class="btn btn-primary" type="submit">Actualizar Producto</button>
+                                        <button class="btn btn-primary" type="submit" onclick="validarFormulario()">Actualizar Producto</button>
                                         <a th:href="@{/SuperAdmin/productos}" class="btn btn-secondary">Cancelar</a>
                                     </div>
                                 </div>
@@ -433,7 +431,79 @@
         });
     }
 </script>
+    <script>
+        function validarFormulario() {
+            const nombre = document.getElementById('nombreProducto');
+            const precio = document.getElementById('precio');
+            const costoEnvio = document.getElementById('costoEnvio');
+            const cantidad = document.getElementById('cantidadZona');
+            const descripcion = document.getElementById('descripcion');
+            let valido = true;
+            // Validación de nombre
+            if (nombre.value.trim() === '') {
+                nombre.classList.add('is-invalid');
+                valido = false;
+            } else {
+                nombre.classList.remove('is-invalid');
+            }
+            // Validación de cantidad (debe ser positiva)
+            if (cantidad.value.trim() === '') {
+                cantidad.classList.add('is-invalid');
+                document.getElementById('cantidad-vacio').style.display = 'block';
+                document.getElementById('cantidad-positiva').style.display = 'none';
+                valido = false;
+            } else if (cantidad.value < 0) {
+                cantidad.classList.add('is-invalid');
+                document.getElementById('cantidad-vacio').style.display = 'none';
+                document.getElementById('cantidad-positiva').style.display = 'block';
+                valido = false;
+            } else {
+                cantidad.classList.remove('is-invalid');
+            }
+            // Validación de precio (número positivo con hasta 2 decimales)
+            const precioRegex = /^\d+(\.\d{1,2})?$/;
+            if (precio.value.trim() === '') {
+                precio.classList.add('is-invalid');
+                document.getElementById('precio-vacio').style.display = 'block';
+                document.getElementById('precio-formato').style.display = 'none';
+                valido = false;
+            } else if (!precioRegex.test(precio.value)) {
+                precio.classList.add('is-invalid');
+                document.getElementById('precio-vacio').style.display = 'none';
+                document.getElementById('precio-formato').style.display = 'block';
+                valido = false;
+            } else {
+                precio.classList.remove('is-invalid');
+            }
 
+            // Validación de costo de envío (número positivo con hasta 2 decimales)
+            if (costoEnvio.value.trim() === '') {
+                costoEnvio.classList.add('is-invalid');
+                document.getElementById('envio-vacio').style.display = 'block';
+                document.getElementById('envio-formato').style.display = 'none';
+                valido = false;
+            } else if (!precioRegex.test(costoEnvio.value)) {
+                costoEnvio.classList.add('is-invalid');
+                document.getElementById('envio-vacio').style.display = 'none';
+                document.getElementById('envio-formato').style.display = 'block';
+                valido = false;
+            } else {
+                costoEnvio.classList.remove('is-invalid');
+            }
+            // Validar Descripción (no puede ser nula)
+            if (descripcion.value.trim() === '') {
+                descripcion.classList.add('is-invalid');
+                descripcion.nextElementSibling.textContent = 'La descripción es obligatoria';
+                valid = false;
+            } else {
+                descripcion.classList.remove('is-invalid');
+            }
+            // Si hay algún campo inválido, no enviar el formulario
+            if (!valido) {
+                event.preventDefault();
+            }
+        }
+    </script>
 <script>
     document.getElementById('fileInput').addEventListener('change', function(event) {
         const [file] = event.target.files;

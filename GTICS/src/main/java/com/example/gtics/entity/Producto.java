@@ -4,7 +4,7 @@ import com.example.gtics.ValidationGroup.AdminZonalValidationGroup;
 import com.example.gtics.ValidationGroup.AgenteValidationGroup;
 import com.example.gtics.ValidationGroup.UsuarioFinalValidationGroup;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,16 +25,24 @@ public class Producto {
     private String nombreProducto;
 
     @Column(name = "cantidadDisponible", nullable = false, length = 45)
+    @Positive(message = "La cantidad disponible ingresada debe ser positiva", groups = {InventarioProductosValidationGroup.class})
     private Integer cantidadDisponible;
 
     @Lob
     @Column(name = "`descripcion`", nullable = false)
+    @NotBlank(message = "Este es un campo obligatorio", groups = {InventarioProductosValidationGroup.class})
     private String descripcion;
 
     @Column(name = "precio", nullable = false, length = 45)
+    @Digits(integer=6, fraction = 2, message = "El precio debe ser un número (máx. 2 decimales)", groups = {InventarioProductosValidationGroup.class})
+    @NotNull(message = "Este es un campo obligatorio", groups = {InventarioProductosValidationGroup.class})
+    @Positive(message = "El precio debe ser un número positivo", groups = {InventarioProductosValidationGroup.class})
     private Double precio;
 
     @Column(name = "costoEnvio", nullable = false, length = 45)
+    @Digits(integer=6, fraction = 2, groups = {InventarioProductosValidationGroup.class})
+    @NotNull(message = "Este es un campo obligatorio", groups = {InventarioProductosValidationGroup.class})
+    @PositiveOrZero(message = "El costo de envío debe ser 0 o positivo", groups = {InventarioProductosValidationGroup.class})
     private Double costoEnvio;
 
     @Column(name = "modelo", length = 45)

@@ -430,7 +430,10 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(nativeQuery = true, value = "UPDATE orden SET ordenEliminada=1, razonEliminacion = ?2 WHERE (idOrden = ?1);")
     void eliminadoLogicoDeOrden(Integer idOrden,String razonEliminacion);
 
-
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE usuario SET direccion = ?2,idDistrito = ?3 WHERE idUsuario= ?1")
+    void actualizarOrdenParaUsuarioFinal(Integer idUsuario,String direccion, Integer idDistrito);
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE orden SET solicitarCancelarOrden=1 WHERE (idOrden = ?1);")
@@ -447,5 +450,5 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "JOIN producto p ON phc.idProducto = p.idProducto " +
             "WHERE c.idUsuario = :idUsuario AND o.idEstadoOrden = 8 AND o.ordenEliminada = 0")
     List<ProductosCarritoDto> obtenerProductosPorUsuario(@Param("idUsuario") Integer idUsuario);
-
+    Page<OrdenCarritoDto> obtenerCarritoUFConDto(Integer idUsuario, Pageable pageable);
 }
