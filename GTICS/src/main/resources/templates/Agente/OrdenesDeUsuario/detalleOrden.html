@@ -114,20 +114,20 @@
 
 					   </div>
 					   <!-- button -->
-					   <div class="row">
-						   <div th:if="${indicadorVistaARegresar == 1}" class="col-6 ml-13">
+					   <div class="row d-flex justify-content-end">
+						   <div th:if="${indicadorVistaARegresar == 1}" class="col-4">
 							   <!--si es 1, regresa a ordenes de usuario-->
 							   <a th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${orden.idCarritoCompra.idUsuario.id}}" class="btn btn-primary">Regresar</a>
 						   </div>
-						   <div th:if="${indicadorVistaARegresar == 0}" class="col-6 ml-13">
+						   <div th:if="${indicadorVistaARegresar == 0}" class="col-4">
 							   <!--si es 0, regresa a lista de ordenes-->
 							   <a th:href="@{/Agente/Ordenes}" class="btn btn-primary">Regresar</a>
 						   </div>
-						   <div th:if="${indicadorVistaARegresar == 2}" class="col-6 ml-13">
+						   <div th:if="${indicadorVistaARegresar == 2}" class="col-4">
 							   <!--si es 2, regresa a lista de inicio-->
 							   <a th:href="@{/Agente}" class="btn btn-primary">Regresar</a>
 						   </div>
-						   <div class="col-6">
+						   <div class="col-8 d-flex justify-content-end">
 							   <a th:href="@{'/Agente/Ordenes/tracking?idOrden=' + ${orden.id}}" class="btn btn-soft-success">Ver tracking</a>
 						   </div>
 					   </div>
@@ -138,7 +138,8 @@
 		   <div class="row">
 			   <div class="col-xl-12 col-12 mb-5">
 				   <!-- card -->
-				   <form class="card h-100 card-lg" method="post" th:action="@{/Agente/Orden/editarOrden}">
+				   <form  id="formOrden" class="card h-100 card-lg" method="post" th:action="@{/Agente/Orden/editarOrden}">
+
 						<input type="hidden" th:field="${orden.solicitarCancelarOrden}">
 					    <input type="hidden" th:field="${orden.ordenEliminada}">
 
@@ -172,7 +173,7 @@
 								</div>
 								   <!-- button -->
 								   <div class="ms-md-3">
-									   <a ><button type="submit" class="btn btn-primary">Guardar</button></a> <!--onclick="mostrarAlerta()" -->
+									   <button type="button" class="btn btn-primary" onclick="mostrarAlerta(event)">Guardar</button> <!-- Aquí llamamos a mostrarAlerta() -->
 									   <th:block th:if="${orden.solicitarCancelarOrden == 1}">
 										   <a class="btn btn-danger eliminarOrden " href="javascript:void(0);"
 											  th:data-id="${orden.id}"
@@ -426,33 +427,37 @@
 	   </script>
 
 		<!--POP UP PARA GUARDAR/EDITAR ORDEN-->
-		<script>
-			function mostrarAlerta() {
-				Swal.fire({
-					title: "¿Estás seguro de guardar los cambios realizados?",
-					showDenyButton: true,
-					showCancelButton: true,
-					confirmButtonText: "Guardar",
-					denyButtonText: "No guardar",
-					cancelButtonText: "Cancelar",
-					buttonsStyling: false,
-					customClass: {
-						confirmButton: 'btn btn-success mx-2',  // Botón verde
-						denyButton: 'btn btn-danger mx-2',      // Botón rojo
-						cancelButton: 'btn btn-secondary mx-2'  // Botón plomo
-					}
-				}).then((result) => {
-					if (result.isConfirmed) {
-						Swal.fire("¡Guardado!", "", "success");
-					} else if (result.isDenied) {
-						Swal.fire("No se guardaron los cambios", "", "info");
-					}
-				});
-			}
-		</script>
+	   <script>
+		   function mostrarAlerta(event) {
+			   event.preventDefault(); // Previene el envío automático del formulario
+
+			   Swal.fire({
+				   title: "¿Estás seguro de guardar los cambios realizados?",
+				   icon: "question",
+
+				   showCancelButton: true,
+				   confirmButtonText: "Guardar",
+
+				   cancelButtonText: "Cancelar",
+				   buttonsStyling: false,
+				   customClass: {
+					   confirmButton: 'btn btn-success mx-2',  // Botón verde
+					   cancelButton: 'btn btn-secondary mx-2'  // Botón plomo
+				   }
+			   }).then((result) => {
+				   if (result.isConfirmed) {
+					   // Si el usuario hace clic en "Guardar", se envía el formulario
+					   document.getElementById("formOrden").submit();
+				   } else if (result.isDenied) {
+					   Swal.fire('Cambios no guardados', '', 'info');
+				   }
+			   });
+		   }
+	   </script>
 
 
-	   </main>
+
+   </main>
 
 
 

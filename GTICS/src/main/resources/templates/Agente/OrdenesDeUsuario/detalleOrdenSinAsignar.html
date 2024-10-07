@@ -117,23 +117,24 @@
 					   </div>
 					   <!-- button -->
 					   <!-- button -->
-					   <div class="row">
-						   <div th:if="${indicadorVistaARegresar == 1}" class="col-6 ml-13">
+					   <div class="row d-flex justify-content-end ">
+						   <div th:if="${indicadorVistaARegresar == 1}" class="col-4 ">
 							   <!--si es 1, regresa a ordenes de usuario-->
-							   <a th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${orden.idCarritoCompra.idUsuario.id}}" class="btn btn-primary">Regresar</a>
+							   <a th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${orden.idCarritoCompra.idUsuario.id}}" class="btn btn-primary"><div>Regresar</div></a>
 						   </div>
-						   <div th:if="${indicadorVistaARegresar == 0}" class="col-6 ml-13">
+						   <div th:if="${indicadorVistaARegresar == 0}" class="col-4  ">
 							   <!--si es 0, regresa a lista de ordenes-->
-							   <a th:href="@{/Agente/Ordenes}" class="btn btn-primary">Regresar</a>
+							   <a th:href="@{/Agente/Ordenes}" class="btn btn-primary"><div>Regresar</div></a>
 						   </div>
-						   <div th:if="${indicadorVistaARegresar == 2}" class="col-6 ml-13">
+						   <div th:if="${indicadorVistaARegresar == 2}" class="col-4 ">
 							   <!--si es 2, regresa a lista de inicio-->
-							   <a th:href="@{/Agente}" class="btn btn-primary">Regresar</a>
+							   <a th:href="@{/Agente}" class="btn btn-primary"><div>Regresar</div></a>
 						   </div>
-						   <div class="col-6">
-							   <a th:href="@{'/Agente/Ordenes/tracking?idOrden=' + ${orden.id}}" class="btn btn-soft-success">Ver tracking</a>
+						   <div class="col-8 d-flex justify-content-end">
+							   <a th:href="@{'/Agente/Ordenes/tracking?idOrden=' + ${orden.id}}" class="btn btn-soft-success"><div>Ver tracking</div></a>
 						   </div>
 					   </div>
+				   </div>
 			   </div>
 		   </div>
 		   <!-- row -->
