@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public interface OrdenCarritoDto{
 
-
+    Integer getPrimerIdProducto();
     LocalDate getFechaOrden();
     double getMontoTotal();
     Integer getEstadoOrden();
