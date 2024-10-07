@@ -6,9 +6,12 @@ import com.example.gtics.dto.ProductosxOrden;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -31,6 +34,10 @@ public class AgenteController {
     ControlOrdenRepository controlOrdenRepository;
     @Autowired
     EstadoOrdenRepository estadoOrdenRepository;
+    @Autowired
+    private FotosProductoRepository fotosProductoRepository;
+    @Autowired
+    private ProductoRepository productoRepository;
 
 
     @ModelAttribute
@@ -353,7 +360,6 @@ public class AgenteController {
             model.addAttribute("costoAdicional", costoAdicioal);  // Enviar costo de envío más alto
 
 
-
             return "Agente/OrdenesDeUsuario/detalleOrden";
 
         }else{
@@ -364,6 +370,20 @@ public class AgenteController {
 
 
     }
+    @GetMapping("/productos/{id}")
+    public ResponseEntity<ByteArrayResource> obtenerFotoProducto(@PathVariable Integer id) {
+        List<Fotosproducto> fopt = fotosProductoRepository.findByProducto_Id(id);
+        Fotosproducto fotosproducto =fopt.get(0);//.orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        byte[] foto = fotosproducto.getFoto();
+        ByteArrayResource resource = new ByteArrayResource(foto);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"foto_producto_" + id + ".jpg\"")
+                .contentLength(foto.length)
+                .body(resource);
+    }
+
     @GetMapping({"Agente/Ordenes/tracking"})
     public String trackingUsuario(@RequestParam("idOrden") Integer idOrden,Model model){
 

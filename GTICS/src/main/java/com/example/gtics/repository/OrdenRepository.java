@@ -128,6 +128,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     List<OrdenCarritoDto> obtenerCarritoUFConDtoFiltro(Integer idUsuario,Integer idEstadoOrden);
 
     @Query(value = "SELECT \n" +
+            "     p.idProducto, \n" +
             "    (SELECT fp.foto FROM fotosproducto fp WHERE fp.idProducto = p.idProducto LIMIT 1) AS primeraFotoProducto,\n" +
             "    p.nombreProducto, \n" +
             "    t.nombreTienda, \n" +

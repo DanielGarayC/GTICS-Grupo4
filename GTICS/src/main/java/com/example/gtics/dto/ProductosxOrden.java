@@ -3,7 +3,7 @@ package com.example.gtics.dto;
 
 
 public interface ProductosxOrden {
-
+    Integer getIdProducto();
     Byte[] getPrimeraFotoProducto();
     String getNombreProducto();
     String getNombreTienda();
