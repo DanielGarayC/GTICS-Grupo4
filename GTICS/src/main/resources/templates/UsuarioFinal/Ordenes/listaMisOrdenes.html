@@ -85,8 +85,7 @@
                                         <div class="col-md-4 col-12 mb-2 mb-md-0">
                                             <!-- form -->
                                             <div class="d-flex" role="search">
-                                                <input class="form-control" type="search" id="searchOrden" placeholder="Buscar órden" aria-label="Search" oninput="filterTable()" />
-
+                                                <input class="form-control" type="search" placeholder="Buscar por número de orden" aria-label="Search" />
                                             </div>
                                         </div>
                                         <form class="col-xl-3 col-md-5 col-12 d-flex align-items-center" method="post" th:action="@{/UsuarioFinal/listaMisOrdenes/filtro}">
@@ -184,37 +183,18 @@
                                         </table>
                                     </div>
                                 </div>
-
-
-
-                                <!-- Mostrar información de paginación y botones -->
-                                <div class="d-flex flex-column align-items-center">
-                                    <!-- Texto de paginación centrado -->
-                                    <span id="paginationInfo" class="mb-2">Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]</span>
-
-                                    <!-- Paginación centrada -->
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination justify-content-center">
-                                            <!-- Botón de "Previo" -->
-                                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                                <a class="page-link" th:href="@{/UsuarioFinal/listaMisOrdenes(page=${currentPage - 1})}">Previo</a>
-                                            </li>
-
-                                            <!-- Páginas numeradas -->
-                                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                                <a class="page-link" th:href="@{/UsuarioFinal/listaMisOrdenes(page=${i})}" th:text="${i + 1}"></a>
-                                            </li>
-
-                                            <!-- Botón de "Siguiente" -->
-                                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                                                <a class="page-link" th:href="@{/UsuarioFinal/listaMisOrdenes(page=${currentPage + 1})}">Siguiente</a>
-                                            </li>
+                                <div class="border-top d-md-flex justify-content-between align-items-center p-6">
+                                    <span> </span>
+                                    <nav class="mt-2 mt-md-0">
+                                        <ul class="pagination mb-0">
+                                            <li class="page-item disabled"><a class="page-link" href="#!">Anterior</a></li>
+                                            <li class="page-item"><a class="page-link active" href="#!">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#!">3</a></li>
+                                            <li class="page-item"><a class="page-link" href="#!">Siguiente</a></li>
                                         </ul>
                                     </nav>
                                 </div>
-
-
-
                             </div>
                         </div>
                     </div>
@@ -317,44 +297,17 @@
        <script>
            const urlParams = new URLSearchParams(window.location.search);
            if (urlParams.has('ordenEliminadaExitosamente')) {
-               Swal.fire('Eliminar orden', 'Se ha solicitado eliminar la orden exitosamente', 'success');
+               Swal.fire('Eliminar orden', 'Se ha solicitado eliminar la orden exitosamente', 'ordenEliminadaExitosamente');
 
            }
            if (urlParams.has('solicitudAgenteExitosamente')) {
-               Swal.fire('Agente asignado', 'Se ha asignado la orden a un agente de forma exitosa', 'success');
+               Swal.fire('Agente asignado', 'Se ha asignado la orden a un agente de forma exitosa', 'solicitudAgenteExitosamente');
            }
            if (urlParams.has('ordenEliminadaEstadoNoValido')) {
-               Swal.fire('Error', 'Solo se pueden elmiminar las órdenes que aún no llegan al estado en proceso ', 'error');
-           }
-           if (urlParams.has('ordenEditadaExitosamente')) {
-               Swal.fire('Orden editada', 'Se ha editado la orden exitosamente ', 'success');
-           }
-           if (urlParams.has('ordenEditadaError')) {
-               Swal.fire('Error', 'Solo se pueden elmiminar las órdenes que aún no llegan al estado en proceso ', 'error');
+               Swal.fire('Error', 'Solo se pueden elmiminar las órdenes que aún no llegan al estado en proceso ', 'ordenEliminadaEstadoNoValido');
            }
        </script>
 
-       <script>
 
-           function filterTable() {
-               const input = document.getElementById("searchOrden");
-               const filter = input.value.toLowerCase();
-               const table = document.querySelector("table tbody");
-               const rows = table.getElementsByTagName("tr");
-
-               for (let i = 0; i < rows.length; i++) {
-                   const cells = rows[i].getElementsByTagName("td");
-                   let match = false;
-
-                   for (let j = 0; j < cells.length; j++) {
-                       if (cells[j].innerText.toLowerCase().includes(filter)) {
-                           match = true;
-                           break;
-                       }
-                   }
-                   rows[i].style.display = match ? "" : "none";
-               }
-           }
-       </script>
    </body>
 </html>

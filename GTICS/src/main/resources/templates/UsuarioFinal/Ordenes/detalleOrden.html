@@ -594,40 +594,41 @@
                                                 <thead class="bg-light">
                                                     <tr>
                                                         <th>Productos</th>
-                                                        <th>Precio (S/.)</th>
+                                                        <th>Precio</th>
                                                         <th>Cantidad</th>
-                                                        <th>Total (S/.)</th>
+                                                        <th>Total</th>
                                                     </tr>
                                                 </thead>
                                                 <!-- tbody -->
                                                 <tbody>
                                                     <tr th:each="producto : ${productosOrden}">
                                                         <td>
-                                                            <div class="d-flex align-items-center text-center">
-                                                                <div>
-                                                                    <img th:src="@{'/productos/' + ${producto.idProducto}}" alt="Imagen del producto" class="icon-shape icon-lg" />
+                                                            <a href="#" class="text-inherit">
+                                                                <div class="d-flex align-items-center">
+                                                                    <div>
+                                                                        <img th:src="@{/images/products/product-img-1.jpg}" alt="" class="icon-shape icon-lg" />
+                                                                    </div>
+                                                                    <div class="ms-lg-4 mt-2 mt-lg-0">
+                                                                        <!-- Nombre del Producto -->
+                                                                        <h5 class="mb-0 h6" th:text="${producto.nombreProducto}"></h5>
+                                                                        <!-- Detalles: Tienda, Modelo, Color (con fuente más pequeña) -->
+                                                                        <div class="text-muted" style="font-size: 0.875em;">
+                                                                            <!-- Tienda -->
+                                                                            <span th:text="'Tienda: ' + ${producto.nombreTienda}"></span><br>
 
-                                                                </div>
-                                                                <div class="ms-lg-4 mt-2 mt-lg-0 text-center">
-                                                                    <!-- Nombre del Producto -->
-                                                                    <h5 class="mb-0 h6" th:text="${producto.nombreProducto}"></h5>
-                                                                    <!-- Detalles: Tienda, Modelo, Color (con fuente más pequeña) -->
-                                                                    <div class="text-muted" style="font-size: 0.875em;">
-                                                                        <!-- Tienda -->
-                                                                        <span th:text="'Tienda: ' + ${producto.nombreTienda}"></span><br>
+                                                                            <!-- Modelo: Si es null o vacío, muestra "No especificado" -->
+                                                                            <span th:text="'Modelo: ' + (${#strings.isEmpty(producto.modelo) ? 'No especificado' : producto.modelo})"></span><br>
 
-                                                                        <!-- Modelo: Si es null o vacío, muestra "No especificado" -->
-                                                                        <span th:text="'Modelo: ' + (${#strings.isEmpty(producto.modelo) ? 'No especificado' : producto.modelo})"></span><br>
-
-                                                                        <!-- Color: Si es null o vacío, muestra "No especificado" -->
-                                                                        <span th:text="'Color: ' + (${#strings.isEmpty(producto.color) ? 'No especificado' : producto.color})"></span>
+                                                                            <!-- Color: Si es null o vacío, muestra "No especificado" -->
+                                                                            <span th:text="'Color: ' + (${#strings.isEmpty(producto.color) ? 'No especificado' : producto.color})"></span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </a>
                                                         </td>
-                                                        <td><span class="text-body" th:text="${#numbers.formatDecimal(producto.precioUnidad,1,2)}"></span></td>
+                                                        <td><span class="text-body" th:text="'S/. ' + ${producto.precioUnidad}"></span></td>
                                                         <td th:text="${producto.cantidadProducto}"></td>
-                                                        <td th:text="${#numbers.formatDecimal(producto.precioTotalPorProducto,1,2 )}"></td>
+                                                        <td th:text="'S/. ' + ${producto.precioTotalPorProducto}"></td>
                                                     </tr>
 
 
@@ -640,7 +641,7 @@
                                                         </td>
                                                         <td class="fw-medium text-dark">
                                                             <!-- Mostrar el subtotal calculado -->
-                                                            <span th:text="${#numbers.formatDecimal(subtotal,1,2)}"></span>
+                                                            <span th:text="'S/. ' + ${subtotal}"></span>
                                                         </td>
                                                     </tr>
 
@@ -653,7 +654,7 @@
                                                         </td>
                                                         <td class="fw-medium text-dark">
                                                             <!-- text -->
-                                                            <span th:text=" ${#numbers.formatDecimal(maxCostoEnvio,1,2) }"></span>
+                                                            <span th:text="'S/. ' + ${maxCostoEnvio}"></span>
                                                         </td>
                                                     </tr>
 
@@ -666,7 +667,7 @@
                                                         </td>
                                                         <td class="fw-medium text-dark">
                                                             <!-- Mostrar el costo adicional, y si es null, mostrar S/. 0.00 -->
-                                                            <span th:text="(${costoAdicional != null ? #numbers.formatDecimal(costoAdicional,1,2) : '0,00'})"></span>
+                                                            <span th:text="'S/. ' + (${costoAdicional != null ? costoAdicional : '0.00'})"></span>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -678,7 +679,7 @@
                                                         </td>
                                                         <td class="fw-semibold text-dark">
                                                             <!-- Mostrar el total (subtotal + maxCostoEnvio + costoAdicional) y asegurar que costoAdicional nunca sea null -->
-                                                            <span th:text="${ #numbers.formatDecimal(subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00),1,2)}"></span>
+                                                            <span th:text="'S/. ' + (${subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00)})"></span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -688,32 +689,17 @@
                                 </div>
                                 <div class="card-body p-6">
                                     <div class="row">
-                                        <form class="col-md-6 mb-4 mb-lg-0" method="post" th:action="@{/UsuarioFinal/editarDireccionOrden}">
-                                            <input type="hidden" name="idUsuario" th:value="${usuario.id}">
-                                            <input type="hidden" th:field="${orden.id}">
-                                            <input type="hidden" th:field="${orden.estadoorden.id}">
+                                        <div class="col-md-6 mb-4 mb-lg-0">
                                             <h6>Información del pedido</h6>
 
                                             Dirección:
-                                            <div class="col-5"><input type="text" class="form-control flex-fill " th:field="${orden.idCarritoCompra.idUsuario.direccion}" style="color: #6c757d;" ></div>
-
-                                            </p>
-                                            Distrito:
-                                            <div class="col-5">
-                                                <select class="form-control flex-fill col-5" th:field="*{orden.idCarritoCompra.idUsuario.distrito}" style="color: #6c757d; ">
-                                                    <option th:each="distrito : ${listaDistritos}" th:value="${distrito.id}" th:text="${distrito.nombre}"
-                                                            th:selected="${distrito.id == orden.idCarritoCompra.idUsuario.distrito.id}">
-                                                    </option>
-                                                </select>
-                                            </div>
-
+                                            <span class="text-dark" th:text="${orden.idCarritoCompra.idUsuario.direccion}"></span>
                                             </p>
 
                                             Método de pago:
                                             <span class="text-dark">Tarjeta de crédito/débito</span> <!--cambiar esto-->
                                             </p>
-                                            <button class="btn btn-primary" type="submit">Guardar cambios</button>
-                                        </form>
+                                        </div>
 
                                         <div class="card-body p-6">
                                             <div class="d-md-flex justify-content-between">
@@ -727,11 +713,7 @@
                                                     <!-- button -->
                                                     <div class="ms-md-3">
                                                         <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-gray-400 mb-2">Regresar</a>
-                                                        <th:block th:if="${usuario.idAgente != null}">
-                                                            <a th:href="@{/UsuarioFinal/chatbot}" class="btn btn-info mb-2 " data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-chat-dots me-3"></i>Comunicarme con mi agente de compra</a>
-                                                        </th:block>
-
-
+                                                        <a th:href="@{UsuarioFinal/chatSoporte}" class="btn btn-info mb-2 " data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-chat-dots me-3"></i>Comunicarme con mi agente de compra</a>
 
                                                     </div>
                                                 </div>

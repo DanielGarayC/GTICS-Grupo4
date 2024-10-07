@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
@@ -38,13 +36,12 @@ public class UsuarioFinalController {
     private final ResenaRepository resenaRepository;
     private final ForoPreguntaRepository foroPreguntaRepository;
     private final ForoRespuestaRepository foroRespuestaRepository;
-    private final DistritoRepository distritoRepository;
 
     public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository, UsuarioRepository usuarioRepository,
                                   FotosProductoRepository fotosProductoRepository, OrdenRepository ordenRepository,
                                   EstadoOrdenRepository estadoOrdenRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
-                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository, DistritoRepository distritoRepository) {
+                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.fotosProductoRepository = fotosProductoRepository;
@@ -54,7 +51,6 @@ public class UsuarioFinalController {
         this.fotosResenaRepository = fotosResenaRepository;
         this.foroPreguntaRepository = foroPreguntaRepository;
         this.foroRespuestaRepository = foroRespuestaRepository;
-        this.distritoRepository = distritoRepository;
     }
 
     @ModelAttribute
@@ -129,21 +125,11 @@ public class UsuarioFinalController {
         return "UsuarioFinal/Perfil/miperfil";
     }
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
-    public String mostrarListaMisOrdenes(Model model,
-                                         @RequestParam(defaultValue = "0") int page){
-
-        int pageSize = 6;
-        Pageable pageable = PageRequest.of(page, pageSize);
-
+    public String mostrarListaMisOrdenes(Model model){
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDto(7,pageable); // Si el usuario tiene ID=7
+        List<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDto(7); // Si el usuario tiene ID=7
         model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-
-
-        model.addAttribute("ordenCarrito",ordenCarrito.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", ordenCarrito.getTotalPages());
-
+        model.addAttribute("ordenCarrito",ordenCarrito);
         return "UsuarioFinal/Ordenes/listaMisOrdenes";
     }
 
@@ -163,7 +149,6 @@ public class UsuarioFinalController {
 
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
         List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
-        List<Distrito> listaDistritos = distritoRepository.findAll();
         Double costoAdicional = ordenRepository.obtenerCostoAdicionalxOrden(idOrden);
         // Calcular el subtotal sumando precioTotalPorProducto
         double subtotal = productosOrden.stream()
@@ -180,7 +165,6 @@ public class UsuarioFinalController {
             model.addAttribute("maxCostoEnvio",maxCostoEnvio);
             model.addAttribute("productosOrden",productosOrden);
             model.addAttribute("orden",ordenOpt.get());
-            model.addAttribute("listaDistritos",listaDistritos);
 
             return "UsuarioFinal/Ordenes/detalleOrden";
         }else{
@@ -188,18 +172,6 @@ public class UsuarioFinalController {
         }
 
 
-    }
-    @PostMapping("/UsuarioFinal/editarDireccionOrden")
-    public String editarOrden(Orden orden,RedirectAttributes redd,@RequestParam("idUsuario") Integer idUsuario){
-
-        if(orden.getEstadoorden().getId() >=3){
-            redd.addAttribute("ordenEditadaError", true);
-        }else{
-            ordenRepository.actualizarOrdenParaUsuarioFinal(idUsuario,orden.getIdCarritoCompra().getIdUsuario().getDireccion(),orden.getIdCarritoCompra().getIdUsuario().getDistrito().getId());
-            redd.addAttribute("ordenEditadaExitosamente", true);
-        }
-
-        return "redirect:/UsuarioFinal/listaMisOrdenes";
     }
     @GetMapping("/UsuarioFinal/eliminarOrden")
     public String solicitarEliminarOrden(@RequestParam Integer idOrden, RedirectAttributes attr){
