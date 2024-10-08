@@ -1,4 +1,4 @@
-package com.example.gtics.config;
+/*package com.example.gtics.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,4 +53,4 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-}
+}*/
