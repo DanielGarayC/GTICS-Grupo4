@@ -444,12 +444,20 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(nativeQuery = true, value = "UPDATE `gticsdb`.`orden` SET `idAgente` = '13' WHERE (`idOrden` = ?1);")
     void solicitarUnAgente(Integer idOrden);
 
-    @Query(nativeQuery = true, value = "SELECT p.idProducto, p.nombreProducto, phc.cantidadProducto, p.precio AS precioUnidad, (phc.cantidadProducto * p.precio) AS precioTotalPorProducto " +
+    @Query(nativeQuery = true, value = "SELECT p.idProducto, " +
+            "p.nombreProducto, " +
+            "phc.cantidadProducto, " +
+            "p.precio AS precioUnidad, " +
+            "(phc.cantidadProducto * p.precio) AS precioTotalPorProducto, " +
+            "fp.foto AS urlImagenProducto " +
             "FROM orden o " +
             "JOIN carritocompra c ON o.idCarritoCompra = c.idCarritoCompra " +
             "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra " +
             "JOIN producto p ON phc.idProducto = p.idProducto " +
-            "WHERE c.idUsuario = :idUsuario AND o.idEstadoOrden = 8 AND o.ordenEliminada = 0")
+            "LEFT JOIN fotosproducto fp ON p.idProducto = fp.idProducto " +
+            "WHERE c.idUsuario = :idUsuario " +
+            "AND o.idEstadoOrden = 8 " +
+            "AND o.ordenEliminada = 0")
     List<ProductosCarritoDto> obtenerProductosPorUsuario(@Param("idUsuario") Integer idUsuario);
 
 }

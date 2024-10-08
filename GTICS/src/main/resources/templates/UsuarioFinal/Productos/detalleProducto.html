@@ -94,31 +94,34 @@
                             <!-- price -->
                             <span class="fw-bold text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">S/. 3000.00</span>
                         </div>
-                        <div>
-                            <!-- input -->
-                            <div class="input-group input-spinner">
-                                <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" style="font-size: 0.7rem;" />
-                                <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
-                                <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" style="font-size: 0.7rem;" />
-                            </div>
-                        </div>
-                        <div class="mt-2 row g-1 align-items-center">
-                            <div class="col-12">
-                                <div class="d-flex gap-2">
-                                    <!-- Botón principal -->
-                                    <button type="button" class="btn btn-primary flex-grow-1" style="font-size: 0.7rem; padding: 0.3rem 0.7rem;">
-                                        <i class="feather-icon icon-credit-card me-2"></i>
-                                        Comprar
-                                    </button>
-                                    <!-- Botón secundario -->
-                                    <button type="button" class="btn btn-primary flex-grow-1" style="font-size: 0.7rem; padding: 0.3rem 0.7rem;">
-                                        <i class="feather-icon icon-shopping-cart me-2"></i>
-                                        Añadir al carrito
-                                    </button>
+
+                        <form th:action="@{/UsuarioFinal/anadirAlCarrito}" method="post">
+                            <input type="hidden" name="idProducto" th:value="${producto.id}" />
+                            <div>
+                                <!-- input -->
+                                <div class="input-group input-spinner">
+                                    <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" style="font-size: 0.7rem;" />
+                                    <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
+                                    <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" style="font-size: 0.7rem;" />
                                 </div>
                             </div>
-                        </div>
-
+                            <div class="mt-2 row g-1 align-items-center">
+                                <div class="col-12">
+                                    <div class="d-flex gap-2">
+                                        <!-- Botón principal -->
+                                        <!--<button type="button" class="btn btn-primary flex-grow-1" style="font-size: 0.7rem; padding: 0.3rem 0.7rem;">
+                                            <i class="feather-icon icon-credit-card me-2"></i>
+                                            Comprar
+                                        </button>-->
+                                        <!-- Botón secundario -->
+                                        <button type="button" class="btn btn-primary flex-grow-1" style="font-size: 0.7rem; padding: 0.3rem 0.7rem;">
+                                            <i class="feather-icon icon-shopping-cart me-2"></i>
+                                            Añadir al carrito
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <!-- hr -->
                         <hr class="my-3" />
                         <div>
