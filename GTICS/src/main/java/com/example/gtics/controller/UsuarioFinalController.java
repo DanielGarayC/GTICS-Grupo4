@@ -350,41 +350,53 @@ public class UsuarioFinalController {
     @GetMapping("/UsuarioFinal/foro")
     public String verForo(){
 
-        return "UsuarioFinal/Foro/foro";
+        return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
     @GetMapping("/UsuarioFinal/faq")
-    public String preguntasFrecuentes(Model model){
+    public String preguntasFrecuentes(Model model, @ModelAttribute("preguntaForm") Foropregunta preguntaForm){
         model.addAttribute("preguntas",foroPreguntaRepository.findAll());
         model.addAttribute("respuestas",foroRespuestaRepository.findAll());
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
-    @PostMapping("/UsuarioFinal/faq/newPregunta")
-    public String crearPregunta(@RequestParam("pregunta") String pregunta, @RequestParam("descripcion") String descripcion) {
-        Usuario user = usuarioRepository.findUsuarioById(2); //estático por ahora
-        Foropregunta question = new Foropregunta();
-        question.setPregunta(pregunta);
-        question.setFechaCreacion(LocalDate.now());
-        question.setIdUsuario(user);
-        //da igual si es nulo (es opcional creo xd)
-        question.setDescripcion(descripcion);
 
-        foroPreguntaRepository.save(question);
+    @GetMapping("/UsuarioFinal/faq/verPregunta")
+    public String verPregunta(Model model, @RequestParam("id") Integer id, @ModelAttribute("respuestaForm") Fororespuesta respuestaForm){
+
+        Optional<Foropregunta> optP = foroPreguntaRepository.findById(id);
+        if(optP.isPresent()){
+            Foropregunta p = optP.get();
+            List<Fororespuesta> listaRespuestas = foroRespuestaRepository.findByIdPregunta(p);
+            model.addAttribute("pregunta", p);
+            model.addAttribute("listaRespuestas", listaRespuestas);
+            return "UsuarioFinal/Foro/preguntaDetalle";
+        }
+        else{
+            return "UsuarioFinal/Foro/preguntasFrecuentes";
+        }
+
+    }
+
+    @PostMapping("/UsuarioFinal/faq/newPregunta")
+    public String crearPregunta(@ModelAttribute("preguntaForm") Foropregunta preguntaForm) {
+        Usuario user = usuarioRepository.findUsuarioById(27); //estático por ahora
+
+        preguntaForm.setFechaCreacion(LocalDate.now());
+        preguntaForm.setIdUsuario(user);
+
+
+        foroPreguntaRepository.save(preguntaForm);
         return "redirect:/UsuarioFinal/faq";
     }
     @PostMapping("/UsuarioFinal/faq/newRespuesta")
-    public String crearPregunta(@RequestParam("idPregunta") int idPregunta,@RequestParam("contenidoRespuesta") String contenidoRespuesta) {
-        Usuario user = usuarioRepository.findUsuarioById(27);  // Ejemplo estático
+    public String crearPregunta(@RequestParam("idPregunta") Integer idPregunta, @ModelAttribute("respuestaForm") Fororespuesta respuestaForm) {
+        Usuario user = usuarioRepository.findUsuarioById(27);  // Ejemplo estático; a posterior se tiene que mandar este parametro por sesion
         Optional<Foropregunta> pregunta = foroPreguntaRepository.findById(idPregunta);
-        System.out.println(pregunta.get().getPregunta());
-        System.out.println(contenidoRespuesta);
-        Fororespuesta respuesta = new Fororespuesta();
-        respuesta.setIdPregunta(pregunta.get());
-        respuesta.setContenidoRespuesta(contenidoRespuesta);
-        respuesta.setFechaRespuesta(LocalDate.now());
-        respuesta.setIdUsuario(user);  // Asignar el usuario que responde
+        pregunta.ifPresent(respuestaForm::setIdPregunta);
+        respuestaForm.setFechaRespuesta(LocalDate.now());
+        respuestaForm.setIdUsuario(user);  // Asignar el usuario que responde
 
-        foroRespuestaRepository.save(respuesta);  // Guardar la respuesta
-        return "redirect:/UsuarioFinal/faq";
+        foroRespuestaRepository.save(respuestaForm);  // Guardar la respuesta
+        return "redirect:/UsuarioFinal/faq/verPregunta?id=" + idPregunta;
     }
 
 }
