@@ -13,10 +13,10 @@
             <img th:src="@{/images/logo/logo.png}" alt="" style="width: 100%;"/>
         </div>
         <h1>Iniciar sesión</h1>
-        <form th:action="@{/processLogin}" method="post">
-            <input type="email" placeholder="Correo electrónico" name="email" required>
-            <input type="password" placeholder="Contraseña" name="contrasena" required>
-            <a class="buttoncustom" type="submit">Iniciar sesión</a>
+        <form th:action="@{/submitLoginForm}" method="post">
+            <input type="email" placeholder="Correo electrónico" name="username" required>
+            <input type="password" placeholder="Contraseña" name="password" required>
+            <button class="buttoncustom" type="submit">Iniciar sesión</button>
         </form>
         <div class="links">
             <a th:href="@{/Registro}">Registrarse</a>

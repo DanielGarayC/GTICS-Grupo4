@@ -1,4 +1,4 @@
-/*package com.example.gtics.config;
+package com.example.gtics.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,30 +27,29 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.formLogin().loginPage("/ExpressDealsLogin").loginProcessingUrl("/submitLoginForm").successHandler(new CustomAuthenticationSuccessHandler());
+
+        http.authorizeHttpRequests()
+                .requestMatchers("/SuperAdmin", "/SuperAdmin/**").hasAnyAuthority("Super Admin")
+                .requestMatchers("/UsuarioFinal", "/UsuarioFinal/**").hasAnyAuthority("Usuario Final")
+                .requestMatchers("/AdminZonal", "/AdminZonal/**").hasAnyAuthority("Administrador Zonal")
+                .requestMatchers("/Agente", "/Agente/**").hasAnyAuthority("Agente")
+                .anyRequest().permitAll();
+        return http.build();
+    }
+
+    @Bean
     public UserDetailsManager user(DataSource dataSource) {
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
         String sql1 = "select email, contrasena, activo from usuario where email=?";
-        String sql2 = "select u.email, r.nombreRol from usuario u INNER JOIN rol r ON (u.idRol = r.idRol) where email=?"
-                + "WHERE u.email = ? and u.activo = 1";
+        String sql2 = "SELECT u.email, r.nombreRol FROM usuario u INNER JOIN rol r ON u.idRol = r.idRol WHERE u.email = ? AND u.activo = 1";
+
 
         users.setUsersByUsernameQuery(sql1);
         users.setAuthoritiesByUsernameQuery(sql2);
         return users;
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((authz) -> authz
-                        .anyRequest().authenticated()
-                )
-                .formLogin((form) -> form
-                        .loginPage("/Login")
-                        .loginProcessingUrl("/processLogin")
-                        .permitAll()
-                )
-                .logout(LogoutConfigurer::permitAll);
-        return http.build();
-    }
 
-}*/
+}
