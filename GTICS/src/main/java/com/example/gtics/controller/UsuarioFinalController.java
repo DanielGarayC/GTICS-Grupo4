@@ -43,14 +43,13 @@ public class UsuarioFinalController {
     private final ProductoRepository productoRepository;
     private final CategoriaRepository categoriaRepository;
     private final SubcategoriaRepository subcategoriaRepository;
-    private final CarritoCompraRepository carritoCompraRepository;
     private final ProductoHasCarritocompraRepository productoHasCarritocompraRepository;
 
     public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository,DistritoRepository distritoRepository, UsuarioRepository usuarioRepository,
                                   FotosProductoRepository fotosProductoRepository, OrdenRepository ordenRepository,
                                   EstadoOrdenRepository estadoOrdenRepository, ProductoHasCarritocompraRepository productoHasCarritocompraRepository,
                                   ProductoRepository productoRepository, CategoriaRepository categoriaRepository,
-                                  SubcategoriaRepository subcategoriaRepository, CarritoCompraRepository carritoCompraRepository,
+                                  SubcategoriaRepository subcategoriaRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
                                   ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
@@ -66,7 +65,6 @@ public class UsuarioFinalController {
         this.productoRepository=productoRepository;
         this.categoriaRepository=categoriaRepository;
         this.subcategoriaRepository=subcategoriaRepository;
-        this.carritoCompraRepository=carritoCompraRepository;
         this.productoHasCarritocompraRepository=productoHasCarritocompraRepository;
     }
 
@@ -91,55 +89,6 @@ public class UsuarioFinalController {
             System.out.println("Productos en el carrito: " + productosCarrito);
             model.addAttribute("productosCarrito", productosCarrito);  // Añadir lista del carrito al modelo
         }
-    }
-
-    @PostMapping("/UsuarioFinal/anadirAlCarrito")
-    public String anadirAlCarrito(@RequestParam("idProducto") Integer idProducto,
-                                  @RequestParam("cantidad") Integer cantidad,
-                                  RedirectAttributes attr) {
-        // Obtener el usuario actual (ID estático = 3)
-        Optional<Usuario> optUsuario = usuarioRepository.findById(3);
-
-        if (optUsuario.isPresent()) {
-            Usuario usuario = optUsuario.get();
-
-            // Buscar el carrito del usuario, crear uno nuevo si no existe
-            Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByUsuarioId(usuario.getId());
-            Carritocompra carrito;
-            if (carritoOpt.isPresent()) {
-                carrito = carritoOpt.get();
-            } else {
-                carrito = new Carritocompra();
-                carrito.setIdUsuario(usuario);
-                carrito = carritoCompraRepository.save(carrito); // Guardar el nuevo carrito
-            }
-
-            // Buscar el producto
-            Optional<Producto> productoOpt = productoRepository.findById(idProducto);
-            if (productoOpt.isPresent()) {
-                Producto producto = productoOpt.get();
-
-                ProductoHasCarritocompraId productoCarritoId = new ProductoHasCarritocompraId();
-                productoCarritoId.setIdProducto(producto.getId());
-                productoCarritoId.setIdCarritoCompra(carrito.getId());
-
-                ProductoHasCarritocompra productoCarrito = new ProductoHasCarritocompra();
-                productoCarrito.setId(productoCarritoId);
-                productoCarrito.setIdProducto(producto);
-                productoCarrito.setIdCarritoCompra(carrito);
-                productoCarrito.setCantidadProducto(cantidad);
-
-                productoHasCarritocompraRepository.save(productoCarrito);
-
-                attr.addFlashAttribute("msg", "Producto añadido al carrito exitosamente.");
-            } else {
-                attr.addFlashAttribute("error", "El producto no existe.");
-            }
-        } else {
-            attr.addFlashAttribute("error", "Usuario no encontrado.");
-        }
-
-        return "redirect:/UsuarioFinal/detallesProducto/" + idProducto;
     }
 
 
