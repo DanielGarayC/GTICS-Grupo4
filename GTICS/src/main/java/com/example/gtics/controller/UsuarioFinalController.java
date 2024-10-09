@@ -300,6 +300,7 @@ public class UsuarioFinalController {
             model.addAttribute("productosOrden",productosOrden);
             model.addAttribute("orden",ordenOpt.get());
             model.addAttribute("listaDistritos",listaDistritos);
+            model.addAttribute("usuario",usuarioRepository.findById(7).get());
 
             return "UsuarioFinal/Ordenes/detalleOrden";
         }else{
@@ -308,6 +309,10 @@ public class UsuarioFinalController {
     }
     @PostMapping("/UsuarioFinal/editarDireccionOrden")
     public String editarOrden(Orden orden,RedirectAttributes redd,@RequestParam("idUsuario") Integer idUsuario){
+        System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDireccion());
+        System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDistrito().getId());
+        System.out.println(idUsuario);
+
         if(orden.getEstadoorden().getId() >=3){
             redd.addAttribute("ordenEditadaError", true);
         }else{

@@ -175,8 +175,9 @@
 
 												   <!-- img -->
 												   <!--<a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" /></a>-->
-												   <a href="#"><img th:src="@{'/productos/' + ${orden.primerIdProducto}}" alt="Imagen del producto" class="mb-3 img-fixed-size"  /></a>
-
+												   <a th:href="@{/Agente/Ordenes/DetallesOrdenSinAsignar(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.idOrden})}">
+													   <img th:src="@{'/productos/' + ${orden.primerIdProducto}}" alt="Imagen del producto" class="mb-3 img-fixed-size" />
+												   </a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a th:href="@{/Agente/Ordenes/DetallesOrdenSinAsignar(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.idOrden})}"
@@ -226,7 +227,10 @@
 
 												   <!-- img -->
 												   <!--<a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" /></a>-->
-												   <a href="#"><img th:src="@{'/productos/' + ${orden.primerIdProducto}}" alt="Imagen del producto" class="mb-3 img-fixed-size"  /></a>
+												   <a th:href="@{/Agente/Ordenes/Detalles(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.idOrden})}">
+													   <img th:src="@{'/productos/' + ${orden.primerIdProducto}}" alt="Imagen del producto" class="mb-3 img-fixed-size" />
+												   </a>
+
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a th:href="@{/Agente/Ordenes/Detalles(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.idOrden})}"
@@ -274,7 +278,9 @@
 											   <div class="text-center position-relative">
 
 												   <!--<a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" /></a>-->
-												   <a href="#"><img th:src="@{'/productos/' + ${orden.primerIdProducto}}" alt="Imagen del producto" class="mb-3 img-fixed-size"  /></a>
+												   <a th:href="@{/Agente/Ordenes/Detalles(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.idOrden})}">
+													   <img th:src="@{'/productos/' + ${orden.primerIdProducto}}" alt="Imagen del producto" class="mb-3 img-fixed-size" />
+												   </a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a th:href="@{/Agente/Ordenes/Detalles(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.idOrden})}"
@@ -323,7 +329,9 @@
 
 												   <!-- img -->
 												   <!--<a href="#!"><img th:src="@{/images/products/product-img-1.jpg}" alt="Grocery Ecommerce Template" /></a>-->
-												   <a href="#"><img th:src="@{'/productos/' + ${orden.primerIdProducto}}" alt="Imagen del producto" class="mb-3 img-fixed-size"  /></a>
+												   <a th:href="@{/Agente/Ordenes/Detalles(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.idOrden})}">
+													   <img th:src="@{'/productos/' + ${orden.primerIdProducto}}" alt="Imagen del producto" class="mb-3 img-fixed-size" />
+												   </a>
 												   <!-- action btn -->
 												   <div class="product-action-btn">
 													   <a th:href="@{/Agente/Ordenes/Detalles(indicadorVistaARegresar=2, numOrden=${var.index + 1}, idOrden=${orden.idOrden})}"

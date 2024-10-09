@@ -30,6 +30,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.formLogin().loginPage("/ExpressDealsLogin").loginProcessingUrl("/submitLoginForm").successHandler(new CustomAuthenticationSuccessHandler());
 
+        http.logout();
         http.authorizeHttpRequests()
                 .requestMatchers("/SuperAdmin", "/SuperAdmin/**").hasAnyAuthority("Super Admin")
                 .requestMatchers("/UsuarioFinal", "/UsuarioFinal/**").hasAnyAuthority("Usuario Final")
