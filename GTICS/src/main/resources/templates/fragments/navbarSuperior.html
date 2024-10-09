@@ -128,9 +128,12 @@
                                     <div class="border-top px-5 py-3">
                                         <a th:href="@{SuperAdmin/perfil}">Mi perfil</a>
                                     </div>
-                                    <div class="border-top px-5 py-3">
-                                        <a href="#">Cerrar sesión</a>
-                                    </div>
+                                    <form id="logoutForm" th:action="@{/logout}" method="post">
+                                        <div class="border-top px-5 py-3">
+                                            <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Cerrar sesión</a>
+                                        </div>
+                                    </form>
+
                                 </div>
                             </li>
                         </ul>
