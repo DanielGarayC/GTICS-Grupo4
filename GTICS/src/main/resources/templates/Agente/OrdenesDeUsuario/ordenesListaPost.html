@@ -242,28 +242,33 @@
                                 <!-- Mostrar información de paginación y botones -->
                                 <div class="d-flex flex-column align-items-center">
                                     <!-- Texto de paginación centrado -->
-                                    <span id="paginationInfo" class="mb-2">Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]</span>
+                                    <span id="paginationInfo" class="mb-2">
+        <span th:if="${totalPages > 0}">Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]</span>
+        <span th:if="${totalPages == 0}">Mostrando página 1 de 1</span>
+    </span>
 
-                                    <!-- Paginación centrada -->
+                                    <!-- Paginación centrada, aseguramos que siempre se muestren los botones -->
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination justify-content-center">
                                             <!-- Botón de "Previo" -->
-                                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                            <li class="page-item" th:classappend="${currentPage == 0 || totalPages == 0} ? 'disabled'">
                                                 <a class="page-link" th:href="@{/Agente/OrdenesPost(page=${currentPage - 1}, idEstado=${idEstado}, idControl=${idControl})}">Previo</a>
                                             </li>
 
                                             <!-- Páginas numeradas -->
-                                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                            <li th:each="i : ${#numbers.sequence(0, totalPages == 0 ? 0 : totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
                                                 <a class="page-link" th:href="@{/Agente/OrdenesPost(page=${i}, idEstado=${idEstado}, idControl=${idControl})}" th:text="${i + 1}"></a>
                                             </li>
 
                                             <!-- Botón de "Siguiente" -->
-                                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages || totalPages == 0} ? 'disabled'">
                                                 <a class="page-link" th:href="@{/Agente/OrdenesPost(page=${currentPage + 1}, idEstado=${idEstado}, idControl=${idControl})}">Siguiente</a>
                                             </li>
                                         </ul>
                                     </nav>
                                 </div>
+
+
 
 
 
