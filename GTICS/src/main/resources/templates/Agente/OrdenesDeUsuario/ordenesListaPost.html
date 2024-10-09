@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta content="Codescandy" name="author" />
+        <title>Órdenes asignadas</title>
+        <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
+        <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
+        <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
+        <!-- Favicon icon-->
+        <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}" />
+
+        <!-- Libs CSS -->
+        <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
+        <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet" />
+        <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
+
+        <!-- Theme CSS -->
+        <link rel="stylesheet" th:href="@{/css/theme.min.css}" />
+
+
+
+        <!--Prueba de logo para ver si usamos jpg o svg -->
+        <style>
+
+            .logoImagen{
+                height: 80px;
+                width: 250px;
+            }
+            .logoImagenCelulares{
+                height: 80px;
+                width: 220px;
+            }
+        </style>
+        <!--POP UP-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <style>
+            .custom-popup{
+                border-radius: 10px;
+            }
+            .swal2-styled{
+                border-radius: 8px;
+            }
+            .swal2-styled.swal2-confirm {
+                background-color: #28a745;
+                color: white;
+            }
+
+            .swal2-styled.swal2-cancel {
+                background-color: #dc3545;
+                color: white;
+            }
+        </style>
+
+
+    </head>
+
+    <body>
+
+        <!-- BARRA SUPERIOR -->
+        <div th:insert="~{fragments/navbarAgente.html :: barraSuperior}"></div>
+        <!-- NAVBAR  -->
+        <div class="main-wrapper">
+
+            <!-- navbar -->
+            <!-- navbar vertical (para pc)-->
+            <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('ordenes')}"></div>
+
+            <!-- navbar vertical (para celular)-->
+            <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('ordenes')}"></div>
+
+
+
+            <!-- COONTENIDO DE LA PAGINA -->
+            <main class="main-content-wrapper">
+                <div class="container">
+                    <!-- row -->
+                    <div class="row mb-8">
+                        <div class="col-md-12">
+                            <!-- page header -->
+                            <div>
+                                <h2>Órdenes</h2>
+                                <!-- breacrumb -->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a th:href="@{/Agente}">Inicio</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Lista de órdenes</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- row -->
+                    <div class="row text-center">
+                        <div class="col-xl-12 col-12 mb-5">
+                            <!--<div class="alert alert-success" role="alert" th:if="${msg!=null}" th:text="${msg}"></div>-->
+                            <!-- card -->
+                            <div class="card h-100 card-lg" >
+                                <div class="p-6">
+                                    <div class="row justify-content-between">
+                                        <div class="col-md-4 col-12 mb-2 mb-md-0">
+                                            <!-- form -->
+                                            <div class="d-flex" role="search">
+                                                <input class="form-control" type="search" id="searchOrden" placeholder="Buscar órden" aria-label="Search" oninput="filterTable()" />
+
+
+                                            </div>
+                                        </div>
+                                        <form class="col-xl-4 col-md-6 col-12 d-flex align-items-center" method="post" th:action="@{/Agente/OrdenesPost}">
+                                            <!-- select -->
+                                            <select class="form-select me-2" name="idEstado">
+                                                <option value="0" th:selected="${idEstado == 0}">Estado</option>
+                                                <option th:each="estado: ${listaEstadoOrden}" th:value="${estado.id}" th:text="${estado.nombreEstado}" th:selected="${idEstado == estado.id}"></option>
+                                            </select>
+                                            <!-- select -->
+                                            <select class="form-select me-2" name="idControl">
+                                                <option value="0" th:selected="${idControl == 0}">Control</option>
+                                                <option th:each="control: ${listaControlOrden}" th:value="${control.id}" th:text="${control.nombreControl}" th:selected="${idControl == control.id}"></option>
+                                            </select>
+                                            <button class="btn btn-primary me-2" type="submit"><i class="bi bi-search"></i></button>
+                                            <a th:href="@{/Agente/Ordenes}" class="btn btn-primary me-2"><i class="bi bi-eraser-fill"></i></a>
+                                        </form>
+
+
+
+
+
+                                    </div>
+                                </div>
+                                <!-- card body -->
+                                <div class="card-body p-0">
+                                    <!-- table responsive -->
+                                    <div class="table-responsive">
+                                        <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
+
+                                            <thead class="bg-light">
+                                                <tr>
+                                                    <th>Nº de orden</th>
+                                                    <th>Fecha de entrega</th>
+                                                    <th>Estado</th>
+                                                    <th>Control</th>
+                                                    <th>Monto total (S/.)</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="orden,var: ${ordenesLista}">
+                                                    <!--<td><a href="#!"><img th:src="@{/images/category/atta-rice-dal.png}" alt="" class="icon-shape icon-md" /></a></td> Agregar si incluimos imagen a la orden -->
+                                                    <td th:text="${var.index+1}"></td>
+                                                    <td th:text="${#temporals.format(orden.fechaOrden, 'dd-MM-yyyy')}"></td>
+                                                    <td th:switch="${orden.estadoorden.id}">
+                                                        <span th:case="1" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-primary text-dark-primary"></span>
+                                                        <span th:case="2" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-secondary text-dark-secondary"></span>
+                                                        <span th:case="3" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-info text-dark-info"> </span>
+                                                        <span th:case="4" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-warning text-dark-warning"></span>
+                                                        <span th:case="5" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-danger text-dark-danger"></span>
+                                                        <span th:case="6" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-warning text-dark-warning"></span>
+                                                        <span th:case="7" th:text="${orden.getEstadoorden.nombreEstado}" class="badge bg-light-success text-dark-success"></span>
+
+                                                    </td>
+                                                    <td th:switch="${orden.controlOrden.id}">
+                                                        <span th:case="1" class="badge bg-light-danger text-dark-danger">Sin asignar</span>
+                                                        <span th:case="2" class="badge bg-light-warning text-dark-warning">Pendiente</span>
+                                                        <span th:case="3" class="badge bg-light-info text-dark-info">En progreso</span>
+                                                        <span th:case="4" class="badge bg-light-primary text-dark-primary">Resuelta</span>
+                                                    </td>
+
+
+                                                    <td>
+										   <span th:each="monto : ${listaMonto}" th:if="${monto.idOrden == orden.id}"
+                                                 th:text="${#numbers.formatDecimal(monto.montoTotal, 1, 2)}"></span>
+
+                                                    </td>
+
+
+                                                    <!-- si la orden ya esta asignada al agente -->
+                                                    <td th:if="${orden.controlOrden.id != 1}">
+                                                        <div class="dropdown">
+                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{'/Agente/Ordenes/Detalles?indicadorVistaARegresar=0&numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver / Editar</a>
+                                                                </li>
+
+                                                                <th:block th:if="${orden.solicitarCancelarOrden == 1}">
+                                                                    <li>
+
+                                                                        <a class="dropdown-item eliminarOrden btn" href="javascript:void(0);"
+                                                                           th:data-id="${orden.id}"
+                                                                           data-bs-toggle="tooltip"
+                                                                           data-bs-placement="bottom">
+                                                                            <i class="bi bi-trash me-3"></i> Eliminar
+                                                                        </a>
+                                                                    </li>
+                                                                </th:block>
+
+
+
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{/Agente/Chat}"><i class="bi bi-wechat me-3"></i>Chat </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                    <!-- si la orden no ha sido asignada a nadie aun -->
+                                                    <td th:unless="${orden.controlOrden.id != 1}">
+                                                        <div class="dropdown">
+                                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?indicadorVistaARegresar=0&numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill me-3"></i> Ver </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" th:href="@{'/Agente/Ordenes/AsignarOrden?idOrden='+ ${orden.id}}"><i class="bi bi-pencil-fill me-3"></i> Autoasignar  </a>
+                                                                </li>
+
+
+
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- Mostrar información de paginación y botones -->
+                                <div class="d-flex flex-column align-items-center">
+                                    <!-- Texto de paginación centrado -->
+                                    <span id="paginationInfo" class="mb-2">Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]</span>
+
+                                    <!-- Paginación centrada -->
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination justify-content-center">
+                                            <!-- Botón de "Previo" -->
+                                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                <a class="page-link" th:href="@{/Agente/OrdenesPost(page=${currentPage - 1}, idEstado=${idEstado}, idControl=${idControl})}">Previo</a>
+                                            </li>
+
+                                            <!-- Páginas numeradas -->
+                                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                                <a class="page-link" th:href="@{/Agente/OrdenesPost(page=${i}, idEstado=${idEstado}, idControl=${idControl})}" th:text="${i + 1}"></a>
+                                            </li>
+
+                                            <!-- Botón de "Siguiente" -->
+                                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                                                <a class="page-link" th:href="@{/Agente/OrdenesPost(page=${currentPage + 1}, idEstado=${idEstado}, idControl=${idControl})}">Siguiente</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </main>
+
+
+
+        </div>
+        <!--POP UP ELIMINAR ORDEN-->
+        <script>
+            document.querySelectorAll('.eliminarOrden').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();  // Evita la redirección automática
+
+                    // Obtenemos el ID de la orden
+                    const orderId = this.getAttribute('data-id');
+
+                    // SweetAlert para seleccionar la razón de cancelación
+                    Swal.fire({
+                        title: 'Eliminar Orden',
+                        text: '¿Realmente desea eliminar esta orden?',
+                        input: 'select',
+                        inputOptions: {
+                            'Datos falsos': 'Datos falsos',
+                            'Duplicado': 'Duplicado',
+                            'Error en precio': 'Error en precio'
+                        },
+                        inputPlaceholder: 'Selecciona un motivo',
+                        showCancelButton: true,
+                        confirmButtonText: 'Eliminar',
+                        cancelButtonText: 'Cancelar',
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return 'Debes seleccionar un motivo.';
+                            }
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const razonEliminacion = result.value;  // Obtener la razón seleccionada
+
+                            // Redirigir al controlador con el ID y la razón de eliminación como parámetros
+                            window.location.href = `/Agente/Ordenes/EliminarOrden?idOrden=${orderId}&razonEliminacion=${razonEliminacion}`;
+                        }
+                    });
+                });
+            });
+
+
+            function filterTable() {
+                const input = document.getElementById("searchOrden");
+                const filter = input.value.toLowerCase();
+                const table = document.querySelector("table tbody");
+                const rows = table.getElementsByTagName("tr");
+
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName("td");
+                    let match = false;
+
+                    for (let j = 0; j < cells.length; j++) {
+                        if (cells[j].innerText.toLowerCase().includes(filter)) {
+                            match = true;
+                            break;
+                        }
+                    }
+                    rows[i].style.display = match ? "" : "none";
+                }
+            }
+        </script>
+        <!-- POP UPS EXITOSOS -->
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('ordenEliminadaExitosamente')) {
+                Swal.fire('Eliminar orden', 'La orden se ha eliminado exitosamente', 'success');
+
+            }
+            if (urlParams.has('ordenEliminadaEstadoNoValido')) {
+                Swal.fire('Error', 'No se pudo eliminar la orden ', 'error');
+            }
+            if (urlParams.has('editarOrdenExitoso')) {
+                Swal.fire('Orden editada', 'La orden se ha actualizado exitosamente ', 'success');
+            }
+            if (urlParams.has('editarOrdenError')) {
+                Swal.fire('Error', 'La orden no se ha podido editar ', 'error');
+            }
+            if (urlParams.has('autoasignacionExito')) {
+                Swal.fire('Orden autoasignada', 'La orden se pudo autoasignar con éxito', 'success');
+            }
+            if (urlParams.has('autoasignacionError')) {
+                Swal.fire('Error', 'No se pudo autoasignar la orden', 'error');
+            }
+        </script>
+
+        <!-- LIBRERIAS -->
+        <div>
+            <!-- Javascript-->
+            <!-- Libs JS -->
+            <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+            <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+            <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+            <!-- Theme JS -->
+            <script th:src="@{/js/theme.min.js}"></script>
+
+            <script th:src="@{/js/vendors/jquery.min.js}"></script>
+            <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+            <script th:src="@{/js/vendors/slick-slider.js}"></script>
+            <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+            <script th:src="@{/js/vendors/tns-slider.js}"></script>
+            <script th:src="@{/js/vendors/zoom.js}"></script>
+
+            <script th:src="@{/js/vendors/countdown.js}"></script>
+            <script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
+            <script th:src="@{/js/vendors/sticky.js}"></script>
+            <script th:src="@{/js/vendors/modal.js}"></script>
+        </div>
+
+    </body>
+</html>
