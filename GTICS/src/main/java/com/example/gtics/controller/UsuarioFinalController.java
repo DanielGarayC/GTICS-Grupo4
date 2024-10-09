@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -44,12 +47,13 @@ public class UsuarioFinalController {
     private final CategoriaRepository categoriaRepository;
     private final SubcategoriaRepository subcategoriaRepository;
     private final ProductoHasCarritocompraRepository productoHasCarritocompraRepository;
+    private final CarritoCompraRepository carritoCompraRepository;
 
     public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository,DistritoRepository distritoRepository, UsuarioRepository usuarioRepository,
                                   FotosProductoRepository fotosProductoRepository, OrdenRepository ordenRepository,
                                   EstadoOrdenRepository estadoOrdenRepository, ProductoHasCarritocompraRepository productoHasCarritocompraRepository,
                                   ProductoRepository productoRepository, CategoriaRepository categoriaRepository,
-                                  SubcategoriaRepository subcategoriaRepository,
+                                  SubcategoriaRepository subcategoriaRepository, CarritoCompraRepository carritoCompraRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
                                   ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
@@ -66,31 +70,122 @@ public class UsuarioFinalController {
         this.categoriaRepository=categoriaRepository;
         this.subcategoriaRepository=subcategoriaRepository;
         this.productoHasCarritocompraRepository=productoHasCarritocompraRepository;
+        this.carritoCompraRepository=carritoCompraRepository;
     }
 
     @ModelAttribute
     public void addUsuarioToModel(Model model) {
-        Optional<Usuario> optUsuario = usuarioRepository.findById(3);  // Aquí cambias el ID según el usuario que necesites
-        // Usuario agregado globalmente
-        optUsuario.ifPresent(usuario -> model.addAttribute("usuario", usuario));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName(); // Obtener el email del usuario autenticado
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+            optUsuario.ifPresent(usuario -> model.addAttribute("usuario", usuario));
+
+        }
     }
 
     @ModelAttribute
     public void addUsuarioAndCarritoToModel(Model model) {
-        // Obtener el usuario actual (por ahora estático con ID = 3)
-        Optional<Usuario> optUsuario = usuarioRepository.findById(3);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (optUsuario.isPresent()) {
-            Usuario usuario = optUsuario.get();
-            model.addAttribute("usuario", usuario);  // Añadir usuario al modelo
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName();
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
-            // Obtener productos del carrito para este usuario
-            List<ProductosCarritoDto> productosCarrito = ordenRepository.obtenerProductosPorUsuario(usuario.getId());
-            System.out.println("Productos en el carrito: " + productosCarrito);
-            model.addAttribute("productosCarrito", productosCarrito);  // Añadir lista del carrito al modelo
+            if (optUsuario.isPresent()) {
+                Usuario usuario = optUsuario.get();
+                model.addAttribute("usuario", usuario);
+
+                // Obtener los productos del carrito
+                List<ProductosCarritoDto> productosCarrito = ordenRepository.obtenerProductosPorUsuario(usuario.getId());
+                model.addAttribute("productosCarrito", productosCarrito);
+
+                // Calcular la cantidad total de productos en el carrito
+                int totalCantidadProductos = productosCarrito.stream()
+                        .mapToInt(ProductosCarritoDto::getCantidadProducto)
+                        .sum();
+                model.addAttribute("totalCantidadProductos", totalCantidadProductos);
+
+            }
         }
     }
 
+    @PostMapping("/UsuarioFinal/agregarAlCarrito")
+    public String agregarAlCarrito(@RequestParam("idProducto") Integer idProducto,
+                                   @RequestParam("cantidad") Integer cantidad,
+                                   RedirectAttributes attr) {
+        // Use SecurityContextHolder to get the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated() ||
+                authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Debes iniciar sesión para agregar productos al carrito.");
+            return "redirect:/login";
+        }
+
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isEmpty()) {
+            attr.addFlashAttribute("error", "Usuario no encontrado.");
+            return "redirect:/login";
+        }
+
+        Usuario usuario = optUsuario.get();
+
+        Carritocompra carrito = carritoCompraRepository.findByIdUsuario(usuario).orElseGet(() -> {
+            Carritocompra nuevoCarrito = new Carritocompra();
+            nuevoCarrito.setIdUsuario(usuario);
+            return carritoCompraRepository.save(nuevoCarrito);
+        });
+
+        Optional<ProductoHasCarritocompra> productoEnCarritoOpt =
+                productoHasCarritocompraRepository.findById_IdCarritoCompraAndId_IdProducto(carrito.getId(), idProducto);
+
+        if (productoEnCarritoOpt.isPresent()) {
+            ProductoHasCarritocompra productoEnCarrito = productoEnCarritoOpt.get();
+            productoEnCarrito.setCantidadProducto(productoEnCarrito.getCantidadProducto() + cantidad);
+            productoHasCarritocompraRepository.save(productoEnCarrito);
+        } else {
+            Producto producto = productoRepository.findById(idProducto).orElseThrow(() ->
+                    new RuntimeException("Producto no encontrado"));
+            ProductoHasCarritocompra nuevoProductoEnCarrito = new ProductoHasCarritocompra();
+            ProductoHasCarritocompraId id = new ProductoHasCarritocompraId();
+            id.setIdProducto(producto.getId());
+            id.setIdCarritoCompra(carrito.getId());
+            nuevoProductoEnCarrito.setId(id);
+            nuevoProductoEnCarrito.setIdProducto(producto);
+            nuevoProductoEnCarrito.setIdCarritoCompra(carrito);
+            nuevoProductoEnCarrito.setCantidadProducto(cantidad);
+            productoHasCarritocompraRepository.save(nuevoProductoEnCarrito);
+        }
+
+        attr.addFlashAttribute("msg", "Producto agregado al carrito exitosamente.");
+        return "redirect:/UsuarioFinal/listaProductos";
+    }
+
+
+    @PostMapping("/UsuarioFinal/eliminarProductoDelCarrito")
+    public ResponseEntity<?> eliminarProductoDelCarrito(@RequestParam("idProducto") Integer idProducto,
+                                                        HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autenticado.");
+        }
+
+        Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuario(usuario);
+        if (carritoOpt.isPresent()) {
+            Carritocompra carrito = carritoOpt.get();
+            // Log the action for debugging
+            System.out.println("Eliminando producto " + idProducto + " del carrito " + carrito.getId());
+            productoHasCarritocompraRepository.deleteById_IdCarritoCompraAndId_IdProducto(carrito.getId(), idProducto);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Carrito no encontrado.");
+        }
+    }
 
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
     public String mostrarPagPrincipal(Model model){

@@ -250,16 +250,20 @@
                                         <div>
                                             <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">Precio: S/. 0.00</span>
                                         </div>
-                                        <!-- btn -->
-                                        <div class="d-grid">
-                                            <a href="#!" class="btn btn-primary btn-sm w-100">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
-                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                </svg>
-                                                Añadir al carrito
-                                            </a>
-                                        </div>
+                                        <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
+                                            <input type="hidden" name="idProducto" th:value="${producto.id}" />
+                                            <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
+                                            <!-- btn -->
+                                            <div class="d-grid">
+                                                <button type="submit" class="btn btn-primary btn-sm w-100">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
+                                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                    </svg>
+                                                    Añadir al carrito
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -295,8 +299,9 @@
     </div>
 </main>
 
-<div th:insert="~{fragments/modalProducto :: modalProducto(${producto}, ${imagenes}, ${fechaFormateada})}
-"></div>
+<div th:if="${producto != null}">
+    <div th:insert="~{fragments/modalProducto :: modalProducto(${producto}, ${imagenes}, ${fechaFormateada})}"></div>
+</div>
 
 <!-- Javascript-->
 

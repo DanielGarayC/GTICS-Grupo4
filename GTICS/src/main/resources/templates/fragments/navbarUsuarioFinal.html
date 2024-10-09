@@ -110,10 +110,10 @@
                                                 <path d="M6 6h15l-1.68 8.39a1 1 0 0 1-1 .61H7"></path>
                                             </svg>
 
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-											1
-											<span class="visually-hidden">unread messages</span>
-										</span>
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
+                                                  th:text="${totalCantidadProductos}">
+                                                0
+                                            </span>
                                         </a>
                                     </li>
                                     <!-- Notifications icon -->
@@ -480,7 +480,7 @@
             </div>
         </div>
 
-        <!-- Shop Cart -->
+        <!-- CARRITO DE COMPRAS -->
 
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
             <div class="offcanvas-header border-bottom">
@@ -497,51 +497,46 @@
                         <a href="#!" class="alert-link">Ve a la sección proceso de compras ya!</a>
                     </div>
                     <ul class="list-group list-group-flush">
-                        <!-- list group -->
-                        <li class="list-group-item py-3 ps-0 border-top" th:each="producto : ${productosCarrito}">
-                            <!-- row -->
+                        <li class="list-group-item py-3 ps-0 border-top producto-item-${producto.idProducto}" th:each="producto : ${productosCarrito}">
                             <div class="row align-items-center">
                                 <div class="col-6 col-md-6 col-lg-7">
                                     <div class="d-flex">
-                                        <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.idProducto}}"
-                                             alt="Producto" class="icon-shape icon-xxl" />
+                                        <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.idProducto}}" alt="Producto" class="icon-shape icon-xxl" />
                                         <div class="ms-3">
-                                            <!-- title -->
                                             <a th:href="@{'/UsuarioFinal/detallesProducto/' + ${producto.idProducto}}" class="text-inherit">
                                                 <h6 class="mb-0" th:text="${producto.nombreProducto}">Nombre Producto</h6>
                                             </a>
-                                            <!-- text -->
                                             <div class="mt-2 small lh-1">
-                                                <a href="#!" class="text-decoration-none text-inherit">
-                                            <span class="me-1 align-text-bottom">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 text-success">
-                                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                                                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                                                </svg>
-                                            </span>
+                                                <a href="#!" class="text-decoration-none text-inherit eliminar-producto" data-producto-id="${producto.idProducto}">
+                                <span class="me-1 align-text-bottom">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 text-success">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                    </svg>
+                                </span>
                                                     <span class="text-muted">Eliminar</span>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- input group -->
                                 <div class="col-4 col-md-3 col-lg-3">
                                     <div class="input-group input-spinner">
                                         <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                        <input type="number" step="1" max="10" th:value="${producto.cantidadProducto}" name="quantity" class="quantity-field form-control-sm form-input" />
+                                        <input type="number" step="1" max="10" th:value="${producto.cantidadProducto}" name="quantity" class="quantity-field form-control-sm form-input" data-producto-id="${producto.idProducto}" />
                                         <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
                                     </div>
                                 </div>
-                                <!-- price -->
-                                <div class="col-2 text-lg-end text-start text-md-end col-md-2" style="white-space: nowrap;">
-                                    <span class="fw-bold" th:text="'S/. ' + ${producto.precioTotalPorProducto}">S/. 0.00</span>
+                                <div class="col-2 text-lg-end text-start text-md-end col-md-2">
+                                    <span class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precioTotalPorProducto, 1, 'COMMA', 2, 'POINT')}"
+                                          style="font-size: 0.8em;">S/. 0.00</span>
                                 </div>
                             </div>
                         </li>
                     </ul>
+
                     <!-- btn -->
                     <div class="d-flex justify-content-between mt-4">
                         <a th:href="@{/UsuarioFinal/listaProductos}" class="btn btn-primary">Continuar comprando</a>
@@ -551,8 +546,9 @@
             </div>
         </div>
 
-
         <script th:src="@{/js/vendors/validation.js}"></script>
+
+        <script th:src="@{/js/carrito.js}"></script>
     </div>
 
     <div class="search-container" th:fragment="buscadorProducto" style="max-width: 600px; position: relative;">
