@@ -161,24 +161,10 @@ public class AgenteController {
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
 
-    @GetMapping({"/Agente/Ordenes/AsignarOrden"})
-    public String AutoAsignarOrden(Model model,@RequestParam("idOrden") Integer idOrden,RedirectAttributes attr ){
-        //Asumiendo que somos el agente con id 13 (esto se cambiará luego con login y session)
-        Integer idAgente = 13;
-
-        try{
-            ordenRepository.autoAsignarOrden(idAgente,idOrden);
-            attr.addAttribute("autoasignacionExito",true);
-        }catch (Exception e){
-            attr.addAttribute("autoasignacionError",true);
-        }
 
 
-        return "redirect:/Agente/Ordenes";
-    }
 
-
-    @PostMapping({"Agente/OrdenesPost"})
+    @RequestMapping(value = "Agente/OrdenesPost", method = {RequestMethod.GET, RequestMethod.POST})
     public String OrdenesFiltro(Model model,
                                 @RequestParam(value = "idEstado", defaultValue = "0") Integer idEstado,
                                 @RequestParam(value = "idControl", defaultValue = "0") Integer idControl,
@@ -229,11 +215,25 @@ public class AgenteController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", ordenesLista.getTotalPages());
 
-        return "Agente/OrdenesDeUsuario/ordeneslista";
+        return "Agente/OrdenesDeUsuario/ordenesListaPost";
     }
 
 
+    @GetMapping({"/Agente/Ordenes/AsignarOrden"})
+    public String AutoAsignarOrden(Model model,@RequestParam("idOrden") Integer idOrden,RedirectAttributes attr ){
+        //Asumiendo que somos el agente con id 13 (esto se cambiará luego con login y session)
+        Integer idAgente = 13;
 
+        try{
+            ordenRepository.autoAsignarOrden(idAgente,idOrden);
+            attr.addAttribute("autoasignacionExito",true);
+        }catch (Exception e){
+            attr.addAttribute("autoasignacionError",true);
+        }
+
+
+        return "redirect:/Agente/Ordenes";
+    }
 
     @GetMapping({"Agente/Ordenes/Usuario"})
     public String OrdenesUsuario(@RequestParam("idUsuario") Integer idUsuario,

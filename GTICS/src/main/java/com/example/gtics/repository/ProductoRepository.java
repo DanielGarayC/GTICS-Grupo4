@@ -5,10 +5,13 @@ import com.example.gtics.dto.ProductoRelevanteDTO;
 import com.example.gtics.dto.ProductoTabla;
 import com.example.gtics.entity.Producto;
 import com.example.gtics.entity.Zona;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -85,8 +88,22 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
             "            where p.idProducto = ?1", nativeQuery = true)
     ProductoTabla getProductosTablaId(int id);
 
-    List<Producto> findByNombreProducto(String nombreProducto);
     Optional<Producto> findByNombreProductoAndZona(String nombreProducto, Zona zona);
 
+    @Query(value = "SELECT COUNT(*) FROM producto WHERE idCategoria = :idCategoria", nativeQuery = true)
+    long contarProductosPorCategoria(@Param("idCategoria") Integer idCategoria);
 
+    @Query(value = "SELECT * FROM producto WHERE idCategoria = :categoriaId AND borrado = 0", nativeQuery = true)
+    List<Producto> findProductosPorCategoria(@Param("categoriaId") Integer categoriaId);
+
+    @Query(value = "SELECT * FROM producto WHERE idSubcategoria = :idSubcategoria", nativeQuery = true)
+    List<Producto> findProductosPorSubcategoria(@Param("idSubcategoria") Integer idSubcategoria);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE producto SET disponibilidad = 'Fuera de stock' WHERE cantVentas >= cantidadDisponible", nativeQuery = true)
+    void actualizarDisponibilidad();
+
+    @Query(value = "SELECT DATE_FORMAT(p.fechaArribo, '%d-%m-%Y') FROM producto p WHERE p.idProducto = :id", nativeQuery = true)
+    String findFechaFormateadaById(@Param("id") Integer id);
 }

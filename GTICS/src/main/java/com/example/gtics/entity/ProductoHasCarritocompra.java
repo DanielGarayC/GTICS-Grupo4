@@ -22,4 +22,7 @@ public class ProductoHasCarritocompra {
     @JoinColumn(name = "idCarritoCompra", nullable = false)
     private Carritocompra idCarritoCompra;
 
+    @Column(name = "cantidadProducto", nullable = false)
+    private Integer cantidadProducto;
+
 }

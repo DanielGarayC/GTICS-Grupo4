@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -39,10 +40,16 @@ public class UsuarioFinalController {
     private final ForoPreguntaRepository foroPreguntaRepository;
     private final ForoRespuestaRepository foroRespuestaRepository;
     private final DistritoRepository distritoRepository;
+    private final ProductoRepository productoRepository;
+    private final CategoriaRepository categoriaRepository;
+    private final SubcategoriaRepository subcategoriaRepository;
+    private final ProductoHasCarritocompraRepository productoHasCarritocompraRepository;
 
     public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository,DistritoRepository distritoRepository, UsuarioRepository usuarioRepository,
                                   FotosProductoRepository fotosProductoRepository, OrdenRepository ordenRepository,
-                                  EstadoOrdenRepository estadoOrdenRepository,
+                                  EstadoOrdenRepository estadoOrdenRepository, ProductoHasCarritocompraRepository productoHasCarritocompraRepository,
+                                  ProductoRepository productoRepository, CategoriaRepository categoriaRepository,
+                                  SubcategoriaRepository subcategoriaRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
                                   ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
@@ -55,11 +62,15 @@ public class UsuarioFinalController {
         this.foroPreguntaRepository = foroPreguntaRepository;
         this.foroRespuestaRepository = foroRespuestaRepository;
         this.distritoRepository=distritoRepository;
+        this.productoRepository=productoRepository;
+        this.categoriaRepository=categoriaRepository;
+        this.subcategoriaRepository=subcategoriaRepository;
+        this.productoHasCarritocompraRepository=productoHasCarritocompraRepository;
     }
 
     @ModelAttribute
     public void addUsuarioToModel(Model model) {
-        Optional<Usuario> optUsuario = usuarioRepository.findById(7);  // Aquí cambias el ID según el usuario que necesites
+        Optional<Usuario> optUsuario = usuarioRepository.findById(3);  // Aquí cambias el ID según el usuario que necesites
         // Usuario agregado globalmente
         optUsuario.ifPresent(usuario -> model.addAttribute("usuario", usuario));
     }
@@ -75,9 +86,11 @@ public class UsuarioFinalController {
 
             // Obtener productos del carrito para este usuario
             List<ProductosCarritoDto> productosCarrito = ordenRepository.obtenerProductosPorUsuario(usuario.getId());
+            System.out.println("Productos en el carrito: " + productosCarrito);
             model.addAttribute("productosCarrito", productosCarrito);  // Añadir lista del carrito al modelo
         }
     }
+
 
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
     public String mostrarPagPrincipal(Model model){
@@ -109,18 +122,25 @@ public class UsuarioFinalController {
         return "redirect:/UsuarioFinal";
     }
 
-    @GetMapping("/productos/foto/{id}")
-    public ResponseEntity<ByteArrayResource> obtenerFotoProducto(@PathVariable Integer id) {
-        Fotosproducto fotosProducto = fotosProductoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Foto del producto no encontrada"));
+    @GetMapping("/UsuarioFinal/producto/foto/{id}")
+    public ResponseEntity<byte[]> obtenerFotoProducto(@PathVariable Integer id) {
+        List<Fotosproducto> fotosProductos = fotosProductoRepository.findByProducto_Id(id);
 
-        byte[] foto = fotosProducto.getFoto();
-        ByteArrayResource resource = new ByteArrayResource(foto);
+        if (!fotosProductos.isEmpty()) {
+            Fotosproducto fotoProducto = fotosProductos.get(0);
+            byte[] imagenComoBytes = fotoProducto.getFoto();
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"foto_producto_" + id + ".jpg\"")
-                .contentLength(foto.length)
-                .body(resource);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(fotoProducto.getFotoContentType()));
+
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/UsuarioFinal/miPerfil")
@@ -185,6 +205,7 @@ public class UsuarioFinalController {
             model.addAttribute("productosOrden",productosOrden);
             model.addAttribute("orden",ordenOpt.get());
             model.addAttribute("listaDistritos",listaDistritos);
+            model.addAttribute("usuario",usuarioRepository.findById(7).get());
 
             return "UsuarioFinal/Ordenes/detalleOrden";
         }else{
@@ -193,6 +214,10 @@ public class UsuarioFinalController {
     }
     @PostMapping("/UsuarioFinal/editarDireccionOrden")
     public String editarOrden(Orden orden,RedirectAttributes redd,@RequestParam("idUsuario") Integer idUsuario){
+        System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDireccion());
+        System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDistrito().getId());
+        System.out.println(idUsuario);
+
         if(orden.getEstadoorden().getId() >=3){
             redd.addAttribute("ordenEditadaError", true);
         }else{
@@ -221,21 +246,159 @@ public class UsuarioFinalController {
         return "redirect:/UsuarioFinal/listaMisOrdenes";
     }
 
+    @GetMapping("/UsuarioFinal/categoria/foto/{id}")
+    public ResponseEntity<byte[]> obtenerFotoCategoria(@PathVariable Integer id) {
+        Optional<Categoria> categoriaOpt = categoriaRepository.findById(id);
+
+        if (categoriaOpt.isPresent()) {
+            Categoria categoria = categoriaOpt.get();
+            byte[] foto = categoria.getFotoCategoria();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+
+            return new ResponseEntity<>(foto, headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/UsuarioFinal/listaProductos")
-    public String mostrarListaProductos(){
+    public String mostrarListaProductos(Model model) {
+        // Obtener todas las categorías
+        List<Categoria> categorias = categoriaRepository.findAll();
+        model.addAttribute("categorias", categorias);
+
+        // Si deseas mostrar productos de la primera categoría o una predeterminada
+        if (!categorias.isEmpty()) {
+            Categoria categoria = categorias.get(0); // Primera categoría de la lista
+            List<Producto> productos = productoRepository.findProductosPorCategoria(categoria.getId());
+            model.addAttribute("productos", productos);
+            model.addAttribute("categoria", categoria);
+
+            // Si hay productos en la categoría, pasar el primer producto y sus detalles al modelo
+            if (!productos.isEmpty()) {
+                Producto producto = productos.get(0); // Primer producto de la lista
+                model.addAttribute("producto", producto);
+                model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+                String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+                model.addAttribute("fechaFormateada", fechaFormateada);
+            }
+        } else {
+            model.addAttribute("productos", List.of()); // Lista vacía si no hay categorías
+        }
 
         return "UsuarioFinal/Productos/listaProductos";
     }
-    @GetMapping("/UsuarioFinal/detallesProducto")
-    public String mostrarDetallesProducto(){
 
-        return "UsuarioFinal/Productos/detalleProducto";
+    @GetMapping("/UsuarioFinal/detallesProducto/{idProducto}")
+    public String mostrarDetallesProducto(@PathVariable("idProducto") Integer idProducto, Model model) {
+        Optional<Producto> productoOpt = productoRepository.findById(idProducto);
+        String fechaFormateada = productoRepository.findFechaFormateadaById(idProducto);
+
+        if (productoOpt.isPresent()) {
+            Producto producto = productoOpt.get();
+
+            model.addAttribute("producto", producto);
+            model.addAttribute("idCategoria", producto.getIdCategoria());
+            model.addAttribute("nombreCategoria", producto.getIdCategoria().getNombreCategoria());
+            model.addAttribute("nombreSubcategoria", producto.getIdSubcategoria().getNombreSubcategoria());
+            model.addAttribute("proveedor", producto.getIdProveedor().getTienda());
+            model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(idProducto));
+            model.addAttribute("fechaFormateada", fechaFormateada);
+
+            List<Producto> productosRecomendados = productoRepository.findProductosPorCategoria(producto.getIdCategoria().getId());
+            model.addAttribute("productosRecomendados", productosRecomendados);
+
+            return "UsuarioFinal/Productos/detalleProducto";
+        } else {
+            return "redirect:/UsuarioFinal/listaProductos";
+        }
     }
-    @GetMapping("/UsuarioFinal/categorias")
-    public String mostrarCategorias(){
+
+    @GetMapping("/UsuarioFinal/categorias/{idCategoria}")
+    public String mostrarProductosPorCategorias(@PathVariable("idCategoria") Integer idCategoria, Model model) {
+        Optional<Categoria> categoriaOpt = categoriaRepository.findById(idCategoria);
+
+        if (categoriaOpt.isPresent()) {
+            Categoria categoria = categoriaOpt.get();
+            List<Subcategoria> subcategorias = categoria.getSubcategorias();
+
+            model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
+            model.addAttribute("subcategorias", subcategorias);
+            List<Producto> productos = productoRepository.findProductosPorCategoria(idCategoria);
+            model.addAttribute("productos", productos);
+
+            long totalProductos = productoRepository.contarProductosPorCategoria(idCategoria);
+            model.addAttribute("totalProductos", totalProductos);
+
+            // Si existe al menos un producto, obtener el primero y sus detalles
+            if (!productos.isEmpty()) {
+                Producto producto = productos.get(0);  // Primer producto de la lista
+                model.addAttribute("producto", producto);
+                model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+                String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+                model.addAttribute("fechaFormateada", fechaFormateada);
+            }
+        } else {
+            return "redirect:/UsuarioFinal/listaProductos";
+        }
 
         return "UsuarioFinal/Productos/categoria";
     }
+
+    @GetMapping("/UsuarioFinal/subcategoria/{idSubcategoria}")
+    public String mostrarProductosPorSubcategoria(@PathVariable("idSubcategoria") Integer idSubcategoria, Model model) {
+        Optional<Subcategoria> subcategoriaOpt = subcategoriaRepository.findById(idSubcategoria);
+
+        if (subcategoriaOpt.isPresent()) {
+            Subcategoria subcategoria = subcategoriaOpt.get();
+            List<Producto> productos = productoRepository.findProductosPorSubcategoria(idSubcategoria);
+            long totalProductos = productos.size();
+
+            Categoria categoria = subcategoria.getCategoria();
+            List<Subcategoria> subcategorias = categoria.getSubcategorias();
+
+            model.addAttribute("nombreSubcategoria", subcategoria.getNombreSubcategoria());
+            model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
+            model.addAttribute("categoria", categoria.getId());
+            model.addAttribute("subcategorias", subcategorias);
+            model.addAttribute("productos", productos);
+            model.addAttribute("totalProductos", totalProductos);
+            model.addAttribute("isSubcategory", true);
+
+            // Si hay productos en la subcategoría, pasamos el primer producto y sus detalles al modelo
+            if (!productos.isEmpty()) {
+                Producto producto = productos.get(0); // Primer producto de la lista
+                model.addAttribute("producto", producto);
+                model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+                String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+                model.addAttribute("fechaFormateada", fechaFormateada);
+            }
+        } else {
+            return "redirect:/UsuarioFinal/listaProductos";
+        }
+
+        return "UsuarioFinal/Productos/subcategoria";
+    }
+
+    @GetMapping("/UsuarioFinal/producto/quickView/{idProducto}")
+    public String mostrarModalQuickView(@PathVariable("idProducto") Integer idProducto, Model model) {
+        Optional<Producto> productoOpt = productoRepository.findById(idProducto);
+        String fechaFormateada = productoRepository.findFechaFormateadaById(idProducto);
+
+        if (productoOpt.isPresent()) {
+            Producto producto = productoOpt.get();
+            model.addAttribute("producto", producto);
+            model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(idProducto));
+            model.addAttribute("fechaFormateada", fechaFormateada);
+
+            return "fragments/modalProducto :: modalContent";
+        } else {
+            return "redirect:/UsuarioFinal/listaProductos";
+        }
+    }
+
     @GetMapping("/UsuarioFinal/Review")
     public String mostrarReview(){
 
@@ -350,41 +513,53 @@ public class UsuarioFinalController {
     @GetMapping("/UsuarioFinal/foro")
     public String verForo(){
 
-        return "UsuarioFinal/Foro/foro";
+        return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
     @GetMapping("/UsuarioFinal/faq")
-    public String preguntasFrecuentes(Model model){
+    public String preguntasFrecuentes(Model model, @ModelAttribute("preguntaForm") Foropregunta preguntaForm){
         model.addAttribute("preguntas",foroPreguntaRepository.findAll());
         model.addAttribute("respuestas",foroRespuestaRepository.findAll());
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
-    @PostMapping("/UsuarioFinal/faq/newPregunta")
-    public String crearPregunta(@RequestParam("pregunta") String pregunta, @RequestParam("descripcion") String descripcion) {
-        Usuario user = usuarioRepository.findUsuarioById(2); //estático por ahora
-        Foropregunta question = new Foropregunta();
-        question.setPregunta(pregunta);
-        question.setFechaCreacion(LocalDate.now());
-        question.setIdUsuario(user);
-        //da igual si es nulo (es opcional creo xd)
-        question.setDescripcion(descripcion);
 
-        foroPreguntaRepository.save(question);
+    @GetMapping("/UsuarioFinal/faq/verPregunta")
+    public String verPregunta(Model model, @RequestParam("id") Integer id, @ModelAttribute("respuestaForm") Fororespuesta respuestaForm){
+
+        Optional<Foropregunta> optP = foroPreguntaRepository.findById(id);
+        if(optP.isPresent()){
+            Foropregunta p = optP.get();
+            List<Fororespuesta> listaRespuestas = foroRespuestaRepository.findByIdPregunta(p);
+            model.addAttribute("pregunta", p);
+            model.addAttribute("listaRespuestas", listaRespuestas);
+            return "UsuarioFinal/Foro/preguntaDetalle";
+        }
+        else{
+            return "UsuarioFinal/Foro/preguntasFrecuentes";
+        }
+
+    }
+
+    @PostMapping("/UsuarioFinal/faq/newPregunta")
+    public String crearPregunta(@ModelAttribute("preguntaForm") Foropregunta preguntaForm) {
+        Usuario user = usuarioRepository.findUsuarioById(27); //estático por ahora
+
+        preguntaForm.setFechaCreacion(LocalDate.now());
+        preguntaForm.setIdUsuario(user);
+
+
+        foroPreguntaRepository.save(preguntaForm);
         return "redirect:/UsuarioFinal/faq";
     }
     @PostMapping("/UsuarioFinal/faq/newRespuesta")
-    public String crearPregunta(@RequestParam("idPregunta") int idPregunta,@RequestParam("contenidoRespuesta") String contenidoRespuesta) {
-        Usuario user = usuarioRepository.findUsuarioById(27);  // Ejemplo estático
+    public String crearPregunta(@RequestParam("idPregunta") Integer idPregunta, @ModelAttribute("respuestaForm") Fororespuesta respuestaForm) {
+        Usuario user = usuarioRepository.findUsuarioById(27);  // Ejemplo estático; a posterior se tiene que mandar este parametro por sesion
         Optional<Foropregunta> pregunta = foroPreguntaRepository.findById(idPregunta);
-        System.out.println(pregunta.get().getPregunta());
-        System.out.println(contenidoRespuesta);
-        Fororespuesta respuesta = new Fororespuesta();
-        respuesta.setIdPregunta(pregunta.get());
-        respuesta.setContenidoRespuesta(contenidoRespuesta);
-        respuesta.setFechaRespuesta(LocalDate.now());
-        respuesta.setIdUsuario(user);  // Asignar el usuario que responde
+        pregunta.ifPresent(respuestaForm::setIdPregunta);
+        respuestaForm.setFechaRespuesta(LocalDate.now());
+        respuestaForm.setIdUsuario(user);  // Asignar el usuario que responde
 
-        foroRespuestaRepository.save(respuesta);  // Guardar la respuesta
-        return "redirect:/UsuarioFinal/faq";
+        foroRespuestaRepository.save(respuestaForm);  // Guardar la respuesta
+        return "redirect:/UsuarioFinal/faq/verPregunta?id=" + idPregunta;
     }
 
 }

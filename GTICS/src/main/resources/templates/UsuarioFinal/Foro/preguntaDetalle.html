@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="Codescandy" name="author">
-    <title>Preguntas Frecuentes</title>
+    <title>Preguntas</title>
     <!-- Favicon icon-->
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
@@ -19,32 +19,24 @@
     <!-- Theme CSS -->
     <link rel="stylesheet" th:href="@{/css/theme.min.css}">
     <style>
-        .info-box {
-            display: flex;
-            padding: 20px;
+        h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .respuesta {
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            padding: 15px;
             border-radius: 8px;
-            margin-top: -100px;
+            margin-bottom: 15px;
         }
-        .highlight-text {
-            font-style: italic; /* Texto en cursiva */
-            font-weight: bold; /* Texto en negritas */
-            color:black;
-            letter-spacing: 1px; /* Espaciado entre letras */
-            text-align: center; /* Centrar el texto */
-            font-family: 'Arial', sans-serif; /* Puedes cambiar la fuente si lo prefieres */
-            font-size: 1.2em; /* Tamaño del texto ajustable */
-            text-transform: uppercase; /* Convertir el texto a mayúsculas */
-            margin-top: 20px;
-        }
-        .button-container {
-            text-align: center; /* Centra el botón horizontalmente */
-        }
-        .table {
-            width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
-            text-align: center; /* Centra el contenido horizontalmente */
-        }
-        .table tbody td {
-            color: black; /* Texto negro para el cuerpo de la tabla */
+
+        .respuesta strong {
+            color: rgba(0, 0, 0, 0.8); /* Cambia el color del nombre del usuario */
+            font-size: 1.1em;
         }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -62,94 +54,45 @@
 </div>
 <main>
     <section class="my-lg-14 my-8">
-        <div class="container mb-10">
-            <div class="row">
-                <div class="col-xl-12 col-12 mb-5">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 style="margin-top: -50px; margin-bottom: 20px">Preguntas Frecuentes</h2>
-                    </div>
-
-                    <div class="accordion">
-
-                        <div class="accordion-item" >
-                            <button class="accordion-btn" aria-expanded="false">
-                                <span class="accordion-title">¿Cuándo recibiré el producto?</span>
-                                <span class="icon" aria-hidden="true"></span>
-                            </button>
-                            <!-- Ver más -->
-
-                            <div class="accordion-content">
-                                <div>
-                                    <p><strong>El administrador zonal es el encargado de determinar las fechas de arribo de los productos; estas suelen ser notificadas a los usuarios</strong></p>
-                                    <hr>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="container">
             <div class="row">
                 <div class="col-xl-12 col-12 mb-5">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2>Preguntas de usuarios</h2>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eee" >Formular Pregunta</button>
+                        <h2 th:text="${pregunta.pregunta}"></h2>
+                        <h3 th:if="${pregunta.descripcion!=null}" th:text="${pregunta.descripcion}"></h3>
+                    </div>
+                    <h4 th:if="${listaRespuestas.isEmpty()}" class="mb-5">No hay respuestas registradas</h4>
+                    <h4 th:if="${!listaRespuestas.isEmpty()}" class="mb-5">Respuestas:</h4>
+                    <div class="respuesta" th:each="respuesta : ${listaRespuestas}" th:if="${respuesta.idPregunta.id} == ${pregunta.id}">
+                        <p style="margin-bottom: 0px;"><strong th:text="${respuesta.getIdUsuario().nombre + ' ' + respuesta.getIdUsuario().apellidoPaterno} + ': '"></strong><span th:text="${respuesta.contenidoRespuesta}"></span></p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+
+                        <a class="btn btn-primary" th:href="@{/UsuarioFinal/faq}" >Regresar</a>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eee" >Agregar respuesta</button>
 
                     </div>
 
-                    <div class="accordion">
-
-                        <div class="accordion-item" th:each="pregunta : ${preguntas}" th:data-id-pregunta="${pregunta.id}">
-                            <button id="accordion-button-1" class="accordion-btn" aria-expanded="false">
-                                <span class="accordion-title" th:text="${pregunta.pregunta}"></span>
-                                <span class="icon" aria-hidden="true"></span>
-                            </button>
-                            <!-- Ver más -->
-
-                            <div class="accordion-content">
-                                <div class="mt-5">
-                                    <div class="d-flex">
-                                        <p style="font-weight: 450;"  th:text="${pregunta.idUsuario.nombre} + ' '+${pregunta.idUsuario.apellidoPaterno}"></p>
-                                        <p th:text="'• ' + ${pregunta.fechaCreacion}"></p>
-                                    </div>
-
-                                    <p th:if="${pregunta.descripcion != null}" style="font-weight: 450;">Descripción: <span th:text="${pregunta.descripcion}"></span></p>
-                                    <hr>
-                                </div>
-                                <div class="text-center">
-                                    <a class="btn btn-outline-primary btn-sm small-reply-btn" style="width: 100%;" th:href="@{'/UsuarioFinal/faq/verPregunta?id=' + ${pregunta.id}}">Ver respuestas</a>
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 </main>
+
 <div class="modal fade" id="eee" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- modal body -->
             <div class="modal-body p-6">
-                <h2>Formular pregunta</h2>
+
                 <!-- row -->
-                <form class="row g-3" method="post" th:object="${preguntaForm}" th:action="@{/UsuarioFinal/faq/newPregunta}">
+                <form class="row g-3" method="post" th:action="@{'/UsuarioFinal/faq/newRespuesta?idPregunta=' + ${pregunta.getId()}}" th:object="${respuestaForm}">
                     <!-- col -->
-
                     <div class="col-12">
-                        <label for="respuesta" class="form-label">Ingresa tu pregunta:</label>
-                        <input id="respuesta" type="text" class="form-control"  th:field="*{pregunta}" required/>
+                        <label for="respuesta" class="form-label">Ingresa tu respuesta:</label>
+                        <input id="respuesta" type="text" class="form-control" th:field="*{contenidoRespuesta}" required/>
                     </div>
-                    <div class="col-12">
-                        <label for="descripcion" class="form-label">Ingresa una descripción (opcional)</label>
-                        <input id="descripcion" type="text" class="form-control" th:field="*{descripcion}" />
-                    </div>
-
                     <button class="btn btn-primary" type="submit">Responder</button>
 
                 </form>
@@ -423,6 +366,82 @@
 
 </script>
 
+<script>
+    async function pregunta() {
+        const { value: formValues } = await Swal.fire({
+            title: "Redactar Pregunta",
+            html:
+                '<div style="margin-bottom: 10px;"><textarea id="pregunta" class="swal2-textarea" placeholder="Escribe tu pregunta aquí..." style="width: 80%; height: 60px;"></textarea></div>' +
+                '<div><textarea id="descripcion" class="swal2-textarea" placeholder="Escribe una descripción (opcional)..." style="width: 80%; height: 120px;"></textarea></div>',
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Enviar',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                confirmButton: 'swal2-confirm swal2-styled btn btn-primary',  // Aumentamos el tamaño y ajustamos el estilo
+                cancelButton: 'swal2-cancel swal2-styled btn btn-secondary'
+            },
+            width: '700px',  // Ajustar el tamaño del modal
+            buttonsStyling: false,
+            preConfirm: () => {
+                const pregunta = document.getElementById('pregunta').value;
+                const descripcion = document.getElementById('descripcion').value;
+                if (!pregunta) {
+                    Swal.showValidationMessage('La pregunta es obligatoria');
+                    return;
+                }
+                return { pregunta: pregunta, descripcion: descripcion || null };
+            }
+        });
+
+        if (formValues) {
+            const { pregunta, descripcion } = formValues;
+
+            // Enviar los datos al servidor
+            const response = await fetch('/UsuarioFinal/faq/newPregunta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'pregunta': pregunta,
+                    'descripcion': descripcion  // Puede ser null si no se ingresó
+                })
+            });
+
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Pregunta enviada',
+                    text: 'Tu pregunta ha sido enviada.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Hubo un problema al enviar la pregunta.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+    }
+    //Para el ver más (chambea bruno)
+    function toggleDescripcion(element) {
+        const descripcionDiv = element.nextElementSibling;  // Selecciona el siguiente elemento (la descripción)
+
+        // Alternar visibilidad
+        if (descripcionDiv.style.display === "none" || descripcionDiv.style.display === "") {
+            descripcionDiv.style.display = "block";
+            element.textContent = "Ver menos";  // Cambiar el texto a "Ver menos"
+        } else {
+            descripcionDiv.style.display = "none";
+            element.textContent = "Ver más";  // Cambiar el texto de nuevo a "Ver más"
+        }
+    }
+</script>
 
 </body>
 

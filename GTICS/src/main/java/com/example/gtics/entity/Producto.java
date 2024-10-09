@@ -77,4 +77,7 @@ public class Producto {
     @Column(name = "fechaArribo")
     private LocalDate fechaArribo;
 
+    @Column(name = "disponibilidad", nullable = false)
+    private String disponibilidad;
+
 }

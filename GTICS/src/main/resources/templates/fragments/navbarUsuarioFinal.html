@@ -503,10 +503,11 @@
                             <div class="row align-items-center">
                                 <div class="col-6 col-md-6 col-lg-7">
                                     <div class="d-flex">
-                                        <img th:src="@{/images/products/laptop.jpg}" alt="Producto" class="icon-shape icon-xxl" />
+                                        <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.idProducto}}"
+                                             alt="Producto" class="icon-shape icon-xxl" />
                                         <div class="ms-3">
                                             <!-- title -->
-                                            <a th:href="@{/UsuarioFinal/detallesProducto}" class="text-inherit">
+                                            <a th:href="@{'/UsuarioFinal/detallesProducto/' + ${producto.idProducto}}" class="text-inherit">
                                                 <h6 class="mb-0" th:text="${producto.nombreProducto}">Nombre Producto</h6>
                                             </a>
                                             <!-- text -->

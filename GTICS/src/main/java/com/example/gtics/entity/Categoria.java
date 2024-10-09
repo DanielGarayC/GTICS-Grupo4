@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -16,5 +18,12 @@ public class Categoria {
 
     @Column(name = "nombreCategoria", nullable = false, length = 45)
     private String nombreCategoria;
+
+    @Lob
+    @Column(name = "fotoCategoria", nullable = false)
+    private byte[] fotoCategoria;
+
+    @OneToMany(mappedBy = "categoria", fetch = FetchType.EAGER)
+    private List<Subcategoria> subcategorias;
 
 }
