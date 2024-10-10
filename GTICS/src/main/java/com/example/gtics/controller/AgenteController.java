@@ -2,9 +2,11 @@ package com.example.gtics.controller;
 
 import com.example.gtics.dto.MontoTotalOrdenDto;
 import com.example.gtics.dto.OrdenCarritoDto;
+import com.example.gtics.dto.ProductosCarritoDto;
 import com.example.gtics.dto.ProductosxOrden;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -42,8 +47,14 @@ public class AgenteController {
 
     @ModelAttribute
     public void addUsuarioToModel(Model model) {
-        Optional<Usuario> optUsuario = usuarioRepository.findById(13);
-        optUsuario.ifPresent(usuarioLogueado -> model.addAttribute("usuarioLogueado", usuarioLogueado));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName(); // Obtener el email del usuario autenticado
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+            optUsuario.ifPresent(usuario -> model.addAttribute("usuario", usuario));
+        }
     }
 
     @GetMapping({"/Agente/Perfil"})
@@ -54,19 +65,32 @@ public class AgenteController {
 
 
     @GetMapping({"Agente"})
-    public String Inicio(Model model){
-        Integer idAgente = 13;
-        List<OrdenCarritoDto> listaOrdenesSinAsignar = ordenRepository.ultimasOrdenesSinAsignar();
-        List<OrdenCarritoDto> listaOrdenesPendientes = ordenRepository.ultimasOrdenesPendientes(idAgente);
-        List<OrdenCarritoDto> listaOrdenesEnProceso = ordenRepository.ultimasOrdenesenProceso(idAgente);
-        List<OrdenCarritoDto> listaOrdenesResueltas = ordenRepository.ultimasOrdenesResueltas(idAgente);
+    public String Inicio(Model model, HttpSession session) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        model.addAttribute("listaOrdenesSinAsignar",listaOrdenesSinAsignar);
-        model.addAttribute("listaOrdenesPendientes",listaOrdenesPendientes);
-        model.addAttribute("listaOrdenesEnProceso",listaOrdenesEnProceso);
-        model.addAttribute("listaOrdenesResueltas",listaOrdenesResueltas);
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName();
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
+            if (optUsuario.isPresent()) {
+                Usuario usuario = optUsuario.get();
 
+                Integer idAgente = usuario.getId();
+
+                // Almacenar el idAgente en la sesión
+                session.setAttribute("idAgente", idAgente);
+
+                List<OrdenCarritoDto> listaOrdenesSinAsignar = ordenRepository.ultimasOrdenesSinAsignar();
+                List<OrdenCarritoDto> listaOrdenesPendientes = ordenRepository.ultimasOrdenesPendientes(idAgente);
+                List<OrdenCarritoDto> listaOrdenesEnProceso = ordenRepository.ultimasOrdenesenProceso(idAgente);
+                List<OrdenCarritoDto> listaOrdenesResueltas = ordenRepository.ultimasOrdenesResueltas(idAgente);
+
+                model.addAttribute("listaOrdenesSinAsignar", listaOrdenesSinAsignar);
+                model.addAttribute("listaOrdenesPendientes", listaOrdenesPendientes);
+                model.addAttribute("listaOrdenesEnProceso", listaOrdenesEnProceso);
+                model.addAttribute("listaOrdenesResueltas", listaOrdenesResueltas);
+            }
+        }
 
         return "Agente/inicio";
     }
@@ -78,20 +102,27 @@ public class AgenteController {
 
     @GetMapping({"Agente/UsuariosAsignados"})
     public String UsuariosAsignados(Model model,
-                                    @RequestParam(defaultValue = "0") int page){
+                                    @RequestParam(defaultValue = "0") int page,
+                                    HttpSession session) {
 
-            int pageSize = 6;
-            Pageable pageable = PageRequest.of(page, pageSize);
-            Integer idAgente = 13;
-            Page<Usuario> usuariosAsignados = usuarioRepository.findUsuariosAsignadosAlAgente(idAgente,pageable);
+        int pageSize = 6;
+        Pageable pageable = PageRequest.of(page, pageSize);
 
+        // Obtener el idAgente desde la sesión
+        Integer idAgente = (Integer) session.getAttribute("idAgente");
 
-            model.addAttribute("listaUsuariosAsignados", usuariosAsignados.getContent());
-            model.addAttribute("currentPage", page);
-            model.addAttribute("totalPages", usuariosAsignados.getTotalPages());
+        if (idAgente == null) {
+            // Si el idAgente no está en la sesión, redirigir o manejar el error
+            return "redirect:/login";
+        }
 
+        Page<Usuario> usuariosAsignados = usuarioRepository.findUsuariosAsignadosAlAgente(idAgente, pageable);
 
-            return "Agente/UsuariosAsignados/usuariosAsignados";
+        model.addAttribute("listaUsuariosAsignados", usuariosAsignados.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", usuariosAsignados.getTotalPages());
+
+        return "Agente/UsuariosAsignados/usuariosAsignados";
     }
 
 
@@ -140,26 +171,37 @@ public class AgenteController {
 
     @GetMapping({"Agente/Ordenes"})
     public String Ordenes(Model model,
-                          @RequestParam(defaultValue = "0") int page){
-
+                          @RequestParam(defaultValue = "0") int page,
+                          HttpSession session) {
 
         int pageSize = 6;
         Pageable pageable = PageRequest.of(page, pageSize);
-        //Asumiendo que somos el agente con id 13 (esto se cambiará luego con login y session)
-        Integer idAgente = 13;
+
+        // Obtener el idAgente desde la sesión
+        Integer idAgente = (Integer) session.getAttribute("idAgente");
+
+        if (idAgente == null) {
+            // Si el idAgente no está en la sesión, redirigir o manejar el error
+            return "redirect:/login";
+        }
+
+        // Cargar los datos asociados al idAgente
         List<ControlOrden> listaControlOrden = controlOrdenRepository.findAll();
         List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        List<MontoTotalOrdenDto> listaMonto =  ordenRepository.obtenerMontoTotalConDto(idAgente);
+        List<MontoTotalOrdenDto> listaMonto = ordenRepository.obtenerMontoTotalConDto(idAgente);
         Page<Orden> ordenesLista = ordenRepository.buscarMisOrdenesYOrdenesSinAsignarPage(idAgente, pageable);
 
+        // Agregar los datos al modelo para la vista
         model.addAttribute("ordenesLista", ordenesLista.getContent());
-        model.addAttribute("listaControlOrden",listaControlOrden);
-        model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-        model.addAttribute("listaMonto",listaMonto);
+        model.addAttribute("listaControlOrden", listaControlOrden);
+        model.addAttribute("listaEstadoOrden", listaEstadoOrden);
+        model.addAttribute("listaMonto", listaMonto);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", ordenesLista.getTotalPages());
+
         return "Agente/OrdenesDeUsuario/ordeneslista";
     }
+
 
 
 
@@ -168,12 +210,19 @@ public class AgenteController {
     public String OrdenesFiltro(Model model,
                                 @RequestParam(value = "idEstado", defaultValue = "0") Integer idEstado,
                                 @RequestParam(value = "idControl", defaultValue = "0") Integer idControl,
-                                @RequestParam(defaultValue = "0") int page) {
+                                @RequestParam(defaultValue = "0") int page,
+                                HttpSession session) {
 
         int pageSize = 6;
         Pageable pageable = PageRequest.of(page, pageSize);
-        //Asumiendo que somos el agente con id 13 (esto se cambiará luego con login y session)
-        Integer idAgente = 13;
+
+        // Obtener el idAgente desde la sesión
+        Integer idAgente = (Integer) session.getAttribute("idAgente");
+
+        if (idAgente == null) {
+            // Si el idAgente no está en la sesión, redirigir o manejar el error
+            return "redirect:/login";
+        }
 
         Page<Orden> ordenesLista;
         List<MontoTotalOrdenDto> listaMonto;
@@ -220,9 +269,18 @@ public class AgenteController {
 
 
     @GetMapping({"/Agente/Ordenes/AsignarOrden"})
-    public String AutoAsignarOrden(Model model,@RequestParam("idOrden") Integer idOrden,RedirectAttributes attr ){
-        //Asumiendo que somos el agente con id 13 (esto se cambiará luego con login y session)
-        Integer idAgente = 13;
+    public String AutoAsignarOrden(Model model,
+                                   @RequestParam("idOrden") Integer idOrden,
+                                   RedirectAttributes attr,
+                                   HttpSession session){
+
+        // Obtener el idAgente desde la sesión
+        Integer idAgente = (Integer) session.getAttribute("idAgente");
+
+        if (idAgente == null) {
+            // Si el idAgente no está en la sesión, redirigir o manejar el error
+            return "redirect:/login";
+        }
 
         try{
             ordenRepository.autoAsignarOrden(idAgente,idOrden);
