@@ -482,9 +482,8 @@ public class UsuarioFinalController {
             long totalProductos = productoRepository.contarProductosPorCategoria(idCategoria);
             model.addAttribute("totalProductos", totalProductos);
 
-            // Si existe al menos un producto, obtener el primero y sus detalles
             if (!productos.isEmpty()) {
-                Producto producto = productos.get(0);  // Primer producto de la lista
+                Producto producto = productos.get(0);
                 model.addAttribute("producto", producto);
                 model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
                 String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
