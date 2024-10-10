@@ -510,77 +510,19 @@
                               <h5 class="px-6 py-4 bg-transparent mb-0">Resumen de la compra</h5>
                               <ul class="list-group list-group-flush">
                                  <!-- list group item -->
-                                 <li class="list-group-item px-4 py-3">
+                                 <li th:each="producto : ${productosCarrito}" class="list-group-item px-4 py-3">
                                     <div class="row align-items-center">
                                        <div class="col-2 col-md-2">
-                                          <img th:src="@{/img_user/img_user/producto1.jpg}" alt="Ecommerce" class="img-fluid" />
+                                          <img th:src="${productoImagenUrls[producto.idProducto]}" alt="Producto" class="img-fluid" />
                                        </div>
                                        <div class="col-5 col-md-5">
-                                          <h6 class="mb-0">Zapato Calvin Klein</h6>
-                          
+                                          <h6 class="mb-0" th:text="${producto.nombreProducto}">Nombre del producto</h6>
                                        </div>
                                        <div class="col-2 col-md-2 text-center text-muted">
-                                          <span>1</span>
+                                          <span th:text="${producto.cantidadProducto}">1</span>
                                        </div>
                                        <div class="col-3 text-lg-end text-start text-md-end col-md-3">
-                                          <span class="fw-bold">S/. 45.00</span>
-                                       </div>
-                                    </div>
-                                 </li>
-                                 <!-- list group item -->
-                                 <li class="list-group-item px-4 py-3">
-                                    <div class="row align-items-center">
-                                       <div class="col-2 col-md-2">
-                                          <img th:src="@{/img_user/img_user/producto2.jpg}" alt="Ecommerce" class="img-fluid" />
-                                       </div>
-                                       <div class="col-5 col-md-5">
-                                          <h6 class="mb-0">Bolsa deportiva</h6>
-                                 
-                                       </div>
-                                       <div class="col-2 col-md-2 text-center text-muted">
-                                          <span>1</span>
-                                       </div>
-                                       <div class="col-3 text-lg-end text-start text-md-end col-md-3">
-                                          <span class="fw-bold">S/. 50.00</span>
-                        
-                                       </div>
-                                    </div>
-                                 </li>
-                                 <!-- list group item -->
-                                 <li class="list-group-item px-4 py-3">
-                                    <div class="row align-items-center">
-                                       <div class="col-2 col-md-2">
-                                          <img th:src="@{/img_user/img_user/producto3.jpg}" alt="Ecommerce" class="img-fluid" />
-                                       </div>
-                                       <div class="col-5 col-md-5">
-                                          <h6 class="mb-0">Refrigeradora Hyandia</h6>
-                                       
-                                       </div>
-                                       <div class="col-2 col-md-2 text-center text-muted">
-                                          <span>1</span>
-                                       </div>
-                                       <div class="col-3 text-lg-end text-start text-md-end col-md-3">
-                                          <span class="fw-bold">S/. 30.00</span>
-                             
-                                       </div>
-                                    </div>
-                                 </li>
-                                 <!-- list group item -->
-                                 <li class="list-group-item px-4 py-3">
-                                    <div class="row align-items-center">
-                                       <div class="col-2 col-md-2">
-                                          <img th:src="@{/img_user/img_user/producto4.jpg}" alt="Ecommerce" class="img-fluid" />
-                                       </div>
-                                       <div class="col-5 col-md-5">
-                                          <h6 class="mb-0">Pan carbonato</h6>
-                                          <span><small class="text-muted">250g</small></span>
-                                       </div>
-                                       <div class="col-2 col-md-2 text-center text-muted">
-                                          <span>2</span>
-                                       </div>
-                                       <div class="col-3 text-lg-end text-start text-md-end col-md-3">
-                                          <span class="fw-bold">S/. 60.00</span>
-                         
+                                          <span class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precioTotalPorProducto, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</span>
                                        </div>
                                     </div>
                                  </li>
@@ -589,21 +531,21 @@
                                  <li class="list-group-item px-4 py-3">
                                     <div class="d-flex align-items-center justify-content-between mb-2">
                                        <div>Subtotal</div>
-                                       <div class="fw-bold">S/. 185.00</div>
+                                       <div class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(subtotal, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</div>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">
                                        <div>
                                           Costo de envío
                                           <i class="feather-icon icon-info text-muted" data-bs-toggle="tooltip" title="Tarifa de envío adicional. Puede variar según el destino"></i>
                                        </div>
-                                       <div class="fw-bold">S/. 20.00</div>
+                                       <div class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(costoEnvio, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</div>
                                     </div>
                                  </li>
                                  <!-- list group item -->
                                  <li class="list-group-item px-4 py-3">
                                     <div class="d-flex align-items-center justify-content-between fw-bold">
                                        <div>Total</div>
-                                       <div>S/. 205.00</div>
+                                       <div th:text="'S/. ' + ${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</div>
                                     </div>
                                  </li>
                               </ul>

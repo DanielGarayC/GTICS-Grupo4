@@ -2,6 +2,7 @@
 package com.example.gtics.repository;
 
 import com.example.gtics.dto.*;
+import com.example.gtics.entity.Carritocompra;
 import com.example.gtics.entity.Orden;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrdenRepository extends JpaRepository<Orden, Integer> {
@@ -457,5 +459,8 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "LEFT JOIN fotosproducto fp ON p.idProducto = fp.idProducto " +
             "WHERE c.idUsuario = :idUsuario AND o.idEstadoOrden = 8 AND o.ordenEliminada = 0")
     List<ProductosCarritoDto> obtenerProductosPorUsuario(@Param("idUsuario") Integer idUsuario);
+
+    @Query("SELECT o FROM Orden o WHERE o.idCarritoCompra = :carrito")
+    Optional<Orden> findByIdCarritoCompra(@Param("carrito") Carritocompra carrito);
 
 }

@@ -44,7 +44,7 @@ public class WebSecurityConfig {
     public UserDetailsManager user(DataSource dataSource) {
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
         String sql1 = "select email, contrasena, activo from usuario where email=?";
-        String sql2 = "SELECT u.email, r.nombreRol FROM usuario u INNER JOIN rol r ON u.idRol = r.idRol WHERE u.email = ? AND u.activo = 1";
+        String sql2 = "SELECT u.email, r.nombreRol FROM usuario u INNER JOIN rol r ON u.idRol = r.idRol WHERE u.email = ? AND u.activo = 1 AND u.baneado = 0";
 
 
         users.setUsersByUsernameQuery(sql1);
