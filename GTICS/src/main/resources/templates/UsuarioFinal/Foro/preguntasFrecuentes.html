@@ -46,6 +46,16 @@
         .table tbody td {
             color: black; /* Texto negro para el cuerpo de la tabla */
         }
+        .question-meta {
+            font-size: 0.70rem;
+            color: #888;
+            margin-top: 7px;
+            text-align: left;
+        }
+        .question-meta .date {
+            margin-top: -15px;  /* Ajustar para que esté más cerca del texto anterior */
+            display: block;  /* Asegura que la fecha esté en una nueva línea */
+        }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
@@ -105,24 +115,26 @@
                             <button id="accordion-button-1" class="accordion-btn" aria-expanded="false">
                                 <span class="accordion-title" th:text="${pregunta.pregunta}"></span>
                                 <span class="icon" aria-hidden="true"></span>
+
+                                <!-- Texto "Enviado por (Usuario) a las (hora)" -->
+                                <div class="question-meta">
+                                    <p th:text="'Enviado por ' + ${pregunta.idUsuario.nombre} + ' ' + ${pregunta.idUsuario.apellidoPaterno} + '   -   ' + ${pregunta.fechaCreacion}  "></p>
+
+                                </div>
                             </button>
-                            <!-- Ver más -->
 
                             <div class="accordion-content">
-                                <div class="mt-5">
-                                    <div class="d-flex">
-                                        <p style="font-weight: 450;"  th:text="${pregunta.idUsuario.nombre} + ' '+${pregunta.idUsuario.apellidoPaterno}"></p>
-                                        <p style="font-weight: 300;" th:text="'• ' + ${pregunta.fechaCreacion}"></p>
-                                    </div>
-
-                                    <p th:if="${pregunta.descripcion != null}" style="font-weight: 450;">Descripción: <span style="font-weight: 300;" th:text="${pregunta.descripcion}"></span></p>
-                                    <hr>
-                                </div>
+                                <!-- Contenido de la descripción y respuestas -->
+                                <p th:if="${pregunta.descripcion != null}">
+                                    <strong>Descripción:</strong> <span th:text="${pregunta.descripcion}"></span>
+                                </p>
+                                <hr>
                                 <div class="text-center">
-                                    <a class="btn btn-outline-primary btn-sm small-reply-btn" style="width: 100%;" th:href="@{'/UsuarioFinal/faq/verPregunta?id=' + ${pregunta.id}}">Ver respuestas</a>
+                                    <a class="btn btn-outline-primary btn-sm small-reply-btn" style="width: 100%;"
+                                       th:href="@{'/UsuarioFinal/faq/verPregunta?id=' + ${pregunta.id}}">
+                                        Ver respuestas
+                                    </a>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
