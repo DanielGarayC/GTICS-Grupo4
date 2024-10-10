@@ -1,7 +1,6 @@
 package com.example.gtics.controller;
 
 import com.example.gtics.dto.OrdenCarritoDto;
-import com.example.gtics.dto.ProductoTabla;
 import com.example.gtics.dto.ProductosCarritoDto;
 import com.example.gtics.dto.ProductosxOrden;
 import com.example.gtics.entity.*;
@@ -117,15 +116,16 @@ public class UsuarioFinalController {
     public String agregarAlCarrito(@RequestParam("idProducto") Integer idProducto,
                                    @RequestParam("cantidad") Integer cantidad,
                                    RedirectAttributes attr) {
-        // Use SecurityContextHolder to get the authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        // Verifica si el usuario está autenticado
         if (authentication == null || !authentication.isAuthenticated() ||
                 authentication instanceof AnonymousAuthenticationToken) {
             attr.addFlashAttribute("error", "Debes iniciar sesión para agregar productos al carrito.");
             return "redirect:/login";
         }
 
+        // Obtiene el usuario autenticado por su email
         String email = authentication.getName();
         Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
@@ -136,22 +136,28 @@ public class UsuarioFinalController {
 
         Usuario usuario = optUsuario.get();
 
-        Carritocompra carrito = carritoCompraRepository.findByIdUsuario(usuario).orElseGet(() -> {
-            Carritocompra nuevoCarrito = new Carritocompra();
-            nuevoCarrito.setIdUsuario(usuario);
-            return carritoCompraRepository.save(nuevoCarrito);
-        });
+        // Busca un carrito activo del usuario o crea uno nuevo
+        Carritocompra carrito = carritoCompraRepository.findByIdUsuarioAndActivoTrue(usuario)
+                .orElseGet(() -> {
+                    Carritocompra nuevoCarrito = new Carritocompra();
+                    nuevoCarrito.setIdUsuario(usuario);
+                    nuevoCarrito.setActivo(true); // Marca el carrito como activo
+                    return carritoCompraRepository.save(nuevoCarrito);
+                });
 
+        // Busca si el producto ya está en el carrito
         Optional<ProductoHasCarritocompra> productoEnCarritoOpt =
                 productoHasCarritocompraRepository.findById_IdCarritoCompraAndId_IdProducto(carrito.getId(), idProducto);
 
+        // Si el producto ya está en el carrito, incrementa la cantidad
         if (productoEnCarritoOpt.isPresent()) {
             ProductoHasCarritocompra productoEnCarrito = productoEnCarritoOpt.get();
             productoEnCarrito.setCantidadProducto(productoEnCarrito.getCantidadProducto() + cantidad);
             productoHasCarritocompraRepository.save(productoEnCarrito);
         } else {
-            Producto producto = productoRepository.findById(idProducto).orElseThrow(() ->
-                    new RuntimeException("Producto no encontrado"));
+            // Si el producto no está en el carrito, lo agrega como un nuevo elemento
+            Producto producto = productoRepository.findById(idProducto)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
             ProductoHasCarritocompra nuevoProductoEnCarrito = new ProductoHasCarritocompra();
             ProductoHasCarritocompraId id = new ProductoHasCarritocompraId();
             id.setIdProducto(producto.getId());
@@ -168,26 +174,6 @@ public class UsuarioFinalController {
     }
 
 
-    @PostMapping("/UsuarioFinal/eliminarProductoDelCarrito")
-    public ResponseEntity<?> eliminarProductoDelCarrito(@RequestParam("idProducto") Integer idProducto,
-                                                        HttpSession session) {
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autenticado.");
-        }
-
-        Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuario(usuario);
-        if (carritoOpt.isPresent()) {
-            Carritocompra carrito = carritoOpt.get();
-            // Log the action for debugging
-            System.out.println("Eliminando producto " + idProducto + " del carrito " + carrito.getId());
-            productoHasCarritocompraRepository.deleteById_IdCarritoCompraAndId_IdProducto(carrito.getId(), idProducto);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Carrito no encontrado.");
-        }
-    }
-
     @GetMapping("/UsuarioFinal/procesoCompra")
     public String procesoComprar(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -199,52 +185,75 @@ public class UsuarioFinalController {
             if (optUsuario.isPresent()) {
                 Usuario usuario = optUsuario.get();
 
-                // Obtener el carrito del usuario
-                Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuario(usuario);
+                // Busca el carrito activo del usuario
+                Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
                 if (carritoOpt.isPresent()) {
                     Carritocompra carrito = carritoOpt.get();
 
-                    // Obtener los productos en el carrito
+                    // Obtiene los productos en el carrito
                     List<ProductosCarritoDto> productosCarrito = productoHasCarritocompraRepository.findProductosPorCarrito(carrito.getId());
 
-                    // Crear un mapa para asociar cada producto con su URL de imagen
+                    // Asocia la URL de imagen de cada producto
                     Map<Integer, String> productoImagenUrls = new HashMap<>();
-
-                    // Obtener la primera imagen asociada a cada producto
                     for (ProductosCarritoDto producto : productosCarrito) {
                         List<Fotosproducto> fotos = fotosProductoRepository.findByProducto_Id(producto.getIdProducto());
                         if (!fotos.isEmpty()) {
-                            // Asumimos que la primera imagen es la principal
                             String urlFoto = "/UsuarioFinal/producto/foto/" + producto.getIdProducto();
                             productoImagenUrls.put(producto.getIdProducto(), urlFoto);
                         }
                     }
 
+                    // Agrega los productos y URLs de imágenes al modelo
                     model.addAttribute("productosCarrito", productosCarrito);
                     model.addAttribute("productoImagenUrls", productoImagenUrls);
-                    // Calcular el subtotal
+
+                    // Calcula el subtotal y el total
                     double subtotal = productosCarrito.stream()
                             .mapToDouble(ProductosCarritoDto::getPrecioTotalPorProducto)
                             .sum();
                     model.addAttribute("subtotal", subtotal);
 
-                    // Obtener el costo de envío desde la tabla de orden
                     Double costoEnvio = ordenRepository.obtenerCostoAdicionalxOrden(carrito.getId());
                     model.addAttribute("costoEnvio", costoEnvio != null ? costoEnvio : 0.0);
 
-                    // Calcular el total
                     double total = subtotal + (costoEnvio != null ? costoEnvio : 0.0);
                     model.addAttribute("total", total);
+                } else {
+                    model.addAttribute("error", "No tienes un carrito activo para proceder con la compra.");
+                    return "redirect:/UsuarioFinal/listaProductos";
                 }
             }
         }
         return "UsuarioFinal/ProcesoCompra/proceso_compra";
     }
 
+    @PostMapping("/UsuarioFinal/procesarOrden")
+    public String procesarOrden(@RequestParam("idOrden") Integer idOrden, RedirectAttributes attr) {
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+
+        if (ordenOpt.isPresent()) {
+            Orden orden = ordenOpt.get();
+
+            // Verifica el estado de la orden
+            if (orden.getEstadoorden().getId() == 8) {
+                // Si el estado es 8, el carrito asociado debe estar activo
+                carritoCompraRepository.updateCarritoActivo(orden.getIdCarritoCompra().getId(), true);
+            } else {
+                // Si el estado no es 8, el carrito debe estar desactivado
+                carritoCompraRepository.updateCarritoActivo(orden.getIdCarritoCompra().getId(), false);
+            }
+
+            attr.addFlashAttribute("msg", "El estado de la orden se ha procesado correctamente.");
+        } else {
+            attr.addFlashAttribute("error", "Orden no encontrada.");
+        }
+
+        return "redirect:/UsuarioFinal/listaMisOrdenes";
+    }
 
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
     public String mostrarPagPrincipal(Model model){
-            return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
+        return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
     }
 
     @PostMapping("/UsuarioFinal/solicitudAgente")
@@ -662,15 +671,8 @@ public class UsuarioFinalController {
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
     @GetMapping("/UsuarioFinal/faq")
-    public String preguntasFrecuentes( @RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "3") int size,Model model, @ModelAttribute("preguntaForm") Foropregunta preguntaForm){
-
-        Page<Foropregunta> preguntasPage = foroPreguntaRepository.findAll(PageRequest.of(page, size));
-
-        model.addAttribute("preguntasPage", preguntasPage);
-        model.addAttribute("preguntas", preguntasPage.getContent());  // Las preguntas actuales
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", preguntasPage.getTotalPages());
+    public String preguntasFrecuentes(Model model, @ModelAttribute("preguntaForm") Foropregunta preguntaForm){
+        model.addAttribute("preguntas",foroPreguntaRepository.findAll());
         model.addAttribute("respuestas",foroRespuestaRepository.findAll());
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }

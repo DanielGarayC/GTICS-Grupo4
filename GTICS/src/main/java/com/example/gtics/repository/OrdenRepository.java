@@ -452,12 +452,11 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "p.precio AS precioUnidad, " +
             "(phc.cantidadProducto * p.precio) AS precioTotalPorProducto, " +
             "fp.foto AS urlImagenProducto " +
-            "FROM orden o " +
-            "JOIN carritocompra c ON o.idCarritoCompra = c.idCarritoCompra " +
+            "FROM carritocompra c " +
             "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra " +
             "JOIN producto p ON phc.idProducto = p.idProducto " +
             "LEFT JOIN fotosproducto fp ON p.idProducto = fp.idProducto " +
-            "WHERE c.idUsuario = :idUsuario AND o.idEstadoOrden = 8 AND o.ordenEliminada = 0")
+            "WHERE c.idUsuario = :idUsuario AND c.activo = 1")
     List<ProductosCarritoDto> obtenerProductosPorUsuario(@Param("idUsuario") Integer idUsuario);
 
     @Query("SELECT o FROM Orden o WHERE o.idCarritoCompra = :carrito")
