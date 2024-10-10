@@ -926,6 +926,16 @@ public class SuperAdminController {
         return "SuperAdmin/GestionProveedores/vendor-edit";
     }
 
+    @GetMapping("/SuperAdmin/crearProveedor")
+    public String crearProveedor(Model model) {
+        Proveedor proveedor= new Proveedor();
+
+        model.addAttribute("tiendas", tiendaRepository.findAll());
+        model.addAttribute("proveedor", proveedor);
+
+        return "SuperAdmin/GestionProveedores/vendor-create";
+    }
+
     @GetMapping("/SuperAdmin/agregarTienda")
     public String agregarTienda() {
 
@@ -951,12 +961,16 @@ public class SuperAdminController {
             }
 
             // Guardar el proveedor en el repositorio
-            proveedorRepository.save(proveedor);
+
 
             if (proveedor.getId() == null) {
+                proveedor.setBaneado(false);
+                proveedorRepository.save(proveedor);
                 attr.addFlashAttribute("msg", "Proveedor creado exitosamente");
             } else {
+                proveedorRepository.save(proveedor);
                 attr.addFlashAttribute("msg", "Información del proveedor actualizada exitosamente");
+
             }
         } catch (Exception e) {
             attr.addFlashAttribute("error", "Ocurrió un error al guardar el proveedor.");
