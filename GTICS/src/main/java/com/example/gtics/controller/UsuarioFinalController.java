@@ -187,6 +187,60 @@ public class UsuarioFinalController {
         }
     }
 
+    @GetMapping("/UsuarioFinal/procesoCompra")
+    public String procesoComprar(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName();
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+            if (optUsuario.isPresent()) {
+                Usuario usuario = optUsuario.get();
+
+                // Obtener el carrito del usuario
+                Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuario(usuario);
+                if (carritoOpt.isPresent()) {
+                    Carritocompra carrito = carritoOpt.get();
+
+                    // Obtener los productos en el carrito
+                    List<ProductosCarritoDto> productosCarrito = productoHasCarritocompraRepository.findProductosPorCarrito(carrito.getId());
+
+                    // Crear un mapa para asociar cada producto con su URL de imagen
+                    Map<Integer, String> productoImagenUrls = new HashMap<>();
+
+                    // Obtener la primera imagen asociada a cada producto
+                    for (ProductosCarritoDto producto : productosCarrito) {
+                        List<Fotosproducto> fotos = fotosProductoRepository.findByProducto_Id(producto.getIdProducto());
+                        if (!fotos.isEmpty()) {
+                            // Asumimos que la primera imagen es la principal
+                            String urlFoto = "/UsuarioFinal/producto/foto/" + producto.getIdProducto();
+                            productoImagenUrls.put(producto.getIdProducto(), urlFoto);
+                        }
+                    }
+
+                    model.addAttribute("productosCarrito", productosCarrito);
+                    model.addAttribute("productoImagenUrls", productoImagenUrls);
+                    // Calcular el subtotal
+                    double subtotal = productosCarrito.stream()
+                            .mapToDouble(ProductosCarritoDto::getPrecioTotalPorProducto)
+                            .sum();
+                    model.addAttribute("subtotal", subtotal);
+
+                    // Obtener el costo de envío desde la tabla de orden
+                    Double costoEnvio = ordenRepository.obtenerCostoAdicionalxOrden(carrito.getId());
+                    model.addAttribute("costoEnvio", costoEnvio != null ? costoEnvio : 0.0);
+
+                    // Calcular el total
+                    double total = subtotal + (costoEnvio != null ? costoEnvio : 0.0);
+                    model.addAttribute("total", total);
+                }
+            }
+        }
+        return "UsuarioFinal/ProcesoCompra/proceso_compra";
+    }
+
+
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
     public String mostrarPagPrincipal(Model model){
             return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
@@ -307,6 +361,7 @@ public class UsuarioFinalController {
             return "UsuarioFinal/Ordenes/listaMisOrdenes";
         }
     }
+
     @PostMapping("/UsuarioFinal/editarDireccionOrden")
     public String editarOrden(Orden orden,RedirectAttributes redd,@RequestParam("idUsuario") Integer idUsuario){
         System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDireccion());
@@ -590,11 +645,7 @@ public class UsuarioFinalController {
 
         return "redirect:/UsuarioFinal/foro";
     }
-    @GetMapping("/UsuarioFinal/procesoCompra")
-    public String procesoComprar(){
 
-        return "UsuarioFinal/ProcesoCompra/proceso_compra";
-    }
     @GetMapping("/UsuarioFinal/chatbot")
     public String interactuarChatBot(){
 

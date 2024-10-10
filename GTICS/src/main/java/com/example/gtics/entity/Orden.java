@@ -45,4 +45,7 @@ public class Orden {
     @Column(name = "razonEliminacion")
     private String razonEliminacion;
 
+    @Column(name = "costosAdicionales")
+    private Double costosAdicionales;
+
 }
