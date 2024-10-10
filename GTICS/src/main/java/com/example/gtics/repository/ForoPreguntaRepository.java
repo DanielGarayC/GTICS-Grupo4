@@ -5,4 +5,5 @@ import com.example.gtics.entity.Foropregunta;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ForoPreguntaRepository extends JpaRepository<Foropregunta,Integer> {
+
 }
