@@ -40,6 +40,6 @@ public class Proveedor {
     private Tienda tienda;
 
     @Column(name = "baneado", nullable = false)
-    private Byte baneado;
+    private Boolean baneado;
 
 }
