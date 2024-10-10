@@ -6,5 +6,5 @@ public interface ProductosCarritoDto {
     Integer getCantidadProducto();
     Double getPrecioUnidad();
     Double getPrecioTotalPorProducto();
-    String getUrlImagenProducto();
+    String getUrlImagenProducto(); // Si no tienes este dato en la consulta, puede ser opcional
 }

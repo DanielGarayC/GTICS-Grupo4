@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
@@ -235,4 +236,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "         WHERE u.idAdminZonal = ?1 and activo = 1\n" +
             "     ) AS subquery", nativeQuery = true)
     Integer cantAgentesByAZ(int idAdminZonal);
+
+    Optional<Usuario> findByEmail(String email);
+
 }
