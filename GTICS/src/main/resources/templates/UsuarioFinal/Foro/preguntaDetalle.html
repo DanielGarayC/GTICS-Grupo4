@@ -57,12 +57,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-12 col-12 mb-5">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 th:text="${pregunta.pregunta}"></h2>
-                        <h3 th:if="${pregunta.descripcion!=null}" th:text="${pregunta.descripcion}"></h3>
+                    <div class="column mb-4">
+                        <h2 style="font-weight: 450;" th:text="${pregunta.pregunta}"></h2>
+                        <h3 style="font-weight: 450;" th:if="${pregunta.descripcion!=null}" th:text="${pregunta.descripcion}"></h3>
                     </div>
-                    <h4 th:if="${listaRespuestas.isEmpty()}" class="mb-5">No hay respuestas registradas</h4>
-                    <h4 th:if="${!listaRespuestas.isEmpty()}" class="mb-5">Respuestas:</h4>
+                    <h4 style="font-weight: 400;" th:if="${listaRespuestas.isEmpty()}" class="mb-5">No hay respuestas registradas</h4>
+                    <h4 style="font-weight: 400;" th:if="${!listaRespuestas.isEmpty()}" class="mb-5">Respuestas:</h4>
                     <div class="respuesta" th:each="respuesta : ${listaRespuestas}" th:if="${respuesta.idPregunta.id} == ${pregunta.id}">
                         <p style="margin-bottom: 0px;"><strong th:text="${respuesta.getIdUsuario().nombre + ' ' + respuesta.getIdUsuario().apellidoPaterno} + ': '"></strong><span th:text="${respuesta.contenidoRespuesta}"></span></p>
                     </div>
