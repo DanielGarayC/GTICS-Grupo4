@@ -112,10 +112,10 @@
                                 <div class="mt-5">
                                     <div class="d-flex">
                                         <p style="font-weight: 450;"  th:text="${pregunta.idUsuario.nombre} + ' '+${pregunta.idUsuario.apellidoPaterno}"></p>
-                                        <p th:text="'• ' + ${pregunta.fechaCreacion}"></p>
+                                        <p style="font-weight: 300;" th:text="'• ' + ${pregunta.fechaCreacion}"></p>
                                     </div>
 
-                                    <p th:if="${pregunta.descripcion != null}" style="font-weight: 450;">Descripción: <span th:text="${pregunta.descripcion}"></span></p>
+                                    <p th:if="${pregunta.descripcion != null}" style="font-weight: 450;">Descripción: <span style="font-weight: 300;" th:text="${pregunta.descripcion}"></span></p>
                                     <hr>
                                 </div>
                                 <div class="text-center">
@@ -150,7 +150,7 @@
                         <input id="descripcion" type="text" class="form-control" th:field="*{descripcion}" />
                     </div>
 
-                    <button class="btn btn-primary" type="submit">Responder</button>
+                    <button class="btn btn-primary" type="submit">Agregar pregunta</button>
 
                 </form>
             </div>
