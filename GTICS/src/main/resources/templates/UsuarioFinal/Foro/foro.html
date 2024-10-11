@@ -16,6 +16,9 @@
         <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
         <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
 
         <!-- Theme CSS -->
         <link rel="stylesheet" th:href="@{/css/theme.min.css}">
@@ -312,7 +315,9 @@
 
                                                     <!-- Botón útil y contador -->
                                                     <div class="d-flex justify-content-end mt-4">
-                                                        <a href="#" class="text-muted like-btn" th:attr="data-resena-id=${resena.id}">
+                                                        <!-- Aquí cambiamos la lógica para eliminar la dependencia de resena.yaLeGusto -->
+                                                        <a href="#" class="text-muted like-btn" th:attr="data-resena-id=${resena.id}"
+                                                           th:classappend="${usuariosLikes != null and usuariosLikes[resena.id] != null and usuariosLikes[resena.id].contains(usuario.email)} ? 'liked' : ''">
                                                             <i class="feather-icon icon-thumbs-up me-1"></i>
                                                             Útil (<span class="like-count" th:text="${resena.util}">0</span>)
                                                             <div class="particles">
@@ -323,7 +328,14 @@
                                                                 <div class="particle" style="--x: 0px; --y: -40px;"></div>
                                                             </div>
                                                         </a>
+
                                                     </div>
+
+                                                </div>
+                                            </div>
+                                            <div th:if="${listaResenas.isEmpty()}">
+                                                <div class="alert alert-warning" role="alert">
+                                                    <strong>No se encontraron resultados</strong> bajo los filtros aplicados.
                                                 </div>
                                             </div>
 
@@ -340,41 +352,26 @@
                                 <!-- Paginación -->
                                 <div class="row mt-8">
                                     <div class="col">
-                                        <nav aria-label="Page navigation">
+                                        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
                                             <ul class="pagination">
-                                                <!-- Botón "Anterior" -->
+                                                <!-- Botón "Anterior" deshabilitado si estamos en la primera página -->
                                                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                                                     <a class="page-link" th:href="${currentPage > 0} ? @{/UsuarioFinal/Reviews(page=${currentPage - 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'" aria-label="Anterior">
                                                         <span aria-hidden="true">&laquo;</span>
                                                     </a>
                                                 </li>
 
-                                                <!-- Enlace a la primera página -->
+                                                <!-- Solo muestra la página 1 si no hay resultados -->
                                                 <li class="page-item" th:classappend="${currentPage == 0} ? 'active'">
                                                     <a class="page-link" th:href="@{/UsuarioFinal/Reviews(page=0, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}">1</a>
                                                 </li>
 
-                                                <!-- Puntos suspensivos si es necesario -->
-                                                <li class="page-item disabled" th:if="${startPage > 2}">
-                                                    <span class="page-link">...</span>
-                                                </li>
-
-                                                <!-- Números de página intermedios -->
-                                                <li th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                                <!-- No mostrar paginación si no hay más de una página -->
+                                                <li th:each="i : ${#numbers.sequence(startPage, endPage)}" th:if="${totalPages > 1}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
                                                     <a class="page-link" th:href="@{/UsuarioFinal/Reviews(page=${i}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}" th:text="${i + 1}"></a>
                                                 </li>
 
-                                                <!-- Puntos suspensivos si es necesario -->
-                                                <li class="page-item disabled" th:if="${endPage < totalPages - 1}">
-                                                    <span class="page-link">...</span>
-                                                </li>
-
-                                                <!-- Enlace a la última página -->
-                                                <li class="page-item" th:if="${totalPages > 1}" th:classappend="${currentPage == totalPages - 1} ? 'active'">
-                                                    <a class="page-link" th:href="@{/UsuarioFinal/Reviews(page=${totalPages - 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}" th:text="${totalPages}"></a>
-                                                </li>
-
-                                                <!-- Botón "Siguiente" -->
+                                                <!-- Botón "Siguiente" deshabilitado si estamos en la última página -->
                                                 <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
                                                     <a class="page-link" th:href="${currentPage + 1 < totalPages} ? @{/UsuarioFinal/Reviews(page=${currentPage + 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'" aria-label="Siguiente">
                                                         <span aria-hidden="true">&raquo;</span>
@@ -383,8 +380,13 @@
                                             </ul>
                                         </nav>
 
+                                        <!-- Mostrar un mensaje si no hay páginas -->
+                                        <div th:if="${totalPages == 0}" class="alert alert-warning">
+                                            No hay resultados que mostrar.
+                                        </div>
                                     </div>
                                 </div>
+
 
 
 
@@ -496,23 +498,49 @@
             // Seleccionar todos los botones de "Útil"
             document.querySelectorAll('.like-btn').forEach(function(btn) {
                 btn.addEventListener('click', function(event) {
-                    event.preventDefault(); // Evita que el enlace siga la redirección predeterminada
+                    event.preventDefault();  // Evita la recarga de página
 
-                    // Alternar la clase 'liked' para aplicar el efecto de me gusta
-                    this.classList.toggle('liked');
+                    const resenaId = this.getAttribute('data-resena-id');
 
-                    // Si el botón ha sido marcado como "liked"
-                    if (this.classList.contains('liked')) {
-                        // Disparar la animación de partículas
-                        this.querySelectorAll('.particle').forEach(function(particle) {
-                            particle.style.animation = 'none';
-                            setTimeout(function() {
-                                particle.style.animation = '';
-                            }, 10);
-                        });
-                    }
+                    // Obtener el token CSRF y el header desde las meta tags
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                    // Realiza la solicitud al servidor para alternar el estado de "Útil"
+                    fetch('/UsuarioFinal/Resena/' + resenaId + '/like', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            [csrfHeader]: csrfToken  // Enviar el token CSRF en el encabezado
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Actualiza el contador en la interfaz
+                                this.querySelector('.like-count').textContent = data.newUtilCount;
+
+                                // Alterna la clase 'liked'
+                                this.classList.toggle('liked');
+
+                                // Si el botón ha sido marcado como "liked", dispara la animación
+                                if (this.classList.contains('liked')) {
+                                    this.querySelectorAll('.particle').forEach(function(particle) {
+                                        particle.style.animation = 'none';
+                                        setTimeout(function() {
+                                            particle.style.animation = '';
+                                        }, 10);
+                                    });
+                                }
+                            } else {
+                                console.error(data.message || 'Error desconocido.');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
                 });
             });
+
+
         </script>
 
         <script>
@@ -534,51 +562,6 @@
         </script>
         <!-- Otros contenidos del body -->
 
-        <script>
-            // Seleccionar todos los botones de "Útil"
-            document.querySelectorAll('.like-btn').forEach(function(btn) {
-                btn.addEventListener('click', function(event) {
-                    event.preventDefault(); // Evita que el enlace siga la redirección predeterminada
-
-                    const resenaId = this.getAttribute('data-resena-id');
-
-                    // Enviar la solicitud al servidor para incrementar el contador
-                    fetch('/UsuarioFinal/Resena/' + resenaId + '/like', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                            // [csrfHeader]: csrfToken // Eliminar esta línea
-                        },
-                        body: JSON.stringify({ resenaId: resenaId })
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Actualizar el contador en la interfaz
-                                this.querySelector('.like-count').textContent = data.newUtilCount;
-                                // Marcar el botón como "liked" si no lo está
-                                if (!this.classList.contains('liked')) {
-                                    this.classList.add('liked');
-                                    // Disparar la animación de partículas
-                                    this.querySelectorAll('.particle').forEach(function(particle) {
-                                        particle.style.animation = 'none';
-                                        setTimeout(function() {
-                                            particle.style.animation = '';
-                                        }, 10);
-                                    });
-                                }
-                            } else {
-                                alert('Ocurrió un error al marcar la reseña como útil.');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Ocurrió un error al procesar tu solicitud.');
-                        });
-                });
-            });
-
-        </script>
 
         <script>
             function updatePlaceholder() {

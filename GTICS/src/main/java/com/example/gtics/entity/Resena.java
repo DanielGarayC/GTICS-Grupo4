@@ -50,7 +50,7 @@ public class Resena {
     private LocalDate fechaCreacion;
 
     @Column(name = "util", nullable = false)
-    private Integer util;
+    private Integer util = 0;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -61,4 +61,6 @@ public class Resena {
     @Size(min = 1, message = "Debe subir al menos una foto.")
     private List<Fotosresena> fotosresenas;
 
+    @Transient // Esta anotación indica que este campo no se almacena en la base de datos
+    private boolean yaLeGusto;
 }

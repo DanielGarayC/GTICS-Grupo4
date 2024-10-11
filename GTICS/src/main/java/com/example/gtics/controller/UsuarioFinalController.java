@@ -6,6 +6,7 @@ import com.example.gtics.dto.ProductosCarritoDto;
 import com.example.gtics.dto.ProductosxOrden;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.core.io.ByteArrayResource;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -58,6 +60,25 @@ public class UsuarioFinalController {
     private final SubcategoriaRepository subcategoriaRepository;
     private final ProductoHasCarritocompraRepository productoHasCarritocompraRepository;
     private final CarritoCompraRepository carritoCompraRepository;
+    // Aquí usaremos un HashMap en memoria (o una caché) para simular la relación
+    private final Map<Integer, Set<String>> usuariosLikes = new HashMap<>();
+
+    private boolean usuarioYaDioLike(Resena resena, Usuario usuario) {
+        return usuariosLikes.containsKey(resena.getId()) && usuariosLikes.get(resena.getId()).contains(usuario.getEmail());
+    }
+
+    private void registrarUsuarioQueDioLike(Resena resena, Usuario usuario) {
+        usuariosLikes.computeIfAbsent(resena.getId(), k -> new HashSet<>()).add(usuario.getEmail());
+    }
+
+    private void eliminarUsuarioDeLike(Resena resena, Usuario usuario) {
+        if (usuariosLikes.containsKey(resena.getId())) {
+            usuariosLikes.get(resena.getId()).remove(usuario.getEmail());
+            if (usuariosLikes.get(resena.getId()).isEmpty()) {
+                usuariosLikes.remove(resena.getId());
+            }
+        }
+    }
 
     public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository,DistritoRepository distritoRepository, UsuarioRepository usuarioRepository,
                                   FotosProductoRepository fotosProductoRepository, OrdenRepository ordenRepository,
@@ -609,24 +630,71 @@ public class UsuarioFinalController {
 
     @PostMapping("/UsuarioFinal/Resena/{id}/like")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> incrementarUtil(@PathVariable("id") Integer id) {
-        Optional<Resena> optionalResena = resenaRepository.findById(id);
-        if (optionalResena.isPresent()) {
-            Resena resena = optionalResena.get();
-            resena.setUtil(resena.getUtil() + 1);
-            resenaRepository.save(resena);
+    public ResponseEntity<Map<String, Object>> toggleLike(@PathVariable("id") Integer id, Principal principal) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Optional<Resena> optionalResena = resenaRepository.findById(id);
+            if (optionalResena.isPresent()) {
+                Resena resena = optionalResena.get();
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("newUtilCount", resena.getUtil());
-            return ResponseEntity.ok(response);
-        } else {
-            Map<String, Object> response = new HashMap<>();
+                // Inicializa 'util' si es null
+                if (resena.getUtil() == null) {
+                    resena.setUtil(0);
+                }
+
+                String userEmail = principal.getName();  // Obtener email del usuario autenticado
+                Usuario usuario = usuarioRepository.findByEmail(userEmail)
+                        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+                // Verifica si el usuario ya dio like
+                if (usuariosLikes.containsKey(resena.getId()) && usuariosLikes.get(resena.getId()).contains(userEmail)) {
+                    // Si ya dio like, quitar el like
+                    resena.setUtil(resena.getUtil() - 1);
+                    usuariosLikes.get(resena.getId()).remove(userEmail);
+                } else {
+                    // Si no ha dado like, agregar el like
+                    resena.setUtil(resena.getUtil() + 1);
+                    usuariosLikes.computeIfAbsent(resena.getId(), k -> new HashSet<>()).add(userEmail);
+                }
+
+                // Guardar los cambios de la reseña
+                resenaRepository.save(resena);
+
+                response.put("success", true);
+                response.put("newUtilCount", resena.getUtil());  // Devolver el nuevo conteo de "útil"
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("success", false);
+                response.put("message", "Reseña no encontrada.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+        } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Reseña no encontrada.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            response.put("message", "Ocurrió un error al procesar la solicitud.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-      }
+    }
+
+
+
+
+    @PostConstruct
+    public void inicializarLikesEnMemoria() {
+        List<Resena> resenas = resenaRepository.findAll();
+
+        for (Resena resena : resenas) {
+            usuariosLikes.putIfAbsent(resena.getId(), new HashSet<>());
+        }
+
+        logger.info("Likes inicializados en memoria.");
+    }
+
+
+
+
+
+
+
 
     @GetMapping("/UsuarioFinal/Reviews")
     public String mostrarReviews(Model model,
@@ -755,7 +823,7 @@ public class UsuarioFinalController {
         attr.addFlashAttribute("msg", "Reseña creada exitosamente.");
 
         return "redirect:/UsuarioFinal/Reviews";
-    }    
+    }
 
     @GetMapping("/UsuarioFinal/chatbot")
     public String interactuarChatBot(){
