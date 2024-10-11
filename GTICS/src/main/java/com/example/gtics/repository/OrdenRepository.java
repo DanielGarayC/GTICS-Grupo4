@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import com.example.gtics.entity.Producto;
 
 import java.util.List;
 import java.util.Optional;
@@ -461,5 +462,15 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
 
     @Query("SELECT o FROM Orden o WHERE o.idCarritoCompra = :carrito")
     Optional<Orden> findByIdCarritoCompra(@Param("carrito") Carritocompra carrito);
+
+    @Query(nativeQuery = true, value = "SELECT p.idProducto, p.nombreProducto " +
+            "FROM orden o " +
+            "JOIN carritocompra c ON o.idCarritoCompra = c.idCarritoCompra " +
+            "JOIN producto_has_carritocompra phc ON c.idCarritoCompra = phc.idCarritoCompra " +
+            "JOIN producto p ON phc.idProducto = p.idProducto " +
+            "WHERE c.idUsuario = :idUsuario " +  // Aquí usas el parámetro dinámico
+            "AND o.idEstadoOrden = 7 " +
+            "AND phc.resenaCreada = 0")
+    List<ProductoDTO> obtenerProductosPorUsuarioSinResena(@Param("idUsuario") Integer idUsuario);
 
 }
