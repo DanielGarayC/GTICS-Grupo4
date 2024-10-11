@@ -21,4 +21,8 @@ public class Fotosresena {
     @JoinColumn(name = "idResena", nullable = false)
     private Resena idResena;
 
+    @Column(name = "tipo", nullable = false)
+    private String tipo;  // Aquí almacenamos el tipo MIME de la imagen (e.g., image/jpeg)
+
+
 }
