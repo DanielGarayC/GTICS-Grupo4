@@ -1,6 +1,7 @@
 package com.example.gtics.controller;
 
 import com.example.gtics.dto.OrdenCarritoDto;
+import com.example.gtics.dto.ProductoDTO;
 import com.example.gtics.dto.ProductosCarritoDto;
 import com.example.gtics.dto.ProductosxOrden;
 import com.example.gtics.entity.*;
@@ -24,6 +25,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +42,7 @@ import java.util.*;
 
 @Controller
 public class UsuarioFinalController {
+    private static final Logger logger = LoggerFactory.getLogger(UsuarioFinalController.class);
     private final UsuarioRepository usuarioRepository;
     private final SolicitudAgenteRepository solicitudAgenteRepository;
     private final FotosProductoRepository fotosProductoRepository;
@@ -558,102 +568,214 @@ public class UsuarioFinalController {
         }
     }
 
-    @GetMapping("/UsuarioFinal/Review")
-    public String mostrarReview(){
+   public String mostrarReview(Model model){
+// Obtener el usuario autenticado (en este caso, estoy usando un ID estático para el ejemplo)
+        Integer idUsuario = 3;  // Cambia esto por el método de autenticación real
 
+        // Obtener la lista de productos recibidos sin reseña
+        List<ProductoDTO> productosSinResena = ordenRepository.obtenerProductosPorUsuarioSinResena(idUsuario);
+        // Añadir la lista de productos al modelo para que se muestre en la vista
+        model.addAttribute("productosSinResena", productosSinResena);
+// Inicializar un objeto vacío de Resena para el formulario
+        model.addAttribute("resena", new Resena());
         return "UsuarioFinal/Productos/reviuw";
     }
 
-    @PostMapping("/UsuarioFinal/Resena/GuardarFotos")
-    @ResponseBody
-    public ResponseEntity<?> guardarFotos(@RequestParam("fotos") List<MultipartFile> fotos) {
-        List<String> nombresFotos = new ArrayList<>();
+    @GetMapping("/UsuarioFinal/Resena/Fotos/{id}")
+    public ResponseEntity<ByteArrayResource> obtenerFotoResena(@PathVariable Integer id) {
+        Optional<Fotosresena> fotoResenaOpt = fotosResenaRepository.findById(id);
 
-        try {
-            for (MultipartFile foto : fotos) {
-                if (!foto.isEmpty()) {
-                    // Guardar cada archivo
-                    Fotosresena fotosresena = new Fotosresena();
-                    fotosresena.setFoto(foto.getBytes());
+        if (fotoResenaOpt.isPresent()) {
+            Fotosresena fotoResena = fotoResenaOpt.get();
+            ByteArrayResource resource = new ByteArrayResource(fotoResena.getFoto());
 
-
-                    nombresFotos.add(foto.getOriginalFilename()); // Añadir el nombre del archivo
-                }
+            String mimeType = fotoResena.getTipo();
+            // Si el tipo MIME es nulo o vacío, usar un tipo predeterminado (por ejemplo, image/jpeg)
+            if (mimeType == null || mimeType.isEmpty()) {
+                mimeType = "image/jpeg";
             }
-            return new ResponseEntity<>(nombresFotos, HttpStatus.OK); // Respuesta exitosa con los nombres de los archivos subidos
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Error guardando las fotos", HttpStatus.INTERNAL_SERVER_ERROR); // Respuesta de error
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"foto_resena_" + id + ".jpg\"")
+                    .contentType(MediaType.parseMediaType(mimeType))  // Usar el tipo MIME corregido
+                    .contentLength(fotoResena.getFoto().length)
+                    .body(resource);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
+
+    @PostMapping("/UsuarioFinal/Resena/{id}/like")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> incrementarUtil(@PathVariable("id") Integer id) {
+        Optional<Resena> optionalResena = resenaRepository.findById(id);
+        if (optionalResena.isPresent()) {
+            Resena resena = optionalResena.get();
+            resena.setUtil(resena.getUtil() + 1);
+            resenaRepository.save(resena);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("newUtilCount", resena.getUtil());
+            return ResponseEntity.ok(response);
+        } else {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "Reseña no encontrada.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+      }
+
+    @GetMapping("/UsuarioFinal/Reviews")
+    public String mostrarReviews(Model model,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "3") int size,
+                                 @RequestParam(required = false) String searchCriteria,
+                                 @RequestParam(required = false) String searchKeyword,
+                                 @RequestParam(required = false) Integer rating,
+                                 @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                 @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+                                 @RequestParam(defaultValue = "recent") String sortOrder,
+                                 HttpServletRequest request) {
+
+        // Limpieza y validación de parámetros
+        if ((searchCriteria == null || searchCriteria.trim().isEmpty()) ||
+                (searchKeyword == null || searchKeyword.trim().isEmpty())) {
+            searchCriteria = null;
+            searchKeyword = null;
+        }
+
+        // Validar que startDate no sea posterior a endDate
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            // Puedes lanzar una excepción, devolver un mensaje de error, o intercambiar las fechas
+            // Aquí intercambiamos las fechas
+            LocalDate temp = startDate;
+            startDate = endDate;
+            endDate = temp;
+        }
+
+        // Determinar el ordenamiento basado en el parámetro sortOrder
+        Sort sort;
+        switch (sortOrder) {
+            case "oldest":
+                sort = Sort.by("fechaCreacion").ascending();
+                break;
+            case "mostHelpful":
+                sort = Sort.by("util").descending();
+                break;
+            default: // "recent"
+                sort = Sort.by("fechaCreacion").descending();
+                break;
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        // Llamar al método 'findByFilters' del repositorio
+        Page<Resena> resenaPage = resenaRepository.findByFilters(
+                searchCriteria, searchKeyword, rating, startDate, endDate, pageable
+        );
+
+        int totalPages = resenaPage.getTotalPages();
+
+        model.addAttribute("listaResenas", resenaPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageSize", size);
+
+        // Añadir los parámetros al modelo para mantener los valores en la vista
+        model.addAttribute("searchCriteria", searchCriteria);
+        model.addAttribute("searchKeyword", searchKeyword);
+        model.addAttribute("rating", rating);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("sortOrder", sortOrder);
+
+        // Lógica de paginación avanzada
+        int pageDisplayLimit = 5;
+        int startPage, endPage;
+
+        if (totalPages <= pageDisplayLimit + 4) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            startPage = Math.max(2, page - 2);
+            endPage = Math.min(totalPages - 1, page + 3);
+
+            if (page <= 2) {
+                endPage = 5;
+            }
+
+            if (page >= totalPages - 3) {
+                startPage = totalPages - 4;
+            }
+        }
+
+        // Asegurar que 'startPage' y 'endPage' estén dentro de límites válidos
+        startPage = Math.max(1, startPage);
+        endPage = Math.min(totalPages, Math.max(startPage, endPage));
+
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        return "UsuarioFinal/Foro/foro";
+    }
+
+
+
     @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
-    @Transactional // Ensure both the review and photos are saved within the same transaction
-    public String guardarResena(@ModelAttribute("resena") Resena resena,
-                                @RequestParam("reviewTitle") String reviewTitle,
-                                @RequestParam("reviewOpinion") String reviewOpinion,
-                                @RequestParam("calificacionAtencion") int calificacionAtencion,
-                                @RequestParam("calificacionCalidad") int calificacionCalidad,
-                                @RequestParam("uploadedPhotos") String uploadedPhotos, // Receive the uploaded photos
+    public String guardarResena(@Valid @ModelAttribute("resena") Resena resena,
                                 BindingResult bindingResult,
+                                @RequestParam(value = "uploadedPhotos", required = false) MultipartFile[] uploadedPhotos,
                                 RedirectAttributes attr,
                                 Model model) {
 
-        // Set review attributes
-        resena.setTema(reviewTitle);
-        resena.setOpinion(reviewOpinion);
-
-        // Assigning quality rating
-        Calidad calidad = new Calidad();
-        calidad.setId(calificacionCalidad);
-        resena.setIdCalidad(calidad);
-
-        // Assigning agent attention rating
-        Atencion atencion = new Atencion();
-        atencion.setId(calificacionAtencion);
-        resena.setIdAtencion(atencion);
-
-        // Check if product is associated, otherwise set default product
-        if (resena.getProducto() == null) {
-            Producto productoDefault = new Producto();
-            productoDefault.setId(1); // Set the default product ID
-            resena.setProducto(productoDefault);
+        // Set fields before validation check
+        Usuario user = usuarioRepository.findUsuarioById(3); // Replace with actual user retrieval logic
+        if (user == null) {
+            attr.addFlashAttribute("error", "Usuario no encontrado.");
+            return "redirect:/UsuarioFinal/Review";
         }
+        resena.setIdUsuario(user); // Assign the user to the review
+
+        // Set the creation date
+        resena.setFechaCreacion(LocalDate.now());
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("error", "Por favor, revisa los campos e inténtalo nuevamente.");
-            return "UsuarioFinal/Resena/crearResena";
+            // Re-add necessary data to the model
+            Integer idUsuario = 3;  // Replace with actual user ID
+            List<ProductoDTO> productosSinResena = ordenRepository.obtenerProductosPorUsuarioSinResena(idUsuario);
+            model.addAttribute("productosSinResena", productosSinResena);
+            return "UsuarioFinal/Productos/reviuw";
         }
 
-        try {
-            // First, save the review and get the generated ID
-            Resena nuevaResena = resenaRepository.save(resena);
-            if (nuevaResena.getId() == null) {
-                throw new RuntimeException("Error al guardar la reseña. El ID es nulo.");
-            }
-
-            System.out.println("Reseña guardada con éxito. ID: " + nuevaResena.getId());
-
-            // Save photos if there are any uploaded
-            if (!uploadedPhotos.isEmpty()) {
-                String[] fotos = uploadedPhotos.split(",");
-                for (String foto : fotos) {
-                    Fotosresena fotosresena = new Fotosresena();
-                    fotosresena.setFoto(foto.getBytes()); // Adjust this to properly handle file content
-                    fotosresena.setIdResena(nuevaResena); // Associate the photos with the newly saved review
-                    fotosResenaRepository.save(fotosresena);
-                    System.out.println("Foto asociada a la reseña guardada correctamente.");
+        // Process uploaded photos
+        if (uploadedPhotos != null && uploadedPhotos.length > 0) {
+            List<Fotosresena> fotosResenaList = new ArrayList<>();
+            for (MultipartFile uploadedPhoto : uploadedPhotos) {
+                if (!uploadedPhoto.isEmpty()) {
+                    try {
+                        Fotosresena fotosresena = new Fotosresena();
+                        fotosresena.setFoto(uploadedPhoto.getBytes());
+                        fotosresena.setTipo(uploadedPhoto.getContentType());
+                        fotosresena.setIdResena(resena); // Associate the photo with the review
+                        fotosResenaList.add(fotosresena);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        attr.addFlashAttribute("error", "Ocurrió un error al procesar las fotos.");
+                        return "redirect:/UsuarioFinal/Review";
+                    }
                 }
             }
-
-            attr.addFlashAttribute("msg", "Reseña creada exitosamente.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            attr.addFlashAttribute("error", "Ocurrió un error al guardar la reseña o las fotos.");
+            resena.setFotosresenas(fotosResenaList); // Assign the photos to the review
         }
 
-        return "redirect:/UsuarioFinal/foro";
-    }
+        // Save the review
+        resenaRepository.save(resena);
+        attr.addFlashAttribute("msg", "Reseña creada exitosamente.");
+
+        return "redirect:/UsuarioFinal/Reviews";
+    }    
 
     @GetMapping("/UsuarioFinal/chatbot")
     public String interactuarChatBot(){
