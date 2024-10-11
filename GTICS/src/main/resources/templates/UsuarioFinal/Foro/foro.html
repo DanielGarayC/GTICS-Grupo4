@@ -7,8 +7,9 @@
         <meta content="Codescandy" name="author">
         <title>Foro</title>
         <!-- Favicon icon-->
-        <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
+        <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+        <!-- ... otros meta tags y enlaces ... -->
 
         <!-- Libs CSS -->
         <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
@@ -51,6 +52,87 @@
             .table tbody td {
                 color: black; /* Texto negro para el cuerpo de la tabla */
             }
+
+            /* Botón "Útil" estilizado */
+            .like-btn {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                font-weight: normal;
+                font-size: 14px;
+                color: #6c757d;
+                transition: color 0.3s ease;
+                cursor: pointer;
+            }
+
+            .like-btn i {
+                font-size: 18px;
+                transition: transform 0.3s ease, color 0.3s ease;
+            }
+
+            /* Estilo cuando está marcado (like) */
+            .like-btn.liked {
+                color: #007bff;
+                font-weight: bold;
+            }
+
+            .like-btn.liked i {
+                color: #007bff;
+                transform: scale(1.2);
+            }
+
+            /* Animación de rebote (bounce) cuando se hace click */
+            @keyframes bounce {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.5);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            .like-btn.liked i {
+                animation: bounce 0.4s ease-out;
+            }
+
+            /* Partículas de "like" */
+            .like-btn .particles {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                display: none;
+            }
+
+            .like-btn.liked .particles {
+                display: block;
+            }
+
+            .particle {
+                position: absolute;
+                width: 6px;
+                height: 6px;
+                background-color: #007bff;
+                border-radius: 50%;
+                opacity: 0;
+                animation: particle-animation 0.6s forwards ease-out;
+            }
+
+            @keyframes particle-animation {
+                0% {
+                    opacity: 1;
+                    transform: translate(0, 0) scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(var(--x), var(--y)) scale(0.6);
+                }
+            }
+
         </style>
 
     </head>
@@ -74,276 +156,168 @@
                             <aside class="col-lg-3 col-md-4 mb-6 mb-md-0">
                                 <div class="offcanvas offcanvas-start offcanvas-collapse w-md-50" tabindex="-1" id="offcanvasCategory" aria-labelledby="offcanvasCategoryLabel">
                                     <div class="offcanvas-header d-lg-none">
-                                        <h5 class="offcanvas-title" id="offcanvasCategoryLabel">Filter</h5>
+                                        <h5 class="offcanvas-title" id="offcanvasCategoryLabel">Filtros</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                     </div>
-
                                     <div class="offcanvas-body ps-lg-2 pt-lg-0">
-                                        <form action="/ruta/backend" method="GET"> <!-- Cambia la acción a la ruta de tu backend -->
-                                            <!-- Búsqueda -->
+                                        <form action="@{/UsuarioFinal/Reviews}" method="get">
+                                            <!-- Filtro de Búsqueda -->
                                             <div class="mb-8">
-                                                <h5 class="mb-3">Búsqueda</h5>
-                                                <div class="my-4">
-                                                    <input type="search" name="search" class="form-control" placeholder="Filtrar por nombre, código, proveedores del producto" />
+                                                <h5 class="mb-3">Buscar Productos</h5>
+                                                <div class="mb-4">
+                                                    <select name="searchCriteria" class="form-select mb-2">
+                                                        <option value="name" th:selected="${searchCriteria == 'name'}">Nombre</option>
+                                                        <option value="provider" th:selected="${searchCriteria == 'provider'}">Proveedor</option>
+                                                    </select>
+                                                    <input type="text" name="searchKeyword" class="form-control" placeholder="Ingrese su búsqueda" th:value="${searchKeyword}" />
                                                 </div>
                                             </div>
 
-                                            <!-- Rating -->
+                                            <!-- Filtro de Calificación -->
                                             <div class="mb-8">
-                                                <h5 class="mb-3">Rating</h5>
-                                                <div>
-                                                    <!-- form check -->
-                                                    <div class="form-check mb-2">
-                                                        <input class="form-check-input" type="checkbox" name="rating[]" value="5" id="ratingFive" />
-                                                        <label class="form-check-label" for="ratingFive">
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check mb-2">
-                                                        <input class="form-check-input" type="checkbox" name="rating[]" value="4" id="ratingFour" checked />
-                                                        <label class="form-check-label" for="ratingFour">
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star text-warning"></i>
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check mb-2">
-                                                        <input class="form-check-input" type="checkbox" name="rating[]" value="3" id="ratingThree" />
-                                                        <label class="form-check-label" for="ratingThree">
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star text-warning"></i>
-                                                            <i class="bi bi-star text-warning"></i>
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check mb-2">
-                                                        <input class="form-check-input" type="checkbox" name="rating[]" value="2" id="ratingTwo" />
-                                                        <label class="form-check-label" for="ratingTwo">
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star text-warning"></i>
-                                                            <i class="bi bi-star text-warning"></i>
-                                                            <i class="bi bi-star text-warning"></i>
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check mb-2">
-                                                        <input class="form-check-input" type="checkbox" name="rating[]" value="1" id="ratingOne" />
-                                                        <label class="form-check-label" for="ratingOne">
-                                                            <i class="bi bi-star-fill text-warning"></i>
-                                                            <i class="bi bi-star text-warning"></i>
-                                                            <i class="bi bi-star text-warning"></i>
-                                                            <i class="bi bi-star text-warning"></i>
-                                                            <i class="bi bi-star text-warning"></i>
+                                                <h5 class="mb-3">Filtrar por Calificación</h5>
+                                                <div class="rating-options d-flex flex-column gap-2">
+                                                    <div th:each="star : ${#numbers.sequence(5,1)}" class="form-check">
+                                                        <input class="form-check-input" type="radio" name="rating" th:value="${star}" th:id="'rating' + ${star}" th:checked="${rating == star}" />
+                                                        <label class="form-check-label d-flex align-items-center" th:for="'rating' + ${star}">
+                    <span th:each="i : ${#numbers.sequence(1,5)}">
+                        <i th:class="${i <= star} ? 'bi bi-star-fill text-warning' : 'bi bi-star text-warning'"></i>
+                    </span>
+                                                            <span class="ms-2" th:text="${star} + ' Estrellas'"></span>
                                                         </label>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Botón para enviar la información -->
-                                            <a href="#" class="btn btn-outline-gray-400 mb-2" style="margin-top: -25px" onclick="document.querySelector('form').submit();">Filtrar</a>
+                                            <!-- Filtro de Fecha -->
+                                            <div class="mb-8">
+                                                <h5 class="mb-3">Filtrar por Fecha</h5>
+                                                <div class="d-flex">
+                                                    <div class="me-3">
+                                                        <label for="startDate" class="form-label">Desde</label>
+                                                        <input type="date" id="startDate" name="startDate" class="form-control" th:value="${#temporals.format(startDate, 'yyyy-MM-dd')}" />
+                                                    </div>
+                                                    <div>
+                                                        <label for="endDate" class="form-label">Hasta</label>
+                                                        <input type="date" id="endDate" name="endDate" class="form-control" th:value="${#temporals.format(endDate, 'yyyy-MM-dd')}" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Botones de Aplicar y Borrar Filtros -->
+                                            <div class="d-grid gap-2">
+                                                <button type="submit" class="btn btn-primary btn-block">Aplicar Filtros</button>
+                                                <a th:href="@{/UsuarioFinal/Reviews}" class="btn btn-secondary btn-block">Borrar Filtros</a>
+                                            </div>
                                         </form>
 
                                     </div>
-                                    <div style="margin-top: -20px;margin-left: 8px" >
-                                    <hr>
-                                    <a th:href="@{/UsuarioFinal/Review}" class="btn btn-primary" >Redactar reseña</a>
-                                    </div>
                                 </div>
                             </aside>
+
                             <section class="col-lg-9 col-md-12">
-
-
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h4>Reseñas</h4>
+                                    <!-- Botón "Redactar reseña" -->
+                                    <a th:href="@{/UsuarioFinal/Review}" class="btn btn-primary">Redactar reseña</a>
+                                </div>
                                 <!-- ACA PONER LOS REVIEWS -->
 
                                 <div class="my-1" >
                                     <!-- col -->
                                     <div class="col-md-12">
                                         <div class="mb-10">
-                                            <div class="d-flex justify-content-between align-items-center mb-8">
-                                                <div>
-                                                    <!-- heading -->
-                                                    <h4>Reseñas</h4>
+                                            <!-- Selectores de "Mostrar" y "Ordenar por" -->
+                                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                                <div class="d-flex align-items-center">
+                                                    <label for="pageSizeSelect" class="form-label me-2">Mostrar:</label>
+                                                    <select class="form-select" id="pageSizeSelect" onchange="changePageSize()">
+                                                        <option th:value="3" th:text="'3'" th:selected="${pageSize == 3}"></option>
+                                                        <option th:value="5" th:text="'5'" th:selected="${pageSize == 5}"></option>
+                                                        <option th:value="10" th:text="'10'" th:selected="${pageSize == 10}"></option>
+                                                    </select>
                                                 </div>
-
-                                                <!-- Agrupando ambos selectores en un solo contenedor -->
-                                                <div class="d-flex mt-2 mt-lg-0">
-                                                    <!-- Selector de "Show" -->
-                                                    <div class="me-2">
-                                                        <select class="form-select">
-                                                            <option selected>Mostrar: 5</option>
-                                                            <option value="10">Mostrar: 10</option>
-                                                            <option value="20">Mostrar: 15</option>
-
-                                                        </select>
-                                                    </div>
-
-                                                    <!-- Selector de "Top Reviews" -->
-                                                    <div>
-                                                        <select class="form-select">
-                                                            <option selected>Más valoradas</option>
-                                                            <option value="Most Recent">Más recientes</option>
-                                                        </select>
-                                                    </div>
+                                                <div class="d-flex align-items-center">
+                                                    <label for="sortSelect" class="form-label me-2">Ordenar por:</label>
+                                                    <select class="form-select" id="sortSelect" onchange="changeSortOrder()">
+                                                        <option value="recent" th:selected="${sortOrder == 'recent'}">Más recientes</option>
+                                                        <option value="oldest" th:selected="${sortOrder == 'oldest'}">Más antiguos</option>
+                                                        <option value="mostHelpful" th:selected="${sortOrder == 'mostHelpful'}">Más útiles</option>
+                                                    </select>
                                                 </div>
                                             </div>
 
-                                            <div class="d-flex border-bottom pb-6 mb-6">
-                                                <!-- img -->
-                                                <img th:src="@{/images/avatar/avatar-10.jpg}" alt="" class="rounded-circle avatar-lg" />
-                                                <div class="ms-5">
-                                                    <h6 class="mb-1">Shankar Subbaraman</h6>
-                                                    <!-- select option -->
-                                                    <!-- content -->
+
+                                            <div th:each="resena : ${listaResenas}" class="d-flex border-bottom pb-6 mb-6">
+                                                <div class="reseña-avatar" style="width: 100px;">
+                                                    <img th:src="@{${resena.idUsuario.foto}}" alt="" class="rounded-circle avatar-lg" />
+                                                </div>
+
+                                                <div class="ms-5 reseña-contenido" style="flex-grow: 1;">
+                                                    <h6 class="mb-1" th:text="${resena.idUsuario.nombre + ' ' + resena.idUsuario.apellidoPaterno + ' ' + resena.idUsuario.apellidoMaterno}"></h6>
+
                                                     <p class="small">
-                                                        <span class="text-muted">30 Diciembre 2022</span>
-                                                        <span class="text-primary ms-3 fw-bold">Compra Verificada</span>
+                                                        <span class="text-muted" th:text="${#temporals.format(resena.fechaCreacion, 'dd MMMM yyyy')}"></span>
                                                     </p>
-                                                    <!-- rating -->
-                                                    <div class="mb-2">
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <span class="ms-3 text-dark fw-bold">Es necesario verificar el peso en el punto de entrega</span>
+
+                                                    <div class="mb-2" th:if="${resena.idCalidad != null}" th:with="
+    filledStars = ${resena.idCalidad.id},
+    emptyStars = ${5 - resena.idCalidad.id}">
+
+                                                        <!-- Display filled stars -->
+                                                        <span th:each="i : ${#numbers.sequence(1, filledStars)}">
+        <i class="bi bi-star-fill text-warning"></i>
+    </span>
+
+                                                        <!-- Display empty stars if any -->
+                                                        <span th:if="${emptyStars > 0}" th:each="i : ${#numbers.sequence(1, emptyStars)}">
+        <i class="bi bi-star text-warning"></i>
+    </span>
+
+                                                        <!-- Review title -->
+                                                        <span class="ms-3 text-dark fw-bold" th:text="${resena.tema}"></span>
                                                     </div>
-                                                    <!-- text-->
-                                                    <p>
-                                                        La calidad del producto es buena, pero el peso parecía ser menor de 1kg. Como se envía en un paquete abierto, existe la posibilidad de que se pierda parte del contenido durante el envío. FreshCart envía las verduras y frutas en bolsas de plástico selladas con código de barras en el peso, etc.
-                                                    </p>
-                                                    <div>
-                                                        <div class="border icon-shape icon-lg border-2">
-                                                            <!-- img -->
-                                                            <img th:src="@{/images/products/product-img-1.jpg}" alt="" class="img-fluid" />
+
+
+                                                    <p th:text="${resena.opinion}"></p>
+
+                                                    <div class="d-flex reseña-fotos mt-3">
+                                                        <div th:if="${not #lists.isEmpty(resena.fotosresenas)}">
+                                                            <div th:each="foto : ${resena.fotosresenas}" class="border icon-shape icon-lg border-2 me-1" style="width: 100px; height: 100px; overflow: hidden;">
+                                                                <!-- Aquí pasamos la información necesaria al modal usando data-* -->
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modalResena"
+                                                                   th:attr="data-usuario-nombre=${resena.idUsuario.nombre},
+                                                                            data-fecha-creacion=${#temporals.format(resena.fechaCreacion, 'dd MMMM yyyy')},
+                                                                            data-calificacion=${resena.idCalidad.id},
+                                                                            data-tema=${resena.tema},
+                                                                            data-opinion=${resena.opinion},
+                                                                            data-imagen-src=@{'/UsuarioFinal/Resena/Fotos/' + ${foto.id}}">
+                                                                    <img th:src="@{'/UsuarioFinal/Resena/Fotos/' + ${foto.id}}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" />
+                                                                </a>
+
+                                                            </div>
                                                         </div>
-                                                        <div class="border icon-shape icon-lg border-2 ms-1">
-                                                            <!-- img -->
-                                                            <img th:src="@{/images/products/product-img-2.jpg}" alt="" class="img-fluid" />
-                                                        </div>
-                                                        <div class="border icon-shape icon-lg border-2 ms-1">
-                                                            <!-- img -->
-                                                            <img th:src="@{/images/products/product-img-3.jpg}" alt="" class="img-fluid" />
-                                                        </div>
                                                     </div>
-                                                    <!-- icon -->
+
                                                     <div class="d-flex justify-content-end mt-4">
-                                                        <a href="#" class="text-muted">
+                                                        <a href="#" class="text-muted like-btn" th:attr="data-resena-id=${resena.id}">
                                                             <i class="feather-icon icon-thumbs-up me-1"></i>
-                                                            Útil
+                                                            Útil(<span class="like-count" th:text="${resena.util}">0</span>)
+                                                            <div class="particles">
+                                                                <!-- Partículas -->
+                                                                <div class="particle" style="--x: -20px; --y: -30px;"></div>
+                                                                <div class="particle" style="--x: 20px; --y: -30px;"></div>
+                                                                <div class="particle" style="--x: -30px; --y: 10px;"></div>
+                                                                <div class="particle" style="--x: 30px; --y: 10px;"></div>
+                                                                <div class="particle" style="--x: 0px; --y: -40px;"></div>
+                                                            </div>
                                                         </a>
+
 
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="d-flex border-bottom pb-6 mb-6 pt-4">
-                                                <!-- img -->
-                                                <img th:src="@{/images/avatar/avatar-12.jpg}" alt="" class="rounded-circle avatar-lg" />
-                                                <div class="ms-5">
-                                                    <h6 class="mb-1">Robert Thomas</h6>
-                                                    <!-- content -->
-                                                    <p class="small">
-                                                        <span class="text-muted">29 Diciembre 2022</span>
-                                                        <span class="text-primary ms-3 fw-bold">Compra Verificada</span>
-                                                    </p>
-                                                    <!-- rating -->
-                                                    <div class="mb-2">
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star text-warning"></i>
-                                                        <span class="ms-3 text-dark fw-bold">Es necesario verificar el peso en el punto de entrega</span>
-                                                    </div>
-
-                                                    <p>
-                                                        La calidad del producto es buena, pero el peso parecía ser menor de 1kg. Como se envía en un paquete abierto, existe la posibilidad de pérdida en el camino. FreshCart envía las verduras y frutas en bolsas de plástico selladas y con código de barras para el peso, etc.
-                                                    </p>
-                                                    <!-- icon -->
-                                                    <div class="d-flex justify-content-end mt-4">
-                                                        <a href="#" class="text-muted">
-                                                            <i class="feather-icon icon-thumbs-up me-1"></i>
-                                                            Útil
-                                                        </a>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="d-flex border-bottom pb-6 mb-6 pt-4">
-                                                <!-- img -->
-                                                <img th:src="@{/images/avatar/avatar-9.jpg}" alt="" class="rounded-circle avatar-lg" />
-                                                <div class="ms-5">
-                                                    <h6 class="mb-1">Barbara Tay</h6>
-                                                    <!-- content -->
-                                                    <p class="small">
-                                                        <span class="text-muted">28 Diciembre 2022</span>
-                                                        <span class="text-danger ms-3 fw-bold">Compra No Verificada</span>
-                                                    </p>
-                                                    <!-- rating -->
-                                                    <div class="mb-2">
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star text-warning"></i>
-                                                        <span class="ms-3 text-dark fw-bold">Es necesario verificar el peso en el punto de entrega</span>
-                                                    </div>
-
-                                                    <p>
-                                                        Cada vez que pedí de Fresh recibí plátanos verde amarillentos como los quería, así que vale la pena. Rara vez llegan demasiado maduros.
-                                                    </p>
-                                                    <!-- icon -->
-                                                    <div class="d-flex justify-content-end mt-4">
-                                                        <a href="#" class="text-muted">
-                                                            <i class="feather-icon icon-thumbs-up me-1"></i>
-                                                            Útil
-                                                        </a>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="d-flex border-bottom pb-6 mb-6 pt-4">
-                                                <!-- img -->
-                                                <img th:src="@{/images/avatar/avatar-8.jpg}" alt="" class="rounded-circle avatar-lg" />
-                                                <div class="ms-5 flex-grow-1">
-                                                    <h6 class="mb-1">Sandra Langevin</h6>
-                                                    <!-- content -->
-                                                    <p class="small">
-                                                        <span class="text-muted">8 Diciembre 2022</span>
-                                                        <span class="text-danger ms-3 fw-bold">Compra No Verificada</span>
-                                                    </p>
-                                                    <!-- rating -->
-                                                    <div class="mb-2">
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star text-warning"></i>
-                                                        <span class="ms-3 text-dark fw-bold">Gran producto</span>
-                                                    </div>
-
-                                                    <p>
-                                                        Gran producto y empaque. La entrega podría ser más rápida.
-                                                    </p>
-                                                    <!-- icon -->
-                                                    <div class="d-flex justify-content-end mt-4">
-                                                        <a href="#" class="text-muted">
-                                                            <i class="feather-icon icon-thumbs-up me-1"></i>
-                                                            Útil
-                                                        </a>
-
-                                                    </div>
-                                                </div>
-                                            </div>
 
 
                                         </div>
@@ -353,37 +327,153 @@
 
 
                                 <!-- row -->
+                                <!-- Pagination Controls -->
+                                <!-- Paginación -->
                                 <div class="row mt-8">
                                     <div class="col">
-                                        <!-- nav -->
                                         <nav>
                                             <ul class="pagination">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link mx-1" href="#" aria-label="Previous">
+                                                <!-- Botón "Anterior" -->
+                                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                    <a class="page-link mx-1"
+                                                       th:if="${currentPage > 0}"
+                                                       th:href="@{/UsuarioFinal/Reviews(
+                           page=${currentPage - 1},
+                           size=${pageSize},
+                           searchCriteria=${searchCriteria},
+                           searchKeyword=${searchKeyword},
+                           rating=${rating},
+                           startDate=${startDate},
+                           endDate=${endDate},
+                           sortOrder=${sortOrder}
+                       )}"
+                                                       aria-label="Anterior">
                                                         <i class="feather-icon icon-chevron-left"></i>
                                                     </a>
+                                                    <span class="page-link mx-1" th:if="${currentPage == 0}" aria-label="Anterior">
+                        <i class="feather-icon icon-chevron-left"></i>
+                    </span>
                                                 </li>
-                                                <li class="page-item"><a class="page-link mx-1 active" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link mx-1" href="#">2</a></li>
 
-                                                <li class="page-item"><a class="page-link mx-1" href="#">...</a></li>
-                                                <li class="page-item"><a class="page-link mx-1" href="#">12</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link mx-1" href="#" aria-label="Next">
+                                                <!-- Enlace a la primera página -->
+                                                <li class="page-item" th:classappend="${currentPage == 0} ? 'active'">
+                                                    <a class="page-link mx-1"
+                                                       th:href="@{/UsuarioFinal/Reviews(
+                           page=0,
+                           size=${pageSize},
+                           searchCriteria=${searchCriteria},
+                           searchKeyword=${searchKeyword},
+                           rating=${rating},
+                           startDate=${startDate},
+                           endDate=${endDate},
+                           sortOrder=${sortOrder}
+                       )}">1</a>
+                                                </li>
+
+                                                <!-- Puntos suspensivos si es necesario -->
+                                                <li class="page-item disabled" th:if="${startPage > 2}">
+                                                    <span class="page-link mx-1">...</span>
+                                                </li>
+
+                                                <!-- Números de página intermedios -->
+                                                <li th:each="i : ${#numbers.sequence(startPage - 1, endPage - 1)}"
+                                                    th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                                    <a class="page-link mx-1"
+                                                       th:href="@{/UsuarioFinal/Reviews(
+                           page=${i},
+                           size=${pageSize},
+                           searchCriteria=${searchCriteria},
+                           searchKeyword=${searchKeyword},
+                           rating=${rating},
+                           startDate=${startDate},
+                           endDate=${endDate},
+                           sortOrder=${sortOrder}
+                       )}"
+                                                       th:text="${i + 1}"></a>
+                                                </li>
+
+                                                <!-- Puntos suspensivos si es necesario -->
+                                                <li class="page-item disabled" th:if="${endPage < totalPages - 1}">
+                                                    <span class="page-link mx-1">...</span>
+                                                </li>
+
+                                                <!-- Enlace a la última página -->
+                                                <li class="page-item" th:if="${totalPages > 1}" th:classappend="${currentPage == totalPages -1} ? 'active'">
+                                                    <a class="page-link mx-1"
+                                                       th:href="@{/UsuarioFinal/Reviews(
+                           page=${totalPages - 1},
+                           size=${pageSize},
+                           searchCriteria=${searchCriteria},
+                           searchKeyword=${searchKeyword},
+                           rating=${rating},
+                           startDate=${startDate},
+                           endDate=${endDate},
+                           sortOrder=${sortOrder}
+                       )}"
+                                                       th:text="${totalPages}"></a>
+                                                </li>
+
+                                                <!-- Botón "Siguiente" -->
+                                                <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                                                    <a class="page-link mx-1"
+                                                       th:if="${currentPage + 1 < totalPages}"
+                                                       th:href="@{/UsuarioFinal/Reviews(
+                           page=${currentPage + 1},
+                           size=${pageSize},
+                           searchCriteria=${searchCriteria},
+                           searchKeyword=${searchKeyword},
+                           rating=${rating},
+                           startDate=${startDate},
+                           endDate=${endDate},
+                           sortOrder=${sortOrder}
+                       )}"
+                                                       aria-label="Siguiente">
                                                         <i class="feather-icon icon-chevron-right"></i>
                                                     </a>
+                                                    <span class="page-link mx-1" th:if="${currentPage + 1 >= totalPages}" aria-label="Siguiente">
+                        <i class="feather-icon icon-chevron-right"></i>
+                    </span>
                                                 </li>
                                             </ul>
                                         </nav>
                                     </div>
                                 </div>
+
+
+
+
+
                             </section>
                         </div>
                     </div>
                 </div>
             </main>
+        <div class="modal fade" id="modalResena" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-4">
+                        <div class="position-absolute top-0 end-0 me-3 mt-3">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 id="modalResenaUsuario"></h5>
+                                <p class="small text-muted" id="modalResenaFecha"></p>
+                                <div id="modalResenaCalificacion"></div>
+                                <h6 class="mt-3" id="modalResenaTema"></h6>
+                                <p id="modalResenaOpinion"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <img id="modalResenaImagen" src="#" alt="Imagen de la reseña" class="img-fluid" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <!-- Libs JS -->
+
+        <!-- Libs JS -->
             <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
 
             <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
@@ -394,7 +484,141 @@
 
             <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
             <script th:src="@{/js/vendors/chart.js}"></script>
+        <!-- Tu script personalizado -->
+
+            <script>
+                var modalResena = document.getElementById('modalResena');
+                modalResena.addEventListener('show.bs.modal', function (event) {
+                    // Obtén el enlace que activó el modal
+                    var button = event.relatedTarget;
+
+                    // Extrae la información de los atributos data-* del enlace
+                    var usuarioNombre = button.getAttribute('data-usuario-nombre');
+                    var fechaCreacion = button.getAttribute('data-fecha-creacion');
+                    var calificacion = parseInt(button.getAttribute('data-calificacion')); // Asegúrate de convertir a número entero
+                    var tema = button.getAttribute('data-tema');
+                    var opinion = button.getAttribute('data-opinion');
+                    var imagenSrc = button.getAttribute('data-imagen-src');
+
+                    // Actualiza el contenido del modal con los datos extraídos
+                    var modalUsuarioNombre = modalResena.querySelector('#modalResenaUsuario');
+                    var modalFechaCreacion = modalResena.querySelector('#modalResenaFecha');
+                    var modalTema = modalResena.querySelector('#modalResenaTema');
+                    var modalOpinion = modalResena.querySelector('#modalResenaOpinion');
+                    var modalImagen = modalResena.querySelector('#modalResenaImagen');
+                    var modalCalificacion = modalResena.querySelector('#modalResenaCalificacion');
+
+                    // Asignar valores al modal
+                    modalUsuarioNombre.textContent = usuarioNombre;
+                    modalFechaCreacion.textContent = fechaCreacion;
+                    modalTema.textContent = tema;
+                    modalOpinion.textContent = opinion;
+                    modalImagen.src = imagenSrc;
+
+                    // Generar las estrellas según la calificación
+                    var calificacionHtml = '';
+                    // Estrellas llenas
+                    for (var i = 1; i <= calificacion; i++) {
+                        calificacionHtml += '<i class="bi bi-star-fill text-warning"></i>';
+                    }
+                    // Estrellas vacías para completar hasta 5
+                    for (var i = calificacion + 1; i <= 5; i++) {
+                        calificacionHtml += '<i class="bi bi-star text-warning"></i>';
+                    }
+                    modalCalificacion.innerHTML = calificacionHtml;
+                });
+
+            </script>
+
+        <script>
+            // Seleccionar todos los botones de "Útil"
+            document.querySelectorAll('.like-btn').forEach(function(btn) {
+                btn.addEventListener('click', function(event) {
+                    event.preventDefault(); // Evita que el enlace siga la redirección predeterminada
+
+                    // Alternar la clase 'liked' para aplicar el efecto de me gusta
+                    this.classList.toggle('liked');
+
+                    // Si el botón ha sido marcado como "liked"
+                    if (this.classList.contains('liked')) {
+                        // Disparar la animación de partículas
+                        this.querySelectorAll('.particle').forEach(function(particle) {
+                            particle.style.animation = 'none';
+                            setTimeout(function() {
+                                particle.style.animation = '';
+                            }, 10);
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            function changePageSize() {
+                const size = document.getElementById('pageSizeSelect').value;
+                let params = new URLSearchParams(window.location.search);
+                params.set('size', size);
+                params.set('page', 0); // Reiniciar a la primera página
+                window.location.search = params.toString();
+            }
+
+            function changeSortOrder() {
+                const sortOrder = document.getElementById('sortSelect').value;
+                let params = new URLSearchParams(window.location.search);
+                params.set('sortOrder', sortOrder);
+                params.set('page', 0); // Reiniciar a la primera página
+                window.location.search = params.toString();
+            }
+        </script>
+        <!-- Otros contenidos del body -->
+
+        <script>
+            // Seleccionar todos los botones de "Útil"
+            document.querySelectorAll('.like-btn').forEach(function(btn) {
+                btn.addEventListener('click', function(event) {
+                    event.preventDefault(); // Evita que el enlace siga la redirección predeterminada
+
+                    const resenaId = this.getAttribute('data-resena-id');
+
+                    // Enviar la solicitud al servidor para incrementar el contador
+                    fetch('/UsuarioFinal/Resena/' + resenaId + '/like', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                            // [csrfHeader]: csrfToken // Eliminar esta línea
+                        },
+                        body: JSON.stringify({ resenaId: resenaId })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Actualizar el contador en la interfaz
+                                this.querySelector('.like-count').textContent = data.newUtilCount;
+                                // Marcar el botón como "liked" si no lo está
+                                if (!this.classList.contains('liked')) {
+                                    this.classList.add('liked');
+                                    // Disparar la animación de partículas
+                                    this.querySelectorAll('.particle').forEach(function(particle) {
+                                        particle.style.animation = 'none';
+                                        setTimeout(function() {
+                                            particle.style.animation = '';
+                                        }, 10);
+                                    });
+                                }
+                            } else {
+                                alert('Ocurrió un error al marcar la reseña como útil.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Ocurrió un error al procesar tu solicitud.');
+                        });
+                });
+            });
+
+        </script>
 
 
     </body>
 </html>
+
