@@ -18,7 +18,7 @@ public interface ResenaRepository extends JpaRepository<Resena, Integer> {
             "(:searchKeyword IS NULL OR " +
             "(:searchCriteria = 'name' AND p.nombreProducto LIKE CONCAT('%', :searchKeyword, '%')) OR " +
             "(:searchCriteria = 'provider' AND prov.nombreProveedor LIKE CONCAT('%', :searchKeyword, '%'))) " +
-            "AND (:rating IS NULL OR r.idCalidad.id = :rating) " +  // Asegurar que se compara el ID correctamente
+            "AND (:rating IS NULL OR r.idCalidad.id = :rating) " +
             "AND (:startDate IS NULL OR r.fechaCreacion >= :startDate) " +
             "AND (:endDate IS NULL OR r.fechaCreacion <= :endDate)")
     Page<Resena> findByFilters(
@@ -29,6 +29,8 @@ public interface ResenaRepository extends JpaRepository<Resena, Integer> {
             @Param("endDate") LocalDate endDate,
             Pageable pageable
     );
+
+
 }
 
 

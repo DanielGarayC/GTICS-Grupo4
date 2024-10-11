@@ -160,16 +160,18 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                     </div>
                                     <div class="offcanvas-body ps-lg-2 pt-lg-0">
-                                        <form action="@{/UsuarioFinal/Reviews}" method="get">
+                                        <form th:action="@{/UsuarioFinal/Reviews}" method="get">
                                             <!-- Filtro de Búsqueda -->
                                             <div class="mb-8">
                                                 <h5 class="mb-3">Buscar Productos</h5>
                                                 <div class="mb-4">
-                                                    <select name="searchCriteria" class="form-select mb-2">
-                                                        <option value="name" th:selected="${searchCriteria == 'name'}">Nombre</option>
+                                                    <!-- Selector de búsqueda -->
+                                                    <select id="searchCriteriaSelect" name="searchCriteria" class="form-select mb-2" onchange="updatePlaceholder()">
+                                                        <option value="name" th:selected="${searchCriteria == 'name'}">Nombre del Producto</option>
                                                         <option value="provider" th:selected="${searchCriteria == 'provider'}">Proveedor</option>
                                                     </select>
-                                                    <input type="text" name="searchKeyword" class="form-control" placeholder="Ingrese su búsqueda" th:value="${searchKeyword}" />
+                                                    <!-- Campo de búsqueda -->
+                                                    <input type="text" id="searchKeywordInput" name="searchKeyword" class="form-control" placeholder="Ingrese el nombre del producto" th:value="${searchKeyword}" />
                                                 </div>
                                             </div>
 
@@ -183,7 +185,6 @@
                     <span th:each="i : ${#numbers.sequence(1,5)}">
                         <i th:class="${i <= star} ? 'bi bi-star-fill text-warning' : 'bi bi-star text-warning'"></i>
                     </span>
-                                                            <span class="ms-2" th:text="${star} + ' Estrellas'"></span>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -205,6 +206,7 @@
                                             </div>
 
                                             <!-- Botones de Aplicar y Borrar Filtros -->
+                                            <!-- Otros filtros -->
                                             <div class="d-grid gap-2">
                                                 <button type="submit" class="btn btn-primary btn-block">Aplicar Filtros</button>
                                                 <a th:href="@{/UsuarioFinal/Reviews}" class="btn btn-secondary btn-block">Borrar Filtros</a>
@@ -238,7 +240,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="d-flex align-items-center">
-                                                    <label for="sortSelect" class="form-label me-2">Ordenar por:</label>
+                                                    <label for="sortSelect" class="form-label me-2" style="white-space: nowrap;">Ordenar por:</label>
                                                     <select class="form-select" id="sortSelect" onchange="changeSortOrder()">
                                                         <option value="recent" th:selected="${sortOrder == 'recent'}">Más recientes</option>
                                                         <option value="oldest" th:selected="${sortOrder == 'oldest'}">Más antiguos</option>
@@ -260,19 +262,25 @@
                                                         <span class="text-muted" th:text="${#temporals.format(resena.fechaCreacion, 'dd MMMM yyyy')}"></span>
                                                     </p>
 
+                                                    <!-- Nombre del producto y del proveedor -->
+                                                    <p class="text-primary fw-bold">
+                                                        Producto: <span th:text="${resena.producto.nombreProducto}"></span> -
+                                                        Proveedor: <span th:text="${resena.producto.idProveedor.nombreProveedor}"></span>
+                                                    </p>
+
                                                     <div class="mb-2" th:if="${resena.idCalidad != null}" th:with="
-    filledStars = ${resena.idCalidad.id},
-    emptyStars = ${5 - resena.idCalidad.id}">
+                                                        filledStars = ${resena.idCalidad.id},
+                                                        emptyStars = ${5 - resena.idCalidad.id}">
 
                                                         <!-- Display filled stars -->
                                                         <span th:each="i : ${#numbers.sequence(1, filledStars)}">
-        <i class="bi bi-star-fill text-warning"></i>
-    </span>
+                                                            <i class="bi bi-star-fill text-warning"></i>
+                                                        </span>
 
                                                         <!-- Display empty stars if any -->
                                                         <span th:if="${emptyStars > 0}" th:each="i : ${#numbers.sequence(1, emptyStars)}">
-        <i class="bi bi-star text-warning"></i>
-    </span>
+                                                            <i class="bi bi-star text-warning"></i>
+                                                        </span>
 
                                                         <!-- Review title -->
                                                         <span class="ms-3 text-dark fw-bold" th:text="${resena.tema}"></span>
@@ -287,24 +295,27 @@
                                                                 <!-- Aquí pasamos la información necesaria al modal usando data-* -->
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalResena"
                                                                    th:attr="data-usuario-nombre=${resena.idUsuario.nombre},
-                                                                            data-fecha-creacion=${#temporals.format(resena.fechaCreacion, 'dd MMMM yyyy')},
-                                                                            data-calificacion=${resena.idCalidad.id},
-                                                                            data-tema=${resena.tema},
-                                                                            data-opinion=${resena.opinion},
-                                                                            data-imagen-src=@{'/UsuarioFinal/Resena/Fotos/' + ${foto.id}}">
+                                                                        data-fecha-creacion=${#temporals.format(resena.fechaCreacion, 'dd MMMM yyyy')},
+                                                                        data-calificacion=${resena.idCalidad.id},
+                                                                        data-tema=${resena.tema},
+                                                                        data-opinion=${resena.opinion},
+                                                                        data-imagen-src=@{'/UsuarioFinal/Resena/Fotos/' + ${foto.id}},
+                                                                        data-producto-nombre=${resena.producto.nombreProducto},
+                                                                        data-proveedor-nombre=${resena.producto.idProveedor.nombreProveedor}">
                                                                     <img th:src="@{'/UsuarioFinal/Resena/Fotos/' + ${foto.id}}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" />
                                                                 </a>
+
 
                                                             </div>
                                                         </div>
                                                     </div>
 
+                                                    <!-- Botón útil y contador -->
                                                     <div class="d-flex justify-content-end mt-4">
                                                         <a href="#" class="text-muted like-btn" th:attr="data-resena-id=${resena.id}">
                                                             <i class="feather-icon icon-thumbs-up me-1"></i>
-                                                            Útil(<span class="like-count" th:text="${resena.util}">0</span>)
+                                                            Útil (<span class="like-count" th:text="${resena.util}">0</span>)
                                                             <div class="particles">
-                                                                <!-- Partículas -->
                                                                 <div class="particle" style="--x: -20px; --y: -30px;"></div>
                                                                 <div class="particle" style="--x: 20px; --y: -30px;"></div>
                                                                 <div class="particle" style="--x: -30px; --y: 10px;"></div>
@@ -312,8 +323,6 @@
                                                                 <div class="particle" style="--x: 0px; --y: -40px;"></div>
                                                             </div>
                                                         </a>
-
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -331,111 +340,49 @@
                                 <!-- Paginación -->
                                 <div class="row mt-8">
                                     <div class="col">
-                                        <nav>
+                                        <nav aria-label="Page navigation">
                                             <ul class="pagination">
                                                 <!-- Botón "Anterior" -->
                                                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                                    <a class="page-link mx-1"
-                                                       th:if="${currentPage > 0}"
-                                                       th:href="@{/UsuarioFinal/Reviews(
-                           page=${currentPage - 1},
-                           size=${pageSize},
-                           searchCriteria=${searchCriteria},
-                           searchKeyword=${searchKeyword},
-                           rating=${rating},
-                           startDate=${startDate},
-                           endDate=${endDate},
-                           sortOrder=${sortOrder}
-                       )}"
-                                                       aria-label="Anterior">
-                                                        <i class="feather-icon icon-chevron-left"></i>
+                                                    <a class="page-link" th:href="${currentPage > 0} ? @{/UsuarioFinal/Reviews(page=${currentPage - 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'" aria-label="Anterior">
+                                                        <span aria-hidden="true">&laquo;</span>
                                                     </a>
-                                                    <span class="page-link mx-1" th:if="${currentPage == 0}" aria-label="Anterior">
-                        <i class="feather-icon icon-chevron-left"></i>
-                    </span>
                                                 </li>
 
                                                 <!-- Enlace a la primera página -->
                                                 <li class="page-item" th:classappend="${currentPage == 0} ? 'active'">
-                                                    <a class="page-link mx-1"
-                                                       th:href="@{/UsuarioFinal/Reviews(
-                           page=0,
-                           size=${pageSize},
-                           searchCriteria=${searchCriteria},
-                           searchKeyword=${searchKeyword},
-                           rating=${rating},
-                           startDate=${startDate},
-                           endDate=${endDate},
-                           sortOrder=${sortOrder}
-                       )}">1</a>
+                                                    <a class="page-link" th:href="@{/UsuarioFinal/Reviews(page=0, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}">1</a>
                                                 </li>
 
                                                 <!-- Puntos suspensivos si es necesario -->
                                                 <li class="page-item disabled" th:if="${startPage > 2}">
-                                                    <span class="page-link mx-1">...</span>
+                                                    <span class="page-link">...</span>
                                                 </li>
 
                                                 <!-- Números de página intermedios -->
-                                                <li th:each="i : ${#numbers.sequence(startPage - 1, endPage - 1)}"
-                                                    th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                                    <a class="page-link mx-1"
-                                                       th:href="@{/UsuarioFinal/Reviews(
-                           page=${i},
-                           size=${pageSize},
-                           searchCriteria=${searchCriteria},
-                           searchKeyword=${searchKeyword},
-                           rating=${rating},
-                           startDate=${startDate},
-                           endDate=${endDate},
-                           sortOrder=${sortOrder}
-                       )}"
-                                                       th:text="${i + 1}"></a>
+                                                <li th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                                    <a class="page-link" th:href="@{/UsuarioFinal/Reviews(page=${i}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}" th:text="${i + 1}"></a>
                                                 </li>
 
                                                 <!-- Puntos suspensivos si es necesario -->
                                                 <li class="page-item disabled" th:if="${endPage < totalPages - 1}">
-                                                    <span class="page-link mx-1">...</span>
+                                                    <span class="page-link">...</span>
                                                 </li>
 
                                                 <!-- Enlace a la última página -->
-                                                <li class="page-item" th:if="${totalPages > 1}" th:classappend="${currentPage == totalPages -1} ? 'active'">
-                                                    <a class="page-link mx-1"
-                                                       th:href="@{/UsuarioFinal/Reviews(
-                           page=${totalPages - 1},
-                           size=${pageSize},
-                           searchCriteria=${searchCriteria},
-                           searchKeyword=${searchKeyword},
-                           rating=${rating},
-                           startDate=${startDate},
-                           endDate=${endDate},
-                           sortOrder=${sortOrder}
-                       )}"
-                                                       th:text="${totalPages}"></a>
+                                                <li class="page-item" th:if="${totalPages > 1}" th:classappend="${currentPage == totalPages - 1} ? 'active'">
+                                                    <a class="page-link" th:href="@{/UsuarioFinal/Reviews(page=${totalPages - 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}" th:text="${totalPages}"></a>
                                                 </li>
 
                                                 <!-- Botón "Siguiente" -->
                                                 <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
-                                                    <a class="page-link mx-1"
-                                                       th:if="${currentPage + 1 < totalPages}"
-                                                       th:href="@{/UsuarioFinal/Reviews(
-                           page=${currentPage + 1},
-                           size=${pageSize},
-                           searchCriteria=${searchCriteria},
-                           searchKeyword=${searchKeyword},
-                           rating=${rating},
-                           startDate=${startDate},
-                           endDate=${endDate},
-                           sortOrder=${sortOrder}
-                       )}"
-                                                       aria-label="Siguiente">
-                                                        <i class="feather-icon icon-chevron-right"></i>
+                                                    <a class="page-link" th:href="${currentPage + 1 < totalPages} ? @{/UsuarioFinal/Reviews(page=${currentPage + 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'" aria-label="Siguiente">
+                                                        <span aria-hidden="true">&raquo;</span>
                                                     </a>
-                                                    <span class="page-link mx-1" th:if="${currentPage + 1 >= totalPages}" aria-label="Siguiente">
-                        <i class="feather-icon icon-chevron-right"></i>
-                    </span>
                                                 </li>
                                             </ul>
                                         </nav>
+
                                     </div>
                                 </div>
 
@@ -459,6 +406,16 @@
                             <div class="col-md-6">
                                 <h5 id="modalResenaUsuario"></h5>
                                 <p class="small text-muted" id="modalResenaFecha"></p>
+
+                                <!-- Agregamos aquí el nombre del producto y proveedor -->
+                                <p class="text-primary fw-bold">
+                                    Producto: <span id="modalResenaProducto"></span>
+                                </p>
+                                <!-- Agregamos aquí el nombre del producto y proveedor -->
+                                <p class="text-primary fw-bold">
+                                    Proveedor: <span id="modalResenaProveedor"></span>
+                                </p>
+
                                 <div id="modalResenaCalificacion"></div>
                                 <h6 class="mt-3" id="modalResenaTema"></h6>
                                 <p id="modalResenaOpinion"></p>
@@ -471,6 +428,7 @@
                 </div>
             </div>
         </div>
+
 
 
         <!-- Libs JS -->
@@ -499,6 +457,8 @@
                     var tema = button.getAttribute('data-tema');
                     var opinion = button.getAttribute('data-opinion');
                     var imagenSrc = button.getAttribute('data-imagen-src');
+                    var productoNombre = button.getAttribute('data-producto-nombre'); // Nombre del producto
+                    var proveedorNombre = button.getAttribute('data-proveedor-nombre'); // Nombre del proveedor
 
                     // Actualiza el contenido del modal con los datos extraídos
                     var modalUsuarioNombre = modalResena.querySelector('#modalResenaUsuario');
@@ -507,6 +467,8 @@
                     var modalOpinion = modalResena.querySelector('#modalResenaOpinion');
                     var modalImagen = modalResena.querySelector('#modalResenaImagen');
                     var modalCalificacion = modalResena.querySelector('#modalResenaCalificacion');
+                    var modalProductoNombre = modalResena.querySelector('#modalResenaProducto'); // Aquí ajusta el ID
+                    var modalProveedorNombre = modalResena.querySelector('#modalResenaProveedor'); // Aquí ajusta el ID
 
                     // Asignar valores al modal
                     modalUsuarioNombre.textContent = usuarioNombre;
@@ -514,14 +476,14 @@
                     modalTema.textContent = tema;
                     modalOpinion.textContent = opinion;
                     modalImagen.src = imagenSrc;
+                    modalProductoNombre.textContent = productoNombre; // Mostrar nombre del producto
+                    modalProveedorNombre.textContent = proveedorNombre; // Mostrar nombre del proveedor
 
                     // Generar las estrellas según la calificación
                     var calificacionHtml = '';
-                    // Estrellas llenas
                     for (var i = 1; i <= calificacion; i++) {
                         calificacionHtml += '<i class="bi bi-star-fill text-warning"></i>';
                     }
-                    // Estrellas vacías para completar hasta 5
                     for (var i = calificacion + 1; i <= 5; i++) {
                         calificacionHtml += '<i class="bi bi-star text-warning"></i>';
                     }
@@ -618,6 +580,21 @@
 
         </script>
 
+        <script>
+            function updatePlaceholder() {
+                // Obtener el valor seleccionado en el selector
+                var searchCriteria = document.getElementById('searchCriteriaSelect').value;
+                // Obtener el campo de texto
+                var searchKeywordInput = document.getElementById('searchKeywordInput');
+
+                // Cambiar el placeholder según la opción seleccionada
+                if (searchCriteria === 'name') {
+                    searchKeywordInput.placeholder = 'Ingrese el nombre del producto';
+                } else if (searchCriteria === 'provider') {
+                    searchKeywordInput.placeholder = 'Ingrese el nombre del proveedor';
+                }
+            }
+        </script>
 
     </body>
 </html>

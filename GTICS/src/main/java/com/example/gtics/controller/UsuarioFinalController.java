@@ -567,13 +567,14 @@ public class UsuarioFinalController {
             return "redirect:/UsuarioFinal/listaProductos";
         }
     }
-
-   public String mostrarReview(Model model){
+    @GetMapping("/UsuarioFinal/Review")
+    public String mostrarReview(Model model){
 // Obtener el usuario autenticado (en este caso, estoy usando un ID estático para el ejemplo)
-        Integer idUsuario = 3;  // Cambia esto por el método de autenticación real
+        Integer idUsuario = 7;  // Cambia esto por el método de autenticación real
 
         // Obtener la lista de productos recibidos sin reseña
         List<ProductoDTO> productosSinResena = ordenRepository.obtenerProductosPorUsuarioSinResena(idUsuario);
+
         // Añadir la lista de productos al modelo para que se muestre en la vista
         model.addAttribute("productosSinResena", productosSinResena);
 // Inicializar un objeto vacío de Resena para el formulario
@@ -639,7 +640,7 @@ public class UsuarioFinalController {
                                  @RequestParam(defaultValue = "recent") String sortOrder,
                                  HttpServletRequest request) {
 
-        // Limpieza y validación de parámetros
+        // Validación de los parámetros del filtro de búsqueda
         if ((searchCriteria == null || searchCriteria.trim().isEmpty()) ||
                 (searchKeyword == null || searchKeyword.trim().isEmpty())) {
             searchCriteria = null;
@@ -648,14 +649,13 @@ public class UsuarioFinalController {
 
         // Validar que startDate no sea posterior a endDate
         if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
-            // Puedes lanzar una excepción, devolver un mensaje de error, o intercambiar las fechas
-            // Aquí intercambiamos las fechas
+            // Si las fechas están intercambiadas, las corregimos
             LocalDate temp = startDate;
             startDate = endDate;
             endDate = temp;
         }
 
-        // Determinar el ordenamiento basado en el parámetro sortOrder
+        // Orden de los resultados
         Sort sort;
         switch (sortOrder) {
             case "oldest":
@@ -664,7 +664,7 @@ public class UsuarioFinalController {
             case "mostHelpful":
                 sort = Sort.by("util").descending();
                 break;
-            default: // "recent"
+            default:
                 sort = Sort.by("fechaCreacion").descending();
                 break;
         }
@@ -676,14 +676,13 @@ public class UsuarioFinalController {
                 searchCriteria, searchKeyword, rating, startDate, endDate, pageable
         );
 
-        int totalPages = resenaPage.getTotalPages();
-
+        // Añadir datos al modelo
         model.addAttribute("listaResenas", resenaPage.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalPages", resenaPage.getTotalPages());
         model.addAttribute("pageSize", size);
 
-        // Añadir los parámetros al modelo para mantener los valores en la vista
+        // Añadir los filtros actuales al modelo para mantenerlos en la vista
         model.addAttribute("searchCriteria", searchCriteria);
         model.addAttribute("searchKeyword", searchKeyword);
         model.addAttribute("rating", rating);
@@ -691,35 +690,16 @@ public class UsuarioFinalController {
         model.addAttribute("endDate", endDate);
         model.addAttribute("sortOrder", sortOrder);
 
-        // Lógica de paginación avanzada
+        // Configuración de paginación avanzada
         int pageDisplayLimit = 5;
-        int startPage, endPage;
-
-        if (totalPages <= pageDisplayLimit + 4) {
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            startPage = Math.max(2, page - 2);
-            endPage = Math.min(totalPages - 1, page + 3);
-
-            if (page <= 2) {
-                endPage = 5;
-            }
-
-            if (page >= totalPages - 3) {
-                startPage = totalPages - 4;
-            }
-        }
-
-        // Asegurar que 'startPage' y 'endPage' estén dentro de límites válidos
-        startPage = Math.max(1, startPage);
-        endPage = Math.min(totalPages, Math.max(startPage, endPage));
-
+        int startPage = Math.max(1, page - 2);
+        int endPage = Math.min(startPage + pageDisplayLimit - 1, resenaPage.getTotalPages());
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
         return "UsuarioFinal/Foro/foro";
     }
+
 
 
 
@@ -731,7 +711,7 @@ public class UsuarioFinalController {
                                 Model model) {
 
         // Set fields before validation check
-        Usuario user = usuarioRepository.findUsuarioById(3); // Replace with actual user retrieval logic
+        Usuario user = usuarioRepository.findUsuarioById(7); // Replace with actual user retrieval logic
         if (user == null) {
             attr.addFlashAttribute("error", "Usuario no encontrado.");
             return "redirect:/UsuarioFinal/Review";
