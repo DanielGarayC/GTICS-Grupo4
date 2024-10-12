@@ -96,8 +96,16 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     @Query(value = "SELECT * FROM producto WHERE idCategoria = :categoriaId AND borrado = 0", nativeQuery = true)
     List<Producto> findProductosPorCategoria(@Param("categoriaId") Integer categoriaId);
 
+    @Query(value = "SELECT * FROM producto WHERE idCategoria = :categoriaId AND borrado = 0", nativeQuery = true)
+    Page<Producto> findProductosPorCategoriaConPaginacion(@Param("categoriaId") Integer categoriaId, Pageable pageable);
+
+
     @Query(value = "SELECT * FROM producto WHERE idSubcategoria = :idSubcategoria", nativeQuery = true)
     List<Producto> findProductosPorSubcategoria(@Param("idSubcategoria") Integer idSubcategoria);
+
+    @Query(value = "SELECT * FROM producto WHERE idSubcategoria = :idSubcategoria AND borrado = 0", nativeQuery = true)
+    Page<Producto> findProductosPorSubcategoriaConPaginacion(@Param("idSubcategoria") Integer idSubcategoria, Pageable pageable);
+
 
     @Modifying
     @Transactional

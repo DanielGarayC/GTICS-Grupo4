@@ -538,69 +538,148 @@ public class UsuarioFinalController {
     }
 
     @GetMapping("/UsuarioFinal/categorias/{idCategoria}")
-    public String mostrarProductosPorCategorias(@PathVariable("idCategoria") Integer idCategoria, Model model) {
+    public String mostrarProductosPorCategorias(@PathVariable("idCategoria") Integer idCategoria,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                Model model) {
+        // Buscar la categoría por ID
         Optional<Categoria> categoriaOpt = categoriaRepository.findById(idCategoria);
 
         if (categoriaOpt.isPresent()) {
             Categoria categoria = categoriaOpt.get();
             List<Subcategoria> subcategorias = categoria.getSubcategorias();
 
+            // Añadir atributos de la categoría y subcategorías al modelo
             model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
             model.addAttribute("subcategorias", subcategorias);
-            List<Producto> productos = productoRepository.findProductosPorCategoria(idCategoria);
+
+            // Tamaño de página fijo, ejemplo: 4 productos por página
+            int size = 1;
+            Pageable pageable = PageRequest.of(page, size);
+
+            // Usamos la consulta paginada
+            Page<Producto> productosPage = productoRepository.findProductosPorCategoriaConPaginacion(idCategoria, pageable);
+            List<Producto> productos = productosPage.getContent();
             model.addAttribute("productos", productos);
 
-            long totalProductos = productoRepository.contarProductosPorCategoria(idCategoria);
+            // Total de productos y número de páginas
+            long totalProductos = productosPage.getTotalElements();
             model.addAttribute("totalProductos", totalProductos);
+            int totalPages = productosPage.getTotalPages();
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("currentPage", page);
 
+            // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
+            int visiblePages = 3;
+            int startPage = Math.max(0, page - (visiblePages / 2));
+            int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
+
+            // Ajustar el rango si es necesario
+            if (endPage - startPage + 1 < visiblePages) {
+                if (startPage == 0) {
+                    endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
+                } else if (endPage == totalPages - 1) {
+                    startPage = Math.max(0, endPage - visiblePages + 1);
+                }
+            }
+
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
+
+            // Verificar si hay productos para mostrar información del producto principal
             if (!productos.isEmpty()) {
-                Producto producto = productos.get(0);
+                Producto producto = productos.get(0);  // Producto destacado
                 model.addAttribute("producto", producto);
+
+                // Añadir imágenes del producto y fecha formateada
                 model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
                 String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
                 model.addAttribute("fechaFormateada", fechaFormateada);
             }
+
         } else {
+            // Redirigir si la categoría no se encuentra
             return "redirect:/UsuarioFinal/listaProductos";
         }
 
+        // Retornar la vista de la categoría con productos
         return "UsuarioFinal/Productos/categoria";
     }
 
+
     @GetMapping("/UsuarioFinal/subcategoria/{idSubcategoria}")
-    public String mostrarProductosPorSubcategoria(@PathVariable("idSubcategoria") Integer idSubcategoria, Model model) {
+    public String mostrarProductosPorSubcategoria(@PathVariable("idSubcategoria") Integer idSubcategoria,
+                                                  @RequestParam(defaultValue = "0") int page, // Parámetro de paginación
+                                                  Model model) {
+        // Buscar la subcategoría por ID
         Optional<Subcategoria> subcategoriaOpt = subcategoriaRepository.findById(idSubcategoria);
 
         if (subcategoriaOpt.isPresent()) {
             Subcategoria subcategoria = subcategoriaOpt.get();
-            List<Producto> productos = productoRepository.findProductosPorSubcategoria(idSubcategoria);
-            long totalProductos = productos.size();
-
             Categoria categoria = subcategoria.getCategoria();
             List<Subcategoria> subcategorias = categoria.getSubcategorias();
 
+            // Añadir nombre de subcategoría y categoría al modelo
             model.addAttribute("nombreSubcategoria", subcategoria.getNombreSubcategoria());
             model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
             model.addAttribute("categoria", categoria.getId());
             model.addAttribute("subcategorias", subcategorias);
+
+            // Tamaño de página fijo, ejemplo: 4 productos por página
+            int size = 2;
+            Pageable pageable = PageRequest.of(page, size);
+
+            // Consulta de productos con paginación
+            Page<Producto> productosPage = productoRepository.findProductosPorSubcategoriaConPaginacion(idSubcategoria, pageable);
+            List<Producto> productos = productosPage.getContent();
+
+            // Total de productos y número de páginas
+            long totalProductos = productosPage.getTotalElements();
+            int totalPages = productosPage.getTotalPages();
+
+            // Añadir productos y detalles de la paginación al modelo
             model.addAttribute("productos", productos);
             model.addAttribute("totalProductos", totalProductos);
-            model.addAttribute("isSubcategory", true);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("currentPage", page);
 
-            // Si hay productos en la subcategoría, pasamos el primer producto y sus detalles al modelo
+            // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
+            int visiblePages = 3;
+            int startPage = Math.max(0, page - (visiblePages / 2));
+            int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
+
+            // Ajustar el rango si es necesario
+            if (endPage - startPage + 1 < visiblePages) {
+                if (startPage == 0) {
+                    endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
+                } else if (endPage == totalPages - 1) {
+                    startPage = Math.max(0, endPage - visiblePages + 1);
+                }
+            }
+
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
+
+            // Si hay productos en la subcategoría, pasar el primer producto y sus detalles al modelo
             if (!productos.isEmpty()) {
-                Producto producto = productos.get(0); // Primer producto de la lista
+                Producto producto = productos.get(0);  // Primer producto de la lista
                 model.addAttribute("producto", producto);
                 model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
                 String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
                 model.addAttribute("fechaFormateada", fechaFormateada);
             }
+
+            model.addAttribute("isSubcategory", true);
+
         } else {
+            // Redirigir si la subcategoría no se encuentra
             return "redirect:/UsuarioFinal/listaProductos";
         }
 
+        // Retornar la vista de la subcategoría con productos
         return "UsuarioFinal/Productos/subcategoria";
     }
+
+
 
     @GetMapping("/UsuarioFinal/producto/quickView/{idProducto}")
     public String mostrarModalQuickView(@PathVariable("idProducto") Integer idProducto, Model model) {
