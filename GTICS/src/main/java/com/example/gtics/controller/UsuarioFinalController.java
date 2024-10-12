@@ -871,12 +871,16 @@ public class UsuarioFinalController {
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
     @GetMapping("/UsuarioFinal/faq")
-    public String preguntasFrecuentes(Model model, @ModelAttribute("preguntaForm") Foropregunta preguntaForm){
-        model.addAttribute("preguntas",foroPreguntaRepository.findAll());
+    public String preguntasFrecuentes( @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "3") int size,Model model, @ModelAttribute("preguntaForm") Foropregunta preguntaForm){
+        Page<Foropregunta> preguntasPage = foroPreguntaRepository.findAll(PageRequest.of(page, size));
+        model.addAttribute("preguntasPage", preguntasPage);
+        model.addAttribute("preguntas", preguntasPage.getContent());  // Las preguntas actuales
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", preguntasPage.getTotalPages());
         model.addAttribute("respuestas",foroRespuestaRepository.findAll());
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
-
     @GetMapping("/UsuarioFinal/faq/verPregunta")
     public String verPregunta(Model model, @RequestParam("id") Integer id, @ModelAttribute("respuestaForm") Fororespuesta respuestaForm){
 
