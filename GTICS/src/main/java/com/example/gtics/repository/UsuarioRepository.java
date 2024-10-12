@@ -237,6 +237,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "     ) AS subquery", nativeQuery = true)
     Integer cantAgentesByAZ(int idAdminZonal);
 
-    Optional<Usuario> findByEmail(String email);
+    @Query(value = "SELECT usuario.*\n" +
+            "FROM usuario\n" +
+            "WHERE usuario.idRol = 2\n" +
+            "AND usuario.idZona = :zonaId", nativeQuery = true)
 
+    List<Usuario> findAZporZona(int zonaId);
+    Optional<Usuario> findByEmail(String email);
 }

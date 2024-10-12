@@ -161,10 +161,22 @@ public class SuperAdminController {
         try {
             // Verificar si ya existen 2 coordinadores en la zona
             int cantidadCoordinadores = usuarioRepository.countCoordinadoresByZona(zonaId);
+            if (usuario.getId() != null) {
+                Optional<Usuario> usuarioExistente = usuarioRepository.findById(usuario.getId());
+                if (usuarioExistente.isPresent() && usuarioExistente.get().getZona().getId().equals(zonaId)) {
+                    cantidadCoordinadores--; // No contar al usuario actual si pertenece a esta zona
+                }
+            }
             if (cantidadCoordinadores >= 2) {
                 attr.addFlashAttribute("error", "Ya existen 2 coordinadores en esta zona.");
-                return "redirect:/SuperAdmin/crearAdminZonal";
+                if (usuario.getId() == null) {
+                    return "redirect:/SuperAdmin/crearAdminZonal";
+                } else {
+                    return "redirect:/SuperAdmin/editarAdminZonal/" + usuario.getId();
+                }
             }
+
+
             Optional<Rol> optionalAZRol = rolRepository.findById(2);
             if (optionalAZRol.isPresent()) {
                 usuario.setRol(optionalAZRol.get());
@@ -202,12 +214,13 @@ public class SuperAdminController {
         return "redirect:/SuperAdmin/listaAdminZonal";
     }
 
-    @GetMapping("/AdminZonal/eliminar")
+    @GetMapping("/SuperAdmin/AdminZonal/eliminar")
     public String eliminarAdminZonal(@RequestParam("id") int id, RedirectAttributes attr) {
 
         Optional<Usuario> optProduct = usuarioRepository.findById(id);
 
         if (optProduct.isPresent()) {
+            System.out.println("Admin Zonal encontrado con ID: " + id);
             try {
                 usuarioRepository.deleteById(id);
                 attr.addFlashAttribute("msg", "El Admin Zonal ha sido eliminado exitosamente");

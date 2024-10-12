@@ -131,21 +131,21 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
+                                                            <a class="dropdown-item" th:href="@{verAdminZonal/{id}(id=${usuario.id})}">
+                                                                <i class="bi bi-eye me-3"></i>
+                                                                Ver
+                                                            </a>
+                                                        </li>
+                                                        <li>
                                                             <a class="dropdown-item" th:href="@{/SuperAdmin/editarAdminZonal/{id}(id=${usuario.id})}">
                                                                 <i class="bi bi-pencil-square me-3"></i>
                                                                 Editar
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a class="dropdown-item" href="javascript:void(0);" th:onclick="'confirmDelete(' + ${usuario.id} + ')'">
+                                                            <a class="dropdown-item" href="javascript:void(0);" th:onclick="|confirmDelete(${usuario.id});|">
                                                                 <i class="bi bi-trash me-3"></i>
                                                                 Eliminar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" th:href="@{verAdminZonal/{id}(id=${usuario.id})}">
-                                                                <i class="bi bi-eye me-3"></i>
-                                                                Ver
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -252,7 +252,7 @@
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = `/AdminZonal/eliminar?id=${id}`;
+                window.location.href = `/SuperAdmin/AdminZonal/eliminar?id=${id}`;
             }
         });
     }
