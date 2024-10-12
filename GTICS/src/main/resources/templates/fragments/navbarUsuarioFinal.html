@@ -553,14 +553,14 @@
     </div>
 
     <div class="search-container" th:fragment="buscadorProducto" style="max-width: 600px; position: relative;">
-        <form class="d-flex" role="search">
+        <form class="d-flex" th:action="@{/UsuarioFinal/buscarProductos}" method="get" role="search">
         <span class="icon" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%);">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.098zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
             </svg>
         </span>
-            <input class="form-control" type="search" placeholder="Buscar productos..." aria-label="Buscar" style="padding-left: 40px;">
-            <button class="btn btn-outline-success" type="button" style="margin-left: 10px;">Buscar</button>
+            <input class="form-control" type="search" name="nombre" placeholder="Buscar productos..." aria-label="Buscar" style="padding-left: 40px;">
+            <button class="btn btn-outline-success" type="submit" style="margin-left: 10px;">Buscar</button>
         </form>
         <script th:src="@{/js/vendors/validation.js}"></script>
     </div>

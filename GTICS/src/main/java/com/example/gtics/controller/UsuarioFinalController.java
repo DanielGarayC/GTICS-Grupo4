@@ -41,6 +41,7 @@ import java.nio.file.Files;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class UsuarioFinalController {
@@ -286,6 +287,35 @@ public class UsuarioFinalController {
     public String mostrarPagPrincipal(Model model){
         return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
     }
+
+    @GetMapping("/UsuarioFinal/buscarProductos")
+    public String buscarProductos(
+            @RequestParam("nombre") String nombre,
+            @RequestParam(value = "minPrice", required = false) Double minPrice,
+            @RequestParam(value = "maxPrice", required = false) Double maxPrice,
+            @RequestParam(value = "sortOrder", defaultValue = "asc") String sortOrder,
+            Model model) {
+        List<Producto> productos = productoRepository.findByNombreContainingIgnoreCase(nombre);
+
+        if (minPrice != null && maxPrice != null) {
+            productos = productos.stream()
+                    .filter(producto -> producto.getPrecio() >= minPrice && producto.getPrecio() <= maxPrice)
+                    .collect(Collectors.toList());
+        }
+        if ("asc".equalsIgnoreCase(sortOrder)) {
+            productos.sort(Comparator.comparing(Producto::getPrecio));
+        } else if ("desc".equalsIgnoreCase(sortOrder)) {
+            productos.sort(Comparator.comparing(Producto::getPrecio).reversed());
+        }
+        model.addAttribute("productos", productos);
+        model.addAttribute("nombreBusqueda", nombre);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("sortOrder", sortOrder);
+
+        return "UsuarioFinal/Productos/listaProductos";
+    }
+
 
     @PostMapping("/UsuarioFinal/solicitudAgente")
     public String enviarSolicitudaSerAgente(Solicitudagente solicitudagente){
@@ -851,7 +881,6 @@ public class UsuarioFinalController {
         model.addAttribute("respuestas",foroRespuestaRepository.findAll());
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
-
     @GetMapping("/UsuarioFinal/faq/verPregunta")
     public String verPregunta(Model model, @RequestParam("id") Integer id, @ModelAttribute("respuestaForm") Fororespuesta respuestaForm){
 

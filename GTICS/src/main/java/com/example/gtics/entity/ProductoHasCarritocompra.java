@@ -25,6 +25,6 @@ public class ProductoHasCarritocompra {
     @Column(name = "cantidadProducto", nullable = false)
     private Integer cantidadProducto;
 
-    @Column(name = "reseñaCreada", nullable = false)
+    @Column(name = "resenaCreada", nullable = false)
     private Boolean reseñaCreada = false;
 }

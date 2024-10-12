@@ -106,4 +106,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
     @Query(value = "SELECT DATE_FORMAT(p.fechaArribo, '%d-%m-%Y') FROM producto p WHERE p.idProducto = :id", nativeQuery = true)
     String findFechaFormateadaById(@Param("id") Integer id);
+
+    @Query("SELECT p FROM Producto p WHERE LOWER(p.nombreProducto) LIKE LOWER(CONCAT('%', :nombre, '%'))")
+    List<Producto> findByNombreContainingIgnoreCase(@Param("nombre") String nombre);
 }
