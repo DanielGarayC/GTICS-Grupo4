@@ -65,6 +65,14 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
             "                p.idProducto = sr.idProducto;", nativeQuery = true)
     List<ProductoTabla> getProductosTabla();
 
+    @Query(value = "SELECT p.idProducto, p.nombreProducto, p.cantidadDisponible, p.fechaArribo, " +
+            "CASE WHEN sr.cantidadSolicitada = 0 THEN NULL ELSE sr.cantidadSolicitada END AS cantidadSolicitada, " +
+            "(SELECT fp.foto FROM gticsdb.fotosproducto fp WHERE fp.idProducto = p.idProducto LIMIT 1) AS primeraFoto " +
+            "FROM gticsdb.producto p " +
+            "LEFT JOIN gticsdb.solicitudreposicion sr ON p.idProducto = sr.idProducto",
+            nativeQuery = true)
+    Page<ProductoTabla> getProductosTablaConPaginacion(Pageable pageable);
+
     @Query(value = "SELECT\n" +
             "                p.idProducto,\n" +
             "                p.nombreProducto,\n" +
