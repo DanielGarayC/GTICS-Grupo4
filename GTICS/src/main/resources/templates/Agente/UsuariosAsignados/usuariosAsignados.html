@@ -127,7 +127,7 @@
 									   <th>Apellidos</th>
 									   <th>Correo</th>
 									   <th>Distrito</th>
-									   <th></th>
+									   <th>Opciones</th>
 
 								   </tr>
 								   </thead>
@@ -142,6 +142,7 @@
 									   <td th:text="${usuarioAsignado.email}"></td>
 									   <td th:text="${usuarioAsignado.distrito.nombre}"></td>
 									   <td>
+										   <!--
 										   <div class="dropdown">
 											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
 												   <i class="feather-icon icon-more-vertical fs-5"></i>
@@ -173,6 +174,30 @@
 												   </li>
 											   </ul>
 										   </div>
+										   -->
+
+										   <a class="btn btn-primary"
+											  th:href="@{'/Agente/Ordenes/Usuario?idUsuario=' + ${usuarioAsignado.id} }">
+											   <i class="bi bi-cart-check "></i>
+										   </a>
+
+										   <a class="btn btn-success" th:href="@{/Agente/Chat}"><i class="bi bi-wechat "></i> </a>
+
+										   <a class="btn btn-secondary" th:href="@{/Agente/verUsuarioFinal(id=${usuarioAsignado.getId()})}">
+											   <i class="bi bi-eye "></i>
+										   </a>
+
+										   <a class="btn btn-danger banearUsuario " href="javascript:void(0);"
+											  th:data-id="${usuarioAsignado.id}"
+											  th:data-nombre="${usuarioAsignado.nombre}"
+											  data-bs-toggle="tooltip"
+											  data-bs-placement="bottom">
+											   <i class="bi bi-person-fill-slash "></i>
+										   </a>
+
+
+
+
 									   </td>
 								   </tr>
 
