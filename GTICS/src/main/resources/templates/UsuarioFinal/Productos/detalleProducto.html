@@ -20,20 +20,6 @@
 
     <!-- Theme CSS -->
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
-
-    <style>
-        .product img {
-            max-height: 400px;
-            width: 100%;
-            object-fit: contain;
-        }
-
-        .thumbnails-img img {
-            max-height: 100px;
-            object-fit: contain;
-        }
-    </style>
-
 </head>
 
 <body>
@@ -49,24 +35,20 @@
             <div class="row">
                 <div class="col-md-6 col-xl-7">
                     <!-- img slide -->
-                    <div class="product" id="product">
-                        <div class="zoom"
-                             th:style="'background-image: url(' + @{/UsuarioFinal/producto/foto/} + ${producto.id} + ')'"
-                             style="width: 100%; height: 400px; background-size: contain; background-position: center; background-repeat: no-repeat;">
-                            <!-- Imagen principal del producto -->
-                            <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}"
-                                 alt="Imagen del producto" class="img-fluid" style="max-height: 400px; object-fit: contain; display: block; margin-left: auto; margin-right: auto;" />
+                    <div class="producto" id="producto">
+                        <div class="zoom" th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.id} + ')'"
+                             style="background-size: contain; background-repeat: no-repeat;">
+                            <!-- img -->
+                            <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}" alt="Imagen del producto" />
                         </div>
                     </div>
-
-                    <!-- product tools (thumbnails) -->
+                    <!-- product tools -->
                     <div class="product-tools">
-                        <div class="thumbnails row g-3" id="productThumbnails">
+                        <div class="thumbnails row g-3" id="productModalThumbnails">
                             <div th:each="imagen : ${imagenes}" class="col-3">
-                                <div class="thumbnails-img" style="height: 100px;">
+                                <div class="thumbnails-img">
                                     <!-- img -->
-                                    <img th:src="@{'/UsuarioFinal/producto/foto/' + ${imagen.producto.id}}"
-                                         alt="Imagen del producto" class="img-fluid" style="max-height: 100px; object-fit: contain; display: block; margin-left: auto; margin-right: auto;" />
+                                    <img th:src="@{'/UsuarioFinal/producto/foto/' + ${imagen.producto.id}}" alt="Imagen del producto" />
                                 </div>
                             </div>
                         </div>
@@ -368,6 +350,37 @@
 <!-- modal -->
 <div th:insert="~{fragments/modalProducto :: modalProducto(${producto}, ${imagenes}, ${fechaFormateada})}
 "></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Manejar el clic en los botones "+"
+        document.querySelectorAll('.button-plus').forEach(function (button) {
+            button.addEventListener('click', function () {
+                let quantityInput = this.parentElement.querySelector('.quantity-field');
+                let currentQuantity = parseInt(quantityInput.value);
+                let maxQuantity = parseInt(quantityInput.getAttribute('max'));
+
+                if (!isNaN(currentQuantity) && currentQuantity < maxQuantity) {
+                    quantityInput.value = currentQuantity + 1;
+                }
+            });
+        });
+
+        // Manejar el clic en los botones "-"
+        document.querySelectorAll('.button-minus').forEach(function (button) {
+            button.addEventListener('click', function () {
+                let quantityInput = this.parentElement.querySelector('.quantity-field');
+                let currentQuantity = parseInt(quantityInput.value);
+                let minQuantity = 1;  // Mínimo siempre debe ser 1
+
+                if (!isNaN(currentQuantity) && currentQuantity > minQuantity) {
+                    quantityInput.value = currentQuantity - 1;
+                }
+            });
+        });
+    });
+
+</script>
 
 <!-- Javascript-->
 <script th:src="@{/libs/rater-js/index.js}"></script>

@@ -473,4 +473,6 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "AND phc.resenaCreada = 0")
     List<ProductoDTO> obtenerProductosPorUsuarioSinResena(@Param("idUsuario") Integer idUsuario);
 
+
+
 }

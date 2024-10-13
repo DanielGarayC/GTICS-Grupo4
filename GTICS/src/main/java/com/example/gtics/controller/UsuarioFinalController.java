@@ -113,19 +113,6 @@ public class UsuarioFinalController {
             String email = authentication.getName(); // Obtener el email del usuario autenticado
             Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
-            optUsuario.ifPresent(usuario -> model.addAttribute("usuario", usuario));
-
-        }
-    }
-
-    @ModelAttribute
-    public void addUsuarioAndCarritoToModel(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
-            String email = authentication.getName();
-            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
-
             if (optUsuario.isPresent()) {
                 Usuario usuario = optUsuario.get();
                 model.addAttribute("usuario", usuario);
@@ -139,9 +126,10 @@ public class UsuarioFinalController {
                         .mapToInt(ProductosCarritoDto::getCantidadProducto)
                         .sum();
                 model.addAttribute("totalCantidadProductos", totalCantidadProductos);
-
             }
         }
+        List<Categoria> categorias = categoriaRepository.findAll();
+        model.addAttribute("categorias", categorias);
     }
 
     @PostMapping("/UsuarioFinal/agregarAlCarrito")
@@ -235,11 +223,50 @@ public class UsuarioFinalController {
         return "redirect:/UsuarioFinal/listaProductos";
     }
 
+    @PostMapping("/UsuarioFinal/actualizarCantidadCarrito")
+    public String actualizarCantidadCarrito(
+            @RequestParam("idProducto") Integer idProducto,
+            @RequestParam("nuevaCantidad") Integer nuevaCantidad,
+            RedirectAttributes attr,
+            Authentication authentication) {
+
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
+
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+            Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
+
+            if (carritoOpt.isPresent()) {
+                Carritocompra carrito = carritoOpt.get();
+
+                Optional<ProductoHasCarritocompra> productoEnCarritoOpt =
+                        productoHasCarritocompraRepository.findById_IdCarritoCompraAndId_IdProducto(carrito.getId(), idProducto);
+
+                if (productoEnCarritoOpt.isPresent()) {
+                    ProductoHasCarritocompra productoEnCarrito = productoEnCarritoOpt.get();
+                    productoEnCarrito.setCantidadProducto(nuevaCantidad);
+                    productoHasCarritocompraRepository.save(productoEnCarrito);
+
+                    attr.addFlashAttribute("msg", "Cantidad actualizada correctamente.");
+                }
+            }
+        }
+        return "redirect:/UsuarioFinal/listaProductos";
+    }
+
+
 
     @GetMapping("/UsuarioFinal/procesoCompra")
     public String procesoComprar(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+        List<Categoria> categorias = categoriaRepository.findAll();
+        model.addAttribute("categorias", categorias);
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             String email = authentication.getName();
             Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
@@ -314,7 +341,24 @@ public class UsuarioFinalController {
     }
 
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
-    public String mostrarPagPrincipal(Model model){
+    public String mostrarPagPrincipal(Model model, Authentication authentication){
+        List<Categoria> categorias = categoriaRepository.findAll();
+        model.addAttribute("categorias", categorias);
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName();  // Obtener el email del usuario autenticado
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+
+            if (usuarioOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                Pageable pageable = PageRequest.of(0, 5); // Página 0 con 5 órdenes
+
+                // Obtener las órdenes más recientes del usuario usando el DTO que ya tienes
+                Page<OrdenCarritoDto> ordenesRecientesPage = ordenRepository.obtenerCarritoUFConDto(usuario.getId(), pageable);
+
+                // Añadir las órdenes recientes al modelo
+                model.addAttribute("ordenesRecientes", ordenesRecientesPage.getContent());
+            }
+        }
         return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
     }
 
@@ -326,7 +370,8 @@ public class UsuarioFinalController {
             @RequestParam(value = "sortOrder", defaultValue = "asc") String sortOrder,
             Model model) {
         List<Producto> productos = productoRepository.findByNombreContainingIgnoreCase(nombre);
-
+        List<Categoria> categorias = categoriaRepository.findAll();
+        model.addAttribute("categorias", categorias);
         if (minPrice != null && maxPrice != null) {
             productos = productos.stream()
                     .filter(producto -> producto.getPrecio() >= minPrice && producto.getPrecio() <= maxPrice)
@@ -576,6 +621,8 @@ public class UsuarioFinalController {
 
         // Buscar la categoría por ID
         Optional<Categoria> categoriaOpt = categoriaRepository.findById(idCategoria);
+        List<Categoria> categorias = categoriaRepository.findAll();
+        model.addAttribute("categorias", categorias);
 
         if (categoriaOpt.isPresent()) {
             Categoria categoria = categoriaOpt.get();
@@ -594,7 +641,7 @@ public class UsuarioFinalController {
             }
 
             // Tamaño de página fijo
-            int size = 10;  // Por ejemplo, 10 productos por página
+            int size = 12;  // Por ejemplo, 10 productos por página
             Pageable pageable = PageRequest.of(page, size, sort);
 
             // Consulta paginada con el criterio de ordenamiento
@@ -650,8 +697,6 @@ public class UsuarioFinalController {
     }
 
 
-
-
     @GetMapping("/UsuarioFinal/subcategoria/{idSubcategoria}")
     public String mostrarProductosPorSubcategoria(
             @PathVariable("idSubcategoria") Integer idSubcategoria,
@@ -661,7 +706,8 @@ public class UsuarioFinalController {
 
         // Buscar la subcategoría por ID
         Optional<Subcategoria> subcategoriaOpt = subcategoriaRepository.findById(idSubcategoria);
-
+        List<Categoria> categorias = categoriaRepository.findAll();
+        model.addAttribute("categorias", categorias);
         if (subcategoriaOpt.isPresent()) {
             Subcategoria subcategoria = subcategoriaOpt.get();
             Categoria categoria = subcategoria.getCategoria();  // Obtener la categoría a la que pertenece
@@ -681,7 +727,7 @@ public class UsuarioFinalController {
             }
 
             // Tamaño de página fijo
-            int size = 1;  // Por ejemplo, 10 productos por página
+            int size = 12;  // Por ejemplo, 10 productos por página
             Pageable pageable = PageRequest.of(page, size, sort);
 
             // Consulta paginada con el criterio de ordenamiento
@@ -735,7 +781,6 @@ public class UsuarioFinalController {
         // Retornar la vista de la subcategoría con productos
         return "UsuarioFinal/Productos/subcategoria";
     }
-
 
 
 

@@ -35,3 +35,5 @@ document.querySelectorAll('.eliminar-producto').forEach(function (btn) {
             });
     });
 });
+
+
