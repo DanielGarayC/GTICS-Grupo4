@@ -107,6 +107,11 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     @Query(value = "SELECT * FROM producto WHERE idCategoria = :categoriaId AND borrado = 0", nativeQuery = true)
     Page<Producto> findProductosPorCategoriaConPaginacion(@Param("categoriaId") Integer categoriaId, Pageable pageable);
 
+    @Query(value = "SELECT * FROM producto WHERE idCategoria = :categoriaId AND borrado = 0 ORDER BY CASE WHEN :sort = 'asc' THEN precio END ASC, CASE WHEN :sort = 'desc' THEN precio END DESC",
+            countQuery = "SELECT count(*) FROM producto WHERE idCategoria = :categoriaId AND borrado = 0",
+            nativeQuery = true)
+    Page<Producto> findProductosPorCategoriaConPaginacionYOrden(@Param("categoriaId") Integer categoriaId, @Param("sort") String sort, Pageable pageable);
+
 
     @Query(value = "SELECT * FROM producto WHERE idSubcategoria = :idSubcategoria", nativeQuery = true)
     List<Producto> findProductosPorSubcategoria(@Param("idSubcategoria") Integer idSubcategoria);

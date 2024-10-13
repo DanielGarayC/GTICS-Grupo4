@@ -190,14 +190,22 @@
 
               <div class="d-flex mt-2 mt-lg-0">
                 <div>
-                  <!-- select option -->
-                  <select class="form-select">
-                    <option selected>Ordenar por: Destacado</option>
-                    <option value="Low to High">Precio: Menos a Más</option>
-                    <option value="High to Low">Precio: Más a Menos</option>
-                  </select>
+                  <!-- Formulario de ordenamiento -->
+                  <form id="ordenForm" th:action="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria})}" method="get">
+                    <input type="hidden" name="page" th:value="${currentPage}" />
+                    <input type="hidden" name="idCategoria" th:value="${idCategoria}" />
+
+                    <!-- Select de ordenamiento -->
+                    <select class="form-select" name="sortOrder" onchange="document.getElementById('ordenForm').submit();">
+                      <option th:value="'default'" th:selected="${sortOrder == 'default'}">Ordenar por: Destacado</option>
+                      <option th:value="'asc'" th:selected="${sortOrder == 'asc'}">Precio: Menos a Más</option>
+                      <option th:value="'desc'" th:selected="${sortOrder == 'desc'}">Precio: Más a Menos</option>
+                    </select>
+                  </form>
+
                 </div>
               </div>
+
             </div>
           </div>
           <!-- row -->

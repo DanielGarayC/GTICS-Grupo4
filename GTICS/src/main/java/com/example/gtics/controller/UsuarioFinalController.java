@@ -538,9 +538,12 @@ public class UsuarioFinalController {
     }
 
     @GetMapping("/UsuarioFinal/categorias/{idCategoria}")
-    public String mostrarProductosPorCategorias(@PathVariable("idCategoria") Integer idCategoria,
-                                                @RequestParam(defaultValue = "0") int page,
-                                                Model model) {
+    public String mostrarProductosPorCategorias(
+            @PathVariable("idCategoria") Integer idCategoria,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "default") String sortOrder, // Nuevo parámetro de ordenamiento
+            Model model) {
+
         // Buscar la categoría por ID
         Optional<Categoria> categoriaOpt = categoriaRepository.findById(idCategoria);
 
@@ -552,11 +555,19 @@ public class UsuarioFinalController {
             model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
             model.addAttribute("subcategorias", subcategorias);
 
-            // Tamaño de página fijo, ejemplo: 4 productos por página
-            int size = 1;
-            Pageable pageable = PageRequest.of(page, size);
+            // Definir el criterio de ordenamiento
+            Sort sort = Sort.unsorted(); // Orden predeterminado
+            if ("asc".equals(sortOrder)) {
+                sort = Sort.by("precio").ascending(); // Orden ascendente por precio
+            } else if ("desc".equals(sortOrder)) {
+                sort = Sort.by("precio").descending(); // Orden descendente por precio
+            }
 
-            // Usamos la consulta paginada
+            // Tamaño de página fijo
+            int size = 10; // Por ejemplo, 4 productos por página
+            Pageable pageable = PageRequest.of(page, size, sort); // Añadimos la paginación con orden
+
+            // Consulta paginada con el criterio de ordenamiento
             Page<Producto> productosPage = productoRepository.findProductosPorCategoriaConPaginacion(idCategoria, pageable);
             List<Producto> productos = productosPage.getContent();
             model.addAttribute("productos", productos);
@@ -601,44 +612,56 @@ public class UsuarioFinalController {
             return "redirect:/UsuarioFinal/listaProductos";
         }
 
+        // Mantener el criterio de orden seleccionado en la vista
+        model.addAttribute("sortOrder", sortOrder);
+
         // Retornar la vista de la categoría con productos
         return "UsuarioFinal/Productos/categoria";
     }
 
 
+
     @GetMapping("/UsuarioFinal/subcategoria/{idSubcategoria}")
-    public String mostrarProductosPorSubcategoria(@PathVariable("idSubcategoria") Integer idSubcategoria,
-                                                  @RequestParam(defaultValue = "0") int page, // Parámetro de paginación
-                                                  Model model) {
+    public String mostrarProductosPorSubcategoria(
+            @PathVariable("idSubcategoria") Integer idSubcategoria,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "default") String sortOrder,  // Parámetro de ordenamiento
+            Model model) {
+
         // Buscar la subcategoría por ID
         Optional<Subcategoria> subcategoriaOpt = subcategoriaRepository.findById(idSubcategoria);
 
         if (subcategoriaOpt.isPresent()) {
             Subcategoria subcategoria = subcategoriaOpt.get();
             Categoria categoria = subcategoria.getCategoria();
-            List<Subcategoria> subcategorias = categoria.getSubcategorias();
+            List<Subcategoria> subcategorias = categoria.getSubcategorias();  // Obtener subcategorías relacionadas
 
-            // Añadir nombre de subcategoría y categoría al modelo
+            // Añadir atributos de la subcategoría y la categoría al modelo
             model.addAttribute("nombreSubcategoria", subcategoria.getNombreSubcategoria());
             model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
-            model.addAttribute("categoria", categoria.getId());
             model.addAttribute("subcategorias", subcategorias);
 
-            // Tamaño de página fijo, ejemplo: 4 productos por página
-            int size = 2;
-            Pageable pageable = PageRequest.of(page, size);
+            // Definir el criterio de ordenamiento
+            Sort sort = Sort.unsorted();
+            if ("asc".equals(sortOrder)) {
+                sort = Sort.by("precio").ascending();  // Orden ascendente por precio
+            } else if ("desc".equals(sortOrder)) {
+                sort = Sort.by("precio").descending();  // Orden descendente por precio
+            }
 
-            // Consulta de productos con paginación
+            // Definir la paginación
+            int size = 4;  // Por ejemplo, 4 productos por página
+            Pageable pageable = PageRequest.of(page, size, sort);
+
+            // Consulta paginada con ordenamiento
             Page<Producto> productosPage = productoRepository.findProductosPorSubcategoriaConPaginacion(idSubcategoria, pageable);
             List<Producto> productos = productosPage.getContent();
-
-            // Total de productos y número de páginas
-            long totalProductos = productosPage.getTotalElements();
-            int totalPages = productosPage.getTotalPages();
-
-            // Añadir productos y detalles de la paginación al modelo
             model.addAttribute("productos", productos);
+
+            // Datos de paginación
+            long totalProductos = productosPage.getTotalElements();
             model.addAttribute("totalProductos", totalProductos);
+            int totalPages = productosPage.getTotalPages();
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("currentPage", page);
 
@@ -647,7 +670,7 @@ public class UsuarioFinalController {
             int startPage = Math.max(0, page - (visiblePages / 2));
             int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
 
-            // Ajustar el rango si es necesario
+            // Ajustar el rango de paginación
             if (endPage - startPage + 1 < visiblePages) {
                 if (startPage == 0) {
                     endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
@@ -659,25 +682,27 @@ public class UsuarioFinalController {
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
 
-            // Si hay productos en la subcategoría, pasar el primer producto y sus detalles al modelo
+            // Verificar si hay productos para mostrar
             if (!productos.isEmpty()) {
-                Producto producto = productos.get(0);  // Primer producto de la lista
+                Producto producto = productos.get(0);  // Producto destacado
                 model.addAttribute("producto", producto);
                 model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
                 String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
                 model.addAttribute("fechaFormateada", fechaFormateada);
             }
 
-            model.addAttribute("isSubcategory", true);
-
         } else {
             // Redirigir si la subcategoría no se encuentra
             return "redirect:/UsuarioFinal/listaProductos";
         }
 
+        // Mantener el valor de sortOrder en la vista
+        model.addAttribute("sortOrder", sortOrder);
+
         // Retornar la vista de la subcategoría con productos
         return "UsuarioFinal/Productos/subcategoria";
     }
+
 
 
 
