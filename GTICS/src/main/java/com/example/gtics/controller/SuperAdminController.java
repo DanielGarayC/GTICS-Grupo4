@@ -371,7 +371,7 @@ public class SuperAdminController {
 
         if (optProduct.isPresent()) {
             try {
-                usuarioRepository.deleteById(id);
+                usuarioRepository.logicalDelete(id);
                 attr.addFlashAttribute("msg", "El agente ha sido eliminado exitosamente");
             } catch (Exception e) {
                 e.printStackTrace();

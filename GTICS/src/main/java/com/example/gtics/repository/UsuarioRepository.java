@@ -49,7 +49,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "u.agt_razonsocial, z.nombrezona " +
             "FROM usuario u " +
             "JOIN zona z ON u.idzona = z.idzona " +
-            "WHERE u.idRol = 3 " +
+            "WHERE u.idRol = 3 AND u.activo = 1 " +
             "GROUP BY u.idusuario",
             countQuery = "SELECT COUNT(*) FROM usuario u WHERE u.idRol = 3",
             nativeQuery = true)
@@ -244,4 +244,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
     List<Usuario> findAZporZona(int zonaId);
     Optional<Usuario> findByEmail(String email);
+    
+    @Transactional
+    @Modifying
+    @Query(value="UPDATE usuario\n" +
+            "SET activo = 0\n" +
+            "WHERE idUsuario = ?1", nativeQuery = true)
+    void logicalDelete(Integer id);
+
 }
