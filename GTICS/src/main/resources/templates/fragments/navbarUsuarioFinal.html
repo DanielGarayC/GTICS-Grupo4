@@ -64,12 +64,11 @@
                                     Todas las categorías
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Salud y Belleza</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Electrónica y tecnología</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Moda y ropa</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Hogar y cocina</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Arte y manualidades</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Deportes y ocio</a></li>
+                                    <li th:each="categoria : ${categorias}">
+                                        <a class="dropdown-item" th:href="@{'/UsuarioFinal/categorias/' + ${categoria.id}}">
+                                            <span th:text="${categoria.nombreCategoria}"></span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <!-- Menú de navegación -->
@@ -198,11 +197,6 @@
                                             </div>
                                         </div>
                                     </li>
-
-
-
-
-
                                 </ul>
                             </div>
                         </div>
@@ -374,12 +368,11 @@
                                         Todas las categorías
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Salud y Belleza</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Electrónica y tecnología</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Moda y ropa</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Hogar y cocina</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Arte y manualidades</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/categorias}">Deportes y ocio</a></li>
+                                        <li th:each="categoria : ${categorias}">
+                                            <a class="dropdown-item" th:href="@{'/UsuarioFinal/categorias/' + ${categoria.id}}">
+                                                <span th:text="${categoria.nombreCategoria}"></span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div>
@@ -496,7 +489,7 @@
                     <!-- alert -->
                     <div class="alert alert-danger p-2" role="alert">
                         Tenemos los mejores productos.
-                        <a href="#!" class="alert-link">Ve a la sección proceso de compras ya!</a>
+                        <a th:href="@{UsuarioFinal/listaProductos}" class="alert-link">Ve a la sección proceso de compras ya!</a>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item py-3 ps-0 border-top producto-item-${producto.idProducto}" th:each="producto : ${productosCarrito}">
@@ -531,12 +524,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-3 col-lg-3">
-                                    <div class="input-group input-spinner">
-                                        <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                                        <input type="number" step="1" max="10" th:value="${producto.cantidadProducto}" name="quantity" class="quantity-field form-control-sm form-input" data-producto-id="${producto.idProducto}" />
-                                        <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                                    </div>
+                                <div class="col-4 col-md-3 col-lg-5">
+                                    <form th:action="@{/UsuarioFinal/actualizarCantidadCarrito}" method="post" class="d-flex align-items-center">
+                                        <input type="hidden" name="idProducto" th:value="${producto.idProducto}" />
+                                        <div class="input-group input-spinner" style="max-width: 160px;">
+                                            <input type="button" value="-" class="button-minus btn btn-sm btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" />
+                                            <input type="number" name="nuevaCantidad" th:value="${producto.cantidadProducto}" step="1" max="10" min="1" class="quantity-field form-control-sm text-center" style="max-width: 50px;" />
+                                            <input type="button" value="+" class="button-plus btn btn-sm btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" />
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm ms-2">Actualizar</button>
+                                    </form>
                                 </div>
                                 <div class="col-2 text-lg-end text-start text-md-end col-md-2">
                                     <span class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precioTotalPorProducto, 1, 'COMMA', 2, 'POINT')}"

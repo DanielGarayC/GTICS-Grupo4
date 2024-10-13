@@ -54,16 +54,7 @@
                     <span th:text="'Resultados para: ' + ${nombreBusqueda}">Resultados para: </span>
                 </div>
             </div>
-            <!-- Filtro por precio -->
-            <div class="mb-8">
-                <h5 class="mb-3">Rango de Precio</h5>
-                <div class="d-flex align-items-center">
-                    <input type="number" class="form-control me-2" id="precioMin" placeholder="Min" style="max-width: 100px;" />
-                    <span class="mx-2">-</span>
-                    <input type="number" class="form-control ms-2" id="precioMax" placeholder="Max" style="max-width: 100px;" />
-                </div>
-                <button class="btn btn-outline-primary mt-2" id="filtrarPrecio">Aplicar</button>
-            </div>
+
 
             <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-2 mt-2">
                 <div th:each="producto : ${productos}" class="col d-flex">

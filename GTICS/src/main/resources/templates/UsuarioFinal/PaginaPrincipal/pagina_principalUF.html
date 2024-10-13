@@ -495,41 +495,40 @@
                   </div>
                </div>
             </div>
-            <h2>Órdenes realizadas</h2>
+            <h2 class="mt-5">Órdenes más recientes</h2>
             <div class="table-responsive">
                <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
                   <thead class="bg-light">
                   <tr>
-                     <th scope="col">Pedido</th>
-                     <th scope="col">Monto total</th>
+                     <th scope="col">N° orden</th>
+                     <th scope="col">Fecha de Orden</th>
                      <th scope="col">Estado</th>
+                     <th scope="col">Monto total (S/.)</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                     <th scope="row">Audifonos RedmiBuds</th>
-                     <td>S/.500</td>
-                     <td><span class="badge bg-light-info text-dark-info">Creado</span></td>
-                  </tr>
-                  <tr>
-                     <th scope="row">Laptop Acer Nitro V</th>
-                     <td>S/.300</td>
-                     <td><span class="badge bg-light-danger text-dark-danger">En validación</span></td>
-                  </tr>
-                  <tr>
-                     <th scope="row">20 poleras Telecom</th>
-                     <td>S/.400</td>
-                     <td><span class="badge bg-light-warning text-dark-warning">En proceso</span></td>
-                  </tr>
-                  <tr></tr>
-                  <th scope="row">iPad 10.9</th>
-                  <td>S/.450</td>
-                  <td><span class="badge bg-light-primary text-dark-primary">Recibido</span></td>
+                  <!-- Iterar sobre las órdenes recientes -->
+                  <tr th:each="orden : ${ordenesRecientes}">
+                     <td th:text="${orden.idOrden}">#1234</td>
+                     <td th:text="${#temporals.format(orden.fechaOrden, 'dd-MM-yyyy')}">15-10-2024</td>
+                     <td th:switch="${orden.estadoOrden}">
+                        <div class="mb-2" th:case="1"><span th:text="'Creado'" class="badge bg-light-primary text-dark-primary"></span></div>
+                        <div class="mb-2" th:case="2"><span th:text="'En validación'" class="badge bg-light-secondary text-dark-secondary"></span></div>
+                        <div class="mb-2" th:case="3"><span th:text="'En proceso'" class="badge bg-light-info text-dark-info"></span></div>
+                        <div class="mb-2" th:case="4"><span th:text="'Arribo al país'" class="badge bg-light-warning text-dark-warning"></span></div>
+                        <div class="mb-2" th:case="5"><span th:text="'En aduanas'" class="badge bg-light-danger text-dark-danger"></span></div>
+                        <div class="mb-2" th:case="6"><span th:text="'En ruta'" class="badge bg-light-warning text-dark-warning"></span></div>
+                        <div class="mb-2" th:case="7"><span th:text="'Recibido'" class="badge bg-light-success text-dark-success"></span></div>
+                     </td>
+                     <td>
+                        <span th:text="${#numbers.formatDecimal(orden.montoTotal, 1, 2)}">150.00</span>
+                     </td>
                   </tr>
                   </tbody>
                </table>
+               <!-- Botón para ver más órdenes -->
                <div class="button-container">
-                  <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-outline-info mb-2">Ver más</a>
+                  <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-outline-info mt-3">Ver todas las órdenes</a>
                </div>
             </div>
       </section>
