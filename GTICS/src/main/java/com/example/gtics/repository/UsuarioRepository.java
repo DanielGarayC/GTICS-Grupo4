@@ -244,4 +244,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
     List<Usuario> findAZporZona(int zonaId);
     Optional<Usuario> findByEmail(String email);
+    
+    @Transactional
+    @Modifying
+    @Query(value="UPDATE usuario\n" +
+            "SET activo = 0\n" +
+            "WHERE idUsuario = ?1", nativeQuery = true)
+    void logicalDelete(Integer id);
+}
 }
