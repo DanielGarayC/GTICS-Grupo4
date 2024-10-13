@@ -900,7 +900,7 @@ public class SuperAdminController {
         return "redirect:/SuperAdmin/listaProveedores";
     }
 
-    @GetMapping("/Proveedor/eliminar")
+    @GetMapping("/SuperAdmin/eliminarProveedor")
     public String eliminarProveedor(@RequestParam("id") int id, RedirectAttributes attr) {
 
         Optional<Proveedor> optProduct = proveedorRepository.findById(id);
