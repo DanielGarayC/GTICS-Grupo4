@@ -278,9 +278,9 @@
             </div>
           </div>
           <div class="d-flex flex-column align-items-center">
-            <!-- Información de paginación -->
-            <span id="paginationInfo" class="mb-2" >
-              Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
+            <!-- Texto de paginación centrado -->
+            <span id="paginationInfo" class="mb-2">
+                Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
             </span>
 
             <!-- Paginación centrada -->
@@ -288,22 +288,22 @@
               <ul class="pagination justify-content-center">
                 <!-- Botón de "Previo" -->
                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                  <a class="page-link" th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage - 1})}">Previo</a>
+                  <a class="page-link" th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage - 1}, sortOrder=${sortOrder})}">Previo</a>
                 </li>
 
-                <!-- Páginas numeradas dinámicas (mostrar solo entre startPage y endPage) -->
-                <li th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                  <a class="page-link" th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${i})}" th:text="${i + 1}"></a>
+                <!-- Páginas numeradas -->
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                  <a class="page-link" th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${i}, sortOrder=${sortOrder})}" th:text="${i + 1}"></a>
                 </li>
 
                 <!-- Botón de "Siguiente" -->
                 <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                  <a class="page-link" th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage + 1})}">Siguiente</a>
+                  <a class="page-link" th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage + 1}, sortOrder=${sortOrder})}">Siguiente</a>
                 </li>
-
               </ul>
             </nav>
           </div>
+
 
 
 

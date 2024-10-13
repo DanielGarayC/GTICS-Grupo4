@@ -283,21 +283,22 @@
                             <ul class="pagination justify-content-center">
                                 <!-- Botón de "Anterior" -->
                                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${currentPage - 1})}" tabindex="-1">Anterior</a>
+                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${currentPage - 1}, sortOrder=${sortOrder})}" tabindex="-1">Anterior</a>
                                 </li>
 
                                 <!-- Páginas numeradas -->
                                 <li th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${i})}" th:text="${i + 1}">1</a>
+                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${i}, sortOrder=${sortOrder})}" th:text="${i + 1}">1</a>
                                 </li>
 
                                 <!-- Botón de "Siguiente" -->
                                 <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${currentPage + 1})}">Siguiente</a>
+                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${currentPage + 1}, sortOrder=${sortOrder})}">Siguiente</a>
                                 </li>
                             </ul>
                         </nav>
                     </div>
+
 
                 </section>
             </div>
