@@ -154,17 +154,12 @@ public class UsuarioFinalController {
         if (authentication == null || !authentication.isAuthenticated() ||
                 authentication instanceof AnonymousAuthenticationToken) {
             attr.addFlashAttribute("error", "Debes iniciar sesión para agregar productos al carrito.");
-            return "redirect:/login";
+            return "redirect:/ExpressDealsLogin";
         }
 
         // Obtiene el usuario autenticado por su email
         String email = authentication.getName();
         Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
-
-        if (optUsuario.isEmpty()) {
-            attr.addFlashAttribute("error", "Usuario no encontrado.");
-            return "redirect:/login";
-        }
 
         Usuario usuario = optUsuario.get();
 
@@ -202,6 +197,41 @@ public class UsuarioFinalController {
         }
 
         attr.addFlashAttribute("msg", "Producto agregado al carrito exitosamente.");
+        return "redirect:/UsuarioFinal/listaProductos";
+    }
+
+    @Transactional
+    @DeleteMapping("/UsuarioFinal/eliminarProductoCarrito/{idProducto}")
+    public String eliminarProductoCarrito(@PathVariable("idProducto") Integer idProducto,
+                                          Authentication authentication,
+                                          RedirectAttributes attr) {
+
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
+
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+
+            Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
+            if (carritoOpt.isPresent()) {
+                Carritocompra carrito = carritoOpt.get();
+
+                Optional<ProductoHasCarritocompra> productoEnCarritoOpt =
+                        productoHasCarritocompraRepository.findById_IdCarritoCompraAndId_IdProducto(carrito.getId(), idProducto);
+
+                if (productoEnCarritoOpt.isPresent()) {
+                    productoHasCarritocompraRepository.deleteById_IdCarritoCompraAndId_IdProducto(carrito.getId(), idProducto);
+                }
+            }
+        } else {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
         return "redirect:/UsuarioFinal/listaProductos";
     }
 
