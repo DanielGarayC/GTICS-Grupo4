@@ -108,7 +108,7 @@
                                                 <th>Fecha de entrega</th>
                                                 <th>Estado</th>
                                                 <th>Monto total (S/.)</th>
-                                                <th></th>
+                                                <th>Opciones</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -129,6 +129,7 @@
 
                                                     </td>
                                                     <td>
+                                                        <!--
                                                         <div class="dropdown">
                                                             <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <i class="feather-icon icon-more-vertical fs-5"></i>
@@ -173,6 +174,30 @@
 
                                                             </ul>
                                                         </div>
+                                                        -->
+
+                                                        <a class="btn btn-primary" th:href="@{'/UsuarioFinal/detallesOrden?idOrden=' + ${orden.idOrden}}"><i class="bi bi-eye-fill "></i> </a>
+                                                        <a class="btn btn-success" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat "></i> </a>
+                                                        <!--<a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>-->
+                                                        <th:block th:switch="${orden.solicitarCancelarOrden}">
+                                                            <th:block th:case="0">
+                                                                <a class="btn btn-danger eliminarOrden" href="#" th:data-id="${orden.idOrden}">
+                                                                    <i class="bi bi-trash "></i>
+                                                                </a>
+                                                            </th:block>
+                                                            <th:block th:case="1">
+                                                                <a class="btn btn-secondary eliminarOrdenError" href="#" th:data-id="${orden.idOrden}">
+                                                                    <i class="bi bi-trash "></i>
+                                                                </a>
+                                                            </th:block>
+
+                                                        </th:block>
+                                                        <th:block th:if="${orden.idAgente == null}">
+                                                            <a class="btn btn-info solicitarApoyo" href="#" th:data-id="${orden.idOrden}"><i class="bi bi-question-circle mt-2 "></i>Solicitar apoyo </a>
+                                                        </th:block>
+                                                        <th:block th:unless="${orden.idAgente == null}">
+                                                            <a class="btn btn-secondary solicitarApoyoError" href="#"><i class="bi bi-question-circle mt-2 "></i>Solicitar apoyo </a>
+                                                        </th:block>
                                                     </td>
                                                 </tr>
 

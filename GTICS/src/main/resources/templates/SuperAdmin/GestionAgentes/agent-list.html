@@ -130,8 +130,8 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a class="dropdown-item" href="javascript:void(0);"
-                                                               data-idusuario="[[${agente['idusuario']}]]"
+                                                            <a class="dropdown-item" href="#"
+                                                               th:data-idusuario="${agente['idusuario']}"
                                                                onclick="confirmDelete(this)">
                                                                 <i class="bi bi-trash me-3"></i>
                                                                 Eliminar
@@ -240,7 +240,8 @@
 
 </script>
 <script>
-function confirmDelete(id) {
+function confirmDelete(button) {
+    const idUsuario = button.getAttribute('data-idusuario');
     Swal.fire({
         title: '¿Estás seguro?',
         text: "Los cambios no serán reversibles",
@@ -252,7 +253,7 @@ function confirmDelete(id) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `/SuperAdmin/eliminarAgente?id=${id}`;
+            window.location.href = `/SuperAdmin/eliminarAgente?id=` + idUsuario;
             Swal.fire(
                 '¡Eliminado!',
                 'El elemento ha sido eliminado con éxito.',
