@@ -222,7 +222,7 @@ public class SuperAdminController {
         if (optProduct.isPresent()) {
             System.out.println("Admin Zonal encontrado con ID: " + id);
             try {
-                usuarioRepository.deleteById(id);
+                usuarioRepository.logicalDelete(id);
                 attr.addFlashAttribute("msg", "El Admin Zonal ha sido eliminado exitosamente");
             } catch (Exception e) {
                 e.printStackTrace();
