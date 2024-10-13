@@ -143,7 +143,7 @@
 										   <th>Estado</th>
 										   <th>Control</th>
 										   <th>Monto total (S/.)</th>
-										   <th></th>
+										   <th>Opciones</th>
 									   </tr>
 								   </thead>
 								   <tbody>
@@ -178,6 +178,7 @@
 
 									   <!-- si la orden ya esta asignada al agente -->
 									   <td th:if="${orden.controlOrden.id != 1}">
+										   <!--
 										   <div class="dropdown">
 											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
 												   <i class="feather-icon icon-more-vertical fs-5"></i>
@@ -209,9 +210,35 @@
 												   </li>
 											   </ul>
 										   </div>
+											-->
+
+										   <a class="btn btn-primary" th:href="@{'/Agente/Ordenes/Detalles?indicadorVistaARegresar=0&numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi-pencil-fill "></i> </a>
+
+										   <th:block th:if="${orden.solicitarCancelarOrden == 1}">
+											   <a class=" eliminarOrden btn btn-danger" href="javascript:void(0);"
+												  th:data-id="${orden.id}"
+												  data-bs-toggle="tooltip"
+												  data-bs-placement="bottom">
+												   <i class="bi bi-trash "></i>
+											   </a>
+										   </th:block>
+										   <th:block th:unless="${orden.solicitarCancelarOrden == 1}">
+											   <a class="eliminarOrdenError btn btn-secondary" href="javascript:void(0);"
+												  th:data-id="${orden.id}"
+												  data-bs-toggle="tooltip"
+												  data-bs-placement="bottom">
+												   <i class="bi bi-trash "></i>
+											   </a>
+										   </th:block>
+										   <a class="btn btn-success" th:href="@{/Agente/Chat}"><i class="bi bi-wechat "></i></a>
+
+
+
+
 									   </td>
 									   <!-- si la orden no ha sido asignada a nadie aun -->
 									   <td th:unless="${orden.controlOrden.id != 1}">
+										   <!--
 										   <div class="dropdown">
 											   <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
 												   <i class="feather-icon icon-more-vertical fs-5"></i>
@@ -228,6 +255,11 @@
 
 											   </ul>
 										   </div>
+										   -->
+										   <a class="btn btn-primary" th:href="@{'/Agente/Ordenes/DetallesOrdenSinAsignar?indicadorVistaARegresar=0&numOrden=' + ${var.index+1}+ '&idOrden=' + ${orden.id}}"><i class="bi bi-eye-fill "></i> </a>
+										   <a class="btn btn-success" th:href="@{'/Agente/Ordenes/AsignarOrden?idOrden='+ ${orden.id}}"><i class="bi bi-pencil-fill "></i> Autoasignar  </a>
+
+
 									   </td>
 								   </tr>
 
@@ -325,6 +357,18 @@
 					   window.location.href = `/Agente/Ordenes/EliminarOrden?idOrden=${orderId}&razonEliminacion=${razonEliminacion}`;
 				   }
 			   });
+		   });
+	   });
+
+	   document.querySelectorAll('.eliminarOrdenError').forEach(button => {
+		   button.addEventListener('click', function (event) {
+			   event.preventDefault();  // Evita la redirección automática
+
+			   // Obtenemos el ID de la orden
+			   const orderId = this.getAttribute('data-id');
+
+			   // SweetAlert para seleccionar la razón de cancelación
+			   Swal.fire('Error', 'No se ha solicitado eliminar la orden ', 'error');
 		   });
 	   });
 
