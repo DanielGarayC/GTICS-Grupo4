@@ -89,10 +89,10 @@
                                             <th></th>
                                             <th>Nombres</th>
                                             <th>Apellidos</th>
-                                            <th>DNI</th>
-                                            <th>Teléfono</th>
-                                            <th>Código de Despachador Aduanero</th>
-                                            <th>Código de Jurisdicción</th>
+                                            <th colspan="2" style="text-align: center;">
+                                                Código de D. Aduanero
+                                            </th>
+                                            <th style="word-wrap: break-word;">Código de Jurisdicción</th>
                                             <th>Razón Social</th>
                                             <th>Zona</th>
                                             <th></th>
@@ -100,29 +100,23 @@
                                         </thead>
                                         <tbody>
 
-                                            <tr th:each="agente,var : ${agentes}">
-
-                                                <td th:text="${var.index+1}"></td>
-                                                <td th:text="${agente['nombre']}"></td>
-                                                <td th:text="${agente['apellidopaterno']} + ' ' + ${agente['apellidomaterno']}"></td>
-                                                <td th:text="${agente['dni']}"></td>
-                                                <td th:text="${agente['telefono']}"></td>
-                                                <td>
-                                                    <span th:text="${agente['agt_codigoaduana']}"></span>
-                                                    <span th:text="${agente['estadoCodigoAduana']}"
-                                                          th:classappend="${agente['estadoCodigoAduana']} == 'Habilitado' ? 'badge bg-success' : ''">
-                                                    </span>
-
-                                                </td>
-                                                <td>
-                                                    <span th:text="${agente['agt_codigojurisdiccion']}"></span>
-                                                    <span th:text="${agente['estadoCodigoJurisdiccion']}"
-                                                          th:classappend="${agente['estadoCodigoJurisdiccion']} == 'Habilitado' ? 'badge bg-success' : ''">
-                                                    </span>
-
-                                                </td>
-                                                <td th:text="${agente['agt_razonsocial']}"></td>
+                                        <tr th:each="agente,var : ${agentes}">
+                                            <td th:text="${var.index+1}"></td>
+                                            <td th:text="${agente['nombre']}"></td>
+                                            <td th:text="${agente['apellidopaterno']} + ' ' + ${agente['apellidomaterno']}"></td>
+                                            <!-- Primera columna del Código de Aduanero -->
+                                            <td style="white-space: nowrap; padding-right: 5px;" th:text="${agente['agt_codigoaduana']}"></td>
+                                            <!-- Columna para el estado del código de aduana -->
+                                            <td class="text-center align-middle" style="padding-left: 5px;">
+                                            <span th:text="${agente['estadoCodigoAduana']}"
+                                                  th:classappend="${agente['estadoCodigoAduana']} == 'Habilitado' ? 'badge bg-success' : 'badge bg-secondary'">
+                                            </span>
+                                            </td>
+                                            <td style="white-space: normal; word-wrap: break-word; max-width: 50px;" th:text="${agente['agt_codigojurisdiccion']}"></td>
+                                            <td th:text="${agente['agt_razonsocial']}"></td>
                                             <td th:text="${agente['nombrezona']}"></td>
+
+
                                             <td>
                                                 <div class="dropdown">
                                                     <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -143,17 +137,12 @@
                                                                 Eliminar
                                                             </a>
                                                         </li>
-
                                                         <li>
                                                             <a class="dropdown-item" th:href="@{verAgente/{id}(id=${agente['idusuario']}, origin='listaAgente')}">
                                                                 <i class="bi bi-eye me-3"></i>
                                                                 Ver
                                                             </a>
                                                         </li>
-
-
-
-
                                                     </ul>
                                                 </div>
                                             </td>

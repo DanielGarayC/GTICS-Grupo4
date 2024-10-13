@@ -65,6 +65,14 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
             "                p.idProducto = sr.idProducto;", nativeQuery = true)
     List<ProductoTabla> getProductosTabla();
 
+    @Query(value = "SELECT p.idProducto, p.nombreProducto, p.cantidadDisponible, p.fechaArribo, " +
+            "CASE WHEN sr.cantidadSolicitada = 0 THEN NULL ELSE sr.cantidadSolicitada END AS cantidadSolicitada, " +
+            "(SELECT fp.foto FROM gticsdb.fotosproducto fp WHERE fp.idProducto = p.idProducto LIMIT 1) AS primeraFoto " +
+            "FROM gticsdb.producto p " +
+            "LEFT JOIN gticsdb.solicitudreposicion sr ON p.idProducto = sr.idProducto",
+            nativeQuery = true)
+    Page<ProductoTabla> getProductosTablaConPaginacion(Pageable pageable);
+
     @Query(value = "SELECT\n" +
             "                p.idProducto,\n" +
             "                p.nombreProducto,\n" +
@@ -96,8 +104,16 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     @Query(value = "SELECT * FROM producto WHERE idCategoria = :categoriaId AND borrado = 0", nativeQuery = true)
     List<Producto> findProductosPorCategoria(@Param("categoriaId") Integer categoriaId);
 
+    @Query(value = "SELECT * FROM producto WHERE idCategoria = :categoriaId AND borrado = 0", nativeQuery = true)
+    Page<Producto> findProductosPorCategoriaConPaginacion(@Param("categoriaId") Integer categoriaId, Pageable pageable);
+
+
     @Query(value = "SELECT * FROM producto WHERE idSubcategoria = :idSubcategoria", nativeQuery = true)
     List<Producto> findProductosPorSubcategoria(@Param("idSubcategoria") Integer idSubcategoria);
+
+    @Query(value = "SELECT * FROM producto WHERE idSubcategoria = :idSubcategoria AND borrado = 0", nativeQuery = true)
+    Page<Producto> findProductosPorSubcategoriaConPaginacion(@Param("idSubcategoria") Integer idSubcategoria, Pageable pageable);
+
 
     @Modifying
     @Transactional

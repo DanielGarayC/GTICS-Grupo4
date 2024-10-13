@@ -327,8 +327,11 @@ public class AdminZonalController {
 
 
 
-    @GetMapping({ "AdminZonal/Productos"})
-    public String Productos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size, Model model){
+    @GetMapping("/AdminZonal/Productos")
+    public String Productos(@RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "3") int size,
+                            Model model) {
+        // Obtener todos los productos (sin paginar)
         List<ProductoTabla> todosLosProductos = productoRepository.getProductosTabla();
 
         // Calcular el total de productos
@@ -337,7 +340,7 @@ public class AdminZonalController {
         // Calcular el número total de páginas
         int totalPages = (int) Math.ceil((double) totalProductos / size);
 
-        // Calcular el índice inicial y final para la sublista
+        // Calcular el índice inicial y final para la sublista (productos de la página actual)
         int fromIndex = page * size;
         int toIndex = Math.min(fromIndex + size, totalProductos);
 
@@ -348,8 +351,28 @@ public class AdminZonalController {
         model.addAttribute("listaProductos", productosPaginados);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
+
+        // Calcular el rango de páginas para la paginación
+        int visiblePages = 3;  // Número de botones de página visibles
+        int startPage = Math.max(0, page - (visiblePages / 2));
+        int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
+
+        // Ajustar el rango si el número de páginas visibles es menor que 3
+        if (endPage - startPage + 1 < visiblePages) {
+            if (startPage == 0) {
+                endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
+            } else if (endPage == totalPages - 1) {
+                startPage = Math.max(0, endPage - visiblePages + 1);
+            }
+        }
+
+        // Añadir los valores de inicio y fin de página al modelo
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
         return "AdminZonal/GestionProductos/productos";
     }
+
 
     @PostMapping({"AdminZonal/Productos/guardarFecha"})
     public String GuardarFecha(@RequestParam("productoId") Integer productoId,

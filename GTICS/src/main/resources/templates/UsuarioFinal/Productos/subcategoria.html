@@ -269,30 +269,37 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-8">
-                        <div class="col">
-                            <!-- nav -->
-                            <nav>
-                                <ul class="pagination">
-                                    <li class="page-item disabled">
-                                        <a class="page-link mx-1" href="#" aria-label="Previous">
-                                            <i class="feather-icon icon-chevron-left"></i>
-                                        </a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link mx-1 active" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link mx-1" href="#">2</a></li>
-
-                                    <li class="page-item"><a class="page-link mx-1" href="#">...</a></li>
-                                    <li class="page-item"><a class="page-link mx-1" href="#">12</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link mx-1" href="#" aria-label="Next">
-                                            <i class="feather-icon icon-chevron-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                    <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-2 row-cols-md-2 mt-2">
+                        <!-- Columna con cada producto -->
+                        <div th:each="producto : ${productos}" class="col">
+                            <!-- Aquí va el código de la tarjeta de producto -->
                         </div>
                     </div>
+
+                    <!-- Paginación -->
+                    <div class="d-flex flex-column align-items-center mt-4">
+                        <span th:text="'Mostrando página ' + (${currentPage} + 1) + ' de ' + ${totalPages}"></span>
+
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <!-- Botón de "Anterior" -->
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${currentPage - 1})}" tabindex="-1">Anterior</a>
+                                </li>
+
+                                <!-- Páginas numeradas -->
+                                <li th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${i})}" th:text="${i + 1}">1</a>
+                                </li>
+
+                                <!-- Botón de "Siguiente" -->
+                                <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${currentPage + 1})}">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
                 </section>
             </div>
         </div>
