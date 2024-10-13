@@ -251,5 +251,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "SET activo = 0\n" +
             "WHERE idUsuario = ?1", nativeQuery = true)
     void logicalDelete(Integer id);
-}
+
 }
