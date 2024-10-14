@@ -76,7 +76,7 @@
                         <!-- card -->
                         <div class="card mb-6 shadow border-0">
                             <!-- card body -->
-                            <form id="productoForm" th:action="@{/SuperAdmin/editarProducto}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+                            <form id="productoForm" th:action="@{/SuperAdmin/guardarProducto}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
                                 <input type="hidden" th:value="${producto.id}" name="id" />
                                 <div class="card-body p-6">
                                     <h4 class="mb-5 h5">Editar fotos del Producto</h4>
