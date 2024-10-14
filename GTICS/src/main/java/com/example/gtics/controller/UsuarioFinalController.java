@@ -86,7 +86,7 @@ public class UsuarioFinalController {
                                   ProductoRepository productoRepository, CategoriaRepository categoriaRepository,
                                   SubcategoriaRepository subcategoriaRepository, CarritoCompraRepository carritoCompraRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
-                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository,,DireccionRepository direccionRepository,ZonaRepository zonaRepository,EtiquetaRepository etiquetaRepository) {
+                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository,DireccionRepository direccionRepository,ZonaRepository zonaRepository,EtiquetaRepository etiquetaRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.fotosProductoRepository = fotosProductoRepository;
