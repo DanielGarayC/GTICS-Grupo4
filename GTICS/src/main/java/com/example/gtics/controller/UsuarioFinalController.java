@@ -606,6 +606,21 @@ public class UsuarioFinalController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/UsuarioFinal/foto/{id}")
+    public ResponseEntity<byte[]> obtenerFotoUsuario(@PathVariable Integer id) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+
+        if (usuario != null && usuario.getFoto() != null) {
+            byte[] imagenComoBytes = usuario.getFoto();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.IMAGE_PNG);
+
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @GetMapping("/UsuarioFinal/miPerfil")
     public String miPerfil(Model model){
