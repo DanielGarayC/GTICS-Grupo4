@@ -212,21 +212,38 @@
                                 <!-- Mostrar información de paginación y botones -->
                                 <div class="d-flex flex-column align-items-center">
                                     <!-- Texto de paginación centrado -->
-                                    <span id="paginationInfo" class="mb-2">Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]</span>
-                                    <!-- Paginación centrada -->
+                                    <span id="paginationInfo" class="mb-2">
+        <!-- Mostrar "Mostrando página 1 de 1" cuando no hay resultados -->
+        <span th:if="${totalPages == 0}">Mostrando página 1 de 1</span>
+                                        <!-- Mostrar la paginación real cuando haya resultados -->
+        <span th:unless="${totalPages == 0}">Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]</span>
+    </span>
+
+                                    <!-- Paginación centrada (siempre mostrar la paginación pero deshabilitar si no hay resultados) -->
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination justify-content-center">
                                             <!-- Botón de "Previo" -->
-                                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                                <a class="page-link" th:href="@{/UsuarioFinal/listaMisOrdenes(page=${currentPage - 1})}">Previo</a>
+                                            <li class="page-item" th:classappend="${currentPage == 0 || totalPages == 0} ? 'disabled'">
+                                                <a class="page-link" th:href="@{/UsuarioFinal/listaMisOrdenes(page=${currentPage - 1})}" th:if="${currentPage > 0}">Previo</a>
+                                                <!-- Deshabilitado si es la primera página o no hay resultados -->
+                                                <a class="page-link" th:if="${currentPage == 0 || totalPages == 0}" href="javascript:void(0)">Previo</a>
                                             </li>
-                                            <!-- Páginas numeradas -->
-                                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+
+                                            <!-- Mostrar solo "1" cuando no haya resultados -->
+                                            <li class="page-item active" th:if="${totalPages == 0}">
+                                                <a class="page-link" href="javascript:void(0)">1</a>
+                                            </li>
+
+                                            <!-- Páginas numeradas (solo si hay resultados) -->
+                                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:unless="${totalPages == 0}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
                                                 <a class="page-link" th:href="@{/UsuarioFinal/listaMisOrdenes(page=${i})}" th:text="${i + 1}"></a>
                                             </li>
+
                                             <!-- Botón de "Siguiente" -->
-                                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                                                <a class="page-link" th:href="@{/UsuarioFinal/listaMisOrdenes(page=${currentPage + 1})}">Siguiente</a>
+                                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages || totalPages == 0} ? 'disabled'">
+                                                <a class="page-link" th:href="@{/UsuarioFinal/listaMisOrdenes(page=${currentPage + 1})}" th:if="${currentPage + 1 < totalPages}">Siguiente</a>
+                                                <!-- Deshabilitado si es la última página o no hay resultados -->
+                                                <a class="page-link" th:if="${currentPage + 1 == totalPages || totalPages == 0}" href="javascript:void(0)">Siguiente</a>
                                             </li>
                                         </ul>
                                     </nav>
