@@ -7,6 +7,7 @@ import com.example.gtics.dto.ProductoTabla;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.boot.Banner;
 import org.springframework.core.io.ByteArrayResource;
@@ -16,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,38 +52,72 @@ public class AdminZonalController {
         this.productoRepository = productoRepository;
         this.solicitudreposicionRepository = solicitudreposicionRepository;
     }
-    @GetMapping({"AdminZonal", "AdminZonal/Dashboard"})
-    public String Dashboard(Model model){
-        int idAdminZonal = 11;
-        Usuario AdmZonal = usuarioRepository.findUsuarioById(idAdminZonal);
-        int idZona =AdmZonal.getZona().getId();
-        List<Agente> listaAgentes = usuarioRepository.findAgentesByAdminZonal(idAdminZonal);
-        ArrayList<String> labelsAgenteChart = new ArrayList();
-        ArrayList<Integer> usuariosPorAgente = new ArrayList();
-        for(Agente agente : listaAgentes){
-            String nombre = agente.getNombre()+ ' ' + agente.getApellidoPaterno();
-            labelsAgenteChart.add(nombre);
-            usuariosPorAgente.add(agente.getCantidadUsuarios());
-        }
-        //Primera parte
-        model.addAttribute("ProductosMenorStock", productoRepository.prductosPocoStockZona(idZona));
-        //G1
-        model.addAttribute("CantidadUsuariosRegistrados",usuarioRepository.getCantidadRegistradosZona(idZona));
-        model.addAttribute("CantidadUsuariosActivos", usuarioRepository.getCantidadActivosZona(idZona));
-        //G2
-        model.addAttribute("labelsAgentes", labelsAgenteChart);
-        model.addAttribute("usuariosPorAgente", usuariosPorAgente);
-        //LI (arreglar la db csm)
-        model.addAttribute("ProductosMasImportados", productoRepository.findProductosRelevantesZona(idZona));
-        model.addAttribute("TotalVentas", productoRepository.getCantidadProductosZona(idZona));
 
-        //LD
-        model.addAttribute("topImportadores", usuarioRepository.getTopImportadores());
+    @ModelAttribute
+    public void addUsuarioToModel(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName(); // Obtener el email del usuario autenticado
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+            optUsuario.ifPresent(usuario -> model.addAttribute("usuario", usuario));
+        }
+    }
+
+
+
+    @GetMapping({"AdminZonal", "AdminZonal/Dashboard"})
+    public String Dashboard(Model model, HttpSession session){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName();
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+            if (optUsuario.isPresent()) {
+
+                Usuario usuario = optUsuario.get();
+                Integer idAdminZonal = usuario.getId();
+
+                // Almacenar el idAdminZonal en la sesión
+                session.setAttribute("idAdminZonal", idAdminZonal);
+
+                Usuario AdmZonal = usuarioRepository.findUsuarioById(idAdminZonal);
+                int idZona = AdmZonal.getZona().getId();
+                List<Agente> listaAgentes = usuarioRepository.findAgentesByAdminZonal(idAdminZonal);
+                ArrayList<String> labelsAgenteChart = new ArrayList();
+                ArrayList<Integer> usuariosPorAgente = new ArrayList();
+                for (Agente agente : listaAgentes) {
+                    String nombre = agente.getNombre() + ' ' + agente.getApellidoPaterno();
+                    labelsAgenteChart.add(nombre);
+                    usuariosPorAgente.add(agente.getCantidadUsuarios());
+                }
+                //Primera parte
+                model.addAttribute("ProductosMenorStock", productoRepository.prductosPocoStockZona(idZona));
+                //G1
+                model.addAttribute("CantidadUsuariosRegistrados", usuarioRepository.getCantidadRegistradosZona(idZona));
+                model.addAttribute("CantidadUsuariosActivos", usuarioRepository.getCantidadActivosZona(idZona));
+                //G2
+                model.addAttribute("labelsAgentes", labelsAgenteChart);
+                model.addAttribute("usuariosPorAgente", usuariosPorAgente);
+                //LI (arreglar la db csm)
+                model.addAttribute("ProductosMasImportados", productoRepository.findProductosRelevantesZona(idZona));
+                model.addAttribute("TotalVentas", productoRepository.getCantidadProductosZona(idZona));
+
+                //LD
+                model.addAttribute("topImportadores", usuarioRepository.getTopImportadores());
+            }
+
+        }
         return "AdminZonal/Dashboard/dashboard";
     }
     @GetMapping({"AdminZonal/Agentes"})
-    public String Agentes(Model model){
-        int idAdminZonal = 11;
+    public String Agentes(Model model,
+                          HttpSession session){
+
+        Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
+
         boolean crearAgente = true;
         int cantAgentes = usuarioRepository.cantAgentesByAZ(idAdminZonal);
         System.out.println(cantAgentes);
@@ -91,8 +129,10 @@ public class AdminZonalController {
         return "AdminZonal/GestionAgentes/agentes";
     }
     @GetMapping({ "AdminZonal/Agentes/Crear"})
-    public String CrearAgente(@ModelAttribute("agente") Usuario agente, Model model){
-        int idAdminZonal = 11;
+    public String CrearAgente(@ModelAttribute("agente") Usuario agente, Model model,
+                              HttpSession session){
+
+        Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
         Optional<Usuario> optUsuario = usuarioRepository.findById(idAdminZonal);
         if(optUsuario.isPresent()){
             Usuario adminzonal = optUsuario.get();
@@ -119,9 +159,10 @@ public class AdminZonalController {
     }
 
     @PostMapping("/AdminZonal/Agentes/Guardar")
-    public String guardarAgente(@ModelAttribute("agente") @Validated(AgenteValidationGroup.class) Usuario agente, BindingResult bindingResult, Model model, RedirectAttributes attr) {
+    public String guardarAgente(@ModelAttribute("agente") @Validated(AgenteValidationGroup.class) Usuario agente, BindingResult bindingResult, Model model, RedirectAttributes attr,
+                                HttpSession session){
 
-        int idAdminZonal = 11;
+        Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
         System.out.println("Llega al método guardarAgente");
         if(bindingResult.hasErrors()){
             if (bindingResult.hasFieldErrors("dni")) {
@@ -476,9 +517,11 @@ public class AdminZonalController {
         return "redirect:/AdminZonal/Productos";
     }
     @GetMapping({ "AdminZonal/Perfil"})
-    public String Perfil(Model model){
+    public String Perfil(Model model, HttpSession session){
         //Actualizar para el entregable de sesiones
-        Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(3);
+        Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
+
+        Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(idAdminZonal);
         if(OptAdminZonal.isPresent()){
             model.addAttribute("adminZonal",OptAdminZonal.get());
         }
