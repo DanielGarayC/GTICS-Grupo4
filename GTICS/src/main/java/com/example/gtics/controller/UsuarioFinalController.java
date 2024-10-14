@@ -627,37 +627,85 @@ public class UsuarioFinalController {
     }
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
     public String mostrarListaMisOrdenes(Model model,
-                                         @RequestParam(defaultValue = "0") int page){
-        int pageSize = 6;
-        Pageable pageable = PageRequest.of(page, pageSize);
-        List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDto(7,pageable); // Si el usuario tiene ID=7
-        model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-        model.addAttribute("ordenCarrito",ordenCarrito.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", ordenCarrito.getTotalPages());
-        return "UsuarioFinal/Ordenes/listaMisOrdenes";
+                                         @RequestParam(defaultValue = "0") int page,
+                                         Authentication authentication,
+                                         RedirectAttributes attr) {
+
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
+
+        // Obtén el email del usuario autenticado
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+
+            int pageSize = 6;
+            Pageable pageable = PageRequest.of(page, pageSize);
+            List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
+
+            // Aquí jalas dinámicamente el ID del usuario autenticado
+            Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDto(usuario.getId(), pageable);
+
+            model.addAttribute("listaEstadoOrden", listaEstadoOrden);
+            model.addAttribute("ordenCarrito", ordenCarrito.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", ordenCarrito.getTotalPages());
+
+            return "UsuarioFinal/Ordenes/listaMisOrdenes";
+        } else {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
     }
+
 
     @PostMapping("/UsuarioFinal/listaMisOrdenes/filtro")
     public String mostrarListaMisOrdenesFiltro(Model model,
                                                @RequestParam("idEstado") Integer idEstado,
-                                               @RequestParam(defaultValue = "0") int page){
+                                               @RequestParam(defaultValue = "0") int page,
+                                               Authentication authentication,
+                                               RedirectAttributes attr) {
 
-        int pageSize = 6;
-        Pageable pageable = PageRequest.of(page, pageSize);
-        System.out.println(idEstado);
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
 
-        List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDtoFiltro(7,idEstado,pageable); // Si el usuario tiene ID=7
-        model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-        model.addAttribute("ordenCarrito",ordenCarrito.getContent());
-        model.addAttribute("idEstado",idEstado);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", ordenCarrito.getTotalPages());
-        model.addAttribute("paginaFiltro", 1);
-        return "UsuarioFinal/Ordenes/listaMisOrdenes";
+        // Obtén el email del usuario autenticado
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+
+            int pageSize = 6;
+            Pageable pageable = PageRequest.of(page, pageSize);
+
+            System.out.println(idEstado);
+
+            List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
+
+            // Ahora usamos el ID del usuario autenticado dinámicamente
+            Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDtoFiltro(usuario.getId(), idEstado, pageable);
+
+            model.addAttribute("listaEstadoOrden", listaEstadoOrden);
+            model.addAttribute("ordenCarrito", ordenCarrito.getContent());
+            model.addAttribute("idEstado", idEstado);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", ordenCarrito.getTotalPages());
+            model.addAttribute("paginaFiltro", 1);
+
+            return "UsuarioFinal/Ordenes/listaMisOrdenes";
+        } else {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
     }
+
 
     @GetMapping("/UsuarioFinal/detallesOrden")
     public String mostrarDetallesOrden(@RequestParam("idOrden") Integer idOrden,Model model) {
