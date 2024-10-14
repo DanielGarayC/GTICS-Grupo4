@@ -61,7 +61,7 @@
    <body>
 
    <!-- BARRA SUPERIOR -->
-   <div th:insert="~{fragments/navbarSuperior.html :: navbarSuperior}"></div>
+   <div th:insert="~{fragments/navbarAgente :: navbarSuperior}"></div>
 	<!-- NAVBAR  -->
    <div class="main-wrapper">
 
@@ -181,7 +181,7 @@
 											   <i class="bi bi-cart-check "></i>
 										   </a>
 
-										   <a class="btn btn-success" th:href="@{/Agente/Chat}"><i class="bi bi-wechat "></i> </a>
+										   <!--<a class="btn btn-success" th:href="@{/Agente/Chat}"><i class="bi bi-wechat "></i> </a>-->
 
 										   <a class="btn btn-secondary" th:href="@{/Agente/verUsuarioFinal(id=${usuarioAsignado.getId()})}">
 											   <i class="bi bi-eye "></i>

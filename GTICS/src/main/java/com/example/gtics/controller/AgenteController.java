@@ -61,9 +61,13 @@ public class AgenteController {
         }
     }
 
-    @GetMapping({"/Agente/Perfil"})
-    public String pefil(){
-
+    @GetMapping({"/Agente/perfil"})
+    public String pefil(Model model, HttpSession session){
+        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(idAgente);
+        if(OptAdminZonal.isPresent()){
+            model.addAttribute("usuarioLogueado",OptAdminZonal.get());
+        }
         return "Agente/miperfil";
     }
 
