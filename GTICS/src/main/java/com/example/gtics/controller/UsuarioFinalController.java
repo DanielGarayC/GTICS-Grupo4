@@ -289,13 +289,15 @@ public class UsuarioFinalController {
         model.addAttribute("categorias", categorias);
         List<Zona> zonas = zonaRepository.findAll(); // Asegúrate de que estás trayendo todas las zonas
         model.addAttribute("zonas", zonas);
+
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             String email = authentication.getName();
             Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
             if (optUsuario.isPresent()) {
                 Usuario usuario = optUsuario.get();
-// Obtener etiquetas predefinidas
+
+                // Obtener etiquetas predefinidas
                 List<String> etiquetasPredefinidas = Arrays.asList("Casa", "Oficina");
 
                 // Obtener etiquetas personalizadas del usuario
@@ -304,49 +306,39 @@ public class UsuarioFinalController {
                 // Pasar etiquetas al modelo para mostrarlas en la vista
                 model.addAttribute("etiquetasPredefinidas", etiquetasPredefinidas);
                 model.addAttribute("etiquetasPersonalizadas", etiquetasPersonalizadas);
-                // Busca las direcciones del usuario
+
+                // Buscar las direcciones del usuario
                 List<Direccion> direcciones = direccionRepository.findByUsuario(usuario);
                 model.addAttribute("direcciones", direcciones);
-                // Si el usuario no tiene su dirección generada
+
+                // Si el usuario no tiene su dirección generada, crear una automáticamente
                 if (!usuario.isDirecciongenerada()) {
-                    // Creamos una dirección predeterminada automáticamente
                     Direccion nuevaDireccion = new Direccion();
                     nuevaDireccion.setUsuario(usuario);
 
-                    // Concatenamos el nombre completo del usuario
                     String nombreCompleto = usuario.getNombre() + " " + usuario.getApellidoPaterno() + " " + usuario.getApellidoMaterno();
                     nuevaDireccion.setNombreContacto(nombreCompleto);
-
-                    // Asignamos el teléfono y la dirección del usuario
                     nuevaDireccion.setTelefono(usuario.getTelefono());
                     nuevaDireccion.setDireccion(usuario.getDireccion());
-
-                    // Asignamos el distrito y la zona del usuario
                     nuevaDireccion.setDistrito(usuario.getDistrito());
                     nuevaDireccion.setZona(usuario.getZona());
-
-                    // Si el usuario no tiene RUC, dejamos el campo vacío
                     nuevaDireccion.setRuc(usuario.getAgtRuc() != null ? usuario.getAgtRuc() : "-");
-
-                    // Establecemos como predeterminada
                     nuevaDireccion.setPredeterminado(true);
-
-                    // Guardamos la dirección en la base de datos
                     direccionRepository.save(nuevaDireccion);
 
-                    // Marcamos en el usuario que ya tiene su dirección generada
                     usuario.setDirecciongenerada(true);
-                    usuarioRepository.save(usuario); // Actualizamos el campo en la base de datos
+                    usuarioRepository.save(usuario); // Actualizar el campo en la base de datos
                 }
-                // Busca el carrito activo del usuario
+
+                // Buscar el carrito activo del usuario
                 Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
                 if (carritoOpt.isPresent()) {
                     Carritocompra carrito = carritoOpt.get();
 
-                    // Obtiene los productos en el carrito
+                    // Obtener los productos en el carrito
                     List<ProductosCarritoDto> productosCarrito = productoHasCarritocompraRepository.findProductosPorCarrito(carrito.getId());
 
-                    // Asocia la URL de imagen de cada producto
+                    // Asociar la URL de imagen de cada producto
                     Map<Integer, String> productoImagenUrls = new HashMap<>();
                     for (ProductosCarritoDto producto : productosCarrito) {
                         List<Fotosproducto> fotos = fotosProductoRepository.findByProducto_Id(producto.getIdProducto());
@@ -356,20 +348,25 @@ public class UsuarioFinalController {
                         }
                     }
 
-                    // Agrega los productos y URLs de imágenes al modelo
                     model.addAttribute("productosCarrito", productosCarrito);
                     model.addAttribute("productoImagenUrls", productoImagenUrls);
 
-                    // Calcula el subtotal y el total
+                    // Calcular el subtotal
                     double subtotal = productosCarrito.stream()
                             .mapToDouble(ProductosCarritoDto::getPrecioTotalPorProducto)
                             .sum();
                     model.addAttribute("subtotal", subtotal);
 
-                    Double costoEnvio = ordenRepository.obtenerCostoAdicionalxOrden(carrito.getId());
-                    model.addAttribute("costoEnvio", costoEnvio != null ? costoEnvio : 0.0);
+                    // **Nuevo cálculo del costo de envío**
+                    // Encontrar el costo de envío más alto entre los productos en el carrito
+                    double maxCostoEnvio = productosCarrito.stream()
+                            .mapToDouble(ProductosCarritoDto::getCostoEnvio)
+                            .max()
+                            .orElse(0.0);
+                    model.addAttribute("costoEnvio", maxCostoEnvio);
 
-                    double total = subtotal + (costoEnvio != null ? costoEnvio : 0.0);
+                    // Calcular el total
+                    double total = subtotal + maxCostoEnvio;
                     model.addAttribute("total", total);
                 } else {
                     model.addAttribute("error", "No tienes un carrito activo para proceder con la compra.");
@@ -379,6 +376,7 @@ public class UsuarioFinalController {
         }
         return "UsuarioFinal/ProcesoCompra/proceso_compra";
     }
+
 
     @PostMapping("/UsuarioFinal/agregarEtiquetaPersonalizada")
     @ResponseBody
