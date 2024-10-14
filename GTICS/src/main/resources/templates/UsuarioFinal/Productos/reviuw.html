@@ -62,20 +62,19 @@
                               <h2 class="mb-5">Crear reseña</h2>
 
                               <div class="border-bottom py-4 mb-4">
-                                 <h5>Productos por hacer reseña:</h5>
-                                 <select id="productosResena" name="Producto.id" class="form-control" required th:field="*{Producto.id}">
-                                    <option value="" disabled selected>Seleccione los productos</option>
-                                    <th:block th:each="producto : ${productosSinResena}">
-                                       <option th:value="${producto.idProducto}" th:text="${producto.nombreProducto}"></option>
-                                    </th:block>
+                                 <label for="selectProducto" class="form-label">Productos por hacer reseña:</label>
+                                 <select class="form-select"  id="selectProducto"  th:field="*{producto.id}">
+                                    <option value="" disabled selected>--Seleccione un producto--</option>
+                                    <option th:each="producto : ${productosSinResena}" th:value="${producto.idProducto}" th:text="${producto.nombreProducto}"></option>
                                  </select>
-
+                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('producto.id')}" th:errors="*{producto.id}"></div>
 
                               </div>
 
                               <div class="border-bottom py-4 mb-4">
                                  <h5>Subir foto del producto recibido aquí</h5>
                                  <input type="file" id="uploadedPhotos" name="uploadedPhotos" accept="image/*" multiple class="form-control mt-3">
+                                 <div class="invalid-feedback" id="photoError">Debe subir al menos una foto.</div>
                               </div>
 
                               <div class="border-bottom py-4 mb-4">
@@ -84,37 +83,31 @@
                                  <!-- Primera sección de calificación -->
                                  <div class="my-5">
                                     <h5>Calidad del producto</h5>
-                                    <!-- Calificación con estrellas -->
                                     <div class="rater" id="rater-calidad" data-rating="0" style="font-size: 24px;" disabled></div>
-                                    <!-- Input oculto para almacenar el valor de la calificación de calidad -->
-                                    <input type="hidden" id="calificacionCalidad" name="idCalidad.id" th:field="*{idCalidad.id}" value="0">
-
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('idCalidad.id')}" th:errors="*{idCalidad.id}"></div>
-
+                                    <input type="hidden" id="calificacionCalidad" name="idCalidad.id" th:field="*{idCalidad.id}" value="0" class="form-control">
+                                    <div class="invalid-feedback">Debe calificar la calidad del producto.</div>
                                  </div>
 
                                  <!-- Pregunta sobre rapidez de entrega -->
-                                 <div class="mb-3 col-lg-12">
+                                 <div class="mb-3 col-lg-12 entregaRapidaGroup">
                                     <label class="form-label" id="productSKU">¿Se recibió rápido?</label><br>
                                     <div class="form-check form-check-inline">
-                                       <input class="form-check-input" type="radio" name="entregaRapida" id="entregaRapidaSi" value="1" th:checked="*{entregaRapida == 1}" required>
+                                       <input class="form-check-input" type="radio" name="entregaRapida" id="entregaRapidaSi" value="1" th:checked="*{entregaRapida == 1}">
                                        <label class="form-check-label" for="entregaRapidaSi">Sí</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                        <input class="form-check-input" type="radio" name="entregaRapida" id="entregaRapidaNo" value="0" th:checked="*{entregaRapida == 0}">
                                        <label class="form-check-label" for="entregaRapidaNo">No</label>
                                     </div>
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('entregaRapida')}" th:errors="*{entregaRapida}"></div>
+                                    <div class="invalid-feedback">Debe ingresar si recibió rápido o no su producto  </div>
                                  </div>
 
                                  <!-- Segunda sección de calificación -->
                                  <div class="my-5">
                                     <h5>Conformidad con la atención del agente</h5>
-                                    <!-- Calificación con estrellas para atención -->
                                     <div class="rater" id="rater-atencion" data-rating="0" style="font-size: 24px;" disabled></div>
-                                    <!-- Input oculto para almacenar el valor de la calificación de atención -->
-                                    <input type="hidden" id="calificacionAtencion" name="idAtencion.id" th:field="*{idAtencion.id}" value="0">
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('idAtencion.id')}" th:errors="*{idAtencion.id}"></div>
+                                    <input type="hidden" id="calificacionAtencion" name="idAtencion.id" th:field="*{idAtencion.id}" value="0" class="form-control">
+                                    <div class="invalid-feedback">Debe calificar la atención del agente.</div>
                                  </div>
                               </div>
                            </div>
@@ -125,20 +118,22 @@
                      <div class="col-md-7 col-xl-6 mt-20 " style="margin-top: 70px;">
                         <div>
                            <div class="mb-4">
-                              <h5>Tema de la reseña </h5>
-                              <input type="text" class="form-control" id="reviewTitle" name="tema" placeholder="Escriba el tema o título de su reseña" th:field="*{tema}" required th:classappend="${#fields.hasErrors('tema')}? ' is-invalid' : ''">
-                              <div class="invalid-feedback" th:if="${#fields.hasErrors('tema')}" th:errors="*{tema}"></div>                           </div>
+                              <h5>Tema de la reseña</h5>
+                              <input type="text" class="form-control" id="reviewTitle" name="tema" placeholder="Escriba el tema o título de su reseña"
+                                     th:field="*{tema}" th:classappend="${#fields.hasErrors('tema')}? ' is-invalid' : ''">
+                              <div class="invalid-feedback">Debe ingresar un tema  </div>
+                           </div>
                            <div id="unique-review" class="py-4 mb-4">
-                              <h5>Escriba una breve reseña </h5>
-                              <textarea class="form-control" id="reviewOpinion" name="opinion" rows="3" placeholder="¿Qué le gustó y qué no le gustó?" th:field="*{opinion}" required th:classappend="${#fields.hasErrors('opinion')}? ' is-invalid' : ''"></textarea>
-
-                              <div class="invalid-feedback" th:if="${#fields.hasErrors('opinion')}" th:errors="*{opinion}"></div>
+                              <h5>Escriba una breve reseña</h5>
+                              <textarea class="form-control" id="reviewOpinion" name="opinion" rows="3" placeholder="¿Qué le gustó y qué no le gustó?"
+                                        th:field="*{opinion}" th:classappend="${#fields.hasErrors('opinion')}? ' is-invalid' : ''"></textarea>
+                              <div class="invalid-feedback">Debe ingresar una reseña sobre el producto  </div>
                            </div>
 
                            <!-- Botones para regresar y publicar -->
                            <div class="d-flex justify-content-end gap-2">
-                              <a href="/UsuarioFinal/Reviews" class="btn btn-secondary">Regresar</a>
-                              <button type="submit" id="submitResena" class="btn btn-primary" disabled>Publicar reseña</button>
+                              <a th:href="@{/UsuarioFinal/Reviews}" class="btn btn-secondary">Regresar</a>
+                              <button type="submit" id="submitResena" class="btn btn-primary" >Publicar reseña</button>
                            </div>
                         </div>
                      </div>
@@ -380,6 +375,133 @@
 
             // Inicialmente, deshabilitar todos los campos
             habilitarCampos(false);
+         });
+
+         document.addEventListener("DOMContentLoaded", function () {
+            // Rater para la calidad del producto
+            const raterCalidadElement = document.querySelector("#rater-calidad");
+            const raterAtencionElement = document.querySelector("#rater-atencion");
+
+            // Actualizar valor del campo oculto de calidad
+            raterCalidadElement.addEventListener("click", function () {
+               const ratingCalidad = raterCalidadElement.getAttribute("data-rating");
+               document.getElementById('calificacionCalidad').value = ratingCalidad;
+            });
+
+            // Actualizar valor del campo oculto de atención
+            raterAtencionElement.addEventListener("click", function () {
+               const ratingAtencion = raterAtencionElement.getAttribute("data-rating");
+               document.getElementById('calificacionAtencion').value = ratingAtencion;
+            });
+
+            // Validación del formulario
+            const form = document.getElementById("resenaForm");
+
+            form.addEventListener("submit", function (event) {
+               let isValid = true;
+
+               // Validar calificación de la calidad del producto
+               const calificacionCalidad = document.getElementById('calificacionCalidad').value;
+               if (calificacionCalidad == 0) {
+                  document.getElementById('calificacionCalidad').classList.add('is-invalid');
+                  isValid = false;
+               } else {
+                  document.getElementById('calificacionCalidad').classList.remove('is-invalid');
+               }
+
+               // Validar calificación de la atención del agente
+               const calificacionAtencion = document.getElementById('calificacionAtencion').value;
+               if (calificacionAtencion == 0) {
+                  document.getElementById('calificacionAtencion').classList.add('is-invalid');
+                  isValid = false;
+               } else {
+                  document.getElementById('calificacionAtencion').classList.remove('is-invalid');
+               }
+
+               // Validar si se seleccionó "Sí" o "No" en la entrega rápida
+               const entregaRapidaSi = document.getElementById('entregaRapidaSi').checked;
+               const entregaRapidaNo = document.getElementById('entregaRapidaNo').checked;
+               const entregaRapidaGroup = document.querySelector('.entregaRapidaGroup');
+               if (!entregaRapidaSi && !entregaRapidaNo) {
+                  entregaRapidaGroup.classList.add('is-invalid');
+                  isValid = false;
+               } else {
+                  entregaRapidaGroup.classList.remove('is-invalid');
+               }
+
+               // Validar el tema (no más de 50 caracteres)
+               const tema = document.getElementById('reviewTitle');
+               if (tema.value.trim() === "" || tema.value.length > 50) {
+                  tema.classList.add('is-invalid');
+                  isValid = false;
+                  if (tema.value.length > 50) {
+                     tema.nextElementSibling.innerHTML = "El tema no puede exceder los 50 caracteres.";
+                  }
+               } else {
+                  tema.classList.remove('is-invalid');
+               }
+
+               // Validar la reseña/opinión (no más de 255 caracteres)
+               const opinion = document.getElementById('reviewOpinion');
+               if (opinion.value.trim() === "" || opinion.value.length > 255) {
+                  opinion.classList.add('is-invalid');
+                  isValid = false;
+                  if (opinion.value.length > 255) {
+                     opinion.nextElementSibling.innerHTML = "La opinión no puede exceder los 255 caracteres.";
+                  }
+               } else {
+                  opinion.classList.remove('is-invalid');
+               }
+
+               // Validar las fotos subidas
+               const uploadedPhotos = document.getElementById('uploadedPhotos');
+               const maxFileSize = 500 * 1024 * 1024; // 5MB en bytes
+               let totalSize = 0;
+               const allowedExtensions = ["jpg", "jpeg", "png"];
+               let hasInvalidFormat = false;
+               let hasFile = false;
+
+               for (let i = 0; i < uploadedPhotos.files.length; i++) {
+                  const file = uploadedPhotos.files[i];
+                  totalSize += file.size;
+
+                  // Verificar extensión
+                  const extension = file.name.split('.').pop().toLowerCase();
+                  if (!allowedExtensions.includes(extension)) {
+                     hasInvalidFormat = true;
+                  }
+
+                  hasFile = true; // Se subió al menos un archivo
+               }
+
+               // Verificar si no se subió ninguna foto
+               if (!hasFile) {
+                  uploadedPhotos.classList.add('is-invalid');
+                  document.getElementById('photoError').style.display = 'block';
+                  document.getElementById('photoError').innerHTML = "Debe subir al menos una foto.";
+                  isValid = false;
+               } else if (totalSize > maxFileSize) {
+                  // Verificar el tamaño total de las fotos
+                  uploadedPhotos.classList.add('is-invalid');
+                  document.getElementById('photoError').style.display = 'block';
+                  document.getElementById('photoError').innerHTML = "El tamaño total de las fotos no puede exceder los 5MB.";
+                  isValid = false;
+               } else if (hasInvalidFormat) {
+                  // Verificar el formato de las fotos
+                  uploadedPhotos.classList.add('is-invalid');
+                  document.getElementById('photoError').style.display = 'block';
+                  document.getElementById('photoError').innerHTML = "Solo se permiten fotos en formato JPG, JPEG, o PNG.";
+                  isValid = false;
+               } else {
+                  uploadedPhotos.classList.remove('is-invalid');
+                  document.getElementById('photoError').style.display = 'none';
+               }
+
+               // Si no es válido, prevenimos el envío
+               if (!isValid) {
+                  event.preventDefault();
+               }
+            });
          });
       </script>
    </body>
