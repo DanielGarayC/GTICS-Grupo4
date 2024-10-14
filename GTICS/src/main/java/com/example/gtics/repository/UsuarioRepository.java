@@ -259,4 +259,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
     List<Usuario> findUsuariosAsignadosAlAgenteNoPageable(Integer idAgente);
 
+    @Query(value = "SELECT estadoCodigo FROM codigosaduaneros WHERE codigoAduanero = :codigo", nativeQuery = true)
+    String findEstadoAduana(String codigo);
 }
