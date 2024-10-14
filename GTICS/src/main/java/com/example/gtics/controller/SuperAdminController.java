@@ -698,6 +698,7 @@ public class SuperAdminController {
                             nuevoProductoPorZona.setIdSubcategoria(producto.getIdSubcategoria());
                             nuevoProductoPorZona.setCantidadDisponible(cantidad);
                             nuevoProductoPorZona.setBorrado(producto.getBorrado());
+                            nuevoProductoPorZona.setDisponibilidad("En stock");
                             nuevoProductoPorZona.setZona(zona);
                             Producto savedProducto = productoRepository.save(nuevoProductoPorZona);
                             if (fotos != null && fotos.length > 0) {
@@ -724,6 +725,7 @@ public class SuperAdminController {
         return "redirect:/SuperAdmin/productos";
     }
 
+    @PostMapping("/SuperAdmin/guardarProducto")
     public String guardareditarProducto(@ModelAttribute("producto") Producto producto,
                                         @RequestParam("zonaId") Integer zonaId,
                                         @RequestParam("cantidadZona") Integer cantidadZona,
