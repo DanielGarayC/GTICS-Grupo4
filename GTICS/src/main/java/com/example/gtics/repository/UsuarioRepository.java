@@ -252,4 +252,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "WHERE idUsuario = ?1", nativeQuery = true)
     void logicalDelete(Integer id);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM usuario u " +
+            "WHERE u.idRol = 4 " +
+            "AND u.idAgente = ?1 " +
+            "AND u.baneado  =0 and u.activo=1")
+
+    List<Usuario> findUsuariosAsignadosAlAgenteNoPageable(Integer idAgente);
+
 }

@@ -177,7 +177,9 @@
                                                         -->
 
                                                         <a class="btn btn-primary" th:href="@{'/UsuarioFinal/detallesOrden?idOrden=' + ${orden.idOrden}}"><i class="bi bi-eye-fill "></i> </a>
-                                                        <a class="btn btn-success" th:href="@{/UsuarioFinal/chatSoporte}"><i class="bi bi-wechat "></i> </a>
+                                                        <a th:if="${usuario.idAgente == null}" class="btn btn-success" th:href="@{/UsuarioFinal/chatbot}"><i class="bi bi-wechat "></i> </a>
+                                                        <a th:if="${usuario.idAgente != null}" class="btn btn-success" th:href="@{'/UsuarioFinal/join-chat?name=' + ${usuario.id}}"><i class="bi bi-wechat "></i> </a>
+
                                                         <!--<a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down-fill me-3"></i>Descargar</a>-->
                                                         <th:block th:switch="${orden.solicitarCancelarOrden}">
                                                             <th:block th:case="0">

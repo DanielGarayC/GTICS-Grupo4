@@ -21,113 +21,132 @@
       <!-- Flag Icons -->
       <!-- Incluir la hoja de estilos de Font Awesome -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">      <style>
-         #cvv-eye-toggle {
-            cursor: pointer;
-            color: #999;
-         }
+      #cvv-eye-toggle {
+         cursor: pointer;
+         color: #999;
+      }
 
-         #cvv-eye-toggle:hover {
-            color: #333;
-         }
-         /* Contenedor de la tarjeta para asegurar que siempre esté centrada */
-         #unique-card-preview {
-            display: flex;
-            justify-content: center;
-            align-items: center; /* Centra verticalmente la tarjeta */
-            height: 200px; /* Asegura que el contenedor tenga suficiente altura para la tarjeta */
-            margin-bottom: 20px;
-            perspective: 1000px;
-            position: relative;
-         }
+      #cvv-eye-toggle:hover {
+         color: #333;
+      }
+      /* Contenedor de la tarjeta para asegurar que siempre esté centrada */
+      #unique-card-preview {
+         display: flex;
+         justify-content: center;
+         align-items: center; /* Centra verticalmente la tarjeta */
+         height: 200px; /* Asegura que el contenedor tenga suficiente altura para la tarjeta */
+         margin-bottom: 20px;
+         perspective: 1000px;
+         position: relative;
+      }
 
-         #unique-card-front, #unique-card-back {
-            width: 300px;
-            height: 180px;
-            background: linear-gradient(135deg, #3b3b3b, #2a2a2a);
-            border-radius: 15px;
-            padding: 20px;
-            color: white;
-            position: absolute; /* Se asegura que tanto la parte frontal como la trasera estén en la misma posición */
-            backface-visibility: hidden;
-            transition: transform 0.6s;
-         }
+      #unique-card-front, #unique-card-back {
+         width: 300px;
+         height: 180px;
+         background: linear-gradient(135deg, #3b3b3b, #2a2a2a);
+         border-radius: 15px;
+         padding: 20px;
+         color: white;
+         position: absolute; /* Se asegura que tanto la parte frontal como la trasera estén en la misma posición */
+         backface-visibility: hidden;
+         transition: transform 0.6s;
+      }
 
-         #unique-card-back {
-            transform: rotateY(180deg);
-         }
+      #unique-card-back {
+         transform: rotateY(180deg);
+      }
 
-         #unique-card-chip {
-            width: 50px;
-            height: 40px;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-         }
+      #unique-card-chip {
+         width: 50px;
+         height: 40px;
+         position: absolute;
+         top: 20px;
+         left: 20px;
+      }
 
-         #unique-card-chip img {
-            width: 100%;
-            height: 100%;
-         }
+      #unique-card-chip img {
+         width: 100%;
+         height: 100%;
+      }
 
-         #unique-card-number {
-            font-size: 20px;
-            letter-spacing: 2px;
-            margin-top: 40px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-align: center;
-         }
+      #unique-card-number {
+         font-size: 20px;
+         letter-spacing: 2px;
+         margin-top: 40px;
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         text-align: center;
+      }
 
-         #unique-card-name {
-            font-size: 14px;
-            text-align: left;
-            margin-top: 20px;
-         }
+      #unique-card-name {
+         font-size: 14px;
+         text-align: left;
+         margin-top: 20px;
+      }
 
-         #unique-card-expiry {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 14px;
-         }
+      #unique-card-expiry {
+         position: absolute;
+         bottom: 20px;
+         right: 20px;
+         font-size: 14px;
+      }
 
-         #unique-card-cvv-back {
-            text-align: right;
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-         }
+      #unique-card-cvv-back {
+         text-align: right;
+         position: absolute;
+         bottom: 20px;
+         right: 20px;
+      }
 
-         #unique-card-preview.flipped #unique-card-front {
-            transform: rotateY(180deg);
-         }
+      #unique-card-preview.flipped #unique-card-front {
+         transform: rotateY(180deg);
+      }
 
-         #unique-card-preview.flipped #unique-card-back {
-            transform: rotateY(0deg);
-         }
+      #unique-card-preview.flipped #unique-card-back {
+         transform: rotateY(0deg);
+      }
 
-         /* Estilos únicos para el grupo de input del CVV */
-         #unique-input-group-cvv {
-            position: relative;
-         }
+      /* Estilos únicos para el grupo de input del CVV */
+      #unique-input-group-cvv {
+         position: relative;
+      }
 
-         #unique-input-group-cvv .btn {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 0;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-         }
+      #unique-input-group-cvv .btn {
+         position: absolute;
+         right: 10px;
+         top: 50%;
+         transform: translateY(-50%);
+         padding: 0;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+      }
 
-         #unique-input-group-cvv .btn i {
-            font-size: 18px;
-            color: #999;
-         }
-      </style>
+      #unique-input-group-cvv .btn i {
+         font-size: 18px;
+         color: #999;
+      }
+
+      #chipsContainer {
+         visibility: visible !important;
+         opacity: 1;
+      }
+
+      .selectable-chip {
+         visibility: visible !important;
+         opacity: 1 !important;
+         background-color: #f8f9fa;
+         color: #212529;
+         transition: background-color 0.3s, color 0.3s;
+      }
+      .selectable-chip.selected {
+         background-color: #007bff !important;
+         color: white !important;
+      }
+
+
+   </style>
    </head>
 
    <body>
@@ -135,11 +154,7 @@
       <script th:src="@{/js/vendors/validation.js}"></script>
 
       <main>
-         <nav class="navbar navbar-light d-flex justify-content-between" style="border-bottom: 2px solid #959ea9">
-            <a class="navbar-brand">
-               <img th:src="@{/images/logo/logoGTICS.jpeg}" width="220" height="auto" class="d-inline-block align-top" alt="Logo de la Empresa" style="margin-left: 50px;">
-            </a>
-         </nav>
+
          <!-- section-->
          <div class="mt-4">
             <div class="container">
@@ -148,12 +163,16 @@
                   <!-- col -->
                   <div class="col-12">
                      <!-- breadcrumb -->
-                     <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0">
-                           <li class="breadcrumb-item"><a th:href="@{/UsuarioFinal/listaProductos}">Tienda</a></li>
-                           <li class="breadcrumb-item active" aria-current="page">Proceso de pago</li>
-                        </ol>
+                     <nav class="navbar navbar-light" style="border-bottom: 2px solid #959ea9; padding: 10px;">
+                        <div class="container d-flex justify-content-between align-items-center">
+                           <a class="navbar-brand" th:href="@{/UsuarioFinal/pagPrincipal}">
+                              <img th:src="@{/images/logo/logoGTICS.jpeg}"  width="220" height="auto" class="d-inline-block align-top" alt="Logo de la Empresa">
+                           </a>
+                           <!-- Botón Regresar alineado correctamente -->
+                           <a th:href="@{/UsuarioFinal/pagPrincipal}" class="btn btn-secondary">Regresar</a>
+                        </div>
                      </nav>
+
                   </div>
                </div>
             </div>
@@ -185,12 +204,12 @@
                               <div class="d-flex justify-content-between align-items-center">
                                  <!-- heading one -->
                                  <a
-                                    href="#"
-                                    class="fs-5 text-inherit collapsed h4"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseOne"
-                                    aria-expanded="true"
-                                    aria-controls="flush-collapseOne">
+                                         href="#"
+                                         class="fs-5 text-inherit collapsed h4"
+                                         data-bs-toggle="collapse"
+                                         data-bs-target="#flush-collapseOne"
+                                         aria-expanded="true"
+                                         aria-controls="flush-collapseOne">
                                     <i class="feather-icon icon-map-pin me-2 text-muted"></i>
                                     Añadir dirección para el delivery
                                  </a>
@@ -199,89 +218,49 @@
                                  <!-- collapse -->
                               </div>
                               <div id="flush-collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushExample">
-                                 
+
                                  <div class="mt-5">
                                     <div class="row">
-                                       <div class="col-xl-6 col-lg-12 col-md-6 col-12 mb-4">
+                                       <!-- Iterar sobre las direcciones del usuario -->
+                                       <div th:each="direccion : ${direcciones}" class="col-xl-6 col-lg-12 col-md-6 col-12 mb-4">
                                           <!-- form -->
                                           <div class="card card-body p-6">
                                              <div class="form-check mb-4">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="homeRadio" checked />
-                                                <label class="form-check-label text-dark" for="homeRadio">Casa</label>
+                                                <!-- Si la dirección es predeterminada, se marca el radio -->
+                                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                                       th:checked="${direccion.predeterminado}" id="direccionRadio"
+                                                />
+                                                <!-- Mostrar la etiqueta de la dirección (Casa, Oficina, etc.) -->
+                                                <label class="form-check-label text-dark" th:text="${direccion.etiqueta.idEtiqueta != null ? direccion.etiqueta.nombreEtiqueta : 'Sin etiqueta'}"></label>
                                              </div>
-                                             <!-- address -->
+                                             <!-- Dirección -->
                                              <address>
-                                                <strong>Adrian Lopez Lopez</strong> <!-- nombre, apellido paterno, apellido materno -->
+                                                <strong th:text="${direccion.nombreContacto}"></strong>
                                                 <br />
-
-                                                Av Universitaria 255, <!-- direccion -->
+                                                <span th:text="${direccion.direccion}"></span>,
                                                 <br />
-
-                                                C.P. 15001,
+                                                Perú, Lima, <span th:text="${direccion.zona.nombreZona != null ? direccion.zona.nombreZona : '-'}"></span>,
+                                                <span th:text="${direccion.distrito.nombre != null ? direccion.distrito.nombre : '-'}"></span>
                                                 <br />
-
-                                                Perú, Lima, Pueblo Libre, <!-- distrito -->
+                                                <abbr title="Phone">Tel: </abbr> +51 <span th:text="${direccion.telefono}"></span>
                                                 <br />
-
-                                                <abbr title="Phone">Tel: +51 963449953</abbr> <!-- telefono -->
-
-                                                <br />
-                                                <abbr title="RUC">RUC: 20552103816</abbr> <!-- nombre, apellido paterno, apellido materno -->
+                                                <abbr title="RUC">RUC: </abbr> <span th:text="${direccion.ruc != null ? direccion.ruc : '-'}"></span>
                                              </address>
-                                       
-                                             <span class="text-danger">Dirección predeterminada</span>
-                                             <!-- btn -->
+
+                                             <!-- Mostrar si es la dirección predeterminada -->
+                                             <span class="text-danger" th:if="${direccion.predeterminado}">Dirección predeterminada</span>
+
+                                             <!-- Botones de acción -->
                                              <div class="mt-4">
-                                                <a href="#" class="text-inherit"
-                                                   data-bs-toggle="modal"
-                                                   data-bs-target="#editModal">Editar</a>
-                                                <a href="#" class="text-danger ms-3"
-                                                   data-bs-toggle="modal"
-                                                   data-bs-target="#deleteModal">Borrar</a>
-                                             </div>
-                                          </div>
-                                          
-                                       </div>
-                                       <div class="col-xl-6 col-lg-12 col-md-6 col-12 mb-4">
-                                          <!-- input -->
-                                          <div class="card card-body p-6">
-                                             <div class="form-check mb-4">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="officeRadio" />
-                                                <label class="form-check-label text-dark" for="officeRadio">Oficina</label>
-                                             </div>
-                                             <address>
-                                                <strong>Nadia Hernandez</strong>
-                                                <br />
-
-                                                Av Universitaria 255,
-                                                <br />
-                                          
-
-                                                C.P. 15001,
-                                                <br />
-                                                Perú, Lima, Pueblo Libre,
-                                                <br />
-
-                                                <abbr title="Phone">Tel: +51 963449953</abbr>
-
-                                                <br />
-                                                <abbr title="RUC">RUC: 20552103816</abbr>
-                                             </address>
-                                              <!-- btn -->
-                                             <div class="mt-4">
-                                                <a href="#" class="text-inherit"
-                                                   data-bs-toggle="modal"
-                                                   data-bs-target="#editModal">Editar</a>
-                                                <a href="#" class="text-danger ms-3"
-                                                   data-bs-toggle="modal"
-                                                   data-bs-target="#deleteModal">Borrar</a>
+                                                <a href="#" class="text-inherit" data-bs-toggle="modal" data-bs-target="#editModal">Editar</a>
+                                                <a href="#" class="text-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal">Borrar</a>
                                              </div>
                                           </div>
                                        </div>
-                                       
                                     </div>
                                  </div>
-                                
+
+
                               </div>
                            </div>
                            <!-- accordion item -->
@@ -293,7 +272,7 @@
                               <!-- collapse -->
                               <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                                  <!-- nav -->
-                                 
+
                                  <!-- tab content -->
                                  <div class="tab-content" id="pills-tabContent">
                                     <!-- tab pane -->
@@ -312,14 +291,14 @@
                                              </div>
                                              <!-- col -->
                                              <div class="col-4">
-                     
-                                                      <span style="white-space: nowrap;">Entrega estimada entre SEP 17 - SEP 20</span>
-                                             
+
+                                                <span style="white-space: nowrap;">Entrega estimada entre SEP 17 - SEP 20</span>
+
                                              </div>
                                              <!-- price -->
                                              <div class="col-3 text-center">S/. 50.00</div>
-                                    
-                                             
+
+
                                           </li>
                                           <!-- list group item -->
                                           <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
@@ -329,20 +308,20 @@
                                                    <!-- form check input -->
                                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
                                                    <span style="width: 120px; background-color: silver;" class="badge ">Entrega Estandar</span>
-                                                  
-                                                   
+
+
                                                 </div>
                                              </div>
                                              <!-- col -->
                                              <div class="col-4">
-                                          
-                                                      <span style="white-space: nowrap;">Entrega estimada entre SEP 20 - SEP 25 </span>
-                                                  
+
+                                                <span style="white-space: nowrap;">Entrega estimada entre SEP 20 - SEP 25 </span>
+
                                              </div>
                                              <!-- price -->
                                              <div class="col-3 text-center">S/. 30.00</div>
-                                    
-                                             
+
+
                                           </li>
                                           <!-- list group item -->
                                           <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
@@ -352,49 +331,49 @@
                                                    <!-- form check input -->
                                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
                                                    <span style="width: 120px;background-color: burlywood;" class="badge">Entrega Económica</span>
-                                                  
+
                                                 </div>
                                              </div>
                                              <!-- col -->
                                              <div class="col-4">
-                                                      <span style="white-space: nowrap;">Entrega estimada entre SEP 25 - SEP 30</span>
-                                                
+                                                <span style="white-space: nowrap;">Entrega estimada entre SEP 25 - SEP 30</span>
+
                                              </div>
                                              <!-- price -->
                                              <div class="col-3 text-center">S/. 20.00</div>
-                                    
-                                           
+
+
                                           </li>
-                                         
+
                                        </ul>
                                     </div>
                                     <div class="tab-pane fade" id="pills-monday" role="tabpanel" aria-labelledby="pills-monday-tab" tabindex="0">
-                                       
+
                                     </div>
                                     <div class="tab-pane fade" id="pills-Tue" role="tabpanel" aria-labelledby="pills-Tue-tab" tabindex="0">
-                                       
+
                                     </div>
                                     <div class="tab-pane fade" id="pills-Wed" role="tabpanel" aria-labelledby="pills-Wed-tab" tabindex="0">
-                                       
+
                                     </div>
                                     <div class="tab-pane fade" id="pills-Thu" role="tabpanel" aria-labelledby="pills-Thu-tab" tabindex="0">
-                                       
+
                                     </div>
                                     <div class="tab-pane fade" id="pills-Fri" role="tabpanel" aria-labelledby="pills-Fri-tab" tabindex="0">
-                                      
+
                                     </div>
                                     <div class="tab-pane fade" id="pills-Sat" role="tabpanel" aria-labelledby="pills-Sat-tab" tabindex="0">
-                                     
+
                                     </div>
                                  </div>
                                  <div class="mt-5 d-flex justify-content-end">
                                     <a
-                                       href="#"
-                                       class="btn btn-outline-gray-400 text-muted"
-                                       data-bs-toggle="collapse"
-                                       data-bs-target="#flush-collapseOne"
-                                       aria-expanded="false"
-                                       aria-controls="flush-collapseOne">
+                                            href="#"
+                                            class="btn btn-outline-gray-400 text-muted"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#flush-collapseOne"
+                                            aria-expanded="false"
+                                            aria-controls="flush-collapseOne">
                                        Anterior
                                     </a>
                                     <a href="#" class="btn btn-primary ms-2" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
@@ -417,12 +396,12 @@
                                     <p class="form-text">Añade instrucciones sobre cómo desean que sea tratada su orden en el proceso de entrega</p>
                                     <div class="mt-5 d-flex justify-content-end">
                                        <a
-                                          href="#"
-                                          class="btn btn-outline-gray-400 text-muted"
-                                          data-bs-toggle="collapse"
-                                          data-bs-target="#flush-collapseTwo"
-                                          aria-expanded="false"
-                                          aria-controls="flush-collapseTwo">
+                                               href="#"
+                                               class="btn btn-outline-gray-400 text-muted"
+                                               data-bs-toggle="collapse"
+                                               data-bs-target="#flush-collapseTwo"
+                                               aria-expanded="false"
+                                               aria-controls="flush-collapseTwo">
                                           Anterior
                                        </a>
                                        <a href="#" class="btn btn-primary ms-2" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
@@ -442,7 +421,7 @@
                               <div id="flush-collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                                  <div class="mt-5">
                                     <div>
-                                    
+
                                        <!-- card -->
                                        <div class="card card-bordered shadow-none mb-2">
                                           <!-- card body -->
@@ -453,21 +432,21 @@
                                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="creditdebitcard" data-bs-toggle="modal" data-bs-target="#addCardModal"/>
                                                    <label class="form-check-label ms-2" for="creditdebitcard"></label>
                                                 </div>
-                                                
+
                                                 <div>
-                                            
+
                                                    <h5 class="mb-1 h6">Tarjeta de crédito/débito</h5>
                                                    <p class="mb-0 small">Transferencia de dinero segura utilizando su cuenta bancaria. Admitimos Mastercard , Visa y American-express.</p>
-                                                   
+
                                                    <ul class="list-inline mb-0">
-                                             
+
                                                       <li class="list-inline-item">
                                                          <a href="#!"><img th:src="@{/images/payment/american-express.svg}" alt="" /></a>
                                                       </li>
                                                       <li class="list-inline-item">
                                                          <a href="#!"><img th:src="@{/images/payment//mastercard.svg}" alt="" /></a>
                                                       </li>
-                        
+
                                                       <li class="list-inline-item">
                                                          <a href="#!"><img th:src="@{/images/payment/visa.svg}" alt="" /></a>
                                                       </li>
@@ -480,22 +459,21 @@
 
                                           </div>
                                        </div>
-                                 
+
                                        <!-- card -->
 
                                        <!-- Button -->
                                        <div class="mt-5 d-flex justify-content-end">
                                           <a
-                                             href="#"
-                                             class="btn btn-outline-gray-400 text-muted"
-                                             data-bs-toggle="collapse"
-                                             data-bs-target="#flush-collapseThree"
-                                             aria-expanded="false"
-                                             aria-controls="flush-collapseThree">
+                                                  href="#"
+                                                  class="btn btn-outline-gray-400 text-muted"
+                                                  data-bs-toggle="collapse"
+                                                  data-bs-target="#flush-collapseThree"
+                                                  aria-expanded="false"
+                                                  aria-controls="flush-collapseThree">
                                              Anterior
                                           </a>
                                           <a href="#" class="btn btn-primary ms-2">Realizar Pedido</a>
-                                          <a th:href="@{/UsuarioFinal/pagPrincipal}" class="btn btn-secondary">Regresar</a>
                                        </div>
                                     </div>
                                  </div>
@@ -589,128 +567,137 @@
          </div>
       </div>
 
-      <!-- Modal -->
+
+
+      <!-- Modal para agregar una nueva dirección -->
       <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
          <div class="modal-dialog">
             <div class="modal-content">
-               <!-- modal body -->
                <div class="modal-body p-6">
                   <div class="d-flex justify-content-between mb-5">
-                     <!-- heading -->
                      <div>
                         <h5 class="h6 mb-1" id="addAddressModalLabel">Añadir nueva dirección</h5>
-                        <p class="small mb-0">Añade una nueva dirección para la entrega del pedido.</p>
+                        <p class="small mb-0">Ingresa la información para la nueva dirección de entrega.</p>
                      </div>
-                     <div>
-                        <!-- button -->
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                     </div>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <!-- row -->
-                  <div class="row g-3">
-                     <div class="col-12">
-                        <label for="CountryName" class="form-label">País/región</label>
-                        <!-- button -->
-                        <select class="form-select">
-                           <option value="IN">Perú</option>
-                           <option value="UK">Brasil</option>
-                           <option value="US">Chile</option>
-                           <option value="AE">Canadá</option>
-                        </select>
-                        
-                     </div>
-                     <!-- col -->
-                     <div class="col-12">
-                        <label for="ContactName" class="form-label">Información personal</label>
-                        <input type="text" class="form-control" placeholder="Nombre del contacto*" aria-label="Nombre del contacto" required="" />
-                     </div>
-                     <!-- col -->
-                     <!-- Número de teléfono -->
-                     <div class="col-12">
-                        <div class="input-group">
-                           <input style="width: 15%;" type="text" class="form-control" id="countryCode" placeholder="Código de país" value="+51"  aria-label="" />
-                           <input style="width: 85%;" type="text" class="form-control" id="phoneNumber" placeholder="Número de teléfono" aria-label="Número de teléfono" required />
+
+                  <!-- Formulario usando Thymeleaf -->
+                  <form th:action="@{/UsuarioFinal/agregarDireccion}" method="post" id="addressForm">
+                     <div class="row g-3">
+                        <!-- Nombre del contacto -->
+                        <div class="col-12">
+                           <label for="nombreContacto" class="form-label">Información personal</label>
+                           <input type="text" class="form-control" id="nombreContacto" name="nombreContacto" placeholder="Nombre del contacto*" required>
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div class="col-12">
+                           <div class="input-group">
+                              <input style="width: 15%;" type="text" class="form-control" value="+51" readonly>
+                              <input style="width: 85%;" type="tel" class="form-control" id="telefono" name="telefono" placeholder="Número de teléfono*" required>
+                           </div>
+                        </div>
+
+                        <!-- Selección de la zona -->
+                        <div class="col-12">
+                           <label for="selectZona" class="form-label">Zona</label>
+                           <select id="selectZona" name="zonaId" class="form-select" required>
+                              <option value="" disabled selected hidden>Selecciona una zona</option>
+                              <option th:each="zona : ${zonas}" th:value="${zona.id}" th:text="${zona.nombreZona}"></option>
+                           </select>
+                        </div>
+
+                        <!-- Selección del distrito -->
+                        <div class="col-12">
+                           <label for="selectDistrito" class="form-label">Distrito</label>
+                           <select id="selectDistrito" name="distritoId" class="form-select" required>
+                              <option value="" disabled selected hidden>Selecciona un distrito</option>
+                           </select>
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="col-12">
+                           <label for="direccion" class="form-label">Dirección</label>
+                           <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Dirección completa*" required>
+                        </div>
+
+                        <!-- Etiquetas -->
+                        <div class="col-12">
+                           <label for="Etiquetas" class="form-label">Etiquetas</label>
+                           <div class="d-flex flex-wrap gap-2 mb-3" id="chipsContainer">
+                              <!-- Mostrar etiquetas predefinidas como chips seleccionables -->
+                              <span th:each="etiquetaPredefinida : ${etiquetasPredefinidas}"
+                                    class="badge selectable-chip"
+                                    th:attr="data-value=${etiquetaPredefinida}"
+                                    style="cursor: pointer;">
+                          <span th:text="${etiquetaPredefinida}"></span>
+                        </span>
+
+                              <!-- Mostrar etiquetas personalizadas como chips seleccionables -->
+                              <span th:each="etiquetaPersonalizada : ${etiquetasPersonalizadas}"
+                                    class="badge selectable-chip"
+                                    th:attr="data-value=${etiquetaPersonalizada.nombreEtiqueta}"
+                                    style="cursor: pointer;">
+                          <span th:text="${etiquetaPersonalizada.nombreEtiqueta}"></span>
+                        </span>
+                           </div>
+
+                           <!-- Campo para añadir una nueva etiqueta personalizada -->
+                           <input type="text" id="customEtiquetaInput" class="form-control" placeholder="Escribe una nueva etiqueta...">
+                           <input type="hidden" id="etiquetaIdInput" name="etiquetaId">
+                        </div>
+
+                        <!-- RUC -->
+                        <div class="col-12">
+                           <label for="aduanas" class="form-label">Número de RUC (Opcional)</label>
+                           <input type="text" class="form-control" id="aduanas" name="aduanas" placeholder="Número de RUC">
+                        </div>
+
+                        <!-- Dirección predeterminada -->
+                        <div class="col-12">
+                           <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="predeterminado" name="predeterminado">
+                              <label class="form-check-label" for="predeterminado">Establecer como dirección predeterminada</label>
+                           </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="col-12 text-end">
+                           <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                           <button type="submit" class="btn btn-primary">Guardar dirección</button>
                         </div>
                      </div>
-                     
-                     <!-- col -->
-                     <div class="col-12">
-                        <label for="direction" class="form-label">Dirección </label>
-                        <input type="text" class="form-control" placeholder="Dirección, apartado posta, etc." aria-label="Dirección" required="" />
-                     </div>
-                     <!-- col -->
-                     <div class="col-12">
-                        <input type="text" class="form-control" placeholder="Apartamento, suite, unidad, etc.(opcional)" aria-label="Apartamento" required="" />
-                     </div>
-                     <!-- col -->
-                     <div class="col-12">
-                        <!-- select -->
-                        <select class="form-select">
-                           <option value="" selected disabled hidden>Provincia</option>
-                           <option >Lima</option>
-                           <option >Cajamarca</option>
-                           <option >La Libertad</option>
-                           <option >Junin</option>
-                        </select>
-                     </div>
-
-                     <!-- col -->
-                     <div class="col-12">
-                        <!-- select -->
-                        <select class="form-select">
-                           <option value="" selected disabled hidden>Distrito</option>
-                           <option >Pueblo Libre</option>
-                           <option >San Miguel</option>
-                           <option >Lince</option>
-                           <option >La Victoria</option>
-                        </select>
-                     </div>
-
-                     <div class="col-12">
-                        <!-- button -->
-                        <input type="text" class="form-control" placeholder="Código postal*" />
-                     </div>
-
-                     <div class="col-12"></div>
-                        <!-- button -->
-                        <label for="Etiquetas" class="form-label"> Etiquetas </label>
-                        <div class="d-flex" style="margin-bottom: 20px; margin-top: -3.5px;">
-                           <a style="flex: 1; margin-right: 5px;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Casa">
-                               <i class="bi bi-house-door"></i> Casa
-                           </a>
-                           <a style="flex: 1; margin-right: 5px;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Oficina">
-                               <i class="bi bi-briefcase"></i> Oficina
-                           </a>
-                           <a style="flex: 1;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Agregar">
-                               <i class="bi bi-plus"></i> Agregar
-                           </a>
-                       </div>
-                     </div>
-                     
-                     <div class="col-12">
-                        <label for="aduanas" class="form-label">Información para aduanas </label>
-                        <!-- button -->
-                        <input type="text" class="form-control" placeholder="Número de RUC*" />
-                        <span class="text-danger">Opcional para importaciones personales.</span>
-                     </div>
-               
-                     <div class="col-12" style="margin-bottom: 10px;">
-                        <div class="form-check">
-                           <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                           <!-- label -->
-                           <label class="form-check-label" for="flexCheckDefault">Establecer como dirección de envío predeterminada</label>
-                        </div>
-                     </div>
-                     <!-- button -->
-                     <div class="col-12 text-end">
-                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
-                        <button class="btn btn-primary" type="button">Guardar dirección</button>
-                     </div>
-                  </div>
+                  </form>
                </div>
             </div>
          </div>
-         <!-- Modal -->
+      </div>
+
+
+
+
+      <!-- Modal para agregar nueva etiqueta -->
+      <div class="modal fade" id="customEtiquetaModal" tabindex="-1" aria-labelledby="customEtiquetaModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="customEtiquetaModalLabel">Añadir nueva etiqueta</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body">
+                  <label for="customEtiquetaInput" class="form-label">Nombre de la etiqueta</label>
+                  <input type="text" class="form-control" id="customEtiquetaInput" placeholder="Introduce un nombre para la etiqueta">
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-primary" id="guardarEtiquetaBtn">Guardar etiqueta</button>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Modal -->
       <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
          <div class="modal-dialog">
             <div class="modal-content">
@@ -729,17 +716,7 @@
                   </div>
                   <!-- row -->
                   <div class="row g-3">
-                     <div class="col-12">
-                        <label for="CountryName" class="form-label">País/región</label>
-                        <!-- button -->
-                        <select class="form-select">
-                           <option value="IN" selected>Perú</option>
-                           <option value="UK">Brasil</option>
-                           <option value="US">Chile</option>
-                           <option value="AE">Canadá</option>
-                        </select>
-                        
-                     </div>
+
                      <!-- col -->
                      <div class="col-12">
                         <label for="ContactName" class="form-label">Información personal</label>
@@ -753,21 +730,12 @@
                            <input style="width: 85%;" type="text" class="form-control" id="phoneNumber" placeholder="Número de teléfono" aria-label="Número de teléfono" value="963447234" />
                         </div>
                      </div>
-                     
-                     <!-- col -->
-                     <div class="col-12">
-                        <label for="direction" class="form-label">Dirección </label>
-                        <input type="text" class="form-control" placeholder="Dirección, apartado posta, etc." aria-label="Dirección" required="" value="Av Universitaria 255"/>
-                     </div>
-                     <!-- col -->
-                     <div class="col-12">
-                        <input type="text" class="form-control" placeholder="Apartamento, suite, unidad, etc.(opcional)" aria-label="Apartamento" required="" />
-                     </div>
+
                      <!-- col -->
                      <div class="col-12">
                         <!-- select -->
                         <select class="form-select">
-                           <option value="" selected disabled hidden>Provincia</option>
+                           <option value="" selected disabled hidden>Zona</option>
                            <option selected >Lima</option>
                            <option >Cajamarca</option>
                            <option >La Libertad</option>
@@ -786,53 +754,53 @@
                            <option selected >La Victoria</option>
                         </select>
                      </div>
-
                      <div class="col-12">
-                        <!-- button -->
-                        <input type="text" class="form-control" placeholder="Código postal*" value="15001"/>
+                        <label for="direction" class="form-label">Dirección </label>
+                        <input type="text" class="form-control" placeholder="Dirección, apartado posta, etc." aria-label="Dirección" required="" value="Av Universitaria 255"/>
                      </div>
+                     <!-- col -->
 
                      <div class="col-12"></div>
-                        <!-- button -->
-                        <label for="Etiquetas" class="form-label"> Etiquetas </label>
-                        <div class="d-flex" style="margin-bottom: 20px; margin-top: -3.5px;">
-                           <a style="flex: 1; margin-right: 5px;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Casa">
-                               <i class="bi bi-house-door"></i> Casa
-                           </a>
-                           <a style="flex: 1; margin-right: 5px;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Oficina">
-                               <i class="bi bi-briefcase"></i> Oficina
-                           </a>
-                           <a style="flex: 1;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Agregar">
-                               <i class="bi bi-plus"></i> Agregar
-                           </a>
-                       </div>
-                     </div>
-                     
-                     <div class="col-12">
-                        <label for="aduanas" class="form-label">Información para aduanas </label>
-                        <!-- button -->
-                        <input type="text" class="form-control" placeholder="Número de RUC*" value="20552103816"/>
-                        <span class="text-danger">Opcional para importaciones personales.</span>
-                     </div>
-               
-                     <div class="col-12" style="margin-bottom: 10px;">
-                        <div class="form-check">
-                           <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                           <!-- label -->
-                           <label class="form-check-label" for="flexCheckDefault" >Establecer como dirección de envío predeterminada</label>
-                        </div>
-                     </div>
                      <!-- button -->
-                     <div class="col-12 text-end">
-                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
-                        <button class="btn btn-primary" type="button">Guardar dirección</button>
+                     <label for="Etiquetas" class="form-label"> Etiquetas </label>
+                     <div class="d-flex" style="margin-bottom: 20px; margin-top: -3.5px;">
+                        <a style="flex: 1; margin-right: 5px;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Casa">
+                           <i class="bi bi-house-door"></i> Casa
+                        </a>
+                        <a style="flex: 1; margin-right: 5px;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Oficina">
+                           <i class="bi bi-briefcase"></i> Oficina
+                        </a>
+                        <a style="flex: 1;" class="btn btn-light" href="#" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Agregar">
+                           <i class="bi bi-plus"></i> Agregar
+                        </a>
                      </div>
+                  </div>
+
+                  <div class="col-12">
+                     <label for="aduanas" class="form-label">Información para aduanas </label>
+                     <!-- button -->
+                     <input type="text" class="form-control" placeholder="Número de RUC*" value="20552103816"/>
+                     <span class="text-danger">Opcional para importaciones personales.</span>
+                  </div>
+
+                  <div class="col-12" style="margin-bottom: 10px;">
+                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                        <!-- label -->
+                        <label class="form-check-label" for="flexCheckDefault" >Establecer como dirección de envío predeterminada</label>
+                     </div>
+                  </div>
+                  <!-- button -->
+                  <div class="col-12 text-end">
+                     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                     <button class="btn btn-primary" type="button">Guardar dirección</button>
                   </div>
                </div>
             </div>
          </div>
-      
-         <!-- Modal -->
+      </div>
+
+      <!-- Modal -->
       <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
          <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -947,22 +915,22 @@
 
 
       <!-- Footer -->
-      
-                  <!-- JavaScript para el formateo automático del número de tarjeta -->
-                  <script>
-                     document.getElementById('card-number2').addEventListener('input', function (e) {
-                        let value = e.target.value.replace(/\D/g, ''); // Elimina cualquier caracter que no sea un número
-                        let formattedValue = '';
 
-                        // Agrupa los números en bloques de 4 separados por guiones
-                        for (let i = 0; i < value.length; i += 4) {
-                           if (i > 0) formattedValue += '-';
-                           formattedValue += value.substr(i, 4);
-                        }
+      <!-- JavaScript para el formateo automático del número de tarjeta -->
+      <script>
+         document.getElementById('card-number2').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Elimina cualquier caracter que no sea un número
+            let formattedValue = '';
 
-                        e.target.value = formattedValue;
-                     });
-                  </script>
+            // Agrupa los números en bloques de 4 separados por guiones
+            for (let i = 0; i < value.length; i += 4) {
+               if (i > 0) formattedValue += '-';
+               formattedValue += value.substr(i, 4);
+            }
+
+            e.target.value = formattedValue;
+         });
+      </script>
       <!-- Javascript-->
       <script th:src="@{/libs/flatpickr/dist/flatpickr.min.js}"></script>
       <!-- Libs JS -->
@@ -1030,6 +998,212 @@
          cvvInput.addEventListener('blur', function () {
             document.getElementById('unique-card-preview').classList.remove('flipped');
          });
+      </script>
+      <script>
+         document.getElementById('selectZona').addEventListener('change', function () {
+            var zonaId = this.value;
+            var distritoSelect = document.getElementById('selectDistrito');
+
+            // Limpiamos el select de distritos
+            distritoSelect.innerHTML = '<option value="" selected disabled hidden>Distrito</option>';
+
+            // Llamamos a la API para obtener los distritos de la zona seleccionada
+            fetch('/UsuarioFinal/distritos/' + zonaId)
+                    .then(response => response.json())
+                    .then(distritos => {
+                       // Iteramos sobre los distritos y los agregamos al select
+                       distritos.forEach(distrito => {
+                          var option = document.createElement('option');
+                          option.value = distrito.id;
+                          option.textContent = distrito.nombre;
+                          distritoSelect.appendChild(option);
+                       });
+                    })
+                    .catch(error => console.error('Error al cargar los distritos:', error));
+         });
+
+      </script>
+      <script>
+         document.querySelectorAll('.btn-light[data-etiqueta-id]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+               var etiquetaId = this.getAttribute('data-etiqueta-id');
+               var etiquetaNombre = this.textContent.trim();
+               document.getElementById('selectedEtiqueta').innerHTML = '<span class="badge bg-primary">' + etiquetaNombre + '</span>';
+               document.getElementById('etiquetaIdInput').value = etiquetaId;
+            });
+         });
+
+         document.getElementById('guardarEtiquetaBtn').addEventListener('click', function () {
+            var etiquetaPersonalizada = document.getElementById('customEtiquetaInput').value.trim();
+            if (etiquetaPersonalizada) {
+               document.getElementById('selectedEtiqueta').innerHTML = '<span class="badge bg-secondary">' + etiquetaPersonalizada + '</span>';
+               document.getElementById('etiquetaIdInput').value = etiquetaPersonalizada;
+               var customEtiquetaModal = new bootstrap.Modal(document.getElementById('customEtiquetaModal'));
+               customEtiquetaModal.hide();
+            }
+         });
+         document.querySelectorAll('input[name="flexRadioDefault"]').forEach(function (radioBtn) {
+            radioBtn.addEventListener('change', function () {
+               if (this.checked) {
+                  document.querySelectorAll('input[name="flexRadioDefault"]').forEach(function (btn) {
+                     if (btn !== radioBtn) {
+                        btn.checked = false;
+                     }
+                  });
+               }
+            });
+         });
+
+      </script>
+      <script>
+         document.addEventListener('DOMContentLoaded', function() {
+            // Función para seleccionar un chip
+            document.querySelectorAll('.selectable-chip').forEach(function(chip) {
+               chip.addEventListener('click', function() {
+                  // Limpiar selección previa
+                  document.querySelectorAll('.selectable-chip').forEach(function(c) {
+                     c.style.backgroundColor = '#f8f9fa';
+                     c.style.color = '#212529';
+                  });
+
+                  // Seleccionar el chip actual
+                  chip.style.backgroundColor = '#007bff';
+                  chip.style.color = 'white';
+
+                  // Actualizar el valor seleccionado en el campo oculto
+                  var etiquetaSeleccionada = chip.getAttribute('data-value');
+                  document.getElementById('etiquetaIdInput').value = etiquetaSeleccionada;
+               });
+            });
+
+            // Agregar nueva etiqueta personalizada
+            document.getElementById('customEtiquetaInput').addEventListener('keydown', function(e) {
+               if (e.key === 'Enter') {
+                  e.preventDefault();
+                  var etiquetaPersonalizada = e.target.value.trim();
+
+                  if (etiquetaPersonalizada) {
+                     // Añadir la nueva etiqueta como chip seleccionable
+                     var nuevaEtiqueta = document.createElement('span');
+                     nuevaEtiqueta.classList.add('badge', 'selectable-chip');
+                     nuevaEtiqueta.style.cursor = 'pointer';
+                     nuevaEtiqueta.setAttribute('data-value', etiquetaPersonalizada);
+                     nuevaEtiqueta.innerText = etiquetaPersonalizada;
+
+                     // Añadir evento de selección a la nueva etiqueta
+                     nuevaEtiqueta.addEventListener('click', function() {
+                        document.querySelectorAll('.selectable-chip').forEach(function(c) {
+                           c.style.backgroundColor = '#f8f9fa';
+                           c.style.color = '#212529';
+                        });
+                        nuevaEtiqueta.style.backgroundColor = '#007bff';
+                        nuevaEtiqueta.style.color = 'white';
+
+                        document.getElementById('etiquetaIdInput').value = etiquetaPersonalizada;
+                     });
+
+                     // Insertar la nueva etiqueta en el contenedor
+                     document.getElementById('chipsContainer').appendChild(nuevaEtiqueta);
+
+                     // Limpiar el campo de texto
+                     e.target.value = '';
+                  }
+               }
+            });
+         });
+
+
+      </script>
+
+      <script>
+         document.getElementById('guardarEtiquetaBtn').addEventListener('click', function () {
+            var etiquetaPersonalizada = document.getElementById('customEtiquetaInput').value.trim();
+            if (etiquetaPersonalizada) {
+               // Guardar la etiqueta personalizada en el servidor
+               fetch('/UsuarioFinal/agregarEtiquetaPersonalizada', {
+                  method: 'POST',
+                  headers: {
+                     'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ nombreEtiqueta: etiquetaPersonalizada }),
+               })
+                       .then(response => response.json())
+                       .then(data => {
+                          if (data.success) {
+                             // Lógica para añadir la nueva etiqueta al DOM
+                             var nuevaEtiqueta = document.createElement('span');
+                             nuevaEtiqueta.classList.add('badge', 'selectable-chip');
+                             nuevaEtiqueta.style.cursor = 'pointer';
+                             nuevaEtiqueta.setAttribute('data-value', etiquetaPersonalizada);
+                             nuevaEtiqueta.innerHTML = etiquetaPersonalizada;
+
+                             // Evento para seleccionar la nueva etiqueta
+                             nuevaEtiqueta.addEventListener('click', function() {
+                                document.querySelectorAll('.selectable-chip').forEach(function(c) {
+                                   c.style.backgroundColor = '#f8f9fa';
+                                   c.style.color = '#212529';
+                                });
+                                nuevaEtiqueta.style.backgroundColor = '#007bff';
+                                nuevaEtiqueta.style.color = 'white';
+                                document.getElementById('etiquetaIdInput').value = etiquetaPersonalizada;
+                             });
+
+                             // Insertar la nueva etiqueta en el contenedor de chips
+                             document.querySelector('#chipsContainer').appendChild(nuevaEtiqueta);
+
+                             // Limpiar el campo de texto
+                             document.getElementById('customEtiquetaInput').value = '';
+
+                             // Cerrar el modal de etiqueta
+                             var customEtiquetaModal = bootstrap.Modal.getInstance(document.getElementById('customEtiquetaModal'));
+                             customEtiquetaModal.hide();
+                          } else {
+                             console.error('Error al guardar la etiqueta personalizada');
+                          }
+                       })
+                       .catch(error => console.error('Error al guardar la etiqueta personalizada:', error));
+            }
+         });
+
+
+      </script>
+      <script>
+         document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.selectable-chip').forEach(function(chip) {
+               chip.style.visibility = 'visible';
+               chip.style.opacity = '1';
+            });
+         });
+
+      </script>
+      <script>
+         document.querySelector('form#addressForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevenir la recarga de la página
+
+            var formData = new FormData(this);
+
+            // Capturar la etiqueta seleccionada
+            var etiquetaSeleccionada = document.getElementById('etiquetaIdInput').value;
+            if (etiquetaSeleccionada) {
+               formData.append('etiquetaId', etiquetaSeleccionada);
+            }
+
+            fetch('/UsuarioFinal/agregarDireccion', {
+               method: 'POST',
+               body: formData
+            })
+                    .then(response => response.text())
+                    .then(data => {
+                       // Manejar la respuesta del servidor si es necesario
+                       var addAddressModal = bootstrap.Modal.getInstance(document.getElementById('addAddressModal'));
+                       addAddressModal.hide();
+
+
+                    })
+                    .catch(error => console.error('Error al guardar la dirección:', error));
+         });
+
+
       </script>
    </body>
 </html>

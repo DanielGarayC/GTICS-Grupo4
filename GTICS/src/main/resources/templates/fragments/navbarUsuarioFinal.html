@@ -170,33 +170,33 @@
                                     <!-- Avatar -->
                                     <li class="list-inline-item dropdown">
                                         <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src="../images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
-
-
+                                            <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-sm rounded-circle" /> <!-- Avatar más pequeño -->
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-end p-0" style="width: 100%; line-height: 0.6rem">
-                                            <div class="lh-1 px-4 py-3 border-bottom text-center">
-                                                <h5 class="mb-1 h6">Nombre Apellido</h5>
-                                                <small>rol en la página</small>
+                                        <div class="dropdown-menu dropdown-menu-end p-0" style="width: 180px; font-size: 0.85rem; padding: 0.5rem;"> <!-- Ajuste de ancho y padding -->
+                                            <div class="lh-1 px-3 py-2 border-bottom text-center">
+                                                <h6 class="mb-1" style="font-size: 0.9rem;">Nombre Apellido</h6> <!-- Ajuste de tamaño de fuente -->
+                                                <small style="font-size: 0.75rem;">rol en la página</small> <!-- Texto más pequeño -->
                                             </div>
-                                            <div class="border-top px-0 py-2">
-                                                <a th:href="@{/UsuarioFinal/miPerfil}" style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
+                                            <div class="border-top px-0 py-1">
+                                                <a th:href="@{/UsuarioFinal/miPerfil}" style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
                                                     Mi perfil
                                                 </a>
                                             </div>
-                                            <div class="border-top px-0 py-2">
+                                            <div class="border-top px-0 py-1">
                                                 <a th:href="@{'UsuarioFinal/solicitudAgente?idUsuario=' + ${usuario.id}}" data-bs-toggle="modal" data-bs-target="#addRequestAgent"
-                                                   style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
+                                                   style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
                                                     Solicitar ser agente
                                                 </a>
                                             </div>
-                                            <div class="border-top px-0 py-2">
-                                                <a href="#" style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
+                                            <div class="border-top px-0 py-1">
+                                                <a th:href="@{/ExpressDealsLogin}" style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
                                                     Cerrar sesión
                                                 </a>
                                             </div>
                                         </div>
                                     </li>
+
+
                                 </ul>
                             </div>
                         </div>
@@ -290,7 +290,7 @@
                                     <!-- Avatar -->
                                     <li class="list-inline-item dropdown">
                                         <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src="../images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+                                            <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end p-0" style="width: 100%; line-height: 0.6rem">
                                             <div class="lh-1 px-4 py-3 border-bottom text-center">
@@ -309,7 +309,7 @@
                                                 </a>
                                             </div>
                                             <div class="border-top px-0 py-2">
-                                                <a href="#" style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
+                                                <a th:href="@{/ExpressDealsController}" style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
                                                     Cerrar sesión
                                                 </a>
                                             </div>

@@ -1,14 +1,13 @@
 package com.example.gtics.controller;
 
-import com.example.gtics.dto.OrdenCarritoDto;
-import com.example.gtics.dto.ProductoDTO;
-import com.example.gtics.dto.ProductosCarritoDto;
-import com.example.gtics.dto.ProductosxOrden;
+import com.example.gtics.dto.*;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
+import com.example.gtics.service.ChatRoomService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 public class UsuarioFinalController {
     private static final Logger logger = LoggerFactory.getLogger(UsuarioFinalController.class);
     private final UsuarioRepository usuarioRepository;
+    private final DireccionRepository direccionRepository;
     private final SolicitudAgenteRepository solicitudAgenteRepository;
     private final FotosProductoRepository fotosProductoRepository;
     private final OrdenRepository ordenRepository;
@@ -63,7 +64,10 @@ public class UsuarioFinalController {
     private final CarritoCompraRepository carritoCompraRepository;
     // Aquí usaremos un HashMap en memoria (o una caché) para simular la relación
     private final Map<Integer, Set<String>> usuariosLikes = new HashMap<>();
-
+    private final ZonaRepository zonaRepository;
+    private final EtiquetaRepository etiquetaRepository;
+    @Autowired
+    private ChatRoomService chatRoomService;
     private boolean usuarioYaDioLike(Resena resena, Usuario usuario) {
         return usuariosLikes.containsKey(resena.getId()) && usuariosLikes.get(resena.getId()).contains(usuario.getEmail());
     }
@@ -87,7 +91,7 @@ public class UsuarioFinalController {
                                   ProductoRepository productoRepository, CategoriaRepository categoriaRepository,
                                   SubcategoriaRepository subcategoriaRepository, CarritoCompraRepository carritoCompraRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
-                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository) {
+                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository,DireccionRepository direccionRepository,ZonaRepository zonaRepository,EtiquetaRepository etiquetaRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.fotosProductoRepository = fotosProductoRepository;
@@ -103,6 +107,9 @@ public class UsuarioFinalController {
         this.subcategoriaRepository=subcategoriaRepository;
         this.productoHasCarritocompraRepository=productoHasCarritocompraRepository;
         this.carritoCompraRepository=carritoCompraRepository;
+        this.direccionRepository=direccionRepository;
+        this.zonaRepository=zonaRepository;
+        this.etiquetaRepository=etiquetaRepository;
     }
 
     @ModelAttribute
@@ -187,6 +194,19 @@ public class UsuarioFinalController {
         attr.addFlashAttribute("msg", "Producto agregado al carrito exitosamente.");
         return "redirect:/UsuarioFinal/listaProductos";
     }
+    @GetMapping("/UsuarioFinal/distritos/{zonaId}")
+    @ResponseBody
+    public List<DistritoDTO> obtenerDistritosPorZona(@PathVariable Integer zonaId) {
+        List<Distrito> distritos = distritoRepository.findByZonaId(zonaId);
+
+        // Convertimos cada entidad Distrito a DTO para evitar problemas de serialización
+        List<DistritoDTO> distritoDTOs = new ArrayList<>();
+        for (Distrito distrito : distritos) {
+            distritoDTOs.add(new DistritoDTO(distrito.getId(), distrito.getNombre()));
+        }
+
+        return distritoDTOs; // Devolvemos la lista de DTOs
+    }
 
     @Transactional
     @DeleteMapping("/UsuarioFinal/eliminarProductoCarrito/{idProducto}")
@@ -267,13 +287,57 @@ public class UsuarioFinalController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
+        List<Zona> zonas = zonaRepository.findAll(); // Asegúrate de que estás trayendo todas las zonas
+        model.addAttribute("zonas", zonas);
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             String email = authentication.getName();
             Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
             if (optUsuario.isPresent()) {
                 Usuario usuario = optUsuario.get();
+// Obtener etiquetas predefinidas
+                List<String> etiquetasPredefinidas = Arrays.asList("Casa", "Oficina");
 
+                // Obtener etiquetas personalizadas del usuario
+                List<Etiqueta> etiquetasPersonalizadas = etiquetaRepository.findByUsuario(usuario);
+
+                // Pasar etiquetas al modelo para mostrarlas en la vista
+                model.addAttribute("etiquetasPredefinidas", etiquetasPredefinidas);
+                model.addAttribute("etiquetasPersonalizadas", etiquetasPersonalizadas);
+                // Busca las direcciones del usuario
+                List<Direccion> direcciones = direccionRepository.findByUsuario(usuario);
+                model.addAttribute("direcciones", direcciones);
+                // Si el usuario no tiene su dirección generada
+                if (!usuario.isDirecciongenerada()) {
+                    // Creamos una dirección predeterminada automáticamente
+                    Direccion nuevaDireccion = new Direccion();
+                    nuevaDireccion.setUsuario(usuario);
+
+                    // Concatenamos el nombre completo del usuario
+                    String nombreCompleto = usuario.getNombre() + " " + usuario.getApellidoPaterno() + " " + usuario.getApellidoMaterno();
+                    nuevaDireccion.setNombreContacto(nombreCompleto);
+
+                    // Asignamos el teléfono y la dirección del usuario
+                    nuevaDireccion.setTelefono(usuario.getTelefono());
+                    nuevaDireccion.setDireccion(usuario.getDireccion());
+
+                    // Asignamos el distrito y la zona del usuario
+                    nuevaDireccion.setDistrito(usuario.getDistrito());
+                    nuevaDireccion.setZona(usuario.getZona());
+
+                    // Si el usuario no tiene RUC, dejamos el campo vacío
+                    nuevaDireccion.setRuc(usuario.getAgtRuc() != null ? usuario.getAgtRuc() : "-");
+
+                    // Establecemos como predeterminada
+                    nuevaDireccion.setPredeterminado(true);
+
+                    // Guardamos la dirección en la base de datos
+                    direccionRepository.save(nuevaDireccion);
+
+                    // Marcamos en el usuario que ya tiene su dirección generada
+                    usuario.setDirecciongenerada(true);
+                    usuarioRepository.save(usuario); // Actualizamos el campo en la base de datos
+                }
                 // Busca el carrito activo del usuario
                 Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
                 if (carritoOpt.isPresent()) {
@@ -316,6 +380,80 @@ public class UsuarioFinalController {
         return "UsuarioFinal/ProcesoCompra/proceso_compra";
     }
 
+    @PostMapping("/UsuarioFinal/agregarEtiquetaPersonalizada")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> agregarEtiquetaPersonalizada(@RequestBody EtiquetaForm etiquetaForm, Principal principal) {
+        String email = principal.getName();
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Guardar la etiqueta personalizada
+        Etiqueta etiqueta = new Etiqueta();
+        etiqueta.setNombreEtiqueta(etiquetaForm.getNombreEtiqueta());
+        etiqueta.setUsuario(usuario);
+        etiquetaRepository.save(etiqueta);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        return ResponseEntity.ok(response);
+    }
+
+
+
+
+    @PostMapping("/UsuarioFinal/agregarDireccion")
+    public String agregarDireccion(@ModelAttribute DireccionForm direccionForm, RedirectAttributes attr) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName();
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+            if (optUsuario.isPresent()) {
+                Usuario usuario = optUsuario.get();
+
+                // Si la dirección es predeterminada, actualizar las demás
+                if (direccionForm.isPredeterminado()) {
+                    direccionRepository.updatePredeterminadaByUsuario(usuario.getId());
+                }
+
+                // Crear y guardar la nueva dirección
+                Direccion nuevaDireccion = new Direccion();
+                nuevaDireccion.setUsuario(usuario);
+                nuevaDireccion.setNombreContacto(direccionForm.getNombreContacto());
+                nuevaDireccion.setTelefono(direccionForm.getTelefono());
+                nuevaDireccion.setDireccion(direccionForm.getDireccion());
+                nuevaDireccion.setDistrito(distritoRepository.findById(direccionForm.getDistritoId()).orElse(null));
+                nuevaDireccion.setZona(zonaRepository.findById(direccionForm.getZonaId()).orElse(null));
+                nuevaDireccion.setPredeterminado(direccionForm.isPredeterminado());
+
+                // Asignar etiqueta (predefinida o personalizada)
+                if (direccionForm.getEtiquetaId() != null && direccionForm.getEtiquetaId().matches("\\d+")) {
+                    Etiqueta etiqueta = etiquetaRepository.findById(Integer.parseInt(direccionForm.getEtiquetaId())).orElse(null);
+                    nuevaDireccion.setEtiqueta(etiqueta);
+                } else if (direccionForm.getEtiquetaId() != null) {
+                    Etiqueta nuevaEtiqueta = new Etiqueta();
+                    nuevaEtiqueta.setNombreEtiqueta(direccionForm.getEtiquetaId());
+                    nuevaEtiqueta.setUsuario(usuario);
+                    etiquetaRepository.save(nuevaEtiqueta);
+                    nuevaDireccion.setEtiqueta(nuevaEtiqueta);
+                }
+
+                // Guardar la nueva dirección
+                direccionRepository.save(nuevaDireccion);
+                attr.addFlashAttribute("msg", "Dirección agregada exitosamente.");
+            } else {
+                attr.addFlashAttribute("error", "Usuario no encontrado.");
+                return "redirect:/login";
+            }
+        } else {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/login";
+        }
+
+        return "redirect:/UsuarioFinal/procesoCompra";
+    }
+
+
     @PostMapping("/UsuarioFinal/procesarOrden")
     public String procesarOrden(@RequestParam("idOrden") Integer idOrden, RedirectAttributes attr) {
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
@@ -350,6 +488,37 @@ public class UsuarioFinalController {
 
             if (usuarioOpt.isPresent()) {
                 Usuario usuario = usuarioOpt.get();
+// Verifica si ya tiene la dirección generada
+                if (!usuario.isDirecciongenerada()) {
+                    Direccion nuevaDireccion = new Direccion();
+                    nuevaDireccion.setUsuario(usuario);
+
+                    // Concatenamos el nombre completo del usuario
+                    String nombreCompleto = usuario.getNombre() + " " + usuario.getApellidoPaterno() + " " + usuario.getApellidoMaterno();
+                    nuevaDireccion.setNombreContacto(nombreCompleto);
+
+                    // Asignamos el teléfono y la dirección del usuario
+                    nuevaDireccion.setTelefono(usuario.getTelefono());
+                    nuevaDireccion.setDireccion(usuario.getDireccion());
+
+                    // Asignamos el distrito y la zona del usuario
+                    nuevaDireccion.setDistrito(usuario.getDistrito());
+                    nuevaDireccion.setZona(usuario.getZona());
+
+                    // Si el usuario no tiene RUC, dejamos el campo vacío
+                    nuevaDireccion.setRuc(usuario.getAgtRuc() != null ? usuario.getAgtRuc() : "-");
+
+                    // Establecemos como predeterminada
+                    nuevaDireccion.setPredeterminado(true);
+
+                    // Guardamos la dirección en la base de datos
+                    direccionRepository.save(nuevaDireccion);
+
+                    // Marcamos en el usuario que ya tiene su dirección generada
+                    usuario.setDirecciongenerada(true);
+                    usuarioRepository.save(usuario); // Actualizamos el campo en la base de datos
+                }
+
                 Pageable pageable = PageRequest.of(0, 5); // Página 0 con 5 órdenes
 
                 // Obtener las órdenes más recientes del usuario usando el DTO que ya tienes
@@ -984,7 +1153,7 @@ public class UsuarioFinalController {
 
 
 
-    @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
+     @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
     public String guardarResena(@Valid @ModelAttribute("resena") Resena resena,
                                 BindingResult bindingResult,
                                 @RequestParam(value = "uploadedPhotos", required = false) MultipartFile[] uploadedPhotos,
@@ -1013,17 +1182,24 @@ public class UsuarioFinalController {
         // Process uploaded photos
         if (uploadedPhotos != null && uploadedPhotos.length > 0) {
             List<Fotosresena> fotosResenaList = new ArrayList<>();
+
             for (MultipartFile uploadedPhoto : uploadedPhotos) {
                 if (!uploadedPhoto.isEmpty()) {
+                    if (uploadedPhoto.getSize() > 5000000) { //5MB
+
+                        attr.addFlashAttribute("error", "El tamaño de la foto excede el límite permitido.");
+                        return "redirect:/UsuarioFinal/Review";
+                    }
                     try {
                         Fotosresena fotosresena = new Fotosresena();
+
                         fotosresena.setFoto(uploadedPhoto.getBytes());
                         fotosresena.setTipo(uploadedPhoto.getContentType());
                         fotosresena.setIdResena(resena); // Associate the photo with the review
                         fotosResenaList.add(fotosresena);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        attr.addFlashAttribute("error", "Ocurrió un error al procesar las fotos.");
+                        attr.addFlashAttribute("error", "Error al subir la foto. Intente nuevamente.");
                         return "redirect:/UsuarioFinal/Review";
                     }
                 }
@@ -1044,9 +1220,27 @@ public class UsuarioFinalController {
         return "UsuarioFinal/ProcesoCompra/chatbot";
     }
     @GetMapping("/UsuarioFinal/chatSoporte")
-    public String chatSoporte(){
-
-        return "UsuarioFinal/ProcesoCompra/chatSoporte";
+    public ModelAndView getChatPage(String room, String name) {
+        ModelAndView modelAndView = new ModelAndView("UsuarioFinal/chatUsuario");
+        modelAndView.addObject("room", room);
+        modelAndView.addObject("name", name);
+        return modelAndView;
+    }
+    @GetMapping("UsuarioFinal/join-chat")
+    public ModelAndView joinChat(@RequestParam("name") String name) {
+        // Crear o redirigir al usuario a su sala
+        String room = chatRoomService.createOrJoinRoom(name);
+        Optional<Usuario> user1 = usuarioRepository.findById(Integer.parseInt(name));
+        Usuario u = new Usuario();
+        if(user1.isPresent()){
+            u = user1.get();
+        }
+        String nombreUsuario = u.getNombre() + "_" + u.getApellidoPaterno();
+        // Redirigir al usuario a la sala asignada
+        ModelAndView modelAndView = new ModelAndView("redirect:/UsuarioFinal/chatSoporte");
+        modelAndView.addObject("room", room);
+        modelAndView.addObject("name", nombreUsuario);
+        return modelAndView;
     }
     @GetMapping("/UsuarioFinal/foro")
     public String verForo(){
