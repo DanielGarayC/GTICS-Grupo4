@@ -412,7 +412,6 @@
         <!--- fin navbar pantallas pequeñas -->
 
         <!--- modal postular a agente -->
-        <!-- Modal -->
         <div class="modal fade" id="addRequestAgent" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -431,40 +430,38 @@
                         </div>
                         <!-- row -->
                         <form class="row g-3" method="post" th:action="@{/UsuarioFinal/solicitudAgente}">
-                            <!-- col -->
+                            <!-- Información personal -->
                             <div class="col-12">
                                 <label for="ContactName" class="form-label">Información personal</label>
-                                <input type="text" class="form-control" th:field="${usuario.nombre} " aria-label="Nombre del contacto" required="" disabled/>
+                                <input type="text" class="form-control" th:value="${usuario.nombre}" aria-label="Nombre del contacto" disabled />
                             </div>
-                            <!-- col -->
+                            <!-- Dirección -->
                             <div class="col-12">
-                                <label for="direction" class="form-label">Dirección </label>
-                                <input type="text" class="form-control" th:field="${usuario.direccion} " aria-label="Dirección" required="" disabled/>
+                                <label for="direction" class="form-label">Dirección</label>
+                                <input type="text" class="form-control" th:value="${usuario.direccion}" aria-label="Dirección" disabled />
                             </div>
-                            <!-- col -->
+                            <!-- Zona -->
                             <div class="col-12">
-                                <label for="direction" class="form-label">Zona </label>
-                                <input type="text" class="form-control" th:field="${usuario.zona.nombreZona}" aria-label="Dirección" required="" disabled/>
+                                <label for="zone" class="form-label">Zona</label>
+                                <input type="text" class="form-control" th:value="${usuario.zona.nombreZona}" aria-label="Zona" disabled />
                             </div>
-                            <!-- col -->
+                            <!-- Distrito -->
                             <div class="col-12">
-                                <label for="direction" class="form-label">Distrto </label>
-                                <input type="text" class="form-control" th:field="${usuario.distrito.nombre}"  aria-label="Dirección" required="" disabled/>
+                                <label for="district" class="form-label">Distrito</label>
+                                <input type="text" class="form-control" th:value="${usuario.distrito.nombre}" aria-label="Distrito" disabled />
                             </div>
-                            <!-- col -->
+                            <!-- Código de jurisdicción -->
                             <div class="col-12">
-                                <label for="direction" class="form-label">Código de jurisdicción </label>
-                                <input type="text" class="form-control" th:field="${usuario.agtCodigojurisdiccion}" aria-label="Dirección" required="" disabled/>
+                                <label for="codigoJurisdiccion" class="form-label">Código de jurisdicción</label>
+                                <input type="text" class="form-control" name="codigoJurisdiccion" placeholder="Ingrese su código de jurisdicción" required />
                             </div>
-                            <!-- col -->
+                            <!-- Código de aduana -->
                             <div class="col-12">
-                                <label for="direction" class="form-label">Código de aduana </label>
-                                <input type="text" class="form-control" name="codigoAduana" placeholder="numeroAleatorio" aria-label="Dirección" required="" />
+                                <label for="codigoAduana" class="form-label">Código de aduana</label>
+                                <input type="text" class="form-control" name="codigoAduana" placeholder="Ingrese su código de Aduana" required />
                             </div>
 
-                            <div class="col-12" style="margin-bottom: 10px;">
-                            </div>
-                            <!-- button -->
+                            <!-- Botones -->
                             <div class="col-12 text-end">
                                 <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
                                 <button class="btn btn-primary" type="submit">Enviar solicitud</button>
@@ -527,11 +524,12 @@
                                 <div class="col-4 col-md-3 col-lg-5">
                                     <form th:action="@{/UsuarioFinal/actualizarCantidadCarrito}" method="post" class="d-flex align-items-center">
                                         <input type="hidden" name="idProducto" th:value="${producto.idProducto}" />
-                                        <div class="input-group input-spinner" style="max-width: 160px;">
-                                            <input type="button" value="-" class="button-minus btn btn-sm btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" />
-                                            <input type="number" name="nuevaCantidad" th:value="${producto.cantidadProducto}" step="1" max="10" min="1" class="quantity-field form-control-sm text-center" style="max-width: 50px;" />
-                                            <input type="button" value="+" class="button-plus btn btn-sm btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" />
+                                        <div class="input-group input-spinner" style="max-width: 120px; display: flex; align-items: center;">
+                                            <input type="button" value="-" class="button-minus btn btn-xs btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" style="width: 30px; padding: 0;"/>
+                                            <input type="number" name="nuevaCantidad" th:value="${producto.cantidadProducto}" step="1" max="10" min="1" class="quantity-field form-control text-center" style="max-width: 40px; height: 30px; padding: 0;" />
+                                            <input type="button" value="+" class="button-plus btn btn-xs btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" style="width: 30px; padding: 0;"/>
                                         </div>
+
                                         <button type="submit" class="btn btn-primary btn-sm ms-2">Actualizar</button>
                                     </form>
                                 </div>

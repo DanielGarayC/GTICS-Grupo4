@@ -26,12 +26,12 @@ public class Usuario {
 
 
     @Column(name = "email", nullable = false, length = 45)
-    @Email(message = "Debe ingresar un correo electrónico válido", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
-    @NotBlank(message = "Debe ingresar un correo electrónico", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
+    @Email(message = "Debe ingresar un correo electrónico válido", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
+    @NotBlank(message = "Debe ingresar un correo electrónico", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
     private String email;
 
     @Column(name = "direccion", nullable = false, length = 45)
-    @NotBlank(message = "Debe ingresar una dirección", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
+    @NotBlank(message = "Debe ingresar una dirección", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
     private String direccion;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -84,15 +84,15 @@ public class Usuario {
 
 
     @Column(name = "telefono", nullable = false, length = 45)
-    @Size(min = 9, max = 9, message = "El teléfono debe tener exactamente 9 dígitos", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
+    @Size(min = 9, max = 9, message = "El teléfono debe tener exactamente 9 dígitos", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
     @NotBlank(message = "Debe ingresar un número de teléfono", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
     @Pattern(regexp = "\\d+", message = "El teléfono debe contener solo dígitos", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
     private String telefono;
 
     @Column(name = "dni", nullable = false, length = 45)
-    @Size(min = 8, max = 8, message = "El dni debe tener exactamente 8 dígitos", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
-    @NotBlank(message = "Debe ingresar un número de dni", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
-    @Pattern(regexp = "\\d+", message = "El dni debe contener solo dígitos", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
+    @Size(min = 8, max = 8, message = "El dni debe tener exactamente 8 dígitos", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
+    @NotBlank(message = "Debe ingresar un número de dni", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
+    @Pattern(regexp = "\\d+", message = "El dni debe contener solo dígitos", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
     private String dni;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -100,13 +100,13 @@ public class Usuario {
     private Zona zona;
 
     @Column(name = "apellidopaterno", nullable = false, length = 45)
-    @NotBlank(message = "Debe ingresar un apellido paterno", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
-    @Size(max = 20, message = "El apellido paterno no puede tener más de 20 caracteres", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
+    @NotBlank(message = "Debe ingresar un apellido paterno", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
+    @Size(max = 20, message = "El apellido paterno no puede tener más de 20 caracteres", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
     private String apellidoPaterno;
 
     @Column(name = "apellidomaterno", nullable = false, length = 45)
-    @NotBlank(message = "Debe ingresar un apellido materno", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
-    @Size(max = 20, message = "El apellido materno no puede tener más de 20 caracteres", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class})
+    @NotBlank(message = "Debe ingresar un apellido materno", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
+    @Size(max = 20, message = "El apellido materno no puede tener más de 20 caracteres", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class})
     private String apellidoMaterno;
 
     @Column(name = "contrasena", nullable = false, length = 45)

@@ -1,6 +1,8 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.ValidationGroup.AgenteValidationGroup;
 import com.example.gtics.ValidationGroup.InventarioProductosValidationGroup;
+import com.example.gtics.ValidationGroup.UsuarioFinalValidationGroup;
 import com.example.gtics.dto.solAgente;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
@@ -280,11 +282,15 @@ public class SuperAdminController {
 
 
     @GetMapping("SuperAdmin/editarAgente/{id}")
-    public String editarAgente(@PathVariable("id") Integer id, Model model) {
+    public String editarAgente(@ModelAttribute("agente") Usuario agente, @PathVariable("id") Integer id, Model model) {
         try {
             Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
             if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 3) {
                 model.addAttribute("agente", optionalAgente.get());
+                Usuario eigent = optionalAgente.get();
+                System.out.println("Código de Aduana: " + eigent.getAgtCodigoaduana());
+                System.out.println("Estado de Aduana: " + usuarioRepository.findEstadoAduana(eigent.getAgtCodigoaduana()));
+                model.addAttribute("estado",usuarioRepository.findEstadoAduana(eigent.getAgtCodigoaduana()));
             } else {
                 model.addAttribute("error", "Agente no encontrado o el rol no es válido");
                 return "SuperAdmin/GestionAgentes/agent-list";  // Redirigir a la lista si no se encuentra el agente
@@ -311,7 +317,58 @@ public class SuperAdminController {
     }
 
     @PostMapping("/SuperAdmin/Agente/guardar")
-    public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model, @RequestParam("agentPhoto") MultipartFile foto) {
+    public String guardarAgente(@ModelAttribute("agente") @Validated(AgenteValidationGroup.class) Usuario agente, BindingResult bindingResult, Model model, @RequestParam("agentPhoto") MultipartFile foto) {
+
+        System.out.println("Llega al método guardarAgente");
+        if(bindingResult.hasErrors()){
+            // Validación de DNI con prioridad
+            if (bindingResult.hasFieldErrors("dni")) {
+                if (bindingResult.getFieldError("dni").getCode().equals("NotBlank")) {
+                    model.addAttribute("dniError", "Debe ingresar un número de DNI");
+                } else if (bindingResult.getFieldError("dni").getCode().equals("Size")) {
+                    model.addAttribute("dniError", "El DNI debe tener exactamente 8 dígitos");
+                } else if (bindingResult.getFieldError("dni").getCode().equals("Pattern")) {
+                    model.addAttribute("dniError", "El DNI debe contener solo dígitos");
+                }
+            }
+
+            // Validación de Teléfono con prioridad
+            if (bindingResult.hasFieldErrors("telefono")) {
+                if (bindingResult.getFieldError("telefono").getCode().equals("NotBlank")) {
+                    model.addAttribute("telefonoError", "Debe ingresar un número de teléfono");
+                } else if (bindingResult.getFieldError("telefono").getCode().equals("Size")) {
+                    model.addAttribute("telefonoError", "El teléfono debe tener exactamente 9 dígitos");
+                } else if (bindingResult.getFieldError("telefono").getCode().equals("Pattern")) {
+                    model.addAttribute("telefonoError", "El teléfono debe contener solo dígitos");
+                }
+            }
+
+            // Prioridad en otros campos...
+            if (bindingResult.hasFieldErrors("agtCodigojurisdiccion")) {
+                if (bindingResult.getFieldError("agtCodigojurisdiccion").getCode().equals("NotBlank")) {
+                    model.addAttribute("agtCodigojurisdiccionError", "El código de jurisdicción no puede estar vacío");
+                } else if (bindingResult.getFieldError("agtCodigojurisdiccion").getCode().equals("Size")) {
+                    model.addAttribute("agtCodigojurisdiccionError", "El código de jurisdicción debe tener entre 4 y 6 dígitos");
+                } else if (bindingResult.getFieldError("agtCodigojurisdiccion").getCode().equals("Pattern")) {
+                    model.addAttribute("agtCodigojurisdiccionError", "El código de jurisdicción debe contener solo dígitos");
+                }
+            }
+
+            if (bindingResult.hasFieldErrors("agtCodigoaduana")) {
+                if (bindingResult.getFieldError("agtCodigoaduana").getCode().equals("NotBlank")) {
+                    model.addAttribute("agtCodigoaduanaError", "El código aduanero no puede estar vacío");
+                } else if (bindingResult.getFieldError("agtCodigoaduana").getCode().equals("Size")) {
+                    model.addAttribute("agtCodigoaduanaError", "El código aduanero debe tener exactamente 6 dígitos");
+                } else if (bindingResult.getFieldError("agtCodigoaduana").getCode().equals("Pattern")) {
+                    model.addAttribute("agtCodigoaduanaError", "El código aduanero debe contener solo dígitos");
+                }
+            }
+
+
+            model.addAttribute("zonas", zonaRepository.findAll());
+            return "SuperAdmin/GestionAgentes/agent-edit";
+        }
+
         try {
             // Buscar el agente existente
             Usuario agenteExistente = usuarioRepository.findById(agente.getId())
@@ -363,8 +420,7 @@ public class SuperAdminController {
 
         return "redirect:/SuperAdmin/listaAgente";
     }
-
-
+    
     @GetMapping("/SuperAdmin/eliminarAgente")
     public String eliminarAgente(@RequestParam("id") int id, RedirectAttributes attr) {
         Optional<Usuario> optProduct = usuarioRepository.findById(id);
@@ -526,32 +582,66 @@ public class SuperAdminController {
         return "SuperAdmin/GestionUsuarioFinal/create-final-user";
     }
 
-    @GetMapping("SuperAdmin/editarUsuarioFinal/{id}")
+    @GetMapping("/SuperAdmin/editarUsuarioFinal/{id}")
     public String editarUsuarioFinal(Model model, @PathVariable("id") Integer idUsuarioFinal) {
         Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
         List<Distrito> listaDistritos = distritoRepository.findAll();
         model.addAttribute("listaDistritos", listaDistritos);
-        model.addAttribute("finalUser", finalUser);
+        model.addAttribute("finalUser", finalUser.get());
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
     }
 
-    @GetMapping("SuperAdmin/verUsuarioFinal/{id}")
+    @GetMapping("/SuperAdmin/verUsuarioFinal/{id}")
     public String verUsuarioFinal(Model model, @PathVariable("id") Integer idUsuarioFinal) {
         Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
-        model.addAttribute("finalUser", finalUser);
+        model.addAttribute("finalUser", finalUser.get());
         return "SuperAdmin/GestionUsuarioFinal/final-user-info";
     }
 
-    @PostMapping("SuperAdmin/Actualizar/{id}")
-    public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal, @RequestParam("UserPhoto") MultipartFile foto) throws IOException {
+    @PostMapping("/SuperAdmin/UsuarioFinal/Actualizar")
+    public String actualizarUsuarioFinal(@ModelAttribute("usuario") @Validated(UsuarioFinalValidationGroup.class) Usuario usuario, BindingResult bindingResult, Model model, @RequestParam("UserPhoto") MultipartFile foto) throws IOException {
+
+        System.out.println("Llega al método guardarUsuario");
+        if(bindingResult.hasErrors()){
+            // Validación de DNI con prioridad
+            if (bindingResult.hasFieldErrors("dni")) {
+                if (bindingResult.getFieldError("dni").getCode().equals("NotBlank")) {
+                    model.addAttribute("dniError", "Debe ingresar un número de DNI");
+                } else if (bindingResult.getFieldError("dni").getCode().equals("Size")) {
+                    model.addAttribute("dniError", "El DNI debe tener exactamente 8 dígitos");
+                } else if (bindingResult.getFieldError("dni").getCode().equals("Pattern")) {
+                    model.addAttribute("dniError", "El DNI debe contener solo dígitos");
+                }
+            }
+
+            // Validación de Teléfono con prioridad
+            if (bindingResult.hasFieldErrors("telefono")) {
+                if (bindingResult.getFieldError("telefono").getCode().equals("NotBlank")) {
+                    model.addAttribute("telefonoError", "Debe ingresar un número de teléfono");
+                } else if (bindingResult.getFieldError("telefono").getCode().equals("Size")) {
+                    model.addAttribute("telefonoError", "El teléfono debe tener exactamente 9 dígitos");
+                } else if (bindingResult.getFieldError("telefono").getCode().equals("Pattern")) {
+                    model.addAttribute("telefonoError", "El teléfono debe contener solo dígitos");
+                }
+            }
+
+
+
+
+            List<Distrito> listaDistritos = distritoRepository.findAll();
+            model.addAttribute("listaDistritos", listaDistritos);
+            return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
+        }
+
+
         if (foto.isEmpty()) {
-            Usuario finalUser = usuarioRepository.findById(idUsuarioFinal).get();
-            usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(), idUsuarioFinal);
+            Usuario finalUser = usuarioRepository.findById(usuario.getId()).get();
+            usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(), usuario.getId());
         } else {
             try {
                 byte[] fotoBytes = foto.getBytes();
                 usuario.setFoto(fotoBytes);
-                usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(), idUsuarioFinal);
+                usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(), usuario.getId());
             } catch (IOException ignored) {
 
             }
