@@ -744,30 +744,37 @@ public class UsuarioFinalController {
     }
 
     @GetMapping("/UsuarioFinal/listaProductos")
-    public String mostrarListaProductos(Model model) {
+    public String mostrarListaProductos(Model model, Authentication authentication) {
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
 
-        if (!categorias.isEmpty()) {
-            Categoria categoria = categorias.get(0); // Primera categoría de la lista
-            List<Producto> productos = productoRepository.findProductosPorCategoria(categoria.getId());
-            model.addAttribute("productos", productos);
-            model.addAttribute("categoria", categoria);
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName(); // Obtener el email del usuario autenticado
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
-            // Si hay productos en la categoría, pasar el primer producto y sus detalles al modelo
-            if (!productos.isEmpty()) {
-                Producto producto = productos.get(0); // Primer producto de la lista
-                model.addAttribute("producto", producto);
-                model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
-                String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
-                model.addAttribute("fechaFormateada", fechaFormateada);
+            if (usuarioOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                Zona zonaUsuario = usuario.getZona(); // Obtener la zona del usuario
+
+                // Filtrar los productos por la zona del usuario
+                List<Producto> productos = productoRepository.findProductosPorZona(zonaUsuario.getId());
+
+                model.addAttribute("productos", productos);
+
+                // Si hay productos, pasar el primero y sus detalles al modelo
+                if (!productos.isEmpty()) {
+                    Producto producto = productos.get(0); // Primer producto de la lista
+                    model.addAttribute("producto", producto);
+                    model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+                    String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+                    model.addAttribute("fechaFormateada", fechaFormateada);
+                }
             }
-        } else {
-            model.addAttribute("productos", List.of()); // Lista vacía si no hay categorías
         }
 
         return "UsuarioFinal/Productos/listaProductos";
     }
+
 
     @GetMapping("/UsuarioFinal/detallesProducto/{idProducto}")
     public String mostrarDetallesProducto(@PathVariable("idProducto") Integer idProducto, Model model) {
@@ -798,77 +805,84 @@ public class UsuarioFinalController {
     public String mostrarProductosPorCategorias(
             @PathVariable("idCategoria") Integer idCategoria,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "default") String sortOrder,  // Parámetro de ordenamiento
+            @RequestParam(defaultValue = "default") String sortOrder, // Parámetro de ordenamiento
+            Authentication authentication,
             Model model) {
 
-        // Buscar la categoría por ID
-        Optional<Categoria> categoriaOpt = categoriaRepository.findById(idCategoria);
-        List<Categoria> categorias = categoriaRepository.findAll();
-        model.addAttribute("categorias", categorias);
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName(); // Obtener el email del usuario autenticado
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
-        if (categoriaOpt.isPresent()) {
-            Categoria categoria = categoriaOpt.get();
-            List<Subcategoria> subcategorias = categoria.getSubcategorias();
+            // Buscar la categoría por ID
+            Optional<Categoria> categoriaOpt = categoriaRepository.findById(idCategoria);
+            List<Categoria> categorias = categoriaRepository.findAll();
+            model.addAttribute("categorias", categorias);
 
-            // Añadir atributos de la categoría y subcategorías al modelo
-            model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
-            model.addAttribute("subcategorias", subcategorias);
+            if (usuarioOpt.isPresent() && categoriaOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                Zona zonaUsuario = usuario.getZona();  // Obtener la zona del usuario
+                Categoria categoria = categoriaOpt.get();
+                List<Subcategoria> subcategorias = categoria.getSubcategorias();
 
-            // Definir el criterio de ordenamiento
-            Sort sort = Sort.unsorted();  // Orden predeterminado
-            if ("asc".equals(sortOrder)) {
-                sort = Sort.by("precio").ascending();  // Orden ascendente por precio
-            } else if ("desc".equals(sortOrder)) {
-                sort = Sort.by("precio").descending();  // Orden descendente por precio
-            }
+                // Añadir atributos de la categoría y subcategorías al modelo
+                model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
+                model.addAttribute("subcategorias", subcategorias);
 
-            // Tamaño de página fijo
-            int size = 12;  // Por ejemplo, 10 productos por página
-            Pageable pageable = PageRequest.of(page, size, sort);
-
-            // Consulta paginada con el criterio de ordenamiento
-            Page<Producto> productosPage = productoRepository.findProductosPorCategoriaConPaginacion(idCategoria, pageable);
-            List<Producto> productos = productosPage.getContent();
-            model.addAttribute("productos", productos);
-
-            // Total de productos y número de páginas
-            long totalProductos = productosPage.getTotalElements();
-            model.addAttribute("totalProductos", totalProductos);
-            int totalPages = productosPage.getTotalPages();
-            model.addAttribute("totalPages", totalPages);
-            model.addAttribute("currentPage", page);
-
-            // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
-            int visiblePages = 3;
-            int startPage = Math.max(0, page - (visiblePages / 2));
-            int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
-
-            // Ajustar el rango si es necesario
-            if (endPage - startPage + 1 < visiblePages) {
-                if (startPage == 0) {
-                    endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
-                } else if (endPage == totalPages - 1) {
-                    startPage = Math.max(0, endPage - visiblePages + 1);
+                // Definir el criterio de ordenamiento
+                Sort sort = Sort.unsorted();  // Orden predeterminado
+                if ("asc".equals(sortOrder)) {
+                    sort = Sort.by("precio").ascending();  // Orden ascendente por precio
+                } else if ("desc".equals(sortOrder)) {
+                    sort = Sort.by("precio").descending();  // Orden descendente por precio
                 }
+
+                // Tamaño de página fijo
+                int size = 12;  // Por ejemplo, 12 productos por página
+                Pageable pageable = PageRequest.of(page, size, sort);
+
+                // Consulta paginada con el criterio de zona y categoría
+                Page<Producto> productosPage = productoRepository.findProductosPorZonaYCategoria(zonaUsuario.getId(), idCategoria, pageable);
+                List<Producto> productos = productosPage.getContent();
+                model.addAttribute("productos", productos);
+
+                // Total de productos y número de páginas
+                long totalProductos = productosPage.getTotalElements();
+                model.addAttribute("totalProductos", totalProductos);
+                int totalPages = productosPage.getTotalPages();
+                model.addAttribute("totalPages", totalPages);
+                model.addAttribute("currentPage", page);
+
+                // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
+                int visiblePages = 3;
+                int startPage = Math.max(0, page - (visiblePages / 2));
+                int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
+
+                // Ajustar el rango si es necesario
+                if (endPage - startPage + 1 < visiblePages) {
+                    if (startPage == 0) {
+                        endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
+                    } else if (endPage == totalPages - 1) {
+                        startPage = Math.max(0, endPage - visiblePages + 1);
+                    }
+                }
+
+                model.addAttribute("startPage", startPage);
+                model.addAttribute("endPage", endPage);
+
+                // Verificar si hay productos para mostrar información del producto principal
+                if (!productos.isEmpty()) {
+                    Producto producto = productos.get(0);  // Producto destacado
+                    model.addAttribute("producto", producto);
+
+                    // Añadir imágenes del producto y fecha formateada
+                    model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+                    String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+                    model.addAttribute("fechaFormateada", fechaFormateada);
+                }
+            } else {
+                // Redirigir si no se encuentra la categoría o el usuario
+                return "redirect:/UsuarioFinal/listaProductos";
             }
-
-            model.addAttribute("startPage", startPage);
-            model.addAttribute("endPage", endPage);
-
-            // Verificar si hay productos para mostrar información del producto principal
-            if (!productos.isEmpty()) {
-                Producto producto = productos.get(0);  // Producto destacado
-                model.addAttribute("producto", producto);
-
-                // Añadir imágenes del producto y fecha formateada
-                model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
-                String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
-                model.addAttribute("fechaFormateada", fechaFormateada);
-            }
-
-        } else {
-            // Redirigir si la categoría no se encuentra
-            return "redirect:/UsuarioFinal/listaProductos";
         }
 
         // Mantener el valor de sortOrder en la vista
@@ -884,74 +898,85 @@ public class UsuarioFinalController {
             @PathVariable("idSubcategoria") Integer idSubcategoria,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "default") String sortOrder,  // Parámetro de ordenamiento
+            Authentication authentication,
             Model model) {
 
         // Buscar la subcategoría por ID
         Optional<Subcategoria> subcategoriaOpt = subcategoriaRepository.findById(idSubcategoria);
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
-        if (subcategoriaOpt.isPresent()) {
-            Subcategoria subcategoria = subcategoriaOpt.get();
-            Categoria categoria = subcategoria.getCategoria();  // Obtener la categoría a la que pertenece
-            List<Subcategoria> subcategorias = categoria.getSubcategorias();  // Obtener subcategorías relacionadas
 
-            // Añadir atributos de la subcategoría y la categoría al modelo
-            model.addAttribute("nombreSubcategoria", subcategoria.getNombreSubcategoria());
-            model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
-            model.addAttribute("subcategorias", subcategorias);
+        if (authentication != null && authentication.isAuthenticated() && subcategoriaOpt.isPresent()) {
+            String email = authentication.getName();  // Obtener el email del usuario autenticado
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
-            // Definir el criterio de ordenamiento
-            Sort sort = Sort.unsorted();  // Orden predeterminado
-            if ("asc".equals(sortOrder)) {
-                sort = Sort.by("precio").ascending();  // Orden ascendente por precio
-            } else if ("desc".equals(sortOrder)) {
-                sort = Sort.by("precio").descending();  // Orden descendente por precio
-            }
+            if (usuarioOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                Zona zonaUsuario = usuario.getZona();  // Obtener la zona del usuario
+                Subcategoria subcategoria = subcategoriaOpt.get();
+                Categoria categoria = subcategoria.getCategoria();  // Obtener la categoría a la que pertenece
+                List<Subcategoria> subcategorias = categoria.getSubcategorias();  // Obtener subcategorías relacionadas
 
-            // Tamaño de página fijo
-            int size = 12;  // Por ejemplo, 10 productos por página
-            Pageable pageable = PageRequest.of(page, size, sort);
+                // Añadir atributos de la subcategoría y la categoría al modelo
+                model.addAttribute("nombreSubcategoria", subcategoria.getNombreSubcategoria());
+                model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
+                model.addAttribute("subcategorias", subcategorias);
 
-            // Consulta paginada con el criterio de ordenamiento
-            Page<Producto> productosPage = productoRepository.findProductosPorSubcategoriaConPaginacion(idSubcategoria, pageable);
-            List<Producto> productos = productosPage.getContent();
-            model.addAttribute("productos", productos);
-
-            // Total de productos y número de páginas
-            long totalProductos = productosPage.getTotalElements();
-            model.addAttribute("totalProductos", totalProductos);
-            int totalPages = productosPage.getTotalPages();
-            model.addAttribute("totalPages", totalPages);
-            model.addAttribute("currentPage", page);
-
-            // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
-            int visiblePages = 3;
-            int startPage = Math.max(0, page - (visiblePages / 2));
-            int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
-
-            // Ajustar el rango si es necesario
-            if (endPage - startPage + 1 < visiblePages) {
-                if (startPage == 0) {
-                    endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
-                } else if (endPage == totalPages - 1) {
-                    startPage = Math.max(0, endPage - visiblePages + 1);
+                // Definir el criterio de ordenamiento
+                Sort sort = Sort.unsorted();  // Orden predeterminado
+                if ("asc".equals(sortOrder)) {
+                    sort = Sort.by("precio").ascending();  // Orden ascendente por precio
+                } else if ("desc".equals(sortOrder)) {
+                    sort = Sort.by("precio").descending();  // Orden descendente por precio
                 }
+
+                // Tamaño de página fijo
+                int size = 12;  // Por ejemplo, 12 productos por página
+                Pageable pageable = PageRequest.of(page, size, sort);
+
+                // Consulta paginada con el criterio de subcategoría y zona
+                Page<Producto> productosPage = productoRepository.findProductosPorZonaYSubcategoria(zonaUsuario.getId(), idSubcategoria, pageable);
+                List<Producto> productos = productosPage.getContent();
+                model.addAttribute("productos", productos);
+
+                // Total de productos y número de páginas
+                long totalProductos = productosPage.getTotalElements();
+                model.addAttribute("totalProductos", totalProductos);
+                int totalPages = productosPage.getTotalPages();
+                model.addAttribute("totalPages", totalPages);
+                model.addAttribute("currentPage", page);
+
+                // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
+                int visiblePages = 3;
+                int startPage = Math.max(0, page - (visiblePages / 2));
+                int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
+
+                // Ajustar el rango si es necesario
+                if (endPage - startPage + 1 < visiblePages) {
+                    if (startPage == 0) {
+                        endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
+                    } else if (endPage == totalPages - 1) {
+                        startPage = Math.max(0, endPage - visiblePages + 1);
+                    }
+                }
+
+                model.addAttribute("startPage", startPage);
+                model.addAttribute("endPage", endPage);
+
+                // Verificar si hay productos para mostrar información del producto principal
+                if (!productos.isEmpty()) {
+                    Producto producto = productos.get(0);  // Producto destacado
+                    model.addAttribute("producto", producto);
+
+                    // Añadir imágenes del producto y fecha formateada
+                    model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+                    String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+                    model.addAttribute("fechaFormateada", fechaFormateada);
+                }
+            } else {
+                // Redirigir si el usuario no se encuentra
+                return "redirect:/UsuarioFinal/listaProductos";
             }
-
-            model.addAttribute("startPage", startPage);
-            model.addAttribute("endPage", endPage);
-
-            // Verificar si hay productos para mostrar información del producto principal
-            if (!productos.isEmpty()) {
-                Producto producto = productos.get(0);  // Producto destacado
-                model.addAttribute("producto", producto);
-
-                // Añadir imágenes del producto y fecha formateada
-                model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
-                String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
-                model.addAttribute("fechaFormateada", fechaFormateada);
-            }
-
         } else {
             // Redirigir si la subcategoría no se encuentra
             return "redirect:/UsuarioFinal/listaProductos";
@@ -963,8 +988,6 @@ public class UsuarioFinalController {
         // Retornar la vista de la subcategoría con productos
         return "UsuarioFinal/Productos/subcategoria";
     }
-
-
 
 
     @GetMapping("/UsuarioFinal/producto/quickView/{idProducto}")
