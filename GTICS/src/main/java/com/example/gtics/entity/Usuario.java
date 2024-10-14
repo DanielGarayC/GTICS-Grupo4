@@ -118,4 +118,7 @@ public class Usuario {
     @Column(name = "u_cantImportaciones", length = 45)
     private String uCantimportaciones;
 
+    @Column(name = "direcciongenerada")
+    private boolean direcciongenerada;
+
 }

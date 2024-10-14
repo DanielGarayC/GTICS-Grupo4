@@ -10,5 +10,6 @@ import java.util.List;
 public interface DistritoRepository extends JpaRepository<Distrito, Integer> {
 
     List<Distrito> findByZona_Id(Integer zonaId); // Obtener distritos por zona
+    List<Distrito> findByZonaId(Integer zonaId);
 
 }
