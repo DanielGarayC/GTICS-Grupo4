@@ -524,25 +524,23 @@ public class SuperAdminController {
 
 
     @GetMapping("SuperAdmin/aceptarSolicitud")
-    public String cambiarRolaAgente(Model model, @RequestParam("id") Integer id, @RequestParam("indicador") Integer indicador) {
-        
+    public String cambiarRolaAgente(Model model, @RequestParam("id") Integer id,
+                                    @RequestParam("indicador") Integer indicador,
+                                    RedirectAttributes redirectAttributes) {
+
         // Obtener el usuario solicitante por ID
         Usuario usuario = usuarioRepository.findUsuarioById(id);
-    
-        // Verificar si el usuario tiene una solicitud válida
-        SolicitudAgente solicitud = solicitudAgenteRepository.findByUsuarioId(id);
-        if (solicitud == null) {
-            model.addAttribute("error", "No existe una solicitud válida para este usuario.");
-            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
-        }
-    
-        // Verificar si el Admin Zonal ya tiene 3 agentes (incluyendo asignados y activos con solicitud)
-        int cantidadAgentes = usuarioRepository.countAgentesActivosYAsignadosByAdminZonal(usuario.getIdAdminZonal());
+
+        // Verificar si el Admin Zonal ya tiene 3 agentes activos asignados
+        int cantidadAgentes = usuarioRepository.contarAgentesPorAdminZonal(usuario.getIdAdminZonal().getId());
+        System.out.println(cantidadAgentes);
+
         if (cantidadAgentes >= 3) {
-            model.addAttribute("error", "Este Administrador Zonal ya tiene el máximo de 3 agentes.");
+            // Usar RedirectAttributes para que el mensaje se vea después del redirect
+            redirectAttributes.addFlashAttribute("error", "Este Administrador Zonal ya tiene el máximo de 3 agentes activos.");
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }
-    
+
         // Cambiar el rol del usuario o activar la cuenta, según el indicador
         switch (indicador) {
             case 0:
@@ -552,12 +550,16 @@ public class SuperAdminController {
                 usuarioRepository.activarCuenta(id);
                 break;
         }
-    
+
         // Eliminar la solicitud
         solicitudAgenteRepository.deleteByIdUsuario(usuario);
-    
+
         return "redirect:/SuperAdmin/listaSolicitudesAgentes";
     }
+
+
+
+
 
 
     @GetMapping("SuperAdmin/listaUsuarioFinal")
