@@ -525,8 +525,26 @@ public class SuperAdminController {
 
     @GetMapping("SuperAdmin/aceptarSolicitud")
     public String cambiarRolaAgente(Model model, @RequestParam("id") Integer id, @RequestParam("indicador") Integer indicador) {
-
-        switch (indicador){
+        
+        // Obtener el usuario solicitante por ID
+        Usuario usuario = usuarioRepository.findUsuarioById(id);
+    
+        // Verificar si el usuario tiene una solicitud válida
+        SolicitudAgente solicitud = solicitudAgenteRepository.findByUsuarioId(id);
+        if (solicitud == null) {
+            model.addAttribute("error", "No existe una solicitud válida para este usuario.");
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+        }
+    
+        // Verificar si el Admin Zonal ya tiene 3 agentes (incluyendo asignados y activos con solicitud)
+        int cantidadAgentes = usuarioRepository.countAgentesActivosYAsignadosByAdminZonal(usuario.getIdAdminZonal());
+        if (cantidadAgentes >= 3) {
+            model.addAttribute("error", "Este Administrador Zonal ya tiene el máximo de 3 agentes.");
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+        }
+    
+        // Cambiar el rol del usuario o activar la cuenta, según el indicador
+        switch (indicador) {
             case 0:
                 usuarioRepository.actualizarRolAAgente(id);
                 break;
@@ -534,11 +552,13 @@ public class SuperAdminController {
                 usuarioRepository.activarCuenta(id);
                 break;
         }
-        solicitudAgenteRepository.deleteByIdUsuario(usuarioRepository.findUsuarioById(id));
-
-
+    
+        // Eliminar la solicitud
+        solicitudAgenteRepository.deleteByIdUsuario(usuario);
+    
         return "redirect:/SuperAdmin/listaSolicitudesAgentes";
     }
+
 
     @GetMapping("SuperAdmin/listaUsuarioFinal")
     public String listaGestionUsuarioFinal(@RequestParam(defaultValue = "0") int page,
