@@ -1153,7 +1153,7 @@ public class UsuarioFinalController {
 
 
 
-    @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
+     @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
     public String guardarResena(@Valid @ModelAttribute("resena") Resena resena,
                                 BindingResult bindingResult,
                                 @RequestParam(value = "uploadedPhotos", required = false) MultipartFile[] uploadedPhotos,
@@ -1182,17 +1182,24 @@ public class UsuarioFinalController {
         // Process uploaded photos
         if (uploadedPhotos != null && uploadedPhotos.length > 0) {
             List<Fotosresena> fotosResenaList = new ArrayList<>();
+
             for (MultipartFile uploadedPhoto : uploadedPhotos) {
                 if (!uploadedPhoto.isEmpty()) {
+                    if (uploadedPhoto.getSize() > 5000000) { //5MB
+
+                        attr.addFlashAttribute("error", "El tamaño de la foto excede el límite permitido.");
+                        return "redirect:/UsuarioFinal/Review";
+                    }
                     try {
                         Fotosresena fotosresena = new Fotosresena();
+
                         fotosresena.setFoto(uploadedPhoto.getBytes());
                         fotosresena.setTipo(uploadedPhoto.getContentType());
                         fotosresena.setIdResena(resena); // Associate the photo with the review
                         fotosResenaList.add(fotosresena);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        attr.addFlashAttribute("error", "Ocurrió un error al procesar las fotos.");
+                        attr.addFlashAttribute("error", "Error al subir la foto. Intente nuevamente.");
                         return "redirect:/UsuarioFinal/Review";
                     }
                 }
