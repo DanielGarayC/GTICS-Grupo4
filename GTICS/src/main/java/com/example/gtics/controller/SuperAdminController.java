@@ -2,6 +2,7 @@ package com.example.gtics.controller;
 
 import com.example.gtics.ValidationGroup.AgenteValidationGroup;
 import com.example.gtics.ValidationGroup.InventarioProductosValidationGroup;
+import com.example.gtics.ValidationGroup.UsuarioFinalValidationGroup;
 import com.example.gtics.dto.solAgente;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
@@ -581,32 +582,66 @@ public class SuperAdminController {
         return "SuperAdmin/GestionUsuarioFinal/create-final-user";
     }
 
-    @GetMapping("SuperAdmin/editarUsuarioFinal/{id}")
+    @GetMapping("/SuperAdmin/editarUsuarioFinal/{id}")
     public String editarUsuarioFinal(Model model, @PathVariable("id") Integer idUsuarioFinal) {
         Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
         List<Distrito> listaDistritos = distritoRepository.findAll();
         model.addAttribute("listaDistritos", listaDistritos);
-        model.addAttribute("finalUser", finalUser);
+        model.addAttribute("finalUser", finalUser.get());
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
     }
 
-    @GetMapping("SuperAdmin/verUsuarioFinal/{id}")
+    @GetMapping("/SuperAdmin/verUsuarioFinal/{id}")
     public String verUsuarioFinal(Model model, @PathVariable("id") Integer idUsuarioFinal) {
         Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
-        model.addAttribute("finalUser", finalUser);
+        model.addAttribute("finalUser", finalUser.get());
         return "SuperAdmin/GestionUsuarioFinal/final-user-info";
     }
 
-    @PostMapping("SuperAdmin/Actualizar/{id}")
-    public String actualizarUsuarioFinal(Model model, Usuario usuario, @PathVariable("id") Integer idUsuarioFinal, @RequestParam("UserPhoto") MultipartFile foto) throws IOException {
+    @PostMapping("/SuperAdmin/UsuarioFinal/Actualizar")
+    public String actualizarUsuarioFinal(@ModelAttribute("usuario") @Validated(UsuarioFinalValidationGroup.class) Usuario usuario, BindingResult bindingResult, Model model, @RequestParam("UserPhoto") MultipartFile foto) throws IOException {
+
+        System.out.println("Llega al método guardarUsuario");
+        if(bindingResult.hasErrors()){
+            // Validación de DNI con prioridad
+            if (bindingResult.hasFieldErrors("dni")) {
+                if (bindingResult.getFieldError("dni").getCode().equals("NotBlank")) {
+                    model.addAttribute("dniError", "Debe ingresar un número de DNI");
+                } else if (bindingResult.getFieldError("dni").getCode().equals("Size")) {
+                    model.addAttribute("dniError", "El DNI debe tener exactamente 8 dígitos");
+                } else if (bindingResult.getFieldError("dni").getCode().equals("Pattern")) {
+                    model.addAttribute("dniError", "El DNI debe contener solo dígitos");
+                }
+            }
+
+            // Validación de Teléfono con prioridad
+            if (bindingResult.hasFieldErrors("telefono")) {
+                if (bindingResult.getFieldError("telefono").getCode().equals("NotBlank")) {
+                    model.addAttribute("telefonoError", "Debe ingresar un número de teléfono");
+                } else if (bindingResult.getFieldError("telefono").getCode().equals("Size")) {
+                    model.addAttribute("telefonoError", "El teléfono debe tener exactamente 9 dígitos");
+                } else if (bindingResult.getFieldError("telefono").getCode().equals("Pattern")) {
+                    model.addAttribute("telefonoError", "El teléfono debe contener solo dígitos");
+                }
+            }
+
+
+
+
+            List<Distrito> listaDistritos = distritoRepository.findAll();
+            model.addAttribute("listaDistritos", listaDistritos);
+            return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
+        }
+
+
         if (foto.isEmpty()) {
-            Usuario finalUser = usuarioRepository.findById(idUsuarioFinal).get();
-            usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(), idUsuarioFinal);
+            Usuario finalUser = usuarioRepository.findById(usuario.getId()).get();
+            usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(), usuario.getId());
         } else {
             try {
                 byte[] fotoBytes = foto.getBytes();
                 usuario.setFoto(fotoBytes);
-                usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(), idUsuarioFinal);
+                usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(), usuario.getId());
             } catch (IOException ignored) {
 
             }
