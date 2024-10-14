@@ -7,4 +7,6 @@ public interface ProductosCarritoDto {
     Double getPrecioUnidad();
     Double getPrecioTotalPorProducto();
     String getUrlImagenProducto();
+   Double getCostoEnvio();
+
 }
