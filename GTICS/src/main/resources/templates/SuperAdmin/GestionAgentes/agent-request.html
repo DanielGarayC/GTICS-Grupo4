@@ -143,12 +143,6 @@
                                             </td> <!-- Código Aduana -->
                                             <td>
                                                 <span th:text="${agente.getSoljurisdiccion()}"></span> <!-- Código Aduana -->
-                                                <span th:text="${agente.getEstadoCodigoJurisdiccion()}"
-                                                      th:classappend="${agente.getEstadoCodigoJurisdiccion()} == 'Habilitado' ? 'badge bg-success' :
-                          (${agente.getEstadoCodigoJurisdiccion()} == 'Multado' ? 'badge bg-warning' :
-                          (${agente.getEstadoCodigoJurisdiccion()} == 'Cancelado' ? 'badge bg-danger' :
-                          (${agente.getEstadoCodigoJurisdiccion()} == 'Suspendido' ? 'badge bg-info' : 'badge bg-secondary')))">
-    </span> <!-- Estado Código Aduana -->
                                             </td>
                                             <td th:text="${agente.getNombreZona()}"></td> <!-- Zona -->
                                             <td>
