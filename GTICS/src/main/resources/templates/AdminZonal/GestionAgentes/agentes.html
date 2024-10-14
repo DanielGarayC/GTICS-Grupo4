@@ -67,6 +67,11 @@
 									<img th:if="${agente.foto != null}" th:src="@{'/AdminZonal/Agentes/fotoagente/' + ${agente.idUsuario}}"
 										 alt="Foto del agente"
 										 class="mb-3 img-fluid rounded-circle" style="border-radius: 8px; height: 28vh;" />
+
+									<img th:if="${agente.foto == null}" th:src="@{'/images/avatar/avatarGenerico.png'}"
+										 alt="Foto del agente"
+										 class="mb-3 img-fluid rounded-circle" style="border-radius: 8px; height: 28vh;" />
+
 								</a>
 								<div class="mt-2">
 									<!-- Cambiamos el id del modal a uno único basado en el id del agente -->
