@@ -1,5 +1,6 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.ValidationGroup.AgenteValidationGroup;
 import com.example.gtics.ValidationGroup.InventarioProductosValidationGroup;
 import com.example.gtics.dto.solAgente;
 import com.example.gtics.entity.*;
