@@ -119,7 +119,7 @@ public class AdminZonalController {
         Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
 
         boolean crearAgente = true;
-        int cantAgentes = usuarioRepository.cantAgentesByAZ(idAdminZonal);
+        int cantAgentes = usuarioRepository.contarAgentesPorAdminZonal(idAdminZonal);
         System.out.println(cantAgentes);
         if(cantAgentes>2){
             crearAgente = false;
