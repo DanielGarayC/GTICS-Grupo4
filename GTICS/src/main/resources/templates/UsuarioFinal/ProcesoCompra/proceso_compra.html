@@ -231,8 +231,7 @@
                                                        th:checked="${direccion.predeterminado}" id="direccionRadio"
                                                 />
                                                 <!-- Mostrar la etiqueta de la dirección (Casa, Oficina, etc.) -->
-                                                <label class="form-check-label text-dark" th:text="${direccion.etiqueta.idEtiqueta != null ? direccion.etiqueta.nombreEtiqueta : 'Sin etiqueta'}"></label>
-                                             </div>
+                                                <label class="form-check-label text-dark" th:text="${direccion.etiqueta != null and direccion.etiqueta.idEtiqueta != null ? direccion.etiqueta.nombreEtiqueta : 'Sin etiqueta'}"></label>                                             </div>
                                              <!-- Dirección -->
                                              <address>
                                                 <strong th:text="${direccion.nombreContacto}"></strong>
