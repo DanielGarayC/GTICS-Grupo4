@@ -121,4 +121,7 @@ public class Usuario {
     @Column(name = "direcciongenerada")
     private boolean direcciongenerada;
 
+    @Column(name = "razonBaneado")
+    private String razonBaneado;
+
 }

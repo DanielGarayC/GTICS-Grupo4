@@ -745,11 +745,9 @@ public class UsuarioFinalController {
 
     @GetMapping("/UsuarioFinal/listaProductos")
     public String mostrarListaProductos(Model model) {
-        // Obtener todas las categorías
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
 
-        // Si deseas mostrar productos de la primera categoría o una predeterminada
         if (!categorias.isEmpty()) {
             Categoria categoria = categorias.get(0); // Primera categoría de la lista
             List<Producto> productos = productoRepository.findProductosPorCategoria(categoria.getId());
