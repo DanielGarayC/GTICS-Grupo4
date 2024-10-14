@@ -838,14 +838,18 @@ public class UsuarioFinalController {
             model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(idProducto));
             model.addAttribute("fechaFormateada", fechaFormateada);
 
-            List<Producto> productosRecomendados = productoRepository.findProductosPorCategoria(producto.getIdCategoria().getId());
-            model.addAttribute("productosRecomendados", productosRecomendados);
+            // Obtener productos recomendados de la misma categoría
+            List<Producto> productosRecomendados = productoRepository.findByIdCategoriaAndIdNot(
+                    producto.getIdCategoria(), idProducto);
+
+            model.addAttribute("productosRecomendados", productosRecomendados.stream().limit(8).collect(Collectors.toList()));
 
             return "UsuarioFinal/Productos/detalleProducto";
         } else {
             return "redirect:/UsuarioFinal/listaProductos";
         }
     }
+
 
     @GetMapping("/UsuarioFinal/categorias/{idCategoria}")
     public String mostrarProductosPorCategorias(

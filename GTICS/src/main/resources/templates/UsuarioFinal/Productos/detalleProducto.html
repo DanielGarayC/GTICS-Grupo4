@@ -20,6 +20,12 @@
 
     <!-- Theme CSS -->
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
+
+    <style>
+        .producto .zoom img:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 
 <body>
@@ -34,21 +40,24 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-xl-7">
-                    <!-- img slide -->
-                    <div class="producto" id="producto">
-                        <div class="zoom" th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.id} + ')'"
-                             style="background-size: contain; background-repeat: no-repeat;">
-                            <!-- img -->
-                            <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}" alt="Imagen del producto" />
+                    <!-- Contenedor de la imagen del producto -->
+                    <div class="producto" id="producto" style="max-width: 100%; overflow: hidden;">
+                        <!-- img principal del producto -->
+                        <div style="background-size: contain; background-repeat: no-repeat; max-height: 400px; overflow: hidden; position: relative;">
+                            <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}"
+                                 alt="Imagen del producto"
+                                 style="width: 100%; height: auto; max-height: 400px; object-fit: contain;" />
                         </div>
                     </div>
-                    <!-- product tools -->
+
+                    <!-- Miniaturas de imagen del producto -->
                     <div class="product-tools">
                         <div class="thumbnails row g-3" id="productModalThumbnails">
                             <div th:each="imagen : ${imagenes}" class="col-3">
                                 <div class="thumbnails-img">
-                                    <!-- img -->
-                                    <img th:src="@{'/UsuarioFinal/producto/foto/' + ${imagen.producto.id}}" alt="Imagen del producto" />
+                                    <img th:src="@{'/UsuarioFinal/producto/foto/' + ${imagen.producto.id}}"
+                                         alt="Imagen del producto"
+                                         style="width: 100%; height: auto; max-height: 100px; object-fit: contain;" />
                                 </div>
                             </div>
                         </div>
@@ -190,6 +199,7 @@
         </div>
     </section>
 
+
     <section class="my-lg-8 my-8">
         <div class="container">
             <div class="row">
@@ -198,60 +208,28 @@
                 </div>
             </div>
 
-            <!-- Contenedor para los productos -->
-            <div class="row">
-                <!-- Producto 1 -->
-                <div class="col-md-3 col-sm-6 mb-4">
-                    <div class="card card-product">
-                        <a class="text-decoration-none text-inherit">
-                            <div class="card-body">
-                                <!-- Imagen del producto -->
-                                <div class="text-center position-relative">
-                                    <img th:src="@{/images/category/laptop.jpg}" alt="Producto" class="mb-3 img-fluid" />
+            <!-- Slick slider container -->
+            <div class="product-slider">
+                <div th:each="productoRelacionado : ${productosRecomendados}" class="item">
+                    <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${productoRelacionado.id})}" class="text-decoration-none text-inherit">
+                        <div class="card card-product mb-lg-4" style="min-height: 400px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div class="card-body d-flex flex-column">
+                                <!-- Image container -->
+                                <div class="text-center position-relative mb-3" style="height: 200px;">
+                                    <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${productoRelacionado.id})}">
+                                        <img th:src="@{'/UsuarioFinal/producto/foto/' + ${productoRelacionado.id}}" alt="Imagen de producto" class="img-fluid product-img" style="max-height: 100%; object-fit: contain; width: auto;" />
+                                    </a>
                                 </div>
-                                <!-- Información del producto -->
-                                <div class="text-small mb-1">
-                                    <small>Electrónica y tecnología</small>
-                                </div>
-                                <h2 class="fs-6">
-                                    Laptop HP 13 pulgadas core i7
-                                </h2>
-                                <div>
-                                    <small class="text-warning">
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-half"></i>
-                                    </small>
-                                    <span class="text-muted small">4.5 (149)</span>
-                                </div>
-                                <!-- Precio -->
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <span class="text-dark">S/. 3000</span>
-                                    <a href="#!" class="btn btn-primary btn-sm">Añadir al carrito</a>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
 
-                <!-- Producto 1 -->
-                <div class="col-md-3 col-sm-6 mb-4">
-                    <div class="card card-product">
-                        <a  class="text-decoration-none text-inherit">
-                            <div class="card-body">
-                                <!-- Imagen del producto -->
-                                <div class="text-center position-relative">
-                                    <img th:src="@{/images/category/laptop.jpg}" alt="Producto" class="mb-3 img-fluid" />
+                                <!-- Product info -->
+                                <div class="text-small mb-1" style="min-height: 20px;">
+                                    <a class="text-decoration-none text-muted" th:text="${productoRelacionado.idCategoria.nombreCategoria}"></a>
                                 </div>
-                                <!-- Información del producto -->
-                                <div class="text-small mb-1">
-                                    <small>Electrónica y tecnología</small>
-                                </div>
-                                <h2 class="fs-6">
-                                    Laptop HP 13 pulgadas core i7
+                                <h2 class="fs-6" style="min-height: 40px;">
+                                    <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${productoRelacionado.id})}" class="text-inherit text-decoration-none" th:text="${productoRelacionado.nombreProducto}"></a>
                                 </h2>
+                                <a class="text-decoration-none text-muted small" style="min-height: 20px;" th:text="${productoRelacionado.idSubcategoria.nombreSubcategoria}"></a>
+                                <a class="text-decoration-none text-muted small" style="min-height: 20px;" th:text="'Proveedor: ' + ${productoRelacionado.idProveedor.tienda.nombreTienda}"></a>
                                 <div>
                                     <small class="text-warning">
                                         <i class="bi bi-star-fill"></i>
@@ -260,90 +238,36 @@
                                         <i class="bi bi-star-fill"></i>
                                         <i class="bi bi-star-half"></i>
                                     </small>
-                                    <span class="text-muted small">4.5 (149)</span>
+                                    <span class="text-muted small">4.5(149)</span>
                                 </div>
-                                <!-- Precio -->
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <span class="text-dark">S/. 3000</span>
-                                    <a href="#!" class="btn btn-primary btn-sm">Añadir al carrito</a>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- Producto 1 -->
-                <div class="col-md-3 col-sm-6 mb-4">
-                    <div class="card card-product">
-                        <a  class="text-decoration-none text-inherit">
-                            <div class="card-body">
-                                <!-- Imagen del producto -->
-                                <div class="text-center position-relative">
-                                    <img th:src="@{/images/category/laptop.jpg}" alt="Producto" class="mb-3 img-fluid" />
-                                </div>
-                                <!-- Información del producto -->
-                                <div class="text-small mb-1">
-                                    <small>Electrónica y tecnología</small>
-                                </div>
-                                <h2 class="fs-6">
-                                    Laptop HP 13 pulgadas core i7
-                                </h2>
-                                <div>
-                                    <small class="text-warning">
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-half"></i>
-                                    </small>
-                                    <span class="text-muted small">4.5 (149)</span>
-                                </div>
-                                <!-- Precio -->
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <span class="text-dark">S/. 3000</span>
-                                    <a href="#!" class="btn btn-primary btn-sm">Añadir al carrito</a>
+
+                                <!-- Price and cart button -->
+                                <div class="d-flex justify-content-between align-items-center mt-3 mt-auto">
+                                    <div>
+                                        <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(productoRelacionado.precio, 1, 'COMMA', 2, 'POINT')}"></span>
+                                    </div>
+                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
+                                        <input type="hidden" name="idProducto" th:value="${productoRelacionado.id}" />
+                                        <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
+                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                </svg>
+                                                Añadir al carrito
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- Producto 1 -->
-                <div class="col-md-3 col-sm-6 mb-4">
-                    <div class="card card-product">
-                        <a  class="text-decoration-none text-inherit">
-                            <div class="card-body">
-                                <!-- Imagen del producto -->
-                                <div class="text-center position-relative">
-                                    <img th:src="@{/images/category/laptop.jpg}" alt="Producto" class="mb-3 img-fluid" />
-                                </div>
-                                <!-- Información del producto -->
-                                <div class="text-small mb-1">
-                                    <small>Electrónica y tecnología</small>
-                                </div>
-                                <h2 class="fs-6">
-                                    Laptop HP 13 pulgadas core i7
-                                </h2>
-                                <div>
-                                    <small class="text-warning">
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-half"></i>
-                                    </small>
-                                    <span class="text-muted small">4.5 (149)</span>
-                                </div>
-                                <!-- Precio -->
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <span class="text-dark">S/. 3000</span>
-                                    <a href="#!" class="btn btn-primary btn-sm">Añadir al carrito</a>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
+
 
 </main>
 
@@ -379,8 +303,35 @@
             });
         });
     });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var slider = tns({
+            container: '.product-slider',
+            items: 4,                  // Mostrar 4 productos
+            slideBy: 'page',
+            autoplay: false,
+            controls: false,            // Activar flechas de navegación
+            nav: false,                // Desactivar paginación por puntos
+            mouseDrag: true,
+            gutter: 10,                // Espacio entre los elementos
+            responsive: {
+                640: {
+                    items: 2
+                },
+                768: {
+                    items: 3
+                },
+                1024: {
+                    items: 4
+                }
+            }
+        });
+    });
+
 
 </script>
+
 
 <!-- Javascript-->
 <script th:src="@{/libs/rater-js/index.js}"></script>
