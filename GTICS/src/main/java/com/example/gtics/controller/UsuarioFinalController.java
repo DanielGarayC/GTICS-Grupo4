@@ -562,28 +562,28 @@ public class UsuarioFinalController {
 
 
     @PostMapping("/UsuarioFinal/solicitudAgente")
-    public String enviarSolicitudaSerAgente(Solicitudagente solicitudagente){
-        solicitudagente.setIndicadorSolicitud(0);
-        //solicitudagente.setValidaciones(1);
-        solicitudagente.setCodigoJurisdiccion("333");
+    public String enviarSolicitudaSerAgente(@ModelAttribute Solicitudagente solicitudagente) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        //solicitudagente.setValidaciones(new Validacionescodigosagente());
-        /*
-        System.out.println(solicitudagente.getCodigoAduana());
-        System.out.println(solicitudagente.getCodigoJurisdiccion());
-        System.out.println(solicitudagente.getIndicadorSolicitud());
-        */
-        solicitudAgenteRepository.save(solicitudagente);
-        Optional<Usuario> optUsuario = usuarioRepository.findById(7);
-        Solicitudagente ultimaSolicitud = solicitudAgenteRepository.findTopByOrderByIdDesc();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName();
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
-        if(optUsuario.isPresent()) {
-            Usuario us = optUsuario.get(); // usuario random que solicita ser agente
+            if (optUsuario.isPresent()) {
+                Usuario usuario = optUsuario.get();
+                solicitudagente.setIdUsuario(usuario);
+                solicitudagente.setIndicadorSolicitud(0);
+                solicitudagente.setCodigoRuc(usuario.getAgtRuc()); // Si es necesario
 
+                solicitudAgenteRepository.save(solicitudagente);
 
-            usuarioRepository.asignarSolictudAusuario(ultimaSolicitud.getId(), us.getId());
+                return "redirect:/UsuarioFinal";
+            } else {
+                return "redirect:/login?error";
+            }
+        } else {
+            return "redirect:/login";
         }
-        return "redirect:/UsuarioFinal";
     }
 
     @GetMapping("/UsuarioFinal/producto/foto/{id}")
