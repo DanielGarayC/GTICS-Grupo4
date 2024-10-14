@@ -723,7 +723,7 @@
                                                     <div class="ms-md-3">
                                                         <a th:href="@{/UsuarioFinal/listaMisOrdenes}" class="btn btn-gray-400 mb-2">Regresar</a>
                                                         <th:block th:if="${usuario.idAgente != null}">
-                                                            <a th:href="@{/UsuarioFinal/chatbot}" class="btn btn-info mb-2 " data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-chat-dots me-3"></i>Comunicarme con mi agente de compra</a>
+                                                            <a th:href="@{'/UsuarioFinal/join-chat?name=' + ${usuario.id}}" class="btn btn-info mb-2 " data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-chat-dots me-3"></i>Comunicarme con mi agente de compra</a>
                                                         </th:block>
 
                                                     </div>

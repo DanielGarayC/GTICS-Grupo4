@@ -3,9 +3,11 @@ package com.example.gtics.controller;
 import com.example.gtics.dto.*;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
+import com.example.gtics.service.ChatRoomService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -63,6 +66,8 @@ public class UsuarioFinalController {
     private final Map<Integer, Set<String>> usuariosLikes = new HashMap<>();
     private final ZonaRepository zonaRepository;
     private final EtiquetaRepository etiquetaRepository;
+    @Autowired
+    private ChatRoomService chatRoomService;
     private boolean usuarioYaDioLike(Resena resena, Usuario usuario) {
         return usuariosLikes.containsKey(resena.getId()) && usuariosLikes.get(resena.getId()).contains(usuario.getEmail());
     }
@@ -1208,9 +1213,27 @@ public class UsuarioFinalController {
         return "UsuarioFinal/ProcesoCompra/chatbot";
     }
     @GetMapping("/UsuarioFinal/chatSoporte")
-    public String chatSoporte(){
-
-        return "UsuarioFinal/ProcesoCompra/chatSoporte";
+    public ModelAndView getChatPage(String room, String name) {
+        ModelAndView modelAndView = new ModelAndView("UsuarioFinal/chatUsuario");
+        modelAndView.addObject("room", room);
+        modelAndView.addObject("name", name);
+        return modelAndView;
+    }
+    @GetMapping("UsuarioFinal/join-chat")
+    public ModelAndView joinChat(@RequestParam("name") String name) {
+        // Crear o redirigir al usuario a su sala
+        String room = chatRoomService.createOrJoinRoom(name);
+        Optional<Usuario> user1 = usuarioRepository.findById(Integer.parseInt(name));
+        Usuario u = new Usuario();
+        if(user1.isPresent()){
+            u = user1.get();
+        }
+        String nombreUsuario = u.getNombre() + "_" + u.getApellidoPaterno();
+        // Redirigir al usuario a la sala asignada
+        ModelAndView modelAndView = new ModelAndView("redirect:/UsuarioFinal/chatSoporte");
+        modelAndView.addObject("room", room);
+        modelAndView.addObject("name", nombreUsuario);
+        return modelAndView;
     }
     @GetMapping("/UsuarioFinal/foro")
     public String verForo(){

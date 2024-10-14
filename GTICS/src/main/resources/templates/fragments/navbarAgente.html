@@ -25,12 +25,34 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:classappend="${paginaActiva == 'usuariosAsignados'} ? ' active'" th:href="@{/Agente/UsuariosAsignados}">
+                            <a class="nav-link  collapsed " href="#" data-bs-toggle="collapse" data-bs-target="#navOrders" aria-expanded="false" aria-controls="navOrders"  th:classappend="${paginaActiva == 'usuariosAsignados'} ? ' active'" >
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
                                     <span class="nav-link-text">Usuarios asignados</span>
                                 </div>
                             </a>
+                            <div id="navOrders" class="collapse " data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link " th:href="@{/Agente/UsuariosAsignados}">
+                                            <div class="d-flex align-items-center">
+
+                                                <span class="nav-link-text">Lista</span>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    <!-- Nav item -->
+                                    <li class="nav-item">
+                                        <a class="nav-link " th:href="@{/Agente/Chat}">
+                                            <div class="d-flex align-items-center">
+
+                                                <span class="nav-link-text">Chat</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" th:classappend="${paginaActiva == 'ordenes'} ? ' active'" th:href="@{/Agente/Ordenes}">
@@ -77,12 +99,34 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" th:classappend="${paginaActiva == 'usuariosAsignados'} ? ' active'" th:href="@{/Agente/UsuariosAsignados}">
+                            <a class="nav-link  collapsed " href="#" data-bs-toggle="collapse" data-bs-target="#navOrdersOC" aria-expanded="false" aria-controls="navOrdersOC"  th:classappend="${paginaActiva == 'usuariosAsignados'} ? ' active'" >
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-person-fill-check"></i></span>
-                                    <span>Usuarios asignados</span>
+                                    <span class="nav-link-text">Usuarios asignados</span>
                                 </div>
                             </a>
+                            <div id="navOrdersOC"  class="collapse " data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link " th:href="@{/Agente/UsuariosAsignados}">
+                                            <div class="d-flex align-items-center">
+
+                                                <span class="nav-link-text">Lista</span>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    <!-- Nav item -->
+                                    <li class="nav-item">
+                                        <a class="nav-link " th:href="@{/Agente/Chat}">
+                                            <div class="d-flex align-items-center">
+
+                                                <span class="nav-link-text">Chat</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
 
                         <li class="nav-item">

@@ -6,6 +6,7 @@ import com.example.gtics.dto.ProductosCarritoDto;
 import com.example.gtics.dto.ProductosxOrden;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
+import com.example.gtics.service.ChatRoomService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -20,11 +21,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 
@@ -43,7 +46,8 @@ public class AgenteController {
     private FotosProductoRepository fotosProductoRepository;
     @Autowired
     private ProductoRepository productoRepository;
-
+    @Autowired
+    private ChatRoomService chatRoomService;
 
     @ModelAttribute
     public void addUsuarioToModel(Model model) {
@@ -95,9 +99,23 @@ public class AgenteController {
         return "Agente/inicio";
     }
     @GetMapping({"Agente/Chat"})
-    public String ChatAgente(){
+    public ModelAndView chatAgente(HttpSession session) {
 
-        return "Agente/chatVistaAgente";
+        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        if (idAgente == null) {
+            // Si el idAgente no está en la sesión, redirigir o manejar el error
+            return new ModelAndView("redirect:/login");
+        }
+        List<Usuario> usuariosAsignados = usuarioRepository.findUsuariosAsignadosAlAgenteNoPageable(idAgente);
+        ArrayList<Integer> idUsuariosAsignados = new ArrayList<>();
+        for(Usuario u : usuariosAsignados){
+            idUsuariosAsignados.add(u.getId());
+        }
+        // Obtener las salas activas del servicio
+        ModelAndView modelAndView = new ModelAndView("Agente/chatVistaAgente");
+        Set<String> activeRooms = chatRoomService.getActiveRoomsAsignadas(idUsuariosAsignados);
+        modelAndView.addObject("activeRooms", activeRooms);
+        return modelAndView;
     }
 
     @GetMapping({"Agente/UsuariosAsignados"})
