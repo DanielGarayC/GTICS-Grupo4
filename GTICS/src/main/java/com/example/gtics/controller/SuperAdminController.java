@@ -585,9 +585,15 @@ public class SuperAdminController {
     @GetMapping("/SuperAdmin/editarUsuarioFinal/{id}")
     public String editarUsuarioFinal(Model model, @PathVariable("id") Integer idUsuarioFinal) {
         Optional<Usuario> finalUser = usuarioRepository.findById(idUsuarioFinal);
+        Usuario u = new Usuario();
+        if(finalUser.isPresent()){
+            u = finalUser.get();
+            model.addAttribute("finalUser", u);
+            model.addAttribute("idUsuarioPOST", u.getId());
+
+        }
         List<Distrito> listaDistritos = distritoRepository.findAll();
         model.addAttribute("listaDistritos", listaDistritos);
-        model.addAttribute("finalUser", finalUser.get());
         return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
     }
 
@@ -602,6 +608,7 @@ public class SuperAdminController {
     public String actualizarUsuarioFinal(@ModelAttribute("usuario") @Validated(UsuarioFinalValidationGroup.class) Usuario usuario, BindingResult bindingResult, Model model, @RequestParam("UserPhoto") MultipartFile foto) throws IOException {
 
         System.out.println("Llega al método guardarUsuario");
+        System.out.println(usuario.getId());
         if(bindingResult.hasErrors()){
             // Validación de DNI con prioridad
             if (bindingResult.hasFieldErrors("dni")) {
