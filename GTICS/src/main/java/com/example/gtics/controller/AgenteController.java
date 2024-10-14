@@ -139,10 +139,11 @@ public class AgenteController {
         }
 
         Page<Usuario> usuariosAsignados = usuarioRepository.findUsuariosAsignadosAlAgente(idAgente, pageable);
-
         model.addAttribute("listaUsuariosAsignados", usuariosAsignados.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", usuariosAsignados.getTotalPages());
+
+
 
         return "Agente/UsuariosAsignados/usuariosAsignados";
     }

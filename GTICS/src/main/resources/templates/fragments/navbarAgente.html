@@ -269,8 +269,8 @@
 
                                 <div class="dropdown-menu dropdown-menu-end p-0">
                                     <div class="lh-1 px-5 py-4 border-bottom">
-                                        <h5 class="mb-1 h6">Nombre Apellido</h5>
-                                        <small>rol en la pagina</small>
+                                        <h5 class="mb-1 h6" th:text="${session.usuario.nombre} + ' ' + ${session.usuario.apellidoPaterno}"></h5>
+                                        <small>rol: Agente</small>
                                     </div>
 
                                     <div class="border-top px-5 py-3">

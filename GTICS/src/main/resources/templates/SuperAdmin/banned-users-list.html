@@ -105,10 +105,11 @@
                                             <th></th>
                                             <th>Nombres</th>
                                             <th>Apellidos</th>
-                                            <th>Correo electrónico</th>
+
                                             <th>Teléfono</th>
                                             <th>DNI</th>
                                             <th>Rol</th>
+                                            <th>Razon de baneo</th>
                                             <th>Quitar Ban</th>
                                         </tr>
                                         </thead>
@@ -127,11 +128,11 @@
                                             <td th:text="${var.index+1}"></td>
                                             <td th:text="${bannedUser.getNombre()}"></td>
                                             <td th:text="${bannedUser.getApellidoPaterno()} + ' ' + ${bannedUser.getApellidoMaterno()} "></td>
-                                            <td th:text="${bannedUser.getEmail()}"></td>
 
                                             <td th:text="${bannedUser.getTelefono()}"></td>
                                             <td th:text="${bannedUser.getDni()}"></td>
                                             <td th:text="${bannedUser.getRol().getNombreRol()}"></td>
+                                            <td th:text="${bannedUser.getRazonBaneado()}"></td>
                                             <td>
                                                 <button class="btn btn-outline-secondary" th:data-href="@{/SuperAdmin/desbanearUsuario/{id}(id=${bannedUser.getId()})}" onclick="confirmUnban(this.getAttribute('data-href'))">
                                                     <i class="bi bi-unlock-fill"></i>

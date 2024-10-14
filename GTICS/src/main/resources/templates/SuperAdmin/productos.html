@@ -75,21 +75,37 @@
                         <div class="card h-100 card-lg">
                             <div class="px-6 py-6">
                                 <div class="row justify-content-between">
+
                                     <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
                                         <!-- form -->
-                                        <form class="d-flex" role="search">
-                                            <input class="form-control" type="search" placeholder="Buscar" aria-label="Search" />
-                                        </form>
+                                        <div class="d-flex" role="search">
+                                            <input id="searchProducto" class="form-control" type="search" placeholder="Buscar" aria-label="Search" oninput="filterTable()" />
+                                        </div>
+
                                     </div>
+
                                     <!-- select option -->
                                     <div class="col-xl-2 col-md-4 col-12">
-                                        <select class="form-select">
-                                            <option selected>Categoría</option>
-                                            <option value="1">Electrónica y Tecnología</option>
-                                            <option value="2">Salud y Belleza</option>
-                                            <option value="3">Moda y Ropa</option>
-                                            <option value="4">Hogar y Cocina</option>
-                                        </select>
+                                        <form method="get" action="/SuperAdmin/productos">
+                                            <!-- Select para la categoría -->
+                                            <div class="col-xl-2 col-md-4 col-12">
+                                                <select class="form-select" name="categoriaId"
+                                                        style="width: 100%; min-width: 200px; font-size: 16px; font-family: Arial, sans-serif; padding: 8px;"
+                                                        onchange="this.form.submit()">
+                                                    <!-- Opción para "Filtrar por: Ninguno" -->
+                                                    <option value="0" th:selected="${selectedCategory == 0}">Filtrar por: Ninguno</option>
+                                                    <option value="1" th:selected="${selectedCategory == 1}">Electrónica y Tecnología</option>
+                                                    <option value="2" th:selected="${selectedCategory == 2}">Salud y Belleza</option>
+                                                    <option value="3" th:selected="${selectedCategory == 3}">Moda y Ropa</option>
+                                                    <option value="4" th:selected="${selectedCategory == 4}">Hogar y Cocina</option>
+                                                </select>
+                                            </div>
+                                        </form>
+
+
+
+
+
                                     </div>
                                 </div>
                             </div>
@@ -152,25 +168,25 @@
                             <div class="d-flex flex-column align-items-center">
                                 <!-- Texto de paginación centrado -->
                                 <span id="paginationInfo" class="mb-2">
-        								Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
-    								</span>
+                                    Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
+                                </span>
 
                                 <!-- Paginación centrada -->
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination justify-content-center">
                                         <!-- Botón de "Previo" -->
                                         <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage - 1})}">Previo</a>
+                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage - 1}, categoriaId=${selectedCategory})}">Previo</a>
                                         </li>
 
                                         <!-- Páginas numeradas -->
                                         <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${i})}" th:text="${i + 1}"></a>
+                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${i}, categoriaId=${selectedCategory})}" th:text="${i + 1}"></a>
                                         </li>
 
                                         <!-- Botón de "Siguiente" -->
                                         <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage + 1})}">Siguiente</a>
+                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage + 1}, categoriaId=${selectedCategory})}">Siguiente</a>
                                         </li>
                                     </ul>
                                 </nav>
@@ -190,6 +206,25 @@
 
 <!-- Theme JS -->
 <script th:src="@{/js/theme.min.js}"></script>
+<script>function filterTable() {
+    const input = document.getElementById("searchProducto");
+    const filter = input.value.toLowerCase();
+    const table = document.querySelector("table tbody");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+        let match = false;
+
+        for (let j = 0; j < cells.length; j++) {
+            if (cells[j].innerText.toLowerCase().includes(filter)) {
+                match = true;
+                break;
+            }
+        }
+        rows[i].style.display = match ? "" : "none";
+    }
+}</script>
 <script>
     $(document).ready(function () {
         // Función para manejar clic en las páginas
