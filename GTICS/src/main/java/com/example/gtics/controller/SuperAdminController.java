@@ -280,11 +280,15 @@ public class SuperAdminController {
 
 
     @GetMapping("SuperAdmin/editarAgente/{id}")
-    public String editarAgente(@PathVariable("id") Integer id, Model model) {
+    public String editarAgente(@ModelAttribute("agente") Usuario agente, @PathVariable("id") Integer id, Model model) {
         try {
             Optional<Usuario> optionalAgente = usuarioRepository.findById(id);
             if (optionalAgente.isPresent() && optionalAgente.get().getRol().getId() == 3) {
                 model.addAttribute("agente", optionalAgente.get());
+                Usuario eigent = optionalAgente.get();
+                System.out.println("Código de Aduana: " + eigent.getAgtCodigoaduana());
+                System.out.println("Estado de Aduana: " + usuarioRepository.findEstadoAduana(eigent.getAgtCodigoaduana()));
+                model.addAttribute("estado",usuarioRepository.findEstadoAduana(eigent.getAgtCodigoaduana()));
             } else {
                 model.addAttribute("error", "Agente no encontrado o el rol no es válido");
                 return "SuperAdmin/GestionAgentes/agent-list";  // Redirigir a la lista si no se encuentra el agente
@@ -311,7 +315,58 @@ public class SuperAdminController {
     }
 
     @PostMapping("/SuperAdmin/Agente/guardar")
-    public String guardarAgente(@ModelAttribute("agente") Usuario agente, Model model, @RequestParam("agentPhoto") MultipartFile foto) {
+    public String guardarAgente(@ModelAttribute("agente") @Validated(AgenteValidationGroup.class) Usuario agente, BindingResult bindingResult, Model model, @RequestParam("agentPhoto") MultipartFile foto) {
+
+        System.out.println("Llega al método guardarAgente");
+        if(bindingResult.hasErrors()){
+            // Validación de DNI con prioridad
+            if (bindingResult.hasFieldErrors("dni")) {
+                if (bindingResult.getFieldError("dni").getCode().equals("NotBlank")) {
+                    model.addAttribute("dniError", "Debe ingresar un número de DNI");
+                } else if (bindingResult.getFieldError("dni").getCode().equals("Size")) {
+                    model.addAttribute("dniError", "El DNI debe tener exactamente 8 dígitos");
+                } else if (bindingResult.getFieldError("dni").getCode().equals("Pattern")) {
+                    model.addAttribute("dniError", "El DNI debe contener solo dígitos");
+                }
+            }
+
+            // Validación de Teléfono con prioridad
+            if (bindingResult.hasFieldErrors("telefono")) {
+                if (bindingResult.getFieldError("telefono").getCode().equals("NotBlank")) {
+                    model.addAttribute("telefonoError", "Debe ingresar un número de teléfono");
+                } else if (bindingResult.getFieldError("telefono").getCode().equals("Size")) {
+                    model.addAttribute("telefonoError", "El teléfono debe tener exactamente 9 dígitos");
+                } else if (bindingResult.getFieldError("telefono").getCode().equals("Pattern")) {
+                    model.addAttribute("telefonoError", "El teléfono debe contener solo dígitos");
+                }
+            }
+
+            // Prioridad en otros campos...
+            if (bindingResult.hasFieldErrors("agtCodigojurisdiccion")) {
+                if (bindingResult.getFieldError("agtCodigojurisdiccion").getCode().equals("NotBlank")) {
+                    model.addAttribute("agtCodigojurisdiccionError", "El código de jurisdicción no puede estar vacío");
+                } else if (bindingResult.getFieldError("agtCodigojurisdiccion").getCode().equals("Size")) {
+                    model.addAttribute("agtCodigojurisdiccionError", "El código de jurisdicción debe tener entre 4 y 6 dígitos");
+                } else if (bindingResult.getFieldError("agtCodigojurisdiccion").getCode().equals("Pattern")) {
+                    model.addAttribute("agtCodigojurisdiccionError", "El código de jurisdicción debe contener solo dígitos");
+                }
+            }
+
+            if (bindingResult.hasFieldErrors("agtCodigoaduana")) {
+                if (bindingResult.getFieldError("agtCodigoaduana").getCode().equals("NotBlank")) {
+                    model.addAttribute("agtCodigoaduanaError", "El código aduanero no puede estar vacío");
+                } else if (bindingResult.getFieldError("agtCodigoaduana").getCode().equals("Size")) {
+                    model.addAttribute("agtCodigoaduanaError", "El código aduanero debe tener exactamente 6 dígitos");
+                } else if (bindingResult.getFieldError("agtCodigoaduana").getCode().equals("Pattern")) {
+                    model.addAttribute("agtCodigoaduanaError", "El código aduanero debe contener solo dígitos");
+                }
+            }
+
+
+            model.addAttribute("zonas", zonaRepository.findAll());
+            return "SuperAdmin/GestionAgentes/agent-edit";
+        }
+
         try {
             // Buscar el agente existente
             Usuario agenteExistente = usuarioRepository.findById(agente.getId())
@@ -363,8 +418,7 @@ public class SuperAdminController {
 
         return "redirect:/SuperAdmin/listaAgente";
     }
-
-
+    
     @GetMapping("/SuperAdmin/eliminarAgente")
     public String eliminarAgente(@RequestParam("id") int id, RedirectAttributes attr) {
         Optional<Usuario> optProduct = usuarioRepository.findById(id);
@@ -698,6 +752,7 @@ public class SuperAdminController {
                             nuevoProductoPorZona.setIdSubcategoria(producto.getIdSubcategoria());
                             nuevoProductoPorZona.setCantidadDisponible(cantidad);
                             nuevoProductoPorZona.setBorrado(producto.getBorrado());
+                            nuevoProductoPorZona.setDisponibilidad("En stock");
                             nuevoProductoPorZona.setZona(zona);
                             Producto savedProducto = productoRepository.save(nuevoProductoPorZona);
                             if (fotos != null && fotos.length > 0) {
@@ -724,6 +779,7 @@ public class SuperAdminController {
         return "redirect:/SuperAdmin/productos";
     }
 
+    @PostMapping("/SuperAdmin/guardarProducto")
     public String guardareditarProducto(@ModelAttribute("producto") Producto producto,
                                         @RequestParam("zonaId") Integer zonaId,
                                         @RequestParam("cantidadZona") Integer cantidadZona,
@@ -838,16 +894,28 @@ public class SuperAdminController {
 
     @GetMapping("SuperAdmin/productos")
     public String productos(Model model,
-                            @RequestParam(defaultValue = "0") int page
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "0") Integer categoriaId // Cambiado a Integer
     ) {
         int size = 10;
-        Pageable pageable = PageRequest.of(page, size); // Crea el objeto Pageable con la página y el tamaño
-        Page<Producto> productosPage = productoRepository.findAllActiveConpaginacion(pageable); // Recupera los productos paginados
+        Pageable pageable = PageRequest.of(page, size);
 
-        model.addAttribute("productos", productosPage.getContent()); // Añade los productos al modelo
-        model.addAttribute("currentPage", page); // Añade el número de la página actual
-        model.addAttribute("totalPages", productosPage.getTotalPages()); // Añade el número total de páginas
-        model.addAttribute("totalItems", productosPage.getTotalElements()); // Añade el número total de productos
+        Page<Producto> productosPage;
+
+        if (categoriaId != 0) {
+            // Filtrar por categoría
+            productosPage = productoRepository.findProductosPorCategoriaConPaginacion(categoriaId, pageable);
+        } else {
+            // Mostrar todos los productos
+            productosPage = productoRepository.findAllActiveConpaginacion(pageable);
+        }
+
+        // Añadir atributos al modelo
+        model.addAttribute("productos", productosPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productosPage.getTotalPages());
+        model.addAttribute("totalItems", productosPage.getTotalElements());
+        model.addAttribute("selectedCategory", categoriaId); // Mantener la categoría seleccionada
 
         return "SuperAdmin/productos";
     }
