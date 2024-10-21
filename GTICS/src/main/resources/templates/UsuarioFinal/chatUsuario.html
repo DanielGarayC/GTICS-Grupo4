@@ -62,11 +62,15 @@
                 return;
             }
 
+            // Extraer senderId de currentRoom
+            var senderId = currentRoom.split('_')[1]; // Asumiendo que currentRoom tiene el formato "room_n"
+
             var message = {
-                sender: name,
+                senderId: senderId,  // Cambiado de 'sender' a 'senderId'
                 content: messageContent,
                 room: currentRoom
             };
+            console.log("Mensaje a enviar:", message);
 
             stompClient.send("/app/chat/" + currentRoom, {}, JSON.stringify(message));
 

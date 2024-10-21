@@ -13,7 +13,7 @@ public class Message {
     private String content;
 
     // Nombre del usuario que envía el mensaje
-    private String sender;
+    private int senderId;
 
     // Sala de chat a la que pertenece el mensaje
     private String room;
