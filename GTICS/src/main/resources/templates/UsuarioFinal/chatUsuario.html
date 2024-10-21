@@ -33,7 +33,6 @@
             }
 
             // Actualizar el nombre de la sala en la interfaz
-            document.getElementById('roomName').textContent = currentRoom;
 
             var socket = new SockJS('/chat-websocket');
             stompClient = Stomp.over(socket);
@@ -148,7 +147,6 @@
 
 <div th:insert="~{fragments/navbarUsuarioFinal :: navbar}"></div>
 
-<!--<h2>Chat en la sala <span id="roomName"></span></h2>-->
 <h2>Chatea con tu agente:</span></h2>
 <div>
     <input type="text" id="message" placeholder="Escribe un mensaje..." />
