@@ -17,7 +17,14 @@ import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
-
+    
+    @Query(value = "SELECT COUNT(*) FROM usuario u " +
+            "WHERE u.idAdminZonal = :idAdminZonal " + // Verifica que estén asignados a este Admin Zonal
+            "AND u.idRol = 3 " + // Deben tener el rol de agente
+            "AND u.activo = 1", // Solo cuenta a los agentes activos
+            nativeQuery = true)
+    int contarAgentesPorAdminZonal(@Param("idAdminZonal") Integer idAdminZonal);
+    
     @Query(value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono,\n" +
             "       s.indicadorSolicitud,\n" +
             "       s.codigoAduana as soladuana,\n" +
@@ -259,4 +266,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
     List<Usuario> findUsuariosAsignadosAlAgenteNoPageable(Integer idAgente);
 
+    @Query(value = "SELECT estadoCodigo FROM codigosaduaneros WHERE codigoAduanero = :codigo", nativeQuery = true)
+    String findEstadoAduana(String codigo);
 }

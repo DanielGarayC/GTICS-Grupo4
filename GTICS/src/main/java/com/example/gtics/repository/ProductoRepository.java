@@ -3,6 +3,7 @@ package com.example.gtics.repository;
 import com.example.gtics.dto.CantidadProductos;
 import com.example.gtics.dto.ProductoRelevanteDTO;
 import com.example.gtics.dto.ProductoTabla;
+import com.example.gtics.entity.Categoria;
 import com.example.gtics.entity.Producto;
 import com.example.gtics.entity.Zona;
 import jakarta.transaction.Transactional;
@@ -130,4 +131,16 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
     @Query("SELECT p FROM Producto p WHERE LOWER(p.nombreProducto) LIKE LOWER(CONCAT('%', :nombre, '%'))")
     List<Producto> findByNombreContainingIgnoreCase(@Param("nombre") String nombre);
+
+    @Query("SELECT p FROM Producto p WHERE p.zona.id = :zonaId")
+    List<Producto> findProductosPorZona(@Param("zonaId") Integer zonaId);
+
+    @Query("SELECT p FROM Producto p WHERE p.zona.id = :zonaId AND p.idCategoria.id = :categoriaId")
+    Page<Producto> findProductosPorZonaYCategoria(@Param("zonaId") Integer zonaId, @Param("categoriaId") Integer categoriaId, Pageable pageable);
+
+    @Query("SELECT p FROM Producto p WHERE p.idSubcategoria.id = :subcategoriaId AND p.zona.id = :zonaId")
+    Page<Producto> findProductosPorZonaYSubcategoria(@Param("zonaId") Integer zonaId, @Param("subcategoriaId") Integer subcategoriaId, Pageable pageable);
+
+    List<Producto> findByIdCategoriaAndIdNot(Categoria idCategoria, Integer id);
+
 }

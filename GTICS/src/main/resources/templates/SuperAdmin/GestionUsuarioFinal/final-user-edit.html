@@ -60,27 +60,25 @@
 									</ol>
 								</nav>
 							</div>
-							<div>
-								<button type="button" class="btn btn-danger" href="#" th:data-href="@{/SuperAdmin/banearUsuarioFinal/{id}(id=${finalUser.get().getId()})}" onclick="confirmDelete(this.getAttribute('data-href'))" data-bs-toggle="modal" data-bs-target="#delete" >Eliminar</button>
-							</div>
-						</div>
+
 					</div>
 				</div>
 				<div class="row" style="min-height: 100vh;">
 					<div class="col-12">
 						<div class="card card-lg border-0">
 							<div class="card-body d-flex flex-column gap-8 p-7">
-								<form class="row g-3 needs-validation" enctype="multipart/form-data"  novalidate method="post" th:action="@{/SuperAdmin/Actualizar/{id}(id=${finalUser.get().getId()})}">
+								<form class="row g-3 needs-validation" enctype="multipart/form-data"   method="post" th:action="@{/SuperAdmin/UsuarioFinal/Actualizar}" th:object="${finalUser}"  novalidate>
+									<input type="hidden" class="form-control" th:value="${idUsuarioPOST}" th:field="*{id}" />
 									<div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
 										<div>
 											<img class="image avatar avatar-lg rounded-3"
-												 th:src="@{${finalUser.get().getFoto() != null} ? '/usuarioFinal/' + ${finalUser.get().getId()} : '/images/docs/placeholder-img.jpg'}"
+												 th:src="@{${finalUser.getFoto() != null} ? '/usuarioFinal/' + ${finalUser.getId()} : '/images/avatar/avatarGenerico.png'}"
 												 alt="Image" />
 										</div>
 
 										<div class="file-upload btn btn-light ms-md-4">
 											<input type="file" name="UserPhoto" class="file-input opacity-0" />
-											Subir Foto
+											Actualizar Foto
 										</div>
 
 										<span class="ms-md-2">JPG, GIF o PNG. Máx. 1MB.</span>
@@ -95,8 +93,8 @@
 													DNI:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" id="DNIFinalUser" name="dni" th:value="${finalUser.get().getDni()}" required />
-												<div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
+												<input type="text" class="form-control" id="DNIFinalUser" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${dniError}" th:text="${dniError}"></div>
 											</div>
 
 											<div class="col-lg-6 col-12">
@@ -104,8 +102,8 @@
 													Nombres:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" id="creatCustomerName" name="nombre" th:value="${finalUser.get().getNombre()}" required />
-												<div class="invalid-feedback">Por favor ingrese los nombres del usuario</div>
+												<input type="text" class="form-control" id="creatCustomerName" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>                                                    </div>
 											</div>
 										</div>
 
@@ -115,8 +113,8 @@
 													Apellido Paterno:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" name="apellidoPaterno" id="creatFinalUserLastName1" th:value="${finalUser.get().getApellidoPaterno()}" required />
-												<div class="invalid-feedback">Por favor ingrese el apellido paterno del usuario</div>
+												<input type="text" class="form-control" id="creatFinalUserLastName1" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></div>
 											</div>
 
 											<div class="col-lg-6 col-12">
@@ -124,9 +122,8 @@
 													Apellido Materno:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="text" class="form-control" name="apellidoMaterno" id="creatFinalUserLastName" th:value="${finalUser.get().getApellidoMaterno()}" required />
-												<div class="invalid-feedback">Por favor ingrese el apellido materno del usuario</div>
-											</div>
+												<input type="text" class="form-control" id="creatFinalUserLastName" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></div>
 										</div>
 
 										<div class="row">
@@ -135,22 +132,22 @@
 													Email:
 													<span class="text-danger">*</span>
 												</label>
-												<input type="email" class="form-control" name="email" id="creatFinalUserEmail" th:value="${finalUser.get().getEmail()}" required />
-												<div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
+												<input type="email" class="form-control" name="email" id="creatFinalUserEmail" th:field="*{email}" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 											</div>
 
 											<div class="col-lg-6 col-12">
 												<label for="creatFinalUserDirection" class="form-label">Dirección</label>
-												<input type="text" class="form-control" name="direccion" id="creatFinalUserDirection" th:value="${finalUser.get().getDireccion()}" required />
-												<div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
+												<input type="text" class="form-control" id="creatFinalUserDirection" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
 											</div>
 										</div>
 
 										<div class="row">
 											<div class="col-lg-6 col-12">
 												<label for="creatFinalUserPhone" class="form-label">Teléfono</label>
-												<input type="text" class="form-control" name="telefono" id="creatFinalUserPhone" th:value="${finalUser.get().getTelefono()}" required />
-												<div class="invalid-feedback">Por favor ingrese el número de teléfono</div>
+												<input type="text" class="form-control"id="creatFinalUserPhone" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}" />
+												<div class="invalid-feedback" th:if="${telefonoError}" th:text="${telefonoError}"></div>
 											</div>
 
 											<div class="col-lg-6 col-12">
@@ -160,7 +157,7 @@
 													<option th:each="distrito : ${listaDistritos}"
 															th:value="${distrito.getId()}"
 															th:text="${distrito.getNombre()}"
-															th:selected="${distrito.getNombre() == finalUser.get().getDistrito().getNombre()}">
+															th:selected="${distrito.getNombre() == finalUser.getDistrito().getNombre()}">
 														[Nombre del Distrito]
 													</option>
 												</select>

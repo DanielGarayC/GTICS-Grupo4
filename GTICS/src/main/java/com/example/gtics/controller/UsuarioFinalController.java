@@ -289,13 +289,15 @@ public class UsuarioFinalController {
         model.addAttribute("categorias", categorias);
         List<Zona> zonas = zonaRepository.findAll(); // Asegúrate de que estás trayendo todas las zonas
         model.addAttribute("zonas", zonas);
+
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             String email = authentication.getName();
             Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
             if (optUsuario.isPresent()) {
                 Usuario usuario = optUsuario.get();
-// Obtener etiquetas predefinidas
+
+                // Obtener etiquetas predefinidas
                 List<String> etiquetasPredefinidas = Arrays.asList("Casa", "Oficina");
 
                 // Obtener etiquetas personalizadas del usuario
@@ -304,49 +306,39 @@ public class UsuarioFinalController {
                 // Pasar etiquetas al modelo para mostrarlas en la vista
                 model.addAttribute("etiquetasPredefinidas", etiquetasPredefinidas);
                 model.addAttribute("etiquetasPersonalizadas", etiquetasPersonalizadas);
-                // Busca las direcciones del usuario
+
+                // Buscar las direcciones del usuario
                 List<Direccion> direcciones = direccionRepository.findByUsuario(usuario);
                 model.addAttribute("direcciones", direcciones);
-                // Si el usuario no tiene su dirección generada
+
+                // Si el usuario no tiene su dirección generada, crear una automáticamente
                 if (!usuario.isDirecciongenerada()) {
-                    // Creamos una dirección predeterminada automáticamente
                     Direccion nuevaDireccion = new Direccion();
                     nuevaDireccion.setUsuario(usuario);
 
-                    // Concatenamos el nombre completo del usuario
                     String nombreCompleto = usuario.getNombre() + " " + usuario.getApellidoPaterno() + " " + usuario.getApellidoMaterno();
                     nuevaDireccion.setNombreContacto(nombreCompleto);
-
-                    // Asignamos el teléfono y la dirección del usuario
                     nuevaDireccion.setTelefono(usuario.getTelefono());
                     nuevaDireccion.setDireccion(usuario.getDireccion());
-
-                    // Asignamos el distrito y la zona del usuario
                     nuevaDireccion.setDistrito(usuario.getDistrito());
                     nuevaDireccion.setZona(usuario.getZona());
-
-                    // Si el usuario no tiene RUC, dejamos el campo vacío
                     nuevaDireccion.setRuc(usuario.getAgtRuc() != null ? usuario.getAgtRuc() : "-");
-
-                    // Establecemos como predeterminada
                     nuevaDireccion.setPredeterminado(true);
-
-                    // Guardamos la dirección en la base de datos
                     direccionRepository.save(nuevaDireccion);
 
-                    // Marcamos en el usuario que ya tiene su dirección generada
                     usuario.setDirecciongenerada(true);
-                    usuarioRepository.save(usuario); // Actualizamos el campo en la base de datos
+                    usuarioRepository.save(usuario); // Actualizar el campo en la base de datos
                 }
-                // Busca el carrito activo del usuario
+
+                // Buscar el carrito activo del usuario
                 Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
                 if (carritoOpt.isPresent()) {
                     Carritocompra carrito = carritoOpt.get();
 
-                    // Obtiene los productos en el carrito
+                    // Obtener los productos en el carrito
                     List<ProductosCarritoDto> productosCarrito = productoHasCarritocompraRepository.findProductosPorCarrito(carrito.getId());
 
-                    // Asocia la URL de imagen de cada producto
+                    // Asociar la URL de imagen de cada producto
                     Map<Integer, String> productoImagenUrls = new HashMap<>();
                     for (ProductosCarritoDto producto : productosCarrito) {
                         List<Fotosproducto> fotos = fotosProductoRepository.findByProducto_Id(producto.getIdProducto());
@@ -356,20 +348,25 @@ public class UsuarioFinalController {
                         }
                     }
 
-                    // Agrega los productos y URLs de imágenes al modelo
                     model.addAttribute("productosCarrito", productosCarrito);
                     model.addAttribute("productoImagenUrls", productoImagenUrls);
 
-                    // Calcula el subtotal y el total
+                    // Calcular el subtotal
                     double subtotal = productosCarrito.stream()
                             .mapToDouble(ProductosCarritoDto::getPrecioTotalPorProducto)
                             .sum();
                     model.addAttribute("subtotal", subtotal);
 
-                    Double costoEnvio = ordenRepository.obtenerCostoAdicionalxOrden(carrito.getId());
-                    model.addAttribute("costoEnvio", costoEnvio != null ? costoEnvio : 0.0);
+                    // **Nuevo cálculo del costo de envío**
+                    // Encontrar el costo de envío más alto entre los productos en el carrito
+                    double maxCostoEnvio = productosCarrito.stream()
+                            .mapToDouble(ProductosCarritoDto::getCostoEnvio)
+                            .max()
+                            .orElse(0.0);
+                    model.addAttribute("costoEnvio", maxCostoEnvio);
 
-                    double total = subtotal + (costoEnvio != null ? costoEnvio : 0.0);
+                    // Calcular el total
+                    double total = subtotal + maxCostoEnvio;
                     model.addAttribute("total", total);
                 } else {
                     model.addAttribute("error", "No tienes un carrito activo para proceder con la compra.");
@@ -379,6 +376,7 @@ public class UsuarioFinalController {
         }
         return "UsuarioFinal/ProcesoCompra/proceso_compra";
     }
+
 
     @PostMapping("/UsuarioFinal/agregarEtiquetaPersonalizada")
     @ResponseBody
@@ -562,28 +560,28 @@ public class UsuarioFinalController {
 
 
     @PostMapping("/UsuarioFinal/solicitudAgente")
-    public String enviarSolicitudaSerAgente(Solicitudagente solicitudagente){
-        solicitudagente.setIndicadorSolicitud(0);
-        //solicitudagente.setValidaciones(1);
-        solicitudagente.setCodigoJurisdiccion("333");
+    public String enviarSolicitudaSerAgente(@ModelAttribute Solicitudagente solicitudagente) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        //solicitudagente.setValidaciones(new Validacionescodigosagente());
-        /*
-        System.out.println(solicitudagente.getCodigoAduana());
-        System.out.println(solicitudagente.getCodigoJurisdiccion());
-        System.out.println(solicitudagente.getIndicadorSolicitud());
-        */
-        solicitudAgenteRepository.save(solicitudagente);
-        Optional<Usuario> optUsuario = usuarioRepository.findById(7);
-        Solicitudagente ultimaSolicitud = solicitudAgenteRepository.findTopByOrderByIdDesc();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName();
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
-        if(optUsuario.isPresent()) {
-            Usuario us = optUsuario.get(); // usuario random que solicita ser agente
+            if (optUsuario.isPresent()) {
+                Usuario usuario = optUsuario.get();
+                solicitudagente.setIdUsuario(usuario);
+                solicitudagente.setIndicadorSolicitud(0);
+                solicitudagente.setCodigoRuc(usuario.getAgtRuc()); // Si es necesario
 
+                solicitudAgenteRepository.save(solicitudagente);
 
-            usuarioRepository.asignarSolictudAusuario(ultimaSolicitud.getId(), us.getId());
+                return "redirect:/UsuarioFinal";
+            } else {
+                return "redirect:/login?error";
+            }
+        } else {
+            return "redirect:/login";
         }
-        return "redirect:/UsuarioFinal";
     }
 
     @GetMapping("/UsuarioFinal/producto/foto/{id}")
@@ -629,37 +627,85 @@ public class UsuarioFinalController {
     }
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
     public String mostrarListaMisOrdenes(Model model,
-                                         @RequestParam(defaultValue = "0") int page){
-        int pageSize = 6;
-        Pageable pageable = PageRequest.of(page, pageSize);
-        List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDto(7,pageable); // Si el usuario tiene ID=7
-        model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-        model.addAttribute("ordenCarrito",ordenCarrito.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", ordenCarrito.getTotalPages());
-        return "UsuarioFinal/Ordenes/listaMisOrdenes";
+                                         @RequestParam(defaultValue = "0") int page,
+                                         Authentication authentication,
+                                         RedirectAttributes attr) {
+
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
+
+        // Obtén el email del usuario autenticado
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+
+            int pageSize = 6;
+            Pageable pageable = PageRequest.of(page, pageSize);
+            List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
+
+            // Aquí jalas dinámicamente el ID del usuario autenticado
+            Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDto(usuario.getId(), pageable);
+
+            model.addAttribute("listaEstadoOrden", listaEstadoOrden);
+            model.addAttribute("ordenCarrito", ordenCarrito.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", ordenCarrito.getTotalPages());
+
+            return "UsuarioFinal/Ordenes/listaMisOrdenes";
+        } else {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
     }
+
 
     @PostMapping("/UsuarioFinal/listaMisOrdenes/filtro")
     public String mostrarListaMisOrdenesFiltro(Model model,
                                                @RequestParam("idEstado") Integer idEstado,
-                                               @RequestParam(defaultValue = "0") int page){
+                                               @RequestParam(defaultValue = "0") int page,
+                                               Authentication authentication,
+                                               RedirectAttributes attr) {
 
-        int pageSize = 6;
-        Pageable pageable = PageRequest.of(page, pageSize);
-        System.out.println(idEstado);
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
 
-        List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
-        Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDtoFiltro(7,idEstado,pageable); // Si el usuario tiene ID=7
-        model.addAttribute("listaEstadoOrden",listaEstadoOrden);
-        model.addAttribute("ordenCarrito",ordenCarrito.getContent());
-        model.addAttribute("idEstado",idEstado);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", ordenCarrito.getTotalPages());
-        model.addAttribute("paginaFiltro", 1);
-        return "UsuarioFinal/Ordenes/listaMisOrdenes";
+        // Obtén el email del usuario autenticado
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+
+            int pageSize = 6;
+            Pageable pageable = PageRequest.of(page, pageSize);
+
+            System.out.println(idEstado);
+
+            List<Estadoorden> listaEstadoOrden = estadoOrdenRepository.findAll();
+
+            // Ahora usamos el ID del usuario autenticado dinámicamente
+            Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoUFConDtoFiltro(usuario.getId(), idEstado, pageable);
+
+            model.addAttribute("listaEstadoOrden", listaEstadoOrden);
+            model.addAttribute("ordenCarrito", ordenCarrito.getContent());
+            model.addAttribute("idEstado", idEstado);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", ordenCarrito.getTotalPages());
+            model.addAttribute("paginaFiltro", 1);
+
+            return "UsuarioFinal/Ordenes/listaMisOrdenes";
+        } else {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
     }
+
 
     @GetMapping("/UsuarioFinal/detallesOrden")
     public String mostrarDetallesOrden(@RequestParam("idOrden") Integer idOrden,Model model) {
@@ -744,30 +790,37 @@ public class UsuarioFinalController {
     }
 
     @GetMapping("/UsuarioFinal/listaProductos")
-    public String mostrarListaProductos(Model model) {
+    public String mostrarListaProductos(Model model, Authentication authentication) {
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
 
-        if (!categorias.isEmpty()) {
-            Categoria categoria = categorias.get(0); // Primera categoría de la lista
-            List<Producto> productos = productoRepository.findProductosPorCategoria(categoria.getId());
-            model.addAttribute("productos", productos);
-            model.addAttribute("categoria", categoria);
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName(); // Obtener el email del usuario autenticado
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
-            // Si hay productos en la categoría, pasar el primer producto y sus detalles al modelo
-            if (!productos.isEmpty()) {
-                Producto producto = productos.get(0); // Primer producto de la lista
-                model.addAttribute("producto", producto);
-                model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
-                String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
-                model.addAttribute("fechaFormateada", fechaFormateada);
+            if (usuarioOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                Zona zonaUsuario = usuario.getZona(); // Obtener la zona del usuario
+
+                // Filtrar los productos por la zona del usuario
+                List<Producto> productos = productoRepository.findProductosPorZona(zonaUsuario.getId());
+
+                model.addAttribute("productos", productos);
+
+                // Si hay productos, pasar el primero y sus detalles al modelo
+                if (!productos.isEmpty()) {
+                    Producto producto = productos.get(0); // Primer producto de la lista
+                    model.addAttribute("producto", producto);
+                    model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+                    String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+                    model.addAttribute("fechaFormateada", fechaFormateada);
+                }
             }
-        } else {
-            model.addAttribute("productos", List.of()); // Lista vacía si no hay categorías
         }
 
         return "UsuarioFinal/Productos/listaProductos";
     }
+
 
     @GetMapping("/UsuarioFinal/detallesProducto/{idProducto}")
     public String mostrarDetallesProducto(@PathVariable("idProducto") Integer idProducto, Model model) {
@@ -785,8 +838,11 @@ public class UsuarioFinalController {
             model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(idProducto));
             model.addAttribute("fechaFormateada", fechaFormateada);
 
-            List<Producto> productosRecomendados = productoRepository.findProductosPorCategoria(producto.getIdCategoria().getId());
-            model.addAttribute("productosRecomendados", productosRecomendados);
+            // Obtener productos recomendados de la misma categoría
+            List<Producto> productosRecomendados = productoRepository.findByIdCategoriaAndIdNot(
+                    producto.getIdCategoria(), idProducto);
+
+            model.addAttribute("productosRecomendados", productosRecomendados.stream().limit(8).collect(Collectors.toList()));
 
             return "UsuarioFinal/Productos/detalleProducto";
         } else {
@@ -794,81 +850,89 @@ public class UsuarioFinalController {
         }
     }
 
+
     @GetMapping("/UsuarioFinal/categorias/{idCategoria}")
     public String mostrarProductosPorCategorias(
             @PathVariable("idCategoria") Integer idCategoria,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "default") String sortOrder,  // Parámetro de ordenamiento
+            @RequestParam(defaultValue = "default") String sortOrder, // Parámetro de ordenamiento
+            Authentication authentication,
             Model model) {
 
-        // Buscar la categoría por ID
-        Optional<Categoria> categoriaOpt = categoriaRepository.findById(idCategoria);
-        List<Categoria> categorias = categoriaRepository.findAll();
-        model.addAttribute("categorias", categorias);
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName(); // Obtener el email del usuario autenticado
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
-        if (categoriaOpt.isPresent()) {
-            Categoria categoria = categoriaOpt.get();
-            List<Subcategoria> subcategorias = categoria.getSubcategorias();
+            // Buscar la categoría por ID
+            Optional<Categoria> categoriaOpt = categoriaRepository.findById(idCategoria);
+            List<Categoria> categorias = categoriaRepository.findAll();
+            model.addAttribute("categorias", categorias);
 
-            // Añadir atributos de la categoría y subcategorías al modelo
-            model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
-            model.addAttribute("subcategorias", subcategorias);
+            if (usuarioOpt.isPresent() && categoriaOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                Zona zonaUsuario = usuario.getZona();  // Obtener la zona del usuario
+                Categoria categoria = categoriaOpt.get();
+                List<Subcategoria> subcategorias = categoria.getSubcategorias();
 
-            // Definir el criterio de ordenamiento
-            Sort sort = Sort.unsorted();  // Orden predeterminado
-            if ("asc".equals(sortOrder)) {
-                sort = Sort.by("precio").ascending();  // Orden ascendente por precio
-            } else if ("desc".equals(sortOrder)) {
-                sort = Sort.by("precio").descending();  // Orden descendente por precio
-            }
+                // Añadir atributos de la categoría y subcategorías al modelo
+                model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
+                model.addAttribute("subcategorias", subcategorias);
 
-            // Tamaño de página fijo
-            int size = 12;  // Por ejemplo, 10 productos por página
-            Pageable pageable = PageRequest.of(page, size, sort);
-
-            // Consulta paginada con el criterio de ordenamiento
-            Page<Producto> productosPage = productoRepository.findProductosPorCategoriaConPaginacion(idCategoria, pageable);
-            List<Producto> productos = productosPage.getContent();
-            model.addAttribute("productos", productos);
-
-            // Total de productos y número de páginas
-            long totalProductos = productosPage.getTotalElements();
-            model.addAttribute("totalProductos", totalProductos);
-            int totalPages = productosPage.getTotalPages();
-            model.addAttribute("totalPages", totalPages);
-            model.addAttribute("currentPage", page);
-
-            // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
-            int visiblePages = 3;
-            int startPage = Math.max(0, page - (visiblePages / 2));
-            int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
-
-            // Ajustar el rango si es necesario
-            if (endPage - startPage + 1 < visiblePages) {
-                if (startPage == 0) {
-                    endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
-                } else if (endPage == totalPages - 1) {
-                    startPage = Math.max(0, endPage - visiblePages + 1);
+                // Definir el criterio de ordenamiento
+                Sort sort = Sort.unsorted();  // Orden predeterminado
+                if ("asc".equals(sortOrder)) {
+                    sort = Sort.by("precio").ascending();  // Orden ascendente por precio
+                } else if ("desc".equals(sortOrder)) {
+                    sort = Sort.by("precio").descending();  // Orden descendente por precio
                 }
+
+                // Tamaño de página fijo
+                int size = 12;  // Por ejemplo, 12 productos por página
+                Pageable pageable = PageRequest.of(page, size, sort);
+
+                // Consulta paginada con el criterio de zona y categoría
+                Page<Producto> productosPage = productoRepository.findProductosPorZonaYCategoria(zonaUsuario.getId(), idCategoria, pageable);
+                List<Producto> productos = productosPage.getContent();
+                model.addAttribute("productos", productos);
+
+                // Total de productos y número de páginas
+                long totalProductos = productosPage.getTotalElements();
+                model.addAttribute("totalProductos", totalProductos);
+                int totalPages = productosPage.getTotalPages();
+                model.addAttribute("totalPages", totalPages);
+                model.addAttribute("currentPage", page);
+
+                // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
+                int visiblePages = 3;
+                int startPage = Math.max(0, page - (visiblePages / 2));
+                int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
+
+                // Ajustar el rango si es necesario
+                if (endPage - startPage + 1 < visiblePages) {
+                    if (startPage == 0) {
+                        endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
+                    } else if (endPage == totalPages - 1) {
+                        startPage = Math.max(0, endPage - visiblePages + 1);
+                    }
+                }
+
+                model.addAttribute("startPage", startPage);
+                model.addAttribute("endPage", endPage);
+
+                // Verificar si hay productos para mostrar información del producto principal
+                if (!productos.isEmpty()) {
+                    Producto producto = productos.get(0);  // Producto destacado
+                    model.addAttribute("producto", producto);
+
+                    // Añadir imágenes del producto y fecha formateada
+                    model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+                    String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+                    model.addAttribute("fechaFormateada", fechaFormateada);
+                }
+            } else {
+                // Redirigir si no se encuentra la categoría o el usuario
+                return "redirect:/UsuarioFinal/listaProductos";
             }
-
-            model.addAttribute("startPage", startPage);
-            model.addAttribute("endPage", endPage);
-
-            // Verificar si hay productos para mostrar información del producto principal
-            if (!productos.isEmpty()) {
-                Producto producto = productos.get(0);  // Producto destacado
-                model.addAttribute("producto", producto);
-
-                // Añadir imágenes del producto y fecha formateada
-                model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
-                String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
-                model.addAttribute("fechaFormateada", fechaFormateada);
-            }
-
-        } else {
-            // Redirigir si la categoría no se encuentra
-            return "redirect:/UsuarioFinal/listaProductos";
         }
 
         // Mantener el valor de sortOrder en la vista
@@ -884,74 +948,85 @@ public class UsuarioFinalController {
             @PathVariable("idSubcategoria") Integer idSubcategoria,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "default") String sortOrder,  // Parámetro de ordenamiento
+            Authentication authentication,
             Model model) {
 
         // Buscar la subcategoría por ID
         Optional<Subcategoria> subcategoriaOpt = subcategoriaRepository.findById(idSubcategoria);
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
-        if (subcategoriaOpt.isPresent()) {
-            Subcategoria subcategoria = subcategoriaOpt.get();
-            Categoria categoria = subcategoria.getCategoria();  // Obtener la categoría a la que pertenece
-            List<Subcategoria> subcategorias = categoria.getSubcategorias();  // Obtener subcategorías relacionadas
 
-            // Añadir atributos de la subcategoría y la categoría al modelo
-            model.addAttribute("nombreSubcategoria", subcategoria.getNombreSubcategoria());
-            model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
-            model.addAttribute("subcategorias", subcategorias);
+        if (authentication != null && authentication.isAuthenticated() && subcategoriaOpt.isPresent()) {
+            String email = authentication.getName();  // Obtener el email del usuario autenticado
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
-            // Definir el criterio de ordenamiento
-            Sort sort = Sort.unsorted();  // Orden predeterminado
-            if ("asc".equals(sortOrder)) {
-                sort = Sort.by("precio").ascending();  // Orden ascendente por precio
-            } else if ("desc".equals(sortOrder)) {
-                sort = Sort.by("precio").descending();  // Orden descendente por precio
-            }
+            if (usuarioOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                Zona zonaUsuario = usuario.getZona();  // Obtener la zona del usuario
+                Subcategoria subcategoria = subcategoriaOpt.get();
+                Categoria categoria = subcategoria.getCategoria();  // Obtener la categoría a la que pertenece
+                List<Subcategoria> subcategorias = categoria.getSubcategorias();  // Obtener subcategorías relacionadas
 
-            // Tamaño de página fijo
-            int size = 12;  // Por ejemplo, 10 productos por página
-            Pageable pageable = PageRequest.of(page, size, sort);
+                // Añadir atributos de la subcategoría y la categoría al modelo
+                model.addAttribute("nombreSubcategoria", subcategoria.getNombreSubcategoria());
+                model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
+                model.addAttribute("subcategorias", subcategorias);
 
-            // Consulta paginada con el criterio de ordenamiento
-            Page<Producto> productosPage = productoRepository.findProductosPorSubcategoriaConPaginacion(idSubcategoria, pageable);
-            List<Producto> productos = productosPage.getContent();
-            model.addAttribute("productos", productos);
-
-            // Total de productos y número de páginas
-            long totalProductos = productosPage.getTotalElements();
-            model.addAttribute("totalProductos", totalProductos);
-            int totalPages = productosPage.getTotalPages();
-            model.addAttribute("totalPages", totalPages);
-            model.addAttribute("currentPage", page);
-
-            // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
-            int visiblePages = 3;
-            int startPage = Math.max(0, page - (visiblePages / 2));
-            int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
-
-            // Ajustar el rango si es necesario
-            if (endPage - startPage + 1 < visiblePages) {
-                if (startPage == 0) {
-                    endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
-                } else if (endPage == totalPages - 1) {
-                    startPage = Math.max(0, endPage - visiblePages + 1);
+                // Definir el criterio de ordenamiento
+                Sort sort = Sort.unsorted();  // Orden predeterminado
+                if ("asc".equals(sortOrder)) {
+                    sort = Sort.by("precio").ascending();  // Orden ascendente por precio
+                } else if ("desc".equals(sortOrder)) {
+                    sort = Sort.by("precio").descending();  // Orden descendente por precio
                 }
+
+                // Tamaño de página fijo
+                int size = 12;  // Por ejemplo, 12 productos por página
+                Pageable pageable = PageRequest.of(page, size, sort);
+
+                // Consulta paginada con el criterio de subcategoría y zona
+                Page<Producto> productosPage = productoRepository.findProductosPorZonaYSubcategoria(zonaUsuario.getId(), idSubcategoria, pageable);
+                List<Producto> productos = productosPage.getContent();
+                model.addAttribute("productos", productos);
+
+                // Total de productos y número de páginas
+                long totalProductos = productosPage.getTotalElements();
+                model.addAttribute("totalProductos", totalProductos);
+                int totalPages = productosPage.getTotalPages();
+                model.addAttribute("totalPages", totalPages);
+                model.addAttribute("currentPage", page);
+
+                // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
+                int visiblePages = 3;
+                int startPage = Math.max(0, page - (visiblePages / 2));
+                int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
+
+                // Ajustar el rango si es necesario
+                if (endPage - startPage + 1 < visiblePages) {
+                    if (startPage == 0) {
+                        endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
+                    } else if (endPage == totalPages - 1) {
+                        startPage = Math.max(0, endPage - visiblePages + 1);
+                    }
+                }
+
+                model.addAttribute("startPage", startPage);
+                model.addAttribute("endPage", endPage);
+
+                // Verificar si hay productos para mostrar información del producto principal
+                if (!productos.isEmpty()) {
+                    Producto producto = productos.get(0);  // Producto destacado
+                    model.addAttribute("producto", producto);
+
+                    // Añadir imágenes del producto y fecha formateada
+                    model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+                    String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+                    model.addAttribute("fechaFormateada", fechaFormateada);
+                }
+            } else {
+                // Redirigir si el usuario no se encuentra
+                return "redirect:/UsuarioFinal/listaProductos";
             }
-
-            model.addAttribute("startPage", startPage);
-            model.addAttribute("endPage", endPage);
-
-            // Verificar si hay productos para mostrar información del producto principal
-            if (!productos.isEmpty()) {
-                Producto producto = productos.get(0);  // Producto destacado
-                model.addAttribute("producto", producto);
-
-                // Añadir imágenes del producto y fecha formateada
-                model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
-                String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
-                model.addAttribute("fechaFormateada", fechaFormateada);
-            }
-
         } else {
             // Redirigir si la subcategoría no se encuentra
             return "redirect:/UsuarioFinal/listaProductos";
@@ -963,8 +1038,6 @@ public class UsuarioFinalController {
         // Retornar la vista de la subcategoría con productos
         return "UsuarioFinal/Productos/subcategoria";
     }
-
-
 
 
     @GetMapping("/UsuarioFinal/producto/quickView/{idProducto}")
