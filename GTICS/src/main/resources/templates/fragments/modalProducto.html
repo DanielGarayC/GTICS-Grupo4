@@ -54,15 +54,7 @@
                 <div class="fs-4">
                   <span class="fw-bold text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
                 </div>
-                <hr class="my-6" />
-                <div>
-                  <!-- input -->
-                  <div class="input-group input-spinner">
-                    <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" />
-                    <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field form-control-sm form-input" />
-                    <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" />
-                  </div>
-                </div>
+
                 <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
                   <input type="hidden" name="idProducto" th:value="${producto.id}" />
                   <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
