@@ -115,6 +115,9 @@ public class Usuario {
     private String apellidoMaterno;
 
     @NotBlank(message = "Debe ingresar una contraseña", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
+    @Pattern(regexp = "^(?=.*[0-9])(?=(.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]){2})(?=.*[a-zA-Z]).{8,16}$",
+            message = "La contraseña debe contener al menos 1 número, 2 caracteres especiales, 1 letra y debe tener entre 8 y 16 caracteres.",
+            groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
     @Column(name = "contrasena", nullable = false, length = 45)
     private String contrasena;
 

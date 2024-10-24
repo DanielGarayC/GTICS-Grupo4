@@ -89,11 +89,16 @@
                     <label for="password" class="form-label">Contraseña</label>
                     <input type="password" id="password" class="form-control" th:field="*{contrasena}" th:classappend="${#fields.hasErrors('contrasena')?'is-invalid':''}" required>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></div>
+                    <small id="password-requirements" class="text-danger"></small>
                 </div>
 
                 <div class="mb-3 col-lg-6">
                     <label for="passwordConfirm" class="form-label">Repetir contraseña</label>
-                    <input type="password" id="passwordConfirm" class="form-control" required>
+                    <input type="password" id="passwordConfirm" class="form-control" name="passwordConfirm" required>
+                    <div th:if="${diferentPassword}" class="text-danger" style="margin-top: 0.5rem; color: red; font-size: 0.875em">
+                        <span th:text="${diferentPassword}"></span>
+                    </div>
+                    <small id="confirm-message" class="text-danger"></small>
                 </div>
                 <button type="submit">Crear cuenta</button>
             </div>
@@ -115,5 +120,7 @@
 <script th:src="@{/js/vendors/chart.js}"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/login/script.js}"></script>
+<script th:src="@{/js/validatePassword.js}"></script>
+
 </body>
 </html>
