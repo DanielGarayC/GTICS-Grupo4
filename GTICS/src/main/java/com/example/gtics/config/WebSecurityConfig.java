@@ -78,8 +78,6 @@ public class WebSecurityConfig {
                 .invalidateHttpSession(true);
 
         http.authorizeHttpRequests()
-                .requestMatchers("/verificarContrasena").permitAll()
-                .requestMatchers("/Sistema", "/Sistema/**").permitAll()
                 .requestMatchers("/SuperAdmin", "/SuperAdmin/**").hasAnyAuthority("Super Admin")
                 .requestMatchers("/UsuarioFinal", "/UsuarioFinal/**").hasAnyAuthority("Usuario Final")
                 .requestMatchers("/AdminZonal", "/AdminZonal/**").hasAnyAuthority("Administrador Zonal")

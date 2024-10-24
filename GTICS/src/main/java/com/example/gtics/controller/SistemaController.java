@@ -84,29 +84,55 @@ public class SistemaController {
         return "Sistema/chPass";
     }
 
-    @PostMapping("/validatePassword")
-    @ResponseBody
-    public ResponseEntity<Map<String, Boolean>> validatePassword(@RequestBody Map<String, String> body, Principal principal) {
-        String currentPassword = body.get("currentPassword");
+    @GetMapping("/validateCurrentPassword")
+    public ResponseEntity<String> validateCurrentPassword(@RequestParam String currentPassword, HttpSession session) {
+        // Obtener el idAgente de la sesión
+        Integer idAgente = (Integer) session.getAttribute("idAgente");
 
-        // Obtener el usuario logueado
-        UserDetails userDetails = (UserDetails) ((Authentication) principal).getPrincipal();
-        String loggedUserPassword = userDetails.getPassword(); // Contraseña encriptada
+        if (idAgente == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autenticado.");
+        }
 
-        System.out.println("Contraseña ingresada: " + currentPassword);
-        System.out.println("Contraseña almacenada: " + loggedUserPassword);
-        // Verificar la contraseña ingresada
-        boolean isValid = passwordEncoder.matches(currentPassword, loggedUserPassword);
-        return ResponseEntity.ok(Map.of("valid", isValid));
+        // Recuperar el usuario desde la base de datos utilizando el idAgente
+        Optional<Usuario> optUsuario = usuarioRepository.findById(idAgente);
+
+        if (!optUsuario.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
+
+        Usuario usuario = optUsuario.get();
+
+        // Aquí obtienes la contraseña hasheada del usuario
+        String storedHashedPassword = usuario.getContrasena();
+
+        // Verificar si la contraseña proporcionada coincide con la almacenada
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        boolean isPasswordMatch = passwordEncoder.matches(currentPassword, storedHashedPassword);
+
+        if (isPasswordMatch) {
+            return ResponseEntity.ok("Contraseña válida.");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La contraseña actual es incorrecta.");
+        }
     }
-    @PostMapping({"CambiarContra"})
+    @PostMapping({"/CambiarContra"})
     public String CambiarContrasena(@RequestParam("newPassword") String newPassword,
                                     @RequestParam("currentPassword") String currentPassword,
                                     @RequestParam("confirmNewPassword") String confirmNewPassword,
                                     HttpSession session,
                                     RedirectAttributes redirectAttributes){
 
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        if (idAgente == null) {
+            return "redirect:/ExpressDealsLogin"; // Redirige a login si no hay sesión
+        }
+
+        Optional<Usuario> optUsuario = usuarioRepository.findById(idAgente);
+        if (!optUsuario.isPresent()) {
+            return "redirect:/ExpressDealsLogin"; // Redirige a login si no hay usuario
+        }
+
+        Usuario usuario = optUsuario.get();
         Rol rol = usuario.getRol();
         String viewName = "";
         switch(rol.getId()) {
@@ -130,11 +156,11 @@ public class SistemaController {
         String hashedCurrentPassword = usuario.getContrasena();
         // Verificar la contraseña actual ingresada (usaron BCrypt asi q yo tmb)
         if (!BCrypt.checkpw(currentPassword, hashedCurrentPassword)) {
-            redirectAttributes.addFlashAttribute("error", "La contraseña actual es incorrecta.");
+            redirectAttributes.addFlashAttribute("error", "Contraseña actual erronea");
             return viewName;
         }
         if (!newPassword.equals(confirmNewPassword)) {
-            redirectAttributes.addFlashAttribute("error", "Las nuevas contraseñas no coinciden.");
+            redirectAttributes.addFlashAttribute("error", "Ha ingresado contraseñas distintas, verifique los datos ingresados");
             return viewName;
         }
         String hashedNewPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
@@ -143,7 +169,8 @@ public class SistemaController {
         usuarioRepository.cambiarContrasena(idUsuario, hashedNewPassword);
 
         // Mensaje de éxito
-        redirectAttributes.addFlashAttribute("success", "Contraseña cambiada con éxito.");
+        redirectAttributes.addFlashAttribute("success", "Contraseña actualizada correctamente"); // o "error"
+
         return viewName;
     }
 

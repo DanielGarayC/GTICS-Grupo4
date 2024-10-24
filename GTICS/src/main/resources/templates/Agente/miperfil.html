@@ -7,7 +7,7 @@
     <meta content="Codescandy" name="author" />
     <title>Perfil Agente</title>
     <link th:href="@{/libs/dropzone/dist/min/dropzone.min.css}" rel="stylesheet" />
-    <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
+    <link href="/libs/tiny-slider/dist/tiny-slider.css" rel="stylesheet" />
     <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
     <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
     <!-- Favicon icon-->
@@ -17,11 +17,18 @@
     <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
     <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet" />
     <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+    <!-- SweetAlert2 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <!-- Theme CSS -->
     <link rel="stylesheet" th:href="@{/css/theme.min.css}" />
     <style>
-
+        .centered {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0; /* Espaciado superior e inferior */
+        }
         .logoImagen{
             height: 80px;
             width: 250px;
@@ -45,16 +52,48 @@
         <!-- navbar vertical (para celular)-->
         <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('inicio')}"></div>
     </div>
+
+    <div th:if="${result != null}">
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let result = /*[[${result}]]*/ '';
+                console.log(result); // Para depuración
+
+                if (result === 'success') {
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: 'La contraseña ha sido cambiada correctamente.',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar'
+                    });
+                } else if (result === 'error') {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Ocurrió un error al cambiar la contraseña. Por favor, verifica los datos.',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            });
+        </script>
+    </div>
     <main class="py-5 mt-11">
+
         <div class="container">
+
             <div class="row justify-content-center g-4" style="margin-left: 100px">
+
                 <!-- Formulario del perfil -->
                 <div class="col-lg-6">
+
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <h2 class="card-title text-center mb-4">Mi perfil</h2>
-                            <div th:if="${mensaje}" class="alert alert-success alert-sm">
-                                <p th:text="${mensaje}" class="mb-0"></p>
+                            <div th:if="${success}" class="alert alert-success" role="alert">
+                                <p th:text="${success}"></p>
+                            </div>
+                            <div th:if="${error}" class="alert alert-danger" role="alert">
+                                <p th:text="${error}"></p>
                             </div>
                             <!-- Formulario de edición del perfil -->
                             <form id="profileForm" method="post" th:action="@{'/Agente/savePerfil'}" th:object="${usuarioLogueado}">
@@ -150,18 +189,20 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="changePasswordForm">
+                        <form id="changePasswordForm" th:action="@{/CambiarContra}" method="POST" class="needs-validation" novalidate>
                             <div class="mb-3">
-                                <label class="form-label">Contraseña Actual</label>
-                                <input type="password" class="form-control" required />
+                                <label for="currentPassword" class="form-label">Contraseña Actual</label>
+                                <input type="password" id="currentPassword" class="form-control" name="currentPassword" required />
+                                <div id="currentPasswordError" class="text-danger"></div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Nueva Contraseña</label>
-                                <input type="password" class="form-control" required />
+                                <label for="newPassword" class="form-label">Nueva Contraseña</label>
+                                <input type="password" id="newPassword" class="form-control" name="newPassword" required />
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Confirmar Nueva Contraseña</label>
-                                <input type="password" class="form-control" required />
+                                <label for="confirmNewPassword" class="form-label">Confirmar Nueva Contraseña</label>
+                                <input type="password" id="confirmNewPassword" class="form-control" name="confirmNewPassword" required />
+                                <div id="passwordError" class="text-danger" style="display:none;">Las contraseñas no coinciden.</div>
                             </div>
                         </form>
                     </div>
@@ -202,7 +243,66 @@
         <script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
         <script th:src="@{/js/vendors/sticky.js}"></script>
         <script th:src="@{/js/vendors/modal.js}"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+        <!-- SweetAlert2 JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
     </div>
+    <script>
+        console.log('SweetAlert2 cargado:', Swal);
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Asignar el valor a partir de lo que envía el controlador
+            let result = /*[[${result}]]*/ ''; // Asegúrate de que este valor se imprime correctamente en tu vista.
+
+            // Si hay un resultado, almacenarlo en localStorage
+            if (result) {
+                localStorage.setItem('passwordChangeResult', result);
+            }
+
+            // Verifica si el pop-up debe mostrarse
+            const storedResult = localStorage.getItem('passwordChangeResult');
+            if (storedResult === 'success') {
+                Swal.fire({
+                    title: 'Éxito',
+                    text: 'La contraseña ha sido cambiada correctamente.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    localStorage.removeItem('passwordChangeResult'); // Elimina el estado después de mostrar el pop-up
+                });
+            } else if (storedResult === 'error') {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error al cambiar la contraseña. Por favor, verifica los datos.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    localStorage.removeItem('passwordChangeResult'); // Elimina el estado después de mostrar el pop-up
+                });
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si hay un mensaje de éxito
+            var successMessage = /*[[${success}]]*/ null;
+            if (successMessage) {
+                swal("¡Éxito!", successMessage, "success");
+            }
+
+            // Verificar si hay un mensaje de error
+            var errorMessage = /*[[${error}]]*/ null;
+            if (errorMessage) {
+                swal("¡Error!", errorMessage, "error");
+            }
+        });
+    </script>
+
     <script>
         // Seleccionar el input y la imagen específicos para este contenedor
         const fileInput1 = document.getElementById('fileInput-1');
@@ -265,6 +365,76 @@
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return re.test(String(email).toLowerCase());
         }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const savePasswordButton = document.getElementById('savePasswordButton');
+
+            if (savePasswordButton) {
+                savePasswordButton.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    // Obtener los valores de los campos
+                    const currentPassword = document.getElementById('currentPassword').value.trim();
+                    const newPassword = document.getElementById('newPassword').value;
+                    const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+                    // Agregar logs para revisar los valores capturados
+                    console.log('Contraseña actual:', currentPassword);
+                    console.log('Nueva contraseña:', newPassword);
+                    console.log('Confirmar nueva contraseña:', confirmNewPassword);
+
+                    // Limpiar mensajes de error
+                    document.getElementById('currentPasswordError').textContent = '';
+                    document.getElementById('passwordError').style.display = 'none';
+
+                    let hasError = false;
+
+                    // Envío de solicitud para validar la contraseña actual
+                    fetch('/validateCurrentPassword?currentPassword=' + encodeURIComponent(currentPassword))
+                        .then(response => {
+                            if (response.ok) {
+                                // La contraseña es válida
+                                console.log('Contraseña válida');
+
+                                // Validación de nueva contraseña (más de 8 caracteres)
+                                if (newPassword.length < 8) {
+                                    document.getElementById('passwordError').textContent = 'La nueva contraseña debe tener al menos 8 caracteres.';
+                                    document.getElementById('passwordError').style.display = 'block';
+                                    hasError = true;
+                                }
+
+                                // Validación de coincidencia de la nueva contraseña
+                                if (newPassword !== confirmNewPassword) {
+                                    document.getElementById('passwordError').textContent = 'Las contraseñas no coinciden.';
+                                    document.getElementById('passwordError').style.display = 'block';
+                                    hasError = true;
+                                }
+
+                                // Si hubo errores, no continuar
+                                if (hasError) {
+                                    console.log('Errores encontrados, el formulario no se enviará.');
+                                    return;
+                                }
+
+                                // Si todas las validaciones pasan, enviar el formulario
+                                console.log('No hay errores, enviando el formulario...');
+                                document.getElementById('changePasswordForm').submit();
+                            } else {
+                                // La contraseña es incorrecta
+                                response.text().then(errorMessage => {
+                                    document.getElementById('currentPasswordError').textContent = errorMessage;
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error al validar la contraseña actual:', error);
+                        });
+                });
+            } else {
+                console.error('El botón de guardar contraseña no fue encontrado.');
+            }
+        });
     </script>
 </body>
 </html>
