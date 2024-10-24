@@ -278,4 +278,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
     @Query(value = "SELECT estadoCodigo FROM codigosaduaneros WHERE codigoAduanero = :codigo", nativeQuery = true)
     String findEstadoAduana(String codigo);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE usuario SET idDistrito = ?, direccion = ?, email = ? WHERE idUsuario = ?", nativeQuery = true)
+    void actualizarUsuario(String idDistrito, String direccion, String email, String id);
+
 }

@@ -237,12 +237,12 @@
 			var response = document.getElementById('response');
 			var p = document.createElement('p');
 
-			if (message.sender === "Sistema") {
+			if (message.senderId === "Sistema") {
 				p.style.fontStyle = "italic";
 				p.style.color = "gray";
 			}
 
-			p.appendChild(document.createTextNode(message.sender + ": " + message.content));
+			p.appendChild(document.createTextNode(message.senderId + ": " + message.content));
 			response.appendChild(p);
 			response.scrollTop = response.scrollHeight; // Desplazarse hacia abajo automáticamente
 		}

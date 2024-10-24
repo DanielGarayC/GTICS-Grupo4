@@ -1,6 +1,7 @@
 package com.example.gtics.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class Fotosproducto {
     private Integer id;
 
     @Lob
+    @NotNull(message = "La foto es obligatoria")
     @Column(name = "foto", nullable = false)
     private byte[] foto;
 
