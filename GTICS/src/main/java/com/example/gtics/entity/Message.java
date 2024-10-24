@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -30,5 +33,9 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario idUsuario;
+
+    @NotNull
+    @Column(name = "fechaEnvio", nullable = false)
+    private LocalDateTime fechaEnvio;
 
 }
