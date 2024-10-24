@@ -145,7 +145,9 @@ public class UsuarioFinalController {
     @PostMapping("/UsuarioFinal/agregarAlCarrito")
     public String agregarAlCarrito(@RequestParam("idProducto") Integer idProducto,
                                    @RequestParam("cantidad") Integer cantidad,
-                                   RedirectAttributes attr) {
+                                   RedirectAttributes attr,
+                                   HttpSession session) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // Verifica si el usuario está autenticado
@@ -160,6 +162,8 @@ public class UsuarioFinalController {
         Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
         Usuario usuario = optUsuario.get();
+        Integer idUsuarioFinal = usuario.getId();
+        session.setAttribute("idUsuarioFinal", idUsuarioFinal);
 
         // Busca un carrito activo del usuario o crea uno nuevo
         Carritocompra carrito = carritoCompraRepository.findByIdUsuarioAndActivoTrue(usuario)
@@ -626,8 +630,36 @@ public class UsuarioFinalController {
     @GetMapping("/UsuarioFinal/miPerfil")
     public String miPerfil(Model model){
 
+        List<Distrito> listaDistritos = distritoRepository.findAll();
+        model.addAttribute("listaDistritos", listaDistritos);
+
+
         return "UsuarioFinal/Perfil/miperfil";
     }
+
+    @PostMapping("/UsuarioFinal/savePerfil")
+    public String guardarPerfil(
+            @RequestParam("id") String id,
+            @RequestParam("distrito") String idDistrito, // Suponiendo que usas el ID del distrito
+            @RequestParam("direccion") String direccion,
+            @RequestParam("email") String email,
+            RedirectAttributes attr) {
+
+        // Actualiza el usuario
+        usuarioRepository.actualizarUsuario(idDistrito, direccion, email, id);
+
+        // Añade un mensaje de éxito
+        attr.addFlashAttribute("mensaje", "Perfil actualizado con éxito.");
+
+        // Redirige a la página de perfil
+        return "redirect:/UsuarioFinal/miPerfil";
+    }
+
+
+
+
+
+
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
     public String mostrarListaMisOrdenes(Model model,
                                          @RequestParam(defaultValue = "0") int page,
@@ -711,35 +743,60 @@ public class UsuarioFinalController {
 
 
     @GetMapping("/UsuarioFinal/detallesOrden")
-    public String mostrarDetallesOrden(@RequestParam("idOrden") Integer idOrden,Model model) {
+    public String mostrarDetallesOrden(@RequestParam("idOrden") Integer idOrden,
+                                       Model model,
+                                       Authentication authentication,
+                                       RedirectAttributes attr) {
 
-        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
-        List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
-        List<Distrito> listaDistritos = distritoRepository.findAll();
-        Double costoAdicional = ordenRepository.obtenerCostoAdicionalxOrden(idOrden);
-        // Calcular el subtotal sumando precioTotalPorProducto
-        double subtotal = productosOrden.stream()
-                .mapToDouble(ProductosxOrden::getPrecioTotalPorProducto)
-                .sum();
-        // Encontrar el costo de envío más alto
-        double maxCostoEnvio = productosOrden.stream()
-                .mapToDouble(ProductosxOrden::getCostoEnvio)
-                .max()
-                .orElse(0.0);
-        if(ordenOpt.isPresent()){
-            model.addAttribute("costoAdicional",costoAdicional);
-            model.addAttribute("subtotal",subtotal);
-            model.addAttribute("maxCostoEnvio",maxCostoEnvio);
-            model.addAttribute("productosOrden",productosOrden);
-            model.addAttribute("orden",ordenOpt.get());
-            model.addAttribute("listaDistritos",listaDistritos);
-            model.addAttribute("usuario",usuarioRepository.findById(7).get());
+        // Verifica si el usuario está autenticado
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
 
-            return "UsuarioFinal/Ordenes/detalleOrden";
-        }else{
-            return "UsuarioFinal/Ordenes/listaMisOrdenes";
+        // Obtiene el email del usuario autenticado
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+
+            // Obtiene la orden por ID
+            Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+            List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+            List<Distrito> listaDistritos = distritoRepository.findAll();
+            Double costoAdicional = ordenRepository.obtenerCostoAdicionalxOrden(idOrden);
+
+            // Calcular el subtotal sumando precioTotalPorProducto
+            double subtotal = productosOrden.stream()
+                    .mapToDouble(ProductosxOrden::getPrecioTotalPorProducto)
+                    .sum();
+
+            // Encontrar el costo de envío más alto
+            double maxCostoEnvio = productosOrden.stream()
+                    .mapToDouble(ProductosxOrden::getCostoEnvio)
+                    .max()
+                    .orElse(0.0);
+
+            if (ordenOpt.isPresent()) {
+                model.addAttribute("costoAdicional", costoAdicional);
+                model.addAttribute("subtotal", subtotal);
+                model.addAttribute("maxCostoEnvio", maxCostoEnvio);
+                model.addAttribute("productosOrden", productosOrden);
+                model.addAttribute("orden", ordenOpt.get());
+                model.addAttribute("listaDistritos", listaDistritos);
+                model.addAttribute("usuario", usuario);
+
+                return "UsuarioFinal/Ordenes/detalleOrden";
+            } else {
+                return "UsuarioFinal/Ordenes/listaMisOrdenes";
+            }
+        } else {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
         }
     }
+
 
     @PostMapping("/UsuarioFinal/editarDireccionOrden")
     public String editarOrden(Orden orden,RedirectAttributes redd,@RequestParam("idUsuario") Integer idUsuario){
@@ -1060,19 +1117,39 @@ public class UsuarioFinalController {
         }
     }
     @GetMapping("/UsuarioFinal/Review")
-    public String mostrarReview(Model model){
-// Obtener el usuario autenticado (en este caso, estoy usando un ID estático para el ejemplo)
-        Integer idUsuario = 7;  // Cambia esto por el método de autenticación real
+    public String mostrarReview(Model model,
+                                Authentication authentication,
+                                RedirectAttributes attr) {
 
-        // Obtener la lista de productos recibidos sin reseña
-        List<ProductoDTO> productosSinResena = ordenRepository.obtenerProductosPorUsuarioSinResena(idUsuario);
+        // Verifica si el usuario está autenticado
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
 
-        // Añadir la lista de productos al modelo para que se muestre en la vista
-        model.addAttribute("productosSinResena", productosSinResena);
-// Inicializar un objeto vacío de Resena para el formulario
-        model.addAttribute("resena", new Resena());
-        return "UsuarioFinal/Productos/reviuw";
+        // Obtiene el email del usuario autenticado
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+
+            // Obtener la lista de productos recibidos sin reseña por el usuario autenticado
+            List<ProductoDTO> productosSinResena = ordenRepository.obtenerProductosPorUsuarioSinResena(usuario.getId());
+
+            // Añadir la lista de productos al modelo para que se muestre en la vista
+            model.addAttribute("productosSinResena", productosSinResena);
+
+            // Inicializar un objeto vacío de Resena para el formulario
+            model.addAttribute("resena", new Resena());
+
+            return "UsuarioFinal/Productos/reviuw";
+        } else {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
     }
+
 
     @GetMapping("/UsuarioFinal/Resena/Fotos/{id}")
     public ResponseEntity<ByteArrayResource> obtenerFotoResena(@PathVariable Integer id) {
@@ -1247,10 +1324,12 @@ public class UsuarioFinalController {
                                 BindingResult bindingResult,
                                 @RequestParam(value = "uploadedPhotos", required = false) MultipartFile[] uploadedPhotos,
                                 RedirectAttributes attr,
-                                Model model) {
+                                Model model,HttpSession session ) {
 
-        // Set fields before validation check
-        Usuario user = usuarioRepository.findUsuarioById(7); // Replace with actual user retrieval logic
+         Integer idUsuarioFinal = (Integer) session.getAttribute("idUsuarioFinal");
+
+         // Set fields before validation check
+        Usuario user = usuarioRepository.findUsuarioById(idUsuarioFinal); // Replace with actual user retrieval logic
         if (user == null) {
             attr.addFlashAttribute("error", "Usuario no encontrado.");
             return "redirect:/UsuarioFinal/Review";
@@ -1379,26 +1458,74 @@ public class UsuarioFinalController {
     }
 
     @PostMapping("/UsuarioFinal/faq/newPregunta")
-    public String crearPregunta(@ModelAttribute("preguntaForm") Foropregunta preguntaForm) {
-        Usuario user = usuarioRepository.findUsuarioById(27); //estático por ahora
+    public String crearPregunta(@ModelAttribute("preguntaForm") Foropregunta preguntaForm,
+                                Authentication authentication,
+                                RedirectAttributes attr) {
 
-        preguntaForm.setFechaCreacion(LocalDate.now());
-        preguntaForm.setIdUsuario(user);
+        // Verifica si el usuario está autenticado
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
 
+        // Obtiene el email del usuario autenticado
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
-        foroPreguntaRepository.save(preguntaForm);
-        return "redirect:/UsuarioFinal/faq";
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+
+            // Asigna el ID del usuario autenticado a la pregunta
+            preguntaForm.setFechaCreacion(LocalDate.now());
+            preguntaForm.setIdUsuario(usuario);
+
+            // Guarda la pregunta en el repositorio
+            foroPreguntaRepository.save(preguntaForm);
+
+            return "redirect:/UsuarioFinal/faq";
+        } else {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
     }
+
     @PostMapping("/UsuarioFinal/faq/newRespuesta")
-    public String crearPregunta(@RequestParam("idPregunta") Integer idPregunta, @ModelAttribute("respuestaForm") Fororespuesta respuestaForm) {
-        Usuario user = usuarioRepository.findUsuarioById(27);  // Ejemplo estático; a posterior se tiene que mandar este parametro por sesion
-        Optional<Foropregunta> pregunta = foroPreguntaRepository.findById(idPregunta);
-        pregunta.ifPresent(respuestaForm::setIdPregunta);
-        respuestaForm.setFechaRespuesta(LocalDate.now());
-        respuestaForm.setIdUsuario(user);  // Asignar el usuario que responde
+    public String crearRespuesta(@RequestParam("idPregunta") Integer idPregunta,
+                                 @ModelAttribute("respuestaForm") Fororespuesta respuestaForm,
+                                 Authentication authentication,
+                                 RedirectAttributes attr) {
 
-        foroRespuestaRepository.save(respuestaForm);  // Guardar la respuesta
-        return "redirect:/UsuarioFinal/faq/verPregunta?id=" + idPregunta;
+        // Verifica si el usuario está autenticado
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
+
+        // Obtiene el email del usuario autenticado
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isPresent()) {
+            Usuario usuario = optUsuario.get();
+
+            // Encuentra la pregunta asociada al ID proporcionado
+            Optional<Foropregunta> pregunta = foroPreguntaRepository.findById(idPregunta);
+            pregunta.ifPresent(respuestaForm::setIdPregunta);
+
+            // Asigna la fecha de la respuesta y el usuario autenticado que responde
+            respuestaForm.setFechaRespuesta(LocalDate.now());
+            respuestaForm.setIdUsuario(usuario);  // Asignar el usuario autenticado
+
+            // Guarda la respuesta en el repositorio
+            foroRespuestaRepository.save(respuestaForm);
+
+            // Redirige a la vista de la pregunta con la respuesta
+            return "redirect:/UsuarioFinal/faq/verPregunta?id=" + idPregunta;
+        } else {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
+        }
     }
+
 
 }

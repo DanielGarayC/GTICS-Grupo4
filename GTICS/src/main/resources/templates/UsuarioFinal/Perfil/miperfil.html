@@ -46,10 +46,14 @@
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <h2 class="card-title text-center mb-4">Mi perfil</h2>
-
+                            <div th:if="${mensaje}" class="alert alert-success alert-sm">
+                                <p th:text="${mensaje}" class="mb-0"></p>
+                            </div>
                             <!-- Formulario de edición del perfil -->
-                            <form id="profileForm">
+                            <form id="profileForm" method="post" th:action="@{'/UsuarioFinal/savePerfil'}" th:object="${usuario}">
                                 <!-- Nombre Completo (no editable) -->
+                                <input type="hidden" name="id" th:value="${usuario.id}">
+
                                 <div class="mb-3">
                                     <label class="form-label">Nombre Completo</label>
                                     <input type="text" class="form-control" th:value="${usuario.nombre} + ' ' + ${usuario.apellidoPaterno} + ' ' + ${usuario.apellidoMaterno}" disabled />
@@ -64,26 +68,27 @@
                                 <!-- Distrito (editable) -->
                                 <div class="mb-3">
                                     <label class="form-label">Distrito</label>
-                                    <input type="text" class="form-control editable-field" id="distrito" th:value="${usuario.distrito.nombre}" disabled />
+                                    <select class="form-select" th:field="*{distrito} " name="idDistrito">
+                                        <option th:each="distrito : ${listaDistritos}" th:text="${distrito.getNombre()}"
+                                                th:value="${distrito.getId()}"></option>
+                                    </select>
                                 </div>
 
                                 <!-- Dirección (editable) -->
                                 <div class="mb-3">
                                     <label class="form-label">Dirección</label>
-                                    <input type="text" class="form-control editable-field" id="direccion" th:value="${usuario.direccion}" disabled />
+                                    <input type="text" class="form-control editable-field" id="direccion" name="direccion" th:value="${usuario.direccion}"  />
                                 </div>
 
                                 <!-- Email (editable) -->
                                 <div class="mb-3">
                                     <label class="form-label">Email</label>
-                                    <input type="email" class="form-control editable-field" id="email" th:value="${usuario.email}" disabled />
+                                    <input type="email" class="form-control editable-field" id="email"  name="email" th:value="${usuario.email}"  />
                                 </div>
 
                                 <!-- Botones de acción -->
                                 <div class="text-center mt-4">
-                                    <button type="button" id="editButton" class="btn btn-primary ">Editar</button>
-                                    <button type="submit" id="saveButton" class="btn btn-primary d-none">Guardar cambios</button>
-                                    <button type="button" id="cancelButton" class="btn btn-secondary d-none">Cancelar</button>
+                                    <button type="submit" id="saveButton" class="btn btn-primary ">Actualizar datos</button>
                                 </div>
                             </form>
                         </div>
