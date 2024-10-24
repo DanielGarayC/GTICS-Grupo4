@@ -520,14 +520,33 @@ public class AdminZonalController {
     public String Perfil(Model model, HttpSession session){
         //Actualizar para el entregable de sesiones
         Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
+        List<Distrito> listaDistritos = distritoRepository.findAll();
 
         Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(idAdminZonal);
         if(OptAdminZonal.isPresent()){
+            model.addAttribute("listaDistritos", listaDistritos);
+
             model.addAttribute("adminZonal",OptAdminZonal.get());
         }
         return "AdminZonal/Perfil/perfilAdminZonal";
     }
 
+    @PostMapping("/AdminZonal/savePerfil")
+    public String guardarPerfil(
+            @RequestParam("id") String id,
+            @RequestParam("distrito") String idDistrito,
+            @RequestParam("direccion") String direccion,
+            @RequestParam("email") String email,
+            RedirectAttributes attr) {
 
+        // Actualiza el usuario
+        usuarioRepository.actualizarUsuario(idDistrito, direccion, email, id);
+
+        // Añade un mensaje de éxito
+        attr.addFlashAttribute("mensaje", "Perfil actualizado con éxito.");
+
+        // Redirige a la página de perfil
+        return "redirect:/AdminZonal/Perfil";
+    }
 }
 

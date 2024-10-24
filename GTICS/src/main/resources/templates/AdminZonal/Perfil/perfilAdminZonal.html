@@ -33,7 +33,7 @@
 
 <body>
 <!-- main -->
-<div>
+
     <!-- navbar -->
     <div th:insert="~{fragments/navbarAdminZonal.html :: navbarSuperior}"></div>
 
@@ -45,57 +45,68 @@
 
         <!-- navbar vertical (para celular)-->
         <div th:insert="~{fragments/navbarAdminZonal.html :: navbarVerticalPc('')}"></div>
-
+    </div>
         <!-- COONTENIDO DE LA PAGINA -->
-        <main class="main-content-wrapper">
+        <main class="py-5 mt-11">
             <div class="container">
-                <div class="row "> <!-- Use gap between columns -->
-                    <div class="col-lg-6 offset-lg-1"> <!-- Centered column -->
-                        <h2 class="mb-3 text-center">Mi perfil</h2> <!-- Adjusted margin and centered -->
-                        <h6 class="mb-4 text-center">Detalles de mi cuenta</h6>
-                        <!-- form -->
-                        <form>
-                            <!-- input -->
-                            <div class="mb-3">
-                                <label class="form-label">Nombre Completo</label>
-                                <input type="text" class="form-control" th:value="${adminZonal.nombre} + ' ' + ${adminZonal.apellidoPaterno} + ' ' + ${adminZonal.apellidoMaterno}" disabled />
-                            </div>
-                            <!-- input -->
-                            <div class="mb-3">
-                                <label class="form-label">DNI</label>
-                                <input type="text" class="form-control" th:value="${adminZonal.dni}" disabled />
-                            </div>
-                            <!-- input -->
-                            <div class="mb-3">
-                                <label class="form-label">Distrito</label>
-                                <input type="text" class="form-control" th:value="${adminZonal.distrito.nombre}" disabled />
-                            </div>
-                            <!-- input -->
-                            <div class="mb-3">
-                                <label class="form-label">Dirección</label>
-                                <input type="text" class="form-control" th:value="${adminZonal.direccion}" disabled />
-                            </div>
-                            <!-- input -->
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" th:value="${adminZonal.email}" disabled />
-                            </div>
+                <div class="row justify-content-center g-4" style="margin-left: 100px">
+                    <!-- Formulario del perfil -->
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h2 class="card-title text-center mb-4">Mi perfil</h2>
+                                <div th:if="${mensaje}" class="alert alert-success alert-sm">
+                                    <p th:text="${mensaje}" class="mb-0"></p>
+                                </div>
+                                <!-- Formulario de edición del perfil -->
+                                <form id="profileForm" method="post" th:action="@{'/AdminZonal/savePerfil'}" th:object="${adminZonal}">
 
-                            <!-- Contenedor flexible para los botones -->
-                            <div class="mb-3 d-flex justify-content-center">
-                                <!-- Botón Editar información -->
-                                <button class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#editInfoModal">Editar información</button>
+                                    <input type="hidden" name="id" th:value="${adminZonal.id}">
 
-                                <!-- Botón Cambiar Contraseña -->
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#passwordChangeModal" data-bs-html="true" title="Cambiar contraseña">
-                                    <i class="bi bi-lock me-2"></i> Cambiar contraseña
-                                </button>
+                                    <!-- Nombre Completo (no editable) -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre Completo</label>
+                                        <input type="text" class="form-control" th:value="${adminZonal.nombre} + ' ' + ${adminZonal.apellidoPaterno} + ' ' + ${adminZonal.apellidoMaterno}" disabled />
+                                    </div>
+
+                                    <!-- DNI (no editable) -->
+                                    <div class="mb-3">
+                                        <label class="form-label">DNI</label>
+                                        <input type="text" class="form-control" th:value="${adminZonal.dni}" disabled />
+                                    </div>
+
+                                    <!-- Distrito (editable) -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Distrito</label>
+                                        <select class="form-select" th:field="*{distrito} " name="idDistrito">
+                                            <option th:each="distrito : ${listaDistritos}" th:text="${distrito.getNombre()}"
+                                                    th:value="${distrito.getId()}"></option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Dirección (editable) -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Dirección</label>
+                                        <input type="text" class="form-control editable-field" id="direccion"  name="direccion" th:value="${adminZonal.direccion}"  />
+                                    </div>
+
+                                    <!-- Email (editable) -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control editable-field" id="email"  name="email" th:value="${adminZonal.email}"  />
+                                    </div>
+
+                                    <!-- Botones de acción -->
+                                    <div class="text-center mt-4">
+                                        <button type="submit" id="saveButton" class="btn btn-primary">Actualizar datos</button>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
                     </div>
 
-                    <!-- Profile Picture Section -->
-                    <div class="col-lg-4 d-flex flex-column align-items-center">
+                    <!-- Sección de la foto de perfil -->
+                    <div class="col-lg-3 d-flex flex-column align-items-center">
                         <div class="card shadow-sm p-3 text-center">
                             <div class="mb-3">
                                 <img id="profileImage-1" th:src="@{/images/avatar/avatar-1.jpg}" alt="Profile Picture"
@@ -107,95 +118,67 @@
                                 <span>Cambiar foto de perfil</span>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Modal Editar Información -->
-                    <div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editInfoModalLabel">Editar Información</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <!-- Sección adicional de opciones -->
+                        <div class="card shadow-sm mt-4 p-3">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Opciones de cuenta</h5>
+
+                                <!-- Cambiar Contraseña -->
+                                <div class="d-grid mb-3">
+                                    <button type="button" class="btn btn-outline-primary"
+                                            data-bs-toggle="modal" data-bs-target="#changePasswordModal">Cambiar Contraseña</button>
                                 </div>
-                                <div class="modal-body">
-                                    <form id="editProfileForm">
-                                        <!-- input Nombre Completo -->
-                                        <div class="mb-3">
-                                            <label for="nombreCompleto" class="form-label">Nombre Completo</label>
-                                            <input type="text" class="form-control" id="nombreCompleto" value="Ricarry Yarleque" required>
-                                        </div>
-                                        <!-- input DNI -->
-                                        <div class="mb-3">
-                                            <label for="dni" class="form-label">DNI</label>
-                                            <input type="text" class="form-control" id="dni" value="12345678"  required>
-                                        </div>
-                                        <!-- input Distrito -->
-                                        <div class="mb-3">
-                                            <label for="distrito" class="form-label">Distrito</label>
-                                            <input type="text" class="form-control" id="distrito" value="San Miguel"  required>
-                                        </div>
-                                        <!-- input Dirección -->
-                                        <div class="mb-3">
-                                            <label for="direccion" class="form-label">Dirección</label>
-                                            <input type="text" class="form-control" id="direccion" value="noc"  required>
-                                        </div>
-                                        <!-- input Email -->
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="email" value="ricarry@gmail.com" required>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary" form="editProfileForm">Guardar cambios</button>
-                                </div>
+
+                                <!-- Eliminar Cuenta -->
+                                <!--<div class="d-grid">
+                                    <button type="button" class="btn btn-danger">Eliminar Cuenta</button>
+                                </div>-->
                             </div>
                         </div>
                     </div>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-body p-8">
-                                    <div class="position-absolute top-0 end-0 me-3 mt-3">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="row">
-                                        <form>
-                                            <!-- Current Password -->
-                                            <div class="mb-3">
-                                                <label for="currentPassword" class="form-label">Contraseña actual</label>
-                                                <input type="password" class="form-control" id="currentPassword" placeholder="Ingresa tu contraseña actual" required>
-                                            </div>
-                                            <!-- New Password -->
-                                            <div class="mb-3">
-                                                <label for="newPassword" class="form-label">Nueva contraseña</label>
-                                                <input type="password" class="form-control" id="newPassword" placeholder="Ingresa una nueva contraseña" required>
-                                            </div>
-                                            <!-- Confirm New Password -->
-                                            <div class="mb-3">
-                                                <label for="confirmNewPassword" class="form-label">Confirmar nueva contraseña</label>
-                                                <input type="password" class="form-control" id="confirmNewPassword" placeholder="Confirma tu nueva contraseña" required>
-                                                <div class="invalid-feedback">
-                                                    Las contraseñas no coinciden.
-                                                </div>
-                                            </div>
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                                            </div>
-                                        </form>
-                                    </div>
+
+
+
+                </div>
+            </div>
+            <!-- Modal para cambiar contraseña -->
+            <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="changePasswordLabel">Cambiar Contraseña</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="changePasswordForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Contraseña Actual</label>
+                                    <input type="password" class="form-control" required />
                                 </div>
-                            </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Nueva Contraseña</label>
+                                    <input type="password" class="form-control" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Confirmar Nueva Contraseña</label>
+                                    <input type="password" class="form-control" required />
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="savePasswordButton">Guardar Contraseña</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+
         </main>
-    </div>
-</div>
+
+
 
 <!-- Libs JS -->
 <!-- <script src="/assets/libs/jquery/dist/jquery.min.js"></script> -->

@@ -50,7 +50,7 @@ public class AgenteController {
     private ChatRoomService chatRoomService;
 
     @ModelAttribute
-    public void addUsuarioToModel(Model model) {
+    public void addUsuarioToModel(Model model ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
@@ -62,16 +62,36 @@ public class AgenteController {
     }
 
     @GetMapping({"/Agente/perfil"})
-    public String pefil(Model model, HttpSession session){
+    public String pefil(Model model, HttpSession session, @ModelAttribute("product") Usuario usuario){
         Integer idAgente = (Integer) session.getAttribute("idAgente");
         Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(idAgente);
+        List<Distrito> listaDistritos = distritoRepository.findAll();
+
         if(OptAdminZonal.isPresent()){
+            model.addAttribute("listaDistritos", listaDistritos);
+
             model.addAttribute("usuarioLogueado",OptAdminZonal.get());
         }
         return "Agente/miperfil";
     }
 
+    @PostMapping("/Agente/savePerfil")
+    public String guardarPerfil(
+            @RequestParam("id") String id,
+            @RequestParam("distrito") String idDistrito, // Suponiendo que usas el ID del distrito
+            @RequestParam("direccion") String direccion,
+            @RequestParam("email") String email,
+            RedirectAttributes attr) {
 
+        // Actualiza el usuario
+        usuarioRepository.actualizarUsuario(idDistrito, direccion, email, id);
+
+        // Añade un mensaje de éxito
+        attr.addFlashAttribute("mensaje", "Perfil actualizado con éxito.");
+
+        // Redirige a la página de perfil
+        return "redirect:/Agente/perfil";
+    }
     @GetMapping({"Agente"})
     public String Inicio(Model model, HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
