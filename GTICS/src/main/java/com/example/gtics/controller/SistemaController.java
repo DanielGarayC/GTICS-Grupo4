@@ -9,6 +9,7 @@ import com.example.gtics.repository.DistritoRepository;
 import com.example.gtics.repository.RolRepository;
 import com.example.gtics.repository.UsuarioRepository;
 import com.example.gtics.repository.ZonaRepository;
+import com.example.gtics.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,10 @@ public class SistemaController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
+
 
     public SistemaController(DistritoRepository distritoRepository, UsuarioRepository usuarioRepository, RolRepository rolRepository, ZonaRepository zonaRepository) {
         this.distritoRepository = distritoRepository;
@@ -103,12 +108,13 @@ public class SistemaController {
                 }
             }
         }
+        String passwordParaEnviar = usuario.getContrasena();
         String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
         usuario.setContrasena(encryptedPassword);
 
+        emailService.sendVerificationEmail(usuario.getEmail(), usuario.getNombre(), passwordParaEnviar);
+
         usuarioRepository.save(usuario);
-
-
         return "redirect:/ExpressDealsLogin";
     }
 
