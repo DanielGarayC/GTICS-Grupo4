@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.security.SecureRandom;
 import java.util.*;
 
 @Controller
@@ -34,6 +35,12 @@ public class SistemaController {
     final UsuarioRepository usuarioRepository;
     final RolRepository rolRepository;
     final ZonaRepository zonaRepository;
+
+    private static final String NUMBERS = "0123456789";
+    private static final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+    private static final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String SPECIAL_CHARACTERS = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/";
+    private static final SecureRandom random = new SecureRandom();
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -49,7 +56,7 @@ public class SistemaController {
         this.zonaRepository = zonaRepository;
     }
 
-    @GetMapping({"/ExpressDealsLogin","/"})
+    @GetMapping({"/ExpressDealsLogin","/", "/Login"})
     public String Login(){
 
         return "Sistema/login";
@@ -189,6 +196,57 @@ public class SistemaController {
 
         usuarioRepository.save(usuario);
         return "redirect:/ExpressDealsLogin";
+    }
+
+    @PostMapping("/enviarNuevaContra")
+    public String recuperarPassword(@RequestParam("email") String email, Model model){
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        boolean existe = false;
+        Usuario user = new Usuario();
+        for (Usuario u: usuarios){
+            if (u.getEmail().equals(email)){
+                user = u;
+                existe = true;
+                break;
+            }
+        }
+        if (existe){
+            String nuevaContrasena = generateRandomPassword();
+            String encryptedPassword = passwordEncoder.encode(nuevaContrasena);
+            emailService.passwordRecoveryEmail(email,user.getNombre(),nuevaContrasena);
+            usuarioRepository.cambiarContrasena(user.getId(), encryptedPassword);
+            return "redirect:/ExpressDealsLogin";
+        }else{
+            model.addAttribute("errorMsg","No se ha encontrado este correo en base de datos.");
+            model.addAttribute("email", email);
+            return "Sistema/recvPass";
+        }
+    }
+
+    private String generateRandomPassword() {
+        int length = random.nextInt(9) + 8;
+        StringBuilder password = new StringBuilder();
+
+        password.append(NUMBERS.charAt(random.nextInt(NUMBERS.length())));
+        password.append(SPECIAL_CHARACTERS.charAt(random.nextInt(SPECIAL_CHARACTERS.length())));
+        password.append(SPECIAL_CHARACTERS.charAt(random.nextInt(SPECIAL_CHARACTERS.length())));
+        password.append(LOWERCASE.charAt(random.nextInt(LOWERCASE.length())));
+
+        while (password.length() < length) {
+            password.append(NUMBERS + LOWERCASE + UPPERCASE + SPECIAL_CHARACTERS).charAt(random.nextInt(NUMBERS.length() + LOWERCASE.length() + UPPERCASE.length() + SPECIAL_CHARACTERS.length()));
+        }
+        return shuffleString(password.toString());
+    }
+
+    private String shuffleString(String input) {
+        char[] characters = input.toCharArray();
+        for (int i = characters.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            char temp = characters[i];
+            characters[i] = characters[j];
+            characters[j] = temp;
+        }
+        return new String(characters);
     }
 
 }

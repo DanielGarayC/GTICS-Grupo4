@@ -5,24 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recuperar Contraseña</title>
     <link rel="stylesheet" th:href="@{/login/styles.css}">
+    <style>
+        .error-message {
+            color: red;
+        }
+    </style>
 </head>
 <body>
-    <div class="background"></div>
-    <div class="container">
-        <div class="logo">
-            <img th:src="@{/images/logo/logo.png}" alt="" style="width: 100%;"/>
-        </div>
-        <h1>Recuperar Contraseña</h1>
-        <form>
-            <input type="email" placeholder="Correo electrónico" required>
-            <a class="buttoncustom" type="submit" th:href="@{/RecuperarContra/Token}">Enviar correo</a>
-        </form>
-        <div class="links">
-            <a th:href="@{/Login}">Volver al inicio de sesión</a>
-        </div>
+<div class="background"></div>
+<div class="container">
+    <div class="logo">
+        <img th:src="@{/images/logo/logo.png}" alt="" style="width: 100%;"/>
     </div>
-    <script th:href="@{/login/script.js}"></script>
+    <h1>Recuperar Contraseña</h1>
 
 
+    <div th:if="${errorMsg}" class="error-message">
+        <p th:text="${errorMsg}"></p>
+    </div>
+
+    <form id="recoverForm" th:action="@{/enviarNuevaContra}" method="post">
+        <input type="email" placeholder="Correo electrónico" name="email"
+               th:value="${email}" required>
+        <a class="buttoncustom" href="#"
+           onclick="document.getElementById('recoverForm').submit(); return false;">Enviar correo</a>
+    </form>
+
+    <div class="links">
+        <a th:href="@{/ExpressDealsLogin}">Volver al inicio de sesión</a>
+    </div>
+</div>
+<script th:href="@{/login/script.js}"></script>
 </body>
 </html>

@@ -18,8 +18,23 @@ public class EmailService {
                 "A continuación, tus credenciales:\n" +
                 "Usuario: " + to + "\n" +
                 "Contraseña: " + password + "\n\n" +
-                "Por favor, asegúrate de cambiar tu contraseña después de iniciar sesión.\n" +
+
                 "¡Bienvenido a ExpressDeals!";
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
+        emailSender.send(message);
+    }
+
+    public void passwordRecoveryEmail(String to, String username, String password) {
+        String subject = "Solicitud de recuperación de contraseña ";
+        String text = "Hola " + username + ",\n\n" +
+                "Se ha cambiado exitosamente tu contraseña.\n"+
+                "A continuación, tus credenciales:\n" +
+                "Usuario: " + to + "\n" +
+                "Contraseña: " + password + "\n\n";
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
