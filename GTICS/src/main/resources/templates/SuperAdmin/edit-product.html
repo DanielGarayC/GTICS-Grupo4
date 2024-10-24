@@ -79,7 +79,7 @@
                             <form id="productoForm" th:action="@{/SuperAdmin/guardarProducto}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
                                 <input type="hidden" th:value="${producto.id}" name="id" />
                                 <div class="card-body p-6">
-                                    <h4 class="mb-5 h5">Editar fotos del Producto</h4>
+                                    <h4 class="mb-5 h5">Editar foto principal del Producto</h4>
                                     <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
                                         <div>
                                             <img id="imagePreviewForm" class="image avatar avatar-lg rounded-3"
@@ -91,11 +91,24 @@
                                         <label for="fileInput" class="form-label">Cambiar foto:</label>
 
                                         <div class="file-upload btn btn-light ms-md-4">
-                                            <input type="file" class="file-input opacity-0" id="fileInput" name="fotos" accept="image/png, image/jpeg, image/gif" />
+                                            <input type="file" class="file-input opacity-0" id="fileInput" name="fotoPrincipal" accept="image/png, image/jpeg, image/gif" />
                                             <span>Subir nueva foto</span>
                                         </div>
 
                                         <span class="ms-2">JPG, GIF o PNG. Máx. 1MB.</span>
+                                    </div>
+
+                                    <h4 class="mb-5 h5">Editar fotos extras del Producto</h4>
+                                    <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
+
+                                        <label for="fileInputExtras" class="form-label">Cambiar fotos:</label>
+
+                                        <div class="file-upload btn btn-light ms-md-4">
+                                            <input type="file" class="file-input opacity-0" id="fileInputExtras" name="fotosExtras" accept="image/png, image/jpeg, image/gif" multiple />
+                                            <span>Subir nuevas fotos</span>
+                                        </div>
+
+                                        <span class="ms-2">JPG, GIF o PNG. Máx. 1MB por foto.</span>
                                     </div>
 
                                     <h4 class="mb-4 h5 mt-5">Información del Producto</h4>

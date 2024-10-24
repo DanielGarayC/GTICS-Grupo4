@@ -781,7 +781,8 @@ public class SuperAdminController {
                                        BindingResult bindingResult, Model model,
                                        @RequestParam Map<String, String> allParams,
                                        @RequestParam(value = "idCategoria", required = false) Integer idCategoria,
-                                       @RequestParam("fotos") MultipartFile[] fotos,
+                                       @RequestParam("fotoPrincipal") MultipartFile fotoPrincipal,
+                                       @RequestParam("fotosExtras") MultipartFile[] fotosExtras,
                                        RedirectAttributes attr) {
         try {
             if (producto.getBorrado() == null) {
@@ -819,14 +820,25 @@ public class SuperAdminController {
                             nuevoProductoPorZona.setBorrado(producto.getBorrado());
                             nuevoProductoPorZona.setDisponibilidad("En stock");
                             nuevoProductoPorZona.setZona(zona);
+
                             Producto savedProducto = productoRepository.save(nuevoProductoPorZona);
-                            if (fotos != null && fotos.length > 0) {
-                                for (MultipartFile foto : fotos) {
-                                    if (!foto.isEmpty()) {
+                            if (fotoPrincipal != null && !fotoPrincipal.isEmpty()) {
+                                Fotosproducto fotoPrincipalEntity = new Fotosproducto();
+                                fotoPrincipalEntity.setFoto(fotoPrincipal.getBytes());
+                                fotoPrincipalEntity.setFotoNombre(fotoPrincipal.getOriginalFilename());
+                                fotoPrincipalEntity.setFotoContentType(fotoPrincipal.getContentType());
+                                fotoPrincipalEntity.setProducto(savedProducto);
+                                fotosProductoRepository.save(fotoPrincipalEntity);
+                            }
+
+                            // Guardar las fotos extras si no están vacías
+                            if (fotosExtras != null && fotosExtras.length > 0) {
+                                for (MultipartFile fotoExtra : fotosExtras) {
+                                    if (!fotoExtra.isEmpty()) {
                                         Fotosproducto fotosProducto = new Fotosproducto();
-                                        fotosProducto.setFoto(foto.getBytes());
-                                        fotosProducto.setFotoNombre(foto.getOriginalFilename());
-                                        fotosProducto.setFotoContentType(foto.getContentType());
+                                        fotosProducto.setFoto(fotoExtra.getBytes());
+                                        fotosProducto.setFotoNombre(fotoExtra.getOriginalFilename());
+                                        fotosProducto.setFotoContentType(fotoExtra.getContentType());
                                         fotosProducto.setProducto(savedProducto);
                                         fotosProductoRepository.save(fotosProducto);
                                     }
@@ -848,7 +860,8 @@ public class SuperAdminController {
     public String guardareditarProducto(@ModelAttribute("producto") Producto producto,
                                         @RequestParam("zonaId") Integer zonaId,
                                         @RequestParam("cantidadZona") Integer cantidadZona,
-                                        @RequestParam("fotos") MultipartFile[] fotos,
+                                        @RequestParam("fotoPrincipal") MultipartFile fotoPrincipal,
+                                        @RequestParam("fotosExtras") MultipartFile[] fotosExtras,
                                         RedirectAttributes attr) {
 
         try {
@@ -872,28 +885,34 @@ public class SuperAdminController {
                     productoActualizado.setCantidadDisponible(cantidadZona);
                     productoActualizado.setBorrado(producto.getBorrado());
                     productoRepository.save(productoActualizado);
-                    // Check if there are new photos to update
-                    if (fotos != null && fotos.length > 0) {
-                        for (MultipartFile foto : fotos) {
-                            if (!foto.isEmpty()) {
-                                // Check if a photo already exists for the product
-                                List<Fotosproducto> existingFotos = fotosProductoRepository.findByProducto_Id(productoActualizado.getId());
-                                if (!existingFotos.isEmpty()) {
-                                    // Update the existing photo
-                                    Fotosproducto existingFoto = existingFotos.get(0);  // Assuming one photo per product
-                                    existingFoto.setFoto(foto.getBytes());
-                                    existingFoto.setFotoNombre(foto.getOriginalFilename());
-                                    existingFoto.setFotoContentType(foto.getContentType());
-                                    fotosProductoRepository.save(existingFoto);
-                                } else {
-                                    // If no photo exists, create a new one
-                                    Fotosproducto nuevaFoto = new Fotosproducto();
-                                    nuevaFoto.setFoto(foto.getBytes());
-                                    nuevaFoto.setFotoNombre(foto.getOriginalFilename());
-                                    nuevaFoto.setFotoContentType(foto.getContentType());
-                                    nuevaFoto.setProducto(productoActualizado);
-                                    fotosProductoRepository.save(nuevaFoto);
-                                }
+
+                    if (fotoPrincipal != null && !fotoPrincipal.isEmpty()) {
+                        List<Fotosproducto> existingFotos = fotosProductoRepository.findByProducto_Id(productoActualizado.getId());
+                        if (!existingFotos.isEmpty()) {
+                            Fotosproducto existingFoto = existingFotos.get(0);
+                            existingFoto.setFoto(fotoPrincipal.getBytes());
+                            existingFoto.setFotoNombre(fotoPrincipal.getOriginalFilename());
+                            existingFoto.setFotoContentType(fotoPrincipal.getContentType());
+                            fotosProductoRepository.save(existingFoto);
+                        } else {
+                            Fotosproducto nuevaFoto = new Fotosproducto();
+                            nuevaFoto.setFoto(fotoPrincipal.getBytes());
+                            nuevaFoto.setFotoNombre(fotoPrincipal.getOriginalFilename());
+                            nuevaFoto.setFotoContentType(fotoPrincipal.getContentType());
+                            nuevaFoto.setProducto(productoActualizado);
+                            fotosProductoRepository.save(nuevaFoto);
+                        }
+                    }
+
+                    if (fotosExtras != null && fotosExtras.length > 0) {
+                        for (MultipartFile fotoExtra : fotosExtras) {
+                            if (!fotoExtra.isEmpty()) {
+                                Fotosproducto nuevaFotoExtra = new Fotosproducto();
+                                nuevaFotoExtra.setFoto(fotoExtra.getBytes());
+                                nuevaFotoExtra.setFotoNombre(fotoExtra.getOriginalFilename());
+                                nuevaFotoExtra.setFotoContentType(fotoExtra.getContentType());
+                                nuevaFotoExtra.setProducto(productoActualizado);
+                                fotosProductoRepository.save(nuevaFotoExtra);
                             }
                         }
                     }
