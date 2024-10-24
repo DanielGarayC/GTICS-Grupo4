@@ -19,7 +19,7 @@ public class EmailService {
                 "Usuario: " + to + "\n" +
                 "Contraseña: " + password + "\n\n" +
                 "Por favor, asegúrate de cambiar tu contraseña después de iniciar sesión.\n" +
-                "¡Bienvenido a nuestro sistema!";
+                "¡Bienvenido a ExpressDeals!";
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
