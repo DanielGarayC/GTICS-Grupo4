@@ -212,8 +212,9 @@ public class SistemaController {
         }
         if (existe){
             String nuevaContrasena = generateRandomPassword();
-            String encryptedPassword = passwordEncoder.encode(nuevaContrasena);
-            emailService.passwordRecoveryEmail(email,user.getNombre(),nuevaContrasena);
+            String contrasenaLimitada = nuevaContrasena.substring(0, Math.min(nuevaContrasena.length(), 12));
+            String encryptedPassword = passwordEncoder.encode(contrasenaLimitada);
+            emailService.passwordRecoveryEmail(email,user.getNombre(),contrasenaLimitada);
             usuarioRepository.cambiarContrasena(user.getId(), encryptedPassword);
             return "redirect:/ExpressDealsLogin";
         }else{
@@ -223,18 +224,24 @@ public class SistemaController {
         }
     }
 
-    private String generateRandomPassword() {
-        int length = random.nextInt(9) + 8;
+    public String generateRandomPassword() {
+        int length = 12;
         StringBuilder password = new StringBuilder();
 
-        password.append(NUMBERS.charAt(random.nextInt(NUMBERS.length())));
-        password.append(SPECIAL_CHARACTERS.charAt(random.nextInt(SPECIAL_CHARACTERS.length())));
-        password.append(SPECIAL_CHARACTERS.charAt(random.nextInt(SPECIAL_CHARACTERS.length())));
-        password.append(LOWERCASE.charAt(random.nextInt(LOWERCASE.length())));
+        password.append(NUMBERS.charAt(random.nextInt(NUMBERS.length()))); // 1 número
+        password.append(SPECIAL_CHARACTERS.charAt(random.nextInt(SPECIAL_CHARACTERS.length()))); // 1er carácter especial
+        password.append(SPECIAL_CHARACTERS.charAt(random.nextInt(SPECIAL_CHARACTERS.length()))); // 2do carácter especial
+        password.append(LOWERCASE.charAt(random.nextInt(LOWERCASE.length()))); // 1 letra
+
+        while (password.length() < 8) {
+            password.append(NUMBERS.charAt(random.nextInt(NUMBERS.length())));
+        }
 
         while (password.length() < length) {
-            password.append(NUMBERS + LOWERCASE + UPPERCASE + SPECIAL_CHARACTERS).charAt(random.nextInt(NUMBERS.length() + LOWERCASE.length() + UPPERCASE.length() + SPECIAL_CHARACTERS.length()));
+            password.append(NUMBERS + LOWERCASE + UPPERCASE + SPECIAL_CHARACTERS)
+                    .charAt(random.nextInt(NUMBERS.length() + LOWERCASE.length() + UPPERCASE.length() + SPECIAL_CHARACTERS.length()));
         }
+
         return shuffleString(password.toString());
     }
 
