@@ -141,7 +141,7 @@ public class AgenteController {
         ArrayList<List<Message>> mensajesPorSala = new ArrayList<>();
         for(String room : activeRooms){
             //Obteniendo los mensajes enviados por el agente
-            List<Message> mensajesSala = messageRepository.findBySala(room);
+            List<Message> mensajesSala = messageRepository.findBySalaOrderByFechaEnvioAsc(room);
             mensajesPorSala.add(mensajesSala);
         }
         modelAndView.addObject("activeRooms", activeRooms);

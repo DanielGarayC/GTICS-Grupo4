@@ -12,5 +12,5 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message,Integer> {
-    List<Message> findBySala(@Size(max = 45) @NotNull String sala);
+    List<Message> findBySalaOrderByFechaEnvioAsc(String sala);
 }

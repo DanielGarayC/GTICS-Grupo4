@@ -1314,14 +1314,19 @@ public class UsuarioFinalController {
         model.addAttribute("name", name);
         int idUsuario= Integer.parseInt(room.split("_")[1]);
         Usuario usuario = usuarioRepository.findUsuarioById(idUsuario);
-        List<Message> listaMensajesSala = messageRepository.findBySala(room);
+        List<Message> listaMensajesSala = messageRepository.findBySalaOrderByFechaEnvioAsc(room);
         model.addAttribute("ListaMensajesSala", listaMensajesSala);
         return "UsuarioFinal/chatUsuario";
     }
 
     @GetMapping("/UsuarioFinal/chatVista")
-    public String chatRef() {
-
+    public String chatRef(String room, String name, Model model) {
+        //model.addAttribute("room", room);
+        //model.addAttribute("name", name);
+        //int idUsuario= Integer.parseInt(room.split("_")[1]);
+        List<Message> listaMensajesSala = messageRepository.findBySalaOrderByFechaEnvioAsc("room_7");
+        model.addAttribute("ListaMensajesSala", listaMensajesSala);
+        model.addAttribute("idSender", 7);
         return "UsuarioFinal/chatAntiguo";
     }
     @GetMapping("UsuarioFinal/join-chat")

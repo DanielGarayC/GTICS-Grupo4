@@ -13,6 +13,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
+
 
 @Controller
 public class ChatController {
@@ -33,6 +35,7 @@ public class ChatController {
         messagedb.setIdUsuario(sender);
         messagedb.setContenido(message.getContent());
         messagedb.setSala(message.getRoom());
+        messagedb.setFechaEnvio(LocalDateTime.now());
         messageRepository.save(messagedb);
         // Devolver el mensaje si todo está bien
         return message;
