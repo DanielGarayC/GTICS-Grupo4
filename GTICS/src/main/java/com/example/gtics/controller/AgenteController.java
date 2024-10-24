@@ -48,7 +48,8 @@ public class AgenteController {
     private ProductoRepository productoRepository;
     @Autowired
     private ChatRoomService chatRoomService;
-
+    @Autowired
+    private MessageRepository messageRepository;
     @ModelAttribute
     public void addUsuarioToModel(Model model ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -135,10 +136,16 @@ public class AgenteController {
         for(Usuario u : usuariosAsignados){
             idUsuariosAsignados.add(u.getId());
         }
-        // Obtener las salas activas del servicio
         ModelAndView modelAndView = new ModelAndView("Agente/chatVistaAgente");
         Set<String> activeRooms = chatRoomService.getActiveRoomsAsignadas(idUsuariosAsignados);
+        ArrayList<List<Message>> mensajesPorSala = new ArrayList<>();
+        for(String room : activeRooms){
+            //Obteniendo los mensajes enviados por el agente
+            List<Message> mensajesSala = messageRepository.findBySala(room);
+            mensajesPorSala.add(mensajesSala);
+        }
         modelAndView.addObject("activeRooms", activeRooms);
+        modelAndView.addObject("MensajesPorSala", mensajesPorSala);
         return modelAndView;
     }
 

@@ -88,12 +88,12 @@
                 var p = document.createElement('p');
 
                 // Si el mensaje es del sistema, se muestra de forma diferente
-                if (message.sender === "Sistema") {
+                if (message.senderId === "Sistema") {
                     p.style.fontStyle = "italic";
                     p.style.color = "gray";
                 }
 
-                p.appendChild(document.createTextNode(message.sender + " (" + message.room + "): " + message.content));
+                p.appendChild(document.createTextNode(message.senderId + " (" + message.room + "): " + message.content));
                 response.appendChild(p);
 
                 // Hacer scroll automático hacia abajo

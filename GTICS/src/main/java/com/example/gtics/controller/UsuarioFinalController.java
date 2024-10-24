@@ -68,6 +68,8 @@ public class UsuarioFinalController {
     private final EtiquetaRepository etiquetaRepository;
     @Autowired
     private ChatRoomService chatRoomService;
+    private final MessageRepository messageRepository;
+
     private boolean usuarioYaDioLike(Resena resena, Usuario usuario) {
         return usuariosLikes.containsKey(resena.getId()) && usuariosLikes.get(resena.getId()).contains(usuario.getEmail());
     }
@@ -91,7 +93,7 @@ public class UsuarioFinalController {
                                   ProductoRepository productoRepository, CategoriaRepository categoriaRepository,
                                   SubcategoriaRepository subcategoriaRepository, CarritoCompraRepository carritoCompraRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
-                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository,DireccionRepository direccionRepository,ZonaRepository zonaRepository,EtiquetaRepository etiquetaRepository) {
+                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository,DireccionRepository direccionRepository,ZonaRepository zonaRepository,EtiquetaRepository etiquetaRepository, MessageRepository messageRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.fotosProductoRepository = fotosProductoRepository;
@@ -110,6 +112,7 @@ public class UsuarioFinalController {
         this.direccionRepository=direccionRepository;
         this.zonaRepository=zonaRepository;
         this.etiquetaRepository=etiquetaRepository;
+        this.messageRepository = messageRepository;
     }
 
     @ModelAttribute
@@ -1306,11 +1309,20 @@ public class UsuarioFinalController {
         return "UsuarioFinal/ProcesoCompra/chatbot";
     }
     @GetMapping("/UsuarioFinal/chatSoporte")
-    public ModelAndView getChatPage(String room, String name) {
-        ModelAndView modelAndView = new ModelAndView("UsuarioFinal/chatUsuario");
-        modelAndView.addObject("room", room);
-        modelAndView.addObject("name", name);
-        return modelAndView;
+    public String getChatPage(String room, String name, Model model) {
+        model.addAttribute("room", room);
+        model.addAttribute("name", name);
+        int idUsuario= Integer.parseInt(room.split("_")[1]);
+        Usuario usuario = usuarioRepository.findUsuarioById(idUsuario);
+        List<Message> listaMensajesSala = messageRepository.findBySala(room);
+        model.addAttribute("ListaMensajesSala", listaMensajesSala);
+        return "UsuarioFinal/chatUsuario";
+    }
+
+    @GetMapping("/UsuarioFinal/chatVista")
+    public String chatRef() {
+
+        return "UsuarioFinal/chatAntiguo";
     }
     @GetMapping("UsuarioFinal/join-chat")
     public ModelAndView joinChat(@RequestParam("name") String name) {
