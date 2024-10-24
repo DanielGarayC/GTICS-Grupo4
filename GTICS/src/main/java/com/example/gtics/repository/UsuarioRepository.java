@@ -17,7 +17,9 @@ import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
-    
+
+    boolean existsByEmail(String email);
+
     @Query(value = "SELECT COUNT(*) FROM usuario u " +
             "WHERE u.idAdminZonal = :idAdminZonal " + // Verifica que estén asignados a este Admin Zonal
             "AND u.idRol = 3 " + // Deben tener el rol de agente
