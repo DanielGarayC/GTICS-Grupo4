@@ -62,40 +62,9 @@ public class AgenteController {
         }
     }
 
-    @GetMapping({"Agente"})
-    public String Inicio(Model model, HttpSession session) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
-            String email = authentication.getName();
-            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
-
-            if (optUsuario.isPresent()) {
-                Usuario usuario = optUsuario.get();
-
-                Integer idAgente = usuario.getId();
-
-                // Almacenar el idAgente en la sesión
-                session.setAttribute("idAgente", idAgente);
-
-                List<OrdenCarritoDto> listaOrdenesSinAsignar = ordenRepository.ultimasOrdenesSinAsignar();
-                List<OrdenCarritoDto> listaOrdenesPendientes = ordenRepository.ultimasOrdenesPendientes(idAgente);
-                List<OrdenCarritoDto> listaOrdenesEnProceso = ordenRepository.ultimasOrdenesenProceso(idAgente);
-                List<OrdenCarritoDto> listaOrdenesResueltas = ordenRepository.ultimasOrdenesResueltas(idAgente);
-
-                model.addAttribute("listaOrdenesSinAsignar", listaOrdenesSinAsignar);
-                model.addAttribute("listaOrdenesPendientes", listaOrdenesPendientes);
-                model.addAttribute("listaOrdenesEnProceso", listaOrdenesEnProceso);
-                model.addAttribute("listaOrdenesResueltas", listaOrdenesResueltas);
-            }
-        }
-
-        return "Agente/inicio";
-    }
-
     @GetMapping({"/Agente/perfil"})
     public String pefil(Model model, HttpSession session, @ModelAttribute("product") Usuario usuario){
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
         Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(idAgente);
         List<Distrito> listaDistritos = distritoRepository.findAll();
 
@@ -124,13 +93,40 @@ public class AgenteController {
         // Redirige a la página de perfil
         return "redirect:/Agente/perfil";
     }
+    @GetMapping({"Agente"})
+    public String Inicio(Model model, HttpSession session) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName();
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
+            if (optUsuario.isPresent()) {
+                Usuario usuario = optUsuario.get();
 
+                Integer idAgente = usuario.getId();
+
+                // Almacenar el idAgente en la sesión
+                session.setAttribute("id", idAgente);
+
+                List<OrdenCarritoDto> listaOrdenesSinAsignar = ordenRepository.ultimasOrdenesSinAsignar();
+                List<OrdenCarritoDto> listaOrdenesPendientes = ordenRepository.ultimasOrdenesPendientes(idAgente);
+                List<OrdenCarritoDto> listaOrdenesEnProceso = ordenRepository.ultimasOrdenesenProceso(idAgente);
+                List<OrdenCarritoDto> listaOrdenesResueltas = ordenRepository.ultimasOrdenesResueltas(idAgente);
+
+                model.addAttribute("listaOrdenesSinAsignar", listaOrdenesSinAsignar);
+                model.addAttribute("listaOrdenesPendientes", listaOrdenesPendientes);
+                model.addAttribute("listaOrdenesEnProceso", listaOrdenesEnProceso);
+                model.addAttribute("listaOrdenesResueltas", listaOrdenesResueltas);
+            }
+        }
+
+        return "Agente/inicio";
+    }
     @GetMapping({"Agente/Chat"})
     public ModelAndView chatAgente(HttpSession session) {
 
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
             return new ModelAndView("redirect:/login");
@@ -162,7 +158,7 @@ public class AgenteController {
         Pageable pageable = PageRequest.of(page, pageSize);
 
         // Obtener el idAgente desde la sesión
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
 
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
@@ -232,7 +228,7 @@ public class AgenteController {
         Pageable pageable = PageRequest.of(page, pageSize);
 
         // Obtener el idAgente desde la sesión
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
 
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
@@ -271,7 +267,7 @@ public class AgenteController {
         Pageable pageable = PageRequest.of(page, pageSize);
 
         // Obtener el idAgente desde la sesión
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
 
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
@@ -329,7 +325,7 @@ public class AgenteController {
                                    HttpSession session){
 
         // Obtener el idAgente desde la sesión
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
 
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error

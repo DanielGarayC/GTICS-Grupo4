@@ -29,8 +29,7 @@ public class CustomErrorController implements ErrorController {
         String userRole = getUserRole();
 
         if (status != null) {
-            int statusCode = Integer.parseInt(status.toString());
-
+            int statusCode = Integer.valueOf(status.toString());
             if (statusCode == HttpStatus.FORBIDDEN.value()) {
                 model.addAttribute("userRole", userRole);
                 return "VistasErrores/Error-403";

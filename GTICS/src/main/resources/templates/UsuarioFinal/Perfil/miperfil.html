@@ -38,6 +38,12 @@
     </div>
 
     <main class="py-5">
+        <div th:if="${success}" class="alert alert-success" role="alert">
+            <p th:text="${success}"></p>
+        </div>
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <p th:text="${error}"></p>
+        </div>
         <div class="container">
             <div class="row justify-content-center g-4">
 
@@ -143,7 +149,6 @@
                     </div>
                     <div class="modal-body">
                         <form id="changePasswordForm" th:action="@{/CambiarContra}" method="POST" class="needs-validation" novalidate>
-                            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
                             <div class="mb-3">
                                 <label for="currentPassword" class="form-label">Contraseña Actual</label>
                                 <input type="password" id="currentPassword" class="form-control" name="currentPassword" required />
@@ -280,12 +285,10 @@
             }
 
             // Envío de solicitud AJAX para verificar la contraseña actual
-            const csrfToken = document.querySelector('input[name="_csrf"]').value; // Para protección CSRF
             fetch('/validatePassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken // Si usas protección CSRF
                 },
                 body: JSON.stringify({ currentPassword: currentPassword })
             })
