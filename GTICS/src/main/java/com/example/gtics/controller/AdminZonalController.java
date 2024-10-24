@@ -81,7 +81,7 @@ public class AdminZonalController {
                 Integer idAdminZonal = usuario.getId();
 
                 // Almacenar el idAdminZonal en la sesión
-                session.setAttribute("idAdminZonal", idAdminZonal);
+                session.setAttribute("id", idAdminZonal);
 
                 Usuario AdmZonal = usuarioRepository.findUsuarioById(idAdminZonal);
                 int idZona = AdmZonal.getZona().getId();
@@ -116,7 +116,7 @@ public class AdminZonalController {
     public String Agentes(Model model,
                           HttpSession session){
 
-        Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
+        Integer idAdminZonal = (Integer) session.getAttribute("id");
 
         boolean crearAgente = true;
         int cantAgentes = usuarioRepository.contarAgentesPorAdminZonal(idAdminZonal);
@@ -132,7 +132,7 @@ public class AdminZonalController {
     public String CrearAgente(@ModelAttribute("agente") Usuario agente, Model model,
                               HttpSession session){
 
-        Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
+        Integer idAdminZonal = (Integer) session.getAttribute("id");
         Optional<Usuario> optUsuario = usuarioRepository.findById(idAdminZonal);
         if(optUsuario.isPresent()){
             Usuario adminzonal = optUsuario.get();
@@ -162,7 +162,7 @@ public class AdminZonalController {
     public String guardarAgente(@ModelAttribute("agente") @Validated(AgenteValidationGroup.class) Usuario agente, BindingResult bindingResult, Model model, RedirectAttributes attr,
                                 HttpSession session){
 
-        Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
+        Integer idAdminZonal = (Integer) session.getAttribute("id");
         System.out.println("Llega al método guardarAgente");
         if(bindingResult.hasErrors()){
             if (bindingResult.hasFieldErrors("dni")) {
@@ -519,7 +519,7 @@ public class AdminZonalController {
     @GetMapping({ "/AdminZonal/Perfil"})
     public String Perfil(Model model, HttpSession session){
         //Actualizar para el entregable de sesiones
-        Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
+        Integer idAdminZonal = (Integer) session.getAttribute("id");
         List<Distrito> listaDistritos = distritoRepository.findAll();
 
         Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(idAdminZonal);

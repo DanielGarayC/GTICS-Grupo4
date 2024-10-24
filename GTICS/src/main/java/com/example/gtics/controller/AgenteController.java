@@ -64,7 +64,7 @@ public class AgenteController {
 
     @GetMapping({"/Agente/perfil"})
     public String pefil(Model model, HttpSession session, @ModelAttribute("product") Usuario usuario){
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
         Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(idAgente);
         List<Distrito> listaDistritos = distritoRepository.findAll();
 
@@ -107,7 +107,7 @@ public class AgenteController {
                 Integer idAgente = usuario.getId();
 
                 // Almacenar el idAgente en la sesión
-                session.setAttribute("idAgente", idAgente);
+                session.setAttribute("id", idAgente);
 
                 List<OrdenCarritoDto> listaOrdenesSinAsignar = ordenRepository.ultimasOrdenesSinAsignar();
                 List<OrdenCarritoDto> listaOrdenesPendientes = ordenRepository.ultimasOrdenesPendientes(idAgente);
@@ -126,7 +126,7 @@ public class AgenteController {
     @GetMapping({"Agente/Chat"})
     public ModelAndView chatAgente(HttpSession session) {
 
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
             return new ModelAndView("redirect:/login");
@@ -158,7 +158,7 @@ public class AgenteController {
         Pageable pageable = PageRequest.of(page, pageSize);
 
         // Obtener el idAgente desde la sesión
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
 
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
@@ -228,7 +228,7 @@ public class AgenteController {
         Pageable pageable = PageRequest.of(page, pageSize);
 
         // Obtener el idAgente desde la sesión
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
 
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
@@ -267,7 +267,7 @@ public class AgenteController {
         Pageable pageable = PageRequest.of(page, pageSize);
 
         // Obtener el idAgente desde la sesión
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
 
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
@@ -325,7 +325,7 @@ public class AgenteController {
                                    HttpSession session){
 
         // Obtener el idAgente desde la sesión
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
 
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error

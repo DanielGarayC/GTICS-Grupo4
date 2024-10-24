@@ -94,14 +94,14 @@ public class SistemaController {
     @GetMapping("/validateCurrentPassword")
     public ResponseEntity<String> validateCurrentPassword(@RequestParam String currentPassword, HttpSession session) {
         // Obtener el idAgente de la sesión
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer id = (Integer) session.getAttribute("id");
 
-        if (idAgente == null) {
+        if (id == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autenticado.");
         }
 
         // Recuperar el usuario desde la base de datos utilizando el idAgente
-        Optional<Usuario> optUsuario = usuarioRepository.findById(idAgente);
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
 
         if (!optUsuario.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
@@ -129,12 +129,12 @@ public class SistemaController {
                                     HttpSession session,
                                     RedirectAttributes redirectAttributes){
 
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
-        if (idAgente == null) {
+        Integer id = (Integer) session.getAttribute("id");
+        if (id == null) {
             return "redirect:/ExpressDealsLogin"; // Redirige a login si no hay sesión
         }
 
-        Optional<Usuario> optUsuario = usuarioRepository.findById(idAgente);
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
         if (!optUsuario.isPresent()) {
             return "redirect:/ExpressDealsLogin"; // Redirige a login si no hay usuario
         }
