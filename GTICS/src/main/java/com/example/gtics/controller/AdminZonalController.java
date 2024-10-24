@@ -516,7 +516,7 @@ public class AdminZonalController {
         }
         return "redirect:/AdminZonal/Productos";
     }
-    @GetMapping({ "AdminZonal/Perfil"})
+    @GetMapping({ "/AdminZonal/Perfil"})
     public String Perfil(Model model, HttpSession session){
         //Actualizar para el entregable de sesiones
         Integer idAdminZonal = (Integer) session.getAttribute("idAdminZonal");
