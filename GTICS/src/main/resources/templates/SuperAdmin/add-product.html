@@ -78,7 +78,7 @@
                             <!-- card body -->
                             <form id="productoForm" enctype="multipart/form-data" th:action="@{/SuperAdmin/crearProducto}" method="post" class="needs-validation" novalidate>
                                 <div class="card-body p-6">
-                                    <h4 class="mb-5 h5">Subir fotos del Producto</h4>
+                                    <h4 class="mb-5 h5">Subir foto principal del Producto</h4>
                                     <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
                                         <div>
                                             <img id="imagePreviewForm" class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/default-image.jpeg}" alt=" " />
@@ -86,11 +86,23 @@
                                         <label for="fileInput" class="form-label">Subir foto:</label>
 
                                         <div class="file-upload btn btn-light ms-md-4">
-                                            <input type="file" class="file-input opacity-0" id="fileInput" name="fotos" accept="image/png, image/jpeg, image/gif" required />
-                                            <span>Subir foto</span>
+                                            <input type="file" class="file-input opacity-0" id="fileInput" name="fotoPrincipal" accept="image/png, image/jpeg, image/gif" required />
+                                            <span>Elegir foto</span>
                                         </div>
 
                                         <span class="ms-2">JPG, GIF or PNG. 1MB Max.</span>
+                                        <div class="invalid-feedback">Debe subir una foto</div>
+
+                                    </div>
+                                    <h4 class="mb-5 h5">Subir 3 fotos extras del producto (opcional)</h4>
+                                    <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
+                                        <label for="fileInputExtras" class="form-label">Subir fotos:</label>
+                                        <div class="file-upload btn btn-light ms-md-4">
+                                            <input type="file" class="file-input opacity-0" id="fileInputExtras" name="fotosExtras" accept="image/png, image/jpeg, image/gif" multiple required />
+                                            <span>Elegir 3 fotos</span>
+                                        </div>
+                                        <span class="ms-2">JPG, GIF o PNG. 1MB Máx por foto.</span>
+
                                     </div>
                                     <h4 class="mb-4 h5 mt-5">Información del Producto</h4>
 
@@ -275,6 +287,7 @@
             { id: 20, nombre: 'Otro' },
 
         ],
+
     };
 
     function cargarSubcategorias() {
@@ -417,6 +430,23 @@
                 errorInvalido.style.display = 'none';
             }
         });
+        // Validar foto principal
+        const fileInput = document.getElementById('fileInput');
+        const fileInputFeedback = fileInput.nextElementSibling; // Div de error por archivo vacío
+
+        if (fileInput.files.length === 0) {
+            fileInput.classList.add('is-invalid');
+            fileInputFeedback.style.display = 'block'; // Show feedback
+            formIsValid = false;
+        } else {
+            fileInput.classList.remove('is-invalid');
+            fileInputFeedback.style.display = 'none'; // Hide feedback
+        }
+
+        // Prevenir el envío del formulario si hay errores
+        if (!formIsValid) {
+            event.preventDefault();  // Prevenir que el formulario se envíe si hay algún error
+        }
 
         // Prevenir el envío del formulario si hay errores
         if (!formIsValid) {

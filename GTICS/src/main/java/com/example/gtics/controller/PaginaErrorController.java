@@ -24,7 +24,8 @@ public class PaginaErrorController {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleServerError() {
+    public String handleServerError(Exception ex) {
+        ex.printStackTrace();
         return "VistasErrores/Error-500";
     }
 }

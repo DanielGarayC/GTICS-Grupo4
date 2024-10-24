@@ -1,5 +1,6 @@
 package com.example.gtics.entity;
 
+import com.example.gtics.ValidationGroup.CustomAnnotations.UniqueEmail;
 import com.example.gtics.ValidationGroup.RegistroUsuarioValidationGroup;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -30,6 +31,7 @@ public class Usuario {
     @Column(name = "email", nullable = false, length = 45)
     @Email(message = "Debe ingresar un correo electrónico válido", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
     @NotBlank(message = "Debe ingresar un correo electrónico", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
+    @UniqueEmail(groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
     private String email;
 
     @Column(name = "direccion", nullable = false, length = 45)
@@ -115,6 +117,9 @@ public class Usuario {
     private String apellidoMaterno;
 
     @NotBlank(message = "Debe ingresar una contraseña", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
+    @Pattern(regexp = "^(?=.*[0-9])(?=(.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]){2})(?=.*[a-zA-Z]).{8,16}$",
+            message = "La contraseña debe contener al menos 1 número, 2 caracteres especiales, 1 letra y debe tener entre 8 y 16 caracteres.",
+            groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
     @Column(name = "contrasena", nullable = false, length = 45)
     private String contrasena;
 

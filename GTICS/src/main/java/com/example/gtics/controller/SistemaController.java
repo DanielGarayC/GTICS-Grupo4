@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 
@@ -78,8 +79,8 @@ public class SistemaController {
     }
 
     @PostMapping("/Registrar")
-    public String registrarUsuario(Model model, @Validated(RegistroUsuarioValidationGroup.class) Usuario usuario, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+    public String registrarUsuario(Model model, @Validated(RegistroUsuarioValidationGroup.class) Usuario usuario, BindingResult bindingResult, @RequestParam("passwordConfirm") String passwordConfirm){
+        if(bindingResult.hasErrors() || !passwordConfirm.equals(usuario.getContrasena())){
             model.addAttribute("usuario", usuario);
             List<Distrito> distritos = distritoRepository.findAll();
             distritos.sort(new Comparator<Distrito>() {
@@ -89,6 +90,9 @@ public class SistemaController {
                 }
             });
             model.addAttribute("distritos", distritos);
+            if (!passwordConfirm.equals(usuario.getContrasena())){
+                model.addAttribute("diferentPassword", "Las contraseñas deben ser iguales");
+            }
             return "Sistema/register";
         }
         Rol rol = new Rol();
