@@ -20,6 +20,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
     boolean existsByEmail(String email);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE usuario u \n" +
+            "SET u.contrasena = :newPassword \n" +
+            "WHERE u.idUsuario = :idUsuario;")
+    void cambiarContrasena(Integer idUsuario,String newPassword);
+
+
     @Query(value = "SELECT COUNT(*) FROM usuario u " +
             "WHERE u.idAdminZonal = :idAdminZonal " + // Verifica que estén asignados a este Admin Zonal
             "AND u.idRol = 3 " + // Deben tener el rol de agente

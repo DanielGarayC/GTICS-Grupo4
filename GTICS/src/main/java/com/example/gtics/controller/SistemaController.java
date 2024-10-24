@@ -10,16 +10,22 @@ import com.example.gtics.repository.RolRepository;
 import com.example.gtics.repository.UsuarioRepository;
 import com.example.gtics.repository.ZonaRepository;
 import com.example.gtics.service.EmailService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -76,6 +82,69 @@ public class SistemaController {
     public String CambiarContrasena(){
 
         return "Sistema/chPass";
+    }
+
+    @PostMapping("/validatePassword")
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> validatePassword(@RequestBody Map<String, String> body, Principal principal) {
+        String currentPassword = body.get("currentPassword");
+
+        // Obtener el usuario logueado
+        UserDetails userDetails = (UserDetails) ((Authentication) principal).getPrincipal();
+        String loggedUserPassword = userDetails.getPassword(); // Contraseña encriptada
+
+        System.out.println("Contraseña ingresada: " + currentPassword);
+        System.out.println("Contraseña almacenada: " + loggedUserPassword);
+        // Verificar la contraseña ingresada
+        boolean isValid = passwordEncoder.matches(currentPassword, loggedUserPassword);
+        return ResponseEntity.ok(Map.of("valid", isValid));
+    }
+    @PostMapping({"CambiarContra"})
+    public String CambiarContrasena(@RequestParam("newPassword") String newPassword,
+                                    @RequestParam("currentPassword") String currentPassword,
+                                    @RequestParam("confirmNewPassword") String confirmNewPassword,
+                                    HttpSession session,
+                                    RedirectAttributes redirectAttributes){
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        Rol rol = usuario.getRol();
+        String viewName = "";
+        switch(rol.getId()) {
+            case 1: //no pasa nd
+                viewName = "redirect:/ExpressDealsLogin";
+                break;
+            case 2:
+                viewName ="redirect:/AdminZonal/Perfil";
+                break;
+            case 3:
+                viewName ="redirect:/Agente/perfil";
+                break;
+            case 4:
+                viewName ="redirect:/UsuarioFinal/miPerfil";
+                break;
+            default:
+                viewName = "redirect:/default"; // Opcional: manejar un caso por defecto
+                break;
+        }
+
+        String hashedCurrentPassword = usuario.getContrasena();
+        // Verificar la contraseña actual ingresada (usaron BCrypt asi q yo tmb)
+        if (!BCrypt.checkpw(currentPassword, hashedCurrentPassword)) {
+            redirectAttributes.addFlashAttribute("error", "La contraseña actual es incorrecta.");
+            return viewName;
+        }
+        if (!newPassword.equals(confirmNewPassword)) {
+            redirectAttributes.addFlashAttribute("error", "Las nuevas contraseñas no coinciden.");
+            return viewName;
+        }
+        String hashedNewPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+        Integer idUsuario = usuario.getId();
+        // Actualizar la contraseña
+        usuarioRepository.cambiarContrasena(idUsuario, hashedNewPassword);
+
+        // Mensaje de éxito
+        redirectAttributes.addFlashAttribute("success", "Contraseña cambiada con éxito.");
+        return viewName;
     }
 
     @PostMapping("/Registrar")

@@ -137,18 +137,21 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="changePasswordForm">
+                        <form id="changePasswordForm" th:action="@{/CambiarContra}" method="POST" class="needs-validation" novalidate>
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
                             <div class="mb-3">
-                                <label class="form-label">Contraseña Actual</label>
-                                <input type="password" class="form-control" required />
+                                <label for="currentPassword" class="form-label">Contraseña Actual</label>
+                                <input type="password" id="currentPassword" class="form-control" name="currentPassword" required />
+                                <div id="currentPasswordError" class="text-danger"></div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Nueva Contraseña</label>
-                                <input type="password" class="form-control" required />
+                                <label for="newPassword" class="form-label">Nueva Contraseña</label>
+                                <input type="password" id="newPassword" class="form-control" name="newPassword" required />
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Confirmar Nueva Contraseña</label>
-                                <input type="password" class="form-control" required />
+                                <label for="confirmNewPassword" class="form-label">Confirmar Nueva Contraseña</label>
+                                <input type="password" id="confirmNewPassword" class="form-control" name="confirmNewPassword" required />
+                                <div id="passwordError" class="text-danger" style="display:none;">Las contraseñas no coinciden.</div>
                             </div>
                         </form>
                     </div>
@@ -236,6 +239,64 @@
                 return;
             }
 
+        });
+        //Función pa contraseñas
+        document.getElementById('savePasswordButton').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            // Obtener los valores de los campos
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            console.log("Contraseña actual ingresada:", currentPassword);
+            // Limpiar mensajes de error
+            document.getElementById('currentPasswordError').textContent = '';
+            document.getElementById('passwordError').style.display = 'none';
+
+            let hasError = false;
+
+            // Validación de nueva contraseña (más de 8 caracteres)
+            if (newPassword.length < 8) {
+                document.getElementById('passwordError').textContent = 'La nueva contraseña debe tener al menos 8 caracteres.';
+                document.getElementById('passwordError').style.display = 'block';
+                hasError = true;
+            }
+
+            // Validación de coincidencia de la nueva contraseña
+            if (newPassword !== confirmNewPassword) {
+                document.getElementById('passwordError').textContent = 'Las contraseñas no coinciden.';
+                document.getElementById('passwordError').style.display = 'block';
+                hasError = true;
+            }
+
+            // Si hubo errores, no continuar
+            if (hasError) {
+                return;
+            }
+
+            // Envío de solicitud AJAX para verificar la contraseña actual
+            const csrfToken = document.querySelector('input[name="_csrf"]').value; // Para protección CSRF
+            fetch('/validatePassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken // Si usas protección CSRF
+                },
+                body: JSON.stringify({ currentPassword: currentPassword })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.valid) {
+                        // Si la contraseña actual es válida, enviar el formulario
+                        document.getElementById('changePasswordForm').submit();
+                    } else {
+                        // Mostrar error si la contraseña actual es incorrecta
+                        document.getElementById('currentPasswordError').textContent = 'La contraseña actual es incorrecta.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la validación de la contraseña:', error);
+                });
         });
 
         // Función para validar email

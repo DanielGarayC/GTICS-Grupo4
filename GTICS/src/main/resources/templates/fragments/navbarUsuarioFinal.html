@@ -294,8 +294,8 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end p-0" style="width: 100%; line-height: 0.6rem">
                                             <div class="lh-1 px-4 py-3 border-bottom text-center">
-                                                <h5 class="mb-1 h6">Nombre Apellido</h5>
-                                                <small>rol en la página</small>
+                                                <h5 class="mb-1 h6" th:text="${session.usuario.nombre} + ' ' + ${session.usuario.apellidoPaterno}"></h5>
+                                                <small>Usuario </small>
                                             </div>
                                             <div class="border-top px-0 py-2">
                                                 <a th:href="@{/UsuarioFinal/miPerfil}" style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
