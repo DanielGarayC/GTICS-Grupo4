@@ -1,40 +1,119 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro</title>
-    <link rel="stylesheet" th:href="@{/login/styles2.css}">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Codescandy" name="author">
+    <title>Crear nuevo administrador zonal</title>
+    <!-- Favicon icon-->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+
+
+    <!-- Libs CSS -->
+    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Theme CSS -->
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+    <link rel="stylesheet" th:href="@{/login/styles3.css}">
+
 </head>
 <body>
-    <div class="background"></div>
-    <div class="container">
-        <div class="logo">
-            <img th:src="@{/images/logo/logo.png}" alt="" style="width: 100%;"/>
-        </div>
-        <h1>Registro</h1>
-        <form>
-            <label for="Nombre" style="text-align: left; font-size:1.7vh; margin-left:1vh;margin-top:none;"> Nombre</label>
-            <input type="text"id="Nombre" required>
-            <label for="Apellido" style="text-align: left; font-size:1.7vh; margin-left:1vh;margin-top:none;"> Apellido</label>
-            <input type="text"id="Apellido" required>
-            <label for="email" style="text-align: left; font-size:1.7vh; margin-left:1vh;margin-top:none;"> Correo electrónico</label>
-            <input type="email"id="email" required>
-            <label for="direccion" style="text-align: left; font-size:1.7vh; margin-left:1vh;margin-top:none;"> Dirección</label>
-            <input type="text"id="direccion" required>
-            <label for="distrito" style="text-align: left; font-size:1.7vh; margin-left:1vh;margin-top:none;"> Distrito</label>
-            <input type="text"id="distrito" required>
-            <label for="password" style="text-align: left; font-size:1.7vh; margin-left:1vh;margin-top:none;"> Contraseña</label>
-            <input type="password"id="password" required>
-            <label for="passwordConfirm" style="text-align: left; font-size:1.7vh; margin-left:1vh;margin-top:none;"> Repetir contraseña</label>
-            <input type="password"id="passwordConfirm" required>
-            
-            <button type="submit">Crear cuenta</button>
+
+<div class="card mb-6 card-lg container2">
+    <!---<div class="text-center mb-3">
+        <img th:src="@{/images/logo/logo.png}" alt="" style="max-width: 30%; height: auto;" class="img-fluid"/>
+    </div>--->
+    <div class="card-body p-6">
+        <h4 class="mb-4 h5" style="text-align: center">Registro de nuevo usuario</h4>
+        <form method="post" th:action="@{/Registrar}" th:object="${usuario}">
+            <div class="row">
+                <div class="mb-3 col-lg-6">
+                    <label for="DNI" class="form-label">DNI</label>
+                    <input type="text" id="DNI" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                </div>
+
+                <div class="mb-3 col-lg-6">
+                    <label for="Nombre" class="form-label">Nombre</label>
+                    <input type="text" id="Nombre" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                </div>
+
+                <div class="mb-3 col-lg-6">
+                    <label for="ApellidoPaterno" class="form-label">Apellido Paterno</label>
+                    <input type="text" id="ApellidoPaterno" class="form-control" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></div>
+                </div>
+
+                <div class="mb-3 col-lg-6">
+                    <label for="ApellidoMaterno" class="form-label">Apellido Materno</label>
+                    <input type="text" id="ApellidoMaterno" class="form-control" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></div>
+                </div>
+
+                <div class="mb-3 col-lg-6">
+                    <label for="email" class="form-label">Correo electrónico</label>
+                    <input type="email" id="email"  class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                </div>
+
+                <div class="mb-3 col-lg-6">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <input type="number" id="telefono" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+                </div>
+
+                <div class="mb-3 col-lg-6">
+                    <label for="direccion" class="form-label">Dirección</label>
+                    <input type="text" class="form-control" id="direccion" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
+                </div>
+
+                <div class="mb-3 col-lg-6">
+                    <label for="distrito" class="form-label">Distrito</label>
+                    <select id="distrito" class="form-select" th:field="*{distrito}" th:classappend="${#fields.hasErrors('distrito')?'is-invalid':''}" required>
+                        <option value="">Seleccione un distrito</option>
+                        <th:block th:each="distrito : ${distritos}">
+                            <option th:value="${distrito.id}" th:text="${distrito.nombre}"></option>
+                        </th:block>
+                    </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}"></div>
+                </div>
+
+                <div class="mb-3 col-lg-6">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" id="password" class="form-control" th:field="*{contrasena}" th:classappend="${#fields.hasErrors('contrasena')?'is-invalid':''}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></div>
+                </div>
+
+                <div class="mb-3 col-lg-6">
+                    <label for="passwordConfirm" class="form-label">Repetir contraseña</label>
+                    <input type="password" id="passwordConfirm" class="form-control" required>
+                </div>
+                <button type="submit">Crear cuenta</button>
+            </div>
         </form>
         <div class="links">
-            <a th:href="@{/Login}">¿Ya tienes una cuenta? Inicia sesión</a>
+            <a th:href="@{/ExpressDealsLogin}">¿Ya tienes una cuenta? Inicia sesión</a>
         </div>
     </div>
-    <script th:src="@{/login/script.js}"></script>
+</div>
+<!-- Libs JS -->
+<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+<!-- Theme JS -->
+<script th:src="@{/js/theme.min.js}"></script>
+
+<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+<script th:src="@{/js/vendors/chart.js}"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/login/script.js}"></script>
 </body>
 </html>

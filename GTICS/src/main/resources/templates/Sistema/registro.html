@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" th:href="@{/login/styles2.css}">
+
+
+</head>
+<body>
+<div class="background"></div>
+<div class="container">
+    <div class="logo">
+        <img th:src="@{/images/logo/logo.png}" alt="" style="width: 100%;"/>
+    </div>
+    <h1>Registro</h1>
+    <form method="post" th:action="@{/Registrar}" th:object="${usuario}">
+        <label for="DNI">DNI</label>
+        <input type="text" id="DNI" th:field="*{dni}" required>
+        <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+
+        <label for="Nombre">Nombre</label>
+        <input type="text" id="Nombre" th:field="*{nombre}" required>
+        <div th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+
+        <label for="ApellidoPaterno">Apellido Paterno</label>
+        <input type="text" id="ApellidoPaterno" th:field="*{apellidoPaterno}" required>
+        <div th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></div>
+
+        <label for="ApellidoMaterno">Apellido Materno</label>
+        <input type="text" id="ApellidoMaterno" th:field="*{apellidoMaterno}" required>
+        <div th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></div>
+
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" th:field="*{email}" required>
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+        <label for="telefono">Teléfono</label>
+        <input type="number" id="telefono" th:field="*{telefono}" required>
+        <div th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" th:field="*{direccion}" required>
+        <div th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
+
+        <label for="distrito">Distrito</label>
+        <select id="distrito" th:field="*{distrito}" required>
+            <option value="">Seleccione un distrito</option>
+            <th:block th:each="distrito : ${distritos}">
+                <option th:value="${distrito.id}" th:text="${distrito.nombre}"></option>
+            </th:block>
+        </select>
+        <div th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}"></div>
+
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" th:field="*{contrasena}" required>
+        <div th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></div>
+
+        <label for="passwordConfirm">Repetir contraseña</label>
+        <input type="password" id="passwordConfirm" required>
+
+        <button type="submit">Crear cuenta</button>
+    </form>
+    <div class="links">
+        <a th:href="@{/ExpressDealsLogin}">¿Ya tienes una cuenta? Inicia sesión</a>
+    </div>
+</div>
+<script th:src="@{/login/script.js}"></script>
+</body>
+</html>
