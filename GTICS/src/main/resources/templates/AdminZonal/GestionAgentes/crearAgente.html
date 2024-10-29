@@ -130,16 +130,19 @@
 										<select class="form-select" th:field="*{distrito.id}" id="distritoSelect" required onchange="actualizarCodigoJurisdiccion()">
 											<option value="" selected disabled>---Seleccione un distrito---</option>
 											<th:block th:each="distrito : ${distritos}">
-												<option th:value="${distrito.id}" th:text="${distrito.nombre}"></option>
+												<option th:value="${distrito.id}" th:text="${distrito.nombre}" th:attr="data-codigo=${distrito.codigojurisdiccion}"></option>
 											</th:block>
 										</select>
+
 										<div class="invalid-feedback">El distrito es obligatorio.</div>
 									</div>
 
 									<!-- input Código de Jurisdicción -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Código de Jurisdicción:</label>
-										<input type="text" class="form-control" th:field="*{agtCodigojurisdiccion}" id="codigoJurisdiccion" th:classappend="${#fields.hasErrors('agtCodigojurisdiccion')?'is-invalid':''}"/>
+										<input type="text" class="form-control" th:field="*{agtCodigojurisdiccion}" id="codigoJurisdiccion" readonly disabled/>
+
+
 										<div class="invalid-feedback" th:if="${agtCodigojurisdiccionError}" th:text="${agtCodigojurisdiccionError}"></div>
 									</div>
 									<!-- input Zona (deshabilitado porque se asigna automáticamente) -->
