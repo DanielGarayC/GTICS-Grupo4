@@ -7,7 +7,17 @@ import com.example.gtics.dto.ProductosxOrden;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import com.example.gtics.service.ChatRoomService;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
@@ -24,6 +34,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -529,11 +542,156 @@ public class AgenteController {
 
 
     @GetMapping({"Agente/Reportes/Descargar"})
-    public String DescargarReporte(){
+    public String DescargarReporte(Model model){
+        // Obtén los usuarios con id_rol = 4 usando el método en UsuarioRepository
+        List<Usuario> usuariosRol4 = usuarioRepository.findUsuariosByRol4();
 
+        // Pasa la lista al modelo para ser usada en el HTML
+        model.addAttribute("usuariosRol4", usuariosRol4);
         return "Agente/Reportes/descargarReporte";
     }
+    @GetMapping("/Agente/ordenes/porUsuario/{usuarioId}")
+    @ResponseBody
+    public List<OrdenCarritoDto> obtenerOrdenesPorUsuario(@PathVariable Integer usuarioId, Pageable pageable) {
+        // Utiliza el método en OrdenRepository para obtener las órdenes del usuario
+        return ordenRepository.obtenerCarritoConDto(usuarioId, pageable).getContent();
+    }
+    @GetMapping("/descargarOrdenPDF")
+    public void descargarOrdenPDF(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException, DocumentException {
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        if (ordenOpt.isPresent()) {
+            Orden orden = ordenOpt.get();
+            List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
 
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".pdf");
+
+            Document document = new Document(PageSize.A4, 36, 36, 90, 55);
+            PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
+            document.open();
+
+            Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font normalFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
+            DecimalFormat df = new DecimalFormat("0.00");
+
+            // Información de la orden
+            document.add(new Paragraph("Orden #" + idOrden, boldFont));
+            document.add(new Paragraph("Fecha de emisión: " + orden.getFechaOrden(), normalFont));
+            document.add(new Paragraph("\n"));
+
+            // Tabla de productos
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
+            table.setWidths(new float[]{1, 4, 1, 2, 2});
+            table.addCell(new PdfPCell(new Phrase("N°", boldFont)));
+            table.addCell(new PdfPCell(new Phrase("Descripción", boldFont)));
+            table.addCell(new PdfPCell(new Phrase("Cant.", boldFont)));
+            table.addCell(new PdfPCell(new Phrase("Precio Unit. (S/.)", boldFont)));
+            table.addCell(new PdfPCell(new Phrase("Total (S/.)", boldFont)));
+
+            double subtotal = 0;
+            int itemNumber = 1;
+            for (ProductosxOrden producto : productosOrden) {
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(itemNumber++), normalFont)));
+                table.addCell(new PdfPCell(new Phrase(producto.getNombreProducto(), normalFont)));
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(producto.getCantidadProducto()), normalFont)));
+                table.addCell(new PdfPCell(new Phrase(df.format(producto.getPrecioUnidad()), normalFont)));
+                double totalProducto = producto.getPrecioTotalPorProducto();
+                subtotal += totalProducto;
+                table.addCell(new PdfPCell(new Phrase(df.format(totalProducto), normalFont)));
+            }
+
+            // Totales
+            table.addCell(new PdfPCell(new Phrase("", normalFont)));
+            table.addCell(new PdfPCell(new Phrase("Subtotal", boldFont)));
+            table.addCell(new PdfPCell(new Phrase("", normalFont)));
+            table.addCell(new PdfPCell(new Phrase("", normalFont)));
+            table.addCell(new PdfPCell(new Phrase("S/." + df.format(subtotal), normalFont)));
+
+            document.add(table);
+            document.close();
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
+        }
+    }
+
+    @GetMapping("/descargarOrdenExcel")
+    public void descargarOrdenExcel(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException {
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        if (ordenOpt.isPresent()) {
+            Orden orden = ordenOpt.get();
+            List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".xlsx");
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("Orden");
+                String[] headers = {"N°", "Descripción", "Cant.", "Precio Unitario (S/.)", "Total (S/.)"};
+                Row headerRow = sheet.createRow(0);
+                for (int i = 0; i < headers.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(headers[i]);
+                }
+
+                int rowIdx = 1;
+                double subtotal = 0;
+                for (ProductosxOrden producto : productosOrden) {
+                    Row row = sheet.createRow(rowIdx++);
+                    row.createCell(0).setCellValue(rowIdx - 1);
+                    row.createCell(1).setCellValue(producto.getNombreProducto());
+                    row.createCell(2).setCellValue(producto.getCantidadProducto());
+                    row.createCell(3).setCellValue(producto.getPrecioUnidad());
+                    double totalProducto = producto.getPrecioTotalPorProducto();
+                    subtotal += totalProducto;
+                    row.createCell(4).setCellValue(totalProducto);
+                }
+
+                Row totalRow = sheet.createRow(rowIdx);
+                totalRow.createCell(3).setCellValue("Total a Pagar");
+                totalRow.createCell(4).setCellValue(subtotal);
+
+                workbook.write(response.getOutputStream());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
+        }
+    }
+
+    @GetMapping("/descargarOrdenCSV")
+    public void descargarOrdenCSV(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException {
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        if (ordenOpt.isPresent()) {
+            Orden orden = ordenOpt.get();
+            List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".csv");
+
+            StringBuilder csvContent = new StringBuilder();
+            csvContent.append("N°;Descripción;Cant.;Precio Unitario (S/.);Total (S/.)\n");
+
+            double subtotal = 0;
+            int itemNumber = 1;
+            for (ProductosxOrden producto : productosOrden) {
+                double totalProducto = producto.getPrecioTotalPorProducto();
+                subtotal += totalProducto;
+
+                csvContent.append(itemNumber++).append(";")
+                        .append(producto.getNombreProducto()).append(";")
+                        .append(producto.getCantidadProducto()).append(";")
+                        .append(producto.getPrecioUnidad()).append(";")
+                        .append(totalProducto).append("\n");
+            }
+
+            csvContent.append(";;;Total a Pagar;").append(subtotal).append("\n");
+            response.getOutputStream().write(csvContent.toString().getBytes(StandardCharsets.UTF_8));
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
+        }
+    }
 
 }
 

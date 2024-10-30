@@ -71,25 +71,18 @@
                                     <div class="card-body p-6 d-flex flex-column gap-3">
                                         <div class="mb-3">
                                             <label for="usuarioSelect" class="form-label">Seleccione un usuario</label>
-                                            <select class="form-select" id="usuarioSelect" required>
+                                            <select class="form-select" id="usuarioSelect" onchange="cargarOrdenesUsuario(this.value)">
                                                 <option selected disabled value="">Usuario</option>
-                                                <option value="1">Jesus Alvarado</option>
-                                                <option value="2">Roberto Tafur</option>
-                                                <option value="3">Nadia Hernandez</option>
-                                                <option value="4">Ricardo Calderon</option>
+                                                <th:block th:each="usuario : ${usuariosRol4}">
+                                                    <option th:value="${usuario.id}" th:text="${usuario.nombre}"></option>
+                                                </th:block>
                                             </select>
-                                            <div class="invalid-feedback">Por favor, seleccione un usuario válido.</div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="ordenSelect" class="form-label">Seleccione la orden</label>
-                                            <select class="form-select" id="ordenSelect" required>
+                                            <select class="form-select" id="ordenSelect" disabled>
                                                 <option selected disabled value="">Orden</option>
-                                                <option value="1234">Orden #1234</option>
-                                                <option value="5678">Orden #5678</option>
-                                                <option value="9123">Orden #9123</option>
-                                                <option value="4567">Orden #4567</option>
                                             </select>
-                                            <div class="invalid-feedback">Por favor, seleccione una orden válida.</div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Seleccione formatos de descarga</label>
@@ -163,21 +156,26 @@
                                 <h3 class="text-center mt-6">Órdenes por agente asignado en la zona</h3>
                                 <div class="card card-lg">
                                     <div class="card-body p-6 d-flex flex-column gap-3">
+                                        <!-- Switches con input antes del label -->
                                         <div class="mb-3">
                                             <label class="form-label">Seleccione formatos de descarga</label>
+                                            <!-- PDF Switch -->
                                             <div class="form-check form-switch d-flex justify-content-between align-items-center">
-                                                <label class="form-check-label" for="pdfSwitch3">PDF</label>
-                                                <input class="form-check-input ms-auto" type="checkbox" role="switch" id="pdfSwitch3" checked>
+                                                <input class="form-check-input" type="checkbox" id="pdfSwitch1" checked>
+                                                <label class="form-check-label" for="pdfSwitch1">PDF</label>
                                             </div>
+                                            <!-- Excel Switch -->
                                             <div class="form-check form-switch d-flex justify-content-between align-items-center">
-                                                <label class="form-check-label" for="excelSwitch3">Excel</label>
-                                                <input class="form-check-input ms-auto" type="checkbox" role="switch" id="excelSwitch3">
+                                                <input class="form-check-input" type="checkbox" id="excelSwitch1">
+                                                <label class="form-check-label" for="excelSwitch1">Excel</label>
                                             </div>
+                                            <!-- CSV Switch -->
                                             <div class="form-check form-switch d-flex justify-content-between align-items-center">
-                                                <label class="form-check-label" for="csvSwitch3">CSV</label>
-                                                <input class="form-check-input ms-auto" type="checkbox" role="switch" id="csvSwitch3">
+                                                <input class="form-check-input" type="checkbox" id="csvSwitch1">
+                                                <label class="form-check-label" for="csvSwitch1">CSV</label>
                                             </div>
                                         </div>
+
                                         <div class="download-buttons d-flex flex-row gap-2">
                                             <button class="btn btn-primary w-100" type="button" onclick="descargarReporte(3)">
                                                 <i class="bi bi-download"></i> Descargar
@@ -227,15 +225,28 @@
             }
 
             function descargarReporte(cardNumber) {
-                const formatos = Array.from(document.querySelectorAll(`#pdfSwitch${cardNumber}, #excelSwitch${cardNumber}, #csvSwitch${cardNumber}`))
-                    .filter((checkbox) => checkbox.checked)
-                    .map((checkbox) => checkbox.id.replace("Switch" + cardNumber, ""));
+                // Obtener los checkboxes de formato para la tarjeta correspondiente
+                const formatos = [];
+                if (document.getElementById(`pdfSwitch${cardNumber}`).checked) formatos.push('PDF');
+                if (document.getElementById(`excelSwitch${cardNumber}`).checked) formatos.push('Excel');
+                if (document.getElementById(`csvSwitch${cardNumber}`).checked) formatos.push('CSV');
 
+                // Verificar si al menos un formato está seleccionado
                 if (formatos.length === 0) {
                     Swal.fire("Error", "Selecciona al menos un formato para descargar.", "error");
                     return;
                 }
 
+                // Obtener el valor del idOrden seleccionado
+                const idOrden = document.getElementById("ordenSelect").value;
+
+                // Verificar que se haya seleccionado un idOrden
+                if (!idOrden) {
+                    Swal.fire("Error", "Selecciona una orden para descargar.", "error");
+                    return;
+                }
+
+                // Mostrar mensaje de confirmación de descarga
                 Swal.fire({
                     title: "¿Confirmar descarga?",
                     text: `Descargarás en formato(s): ${formatos.join(", ")}`,
@@ -247,9 +258,34 @@
                     cancelButtonText: "Cancelar",
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        // Abrir una nueva pestaña para cada formato seleccionado
+                        formatos.forEach((formato) => {
+                            const url = `/descargarOrden${formato}?idOrden=${idOrden}`;
+                            window.open(url, "_blank");
+                        });
                         Swal.fire("Descarga en progreso", "Tus archivos se están descargando.", "success");
                     }
                 });
+            }
+
+        </script>
+        <script>
+            function cargarOrdenesUsuario(usuarioId) {
+                if (!usuarioId) return;
+
+                fetch(`/Agente/ordenes/porUsuario/${usuarioId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const ordenSelect = document.getElementById("ordenSelect");
+                        ordenSelect.innerHTML = "<option selected disabled value=''>Orden</option>";
+
+                        data.forEach(orden => {
+                            ordenSelect.innerHTML += `<option value="${orden.idOrden}">Orden #${orden.idOrden}</option>`;
+                        });
+
+                        ordenSelect.disabled = false; // Activa el selector de órdenes
+                    })
+                    .catch(error => console.error("Error al cargar órdenes:", error));
             }
         </script>
     </body>

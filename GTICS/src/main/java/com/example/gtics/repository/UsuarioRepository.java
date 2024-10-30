@@ -284,4 +284,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(value = "UPDATE usuario SET idDistrito = ?, direccion = ?, email = ? WHERE idUsuario = ?", nativeQuery = true)
     void actualizarUsuario(String idDistrito, String direccion, String email, String id);
 
+    @Query(value = "SELECT * FROM usuario WHERE idrol = 4", nativeQuery = true)
+    List<Usuario> findUsuariosByRol4();
+
 }
