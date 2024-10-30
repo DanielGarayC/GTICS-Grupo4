@@ -4,7 +4,10 @@ import com.example.gtics.dto.*;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import com.example.gtics.service.ChatRoomService;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +42,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.Principal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -1526,6 +1532,242 @@ public class UsuarioFinalController {
             return "redirect:/ExpressDealsLogin";
         }
     }
+
+    @GetMapping("/UsuarioFinal/descargarOrdenPDF")
+    public void descargarOrdenPDF(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws DocumentException, IOException {
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+
+        if (ordenOpt.isPresent()) {
+            Orden orden = ordenOpt.get();
+            List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+
+            // Configurar la respuesta para PDF
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".pdf");
+
+            // Crear el documento PDF con márgenes ajustados
+            Document document = new Document(PageSize.A4, 36, 36, 90, 55);
+            PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
+
+            // Agregar evento para encabezado y pie de página
+            HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+            writer.setPageEvent(event);
+
+            document.open();
+
+            // Estilos de fuente
+            BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            Font titleFont = new Font(baseFont, 18, Font.BOLD, BaseColor.BLACK);
+            Font subtitleFont = new Font(baseFont, 14, Font.BOLD, BaseColor.DARK_GRAY);
+            Font normalFont = new Font(baseFont, 11, Font.NORMAL, BaseColor.BLACK);
+            Font boldFont = new Font(baseFont, 11, Font.BOLD, BaseColor.BLACK);
+            Font tableHeaderFont = new Font(baseFont, 12, Font.BOLD, BaseColor.WHITE);
+            DecimalFormat df = new DecimalFormat("0.00");
+
+
+            // Información de la Orden
+            PdfPTable infoTable = new PdfPTable(2);
+            infoTable.setWidthPercentage(100);
+            infoTable.setWidths(new int[]{1, 2});
+            infoTable.setSpacingAfter(20);
+
+            // Número de Orden y Fecha
+            infoTable.addCell(getCell("Número de Orden:", boldFont, Element.ALIGN_LEFT, Rectangle.NO_BORDER));
+            infoTable.addCell(getCell("#" + idOrden, normalFont, Element.ALIGN_LEFT, Rectangle.NO_BORDER));
+            infoTable.addCell(getCell("Fecha de Emisión:", boldFont, Element.ALIGN_LEFT, Rectangle.NO_BORDER));
+            infoTable.addCell(getCell(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), normalFont, Element.ALIGN_LEFT, Rectangle.NO_BORDER));
+
+            document.add(infoTable);
+
+            // Sección "Vendido por" y "Enviado a"
+            PdfPTable sellerBuyerTable = new PdfPTable(2);
+            sellerBuyerTable.setWidthPercentage(100);
+            sellerBuyerTable.setSpacingAfter(20);
+
+            PdfPCell sellerCell = new PdfPCell();
+            sellerCell.addElement(new Phrase("Vendido por:", boldFont));
+            sellerCell.addElement(new Phrase("Nombre de la Empresa", normalFont));
+            sellerCell.addElement(new Phrase("Dirección de la Empresa", normalFont));
+            sellerCell.addElement(new Phrase("Teléfono: 123-456-789", normalFont));
+            sellerCell.setBorder(Rectangle.NO_BORDER);
+            sellerBuyerTable.addCell(sellerCell);
+
+            PdfPCell buyerCell = new PdfPCell();
+            buyerCell.addElement(new Phrase("Enviado a:", boldFont));
+            buyerCell.addElement(new Phrase(orden.getIdCarritoCompra().getIdUsuario().getNombre(), normalFont));
+            buyerCell.addElement(new Phrase(orden.getIdCarritoCompra().getIdUsuario().getDireccion(), normalFont));
+            buyerCell.setBorder(Rectangle.NO_BORDER);
+            sellerBuyerTable.addCell(buyerCell);
+
+            document.add(sellerBuyerTable);
+
+            // Tabla de Detalles de la Orden
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
+            table.setWidths(new int[]{1, 4, 1, 2, 2});
+            table.setSpacingAfter(20);
+
+            // Encabezados de la tabla
+            String[] headers = {"N°", "Descripción", "Cant.", "Precio Unit. (S/.)", "Total (S/.)"};
+            for (String header : headers) {
+                PdfPCell headerCell = new PdfPCell(new Phrase(header, tableHeaderFont));
+                headerCell.setBackgroundColor(BaseColor.GRAY);
+                headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                headerCell.setPadding(5);
+                table.addCell(headerCell);
+            }
+
+            // Contenido de la tabla de productos
+            double subtotal = 0;
+            int itemNumber = 1;
+            for (ProductosxOrden producto : productosOrden) {
+                table.addCell(getCell(String.valueOf(itemNumber++), normalFont, Element.ALIGN_CENTER, Rectangle.BOX));
+                table.addCell(getCell(producto.getNombreProducto(), normalFont, Element.ALIGN_LEFT, Rectangle.BOX));
+                table.addCell(getCell(String.valueOf(producto.getCantidadProducto()), normalFont, Element.ALIGN_CENTER, Rectangle.BOX));
+                table.addCell(getCell(df.format(producto.getPrecioUnidad()), normalFont, Element.ALIGN_RIGHT, Rectangle.BOX));
+                double precioTotal = producto.getPrecioTotalPorProducto();
+                subtotal += precioTotal;
+                table.addCell(getCell(df.format(precioTotal), normalFont, Element.ALIGN_RIGHT, Rectangle.BOX));
+            }
+
+            // Filas de totales
+            addEmptyRow(table, 5); // Agregar una fila vacía con 5 columnas
+            table.addCell(getCell("", normalFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER, 3));
+            table.addCell(getCell("Subtotal:", boldFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER));
+            table.addCell(getCell("S/." + df.format(subtotal), normalFont, Element.ALIGN_RIGHT, Rectangle.BOX));
+
+            double maxCostoEnvio = productosOrden.stream()
+                    .mapToDouble(ProductosxOrden::getCostoEnvio)
+                    .max()
+                    .orElse(0.0);
+
+            table.addCell(getCell("", normalFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER, 3));
+            table.addCell(getCell("Costo de Envío:", boldFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER));
+            table.addCell(getCell("S/." + df.format(maxCostoEnvio), normalFont, Element.ALIGN_RIGHT, Rectangle.BOX));
+
+            Double costoAdicional = ordenRepository.obtenerCostoAdicionalxOrden(idOrden);
+            table.addCell(getCell("", normalFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER, 3));
+            table.addCell(getCell("Costos Adicionales:", boldFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER));
+            table.addCell(getCell("S/." + df.format(costoAdicional != null ? costoAdicional : 0.00), normalFont, Element.ALIGN_RIGHT, Rectangle.BOX));
+
+            double total = subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00);
+            table.addCell(getCell("", normalFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER, 3));
+            PdfPCell totalCell = getCell("Total a Pagar:", boldFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER);
+            totalCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            table.addCell(totalCell);
+            PdfPCell totalAmountCell = getCell("S/." + df.format(total), boldFont, Element.ALIGN_RIGHT, Rectangle.BOX);
+            totalAmountCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            table.addCell(totalAmountCell);
+
+            document.add(table);
+
+            // Términos y Condiciones
+            Paragraph terms = new Paragraph("Términos y Condiciones", subtitleFont);
+            terms.setSpacingBefore(20);
+            terms.setSpacingAfter(10);
+            document.add(terms);
+
+            Paragraph termsContent = new Paragraph("Este documento es válido para los fines de despacho aduanero. La mercancía detallada está sujeta a las regulaciones vigentes y debe ser manejada de acuerdo con las normativas establecidas por las autoridades competentes.", normalFont);
+            termsContent.setAlignment(Element.ALIGN_JUSTIFIED);
+            document.add(termsContent);
+
+            document.close();
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
+        }
+    }
+
+    // Método para crear celdas de tabla con estilo
+    private PdfPCell getCell(String text, Font font, int alignment, int border) {
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setHorizontalAlignment(alignment);
+        cell.setBorder(border);
+        cell.setPadding(5);
+        return cell;
+    }
+
+    // Sobrecarga para combinar celdas
+    private PdfPCell getCell(String text, Font font, int alignment, int border, int colspan) {
+        PdfPCell cell = getCell(text, font, alignment, border);
+        cell.setColspan(colspan);
+        return cell;
+    }
+
+    // Método para agregar una fila vacía en la tabla
+    private void addEmptyRow(PdfPTable table, int cols) {
+        PdfPCell emptyCell = new PdfPCell(new Phrase(" "));
+        emptyCell.setColspan(cols);
+        emptyCell.setBorder(Rectangle.NO_BORDER);
+        table.addCell(emptyCell);
+    }
+
+    // Clase para manejar encabezado y pie de página
+    class HeaderFooterPageEvent extends PdfPageEventHelper {
+        Font footerFont;
+        Font boldFont;
+        Font normalFont;
+
+        public HeaderFooterPageEvent() throws DocumentException, IOException {
+            BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            this.footerFont = new Font(baseFont, 9, Font.NORMAL, BaseColor.GRAY);
+            this.boldFont = new Font(baseFont, 11, Font.BOLD, BaseColor.BLACK);
+            this.normalFont = new Font(baseFont, 11, Font.NORMAL, BaseColor.BLACK);
+        }
+
+        @Override
+        public void onEndPage(PdfWriter writer, Document document) {
+            PdfPTable header = new PdfPTable(3);
+            try {
+                header.setWidths(new int[]{24, 24, 2});
+                header.setTotalWidth(527);
+                header.setLockedWidth(true);
+                header.getDefaultCell().setFixedHeight(40);
+                header.getDefaultCell().setBorder(Rectangle.BOTTOM);
+                header.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
+
+                ClassLoader classLoader = getClass().getClassLoader();
+                String logoPath = classLoader.getResource("static/images/logo/logoGTICS.jpeg").getPath();
+                Image logo = Image.getInstance(logoPath);
+                logo.scaleToFit(50, 50);
+                PdfPCell logoCell = new PdfPCell(logo, true);
+                logoCell.setBorder(Rectangle.BOTTOM);
+                logoCell.setBorderColor(BaseColor.LIGHT_GRAY);
+                header.addCell(logoCell);
+
+                PdfPCell titleCell = new PdfPCell();
+                titleCell.setBorder(Rectangle.BOTTOM);
+                titleCell.setBorderColor(BaseColor.LIGHT_GRAY);
+                titleCell.addElement(new Phrase("Recibo de Orden para Aduanas", boldFont));
+                header.addCell(titleCell);
+
+                PdfPCell emptyCell = new PdfPCell();
+                emptyCell.setBorder(Rectangle.BOTTOM);
+                emptyCell.setBorderColor(BaseColor.LIGHT_GRAY);
+                header.addCell(emptyCell);
+
+                header.writeSelectedRows(0, -1, 34, 803, writer.getDirectContent());
+            } catch (DocumentException | IOException e) {
+                e.printStackTrace();
+            }
+
+            PdfPTable footer = new PdfPTable(1);
+            footer.setTotalWidth(527);
+            footer.setLockedWidth(true);
+            footer.getDefaultCell().setFixedHeight(30);
+            footer.getDefaultCell().setBorder(Rectangle.TOP);
+            footer.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
+
+            footer.addCell(new Phrase(String.format("Página %d", writer.getPageNumber()), footerFont));
+
+            footer.writeSelectedRows(0, -1, 34, 50, writer.getDirectContent());
+        }
+    }
+
+
+
+
+
+
 
 
 }

@@ -200,6 +200,10 @@
                                                         <th:block th:unless="${orden.idAgente == null}">
                                                             <a class="btn btn-secondary solicitarApoyoError" href="#"><i class="bi bi-question-circle mt-2 "></i>Solicitar apoyo </a>
                                                         </th:block>
+                                                        <!-- Botón de descarga de PDF -->
+                                                        <a class="btn btn-dark" th:href="@{'/UsuarioFinal/descargarOrdenPDF?idOrden=' + ${orden.idOrden}}">
+                                                            <i class="bi bi-file-earmark-arrow-down-fill"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
 
