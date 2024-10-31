@@ -1,5 +1,6 @@
 package com.example.gtics.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -30,8 +31,9 @@ public class Message {
     private String sala;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "idUsuario", nullable = false)
+    @JsonIgnore
     private Usuario idUsuario;
 
     @NotNull

@@ -10,6 +10,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
@@ -1401,7 +1402,16 @@ public class UsuarioFinalController {
         Usuario usuario = usuarioRepository.findUsuarioById(idUsuario);
         List<Message> listaMensajesSala = messageRepository.findBySalaOrderByFechaEnvioAsc(room);
         model.addAttribute("ListaMensajesSala", listaMensajesSala);
-        return "UsuarioFinal/chatUsuario";
+        model.addAttribute("idSender", 7);
+
+        return "UsuarioFinal/chatAntiguo";
+    }
+    @GetMapping("/UsuarioFinal/obtenerMensajesChat")
+    @ResponseBody
+    public List<Message> obtenerMensajes(String room){
+        List<Message> ListaMensajesSala = messageRepository.findBySalaOrderByFechaEnvioAsc(room);
+        ListaMensajesSala.forEach(mensaje -> Hibernate.initialize(mensaje.getIdUsuario()));
+        return ListaMensajesSala;
     }
 
     @GetMapping("/UsuarioFinal/chatVista")

@@ -20,50 +20,31 @@
 	<!-- Theme CSS -->
 	<link rel="stylesheet" th:href="@{/css/theme.min.css}" />
 
-
-
-	<!--Prueba de logo para ver si usamos jpg o svg -->
+	<!-- Custom CSS for logo and layout -->
 	<style>
-
-		.logoImagen{
+		.logoImagen {
 			height: 80px;
 			width: 250px;
 		}
-		.logoImagenCelulares{
+		.logoImagenCelulares {
 			height: 80px;
 			width: 220px;
 		}
-	</style>
-	<!--POP UP-->
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<style>
 		.room-list {
 			width: 30%;
-			border-right: 1px solid #ccc;
-			padding: 10px;
-		}
-		.chat-view {
-			width: 70%;
-			padding: 10px;
-			display: flex;
-			flex-direction: column;
-		}
-		#response {
-			flex-grow: 1;
-			overflow-y: auto;
-			border: 1px solid #ccc;
-			padding: 10px;
-			margin-bottom: 10px;
-		}
-		#message {
-			width: 80%;
 			padding: 10px;
 		}
 
-
+		.card-message {
+			display: none; /* Ocultar inicialmente todas las cards de mensaje */
+		}
+		.message {
+			max-width: 40vw; /* Ajusta este porcentaje para el ancho máximo de los mensajes largos */
+			word-wrap: break-word; /* Permite el salto de línea solo cuando es necesario */
+		}
 	</style>
-
-
+	<!-- SweetAlert2 for pop-ups -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -80,11 +61,7 @@
 	<!-- navbar vertical (para celular)-->
 	<div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('usuariosAsignados')}"></div>
 
-
-
-
-
-	<!-- COONTENIDO DE LA PAGINA -->
+	<!-- CONTENIDO DE LA PAGINA -->
 	<main class="main-content-wrapper">
 		<div class="container">
 			<section>
@@ -92,130 +69,136 @@
 					<h1>Mensajes de usuarios</h1>
 					<div class="room-list">
 						<ul>
-							<li th:each="room : ${activeRooms}">
-								<a href="#" th:text="${room}" th:data-room="${room}" onclick="joinRoom(this)"></a>
+							<li th:each="listaMensajes, iterStat : ${MensajesPorSala}">
+								<a href="#" th:text="${listaMensajes.get(0).getIdUsuario().getNombre()} + ' ' + ${listaMensajes.get(0).getIdUsuario().getApellidoPaterno()}" th:data-room="${listaMensajes.get(0).getSala()}" th:data-index="${iterStat.index}" onclick="joinRoom(this)"></a>
 							</li>
 						</ul>
 					</div>
 
 					<!-- Vista de chat -->
 					<div class="chat-view">
-						<h2>Chat en la sala <span id="roomName">Selecciona una sala</span></h2>
-						<div id="response"></div>
-						<input type="text" id="message" placeholder="Escribe un mensaje..." />
-						<button onclick="sendMessage()">Enviar</button>
+						<span id="roomName" style="display: none;"></span>
+
+						<!-- Iteración de mensajes por cada sala (cada sala tiene su propia card) -->
+						<div th:each="ListaMensajesSala, iterStat : ${MensajesPorSala}">
+							<div th:id="'chat_' + ${iterStat.index}" class="card card-message" th:data-room="${ListaMensajesSala[0].getSala()}">
+								<div class="row d-flex justify-content-center">
+									<div class="col-md-10 col-lg-8 col-xl-10 col-sm-11">
+										<div class="card" style="height: 65vh !important;">
+											<div class="card-header d-flex justify-content-between align-items-center p-3">
+												<h5 class="mb-0" th:text="${ListaMensajesSala.get(0).getIdUsuario().getNombre()} + ' ' + ${ListaMensajesSala.get(0).getIdUsuario().getApellidoPaterno()}"></h5>
+											</div>
+											<div th:id="'response_' + ${iterStat.index}" class="card-body" style="position: relative; overflow-y: scroll;" th:data-index="${iterStat.index}">
+												<div th:each="mensaje : ${ListaMensajesSala}">
+													<div class="d-flex flex-row justify-content-start mb-4 pt-1">
+														<div>
+															<p th:if="${mensaje.getIdUsuario().getId() != idSender}" class="message small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary" th:text="${mensaje.getContenido()}"></p>
+														</div>
+													</div>
+													<div class="d-flex flex-row justify-content-end mb-4 pt-1">
+														<div>
+															<p th:if="${mensaje.getIdUsuario().getId() == idSender}" class="message small p-2 me-3 mb-1 text-white rounded-3 bg-primary" th:text="${mensaje.getContenido()}"></p>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+												<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3" style="width: 40px; height: 100%;">
+												<input type="text" th:id="'messageInput_' + ${iterStat.index}" class="form-control form-control-lg messageSender" placeholder="Escribe algo...">
+												<button class="ms-3 btn btn-primary" th:onclick="'sendMessage(' + ${iterStat.index} + ')'">Enviar</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
+
 				</div>
 			</section>
 		</div>
 
 	</main>
-
-
-
 </div>
-
 
 <!-- LIBRERIAS -->
 <div>
 	<!-- Javascript-->
 	<!-- Libs JS -->
-	<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
 	<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
 	<!-- Theme JS -->
 	<script th:src="@{/js/theme.min.js}"></script>
-
 	<script th:src="@{/js/vendors/jquery.min.js}"></script>
 	<script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
 	<script th:src="@{/js/vendors/slick-slider.js}"></script>
 	<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
 	<script th:src="@{/js/vendors/tns-slider.js}"></script>
 	<script th:src="@{/js/vendors/zoom.js}"></script>
-
 	<script th:src="@{/js/vendors/countdown.js}"></script>
 	<script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
 	<script th:src="@{/js/vendors/sticky.js}"></script>
 	<script th:src="@{/js/vendors/modal.js}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-	<script>
+	<script th:inline="javascript">
 		var stompClient = null;
 		var currentRoom = null;
 		var name = 'Agente'; // Nombre fijo para el administrador
 		var messagesPerRoom = {}; // Objeto para almacenar los mensajes por sala
 		var subscriptions = {}; // Para guardar las suscripciones de cada sala
 		var subscribedRooms = [];
-		// Función para unirse a una sala de chat
-		function joinRoom(element) {
-			var room = element.getAttribute('data-room'); // Obtener el nombre de la sala desde el atributo data-room
+		var idSender = /*[[${idSender}]]*/
 
-			// Solo proceder si la sala actual es diferente de la nueva
-			if (currentRoom !== room) {
-				// Guardar los mensajes actuales de la sala anterior antes de cambiar de sala
-				if (currentRoom) {
-					saveMessages(currentRoom);
-					//unsubscribeFromRoom(currentRoom);  // Desuscribir de la sala anterior
-				}
+				// Función para unirse a una sala de chat
+				function joinRoom(element) {
+					var room = element.getAttribute('data-room'); // Obtener el nombre de la sala desde el atributo data-room
+					currentRoom = room;
+					selectedRoomIndex = element.getAttribute('data-index');
+					document.getElementById('roomName').textContent = currentRoom;
 
-				currentRoom = room;
-				document.getElementById('roomName').textContent = currentRoom;
+					// Ocultar todas las cards de mensaje y mostrar solo la card de la sala seleccionada
+					var allCards = document.getElementsByClassName('card-message');
+					for (var i = 0; i < allCards.length; i++) {
+						allCards[i].style.display = 'none';
+					}
+					var selectedCard = document.querySelector('.card-message[data-room="' + room + '"]');
+					if (selectedCard) {
+						selectedCard.style.display = 'block';
+					}
 
-				// Limpiar los mensajes anteriores de la interfaz
-				clearMessages();
-
-				if(!subscribedRooms.includes(currentRoom)){
 					// Conectar al servidor WebSocket si no está conectado
 					if (!stompClient) {
 						var socket = new SockJS('/chat-websocket');
 						stompClient = Stomp.over(socket);
 						stompClient.connect({}, function (frame) {
 							console.log("Conectado: " + frame);
-							subscribeToRoom(currentRoom);
+							subscribeToRoom(room);
+							scrollToBottom();
 						});
 					} else {
 						// Si ya está conectado, simplemente suscribirse a la nueva sala
-						subscribeToRoom(currentRoom);
+						subscribeToRoom(room);
+						scrollToBottom();
 					}
-				}else{
-					loadMessages(currentRoom);
 				}
-			}
-		}
 
 		// Función para suscribirse a una sala de chat
 		function subscribeToRoom(room) {
-			// Suscribirse a la nueva sala
-			var subscription = stompClient.subscribe('/topic/room/' + room, function (message) {
-				showMessage(JSON.parse(message.body));
-			});
-
-			// Guardar la suscripción para poder desuscribir luego
-			subscriptions[room] = subscription;
-
-			subscribedRooms.push(document.getElementById('roomName').textContent)
-
-			// Cargar los mensajes guardados de la sala seleccionada
-			loadMessages(room);
-
-			//saveActiveRooms();
-
-			// Enviar notificación de que el usuario ha cambiado de sala
-			stompClient.send("/app/chat/" + room, {}, JSON.stringify({ sender: "Sistema", content: "El usuario ha entrado a la sala", room: room }));
-		}
-
-		// Función para desuscribirse de la sala anterior
-		function unsubscribeFromRoom(room) {
-			if (subscriptions[room]) {
-				subscriptions[room].unsubscribe();
-				delete subscriptions[room];  // Eliminar la suscripción de la memoria
+			if (!subscriptions[room]) {
+				var subscription = stompClient.subscribe('/topic/room/' + room, function (message) {
+					showMessage(JSON.parse(message.body), selectedRoomIndex); // Usa selectedRoomIndex aquí
+				});
+				subscriptions[room] = subscription;
+				subscribedRooms.push(room);
 			}
 		}
 
 		// Enviar un mensaje a la sala actual
-		function sendMessage() {
-			var messageContent = document.getElementById('message').value;
+		function sendMessage(roomIndex) {
+			var messageInput = document.getElementById('messageInput_' + roomIndex);
+			var messageContent = messageInput.value;
 
 			if (!messageContent.trim()) {
 				alert("Por favor, escribe un mensaje.");
@@ -223,56 +206,46 @@
 			}
 
 			var message = {
-				senderId: 13, //Modificar para obtener dinamicamente el id del agente
+				senderId: idSender,
 				content: messageContent,
 				room: currentRoom
 			};
 
 			stompClient.send("/app/chat/" + currentRoom, {}, JSON.stringify(message));
-			document.getElementById('message').value = ''; // Limpiar el campo de entrada
+			messageInput.value = ''; // Limpiar el campo de entrada
 		}
 
 		// Mostrar un mensaje en la interfaz
-		function showMessage(message) {
-			var response = document.getElementById('response');
+		function showMessage(message, roomIndex) {
+			var response = document.getElementById('response_' + roomIndex);
+			console.log('response_' + roomIndex)
+			var divContainer = document.createElement('div');
 			var p = document.createElement('p');
 
-			if (message.senderId === "Sistema") {
-				p.style.fontStyle = "italic";
-				p.style.color = "gray";
+			if (message.senderId == idSender) {
+				divContainer.classList.add("d-flex", "flex-row", "justify-content-end", "mb-4", "pt-1");
+				p.classList.add("small", "message", "p-2", "me-3", "mb-1", "text-white", "rounded-3", "bg-primary");
+			} else {
+				divContainer.classList.add("d-flex", "flex-row", "justify-content-start", "mb-4", "pt-1");
+				p.classList.add("small", "message", "p-2", "ms-3", "mb-1", "rounded-3", "bg-body-tertiary");
 			}
 
-			p.appendChild(document.createTextNode(message.senderId + ": " + message.content));
-			response.appendChild(p);
-			response.scrollTop = response.scrollHeight; // Desplazarse hacia abajo automáticamente
+			p.appendChild(document.createTextNode(message.content));
+			divContainer.appendChild(p);
+
+			// Agregar el div contenedor al contenedor principal de mensajes de la sala seleccionada
+			response.appendChild(divContainer);
+
+			// Desplazarse al final después de agregar el mensaje
+			response.scrollTop = response.scrollHeight;
 		}
 
-		// Limpiar el área de mensajes
-		function clearMessages() {
-			document.getElementById('response').innerHTML = ''; // Limpiar todos los mensajes
-		}
 
-		// Función para guardar los mensajes de una sala
-		function saveMessages(room) {
-			var response = document.getElementById('response');
-			var messages = response.innerHTML; // Guardar el contenido HTML de los mensajes
-			messagesPerRoom[room] = messages;  // Almacenar los mensajes en el objeto
+		//modificar ligeramente
+		function scrollToBottom() {
+			var response = document.getElementById('response_' + selectedRoomIndex);
+			response.scrollTop = response.scrollHeight;
 		}
-
-		// Función para cargar los mensajes de una sala
-		function loadMessages(room) {
-			var response = document.getElementById('response');
-			var savedMessages = messagesPerRoom[room]; // Obtener los mensajes guardados de la sala
-			if (savedMessages) {
-				response.innerHTML = savedMessages; // Mostrar los mensajes en la interfaz
-			}
-
-			console.log("Mensajes cargados para la sala: " + room); // Confirmación de carga
-		}
-		/*function saveActiveRooms(activeRooms) {
-            activeRooms = Object.keys(subscriptions); // Obtener todas las salas activas
-            localStorage.setItem('activeRooms', JSON.stringify(activeRooms)); // Guardar en localStorage
-        }*/
 	</script>
 </div>
 

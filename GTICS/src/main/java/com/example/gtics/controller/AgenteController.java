@@ -148,7 +148,7 @@ public class AgenteController {
     @GetMapping({"Agente/Chat"})
     public ModelAndView chatAgente(HttpSession session) {
 
-        Integer idAgente = (Integer) session.getAttribute("id");
+        Integer idAgente = (Integer) session.getAttribute("idAgente");
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
             return new ModelAndView("redirect:/login");
@@ -159,7 +159,25 @@ public class AgenteController {
             idUsuariosAsignados.add(u.getId());
         }
         ModelAndView modelAndView = new ModelAndView("Agente/chatVistaAgente");
-        Set<String> activeRooms = chatRoomService.getActiveRoomsAsignadas(idUsuariosAsignados);
+
+        List<String> allRooms = messageRepository.findRooms();
+        List<String> activeRooms = new ArrayList<>();;
+        for (String room : allRooms) {
+            // Verificar que la sala siga el formato "room_<idUsuario>"
+            if (room.startsWith("room_")) {
+                try {
+                    Integer roomId = Integer.parseInt(room.substring(5));
+                    // Comprobar si el idUsuario está en la lista de usuarios asignados
+                    if (idUsuariosAsignados.contains(roomId)) {
+                        activeRooms.add(room);
+                    }
+                } catch (NumberFormatException e) {
+                    // Si no es un número válido, ignoramos esta sala
+                    continue;
+                }
+            }
+        }
+        //Obtener las activeRooms mediante services: Set<String> activeRooms = chatRoomService.getActiveRoomsAsignadas(idUsuariosAsignados);
         ArrayList<List<Message>> mensajesPorSala = new ArrayList<>();
         for(String room : activeRooms){
             //Obteniendo los mensajes enviados por el agente
@@ -167,7 +185,12 @@ public class AgenteController {
             mensajesPorSala.add(mensajesSala);
         }
         modelAndView.addObject("activeRooms", activeRooms);
+        for (String room: activeRooms){
+            System.out.println(room);
+        }
         modelAndView.addObject("MensajesPorSala", mensajesPorSala);
+        modelAndView.addObject("idSender", session.getAttribute("idAgente"));
+        System.out.println(String.valueOf(session.getAttribute("idAgente")));
         return modelAndView;
     }
 

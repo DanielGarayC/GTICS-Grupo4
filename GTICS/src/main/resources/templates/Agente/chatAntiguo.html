@@ -37,21 +37,30 @@
     <!--POP UP-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        .custom-popup{
-            border-radius: 10px;
+        .room-list {
+            width: 30%;
+            border-right: 1px solid #ccc;
+            padding: 10px;
         }
-        .swal2-styled{
-            border-radius: 8px;
+        .chat-view {
+            width: 70%;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
         }
-        .swal2-styled.swal2-confirm {
-            background-color: #28a745;
-            color: white;
+        #response {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #message {
+            width: 80%;
+            padding: 10px;
         }
 
-        .swal2-styled.swal2-cancel {
-            background-color: #dc3545;
-            color: white;
-        }
+
     </style>
 
 
@@ -80,46 +89,56 @@
         <div class="container">
             <section>
                 <div class="container py-5">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-md-10 col-lg-8 col-xl-10 col-sm-11">
-                            <div class="card" id="chat2">
-                                <div class="card-header d-flex justify-content-between align-items-center p-3">
-                                    <h5 class="mb-0">Chat</h5>
-                                    <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" data-mdb-ripple-color="dark">Iniciar Chat</button>
-                                </div>
-                                <div class="card-body" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px">
-                                    <div class="d-flex flex-row justify-content-start">
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 1" style="width: 45px; height: 100%;">
-                                        <div>
-                                            <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary">Buenas tardes, ¿podría confirmarme si su ubicación es la siguiente?</p>
-                                            <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary">Av. La Marina 1290</p>
-                                            <p class="small ms-3 mb-3 rounded-3 text-muted">15:58</p>
+                    <h1>Mensajes de usuarios</h1>
+                    <div class="room-list">
+                        <ul>
+                            <li th:each="listaMensajes : ${MensajesPorSala}">
+                                <a href="#" th:text="${listaMensajes.get(0).getSala()}" th:data-room="${listaMensajes.get(0).getSala()}" onclick="joinRoom(this)"></a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <!-- Vista de chat -->
+                    <div class="chat-view">
+                        <h2>Chat en la sala <span id="roomName">Selecciona una sala</span></h2>
+                        <div th:each="ListaMensajesSala : ${MensajesPorSala}">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-md-10 col-lg-8 col-xl-10 col-sm-11">
+                                    <div class="card" id="chat2" style="height: 65vh !important;">
+                                        <div class="card-header d-flex justify-content-between align-items-center p-3">
+                                            <h5 class="mb-0">Chat con usuario</h5>
+                                        </div>
+                                        <div id="response2" class="card-body" data-mdb-perfect-scrollbar-init style="position: relative; overflow-y: scroll;"> <!--cambiar-->
+                                            <div th:each="mensaje : ${ListaMensajesSala}">
+                                                <div class="d-flex flex-row justify-content-start mb-4 pt-1">
+                                                    <div>
+                                                        <p th:if="${mensaje.getIdUsuario().getId() != idSender}" class="message small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary" th:text="${mensaje.getContenido()}"></p>
+                                                        <!--<p class="small ms-3 mb-3 rounded-3 text-muted">15:58</p>-->
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="d-flex flex-row justify-content-end mb-4 pt-1">
+                                                    <div>
+                                                        <p th:if="${mensaje.getIdUsuario().getId() == idSender}" class="message small p-2 me-3 mb-1 text-white rounded-3 bg-primary" th:text="${mensaje.getContenido()}"></p>
+                                                        <!--<p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">16:06</p>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3" style="width: 40px; height: 100%;">
+                                            <input type="text" class="form-control form-control-lg messageSender"  placeholder="Escribe algo...">
+
+                                            <button class="ms-3 btn btn-primary" onclick="sendMessage()">Enviar</button>
                                         </div>
                                     </div>
-
-                                    <div class="divider d-flex align-items-center mb-4">
-                                        <p class="text-center mx-3 mb-0" style="color: #a2aab7;">Hoy</p>
-                                    </div>
-
-                                    <div class="d-flex flex-row justify-content-end mb-4 pt-1">
-                                        <div>
-                                            <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Sí, la dirección es correcta.</p>
-                                            <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">La otra referencia es Calle San Cristobal 123.</p>
-                                            <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">No podré recoger mañana porque iré al trabajo.</p>
-                                            <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">16:06</p>
-                                        </div>
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar 2" style="width: 45px; height: 100%;">
-                                    </div>
-                                </div>
-                                <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3" style="width: 40px; height: 100%;">
-                                    <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1" placeholder="Escribe algo...">
-                                    <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
-                                    <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
-                                    <a class="ms-3" href="#!"><i class="fas fa-paper-plane"></i></a>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </section>
@@ -159,10 +178,10 @@
     <script>
         var stompClient = null;
         var currentRoom = null;
-        var name = 'admin'; // Nombre fijo para el administrador
+        var name = 'Agente'; // Nombre fijo para el administrador
         var messagesPerRoom = {}; // Objeto para almacenar los mensajes por sala
         var subscriptions = {}; // Para guardar las suscripciones de cada sala
-
+        var subscribedRooms = [];
         // Función para unirse a una sala de chat
         function joinRoom(element) {
             var room = element.getAttribute('data-room'); // Obtener el nombre de la sala desde el atributo data-room
@@ -172,7 +191,7 @@
                 // Guardar los mensajes actuales de la sala anterior antes de cambiar de sala
                 if (currentRoom) {
                     saveMessages(currentRoom);
-                    unsubscribeFromRoom(currentRoom);  // Desuscribir de la sala anterior
+                    //unsubscribeFromRoom(currentRoom);  // Desuscribir de la sala anterior
                 }
 
                 currentRoom = room;
@@ -181,17 +200,21 @@
                 // Limpiar los mensajes anteriores de la interfaz
                 clearMessages();
 
-                // Conectar al servidor WebSocket si no está conectado
-                if (!stompClient) {
-                    var socket = new SockJS('/chat-websocket');
-                    stompClient = Stomp.over(socket);
-                    stompClient.connect({}, function (frame) {
-                        console.log("Conectado: " + frame);
+                if(!subscribedRooms.includes(currentRoom)){
+                    // Conectar al servidor WebSocket si no está conectado
+                    if (!stompClient) {
+                        var socket = new SockJS('/chat-websocket');
+                        stompClient = Stomp.over(socket);
+                        stompClient.connect({}, function (frame) {
+                            console.log("Conectado: " + frame);
+                            subscribeToRoom(currentRoom);
+                        });
+                    } else {
+                        // Si ya está conectado, simplemente suscribirse a la nueva sala
                         subscribeToRoom(currentRoom);
-                    });
-                } else {
-                    // Si ya está conectado, simplemente suscribirse a la nueva sala
-                    subscribeToRoom(currentRoom);
+                    }
+                }else{
+                    loadMessages(currentRoom);
                 }
             }
         }
@@ -206,11 +229,14 @@
             // Guardar la suscripción para poder desuscribir luego
             subscriptions[room] = subscription;
 
+            subscribedRooms.push(document.getElementById('roomName').textContent)
+
             // Cargar los mensajes guardados de la sala seleccionada
             loadMessages(room);
 
+            //saveActiveRooms();
+
             // Enviar notificación de que el usuario ha cambiado de sala
-            stompClient.send("/app/chat/" + room, {}, JSON.stringify({ sender: "Sistema", content: "El usuario ha entrado a la sala", room: room }));
         }
 
         // Función para desuscribirse de la sala anterior
@@ -223,7 +249,11 @@
 
         // Enviar un mensaje a la sala actual
         function sendMessage() {
-            var messageContent = document.getElementById('message').value;
+            var messageInputElements = document.getElementsByClassName('messageSender');
+
+            // Tomar el primer elemento con la clase 'messageSender' (puedes ajustar esto si hay varios campos con esta clase)
+            var messageContent = messageInputElements[0].value;
+
 
             if (!messageContent.trim()) {
                 alert("Por favor, escribe un mensaje.");
@@ -231,7 +261,7 @@
             }
 
             var message = {
-                sender: name,
+                senderId: 13, //Modificar para obtener dinamicamente el id del agente
                 content: messageContent,
                 room: currentRoom
             };
@@ -245,12 +275,9 @@
             var response = document.getElementById('response');
             var p = document.createElement('p');
 
-            if (message.sender === "Sistema") {
-                p.style.fontStyle = "italic";
-                p.style.color = "gray";
-            }
 
-            p.appendChild(document.createTextNode(message.sender + ": " + message.content));
+
+            p.appendChild(document.createTextNode(message.senderId + ": " + message.content));
             response.appendChild(p);
             response.scrollTop = response.scrollHeight; // Desplazarse hacia abajo automáticamente
         }
@@ -274,7 +301,13 @@
             if (savedMessages) {
                 response.innerHTML = savedMessages; // Mostrar los mensajes en la interfaz
             }
+
+            console.log("Mensajes cargados para la sala: " + room); // Confirmación de carga
         }
+        /*function saveActiveRooms(activeRooms) {
+            activeRooms = Object.keys(subscriptions); // Obtener todas las salas activas
+            localStorage.setItem('activeRooms', JSON.stringify(activeRooms)); // Guardar en localStorage
+        }*/
     </script>
 </div>
 

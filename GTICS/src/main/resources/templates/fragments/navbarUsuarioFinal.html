@@ -13,7 +13,6 @@
     <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
 
     <!-- Favicon icon-->
-    <link th:href="@{/images/favicon/favicon.ico}" rel="shortcut icon" type="image/x-icon" />
 
     <!-- Libs CSS -->
     <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
@@ -24,25 +23,25 @@
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
 </head>
 <body>
-    <!-- Fragmento de Navbar --->
-    <div th:fragment="navbar">
-        <!-- navbar -->
-        <!-- Navbar para pantallas grandes -->
-        <div class="border-bottom d-none d-lg-block">
-            <div class="py-5">
-                <div class="container">
-                    <div class="row w-100 align-items-center gx-lg-2 gx-0 justify-content-between">
-                        <!-- Logo -->
-                        <div class="col-xxl-2 col-lg-2 col-md-6 col-5">
-                            <a class="navbar-brand" th:href="@{/UsuarioFinal/pagPrincipal}">
-                                <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" width="200" height="auto" />
-                            </a>
-                        </div>
+<!-- Fragmento de Navbar --->
+<div th:fragment="navbar">
+    <!-- navbar -->
+    <!-- Navbar para pantallas grandes -->
+    <div class="border-bottom d-none d-lg-block">
+        <div class="py-5">
+            <div class="container">
+                <div class="row w-100 align-items-center gx-lg-2 gx-0 justify-content-between">
+                    <!-- Logo -->
+                    <div class="col-xxl-2 col-lg-2 col-md-6 col-5">
+                        <a class="navbar-brand" th:href="@{/UsuarioFinal/pagPrincipal}">
+                            <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" width="200" height="auto" />
+                        </a>
+                    </div>
 
-                        <!-- Menú de categorías y enlaces de navegación -->
-                        <div class="col-lg-7 col-xxl-7 d-flex align-items-center justify-content-start flex-grow-1">
-                            <div class="dropdown me-4">
-                                <button class="btn btn-primary px-6" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <!-- Menú de categorías y enlaces de navegación -->
+                    <div class="col-lg-7 col-xxl-7 d-flex align-items-center justify-content-start flex-grow-1">
+                        <div class="dropdown me-4">
+                            <button class="btn btn-primary px-6" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="me-1">
                                 <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -61,292 +60,292 @@
                                     <rect x="3" y="14" width="7" height="7"></rect>
                                 </svg>
                             </span>
-                                    Todas las categorías
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li th:each="categoria : ${categorias}">
-                                        <a class="dropdown-item" th:href="@{'/UsuarioFinal/categorias/' + ${categoria.id}}">
-                                            <span th:text="${categoria.nombreCategoria}"></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Menú de navegación -->
-                            <ul class="navbar-nav d-flex flex-row flex-grow-1 justify-content-between">
-                                <li class="nav-item">
-                                    <a class="nav-link" th:href="@{/UsuarioFinal/pagPrincipal}" aria-expanded="false">Inicio</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" th:href="@{/UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" th:href="@{/UsuarioFinal/listaMisOrdenes}" aria-expanded="false">Mis compras</a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Foro</a>
-                                    <ul class="dropdown-menu">
-                                         <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Reviews}">Reseñas</a></li>
-
-                                        <li><a class="dropdown-item" th:href="@{/UsuarioFinal/faq}">Preguntas frecuentes</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" th:href="@{/UsuarioFinal/chatbot}">Soporte Técnico</a>
+                                Todas las categorías
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li th:each="categoria : ${categorias}">
+                                    <a class="dropdown-item" th:href="@{'/UsuarioFinal/categorias/' + ${categoria.id}}">
+                                        <span th:text="${categoria.nombreCategoria}"></span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
+                        <!-- Menú de navegación -->
+                        <ul class="navbar-nav d-flex flex-row flex-grow-1 justify-content-between">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/UsuarioFinal/pagPrincipal}" aria-expanded="false">Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/UsuarioFinal/listaMisOrdenes}" aria-expanded="false">Mis compras</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Foro</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Reviews}">Reseñas</a></li>
 
-                        <!-- Iconos de notificaciones, cuenta y carrito -->
-                        <div class="col-lg-3 col-xxl-3 d-flex justify-content-end">
-                            <div class="list-inline">
-                                <ul class="list-inline">
-                                    <!-- Shopcart icon -->
-                                    <li class="list-inline-item me-5">
-                                        <a class="text-muted position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" href="#offcanvasExample" role="button" aria-controls="offcanvasRight">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
-                                                <circle cx="9" cy="21" r="1"></circle>
-                                                <circle cx="20" cy="21" r="1"></circle>
-                                                <path d="M1 1h4l2 13h13"></path>
-                                                <path d="M6 6h15l-1.68 8.39a1 1 0 0 1-1 .61H7"></path>
-                                            </svg>
+                                    <li><a class="dropdown-item" th:href="@{/UsuarioFinal/faq}">Preguntas frecuentes</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/UsuarioFinal/chatbot}">Soporte Técnico</a>
+                            </li>
+                        </ul>
+                    </div>
 
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
-                                                  th:text="${totalCantidadProductos}">
+                    <!-- Iconos de notificaciones, cuenta y carrito -->
+                    <div class="col-lg-3 col-xxl-3 d-flex justify-content-end">
+                        <div class="list-inline">
+                            <ul class="list-inline">
+                                <!-- Shopcart icon -->
+                                <li class="list-inline-item me-5">
+                                    <a class="text-muted position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" href="#offcanvasExample" role="button" aria-controls="offcanvasRight">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
+                                            <circle cx="9" cy="21" r="1"></circle>
+                                            <circle cx="20" cy="21" r="1"></circle>
+                                            <path d="M1 1h4l2 13h13"></path>
+                                            <path d="M6 6h15l-1.68 8.39a1 1 0 0 1-1 .61H7"></path>
+                                        </svg>
+
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
+                                              th:text="${totalCantidadProductos}">
                                                 0
                                             </span>
-                                        </a>
-                                    </li>
-                                    <!-- Notifications icon -->
-                                    <li class="list-inline-item dropdown">
-                                        <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-bell fs-5"></i>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+                                    </a>
+                                </li>
+                                <!-- Notifications icon -->
+                                <li class="list-inline-item dropdown">
+                                    <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-bell fs-5"></i>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
 										2
 										<span class="visually-hidden">Mensajes sin leer</span>
 									</span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
-                                            <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h5 class="mb-1">Notificaciones</h5>
-                                                    <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
-                                                </div>
-                                                <a href="#!" class="text-muted">
-                                                    <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
-                                                            <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"/>
-                                                            <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z"/>
-                                                        </svg>
-                                                    </a>
-                                                </a>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+                                        <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5 class="mb-1">Notificaciones</h5>
+                                                <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
                                             </div>
-                                            <ul class="list-group list-group-flush notification-list-scroll fs-6">
-                                                <li class="list-group-item px-5 py-4 list-group-item-action">
-                                                    <a href="#!" class="text-muted">
-                                                        <div class="d-flex">
-                                                            <div class="ms-4">
-                                                                <p class="mb-1">
-                                                                    <span class="text-dark">Título de notificación 1</span>
-                                                                    Descripción notificación 1
-                                                                </p>
-                                                                <span>
+                                            <a href="#!" class="text-muted">
+                                                <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+                                                        <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"/>
+                                                        <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z"/>
+                                                    </svg>
+                                                </a>
+                                            </a>
+                                        </div>
+                                        <ul class="list-group list-group-flush notification-list-scroll fs-6">
+                                            <li class="list-group-item px-5 py-4 list-group-item-action">
+                                                <a href="#!" class="text-muted">
+                                                    <div class="d-flex">
+                                                        <div class="ms-4">
+                                                            <p class="mb-1">
+                                                                <span class="text-dark">Título de notificación 1</span>
+                                                                Descripción notificación 1
+                                                            </p>
+                                                            <span>
 															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
 																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
 																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
 															</svg>
 															<small class="ms-2">Hace 1 minuto</small>
 														</span>
-                                                            </div>
                                                         </div>
-                                                    </a>
-                                                </li>
-                                                <!-- Más notificaciones -->
-                                            </ul>
-                                            <div class="border-top px-5 py-4 text-center">
-                                                <a href="#!">Ver todas</a>
-                                            </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <!-- Más notificaciones -->
+                                        </ul>
+                                        <div class="border-top px-5 py-4 text-center">
+                                            <a href="#!">Ver todas</a>
                                         </div>
-                                    </li>
-                                    <!-- Avatar -->
-                                    <li class="list-inline-item dropdown">
-                                        <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-sm rounded-circle" /> <!-- Avatar más pequeño -->
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end p-0" style="width: 180px; font-size: 0.85rem; padding: 0.5rem;"> <!-- Ajuste de ancho y padding -->
-                                            <div class="lh-1 px-3 py-2 border-bottom text-center">
-                                                <h6 class="mb-1" style="font-size: 0.9rem;">Nombre Apellido</h6> <!-- Ajuste de tamaño de fuente -->
-                                                <small style="font-size: 0.75rem;">rol en la página</small> <!-- Texto más pequeño -->
-                                            </div>
-                                            <div class="border-top px-0 py-1">
-                                                <a th:href="@{/UsuarioFinal/miPerfil}" style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
-                                                    Mi perfil
-                                                </a>
-                                            </div>
-                                            <div class="border-top px-0 py-1">
-                                                <a th:href="@{'UsuarioFinal/solicitudAgente?idUsuario=' + ${usuario.id}}" data-bs-toggle="modal" data-bs-target="#addRequestAgent"
-                                                   style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
-                                                    Solicitar ser agente
-                                                </a>
-                                            </div>
-                                            <div class="border-top px-0 py-1">
-                                                <a th:href="@{/ExpressDealsLogin}" style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
-                                                    Cerrar sesión
-                                                </a>
-                                            </div>
+                                    </div>
+                                </li>
+                                <!-- Avatar -->
+                                <li class="list-inline-item dropdown">
+                                    <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-sm rounded-circle" /> <!-- Avatar más pequeño -->
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end p-0" style="width: 180px; font-size: 0.85rem; padding: 0.5rem;"> <!-- Ajuste de ancho y padding -->
+                                        <div class="lh-1 px-3 py-2 border-bottom text-center">
+                                            <h6 class="mb-1" style="font-size: 0.9rem;">Nombre Apellido</h6> <!-- Ajuste de tamaño de fuente -->
+                                            <small style="font-size: 0.75rem;">rol en la página</small> <!-- Texto más pequeño -->
                                         </div>
-                                    </li>
+                                        <div class="border-top px-0 py-1">
+                                            <a th:href="@{/UsuarioFinal/miPerfil}" style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
+                                                Mi perfil
+                                            </a>
+                                        </div>
+                                        <div class="border-top px-0 py-1">
+                                            <a th:href="@{'UsuarioFinal/solicitudAgente?idUsuario=' + ${usuario.id}}" data-bs-toggle="modal" data-bs-target="#addRequestAgent"
+                                               style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
+                                                Solicitar ser agente
+                                            </a>
+                                        </div>
+                                        <div class="border-top px-0 py-1">
+                                            <a th:href="@{/ExpressDealsLogin}" style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
+                                                Cerrar sesión
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
 
 
-                                </ul>
-                            </div>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- fin navbar pantallas grandes -->
+    </div>
+    <!-- fin navbar pantallas grandes -->
 
-        <!-- Navbar para pantallas pequeñas -->
-        <div class="border-bottom d-lg-none">
-            <div class="py-5">
-                <div class="container">
-                    <div class="row w-100 align-items-center gx-lg-2 gx-0">
-                        <div class="col-xxl-2 col-lg-3 col-md-6 col-5">
-                            <a class="navbar-brand" th:href="@{/UsuarioFinal/pagPrincipal}">
-                                <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" width="200" height="auto" />
-                            </a>
-                        </div>
-                        <div class="col-lg-2 col-xxl-2 text-end col-md-6 col-7">
-                            <div class="list-inline">
-                                <ul class="list-inline">
-                                    <!-- Shopcart icon -->
-                                    <li class="list-inline-item me-5">
-                                        <a class="text-muted position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" href="#offcanvasExample" role="button" aria-controls="offcanvasRight">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
-                                                <circle cx="9" cy="21" r="1"></circle>
-                                                <circle cx="20" cy="21" r="1"></circle>
-                                                <path d="M1 1h4l2 13h13"></path>
-                                                <path d="M6 6h15l-1.68 8.39a1 1 0 0 1-1 .61H7"></path>
-                                            </svg>
+    <!-- Navbar para pantallas pequeñas -->
+    <div class="border-bottom d-lg-none">
+        <div class="py-5">
+            <div class="container">
+                <div class="row w-100 align-items-center gx-lg-2 gx-0">
+                    <div class="col-xxl-2 col-lg-3 col-md-6 col-5">
+                        <a class="navbar-brand" th:href="@{/UsuarioFinal/pagPrincipal}">
+                            <img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" width="200" height="auto" />
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-xxl-2 text-end col-md-6 col-7">
+                        <div class="list-inline">
+                            <ul class="list-inline">
+                                <!-- Shopcart icon -->
+                                <li class="list-inline-item me-5">
+                                    <a class="text-muted position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" href="#offcanvasExample" role="button" aria-controls="offcanvasRight">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
+                                            <circle cx="9" cy="21" r="1"></circle>
+                                            <circle cx="20" cy="21" r="1"></circle>
+                                            <path d="M1 1h4l2 13h13"></path>
+                                            <path d="M6 6h15l-1.68 8.39a1 1 0 0 1-1 .61H7"></path>
+                                        </svg>
 
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
-                                                  th:text="${totalCantidadProductos}">
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
+                                              th:text="${totalCantidadProductos}">
                                                 0
                                             </span>
 
-                                        </a>
-                                    </li>
-                                    <!-- Notifications icon -->
-                                    <li class="list-inline-item dropdown">
-                                        <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-bell fs-5"></i>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+                                    </a>
+                                </li>
+                                <!-- Notifications icon -->
+                                <li class="list-inline-item dropdown">
+                                    <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-bell fs-5"></i>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
 										2
 										<span class="visually-hidden">Mensajes sin leer</span>
 									</span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
-                                            <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h5 class="mb-1">Notificaciones</h5>
-                                                    <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
-                                                </div>
-                                                <a href="#!" class="text-muted">
-                                                    <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
-                                                            <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"/>
-                                                            <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z"/>
-                                                        </svg>
-                                                    </a>
-                                                </a>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0 border-0">
+                                        <div class="border-bottom p-5 d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5 class="mb-1">Notificaciones</h5>
+                                                <p class="mb-0 small">Tienes 2 mensajes sin leer</p>
                                             </div>
-                                            <ul class="list-group list-group-flush notification-list-scroll fs-6">
-                                                <li class="list-group-item px-5 py-4 list-group-item-action">
-                                                    <a href="#!" class="text-muted">
-                                                        <div class="d-flex">
-                                                            <div class="ms-4">
-                                                                <p class="mb-1">
-                                                                    <span class="text-dark">Título de notificación 1</span>
-                                                                    Descripción notificación 1
-                                                                </p>
-                                                                <span>
+                                            <a href="#!" class="text-muted">
+                                                <a href="#" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marcar como leído">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check2-all text-success" viewBox="0 0 16 16">
+                                                        <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"/>
+                                                        <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z"/>
+                                                    </svg>
+                                                </a>
+                                            </a>
+                                        </div>
+                                        <ul class="list-group list-group-flush notification-list-scroll fs-6">
+                                            <li class="list-group-item px-5 py-4 list-group-item-action">
+                                                <a href="#!" class="text-muted">
+                                                    <div class="d-flex">
+                                                        <div class="ms-4">
+                                                            <p class="mb-1">
+                                                                <span class="text-dark">Título de notificación 1</span>
+                                                                Descripción notificación 1
+                                                            </p>
+                                                            <span>
 															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock text-muted" viewBox="0 0 16 16">
 																<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
 																<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
 															</svg>
 															<small class="ms-2">Hace 1 minuto</small>
 														</span>
-                                                            </div>
                                                         </div>
-                                                    </a>
-                                                </li>
-                                                <!-- Más notificaciones -->
-                                            </ul>
-                                            <div class="border-top px-5 py-4 text-center">
-                                                <a href="#!">Ver todas</a>
-                                            </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <!-- Más notificaciones -->
+                                        </ul>
+                                        <div class="border-top px-5 py-4 text-center">
+                                            <a href="#!">Ver todas</a>
                                         </div>
-                                    </li>
-                                    <!-- Avatar -->
-                                    <li class="list-inline-item dropdown">
-                                        <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end p-0" style="width: 100%; line-height: 0.6rem">
-                                            <div class="lh-1 px-4 py-3 border-bottom text-center">
-                                                <h5 class="mb-1 h6" th:text="${session.usuario.nombre} + ' ' + ${session.usuario.apellidoPaterno}"></h5>
-                                                <small>Usuario </small>
-                                            </div>
-                                            <div class="border-top px-0 py-2">
-                                                <a th:href="@{/UsuarioFinal/miPerfil}" style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
-                                                    Mi perfil
-                                                </a>
-                                            </div>
-                                            <div class="border-top px-0 py-2">
-                                                <a th:href="@{'UsuarioFinal/solicitudAgente?idUsuario=' + ${usuario.id}}" data-bs-toggle="modal" data-bs-target="#addRequestAgent"
-                                                   style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
-                                                    Solicitar ser agente
-                                                </a>
-                                            </div>
-                                            <div class="border-top px-0 py-2">
-                                                <a th:href="@{/ExpressDealsController}" style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
-                                                    Cerrar sesión
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-
-
-                                    <div class="list-inline-item d-inline-block d-lg-none">
-                                        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar-default" aria-controls="navbar-default" aria-label="Toggle navigation">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-left text-primary" viewBox="0 0 16 16">
-                                                <path d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm.646 2.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L4.293 8 2.646 6.354a.5.5 0 0 1 0-.708zM7 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
-                                            </svg>
-                                        </button>
                                     </div>
+                                </li>
+                                <!-- Avatar -->
+                                <li class="list-inline-item dropdown">
+                                    <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end p-0" style="width: 100%; line-height: 0.6rem">
+                                        <div class="lh-1 px-4 py-3 border-bottom text-center">
+                                            <h5 class="mb-1 h6" th:text="${session.usuario.nombre} + ' ' + ${session.usuario.apellidoPaterno}"></h5>
+                                            <small>Usuario </small>
+                                        </div>
+                                        <div class="border-top px-0 py-2">
+                                            <a th:href="@{/UsuarioFinal/miPerfil}" style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
+                                                Mi perfil
+                                            </a>
+                                        </div>
+                                        <div class="border-top px-0 py-2">
+                                            <a th:href="@{'UsuarioFinal/solicitudAgente?idUsuario=' + ${usuario.id}}" data-bs-toggle="modal" data-bs-target="#addRequestAgent"
+                                               style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
+                                                Solicitar ser agente
+                                            </a>
+                                        </div>
+                                        <div class="border-top px-0 py-2">
+                                            <a th:href="@{/ExpressDealsController}" style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
+                                                Cerrar sesión
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
 
 
-                                </ul>
+                                <div class="list-inline-item d-inline-block d-lg-none">
+                                    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar-default" aria-controls="navbar-default" aria-label="Toggle navigation">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-left text-primary" viewBox="0 0 16 16">
+                                            <path d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm.646 2.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L4.293 8 2.646 6.354a.5.5 0 0 1 0-.708zM7 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+                                        </svg>
+                                    </button>
+                                </div>
 
 
-                            </div>
+                            </ul>
+
+
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <nav class="navbar navbar-expand-lg navbar-light navbar-default py-0 pb-lg-4">
-                <div class="container">
-                    <div class="offcanvas offcanvas-start" tabindex="-1" id="navbar-default" aria-labelledby="navbar-defaultLabel">
-                        <div class="offcanvas-header pb-1">
-                            <a th:href="@{/UsuarioFinal}" ><img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" width="200" height="auto" />
-                            </a>
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                            <div class="d-block d-lg-none mb-4">
-                                <div class="dropdown me-3 d-none d-lg-block">
-                                    <button class="btn btn-primary px-6" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <nav class="navbar navbar-expand-lg navbar-light navbar-default py-0 pb-lg-4">
+            <div class="container">
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="navbar-default" aria-labelledby="navbar-defaultLabel">
+                    <div class="offcanvas-header pb-1">
+                        <a th:href="@{/UsuarioFinal}" ><img th:src="@{/images/logo/logoGTICS.jpeg}" alt="" width="200" height="auto" />
+                        </a>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <div class="d-block d-lg-none mb-4">
+                            <div class="dropdown me-3 d-none d-lg-block">
+                                <button class="btn btn-primary px-6" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                            <span class="me-1">
                               <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -365,147 +364,147 @@
                                  <rect x="3" y="14" width="7" height="7"></rect>
                               </svg>
                            </span>
-                                        Todas las categorías
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li th:each="categoria : ${categorias}">
-                                            <a class="dropdown-item" th:href="@{'/UsuarioFinal/categorias/' + ${categoria.id}}">
-                                                <span th:text="${categoria.nombreCategoria}"></span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <ul class="navbar-nav align-items-center">
-                                        <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link " th:href="@{/UsuarioFinal/pagPrincipal}"   aria-expanded="false">Inicio</a>
+                                    Todas las categorías
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li th:each="categoria : ${categorias}">
+                                        <a class="dropdown-item" th:href="@{'/UsuarioFinal/categorias/' + ${categoria.id}}">
+                                            <span th:text="${categoria.nombreCategoria}"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <ul class="navbar-nav align-items-center">
+                                    <li class="nav-item dropdown w-100 w-lg-auto">
+                                        <a class="nav-link " th:href="@{/UsuarioFinal/pagPrincipal}"   aria-expanded="false">Inicio</a>
 
-                                        </li>
-                                        <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link " th:href="@{/UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
+                                    </li>
+                                    <li class="nav-item dropdown w-100 w-lg-auto">
+                                        <a class="nav-link " th:href="@{/UsuarioFinal/listaProductos}" aria-expanded="false">Productos</a>
 
-                                        </li>
-                                        <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link " th:href="@{/UsuarioFinal/listaMisOrdenes}"  aria-expanded="false">Mis compras</a>
+                                    </li>
+                                    <li class="nav-item dropdown w-100 w-lg-auto">
+                                        <a class="nav-link " th:href="@{/UsuarioFinal/listaMisOrdenes}"  aria-expanded="false">Mis compras</a>
 
-                                        </li>
-                                        <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Foro</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Review}">Reseñas</a></li>
-                                                <li><a class="dropdown-item" th:href="@{/UsuarioFinal/faq}">Preguntas frecuentes</a></li>
+                                    </li>
+                                    <li class="nav-item dropdown w-100 w-lg-auto">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Foro</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" th:href="@{/UsuarioFinal/Review}">Reseñas</a></li>
+                                            <li><a class="dropdown-item" th:href="@{/UsuarioFinal/faq}">Preguntas frecuentes</a></li>
 
-                                            </ul>
-                                        </li>
-                                        <li class="nav-item dropdown w-100 w-lg-auto">
-                                            <a class="nav-link " th:href="@{/UsuarioFinal/chatbot}" role="button" data-bs-toggle="dropdown" aria-expanded="false">Soporte Técnico</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item dropdown w-100 w-lg-auto">
+                                        <a class="nav-link " th:href="@{/UsuarioFinal/chatbot}" role="button" data-bs-toggle="dropdown" aria-expanded="false">Soporte Técnico</a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-            </nav>
-        </div>
+            </div>
+        </nav>
+    </div>
 
-        <!--- fin navbar pantallas pequeñas -->
+    <!--- fin navbar pantallas pequeñas -->
 
-        <!--- modal postular a agente -->
-        <div class="modal fade" id="addRequestAgent" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <!-- modal body -->
-                    <div class="modal-body p-6">
-                        <div class="d-flex justify-content-between mb-5">
-                            <!-- heading -->
-                            <div>
-                                <h5 class="h6 mb-1" id="addAddressModalLabel">Solicitud de agente</h5>
-                                <p class="small mb-0">Ingresa tus datos </p>
-                            </div>
-                            <div>
-                                <!-- button -->
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
+    <!--- modal postular a agente -->
+    <div class="modal fade" id="addRequestAgent" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal body -->
+                <div class="modal-body p-6">
+                    <div class="d-flex justify-content-between mb-5">
+                        <!-- heading -->
+                        <div>
+                            <h5 class="h6 mb-1" id="addAddressModalLabel">Solicitud de agente</h5>
+                            <p class="small mb-0">Ingresa tus datos </p>
                         </div>
-                        <!-- row -->
-                        <form class="row g-3" method="post" th:action="@{/UsuarioFinal/solicitudAgente}">
-                            <!-- Información personal -->
-                            <div class="col-12">
-                                <label for="ContactName" class="form-label">Información personal</label>
-                                <input type="text" class="form-control" th:value="${usuario.nombre}" aria-label="Nombre del contacto" disabled />
-                            </div>
-                            <!-- Dirección -->
-                            <div class="col-12">
-                                <label for="direction" class="form-label">Dirección</label>
-                                <input type="text" class="form-control" th:value="${usuario.direccion}" aria-label="Dirección" disabled />
-                            </div>
-                            <!-- Zona -->
-                            <div class="col-12">
-                                <label for="zone" class="form-label">Zona</label>
-                                <input type="text" class="form-control" th:value="${usuario.zona.nombreZona}" aria-label="Zona" disabled />
-                            </div>
-                            <!-- Distrito -->
-                            <div class="col-12">
-                                <label for="district" class="form-label">Distrito</label>
-                                <input type="text" class="form-control" th:value="${usuario.distrito.nombre}" aria-label="Distrito" disabled />
-                            </div>
-                            <!-- Código de jurisdicción -->
-                            <div class="col-12">
-                                <label for="codigoJurisdiccion" class="form-label">Código de jurisdicción</label>
-                                <input type="text" class="form-control" name="codigoJurisdiccion" placeholder="Ingrese su código de jurisdicción" required />
-                            </div>
-                            <!-- Código de aduana -->
-                            <div class="col-12">
-                                <label for="codigoAduana" class="form-label">Código de aduana</label>
-                                <input type="text" class="form-control" name="codigoAduana" placeholder="Ingrese su código de Aduana" required />
-                            </div>
-
-                            <!-- Botones -->
-                            <div class="col-12 text-end">
-                                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
-                                <button class="btn btn-primary" type="submit">Enviar solicitud</button>
-                            </div>
-                        </form>
+                        <div>
+                            <!-- button -->
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
                     </div>
+                    <!-- row -->
+                    <form class="row g-3" method="post" th:action="@{/UsuarioFinal/solicitudAgente}">
+                        <!-- Información personal -->
+                        <div class="col-12">
+                            <label for="ContactName" class="form-label">Información personal</label>
+                            <input type="text" class="form-control" th:value="${usuario.nombre}" aria-label="Nombre del contacto" disabled />
+                        </div>
+                        <!-- Dirección -->
+                        <div class="col-12">
+                            <label for="direction" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" th:value="${usuario.direccion}" aria-label="Dirección" disabled />
+                        </div>
+                        <!-- Zona -->
+                        <div class="col-12">
+                            <label for="zone" class="form-label">Zona</label>
+                            <input type="text" class="form-control" th:value="${usuario.zona.nombreZona}" aria-label="Zona" disabled />
+                        </div>
+                        <!-- Distrito -->
+                        <div class="col-12">
+                            <label for="district" class="form-label">Distrito</label>
+                            <input type="text" class="form-control" th:value="${usuario.distrito.nombre}" aria-label="Distrito" disabled />
+                        </div>
+                        <!-- Código de jurisdicción -->
+                        <div class="col-12">
+                            <label for="codigoJurisdiccion" class="form-label">Código de jurisdicción</label>
+                            <input type="text" class="form-control" name="codigoJurisdiccion" placeholder="Ingrese su código de jurisdicción" required />
+                        </div>
+                        <!-- Código de aduana -->
+                        <div class="col-12">
+                            <label for="codigoAduana" class="form-label">Código de aduana</label>
+                            <input type="text" class="form-control" name="codigoAduana" placeholder="Ingrese su código de Aduana" required />
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="col-12 text-end">
+                            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                            <button class="btn btn-primary" type="submit">Enviar solicitud</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- CARRITO DE COMPRAS -->
+    <!-- CARRITO DE COMPRAS -->
 
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-            <div class="offcanvas-header border-bottom">
-                <div class="text-start">
-                    <h5 id="offcanvasRightLabel" class="mb-0 fs-4">Carrito de Compras</h5>
-                </div>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header border-bottom">
+            <div class="text-start">
+                <h5 id="offcanvasRightLabel" class="mb-0 fs-4">Carrito de Compras</h5>
             </div>
-            <div class="offcanvas-body">
-                <div>
-                    <!-- alert -->
-                    <div class="alert alert-danger p-2" role="alert">
-                        Tenemos los mejores productos.
-                        <a th:href="@{UsuarioFinal/listaProductos}" class="alert-link">Ve a la sección proceso de compras ya!</a>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item py-3 ps-0 border-top producto-item-${producto.idProducto}" th:each="producto : ${productosCarrito}">
-                            <div class="row align-items-center">
-                                <div class="col-6 col-md-6 col-lg-7">
-                                    <div class="d-flex">
-                                        <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.idProducto}}" alt="Producto" class="icon-shape icon-xxl" />
-                                        <div class="ms-3">
-                                            <a th:href="@{'/UsuarioFinal/detallesProducto/' + ${producto.idProducto}}" class="text-inherit">
-                                                <h6 class="mb-0" th:text="${producto.nombreProducto}">Nombre Producto</h6>
-                                            </a>
-                                            <div class="mt-2 small lh-1">
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div>
+                <!-- alert -->
+                <div class="alert alert-danger p-2" role="alert">
+                    Tenemos los mejores productos.
+                    <a th:href="@{UsuarioFinal/listaProductos}" class="alert-link">Ve a la sección proceso de compras ya!</a>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item py-3 ps-0 border-top producto-item-${producto.idProducto}" th:each="producto : ${productosCarrito}">
+                        <div class="row align-items-center">
+                            <div class="col-6 col-md-6 col-lg-7">
+                                <div class="d-flex">
+                                    <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.idProducto}}" alt="Producto" class="icon-shape icon-xxl" />
+                                    <div class="ms-3">
+                                        <a th:href="@{'/UsuarioFinal/detallesProducto/' + ${producto.idProducto}}" class="text-inherit">
+                                            <h6 class="mb-0" th:text="${producto.nombreProducto}">Nombre Producto</h6>
+                                        </a>
+                                        <div class="mt-2 small lh-1">
 
-                                                <form th:action="@{'/UsuarioFinal/eliminarProductoCarrito/' + ${producto.idProducto}}" method="post" class="d-inline">
-                                                    <!-- Simular método DELETE con un campo oculto -->
-                                                    <input type="hidden" name="_method" value="delete">
+                                            <form th:action="@{'/UsuarioFinal/eliminarProductoCarrito/' + ${producto.idProducto}}" method="post" class="d-inline">
+                                                <!-- Simular método DELETE con un campo oculto -->
+                                                <input type="hidden" name="_method" value="delete">
 
-                                                    <!-- Botón de eliminar dentro del formulario -->
-                                                    <button type="submit" class="text-decoration-none text-inherit eliminar-producto btn btn-link" style="padding: 0; border: none; background: none;">
+                                                <!-- Botón de eliminar dentro del formulario -->
+                                                <button type="submit" class="text-decoration-none text-inherit eliminar-producto btn btn-link" style="padding: 0; border: none; background: none;">
                                                         <span class="me-1 align-text-bottom">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 text-success">
                                                                 <polyline points="3 6 5 6 21 6"></polyline>
@@ -514,56 +513,56 @@
                                                                 <line x1="14" y1="11" x2="14" y2="17"></line>
                                                             </svg>
                                                         </span>
-                                                        <span class="text-muted">Eliminar</span>
-                                                    </button>
-                                                </form>
-                                            </div>
+                                                    <span class="text-muted">Eliminar</span>
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-3 col-lg-5">
-                                    <form th:action="@{/UsuarioFinal/actualizarCantidadCarrito}" method="post" class="d-flex align-items-center">
-                                        <input type="hidden" name="idProducto" th:value="${producto.idProducto}" />
-                                        <div class="input-group input-spinner" style="max-width: 120px; display: flex; align-items: center;">
-                                            <input type="button" value="-" class="button-minus btn btn-xs btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" style="width: 30px; padding: 0;"/>
-                                            <input type="number" name="nuevaCantidad" th:value="${producto.cantidadProducto}" step="1" max="10" min="1" class="quantity-field form-control text-center" style="max-width: 40px; height: 30px; padding: 0;" />
-                                            <input type="button" value="+" class="button-plus btn btn-xs btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" style="width: 30px; padding: 0;"/>
-                                        </div>
+                            </div>
+                            <div class="col-4 col-md-3 col-lg-5">
+                                <form th:action="@{/UsuarioFinal/actualizarCantidadCarrito}" method="post" class="d-flex align-items-center">
+                                    <input type="hidden" name="idProducto" th:value="${producto.idProducto}" />
+                                    <div class="input-group input-spinner" style="max-width: 120px; display: flex; align-items: center;">
+                                        <input type="button" value="-" class="button-minus btn btn-xs btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" style="width: 30px; padding: 0;"/>
+                                        <input type="number" name="nuevaCantidad" th:value="${producto.cantidadProducto}" step="1" max="10" min="1" class="quantity-field form-control text-center" style="max-width: 40px; height: 30px; padding: 0;" />
+                                        <input type="button" value="+" class="button-plus btn btn-xs btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" style="width: 30px; padding: 0;"/>
+                                    </div>
 
-                                        <button type="submit" class="btn btn-primary btn-sm ms-2">Actualizar</button>
-                                    </form>
-                                </div>
-                                <div class="col-2 text-lg-end text-start text-md-end col-md-2">
+                                    <button type="submit" class="btn btn-primary btn-sm ms-2">Actualizar</button>
+                                </form>
+                            </div>
+                            <div class="col-2 text-lg-end text-start text-md-end col-md-2">
                                     <span class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precioTotalPorProducto, 1, 'COMMA', 2, 'POINT')}"
                                           style="font-size: 0.8em;">S/. 0.00</span>
-                                </div>
                             </div>
-                        </li>
-                    </ul>
+                        </div>
+                    </li>
+                </ul>
 
-                    <!-- btn -->
-                    <div class="d-flex justify-content-between mt-4">
-                        <a th:href="@{/UsuarioFinal/listaProductos}" class="btn btn-primary">Continuar comprando</a>
-                        <a th:href="@{/UsuarioFinal/procesoCompra}" class="btn btn-dark">Ir a Proceso de Compra</a>
-                    </div>
+                <!-- btn -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a th:href="@{/UsuarioFinal/listaProductos}" class="btn btn-primary">Continuar comprando</a>
+                    <a th:href="@{/UsuarioFinal/procesoCompra}" class="btn btn-dark">Ir a Proceso de Compra</a>
                 </div>
             </div>
         </div>
-
-        <script th:src="@{/js/vendors/validation.js}"></script>
     </div>
 
-    <div class="search-container" th:fragment="buscadorProducto" style="max-width: 600px; position: relative;">
-        <form class="d-flex" th:action="@{/UsuarioFinal/buscarProductos}" method="get" role="search">
+    <script th:src="@{/js/vendors/validation.js}"></script>
+</div>
+
+<div class="search-container" th:fragment="buscadorProducto" style="max-width: 600px; position: relative;">
+    <form class="d-flex" th:action="@{/UsuarioFinal/buscarProductos}" method="get" role="search">
         <span class="icon" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%);">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.098zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
             </svg>
         </span>
-            <input class="form-control" type="search" name="nombre" placeholder="Buscar productos..." aria-label="Buscar" style="padding-left: 40px;">
-            <button class="btn btn-outline-success" type="submit" style="margin-left: 10px;">Buscar</button>
-        </form>
-        <script th:src="@{/js/vendors/validation.js}"></script>
-    </div>
+        <input class="form-control" type="search" name="nombre" placeholder="Buscar productos..." aria-label="Buscar" style="padding-left: 40px;">
+        <button class="btn btn-outline-success" type="submit" style="margin-left: 10px;">Buscar</button>
+    </form>
+    <script th:src="@{/js/vendors/validation.js}"></script>
+</div>
 </body>
 </html>

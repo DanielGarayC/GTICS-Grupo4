@@ -5,53 +5,32 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta content="Codescandy" name="author" />
-    <title>Órdenes asignadas</title>
-    <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
+    <title>Productos</title>
     <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
     <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
-    <!-- Favicon icon-->
+
 
     <!-- Libs CSS -->
-    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
-    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet" />
-    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
+    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+
 
     <!-- Theme CSS -->
-    <link rel="stylesheet" th:href="@{/css/theme.min.css}" />
-
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
 
 
     <!--Prueba de logo para ver si usamos jpg o svg -->
     <style>
 
-        .logoImagen{
-            height: 80px;
-            width: 250px;
-        }
-        .logoImagenCelulares{
-            height: 80px;
-            width: 220px;
+        .message {
+            max-width: 40vw; /* Ajusta este porcentaje para el ancho máximo de los mensajes largos */
+            word-wrap: break-word; /* Permite el salto de línea solo cuando es necesario */
         }
     </style>
     <!--POP UP-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        .custom-popup{
-            border-radius: 10px;
-        }
-        .swal2-styled{
-            border-radius: 8px;
-        }
-        .swal2-styled.swal2-confirm {
-            background-color: #28a745;
-            color: white;
-        }
 
-        .swal2-styled.swal2-cancel {
-            background-color: #dc3545;
-            color: white;
-        }
-    </style>
 
 
 </head>
@@ -71,21 +50,21 @@
 
 
     <!-- COONTENIDO DE LA PAGINA -->
-    <main class="main-content-wrapper">
+    <main class="main-content-wrapper" style="padding-top: 8vh;">
         <div class="container">
             <section>
-                <div class="container py-5">
+                <div class="container py-5" >
                     <div class="row d-flex justify-content-center">
                         <div class="col-md-10 col-lg-8 col-xl-10 col-sm-11">
-                            <div class="card" id="chat2">
+                            <div class="card" id="chat2" style="height: 65vh !important;">
                                 <div class="card-header d-flex justify-content-between align-items-center p-3">
-                                    <h5 class="mb-0">Chat</h5>
+                                    <h5 class="mb-0">Chat con tu agente</h5>
                                 </div>
-                                <div class="card-body" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px; overflow-y: scroll">
+                                <div id="response" class="card-body" data-mdb-perfect-scrollbar-init style="position: relative; overflow-y: scroll;">
                                     <div th:each="mensaje : ${ListaMensajesSala}">
-                                        <div class="d-flex flex-row justify-content-start">
+                                        <div class="d-flex flex-row justify-content-start mb-4 pt-1">
                                             <div>
-                                                <p th:if="${mensaje.getIdUsuario().getId() != idSender}" class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary" th:text="${mensaje.getContenido()}"></p>
+                                                <p th:if="${mensaje.getIdUsuario().getId() != idSender}" class="message small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary" th:text="${mensaje.getContenido()}"></p>
                                                 <!--<p class="small ms-3 mb-3 rounded-3 text-muted">15:58</p>-->
                                             </div>
                                         </div>
@@ -94,7 +73,7 @@
 
                                         <div class="d-flex flex-row justify-content-end mb-4 pt-1">
                                             <div>
-                                                <p th:if="${mensaje.getIdUsuario().getId() == idSender}" class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary" th:text="${mensaje.getContenido()}"></p>
+                                                <p th:if="${mensaje.getIdUsuario().getId() == idSender}" class="message small p-2 me-3 mb-1 text-white rounded-3 bg-primary" th:text="${mensaje.getContenido()}"></p>
                                                 <!--<p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">16:06</p>-->
                                             </div>
                                         </div>
@@ -102,10 +81,9 @@
                                 </div>
                                 <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
                                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3" style="width: 40px; height: 100%;">
-                                    <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1" placeholder="Escribe algo...">
-                                    <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
-                                    <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
-                                    <a class="ms-3" href="#!"><i class="fas fa-paper-plane"></i></a>
+                                    <input type="text" class="form-control form-control-lg " id="message" placeholder="Escribe algo...">
+
+                                    <button class="ms-3 btn btn-primary" onclick="sendMessage()">Enviar</button>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +91,6 @@
                 </div>
             </section>
         </div>
-
     </main>
 
 
@@ -123,94 +100,95 @@
 
 <!-- LIBRERIAS -->
 <div>
-    <!-- Javascript-->
-    <!-- Libs JS -->
-    <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-    <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-    <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
-    <!-- Theme JS -->
-    <script th:src="@{/js/theme.min.js}"></script>
-
-    <script th:src="@{/js/vendors/jquery.min.js}"></script>
-    <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
-    <script th:src="@{/js/vendors/slick-slider.js}"></script>
-    <script th:src="@{/js/vendors/tns-slider.js}"></script>
-    <script th:src="@{/js/vendors/zoom.js}"></script>
-
-    <script th:src="@{/js/vendors/countdown.js}"></script>
-    <script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
-    <script th:src="@{/js/vendors/sticky.js}"></script>
-    <script th:src="@{/js/vendors/modal.js}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script>
+    <script th:inline="javascript">
         var stompClient = null;
         var currentRoom = null;
-        var name = 'admin'; // Nombre fijo para el administrador
-        var messagesPerRoom = {}; // Objeto para almacenar los mensajes por sala
-        var subscriptions = {}; // Para guardar las suscripciones de cada sala
+        var name = null;
+        var idSender = /*[[${idSender}]]*/
 
-        // Función para unirse a una sala de chat
-        function joinRoom(element) {
-            var room = element.getAttribute('data-room'); // Obtener el nombre de la sala desde el atributo data-room
-
-            // Solo proceder si la sala actual es diferente de la nueva
-            if (currentRoom !== room) {
-                // Guardar los mensajes actuales de la sala anterior antes de cambiar de sala
-                if (currentRoom) {
-                    saveMessages(currentRoom);
-                    unsubscribeFromRoom(currentRoom);  // Desuscribir de la sala anterior
-                }
-
-                currentRoom = room;
-                document.getElementById('roomName').textContent = currentRoom;
-
-                // Limpiar los mensajes anteriores de la interfaz
-                clearMessages();
-
-                // Conectar al servidor WebSocket si no está conectado
-                if (!stompClient) {
-                    var socket = new SockJS('/chat-websocket');
-                    stompClient = Stomp.over(socket);
-                    stompClient.connect({}, function (frame) {
-                        console.log("Conectado: " + frame);
-                        subscribeToRoom(currentRoom);
-                    });
-                } else {
-                    // Si ya está conectado, simplemente suscribirse a la nueva sala
-                    subscribeToRoom(currentRoom);
-                }
+            function getQueryParams() {
+                var params = {};
+                window.location.search.substring(1).split('&').forEach(function (pair) {
+                    var keyValue = pair.split('=');
+                    params[keyValue[0]] = decodeURIComponent(keyValue[1]);
+                });
+                return params;
             }
-        }
 
-        // Función para suscribirse a una sala de chat
-        function subscribeToRoom(room) {
-            // Suscribirse a la nueva sala
-            var subscription = stompClient.subscribe('/topic/room/' + room, function (message) {
-                showMessage(JSON.parse(message.body));
+        function connect() {
+            var params = getQueryParams();
+            currentRoom = params.room;
+            name = params.name;
+
+            if (!currentRoom || !name) {
+                alert("Error: No se ha especificado la sala o el nombre.");
+                return;
+            }
+
+            var socket = new SockJS('/chat-websocket');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log("Conectado: " + frame);
+
+                // Suscribirse para recibir nuevos mensajes
+                stompClient.subscribe('/topic/room/' + currentRoom, function (message) {
+                    showMessage(JSON.parse(message.body));
+                });
+
+                // Ajustar el scroll al final al conectar
+                scrollToBottom();
             });
-
-            // Guardar la suscripción para poder desuscribir luego
-            subscriptions[room] = subscription;
-
-            // Cargar los mensajes guardados de la sala seleccionada
-            loadMessages(room);
-
-            // Enviar notificación de que el usuario ha cambiado de sala
-            stompClient.send("/app/chat/" + room, {}, JSON.stringify({ sender: "Sistema", content: "El usuario ha entrado a la sala", room: room }));
         }
 
-        // Función para desuscribirse de la sala anterior
-        function unsubscribeFromRoom(room) {
-            if (subscriptions[room]) {
-                subscriptions[room].unsubscribe();
-                delete subscriptions[room];  // Eliminar la suscripción de la memoria
+        function showMessage(message) {
+            var response = document.getElementById('response');
+
+            var divContainer = document.createElement('div');
+
+
+            var p = document.createElement('p');
+            console.log("Parametros mensaje tiempo real")
+            console.log(message.senderId)
+            console.log(idSender)
+            if (message.senderId == idSender) {
+                divContainer.classList.add("d-flex", "flex-row", "justify-content-end", "mb-4", "pt-1");
+                p.classList.add("small","message" , "p-2", "me-3", "mb-1", "text-white", "rounded-3", "bg-primary");
+            } else {
+                divContainer.classList.add("d-flex", "flex-row", "justify-content-start", "mb-4", "pt-1");
+                p.classList.add("small","message", "p-2", "ms-3", "mb-1", "rounded-3", "bg-body-tertiary");
             }
+
+            p.appendChild(document.createTextNode(message.content));
+            divContainer.appendChild(p);
+
+            // Agregar el div contenedor al contenedor principal de mensajes
+            response.appendChild(divContainer);
+
+            // Desplazarse al final después de agregar el mensaje
+            scrollToBottom();
         }
 
-        // Enviar un mensaje a la sala actual
+        // Función para desplazar el scroll al final del contenedor de mensajes
+        function scrollToBottom() {
+            var response = document.getElementById('response');
+            response.scrollTop = response.scrollHeight;
+        }
+
+        // Llamada inicial para conectar y ajustar el scroll
+        window.onload = function () {
+            connect();
+            scrollToBottom();
+        };
+
         function sendMessage() {
+            if (!currentRoom || !name) {
+                alert("Error: No se ha asignado ninguna sala o nombre.");
+                return;
+            }
+
             var messageContent = document.getElementById('message').value;
 
             if (!messageContent.trim()) {
@@ -218,53 +196,25 @@
                 return;
             }
 
+            var senderId = currentRoom.split('_')[1]; // Asumiendo formato "room_n"
+
             var message = {
-                sender: name,
+                senderId: senderId,
                 content: messageContent,
                 room: currentRoom
             };
 
             stompClient.send("/app/chat/" + currentRoom, {}, JSON.stringify(message));
-            document.getElementById('message').value = ''; // Limpiar el campo de entrada
-        }
 
-        // Mostrar un mensaje en la interfaz
-        function showMessage(message) {
-            var response = document.getElementById('response');
-            var p = document.createElement('p');
-
-            if (message.sender === "Sistema") {
-                p.style.fontStyle = "italic";
-                p.style.color = "gray";
-            }
-
-            p.appendChild(document.createTextNode(message.sender + ": " + message.content));
-            response.appendChild(p);
-            response.scrollTop = response.scrollHeight; // Desplazarse hacia abajo automáticamente
-        }
-
-        // Limpiar el área de mensajes
-        function clearMessages() {
-            document.getElementById('response').innerHTML = ''; // Limpiar todos los mensajes
-        }
-
-        // Función para guardar los mensajes de una sala
-        function saveMessages(room) {
-            var response = document.getElementById('response');
-            var messages = response.innerHTML; // Guardar el contenido HTML de los mensajes
-            messagesPerRoom[room] = messages;  // Almacenar los mensajes en el objeto
-        }
-
-        // Función para cargar los mensajes de una sala
-        function loadMessages(room) {
-            var response = document.getElementById('response');
-            var savedMessages = messagesPerRoom[room]; // Obtener los mensajes guardados de la sala
-            if (savedMessages) {
-                response.innerHTML = savedMessages; // Mostrar los mensajes en la interfaz
-            }
+            // Limpiar el campo de entrada después de enviar
+            document.getElementById('message').value = '';
         }
     </script>
+
+
+
 </div>
 
 </body>
 </html>
+
