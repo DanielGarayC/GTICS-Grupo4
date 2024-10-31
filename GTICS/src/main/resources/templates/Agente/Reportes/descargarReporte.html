@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
-        <!-- Meta etiquetas requeridas -->
+        <!-- Meta Tags -->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta content="Codescandy" name="author" />
-        <title>Descargar reportes</title>
+        <title>Descargar Reportes</title>
 
         <!-- Favicon -->
         <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}" />
@@ -16,227 +16,289 @@
         <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
         <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
 
-        <!-- Estilos personalizados -->
+        <!-- Estilos Personalizados -->
         <style>
+            /* Estilos de Logos */
             .logoImagen { height: 80px; width: 250px; }
             .logoImagenCelulares { height: 80px; width: 220px; }
+
+            /* Estilos de Popups */
             .custom-popup { border-radius: 10px; }
             .swal2-styled { border-radius: 8px; }
             .swal2-styled.swal2-confirm { background-color: #28a745; color: white; }
             .swal2-styled.swal2-cancel { background-color: #dc3545; color: white; }
+
+            /* Botones de Descarga */
             .download-buttons .btn { display: flex; align-items: center; justify-content: center; }
             .download-buttons .btn i { margin-right: 5px; }
-        </style>
-        <!-- Estilos personalizados -->
-        <style>
-            .logoImagen { height: 80px; width: 250px; }
-            .logoImagenCelulares { height: 80px; width: 220px; }
-            .custom-popup { border-radius: 10px; }
-            .swal2-styled { border-radius: 8px; }
-            .swal2-styled.swal2-confirm { background-color: #28a745; color: white; }
-            .swal2-styled.swal2-cancel { background-color: #dc3545; color: white; }
-            .download-buttons .btn { display: flex; align-items: center; justify-content: center; }
-            .download-buttons .btn i { margin-right: 5px; }
-            /* Estilos para el contenido del reporte */
+
+            /* Estilos del Reporte */
             .reporte-header { text-align: center; margin-bottom: 20px; }
             .reporte-total { text-align: right; font-weight: bold; margin-top: 20px; }
             .reporte-content p { margin-bottom: 5px; }
-        </style>
 
+            /* Estilos Personalizados para Tarjetas */
+            .card-header-custom {
+                background-color: #28a745; /* Verde */
+                color: white;
+                border-bottom: 2px solid #1e7e34;
+                padding: 1rem;
+            }
+
+            /* Ajustes Responsivos */
+            @media (max-width: 576px) {
+                .logoImagen { width: 200px; }
+                .logoImagenCelulares { width: 180px; }
+            }
+
+            /* Mejora de Botones */
+            .btn-primary {
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-primary:hover {
+                background-color: #218838;
+            }
+
+            .btn-outline-secondary {
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+
+            .btn-outline-secondary:hover {
+                background-color: #f8f9fa;
+                color: #343a40;
+            }
+
+            /* Modal Personalizado */
+            .modal-header {
+                background-color: #28a745; /* Verde */
+                color: white;
+            }
+
+            .modal-footer {
+                background-color: #f8f9fa;
+            }
+
+            /* Sombra y Bordes Suaves para Tarjetas */
+            .card {
+                border-radius: 12px;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            }
+
+            /* Estilo para el Título de la Página */
+            .page-title {
+                font-size: 2rem;
+                font-weight: bold;
+                color: #343a40;
+            }
+
+            /* Breadcrumb Personalizado */
+            .breadcrumb {
+                background-color: transparent;
+            }
+
+            .breadcrumb-item + .breadcrumb-item::before {
+                content: ">";
+                color: #6c757d;
+            }
+        </style>
 
         <!-- SweetAlert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
-        <!-- Contenedor principal -->
+        <!-- Contenedor Principal -->
         <div>
-            <!-- Navbar superior -->
+            <!-- Navbar Superior -->
             <div th:insert="~{fragments/navbarAgente :: navbarSuperior}"></div>
 
-            <!-- Contenido principal -->
+            <!-- Wrapper Principal -->
             <div class="main-wrapper">
-                <!-- Navbar vertical para PC y móvil -->
+                <!-- Navbar Vertical para PC y Móvil -->
                 <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalPc('reportes')}"></div>
                 <div th:insert="~{fragments/navbarAgente.html :: navbarVerticalCelulares('reportes')}"></div>
 
-                <!-- Contenido de la página -->
+                <!-- Contenido Principal -->
                 <main class="main-content-wrapper">
-                    <div class="container">
-                        <!-- Encabezado de la página -->
-                        <div class="row mb-8">
-                            <div class="col-md-12">
-                                <div>
-                                    <h2>Reportes</h2>
-                                    <!-- Breadcrumb -->
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb mb-0">
-                                            <li class="breadcrumb-item"><a th:href="@{/Agente}">Inicio</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">Descarga de reporte</li>
-                                        </ol>
-                                    </nav>
+                    <div class="container-fluid px-4 py-5">
+                        <!-- Encabezado de la Página -->
+                        <div class="row mb-5">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h2 class="page-title mb-0">Descarga de Reportes</h2>
                                 </div>
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a th:href="@{/Agente}">Inicio</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Descarga de Reporte</li>
+                                    </ol>
+                                </nav>
                             </div>
                         </div>
 
-                        <!-- Tarjetas de reportes -->
-                        <div class="row">
-                            <!-- Primera tarjeta -->
-                            <div class="col-xl-4 col-lg-6 col-12 mb-5">
-                                <h3 class="text-center mt-6">Órdenes generadas por usuario</h3>
-                                <div class="card card-lg">
-                                    <div class="card-body p-6 d-flex flex-column gap-3">
-                                        <div class="mb-3">
-                                            <label for="usuarioSelect" class="form-label">Seleccione un usuario</label>
+                        <!-- Tarjetas de Reportes -->
+                        <div class="row g-4">
+                            <!-- Primera Tarjeta: Órdenes Generadas por Usuario -->
+                            <div class="col-xl-4 col-lg-6 col-md-12">
+                                <div class="card shadow-sm h-100">
+                                    <div class="card-header card-header-custom">
+                                        <h5 class="mb-0">Órdenes Generadas por Usuario</h5>
+                                    </div>
+                                    <div class="card-body d-flex flex-column">
+                                        <!-- Selección de Usuario -->
+                                        <div class="mb-4">
+                                            <label for="usuarioSelect" class="form-label">Seleccione un Usuario</label>
                                             <select class="form-select" id="usuarioSelect" onchange="cargarOrdenesUsuario(this.value)">
-                                                <option selected disabled value="">Usuario</option>
+                                                <option selected disabled value="">Seleccione un Usuario</option>
                                                 <th:block th:each="usuario : ${usuariosRol4}">
                                                     <option th:value="${usuario.id}" th:text="${usuario.nombre}"></option>
                                                 </th:block>
                                             </select>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="ordenSelect" class="form-label">Seleccione la orden</label>
+                                        <!-- Selección de Orden -->
+                                        <div class="mb-4">
+                                            <label for="ordenSelect" class="form-label">Seleccione una Orden</label>
                                             <select class="form-select" id="ordenSelect" disabled>
-                                                <option selected disabled value="">Orden</option>
+                                                <option selected disabled value="">Seleccione una Orden</option>
                                             </select>
                                         </div>
-                                        <!-- Tarjeta 1 -->
-                                        <div class="mb-3">
-                                            <label class="form-label">Seleccione formatos de descarga</label>
-                                            <!-- PDF Switch -->
-                                            <div class="form-check form-switch d-flex justify-content-between align-items-center">
+                                        <!-- Selección de Formatos -->
+                                        <div class="mb-4">
+                                            <label class="form-label">Seleccione Formatos de Descarga</label>
+                                            <div class="form-check form-switch mb-2 d-flex justify-content-between align-items-center">
                                                 <label class="form-check-label" for="pdfSwitch1">PDF</label>
                                                 <input class="form-check-input ms-auto" type="checkbox" id="pdfSwitch1" checked>
                                             </div>
-                                            <!-- Excel Switch -->
-                                            <div class="form-check form-switch d-flex justify-content-between align-items-center">
+                                            <div class="form-check form-switch mb-2 d-flex justify-content-between align-items-center">
                                                 <label class="form-check-label" for="excelSwitch1">Excel</label>
                                                 <input class="form-check-input ms-auto" type="checkbox" id="excelSwitch1">
                                             </div>
-                                            <!-- CSV Switch -->
                                             <div class="form-check form-switch d-flex justify-content-between align-items-center">
                                                 <label class="form-check-label" for="csvSwitch1">CSV</label>
                                                 <input class="form-check-input ms-auto" type="checkbox" id="csvSwitch1">
                                             </div>
                                         </div>
-
-
-                                        <div class="download-buttons d-flex flex-row gap-2">
-                                            <button class="btn btn-primary w-100" type="button" onclick="descargarReporte(1)">
-                                                <i class="bi bi-download"></i> Descargar
-                                            </button>
-
-                                            <!-- Botón de Previsualización para la primera tarjeta -->
-                                            <button class="btn btn-light w-100" type="button" onclick="previsualizarReporte(1)">
-                                                <i class="bi bi-eye"></i> Previsualizar
-                                            </button>
-
+                                        <!-- Botones de Descarga y Previsualización -->
+                                        <div class="mt-auto">
+                                            <div class="d-grid gap-2">
+                                                <button class="btn btn-primary" type="button" onclick="descargarReporte(1)">
+                                                    <i class="bi bi-download"></i> Descargar
+                                                </button>
+                                                <button class="btn btn-outline-secondary" type="button" onclick="previsualizarReporte(1)">
+                                                    <i class="bi bi-eye"></i> Previsualizar
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Segunda tarjeta -->
-                            <div class="col-xl-4 col-lg-6 col-12 mb-5">
-                                <h3 class="text-center mt-6">Total de órdenes en el sistema</h3>
-                                <div class="card card-lg">
-                                    <div class="card-body p-6 d-flex flex-column gap-3">
-                                        <!-- Tarjeta 2 -->
-                                        <!-- Tarjeta 2 -->
-                                        <!-- En la Segunda tarjeta -->
-                                        <div class="mb-3">
-                                            <label class="form-label">Rango de fechas</label>
-                                            <div class="d-flex align-items-center">
-                                                <input type="date" class="form-control me-2" id="fechaInicio2" name="fechaInicio" min="2020-01-01" onchange="actualizarFechaFinMin()">
-                                                <span class="mx-2">a</span>
-                                                <input type="date" class="form-control ms-2" id="fechaFin2" name="fechaFin" min="2020-01-01" onchange="actualizarFechaInicioMax()">
+                            <!-- Segunda Tarjeta: Total de Órdenes en el Sistema -->
+                            <div class="col-xl-4 col-lg-6 col-md-12">
+                                <div class="card shadow-sm h-100">
+                                    <div class="card-header card-header-custom">
+                                        <h5 class="mb-0">Total de Órdenes en el Sistema</h5>
+                                    </div>
+                                    <div class="card-body d-flex flex-column">
+                                        <!-- Selección de Rango de Fechas -->
+                                        <div class="mb-4">
+                                            <label class="form-label">Rango de Fechas</label>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <input type="date" class="form-control" id="fechaInicio2" name="fechaInicio" min="2020-01-01" onchange="actualizarFechaFinMin()">
+                                                <span>a</span>
+                                                <input type="date" class="form-control" id="fechaFin2" name="fechaFin" min="2020-01-01" onchange="actualizarFechaInicioMax()">
                                             </div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Seleccione formatos de descarga</label>
-                                            <!-- PDF Switch -->
-                                            <div class="form-check form-switch d-flex justify-content-between align-items-center">
+                                        <!-- Selección de Formatos -->
+                                        <div class="mb-4">
+                                            <label class="form-label">Seleccione Formatos de Descarga</label>
+                                            <div class="form-check form-switch mb-2 d-flex justify-content-between align-items-center">
                                                 <label class="form-check-label" for="pdfSwitch2">PDF</label>
                                                 <input class="form-check-input ms-auto" type="checkbox" id="pdfSwitch2" checked>
                                             </div>
-                                            <!-- Excel Switch -->
-                                            <div class="form-check form-switch d-flex justify-content-between align-items-center">
+                                            <div class="form-check form-switch mb-2 d-flex justify-content-between align-items-center">
                                                 <label class="form-check-label" for="excelSwitch2">Excel</label>
                                                 <input class="form-check-input ms-auto" type="checkbox" id="excelSwitch2">
                                             </div>
-                                            <!-- CSV Switch -->
                                             <div class="form-check form-switch d-flex justify-content-between align-items-center">
                                                 <label class="form-check-label" for="csvSwitch2">CSV</label>
                                                 <input class="form-check-input ms-auto" type="checkbox" id="csvSwitch2">
                                             </div>
                                         </div>
-
-                                        <div class="download-buttons d-flex flex-row gap-2">
-                                            <button class="btn btn-primary w-100" type="button" onclick="descargarReporte(2)">
-                                                <i class="bi bi-download"></i> Descargar
-                                            </button>
-                                            <button class="btn btn-light w-100" type="button" data-bs-toggle="modal" data-bs-target="#previewModal" onclick="previsualizarReporte(2)">
-                                                <i class="bi bi-eye"></i> Previsualizar
-                                            </button>
+                                        <!-- Botones de Descarga y Previsualización -->
+                                        <div class="mt-auto">
+                                            <div class="d-grid gap-2">
+                                                <button class="btn btn-primary" type="button" onclick="descargarReporte(2)">
+                                                    <i class="bi bi-download"></i> Descargar
+                                                </button>
+                                                <button class="btn btn-outline-secondary" type="button" onclick="previsualizarReporte(2)">
+                                                    <i class="bi bi-eye"></i> Previsualizar
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Tercera tarjeta -->
-                            <!-- Tercera tarjeta -->
-                            <div class="col-xl-4 col-lg-6 col-12 mb-5">
-                                <h3 class="text-center mt-6">Órdenes por agente asignado en la zona</h3>
-                                <div class="card card-lg">
-                                    <div class="card-body p-6 d-flex flex-column gap-3">
-                                        <!-- Formato de descarga -->
-                                        <div class="mb-3">
-                                            <label class="form-label">Seleccione formatos de descarga</label>
-                                            <!-- PDF Switch -->
-                                            <div class="form-check form-switch d-flex justify-content-between align-items-center">
+                            <!-- Tercera Tarjeta: Órdenes por Agente Asignado en la Zona -->
+                            <div class="col-xl-4 col-lg-6 col-md-12">
+                                <div class="card shadow-sm h-100">
+                                    <div class="card-header card-header-custom">
+                                        <h5 class="mb-0">Órdenes por Agente Asignado en la Zona</h5>
+                                    </div>
+                                    <div class="card-body d-flex flex-column">
+                                        <!-- Selección de Formatos -->
+                                        <div class="mb-4">
+                                            <label class="form-label">Seleccione Formatos de Descarga</label>
+                                            <div class="form-check form-switch mb-2 d-flex justify-content-between align-items-center">
                                                 <label class="form-check-label" for="pdfSwitch3">PDF</label>
                                                 <input class="form-check-input ms-auto" type="checkbox" id="pdfSwitch3" checked>
                                             </div>
-                                            <!-- Excel Switch -->
-                                            <div class="form-check form-switch d-flex justify-content-between align-items-center">
+                                            <div class="form-check form-switch mb-2 d-flex justify-content-between align-items-center">
                                                 <label class="form-check-label" for="excelSwitch3">Excel</label>
                                                 <input class="form-check-input ms-auto" type="checkbox" id="excelSwitch3">
                                             </div>
-                                            <!-- CSV Switch -->
                                             <div class="form-check form-switch d-flex justify-content-between align-items-center">
                                                 <label class="form-check-label" for="csvSwitch3">CSV</label>
                                                 <input class="form-check-input ms-auto" type="checkbox" id="csvSwitch3">
                                             </div>
                                         </div>
-
-                                        <div class="download-buttons d-flex flex-row gap-2">
-                                            <button class="btn btn-primary w-100" type="button" onclick="descargarReporte(3)">
-                                                <i class="bi bi-download"></i> Descargar
-                                            </button>
-                                            <button class="btn btn-light w-100" type="button" onclick="previsualizarReporte(3)">
-                                                <i class="bi bi-eye"></i> Previsualizar
-                                            </button>
+                                        <!-- Botones de Descarga y Previsualización -->
+                                        <div class="mt-auto">
+                                            <div class="d-grid gap-2">
+                                                <button class="btn btn-primary" type="button" onclick="descargarReporte(3)">
+                                                    <i class="bi bi-download"></i> Descargar
+                                                </button>
+                                                <button class="btn btn-outline-secondary" type="button" onclick="previsualizarReporte(3)">
+                                                    <i class="bi bi-eye"></i> Previsualizar
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                        </div>
-                    </div>
+                        </div> <!-- Fin de Row Tarjetas -->
+                    </div> <!-- Fin de Container -->
                 </main>
-            </div>
-        </div>
+            </div> <!-- Fin de Main Wrapper -->
+        </div> <!-- Fin de Contenedor Principal -->
 
         <!-- Modal de Previsualización -->
         <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Previsualización de Reporte</h5>
+                        <h5 class="modal-title" id="previewModalLabel">Previsualización de Reporte</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- El contenido del reporte se cargará aquí dinámicamente -->
+                        <!-- Contenido del Reporte -->
+                        <p class="text-center">Cargando vista previa...</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -250,7 +312,7 @@
         <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
         <script th:src="@{/js/theme.min.js}"></script>
 
-        <!-- Scripts personalizados -->
+        <!-- Scripts Personalizados -->
         <script>
             // Instancia global del modal
             let myModal;
@@ -259,8 +321,14 @@
                 // Instanciar el modal una sola vez al cargar la página
                 const modalElement = document.getElementById("previewModal");
                 myModal = new bootstrap.Modal(modalElement);
+
+                // Establecer la fecha máxima para los inputs de fecha al cargar la página
+                const today = new Date().toLocaleDateString('en-CA'); // Formato yyyy-MM-dd
+                document.getElementById('fechaInicio2').setAttribute('max', today);
+                document.getElementById('fechaFin2').setAttribute('max', today);
             });
 
+            // Función para Previsualizar Reporte
             function previsualizarReporte(cardNumber) {
                 let url = "";
                 let params = new URLSearchParams();
@@ -310,7 +378,7 @@
 
                 // Mostrar un mensaje de carga mientras se obtiene la previsualización
                 const modalBody = document.getElementById("previewModal").querySelector(".modal-body");
-                modalBody.innerHTML = `<p>Cargando vista previa...</p>`;
+                modalBody.innerHTML = `<p class="text-center">Cargando vista previa...</p>`;
 
                 // Realizar la solicitud
                 fetch(url)
@@ -325,10 +393,11 @@
                         myModal.show();
                     })
                     .catch(error => {
-                        modalBody.innerHTML = `<p>Error al cargar la vista previa: ${error.message}</p>`;
+                        modalBody.innerHTML = `<p class="text-danger">Error al cargar la vista previa: ${error.message}</p>`;
                     });
             }
 
+            // Función para Descargar Reporte
             function descargarReporte(cardNumber) {
                 const formatos = [];
                 if (document.getElementById(`pdfSwitch${cardNumber}`).checked) formatos.push('PDF');
@@ -413,7 +482,18 @@
                     .then(blob => {
                         const link = document.createElement('a');
                         link.href = window.URL.createObjectURL(blob);
-                        link.download = 'Reporte_Ordenes_Zona.zip';
+                        // Determinar nombre de archivo basado en el cardNumber
+                        let fileName = '';
+                        if (cardNumber === 1) {
+                            fileName = 'Reporte_Ordenes_Usuario.zip';
+                        } else if (cardNumber === 2) {
+                            fileName = 'Reporte_Total_Ordenes.zip';
+                        } else if (cardNumber === 3) {
+                            fileName = 'Reporte_Ordenes_Zona.zip';
+                        } else {
+                            fileName = 'Reporte.zip';
+                        }
+                        link.download = fileName;
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
@@ -424,10 +504,7 @@
                     });
             }
 
-
-
-        </script>
-        <script>
+            // Funciones para Actualizar Fechas
             function actualizarFechaFinMin() {
                 const fechaInicioInput = document.getElementById('fechaInicio2');
                 const fechaFinInput = document.getElementById('fechaFin2');
@@ -436,7 +513,7 @@
                 if (fechaInicio) {
                     fechaFinInput.min = fechaInicio;
 
-                    // Asegurarse de que la fecha máxima sea la fecha de hoy
+                    // Establecer la fecha máxima como la de hoy
                     const today = new Date().toLocaleDateString('en-CA');
                     fechaFinInput.max = today;
 
@@ -462,15 +539,13 @@
                         fechaInicioInput.value = fechaFin;
                     }
                 } else {
-                    // Asegurarse de que la fecha máxima sea la fecha de hoy
+                    // Establecer la fecha máxima como la de hoy
                     const today = new Date().toLocaleDateString('en-CA');
                     fechaInicioInput.max = today;
                 }
             }
 
-
-        </script>
-        <script>
+            // Función para Cargar Órdenes por Usuario
             function cargarOrdenesUsuario(usuarioId) {
                 if (!usuarioId) return;
 
@@ -478,7 +553,7 @@
                     .then(response => response.json())
                     .then(data => {
                         const ordenSelect = document.getElementById("ordenSelect");
-                        ordenSelect.innerHTML = "<option selected disabled value=''>Orden</option>";
+                        ordenSelect.innerHTML = "<option selected disabled value=''>Seleccione una Orden</option>";
 
                         data.forEach(orden => {
                             ordenSelect.innerHTML += `<option value="${orden.idOrden}">Orden #${orden.idOrden}</option>`;
@@ -489,14 +564,5 @@
                     .catch(error => console.error("Error al cargar órdenes:", error));
             }
         </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const today = new Date().toLocaleDateString('en-CA'); // Formato yyyy-MM-dd
-                document.getElementById('fechaInicio2').setAttribute('max', today);
-                document.getElementById('fechaFin2').setAttribute('max', today);
-            });
-
-        </script>
-
     </body>
 </html>
