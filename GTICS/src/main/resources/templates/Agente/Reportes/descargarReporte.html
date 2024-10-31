@@ -27,6 +27,22 @@
             .download-buttons .btn { display: flex; align-items: center; justify-content: center; }
             .download-buttons .btn i { margin-right: 5px; }
         </style>
+        <!-- Estilos personalizados -->
+        <style>
+            .logoImagen { height: 80px; width: 250px; }
+            .logoImagenCelulares { height: 80px; width: 220px; }
+            .custom-popup { border-radius: 10px; }
+            .swal2-styled { border-radius: 8px; }
+            .swal2-styled.swal2-confirm { background-color: #28a745; color: white; }
+            .swal2-styled.swal2-cancel { background-color: #dc3545; color: white; }
+            .download-buttons .btn { display: flex; align-items: center; justify-content: center; }
+            .download-buttons .btn i { margin-right: 5px; }
+            /* Estilos para el contenido del reporte */
+            .reporte-header { text-align: center; margin-bottom: 20px; }
+            .reporte-total { text-align: right; font-weight: bold; margin-top: 20px; }
+            .reporte-content p { margin-bottom: 5px; }
+        </style>
+
 
         <!-- SweetAlert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -110,9 +126,11 @@
                                                 <i class="bi bi-download"></i> Descargar
                                             </button>
 
-                                            <button class="btn btn-light w-100" type="button" data-bs-toggle="modal" data-bs-target="#previewModal" onclick="previsualizarReporte(1)">
+                                            <!-- Botón de Previsualización para la primera tarjeta -->
+                                            <button class="btn btn-light w-100" type="button" onclick="previsualizarReporte(1)">
                                                 <i class="bi bi-eye"></i> Previsualizar
                                             </button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -218,8 +236,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Aquí se cargará una vista previa del reporte -->
-                        <p>Generando vista previa del reporte seleccionado...</p>
+                        <!-- El contenido del reporte se cargará aquí dinámicamente -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -235,9 +252,81 @@
 
         <!-- Scripts personalizados -->
         <script>
+            // Instancia global del modal
+            let myModal;
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Instanciar el modal una sola vez al cargar la página
+                const modalElement = document.getElementById("previewModal");
+                myModal = new bootstrap.Modal(modalElement);
+            });
+
             function previsualizarReporte(cardNumber) {
-                document.getElementById("previewModal").querySelector(".modal-body").innerHTML = `<p>Generando vista previa para la tarjeta ${cardNumber}...</p>`;
-                new bootstrap.Modal(document.getElementById("previewModal")).show();
+                let url = "";
+                let params = new URLSearchParams();
+
+                if (cardNumber === 1) {
+                    const idOrden = document.getElementById("ordenSelect").value;
+                    if (!idOrden) {
+                        Swal.fire("Error", "Selecciona una orden para previsualizar.", "error");
+                        return;
+                    }
+                    params.append('idOrden', idOrden);
+                    url = `/previsualizarReporte?${params.toString()}`;
+                } else if (cardNumber === 2) {
+                    const fechaInicio = document.getElementById(`fechaInicio${cardNumber}`).value;
+                    const fechaFin = document.getElementById(`fechaFin${cardNumber}`).value;
+
+                    if (!fechaInicio || !fechaFin) {
+                        Swal.fire("Error", "Selecciona un rango de fechas.", "error");
+                        return;
+                    }
+
+                    // Validación del rango de fechas
+                    const fechaInicioDate = new Date(fechaInicio);
+                    const fechaFinDate = new Date(fechaFin);
+                    const todayString = new Date().toLocaleDateString('en-CA');
+                    const todayDate = new Date(todayString);
+
+                    if (fechaInicioDate > fechaFinDate) {
+                        Swal.fire("Error", "La fecha de inicio no puede ser posterior a la fecha de fin.", "error");
+                        return;
+                    }
+                    if (fechaFinDate > todayDate) {
+                        Swal.fire("Error", "La fecha de fin no puede ser posterior a hoy.", "error");
+                        return;
+                    }
+
+                    params.append('fechaInicio', fechaInicio);
+                    params.append('fechaFin', fechaFin);
+                    url = `/previsualizarReporteTotalOrdenes?${params.toString()}`;
+                } else if (cardNumber === 3) {
+                    // No se requieren parámetros adicionales
+                    url = `/previsualizarReporteOrdenesPorAgente`;
+                } else {
+                    Swal.fire("Error", "Acción no válida.", "error");
+                    return;
+                }
+
+                // Mostrar un mensaje de carga mientras se obtiene la previsualización
+                const modalBody = document.getElementById("previewModal").querySelector(".modal-body");
+                modalBody.innerHTML = `<p>Cargando vista previa...</p>`;
+
+                // Realizar la solicitud
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al obtener la vista previa.');
+                        }
+                        return response.text();
+                    })
+                    .then(htmlContent => {
+                        modalBody.innerHTML = htmlContent;
+                        myModal.show();
+                    })
+                    .catch(error => {
+                        modalBody.innerHTML = `<p>Error al cargar la vista previa: ${error.message}</p>`;
+                    });
             }
 
             function descargarReporte(cardNumber) {
@@ -310,7 +399,7 @@
                 } else if (cardNumber === 2) {
                     url = `/descargarReporteTotalOrdenesZIP?${params.toString()}`;
                 } else if (cardNumber === 3) {
-                    url = `/descargarReporteOrdenesPorAgenteZIP?formatos=${formatos.join(',')}`;
+                    url = `/descargarReporteOrdenesPorAgenteZIP?${params.toString()}`;
                 }
 
                 // Iniciar la descarga del archivo ZIP
@@ -334,6 +423,7 @@
                         Swal.fire("Error", error.message, "error");
                     });
             }
+
 
 
         </script>

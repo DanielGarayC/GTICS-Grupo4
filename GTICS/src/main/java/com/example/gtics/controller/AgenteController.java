@@ -8,22 +8,24 @@ import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import com.example.gtics.service.ChatRoomService;
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,6 +40,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -650,56 +655,152 @@ public class AgenteController {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Document document = new Document(PageSize.A4, 36, 36, 90, 55);
-            PdfWriter.getInstance(document, baos);
-            document.open();
+            PdfWriter writer = PdfWriter.getInstance(document, baos);
 
-            // Reutiliza el código existente para agregar contenido al PDF
-            Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
-            Font normalFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
-            DecimalFormat df = new DecimalFormat("0.00");
+            // Agregar encabezado y pie de página
+            writer.setPageEvent(new HeaderFooterPageEvent());
+
+            document.open();
+            ClassLoader classLoader = getClass().getClassLoader();
+            // Añadir logo
+            String logoPath = classLoader.getResource("static/images/logo/logoGTICS.jpeg").getPath();
+            Image logo = Image.getInstance(logoPath);
+            logo.scaleToFit(100, 50);
+            document.add(logo);
+
+            // Título de la orden
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
+            Paragraph title = new Paragraph("Detalle de la Orden #" + idOrden, titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20);
+            document.add(title);
 
             // Información de la orden
-            document.add(new Paragraph("Orden #" + idOrden, boldFont));
-            document.add(new Paragraph("Fecha de emisión: " + orden.getFechaOrden(), normalFont));
-            document.add(new Paragraph("\n"));
+            Font infoFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Paragraph info = new Paragraph(
+                    "Fecha de emisión: " + orden.getFechaOrden() + "\n" +
+                            "Cliente: " + orden.getIdCarritoCompra().getIdUsuario().getNombre() + "\n" +
+                            "Dirección: " + orden.getIdCarritoCompra().getIdUsuario().getDireccion(),
+                    infoFont);
+            info.setSpacingAfter(20);
+            document.add(info);
 
             // Tabla de productos
             PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
             table.setWidths(new float[]{1, 4, 1, 2, 2});
-            table.addCell(new PdfPCell(new Phrase("N°", boldFont)));
-            table.addCell(new PdfPCell(new Phrase("Descripción", boldFont)));
-            table.addCell(new PdfPCell(new Phrase("Cant.", boldFont)));
-            table.addCell(new PdfPCell(new Phrase("Precio Unit. (S/.)", boldFont)));
-            table.addCell(new PdfPCell(new Phrase("Total (S/.)", boldFont)));
 
-            double subtotal = 0;
-            int itemNumber = 1;
-            for (ProductosxOrden producto : productosOrden) {
-                table.addCell(new PdfPCell(new Phrase(String.valueOf(itemNumber++), normalFont)));
-                table.addCell(new PdfPCell(new Phrase(producto.getNombreProducto(), normalFont)));
-                table.addCell(new PdfPCell(new Phrase(String.valueOf(producto.getCantidadProducto()), normalFont)));
-                table.addCell(new PdfPCell(new Phrase(df.format(producto.getPrecioUnidad()), normalFont)));
-                double totalProducto = producto.getPrecioTotalPorProducto();
-                subtotal += totalProducto;
-                table.addCell(new PdfPCell(new Phrase(df.format(totalProducto), normalFont)));
+            // Estilos para la tabla
+            Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL, BaseColor.BLACK);
+            BaseColor headerColor = new BaseColor(0, 121, 107); // Verde oscuro
+            BaseColor evenRowColor = new BaseColor(224, 242, 241); // Verde claro
+            BaseColor oddRowColor = BaseColor.WHITE;
+
+            // Encabezados de la tabla
+            String[] headers = {"N°", "Descripción", "Cant.", "Precio Unit.", "Total"};
+            for (String header : headers) {
+                PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
+                cell.setBackgroundColor(headerColor);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setPadding(5);
+                table.addCell(cell);
             }
 
-            // Totales
+            // Contenido de la tabla
+            double subtotal = 0;
+            int itemNumber = 1;
+            boolean isEvenRow = true;
+            DecimalFormat df = new DecimalFormat("0.00");
+            for (ProductosxOrden producto : productosOrden) {
+                BaseColor rowColor = isEvenRow ? evenRowColor : oddRowColor;
+
+                PdfPCell cell1 = new PdfPCell(new Phrase(String.valueOf(itemNumber++), cellFont));
+                cell1.setBackgroundColor(rowColor);
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setPadding(5);
+                table.addCell(cell1);
+
+                PdfPCell cell2 = new PdfPCell(new Phrase(producto.getNombreProducto(), cellFont));
+                cell2.setBackgroundColor(rowColor);
+                cell2.setPadding(5);
+                table.addCell(cell2);
+
+                PdfPCell cell3 = new PdfPCell(new Phrase(String.valueOf(producto.getCantidadProducto()), cellFont));
+                cell3.setBackgroundColor(rowColor);
+                cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell3.setPadding(5);
+                table.addCell(cell3);
+
+                PdfPCell cell4 = new PdfPCell(new Phrase("S/ " + df.format(producto.getPrecioUnidad()), cellFont));
+                cell4.setBackgroundColor(rowColor);
+                cell4.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                cell4.setPadding(5);
+                table.addCell(cell4);
+
+                double totalProducto = producto.getPrecioTotalPorProducto();
+                subtotal += totalProducto;
+                PdfPCell cell5 = new PdfPCell(new Phrase("S/ " + df.format(totalProducto), cellFont));
+                cell5.setBackgroundColor(rowColor);
+                cell5.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                cell5.setPadding(5);
+                table.addCell(cell5);
+
+                isEvenRow = !isEvenRow;
+            }
+
+            // Fila de subtotal
             PdfPCell emptyCell = new PdfPCell(new Phrase(""));
+            emptyCell.setColspan(3);
             emptyCell.setBorder(Rectangle.NO_BORDER);
+
+            PdfPCell subtotalCell = new PdfPCell(new Phrase("Subtotal", headerFont));
+            subtotalCell.setBackgroundColor(headerColor);
+            subtotalCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            subtotalCell.setPadding(5);
+
+            PdfPCell subtotalValueCell = new PdfPCell(new Phrase("S/ " + df.format(subtotal), cellFont));
+            subtotalValueCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            subtotalValueCell.setPadding(5);
+
             table.addCell(emptyCell);
-            table.addCell(new PdfPCell(new Phrase("Subtotal", boldFont)));
-            table.addCell(emptyCell);
-            table.addCell(emptyCell);
-            table.addCell(new PdfPCell(new Phrase("S/." + df.format(subtotal), normalFont)));
+            table.addCell(subtotalCell);
+            table.addCell(subtotalValueCell);
 
             document.add(table);
+
             document.close();
 
             return baos.toByteArray();
         } else {
             throw new IOException("Orden no encontrada");
+        }
+    }
+
+    // Clase para agregar encabezado y pie de página
+    class HeaderFooterPageEvent extends PdfPageEventHelper {
+        Font footerFont = new Font(Font.FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.GRAY);
+
+        @Override
+        public void onEndPage(PdfWriter writer, Document document) {
+            // Pie de página
+            PdfPTable footer = new PdfPTable(2);
+            try {
+                footer.setWidths(new int[]{24, 24});
+                footer.setTotalWidth(527);
+                footer.setLockedWidth(true);
+                footer.getDefaultCell().setFixedHeight(20);
+                footer.getDefaultCell().setBorder(Rectangle.TOP);
+                footer.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
+
+                footer.addCell(new Phrase("Reporte generado por ExpressDeals", footerFont));
+                footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+                footer.addCell(new Phrase(String.format("Página %d", writer.getPageNumber()), footerFont));
+
+                footer.writeSelectedRows(0, -1, 34, 50, writer.getDirectContent());
+            } catch (DocumentException de) {
+                throw new ExceptionConverter(de);
+            }
         }
     }
 
@@ -713,32 +814,79 @@ public class AgenteController {
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet("Orden");
 
-            // Reutiliza el código existente para agregar contenido al Excel
-            String[] headers = {"N°", "Descripción", "Cant.", "Precio Unitario (S/.)", "Total (S/.)"};
+            // Estilos
+            CellStyle headerStyle = workbook.createCellStyle();
+            // Usar la clase Font de Apache POI
+            org.apache.poi.ss.usermodel.Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerStyle.setFont(headerFont);
+            headerStyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
+            CellStyle cellStyle = workbook.createCellStyle();
+            cellStyle.setWrapText(true);
+
+            CellStyle currencyStyle = workbook.createCellStyle();
+            currencyStyle.setDataFormat(workbook.createDataFormat().getFormat("S/ #,##0.00"));
+            currencyStyle.setAlignment(HorizontalAlignment.RIGHT);
+
+            // Encabezados
+            String[] headers = {"N°", "Descripción", "Cant.", "Precio Unitario (S/)", "Total (S/)"};
             Row headerRow = sheet.createRow(0);
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(headers[i]);
+                cell.setCellStyle(headerStyle);
             }
 
+            // Contenido
             int rowIdx = 1;
             double subtotal = 0;
             int itemNumber = 1;
             for (ProductosxOrden producto : productosOrden) {
                 Row row = sheet.createRow(rowIdx++);
-                row.createCell(0).setCellValue(itemNumber++);
-                row.createCell(1).setCellValue(producto.getNombreProducto());
-                row.createCell(2).setCellValue(producto.getCantidadProducto());
-                row.createCell(3).setCellValue(producto.getPrecioUnidad());
+
+                Cell cell0 = row.createCell(0);
+                cell0.setCellValue(itemNumber++);
+                cell0.setCellStyle(cellStyle);
+
+                Cell cell1 = row.createCell(1);
+                cell1.setCellValue(producto.getNombreProducto());
+                cell1.setCellStyle(cellStyle);
+
+                Cell cell2 = row.createCell(2);
+                cell2.setCellValue(producto.getCantidadProducto());
+                cell2.setCellStyle(cellStyle);
+
+                Cell cell3 = row.createCell(3);
+                cell3.setCellValue(producto.getPrecioUnidad());
+                cell3.setCellStyle(currencyStyle);
+
                 double totalProducto = producto.getPrecioTotalPorProducto();
                 subtotal += totalProducto;
-                row.createCell(4).setCellValue(totalProducto);
+                Cell cell4 = row.createCell(4);
+                cell4.setCellValue(totalProducto);
+                cell4.setCellStyle(currencyStyle);
             }
 
-            // Totales
+            // Fila de subtotal
             Row totalRow = sheet.createRow(rowIdx);
-            totalRow.createCell(3).setCellValue("Total a Pagar");
-            totalRow.createCell(4).setCellValue(subtotal);
+            Cell cellLabel = totalRow.createCell(3);
+            cellLabel.setCellValue("Total a Pagar");
+            cellLabel.setCellStyle(headerStyle);
+
+            Cell cellTotal = totalRow.createCell(4);
+            cellTotal.setCellValue(subtotal);
+            cellTotal.setCellStyle(currencyStyle);
+
+            // Autoajustar anchos de columna
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Aplicar filtros
+            sheet.setAutoFilter(new CellRangeAddress(0, 0, 0, headers.length - 1));
 
             workbook.write(baos);
             workbook.close();
@@ -749,6 +897,64 @@ public class AgenteController {
         }
     }
 
+    @GetMapping(value = "/previsualizarReporte", produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String previsualizarReporte(@RequestParam("idOrden") Integer idOrden) {
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        if (ordenOpt.isPresent()) {
+            Orden orden = ordenOpt.get();
+            List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+
+            // Generar el HTML del reporte
+            StringBuilder htmlContent = new StringBuilder();
+
+            // Construir el contenido HTML sin estilos en línea
+            htmlContent.append("<div class='reporte-content'>");
+            htmlContent.append("<h3 class='reporte-header'>Detalle de la Orden #").append(idOrden).append("</h3>");
+            htmlContent.append("<p><strong>Fecha de emisión:</strong> ").append(orden.getFechaOrden()).append("</p>");
+            htmlContent.append("<p><strong>Cliente:</strong> ").append(orden.getIdCarritoCompra().getIdUsuario().getNombre()).append("</p>");
+            htmlContent.append("<p><strong>Dirección:</strong> ").append(orden.getIdCarritoCompra().getIdUsuario().getDireccion()).append("</p>");
+
+            htmlContent.append("<div class='table-responsive'>");
+            htmlContent.append("<table class='table table-striped table-bordered'><thead><tr>")
+                    .append("<th scope='col'>N°</th>")
+                    .append("<th scope='col'>Descripción</th>")
+                    .append("<th scope='col'>Cant.</th>")
+                    .append("<th scope='col'>Precio Unitario (S/)</th>")
+                    .append("<th scope='col'>Total (S/)</th>")
+                    .append("</tr></thead><tbody>");
+
+            int itemNumber = 1;
+            double subtotal = 0;
+            DecimalFormat df = new DecimalFormat("0.00");
+            for (ProductosxOrden producto : productosOrden) {
+                double totalProducto = producto.getPrecioTotalPorProducto();
+                subtotal += totalProducto;
+
+                htmlContent.append("<tr>")
+                        .append("<th scope='row'>").append(itemNumber++).append("</th>")
+                        .append("<td>").append(producto.getNombreProducto()).append("</td>")
+                        .append("<td>").append(producto.getCantidadProducto()).append("</td>")
+                        .append("<td>").append("S/ ").append(df.format(producto.getPrecioUnidad())).append("</td>")
+                        .append("<td>").append("S/ ").append(df.format(totalProducto)).append("</td>")
+                        .append("</tr>");
+            }
+
+            htmlContent.append("</tbody></table>");
+            htmlContent.append("</div>"); // Cierre de table-responsive
+
+            htmlContent.append("<p class='reporte-total'><strong>Total a Pagar: S/ ").append(df.format(subtotal)).append("</strong></p>");
+            htmlContent.append("</div>");
+
+            return htmlContent.toString();
+        } else {
+            return "<p>Error: Orden no encontrada.</p>";
+        }
+    }
+
+
+
+
     private byte[] generarOrdenCSV(Integer idOrden) throws IOException {
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
         if (ordenOpt.isPresent()) {
@@ -756,10 +962,16 @@ public class AgenteController {
             List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
 
             StringBuilder csvContent = new StringBuilder();
-            csvContent.append("N°;Descripción;Cant.;Precio Unitario (S/.);Total (S/.)\n");
+            csvContent.append("Orden #").append(idOrden).append("\n");
+            csvContent.append("Fecha de emisión:;").append(orden.getFechaOrden()).append("\n");
+            csvContent.append("Cliente:;").append(orden.getIdCarritoCompra().getIdUsuario().getNombre()).append("\n");
+            csvContent.append("Dirección:;").append(orden.getIdCarritoCompra().getIdUsuario().getDireccion()).append("\n\n");
+
+            csvContent.append("N°;Descripción;Cant.;Precio Unitario (S/);Total (S/)\n");
 
             double subtotal = 0;
             int itemNumber = 1;
+            DecimalFormat df = new DecimalFormat("0.00");
             for (ProductosxOrden producto : productosOrden) {
                 double totalProducto = producto.getPrecioTotalPorProducto();
                 subtotal += totalProducto;
@@ -767,11 +979,11 @@ public class AgenteController {
                 csvContent.append(itemNumber++).append(";")
                         .append(producto.getNombreProducto()).append(";")
                         .append(producto.getCantidadProducto()).append(";")
-                        .append(producto.getPrecioUnidad()).append(";")
-                        .append(totalProducto).append("\n");
+                        .append(df.format(producto.getPrecioUnidad())).append(";")
+                        .append(df.format(totalProducto)).append("\n");
             }
 
-            csvContent.append(";;;Total a Pagar;").append(subtotal).append("\n");
+            csvContent.append(";;;Total a Pagar;").append(df.format(subtotal)).append("\n");
 
             return csvContent.toString().getBytes(StandardCharsets.UTF_8);
         } else {
@@ -779,7 +991,605 @@ public class AgenteController {
         }
     }
 
+    @GetMapping("/descargarReporteTotalOrdenesZIP")
+    public void descargarReporteTotalOrdenesZIP(
+            @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+            @RequestParam("formatos") String formatos,
+            HttpServletResponse response) throws IOException, DocumentException {
 
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ZipOutputStream zos = new ZipOutputStream(baos);
+
+            // Ajustar fechaFin si es necesario
+            // Si el método es inclusivo, no es necesario sumar un día
+            // LocalDate fechaFinInclusive = fechaFin;
+            // Si es exclusivo, sumar un día
+            LocalDate fechaFinInclusive = fechaFin.plusDays(1);
+
+            // Obtener las órdenes en el rango de fechas ajustado
+            List<Orden> ordenes = ordenRepository.findOrdenesByFechaOrdenBetween(fechaInicio, fechaFinInclusive);
+
+            if (ordenes.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron órdenes en el rango de fechas seleccionado.");
+                return;
+            }
+
+            String[] formatosArray = formatos.split(",");
+            for (String formato : formatosArray) {
+                formato = formato.trim();
+                byte[] fileBytes = null;
+                String fileName = "Reporte_Total_Ordenes_" + fechaInicio + "_al_" + fechaFin;
+
+                if (formato.equalsIgnoreCase("PDF")) {
+                    fileBytes = generarReporteTotalOrdenesPDF(ordenes, fechaInicio, fechaFin);
+                    fileName += ".pdf";
+                } else if (formato.equalsIgnoreCase("Excel")) {
+                    fileBytes = generarReporteTotalOrdenesExcel(ordenes, fechaInicio, fechaFin);
+                    fileName += ".xlsx";
+                } else if (formato.equalsIgnoreCase("CSV")) {
+                    fileBytes = generarReporteTotalOrdenesCSV(ordenes, fechaInicio, fechaFin);
+                    fileName += ".csv";
+                }
+
+                if (fileBytes != null) {
+                    ZipEntry zipEntry = new ZipEntry(fileName);
+                    zos.putNextEntry(zipEntry);
+                    zos.write(fileBytes);
+                    zos.closeEntry();
+                }
+            }
+
+            zos.close();
+
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition", "attachment; filename=Reporte_Total_Ordenes.zip");
+            response.getOutputStream().write(baos.toByteArray());
+        } catch (IOException | DocumentException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo ZIP: " + e.getMessage());
+        }
+    }
+
+
+
+    // Agrega este método en tu AgenteController
+    private byte[] generarReporteTotalOrdenesPDF(List<Orden> ordenes, LocalDate fechaInicio, LocalDate fechaFin) throws DocumentException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Document document = new Document(PageSize.A4, 36, 36, 90, 55);
+        PdfWriter writer = PdfWriter.getInstance(document, baos);
+
+        document.open();
+
+        // Título
+        Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
+        Paragraph title = new Paragraph("Reporte Total de Órdenes", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(20);
+        document.add(title);
+
+        // Información general
+        Font infoFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+        Paragraph info = new Paragraph(
+                "Total de órdenes desde: " + fechaInicio + " hasta: " + fechaFin,
+                infoFont);
+        info.setSpacingAfter(20);
+        document.add(info);
+
+        // Tabla
+        PdfPTable table = new PdfPTable(5);
+        table.setWidthPercentage(100);
+        table.setWidths(new float[]{1, 3, 2, 2, 2});
+
+        // Estilos
+        Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+        Font cellFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL, BaseColor.BLACK);
+        BaseColor headerColor = new BaseColor(0, 121, 107); // Verde oscuro
+
+        // Encabezados
+        String[] headers = {"N°", "Fecha", "Cliente", "Monto Total", "Estado"};
+        for (String header : headers) {
+            PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
+            cell.setBackgroundColor(headerColor);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setPadding(5);
+            table.addCell(cell);
+        }
+
+        // Contenido
+        int itemNumber = 1;
+        DecimalFormat df = new DecimalFormat("0.00");
+        for (Orden orden : ordenes) {
+            // Obtener el monto total de la orden
+            double montoTotal = calcularMontoTotalOrden(orden);
+
+            // Agregar filas
+            PdfPCell cell1 = new PdfPCell(new Phrase(String.valueOf(itemNumber++), cellFont));
+            cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1.setPadding(5);
+            table.addCell(cell1);
+
+            PdfPCell cell2 = new PdfPCell(new Phrase(orden.getFechaOrden().toString(), cellFont));
+            cell2.setPadding(5);
+            table.addCell(cell2);
+
+            PdfPCell cell3 = new PdfPCell(new Phrase(orden.getIdCarritoCompra().getIdUsuario().getNombre(), cellFont));
+            cell3.setPadding(5);
+            table.addCell(cell3);
+
+            PdfPCell cell4 = new PdfPCell(new Phrase("S/ " + df.format(montoTotal), cellFont));
+            cell4.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cell4.setPadding(5);
+            table.addCell(cell4);
+
+            PdfPCell cell5 = new PdfPCell(new Phrase(orden.getEstadoorden().getNombreEstado(), cellFont));
+            cell5.setPadding(5);
+            table.addCell(cell5);
+        }
+
+        document.add(table);
+        document.close();
+
+        return baos.toByteArray();
+    }
+
+
+    private byte[] generarReporteTotalOrdenesExcel(List<Orden> ordenes, LocalDate fechaInicio, LocalDate fechaFin) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Reporte Total de Órdenes");
+
+        int rowIdx = 0;
+
+        // Información general
+        Row infoRow = sheet.createRow(rowIdx++);
+        infoRow.createCell(0).setCellValue("Total de órdenes desde: " + fechaInicio + " hasta: " + fechaFin);
+
+        // Saltar una fila
+        rowIdx++;
+
+        // Encabezados
+        String[] headers = {"N°", "Fecha", "Cliente", "Monto Total (S/)", "Estado"};
+        Row headerRow = sheet.createRow(rowIdx++);
+
+        // Estilos
+        CellStyle headerStyle = workbook.createCellStyle();
+        org.apache.poi.ss.usermodel.Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerStyle.setFont(headerFont);
+        headerStyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setWrapText(true);
+
+        CellStyle currencyStyle = workbook.createCellStyle();
+        currencyStyle.setDataFormat(workbook.createDataFormat().getFormat("S/ #,##0.00"));
+        currencyStyle.setAlignment(HorizontalAlignment.RIGHT);
+
+        // Agregar los encabezados a la hoja
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        // Contenido de las órdenes
+        int itemNumber = 1;
+        DecimalFormat df = new DecimalFormat("0.00");
+        for (Orden orden : ordenes) {
+            Row row = sheet.createRow(rowIdx++);
+
+            double montoTotal = calcularMontoTotalOrden(orden);
+
+            Cell cell0 = row.createCell(0);
+            cell0.setCellValue(itemNumber++);
+
+            Cell cell1 = row.createCell(1);
+            cell1.setCellValue(orden.getFechaOrden().toString());
+
+            Cell cell2 = row.createCell(2);
+            cell2.setCellValue(orden.getIdCarritoCompra().getIdUsuario().getNombre());
+
+            Cell cell3 = row.createCell(3);
+            cell3.setCellValue(montoTotal);
+            cell3.setCellStyle(currencyStyle);
+
+            Cell cell4 = row.createCell(4);
+            cell4.setCellValue(orden.getEstadoorden().getNombreEstado());
+        }
+
+        // Autoajustar anchos de columna
+        for (int i = 0; i < headers.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        workbook.write(baos);
+        workbook.close();
+
+        return baos.toByteArray();
+    }
+
+    private byte[] generarReporteTotalOrdenesCSV(List<Orden> ordenes, LocalDate fechaInicio, LocalDate fechaFin) throws IOException {
+        StringBuilder csvContent = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        // Información general
+        csvContent.append("Total de órdenes desde: ").append(fechaInicio).append(" hasta: ").append(fechaFin).append("\n\n");
+
+        // Encabezados
+        csvContent.append("N°;Fecha;Cliente;Monto Total (S/);Estado\n");
+
+        int itemNumber = 1;
+        for (Orden orden : ordenes) {
+            double montoTotal = calcularMontoTotalOrden(orden);
+
+            csvContent.append(itemNumber++).append(";")
+                    .append(orden.getFechaOrden()).append(";")
+                    .append(orden.getIdCarritoCompra().getIdUsuario().getNombre()).append(";")
+                    .append(df.format(montoTotal)).append(";")
+                    .append(orden.getEstadoorden().getNombreEstado()).append("\n");
+        }
+
+        return csvContent.toString().getBytes(StandardCharsets.UTF_8);
+    }
+    @GetMapping(value = "/previsualizarReporteTotalOrdenes", produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String previsualizarReporteTotalOrdenes(
+            @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin) {
+
+        // Ajustar fechaFin si es necesario
+        LocalDate fechaFinInclusive = fechaFin.plusDays(1);
+
+        // Obtener las órdenes en el rango de fechas ajustado
+        List<Orden> ordenes = ordenRepository.findOrdenesByFechaOrdenBetween(fechaInicio, fechaFinInclusive);
+
+        if (ordenes.isEmpty()) {
+            return "<p>No se encontraron órdenes en el rango de fechas seleccionado.</p>";
+        }
+
+        StringBuilder htmlContent = new StringBuilder();
+
+        // Construir el contenido HTML
+        htmlContent.append("<div class='reporte-content'>");
+        htmlContent.append("<h3 class='reporte-header'>Reporte Total de Órdenes</h3>");
+        htmlContent.append("<p><strong>Desde:</strong> ").append(fechaInicio).append("</p>");
+        htmlContent.append("<p><strong>Hasta:</strong> ").append(fechaFin).append("</p>");
+
+        htmlContent.append("<div class='table-responsive'>");
+        htmlContent.append("<table class='table table-striped table-bordered'><thead><tr>")
+                .append("<th scope='col'>N°</th>")
+                .append("<th scope='col'>Fecha</th>")
+                .append("<th scope='col'>Cliente</th>")
+                .append("<th scope='col'>Monto Total (S/)</th>")
+                .append("<th scope='col'>Estado</th>")
+                .append("</tr></thead><tbody>");
+
+        int itemNumber = 1;
+        DecimalFormat df = new DecimalFormat("0.00");
+        for (Orden orden : ordenes) {
+            double montoTotal = calcularMontoTotalOrden(orden);
+
+            htmlContent.append("<tr>")
+                    .append("<th scope='row'>").append(itemNumber++).append("</th>")
+                    .append("<td>").append(orden.getFechaOrden()).append("</td>")
+                    .append("<td>").append(orden.getIdCarritoCompra().getIdUsuario().getNombre()).append("</td>")
+                    .append("<td>").append("S/ ").append(df.format(montoTotal)).append("</td>")
+                    .append("<td>").append(orden.getEstadoorden().getNombreEstado()).append("</td>")
+                    .append("</tr>");
+        }
+
+        htmlContent.append("</tbody></table>");
+        htmlContent.append("</div>"); // Cierre de table-responsive
+        htmlContent.append("</div>");
+
+        return htmlContent.toString();
+    }
+
+
+    private double calcularMontoTotalOrden(Orden orden) {
+        List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(orden.getId());
+        double subtotal = productosOrden.stream()
+                .mapToDouble(ProductosxOrden::getPrecioTotalPorProducto)
+                .sum();
+        double maxCostoEnvio = productosOrden.stream()
+                .mapToDouble(ProductosxOrden::getCostoEnvio)
+                .max()
+                .orElse(0.0);
+        double costosAdicionales = orden.getCostosAdicionales() != null ? orden.getCostosAdicionales() : 0.0;
+        return subtotal + maxCostoEnvio + costosAdicionales;
+    }
+
+
+
+    // Método para descargar el reporte en ZIP
+    @GetMapping("/descargarReporteOrdenesPorAgenteZIP")
+    public void descargarReporteOrdenesPorAgenteZIP(
+            @RequestParam("formatos") String formatos,
+            HttpSession session,
+            HttpServletResponse response) throws IOException, DocumentException {
+
+        // Obtener idAgente de la sesión
+        Integer idAgente = (Integer) session.getAttribute("id");
+
+        if (idAgente == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuario no autenticado");
+            return;
+        }
+
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ZipOutputStream zos = new ZipOutputStream(baos);
+
+            // Obtener las órdenes asignadas al agente
+            List<Orden> ordenes = ordenRepository.findByIdAgente_Id(idAgente);
+
+            if (ordenes.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron órdenes asignadas al agente");
+                return;
+            }
+
+            String[] formatosArray = formatos.split(",");
+            for (String formato : formatosArray) {
+                formato = formato.trim();
+                byte[] fileBytes = null;
+                String fileName = "Reporte_Ordenes_Agente_" + idAgente;
+
+                if (formato.equalsIgnoreCase("PDF")) {
+                    fileBytes = generarReporteOrdenesPorAgentePDF(ordenes, idAgente);
+                    fileName += ".pdf";
+                } else if (formato.equalsIgnoreCase("Excel")) {
+                    fileBytes = generarReporteOrdenesPorAgenteExcel(ordenes, idAgente);
+                    fileName += ".xlsx";
+                } else if (formato.equalsIgnoreCase("CSV")) {
+                    fileBytes = generarReporteOrdenesPorAgenteCSV(ordenes, idAgente);
+                    fileName += ".csv";
+                }
+
+                if (fileBytes != null) {
+                    ZipEntry zipEntry = new ZipEntry(fileName);
+                    zos.putNextEntry(zipEntry);
+                    zos.write(fileBytes);
+                    zos.closeEntry();
+                }
+            }
+
+            zos.close();
+
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition", "attachment; filename=Reporte_Ordenes_Agente.zip");
+            response.getOutputStream().write(baos.toByteArray());
+        } catch (IOException | DocumentException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo ZIP: " + e.getMessage());
+        }
+    }
+
+    // Método para generar el reporte en PDF
+    private byte[] generarReporteOrdenesPorAgentePDF(List<Orden> ordenes, Integer idAgente) throws DocumentException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Document document = new Document(PageSize.A4, 36, 36, 90, 55);
+        PdfWriter writer = PdfWriter.getInstance(document, baos);
+
+        document.open();
+
+        // Título
+        Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
+        Paragraph title = new Paragraph("Reporte de Órdenes por Agente Asignado", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(20);
+        document.add(title);
+
+        // Información general
+        Font infoFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+        Paragraph info = new Paragraph("Agente ID: " + idAgente, infoFont);
+        info.setSpacingAfter(20);
+        document.add(info);
+
+        // Tabla
+        PdfPTable table = new PdfPTable(5);
+        table.setWidthPercentage(100);
+        table.setWidths(new float[]{1, 3, 2, 2, 2});
+
+        // Estilos
+        Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+        Font cellFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL, BaseColor.BLACK);
+        BaseColor headerColor = new BaseColor(0, 121, 107); // Verde oscuro
+
+        // Encabezados
+        String[] headers = {"N°", "Fecha", "Cliente", "Monto Total", "Estado"};
+        for (String header : headers) {
+            PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
+            cell.setBackgroundColor(headerColor);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setPadding(5);
+            table.addCell(cell);
+        }
+
+        // Contenido
+        int itemNumber = 1;
+        DecimalFormat df = new DecimalFormat("0.00");
+        for (Orden orden : ordenes) {
+            double montoTotal = calcularMontoTotalOrden(orden);
+
+            PdfPCell cell1 = new PdfPCell(new Phrase(String.valueOf(itemNumber++), cellFont));
+            cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1.setPadding(5);
+            table.addCell(cell1);
+
+            PdfPCell cell2 = new PdfPCell(new Phrase(orden.getFechaOrden().toString(), cellFont));
+            cell2.setPadding(5);
+            table.addCell(cell2);
+
+            PdfPCell cell3 = new PdfPCell(new Phrase(orden.getIdCarritoCompra().getIdUsuario().getNombre(), cellFont));
+            cell3.setPadding(5);
+            table.addCell(cell3);
+
+            PdfPCell cell4 = new PdfPCell(new Phrase("S/ " + df.format(montoTotal), cellFont));
+            cell4.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cell4.setPadding(5);
+            table.addCell(cell4);
+
+            PdfPCell cell5 = new PdfPCell(new Phrase(orden.getEstadoorden().getNombreEstado(), cellFont));
+            cell5.setPadding(5);
+            table.addCell(cell5);
+        }
+
+        document.add(table);
+        document.close();
+
+        return baos.toByteArray();
+    }
+
+    // Método para generar el reporte en Excel
+    private byte[] generarReporteOrdenesPorAgenteExcel(List<Orden> ordenes, Integer idAgente) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Reporte Órdenes Agente");
+
+        int rowIdx = 0;
+
+        // Información general
+        Row infoRow = sheet.createRow(rowIdx++);
+        infoRow.createCell(0).setCellValue("Agente ID: " + idAgente);
+
+        // Saltar una fila
+        rowIdx++;
+
+        // Encabezados
+        String[] headers = {"N°", "Fecha", "Cliente", "Monto Total (S/)", "Estado"};
+        Row headerRow = sheet.createRow(rowIdx++);
+
+        // Estilos
+        CellStyle headerStyle = workbook.createCellStyle();
+        org.apache.poi.ss.usermodel.Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerStyle.setFont(headerFont);
+        headerStyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        CellStyle currencyStyle = workbook.createCellStyle();
+        currencyStyle.setDataFormat(workbook.createDataFormat().getFormat("S/ #,##0.00"));
+        currencyStyle.setAlignment(HorizontalAlignment.RIGHT);
+
+        // Agregar los encabezados
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        // Contenido
+        int itemNumber = 1;
+        DecimalFormat df = new DecimalFormat("0.00");
+        for (Orden orden : ordenes) {
+            Row row = sheet.createRow(rowIdx++);
+
+            double montoTotal = calcularMontoTotalOrden(orden);
+
+            row.createCell(0).setCellValue(itemNumber++);
+            row.createCell(1).setCellValue(orden.getFechaOrden().toString());
+            row.createCell(2).setCellValue(orden.getIdCarritoCompra().getIdUsuario().getNombre());
+
+            Cell montoCell = row.createCell(3);
+            montoCell.setCellValue(montoTotal);
+            montoCell.setCellStyle(currencyStyle);
+
+            row.createCell(4).setCellValue(orden.getEstadoorden().getNombreEstado());
+        }
+
+        // Autoajustar anchos de columna
+        for (int i = 0; i < headers.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        workbook.write(baos);
+        workbook.close();
+
+        return baos.toByteArray();
+    }
+
+    // Método para generar el reporte en CSV
+    private byte[] generarReporteOrdenesPorAgenteCSV(List<Orden> ordenes, Integer idAgente) throws IOException {
+        StringBuilder csvContent = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        // Información general
+        csvContent.append("Agente ID:;").append(idAgente).append("\n\n");
+
+        // Encabezados
+        csvContent.append("N°;Fecha;Cliente;Monto Total (S/);Estado\n");
+
+        int itemNumber = 1;
+        for (Orden orden : ordenes) {
+            double montoTotal = calcularMontoTotalOrden(orden);
+
+            csvContent.append(itemNumber++).append(";")
+                    .append(orden.getFechaOrden()).append(";")
+                    .append(orden.getIdCarritoCompra().getIdUsuario().getNombre()).append(";")
+                    .append(df.format(montoTotal)).append(";")
+                    .append(orden.getEstadoorden().getNombreEstado()).append("\n");
+        }
+
+        return csvContent.toString().getBytes(StandardCharsets.UTF_8);
+    }
+
+    @GetMapping(value = "/previsualizarReporteOrdenesPorAgente", produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String previsualizarReporteOrdenesPorAgente(HttpSession session) {
+
+        // Obtener idAgente de la sesión
+        Integer idAgente = (Integer) session.getAttribute("id");
+
+        if (idAgente == null) {
+            return "<p>Error: Usuario no autenticado.</p>";
+        }
+
+        // Obtener las órdenes asignadas al agente
+        List<Orden> ordenes = ordenRepository.findByIdAgente_Id(idAgente);
+
+        if (ordenes.isEmpty()) {
+            return "<p>No se encontraron órdenes asignadas al agente.</p>";
+        }
+
+        StringBuilder htmlContent = new StringBuilder();
+
+        // Construir el contenido HTML
+        htmlContent.append("<div class='reporte-content'>");
+        htmlContent.append("<h3 class='reporte-header'>Reporte de Órdenes por Agente Asignado</h3>");
+        htmlContent.append("<p><strong>Agente ID:</strong> ").append(idAgente).append("</p>");
+
+        htmlContent.append("<div class='table-responsive'>");
+        htmlContent.append("<table class='table table-striped table-bordered'><thead><tr>")
+                .append("<th scope='col'>N°</th>")
+                .append("<th scope='col'>Fecha</th>")
+                .append("<th scope='col'>Cliente</th>")
+                .append("<th scope='col'>Monto Total (S/)</th>")
+                .append("<th scope='col'>Estado</th>")
+                .append("</tr></thead><tbody>");
+
+        int itemNumber = 1;
+        DecimalFormat df = new DecimalFormat("0.00");
+        for (Orden orden : ordenes) {
+            double montoTotal = calcularMontoTotalOrden(orden);
+
+            htmlContent.append("<tr>")
+                    .append("<th scope='row'>").append(itemNumber++).append("</th>")
+                    .append("<td>").append(orden.getFechaOrden()).append("</td>")
+                    .append("<td>").append(orden.getIdCarritoCompra().getIdUsuario().getNombre()).append("</td>")
+                    .append("<td>").append("S/ ").append(df.format(montoTotal)).append("</td>")
+                    .append("<td>").append(orden.getEstadoorden().getNombreEstado()).append("</td>")
+                    .append("</tr>");
+        }
+
+        htmlContent.append("</tbody></table>");
+        htmlContent.append("</div>"); // Cierre de table-responsive
+        htmlContent.append("</div>");
+
+        return htmlContent.toString();
+    }
 
 
 

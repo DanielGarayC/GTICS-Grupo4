@@ -14,6 +14,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.example.gtics.entity.Producto;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -473,6 +475,11 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "AND phc.resenaCreada = 0")
     List<ProductoDTO> obtenerProductosPorUsuarioSinResena(@Param("idUsuario") Integer idUsuario);
 
+    @Query(value = "SELECT * FROM orden WHERE fechaOrden BETWEEN :fechaInicio AND :fechaFin ORDER BY fechaOrden ASC", nativeQuery = true)
+    List<Orden> findOrdenesByFechaOrdenBetween(
+            @Param("fechaInicio") LocalDate fechaInicio,
+            @Param("fechaFin") LocalDate fechaFin);
 
 
+    List<Orden> findByIdAgente_Id(Integer idAgente);
 }
