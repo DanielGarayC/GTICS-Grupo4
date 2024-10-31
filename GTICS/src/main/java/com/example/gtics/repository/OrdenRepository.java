@@ -482,4 +482,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
 
 
     List<Orden> findByIdAgente_Id(Integer idAgente);
+    // Nuevo método para encontrar órdenes asignadas a una lista de agentes
+    // Método corregido
+    List<Orden> findByIdAgente_IdIn(List<Integer> idAgentes);
 }

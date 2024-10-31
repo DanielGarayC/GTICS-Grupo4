@@ -184,12 +184,12 @@
                             </div>
 
                             <!-- Tercera tarjeta -->
+                            <!-- Tercera tarjeta -->
                             <div class="col-xl-4 col-lg-6 col-12 mb-5">
                                 <h3 class="text-center mt-6">Órdenes por agente asignado en la zona</h3>
                                 <div class="card card-lg">
                                     <div class="card-body p-6 d-flex flex-column gap-3">
-                                        <!-- Switches con input antes del label -->
-                                        <!-- Tarjeta 3 -->
+                                        <!-- Formato de descarga -->
                                         <div class="mb-3">
                                             <label class="form-label">Seleccione formatos de descarga</label>
                                             <!-- PDF Switch -->
@@ -209,18 +209,18 @@
                                             </div>
                                         </div>
 
-
                                         <div class="download-buttons d-flex flex-row gap-2">
                                             <button class="btn btn-primary w-100" type="button" onclick="descargarReporte(3)">
                                                 <i class="bi bi-download"></i> Descargar
                                             </button>
-                                            <button class="btn btn-light w-100" type="button" data-bs-toggle="modal" data-bs-target="#previewModal" onclick="previsualizarReporte(3)">
+                                            <button class="btn btn-light w-100" type="button" onclick="previsualizarReporte(3)">
                                                 <i class="bi bi-eye"></i> Previsualizar
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </main>
@@ -301,8 +301,8 @@
                     params.append('fechaFin', fechaFin);
                     url = `/previsualizarReporteTotalOrdenes?${params.toString()}`;
                 } else if (cardNumber === 3) {
-                    // No se requieren parámetros adicionales
-                    url = `/previsualizarReporteOrdenesPorAgente`;
+                    // No se requieren parámetros adicionales para la tarjeta 3
+                    url = `/previsualizarReporteOrdenesPorZona`;
                 } else {
                     Swal.fire("Error", "Acción no válida.", "error");
                     return;
@@ -379,7 +379,7 @@
                     params.append('fechaInicio', fechaInicio);
                     params.append('fechaFin', fechaFin);
                 } else if (cardNumber === 3) {
-                    // No se requieren parámetros adicionales
+                    // No se requieren parámetros adicionales para la tarjeta 3
                 } else {
                     valid = false;
                 }
@@ -399,7 +399,7 @@
                 } else if (cardNumber === 2) {
                     url = `/descargarReporteTotalOrdenesZIP?${params.toString()}`;
                 } else if (cardNumber === 3) {
-                    url = `/descargarReporteOrdenesPorAgenteZIP?${params.toString()}`;
+                    url = `/descargarReporteOrdenesPorZonaZIP?${params.toString()}`;
                 }
 
                 // Iniciar la descarga del archivo ZIP
@@ -413,7 +413,7 @@
                     .then(blob => {
                         const link = document.createElement('a');
                         link.href = window.URL.createObjectURL(blob);
-                        link.download = 'Reportes.zip';
+                        link.download = 'Reporte_Ordenes_Zona.zip';
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);

@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -1304,9 +1305,8 @@ public class AgenteController {
 
 
 
-    // Método para descargar el reporte en ZIP
-    @GetMapping("/descargarReporteOrdenesPorAgenteZIP")
-    public void descargarReporteOrdenesPorAgenteZIP(
+    @GetMapping("/descargarReporteOrdenesPorZonaZIP")
+    public void descargarReporteOrdenesPorZonaZIP(
             @RequestParam("formatos") String formatos,
             HttpSession session,
             HttpServletResponse response) throws IOException, DocumentException {
@@ -1319,32 +1319,57 @@ public class AgenteController {
             return;
         }
 
+        // Obtener el agente actual
+        Optional<Usuario> optAgente = usuarioRepository.findById(idAgente);
+        if (!optAgente.isPresent()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Agente no encontrado");
+            return;
+        }
+        Usuario agenteActual = optAgente.get();
+
+        // Obtener idZona del agente actual
+        Integer idZona = agenteActual.getDistrito().getZona().getId();
+
+        // Obtener todos los agentes con idRol=3 en esa zona
+        Integer idRol = 3;
+        List<Usuario> agentesEnZona = usuarioRepository.findByDistrito_Zona_IdAndRol_Id(idZona, idRol);
+
+        if (agentesEnZona.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron agentes con rol 3 en esta zona");
+            return;
+        }
+
+        // Obtener los IDs de los agentes
+        List<Integer> idAgentes = agentesEnZona.stream()
+                .map(Usuario::getId)
+                .collect(Collectors.toList());
+
+        // Obtener todas las órdenes asignadas a estos agentes
+        List<Orden> ordenes = ordenRepository.findByIdAgente_IdIn(idAgentes);
+
+        if (ordenes.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron órdenes asignadas a los agentes en esta zona");
+            return;
+        }
+
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ZipOutputStream zos = new ZipOutputStream(baos);
-
-            // Obtener las órdenes asignadas al agente
-            List<Orden> ordenes = ordenRepository.findByIdAgente_Id(idAgente);
-
-            if (ordenes.isEmpty()) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron órdenes asignadas al agente");
-                return;
-            }
 
             String[] formatosArray = formatos.split(",");
             for (String formato : formatosArray) {
                 formato = formato.trim();
                 byte[] fileBytes = null;
-                String fileName = "Reporte_Ordenes_Agente_" + idAgente;
+                String fileName = "Reporte_Ordenes_Zona_" + idZona;
 
                 if (formato.equalsIgnoreCase("PDF")) {
-                    fileBytes = generarReporteOrdenesPorAgentePDF(ordenes, idAgente);
+                    fileBytes = generarReporteOrdenesPorZonaPDF(ordenes, idZona);
                     fileName += ".pdf";
                 } else if (formato.equalsIgnoreCase("Excel")) {
-                    fileBytes = generarReporteOrdenesPorAgenteExcel(ordenes, idAgente);
+                    fileBytes = generarReporteOrdenesPorZonaExcel(ordenes, idZona);
                     fileName += ".xlsx";
                 } else if (formato.equalsIgnoreCase("CSV")) {
-                    fileBytes = generarReporteOrdenesPorAgenteCSV(ordenes, idAgente);
+                    fileBytes = generarReporteOrdenesPorZonaCSV(ordenes, idZona);
                     fileName += ".csv";
                 }
 
@@ -1359,15 +1384,17 @@ public class AgenteController {
             zos.close();
 
             response.setContentType("application/zip");
-            response.setHeader("Content-Disposition", "attachment; filename=Reporte_Ordenes_Agente.zip");
+            response.setHeader("Content-Disposition", "attachment; filename=Reporte_Ordenes_Zona_" + idZona + ".zip");
             response.getOutputStream().write(baos.toByteArray());
         } catch (IOException | DocumentException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo ZIP: " + e.getMessage());
         }
     }
 
+
+
     // Método para generar el reporte en PDF
-    private byte[] generarReporteOrdenesPorAgentePDF(List<Orden> ordenes, Integer idAgente) throws DocumentException {
+    private byte[] generarReporteOrdenesPorZonaPDF(List<Orden> ordenes, Integer idZona) throws DocumentException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document(PageSize.A4, 36, 36, 90, 55);
         PdfWriter writer = PdfWriter.getInstance(document, baos);
@@ -1376,21 +1403,21 @@ public class AgenteController {
 
         // Título
         Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
-        Paragraph title = new Paragraph("Reporte de Órdenes por Agente Asignado", titleFont);
+        Paragraph title = new Paragraph("Reporte de Órdenes por Zona y Agente", titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         title.setSpacingAfter(20);
         document.add(title);
 
         // Información general
         Font infoFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
-        Paragraph info = new Paragraph("Agente ID: " + idAgente, infoFont);
+        Paragraph info = new Paragraph("Zona ID: " + idZona + " | Rol de Agente: 3", infoFont);
         info.setSpacingAfter(20);
         document.add(info);
 
         // Tabla
-        PdfPTable table = new PdfPTable(5);
+        PdfPTable table = new PdfPTable(6);
         table.setWidthPercentage(100);
-        table.setWidths(new float[]{1, 3, 2, 2, 2});
+        table.setWidths(new float[]{1, 2, 3, 2, 2, 2});
 
         // Estilos
         Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
@@ -1398,7 +1425,7 @@ public class AgenteController {
         BaseColor headerColor = new BaseColor(0, 121, 107); // Verde oscuro
 
         // Encabezados
-        String[] headers = {"N°", "Fecha", "Cliente", "Monto Total", "Estado"};
+        String[] headers = {"N°", "Fecha", "Cliente", "Monto Total (S/)", "Estado", "Agente Asignado"};
         for (String header : headers) {
             PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
             cell.setBackgroundColor(headerColor);
@@ -1412,6 +1439,7 @@ public class AgenteController {
         DecimalFormat df = new DecimalFormat("0.00");
         for (Orden orden : ordenes) {
             double montoTotal = calcularMontoTotalOrden(orden);
+            String agenteAsignado = orden.getIdAgente().getNombre(); // Asegúrate de que el campo 'nombre' existe
 
             PdfPCell cell1 = new PdfPCell(new Phrase(String.valueOf(itemNumber++), cellFont));
             cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1434,6 +1462,10 @@ public class AgenteController {
             PdfPCell cell5 = new PdfPCell(new Phrase(orden.getEstadoorden().getNombreEstado(), cellFont));
             cell5.setPadding(5);
             table.addCell(cell5);
+
+            PdfPCell cell6 = new PdfPCell(new Phrase(agenteAsignado, cellFont));
+            cell6.setPadding(5);
+            table.addCell(cell6);
         }
 
         document.add(table);
@@ -1442,23 +1474,26 @@ public class AgenteController {
         return baos.toByteArray();
     }
 
-    // Método para generar el reporte en Excel
-    private byte[] generarReporteOrdenesPorAgenteExcel(List<Orden> ordenes, Integer idAgente) throws IOException {
+
+
+    private byte[] generarReporteOrdenesPorZonaExcel(List<Orden> ordenes, Integer idZona) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Reporte Órdenes Agente");
+        Sheet sheet = workbook.createSheet("Reporte Órdenes Zona");
 
         int rowIdx = 0;
 
         // Información general
         Row infoRow = sheet.createRow(rowIdx++);
-        infoRow.createCell(0).setCellValue("Agente ID: " + idAgente);
+        infoRow.createCell(0).setCellValue("Reporte de Órdenes por Zona y Agente");
+        Row infoRow2 = sheet.createRow(rowIdx++);
+        infoRow2.createCell(0).setCellValue("Zona ID: " + idZona + " | Rol de Agente: 3");
 
         // Saltar una fila
         rowIdx++;
 
         // Encabezados
-        String[] headers = {"N°", "Fecha", "Cliente", "Monto Total (S/)", "Estado"};
+        String[] headers = {"N°", "Fecha", "Cliente", "Monto Total (S/)", "Estado", "Agente Asignado"};
         Row headerRow = sheet.createRow(rowIdx++);
 
         // Estilos
@@ -1488,6 +1523,7 @@ public class AgenteController {
             Row row = sheet.createRow(rowIdx++);
 
             double montoTotal = calcularMontoTotalOrden(orden);
+            String agenteAsignado = orden.getIdAgente().getNombre();
 
             row.createCell(0).setCellValue(itemNumber++);
             row.createCell(1).setCellValue(orden.getFechaOrden().toString());
@@ -1498,6 +1534,7 @@ public class AgenteController {
             montoCell.setCellStyle(currencyStyle);
 
             row.createCell(4).setCellValue(orden.getEstadoorden().getNombreEstado());
+            row.createCell(5).setCellValue(agenteAsignado);
         }
 
         // Autoajustar anchos de columna
@@ -1511,35 +1548,38 @@ public class AgenteController {
         return baos.toByteArray();
     }
 
-    // Método para generar el reporte en CSV
-    private byte[] generarReporteOrdenesPorAgenteCSV(List<Orden> ordenes, Integer idAgente) throws IOException {
+
+    private byte[] generarReporteOrdenesPorZonaCSV(List<Orden> ordenes, Integer idZona) throws IOException {
         StringBuilder csvContent = new StringBuilder();
         DecimalFormat df = new DecimalFormat("0.00");
 
         // Información general
-        csvContent.append("Agente ID:;").append(idAgente).append("\n\n");
+        csvContent.append("Reporte de Órdenes por Zona y Agente\n");
+        csvContent.append("Zona ID:;").append(idZona).append(";Rol de Agente:;3\n\n");
 
         // Encabezados
-        csvContent.append("N°;Fecha;Cliente;Monto Total (S/);Estado\n");
+        csvContent.append("N°;Fecha;Cliente;Monto Total (S/);Estado;Agente Asignado\n");
 
         int itemNumber = 1;
         for (Orden orden : ordenes) {
             double montoTotal = calcularMontoTotalOrden(orden);
+            String agenteAsignado = orden.getIdAgente().getNombre();
 
             csvContent.append(itemNumber++).append(";")
                     .append(orden.getFechaOrden()).append(";")
                     .append(orden.getIdCarritoCompra().getIdUsuario().getNombre()).append(";")
                     .append(df.format(montoTotal)).append(";")
-                    .append(orden.getEstadoorden().getNombreEstado()).append("\n");
+                    .append(orden.getEstadoorden().getNombreEstado()).append(";")
+                    .append(agenteAsignado).append("\n");
         }
 
         return csvContent.toString().getBytes(StandardCharsets.UTF_8);
     }
 
-    @GetMapping(value = "/previsualizarReporteOrdenesPorAgente", produces = MediaType.TEXT_HTML_VALUE)
-    @ResponseBody
-    public String previsualizarReporteOrdenesPorAgente(HttpSession session) {
 
+    @GetMapping(value = "/previsualizarReporteOrdenesPorZona", produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String previsualizarReporteOrdenesPorZona(HttpSession session) {
         // Obtener idAgente de la sesión
         Integer idAgente = (Integer) session.getAttribute("id");
 
@@ -1547,19 +1587,44 @@ public class AgenteController {
             return "<p>Error: Usuario no autenticado.</p>";
         }
 
-        // Obtener las órdenes asignadas al agente
-        List<Orden> ordenes = ordenRepository.findByIdAgente_Id(idAgente);
+        // Obtener el agente actual
+        Optional<Usuario> optAgente = usuarioRepository.findById(idAgente);
+        if (!optAgente.isPresent()) {
+            return "<p>Error: Agente no encontrado.</p>";
+        }
+        Usuario agenteActual = optAgente.get();
 
-        if (ordenes.isEmpty()) {
-            return "<p>No se encontraron órdenes asignadas al agente.</p>";
+        // Obtener idZona del agente actual
+        Integer idZona = agenteActual.getDistrito().getZona().getId();
+
+        // Obtener todos los agentes con idRol=3 en esa zona
+        Integer idRol = 3;
+        List<Usuario> agentesEnZona = usuarioRepository.findByDistrito_Zona_IdAndRol_Id(idZona, idRol);
+
+        if (agentesEnZona.isEmpty()) {
+            return "<p>No se encontraron agentes con rol 3 en esta zona.</p>";
         }
 
+        // Obtener los IDs de los agentes
+        List<Integer> idAgentes = agentesEnZona.stream()
+                .map(Usuario::getId)
+                .collect(Collectors.toList());
+
+        // Obtener todas las órdenes asignadas a estos agentes
+        List<Orden> ordenes = ordenRepository.findByIdAgente_IdIn(idAgentes);
+
+        if (ordenes.isEmpty()) {
+            return "<p>No se encontraron órdenes asignadas a los agentes en esta zona.</p>";
+        }
+
+        // Construcción del contenido HTML del reporte
         StringBuilder htmlContent = new StringBuilder();
 
         // Construir el contenido HTML
         htmlContent.append("<div class='reporte-content'>");
-        htmlContent.append("<h3 class='reporte-header'>Reporte de Órdenes por Agente Asignado</h3>");
-        htmlContent.append("<p><strong>Agente ID:</strong> ").append(idAgente).append("</p>");
+        htmlContent.append("<h3 class='reporte-header'>Reporte de Órdenes por Zona y Agente</h3>");
+        htmlContent.append("<p><strong>Zona ID:</strong> ").append(idZona).append("</p>");
+        htmlContent.append("<p><strong>Rol de Agente:</strong> 3</p>");
 
         htmlContent.append("<div class='table-responsive'>");
         htmlContent.append("<table class='table table-striped table-bordered'><thead><tr>")
@@ -1568,12 +1633,14 @@ public class AgenteController {
                 .append("<th scope='col'>Cliente</th>")
                 .append("<th scope='col'>Monto Total (S/)</th>")
                 .append("<th scope='col'>Estado</th>")
+                .append("<th scope='col'>Agente Asignado</th>")
                 .append("</tr></thead><tbody>");
 
         int itemNumber = 1;
         DecimalFormat df = new DecimalFormat("0.00");
         for (Orden orden : ordenes) {
             double montoTotal = calcularMontoTotalOrden(orden);
+            String agenteAsignado = orden.getIdAgente().getNombre(); // Uso correcto del getter
 
             htmlContent.append("<tr>")
                     .append("<th scope='row'>").append(itemNumber++).append("</th>")
@@ -1581,6 +1648,7 @@ public class AgenteController {
                     .append("<td>").append(orden.getIdCarritoCompra().getIdUsuario().getNombre()).append("</td>")
                     .append("<td>").append("S/ ").append(df.format(montoTotal)).append("</td>")
                     .append("<td>").append(orden.getEstadoorden().getNombreEstado()).append("</td>")
+                    .append("<td>").append(agenteAsignado).append("</td>")
                     .append("</tr>");
         }
 

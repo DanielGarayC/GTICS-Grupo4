@@ -287,4 +287,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(value = "SELECT * FROM usuario WHERE idrol = 4", nativeQuery = true)
     List<Usuario> findUsuariosByRol4();
 
+    // Nuevo método para encontrar agentes por zona y rol
+    List<Usuario> findByDistrito_Zona_IdAndRol_Id(Integer idZona, Integer idRol);
+
 }
