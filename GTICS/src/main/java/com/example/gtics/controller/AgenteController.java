@@ -148,7 +148,7 @@ public class AgenteController {
     @GetMapping({"Agente/Chat"})
     public ModelAndView chatAgente(HttpSession session) {
 
-        Integer idAgente = (Integer) session.getAttribute("idAgente");
+        Integer idAgente = (Integer) session.getAttribute("id");
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
             return new ModelAndView("redirect:/login");
@@ -189,8 +189,8 @@ public class AgenteController {
             System.out.println(room);
         }
         modelAndView.addObject("MensajesPorSala", mensajesPorSala);
-        modelAndView.addObject("idSender", session.getAttribute("idAgente"));
-        System.out.println(String.valueOf(session.getAttribute("idAgente")));
+        modelAndView.addObject("idSender", idAgente);
+        System.out.println(idAgente);
         return modelAndView;
     }
 
