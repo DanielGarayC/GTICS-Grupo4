@@ -34,6 +34,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
@@ -41,6 +42,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Controller
 
@@ -558,18 +561,99 @@ public class AgenteController {
     }
     @GetMapping("/descargarOrdenPDF")
     public void descargarOrdenPDF(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException, DocumentException {
+        try {
+            byte[] pdfBytes = generarOrdenPDF(idOrden);
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".pdf");
+            response.getOutputStream().write(pdfBytes);
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+        }
+    }
+
+
+    @GetMapping("/descargarOrdenExcel")
+    public void descargarOrdenExcel(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException {
+        try {
+            byte[] excelBytes = generarOrdenExcel(idOrden);
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".xlsx");
+            response.getOutputStream().write(excelBytes);
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+        }
+    }
+
+
+    @GetMapping("/descargarOrdenCSV")
+    public void descargarOrdenCSV(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException {
+        try {
+            byte[] csvBytes = generarOrdenCSV(idOrden);
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".csv");
+            response.getOutputStream().write(csvBytes);
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+        }
+    }
+
+
+    @GetMapping("/descargarOrdenZIP")
+    public void descargarOrdenZIP(@RequestParam("idOrden") Integer idOrden,
+                                  @RequestParam("formatos") String formatos,
+                                  HttpServletResponse response) throws IOException, DocumentException {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ZipOutputStream zos = new ZipOutputStream(baos);
+
+            String[] formatosArray = formatos.split(",");
+            for (String formato : formatosArray) {
+                formato = formato.trim();
+                byte[] fileBytes = null;
+                String fileName = "Orden_" + idOrden;
+
+                if (formato.equalsIgnoreCase("PDF")) {
+                    fileBytes = generarOrdenPDF(idOrden);
+                    fileName += ".pdf";
+                } else if (formato.equalsIgnoreCase("Excel")) {
+                    fileBytes = generarOrdenExcel(idOrden);
+                    fileName += ".xlsx";
+                } else if (formato.equalsIgnoreCase("CSV")) {
+                    fileBytes = generarOrdenCSV(idOrden);
+                    fileName += ".csv";
+                }
+
+                if (fileBytes != null) {
+                    ZipEntry zipEntry = new ZipEntry(fileName);
+                    zos.putNextEntry(zipEntry);
+                    zos.write(fileBytes);
+                    zos.closeEntry();
+                }
+            }
+
+            zos.close();
+
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".zip");
+            response.getOutputStream().write(baos.toByteArray());
+        } catch (IOException | DocumentException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo ZIP: " + e.getMessage());
+        }
+    }
+
+
+    private byte[] generarOrdenPDF(Integer idOrden) throws IOException, DocumentException {
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
         if (ordenOpt.isPresent()) {
             Orden orden = ordenOpt.get();
             List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
 
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".pdf");
-
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Document document = new Document(PageSize.A4, 36, 36, 90, 55);
-            PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
+            PdfWriter.getInstance(document, baos);
             document.open();
 
+            // Reutiliza el código existente para agregar contenido al PDF
             Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
             Font normalFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
             DecimalFormat df = new DecimalFormat("0.00");
@@ -602,73 +686,74 @@ public class AgenteController {
             }
 
             // Totales
-            table.addCell(new PdfPCell(new Phrase("", normalFont)));
+            PdfPCell emptyCell = new PdfPCell(new Phrase(""));
+            emptyCell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(emptyCell);
             table.addCell(new PdfPCell(new Phrase("Subtotal", boldFont)));
-            table.addCell(new PdfPCell(new Phrase("", normalFont)));
-            table.addCell(new PdfPCell(new Phrase("", normalFont)));
+            table.addCell(emptyCell);
+            table.addCell(emptyCell);
             table.addCell(new PdfPCell(new Phrase("S/." + df.format(subtotal), normalFont)));
 
             document.add(table);
             document.close();
+
+            return baos.toByteArray();
         } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
+            throw new IOException("Orden no encontrada");
         }
     }
 
-    @GetMapping("/descargarOrdenExcel")
-    public void descargarOrdenExcel(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException {
+    private byte[] generarOrdenExcel(Integer idOrden) throws IOException {
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
         if (ordenOpt.isPresent()) {
             Orden orden = ordenOpt.get();
             List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
 
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".xlsx");
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Orden");
 
-            try (Workbook workbook = new XSSFWorkbook()) {
-                Sheet sheet = workbook.createSheet("Orden");
-                String[] headers = {"N°", "Descripción", "Cant.", "Precio Unitario (S/.)", "Total (S/.)"};
-                Row headerRow = sheet.createRow(0);
-                for (int i = 0; i < headers.length; i++) {
-                    Cell cell = headerRow.createCell(i);
-                    cell.setCellValue(headers[i]);
-                }
-
-                int rowIdx = 1;
-                double subtotal = 0;
-                for (ProductosxOrden producto : productosOrden) {
-                    Row row = sheet.createRow(rowIdx++);
-                    row.createCell(0).setCellValue(rowIdx - 1);
-                    row.createCell(1).setCellValue(producto.getNombreProducto());
-                    row.createCell(2).setCellValue(producto.getCantidadProducto());
-                    row.createCell(3).setCellValue(producto.getPrecioUnidad());
-                    double totalProducto = producto.getPrecioTotalPorProducto();
-                    subtotal += totalProducto;
-                    row.createCell(4).setCellValue(totalProducto);
-                }
-
-                Row totalRow = sheet.createRow(rowIdx);
-                totalRow.createCell(3).setCellValue("Total a Pagar");
-                totalRow.createCell(4).setCellValue(subtotal);
-
-                workbook.write(response.getOutputStream());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            // Reutiliza el código existente para agregar contenido al Excel
+            String[] headers = {"N°", "Descripción", "Cant.", "Precio Unitario (S/.)", "Total (S/.)"};
+            Row headerRow = sheet.createRow(0);
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
             }
+
+            int rowIdx = 1;
+            double subtotal = 0;
+            int itemNumber = 1;
+            for (ProductosxOrden producto : productosOrden) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(itemNumber++);
+                row.createCell(1).setCellValue(producto.getNombreProducto());
+                row.createCell(2).setCellValue(producto.getCantidadProducto());
+                row.createCell(3).setCellValue(producto.getPrecioUnidad());
+                double totalProducto = producto.getPrecioTotalPorProducto();
+                subtotal += totalProducto;
+                row.createCell(4).setCellValue(totalProducto);
+            }
+
+            // Totales
+            Row totalRow = sheet.createRow(rowIdx);
+            totalRow.createCell(3).setCellValue("Total a Pagar");
+            totalRow.createCell(4).setCellValue(subtotal);
+
+            workbook.write(baos);
+            workbook.close();
+
+            return baos.toByteArray();
         } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
+            throw new IOException("Orden no encontrada");
         }
     }
 
-    @GetMapping("/descargarOrdenCSV")
-    public void descargarOrdenCSV(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException {
+    private byte[] generarOrdenCSV(Integer idOrden) throws IOException {
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
         if (ordenOpt.isPresent()) {
             Orden orden = ordenOpt.get();
             List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
-
-            response.setContentType("text/csv");
-            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".csv");
 
             StringBuilder csvContent = new StringBuilder();
             csvContent.append("N°;Descripción;Cant.;Precio Unitario (S/.);Total (S/.)\n");
@@ -687,11 +772,16 @@ public class AgenteController {
             }
 
             csvContent.append(";;;Total a Pagar;").append(subtotal).append("\n");
-            response.getOutputStream().write(csvContent.toString().getBytes(StandardCharsets.UTF_8));
+
+            return csvContent.toString().getBytes(StandardCharsets.UTF_8);
         } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
+            throw new IOException("Orden no encontrada");
         }
     }
+
+
+
+
 
 }
 
