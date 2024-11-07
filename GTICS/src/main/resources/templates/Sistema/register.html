@@ -36,6 +36,7 @@
                     <label for="DNI" class="form-label">DNI</label>
                     <input type="text" id="DNI" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" required>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+
                 </div>
 
                 <div class="mb-3 col-lg-6">

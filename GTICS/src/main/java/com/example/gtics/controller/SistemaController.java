@@ -1,5 +1,6 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.DNIAPI;
 import com.example.gtics.ValidationGroup.RegistroUsuarioValidationGroup;
 import com.example.gtics.entity.Distrito;
 import com.example.gtics.entity.Rol;
@@ -61,7 +62,7 @@ public class SistemaController {
 
         return "Sistema/login";
     }
-    @GetMapping({"Registro"})
+    @GetMapping({"/Registro"})
     public String Registro(Model model){
         Usuario usuario = new Usuario();
         List<Distrito> distritos = distritoRepository.findAll();
@@ -196,7 +197,35 @@ public class SistemaController {
             if (!passwordConfirm.equals(usuario.getContrasena())){
                 model.addAttribute("diferentPassword", "Las contraseñas deben ser iguales");
             }
-            return "Sistema/register";
+            return "redirect:/Registro";
+        }
+        //Verificacion del dni con la api
+        List<String> datosRENIEC = DNIAPI.getDni(usuario.getDni());
+
+        if (!datosRENIEC.isEmpty()){
+            String apiDni = datosRENIEC.get(3);
+            String apiNombres = datosRENIEC.get(0);
+            String apiApellidoP = datosRENIEC.get(1);
+            String apiApellidoM = datosRENIEC.get(2);
+            if(apiNombres.isEmpty()){
+                String dniError = "El DNI no existe";
+                System.out.println(dniError);
+                model.addAttribute("dniError", dniError);
+                return "redirect:/Registro";
+
+            }else{
+                System.out.println("Datos de la persona");
+                System.out.println("DNI: " + apiDni);
+                System.out.println("Nombres: " + apiNombres);
+                System.out.println("Apellidos: " + apiApellidoP + " " + apiApellidoM);
+                if (!usuario.getApellidoPaterno().equals(apiApellidoP) || !usuario.getApellidoMaterno().equals(apiApellidoM)){
+                    String dpError = "Los datos ingresados no coinciden con la data de la RENIEC";
+                    System.out.println(dpError);
+                    model.addAttribute("datosPersonalesError", dpError);
+                    return "redirect:/Registro";
+
+                }
+            }
         }
         Rol rol = new Rol();
         rol.setId(4);

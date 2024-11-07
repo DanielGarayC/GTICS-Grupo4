@@ -1,5 +1,6 @@
 package com.example.gtics.controller;
 
+import com.example.gtics.DNIAPI;
 import com.example.gtics.dto.*;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
@@ -75,6 +76,8 @@ public class UsuarioFinalController {
     private final EtiquetaRepository etiquetaRepository;
     @Autowired
     private ChatRoomService chatRoomService;
+    @Autowired
+    private DNIAPI DNIapi;
     private final MessageRepository messageRepository;
 
     private boolean usuarioYaDioLike(Resena resena, Usuario usuario) {
@@ -1471,6 +1474,28 @@ public class UsuarioFinalController {
             return "UsuarioFinal/Foro/preguntasFrecuentes";
         }
 
+    }
+    @GetMapping(value = "/prueba_api")
+    public String pruebaDniApi(){
+
+        List<String> datosRENIEC = DNIAPI.getDni("11111111");
+
+        if (!datosRENIEC.isEmpty()){
+            String apiDni = datosRENIEC.get(3);
+            String apiNombres = datosRENIEC.get(0);
+            String apiApellidos = (datosRENIEC.get(1) + " " + datosRENIEC.get(2));
+            if(apiNombres.isEmpty()){
+                System.out.println("El DNI no existe");
+            }else{
+                System.out.println("Datos de la persona");
+                System.out.println("DNI: " + apiDni);
+                System.out.println("Nombres: " + apiNombres);
+                System.out.println("Apellidos: " + apiApellidos);
+            }
+
+        }
+
+        return "redirect:/ExpressDealsLogin";
     }
 
     @PostMapping("/UsuarioFinal/faq/newPregunta")
