@@ -30,7 +30,14 @@
     </div>--->
     <div class="card-body p-6">
         <h4 class="mb-4 h5" style="text-align: center">Registro de nuevo usuario</h4>
+        <div class="alert alert-danger" role="alert" th:if="${dniError != null}" th:text="${dniError}">
+
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${datosPersonalesError != null}" th:text="${datosPersonalesError}">
+
+        </div>
         <form method="post" th:action="@{/Registrar}" th:object="${usuario}">
+
             <div class="row">
                 <div class="mb-3 col-lg-6">
                     <label for="DNI" class="form-label">DNI</label>

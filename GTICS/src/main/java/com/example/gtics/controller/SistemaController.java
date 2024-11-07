@@ -63,8 +63,7 @@ public class SistemaController {
         return "Sistema/login";
     }
     @GetMapping({"/Registro"})
-    public String Registro(Model model){
-        Usuario usuario = new Usuario();
+    public String Registro(@ModelAttribute("usuario") Usuario usuario, Model model){
         List<Distrito> distritos = distritoRepository.findAll();
         distritos.sort(new Comparator<Distrito>() {
             @Override
@@ -73,7 +72,6 @@ public class SistemaController {
             }
         });
         model.addAttribute("distritos", distritos);
-        model.addAttribute("usuario", usuario);
         return "Sistema/register";
     }
     @GetMapping({"RecuperarContra"})
@@ -183,7 +181,7 @@ public class SistemaController {
     }
 
     @PostMapping("/Registrar")
-    public String registrarUsuario(Model model, @Validated(RegistroUsuarioValidationGroup.class) Usuario usuario, BindingResult bindingResult, @RequestParam("passwordConfirm") String passwordConfirm){
+    public String registrarUsuario(Model model, @Validated(RegistroUsuarioValidationGroup.class) Usuario usuario, BindingResult bindingResult, @RequestParam("passwordConfirm") String passwordConfirm, RedirectAttributes attr){
         if(bindingResult.hasErrors() || !passwordConfirm.equals(usuario.getContrasena())){
             model.addAttribute("usuario", usuario);
             List<Distrito> distritos = distritoRepository.findAll();
@@ -210,7 +208,7 @@ public class SistemaController {
             if(apiNombres.isEmpty()){
                 String dniError = "El DNI no existe";
                 System.out.println(dniError);
-                model.addAttribute("dniError", dniError);
+                attr.addFlashAttribute("dniError", dniError);
                 return "redirect:/Registro";
 
             }else{
@@ -221,7 +219,7 @@ public class SistemaController {
                 if (!usuario.getApellidoPaterno().equals(apiApellidoP) || !usuario.getApellidoMaterno().equals(apiApellidoM)){
                     String dpError = "Los datos ingresados no coinciden con la data de la RENIEC";
                     System.out.println(dpError);
-                    model.addAttribute("datosPersonalesError", dpError);
+                    attr.addFlashAttribute("datosPersonalesError", dpError);
                     return "redirect:/Registro";
 
                 }
