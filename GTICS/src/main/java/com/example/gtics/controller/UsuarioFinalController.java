@@ -1591,10 +1591,19 @@ public class UsuarioFinalController {
             document.open();
 
             // Estilos de fuente
+
+
+
+
             BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             Font titleFont = new Font(baseFont, 18, Font.BOLD, BaseColor.BLACK);
             Font subtitleFont = new Font(baseFont, 14, Font.BOLD, BaseColor.DARK_GRAY);
             Font normalFont = new Font(baseFont, 11, Font.NORMAL, BaseColor.BLACK);
+
+
+
+
+
             Font boldFont = new Font(baseFont, 11, Font.BOLD, BaseColor.BLACK);
             Font tableHeaderFont = new Font(baseFont, 12, Font.BOLD, BaseColor.WHITE);
             DecimalFormat df = new DecimalFormat("0.00");
