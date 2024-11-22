@@ -1,384 +1,389 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta content="Codescandy" name="author" />
-    <title>Productos</title>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta content="Codescandy" name="author" />
+        <title>Productos</title>
 
 
-    <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
-    <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
-    <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
+        <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
+        <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
+        <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
 
-    <!-- Favicon icon-->
-    <link th:href="@{/images/favicon/favicon.ico}" rel="shortcut icon" type="image/x-icon" />
+        <!-- Favicon icon-->
+        <link th:href="@{/images/favicon/favicon.ico}" rel="shortcut icon" type="image/x-icon" />
 
-    <!-- Libs CSS -->
-    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
-    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet" />
-    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
+        <!-- Libs CSS -->
+        <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
+        <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet" />
+        <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
 
-    <!-- Theme CSS -->
-    <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
-    <style>
-        .zoom {
-            position: relative;
-            overflow: hidden;
-            width: 400px; /* Ancho fijo */
-            height: 400px; /* Alto fijo */
-            background-size: contain; /* Ajusta la imagen manteniendo su proporción */
-            background-position: center;
-            background-repeat: no-repeat;
-            cursor: zoom-in;
-            transition: background-size 0.3s ease; /* Añade una transición suave */
-        }
+        <!-- Theme CSS -->
+        <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
+        <style>
+            .zoom {
+                position: relative;
+                overflow: hidden;
+                width: 400px; /* Ancho fijo */
+                height: 400px; /* Alto fijo */
+                background-size: contain; /* Ajusta la imagen manteniendo su proporción */
+                background-position: center;
+                background-repeat: no-repeat;
+                cursor: zoom-in;
+                transition: background-size 0.3s ease; /* Añade una transición suave */
+            }
 
-        .zoom:hover {
-            background-size: 200%; /* Zoom al pasar el ratón */
-        }
-    </style>
+            .zoom:hover {
+                background-size: 200%; /* Zoom al pasar el ratón */
+            }
+        </style>
 
-</head>
+    </head>
 
-<body>
-<!-- navbar -->
-<!-- navbar -->
+    <body>
+        <!-- navbar -->
+        <!-- navbar -->
 
-<div class="border-bottom">
+        <div class="border-bottom">
 
-    <div th:insert="~{fragments/navbarUsuarioFinal :: navbar}"></div>
+            <div th:insert="~{fragments/navbarUsuarioFinal :: navbar}"></div>
 
-</div>
-
-
-<main>
-    <!-- Category Section Start-->
-    <section class="mb-lg-6 mt-lg-6 my-2">
-        <div class="container">
-            <div class="col-12 mb-6">
-                <div class="mb-0" th:insert="~{fragments/navbarUsuarioFinal :: buscadorProducto}"></div>
-            </div>
         </div>
-    </section>
 
-    <div th:if="${nombreBusqueda != null}">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 mb-6">
-                    <span th:text="'Resultados para: ' + ${nombreBusqueda}">Resultados para: </span>
+
+        <main>
+            <!-- Category Section Start-->
+            <section class="mb-lg-6 mt-lg-6 my-2">
+                <div class="container">
+                    <div class="col-12 mb-6">
+                        <div class="mb-0" th:insert="~{fragments/navbarUsuarioFinal :: buscadorProducto}"></div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:if="${nombreBusqueda != null}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 mb-6">
+                            <span th:text="'Resultados para: ' + ${nombreBusqueda}">Resultados para: </span>
+                        </div>
+                    </div>
+
+
+                    <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-2 mt-2">
+                        <div th:each="producto : ${productos}" class="col d-flex">
+                            <!-- Card del producto -->
+                            <div class="card card-product flex-fill d-flex flex-column">
+                                <div class="card-body d-flex flex-column">
+                                    <!-- Imagen del producto -->
+                                    <div class="text-center position-relative mb-3">
+                                        <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}" class="text-decoration-none text-inherit">
+                                            <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}" alt="Imagen de producto" class="img-fluid product-img" />
+                                        </a>
+                                        <!-- Botón de acción para vista rápida -->
+                                        <div class="card-product-action">
+                                            <a href="#!" class="btn-action" data-bs-toggle="modal" th:data-bs-target="'#quickViewModal' + ${producto.id}">
+                                                <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista rápida"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Información del producto -->
+                                    <div class="text-small mb-1">
+                                        <a class="text-decoration-none text-muted" th:text="${producto.idCategoria.nombreCategoria}"></a>
+                                    </div>
+                                    <h2 class="fs-5">
+                                        <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}" class="text-inherit text-decoration-none" th:text="${producto.nombreProducto}"></a>
+                                    </h2>
+                                    <a class="text-decoration-none text-muted small" th:text="${producto.idSubcategoria.nombreSubcategoria}"></a>
+                                    <a class="text-decoration-none text-muted small" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></a>
+
+                                    <!-- Calificación -->
+                                    <div class="mt-auto">
+                                        <small class="text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                        </small>
+                                        <span class="text-muted small">4.5(149)</span>
+                                    </div>
+
+                                    <!-- Precio y botón de agregar al carrito -->
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <div>
+                                            <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">Precio: S/. 0.00</span>
+                                        </div>
+                                        <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
+                                            <input type="hidden" name="idProducto" th:value="${producto.id}" />
+                                            <input type="hidden" value="1" name="cantidad" />
+                                            <div class="d-grid">
+                                                <button type="submit" class="btn btn-primary btn-sm w-100">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
+                                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                    </svg>
+                                                    Añadir al carrito
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
+            <div th:if="${nombreBusqueda == null}">
+                <section class="mb-lg-6 mt-lg-6 my-2">
+                    <div class="container">
 
-            <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-2 mt-2">
-                <div th:each="producto : ${productos}" class="col d-flex">
-                    <!-- Card del producto -->
-                    <div class="card card-product flex-fill d-flex flex-column">
-                        <div class="card-body d-flex flex-column">
-                            <!-- Imagen del producto -->
-                            <div class="text-center position-relative mb-3">
-                                <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}" class="text-decoration-none text-inherit">
-                                    <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}" alt="Imagen de producto" class="img-fluid product-img" />
-                                </a>
-                                <!-- Botón de acción para vista rápida -->
-                                <div class="card-product-action">
-                                    <a href="#!" class="btn-action" data-bs-toggle="modal" th:data-bs-target="'#quickViewModal' + ${producto.id}">
-                                        <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista rápida"></i>
+                        <div class="col-12 mb-6">
+                            <h3 class="mb-0" style="margin-top: 20px;">Categorías</h3>
+                        </div>
+                        <div class="category-slider hidden-until-loaded">
+                            <div th:each="categoria : ${categorias}">
+                                <div class="item">
+                                    <a th:href="@{'/UsuarioFinal/categorias/' + ${categoria.id}}" class="text-decoration-none text-inherit">
+                                        <div class="card card-product mb-lg-3" style="max-width: 150px;">
+                                            <div class="card-body text-center py-4">
+                                                <img th:src="@{'/UsuarioFinal/categoria/foto/' + ${categoria.id}}"
+                                                     alt="Imagen de la categoría" class="mb-2 img-fluid"
+                                                     style="max-height: 80px; max-width: 100%;" />
+                                                <div class="text-truncate" style="font-size: 0.85rem;" th:text="${categoria.nombreCategoria}">
+                                                    Nombre de la Categoría
+                                                </div>
+                                            </div>
+                                        </div>
                                     </a>
                                 </div>
                             </div>
-
-                            <!-- Información del producto -->
-                            <div class="text-small mb-1">
-                                <a class="text-decoration-none text-muted" th:text="${producto.idCategoria.nombreCategoria}"></a>
-                            </div>
-                            <h2 class="fs-5">
-                                <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}" class="text-inherit text-decoration-none" th:text="${producto.nombreProducto}"></a>
-                            </h2>
-                            <a class="text-decoration-none text-muted small" th:text="${producto.idSubcategoria.nombreSubcategoria}"></a>
-                            <a class="text-decoration-none text-muted small" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></a>
-
-                            <!-- Calificación -->
-                            <div class="mt-auto">
-                                <small class="text-warning">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-half"></i>
-                                </small>
-                                <span class="text-muted small">4.5(149)</span>
-                            </div>
-
-                            <!-- Precio y botón de agregar al carrito -->
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <div>
-                                    <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">Precio: S/. 0.00</span>
-                                </div>
-                                <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
-                                    <input type="hidden" name="idProducto" th:value="${producto.id}" />
-                                    <input type="hidden" value="1" name="cantidad" />
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary btn-sm w-100">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
-                                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                            </svg>
-                                            Añadir al carrito
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div th:if="${nombreBusqueda == null}">
-        <section class="mb-lg-6 mt-lg-6 my-2">
-            <div class="container">
-
-                <div class="col-12 mb-6">
-                    <h3 class="mb-0" style="margin-top: 20px;">Categorías</h3>
-                </div>
-                <div class="category-slider hidden-until-loaded">
-                    <div th:each="categoria : ${categorias}">
-                        <div class="item">
-                            <a th:href="@{'/UsuarioFinal/categorias/' + ${categoria.id}}" class="text-decoration-none text-inherit">
-                                <div class="card card-product mb-lg-3" style="max-width: 150px;">
-                                    <div class="card-body text-center py-4">
-                                        <img th:src="@{'/UsuarioFinal/categoria/foto/' + ${categoria.id}}"
-                                             alt="Imagen de la categoría" class="mb-2 img-fluid"
-                                             style="max-height: 80px; max-width: 100%;" />
-                                        <div class="text-truncate" style="font-size: 0.85rem;" th:text="${categoria.nombreCategoria}">
-                                            Nombre de la Categoría
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Category Section End-->
-        <section>
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-md-6 mb-3 mb-lg-0">
-                        <div>
-                            <div class="banner-small rounded" style="background: url(/images/banner/hogarBanner.jpg) no-repeat center center; background-size: cover; height: 30vh; display: flex; justify-content: center; align-items: center;">
-                                <div class="banner-content" style="text-align: center; width: 100%; padding: 0 5%;">
-                                    <h3 class="fw-bold mb-1">¡Descubre lo nuevo para tu hogar!</h3>
-                                    <div style="text-align: left; display: inline-block;">
-                                        <!-- Cambia el enlace aquí para que apunte a la categoría de Hogar -->
-                                        <a th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${4})}"
-                                           class="btn btn-dark" style="display: inline-block; margin-left: 0;">Ir ahora</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div>
-                            <div class="banner-small rounded" style="background: url(/images/banner/modaBanner.jpg) no-repeat center center; background-size: cover; height: 30vh; display: flex; justify-content: center; align-items: center;">
-                                <div class="banner-content" style="text-align: center; width: 100%; padding: 0 5%;">
-                                    <h3 class="fw-bold mb-1">¡Lo último en tendencia de moda!</h3>
-                                    <div style="text-align: left; display: inline-block;">
-                                        <!-- Cambia el enlace aquí para que apunte a la categoría de Moda -->
-                                        <a th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${3})}"
-                                           class="btn btn-dark" style="display: inline-block; margin-left: 0;">Revisa aquí</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <section class="my-lg-8 my-8">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 mb-6">
-                        <h3 class="mb-0">Productos que te podrían gustar</h3>
-                    </div>
-                </div>
-
-                <!-- Slick slider container -->
-                <div class="product-slider">
-
-                    <div th:each="producto : ${productos}">
-                        <div class="item">
-                            <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}" class="text-decoration-none text-inherit">
-                                <div class="card card-product mb-lg-4" style="min-height: 400px; display: flex; flex-direction: column; justify-content: space-between;">
-                                    <!-- Cuerpo de la tarjeta -->
-                                    <div class="card-body d-flex flex-column">
-                                        <!-- Contenedor de la imagen del producto -->
-                                        <div class="text-center position-relative mb-3" style="height: 200px;">
-                                            <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}">
-                                                <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}"
-                                                     alt="Imagen de producto" class="img-fluid product-img"
-                                                     style="max-height: 100%; object-fit: contain; width: auto;" />
-                                            </a>
-                                            <!-- Acciones de la tarjeta (Vista rápida, etc.) -->
-                                            <div class="card-product-action">
-                                                <a href="#!" class="btn-action" data-bs-toggle="modal" th:data-bs-target="'#quickViewModal' + ${producto.id}">
-                                                    <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista rápida"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <!-- Información del producto -->
-                                        <div class="text-small mb-1" style="min-height: 20px;">
-                                            <a class="text-decoration-none text-muted" th:text="${producto.idCategoria.nombreCategoria}"></a>
-                                        </div>
-                                        <h2 class="fs-6" style="min-height: 40px;">
-                                            <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}"
-                                               class="text-inherit text-decoration-none" th:text="${producto.nombreProducto}"></a>
-                                        </h2>
-                                        <!-- Proveedor y Subcategoría -->
-                                        <a class="text-decoration-none text-muted small" style="min-height: 20px;" th:text="${producto.idSubcategoria.nombreSubcategoria}"></a>
-                                        <a class="text-decoration-none text-muted small" style="min-height: 20px;" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></a>
-                                        <div>
-                                            <small class="text-warning">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-half"></i>
-                                            </small>
-                                            <span class="text-muted small">4.5(149)</span>
-                                        </div>
-
-                                        <!-- Precio y botón de agregar al carrito -->
-                                        <div class="d-flex justify-content-between align-items-center mt-3 mt-auto">
-                                            <div>
-                                                <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
-                                            </div>
-                                            <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
-                                                <input type="hidden" name="idProducto" th:value="${producto.id}" />
-                                                <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
-                                                <!-- Botón -->
-                                                <div class="d-grid">
-                                                    <button type="submit" class="btn btn-primary btn-sm w-100">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
-                                                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                        </svg>
-                                                        Añadir al carrito
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-
-
-
-            </div>
-        </section>
-    </div>
-
-    <div th:each="producto : ${productos}">
-        <!-- Modal -->
-        <div class="modal fade" th:id="'quickViewModal' + ${producto.id}" tabindex="-1" aria-hidden="true" role="dialog">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body p-8">
-                        <div class="position-absolute top-0 end-0 me-3 mt-3">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
+                </section>
+                <!-- Category Section End-->
+                <section>
+                    <div class="container">
                         <div class="row">
-
-                            <div class="col-lg-6">
-                                <div class="product productModal" id="productModal">
-                                    <div class="zoom"
-                                         onmousemove="zoom(event)"
-                                         onmouseout="resetZoom(event)"
-                                         th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.id} + ');'">
+                            <div class="col-12 col-md-6 mb-3 mb-lg-0">
+                                <div>
+                                    <div class="banner-small rounded" style="background: url(/images/banner/hogarBanner.jpg) no-repeat center center; background-size: cover; height: 30vh; display: flex; justify-content: center; align-items: center;">
+                                        <div class="banner-content" style="text-align: center; width: 100%; padding: 0 5%;">
+                                            <h3 class="fw-bold mb-1">¡Descubre lo nuevo para tu hogar!</h3>
+                                            <div style="text-align: left; display: inline-block;">
+                                                <!-- Cambia el enlace aquí para que apunte a la categoría de Hogar -->
+                                                <a th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${4})}"
+                                                   class="btn btn-dark" style="display: inline-block; margin-left: 0;">Ir ahora</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-
-
-                            <div class="col-lg-6">
-                                <div class="ps-lg-8 mt-6 mt-lg-0">
-                                    <h2 class="mb-1 h1" th:text="${producto.nombreProducto}">Nombre del producto</h2>
-                                    <div class="fs-4">
-                                        <span class="fw-bold text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
+                            <div class="col-12 col-md-6">
+                                <div>
+                                    <div class="banner-small rounded" style="background: url(/images/banner/modaBanner.jpg) no-repeat center center; background-size: cover; height: 30vh; display: flex; justify-content: center; align-items: center;">
+                                        <div class="banner-content" style="text-align: center; width: 100%; padding: 0 5%;">
+                                            <h3 class="fw-bold mb-1">¡Lo último en tendencia de moda!</h3>
+                                            <div style="text-align: left; display: inline-block;">
+                                                <!-- Cambia el enlace aquí para que apunte a la categoría de Moda -->
+                                                <a th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${3})}"
+                                                   class="btn btn-dark" style="display: inline-block; margin-left: 0;">Revisa aquí</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <hr class="my-6" />
-                                    <div>
-                                        <!-- Quantity Selector -->
-                                        <div class="input-group input-spinner" style="max-width: 120px; display: flex; align-items: center;">
-                                            <input type="button" value="-" class="button-minus btn btn-xs btn-outline-secondary"
-                                                   onclick="var input = this.parentNode.querySelector('input[type=number]');
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <section class="my-lg-8 my-8">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 mb-6">
+                                <h3 class="mb-0">Productos que te podrían gustar</h3>
+                            </div>
+                        </div>
+
+                        <!-- Slick slider container -->
+                        <div class="product-slider">
+
+                            <div th:each="producto : ${productos}">
+                                <div class="item">
+                                    <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}" class="text-decoration-none text-inherit">
+                                        <div class="card card-product mb-lg-4" style="min-height: 400px; display: flex; flex-direction: column; justify-content: space-between;">
+                                            <!-- Cuerpo de la tarjeta -->
+                                            <div class="card-body d-flex flex-column">
+                                                <!-- Contenedor de la imagen del producto -->
+                                                <div class="text-center position-relative mb-3" style="height: 200px;">
+                                                    <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}">
+                                                        <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}"
+                                                             alt="Imagen de producto" class="img-fluid product-img"
+                                                             style="max-height: 100%; object-fit: contain; width: auto;" />
+                                                    </a>
+                                                    <!-- Acciones de la tarjeta (Vista rápida, etc.) -->
+                                                    <div class="card-product-action">
+                                                        <a href="#!" class="btn-action" data-bs-toggle="modal" th:data-bs-target="'#quickViewModal' + ${producto.id}">
+                                                            <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista rápida"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Información del producto -->
+                                                <div class="text-small mb-1" style="min-height: 20px;">
+                                                    <a class="text-decoration-none text-muted" th:text="${producto.idCategoria.nombreCategoria}"></a>
+                                                </div>
+                                                <h2 class="fs-6" style="min-height: 40px;">
+                                                    <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}"
+                                                       class="text-inherit text-decoration-none" th:text="${producto.nombreProducto}"></a>
+                                                </h2>
+                                                <!-- Proveedor y Subcategoría -->
+                                                <a class="text-decoration-none text-muted small" style="min-height: 20px;" th:text="${producto.idSubcategoria.nombreSubcategoria}"></a>
+                                                <a class="text-decoration-none text-muted small" style="min-height: 20px;" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></a>
+                                                <div>
+                                                    <small class="text-warning">
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-half"></i>
+                                                    </small>
+                                                    <span class="text-muted small">4.5(149)</span>
+                                                </div>
+
+                                                <!-- Precio y botón de agregar al carrito -->
+                                                <div class="d-flex justify-content-between align-items-center mt-3 mt-auto">
+                                                    <div>
+                                                        <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
+                                                    </div>
+                                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
+                                                        <input type="hidden" name="idProducto" th:value="${producto.id}" />
+                                                        <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
+                                                        <!-- Botón -->
+                                                       <br>
+                                                        <br>
+                                                        <br>
+                                                        <div class="d-grid">
+                                                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
+                                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                                </svg>
+                                                                Añadir al carrito
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div> <!-- card-body -->
+                                        </div> <!-- card -->
+                                    </a>
+                                </div> <!-- item -->
+                            </div> <!-- th:each -->
+
+                        </div>
+
+
+
+                    </div>
+                </section>
+            </div>
+
+            <div th:each="producto : ${productos}">
+                <!-- Modal -->
+                <div class="modal fade" th:id="'quickViewModal' + ${producto.id}" tabindex="-1" aria-hidden="true" role="dialog">
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body p-8">
+                                <div class="position-absolute top-0 end-0 me-3 mt-3">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-lg-6">
+                                        <div class="product productModal" id="productModal">
+                                            <div class="zoom"
+                                                 onmousemove="zoom(event)"
+                                                 onmouseout="resetZoom(event)"
+                                                 th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.id} + ');'">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-lg-6">
+                                        <div class="ps-lg-8 mt-6 mt-lg-0">
+                                            <h2 class="mb-1 h1" th:text="${producto.nombreProducto}">Nombre del producto</h2>
+                                            <div class="fs-4">
+                                                <span class="fw-bold text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
+                                            </div>
+                                            <hr class="my-6" />
+                                            <div>
+                                                <!-- Quantity Selector -->
+                                                <div class="input-group input-spinner" style="max-width: 120px; display: flex; align-items: center;">
+                                                    <input type="button" value="-" class="button-minus btn btn-xs btn-outline-secondary"
+                                                           onclick="var input = this.parentNode.querySelector('input[type=number]');
                                                     if (input.value > 1) {
                                                         input.stepDown();
                                                         this.parentNode.querySelector('input[type=hidden]').value = input.value; // Actualiza el campo hidden
                                                     }"
-                                                   style="width: 30px; padding: 0;" />
-                                            <input type="number" name="cantidadVisible" value="1" step="1" max="10" min="1"
-                                                   class="quantity-field form-control text-center"
-                                                   style="max-width: 40px; height: 30px; padding: 0;"
-                                                   oninput="this.parentNode.querySelector('input[type=hidden]').value = this.value;" />
-                                            <input type="button" value="+" class="button-plus btn btn-xs btn-outline-secondary"
-                                                   onclick="var input = this.parentNode.querySelector('input[type=number]');
+                                                           style="width: 30px; padding: 0;" />
+                                                    <input type="number" name="cantidadVisible" value="1" step="1" max="10" min="1"
+                                                           class="quantity-field form-control text-center"
+                                                           style="max-width: 40px; height: 30px; padding: 0;"
+                                                           oninput="this.parentNode.querySelector('input[type=hidden]').value = this.value;" />
+                                                    <input type="button" value="+" class="button-plus btn btn-xs btn-outline-secondary"
+                                                           onclick="var input = this.parentNode.querySelector('input[type=number]');
                                                     input.stepUp();
                                                     this.parentNode.querySelector('input[type=hidden]').value = input.value;"
-                                                   style="width: 30px; padding: 0;" />
+                                                           style="width: 30px; padding: 0;" />
+                                                </div>
+                                            </div>
+                                            <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
+                                                <input type="hidden" name="idProducto" th:value="${producto.id}" />
+                                                <!-- Campo oculto actualizado con la cantidad -->
+                                                <input type="hidden" name="cantidad" value="1" class="quantity-field form-control-sm form-input" />
+                                                <!-- Botón -->
+                                                <div class="d-grid">
+                                                    <button type="submit" class="btn btn-primary btn-sm w-100">
+                                                        Añadir al carrito
+                                                    </button>
+                                                </div>
+                                            </form>
+                                            <hr class="my-6" />
+                                            <div>
+                                                <table class="table table-borderless">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="font-size: 0.8rem;">Disponibilidad:</td>
+                                                            <td th:if="${producto.disponibilidad == 'En stock'}" style="font-size: 0.8rem;">
+                                                                <span class="badge bg-light-primary text-dark-primary">En Stock</span>
+                                                            </td>
+                                                            <td th:if="${producto.disponibilidad == 'Fuera de stock'}" style="font-size: 0.8rem;">
+                                                                <span class="badge bg-light-danger text-dark-danger">Fuera de stock</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-size: 0.8rem;">Tipo:</td>
+                                                            <td th:text="${producto.idCategoria.nombreCategoria}" style="font-size: 0.8rem;">Tecnología</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-size: 0.8rem;">Fecha aproximada de entrega:</td>
+                                                            <td style="font-size: 0.8rem;">
+                                                                <small th:if="${fechaFormateada != null}" th:text="${fechaFormateada}"></small>
+                                                                <small th:unless="${fechaFormateada != null}">No hay fecha aproximada</small>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
-                                        <input type="hidden" name="idProducto" th:value="${producto.id}" />
-                                        <!-- Campo oculto actualizado con la cantidad -->
-                                        <input type="hidden" name="cantidad" value="1" class="quantity-field form-control-sm form-input" />
-                                        <!-- Botón -->
-                                        <div class="d-grid">
-                                            <button type="submit" class="btn btn-primary btn-sm w-100">
-                                                Añadir al carrito
-                                            </button>
-                                        </div>
-                                    </form>
-                                    <hr class="my-6" />
-                                    <div>
-                                        <table class="table table-borderless">
-                                            <tbody>
-                                            <tr>
-                                                <td style="font-size: 0.8rem;">Disponibilidad:</td>
-                                                <td th:if="${producto.disponibilidad == 'En stock'}" style="font-size: 0.8rem;">
-                                                    <span class="badge bg-light-primary text-dark-primary">En Stock</span>
-                                                </td>
-                                                <td th:if="${producto.disponibilidad == 'Fuera de stock'}" style="font-size: 0.8rem;">
-                                                    <span class="badge bg-light-danger text-dark-danger">Fuera de stock</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size: 0.8rem;">Tipo:</td>
-                                                <td th:text="${producto.idCategoria.nombreCategoria}" style="font-size: 0.8rem;">Tecnología</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size: 0.8rem;">Fecha aproximada de entrega:</td>
-                                                <td style="font-size: 0.8rem;">
-                                                    <small th:if="${fechaFormateada != null}" th:text="${fechaFormateada}"></small>
-                                                    <small th:unless="${fechaFormateada != null}">No hay fecha aproximada</small>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -386,116 +391,114 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
 
 
-</main>
+        </main>
 
-<!-- Javascript-->
+        <!-- Javascript-->
 
-<!-- Libs JS -->
-<!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
-<!-- Libs JS -->
-<!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
-<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+        <!-- Libs JS -->
+        <!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
+        <!-- Libs JS -->
+        <!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
-<!-- Theme JS -->
-<script th:src="@{/js/theme.min.js}"></script>
+        <!-- Theme JS -->
+        <script th:src="@{/js/theme.min.js}"></script>
 
-<script th:src="@{/js/vendors/jquery.min.js}"></script>
-<script th:src="@{/js/vendors/countdown.js}"></script>
-<script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
-<script th:src="@{/js/vendors/slick-slider.js}"></script>
-<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
-<script th:src="@{/js/vendors/tns-slider.js}"></script>
-<script th:src="@{/js/vendors/zoom.js}"></script>
-<script>
-    $(document).ready(function() {
-        $('.category-slider').slick({
-            infinite: true,
-            slidesToShow: 5,
-            slidesToScroll: 1,
-            arrows: true,
-            dots: true,
-            responsive: [
-                {
-                    breakpoint: 1200,
-                    settings: {
-                        slidesToShow: 4,
-                    }
-                },
-                {
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 3,
-                    }
-                },
-                {
-                    breakpoint: 768,
-                    settings: {
-                        slidesToShow: 2,
-                    }
-                },
-                {
-                    breakpoint: 576,
-                    settings: {
-                        slidesToShow: 1,
-                    }
+        <script th:src="@{/js/vendors/jquery.min.js}"></script>
+        <script th:src="@{/js/vendors/countdown.js}"></script>
+        <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+        <script th:src="@{/js/vendors/slick-slider.js}"></script>
+        <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+        <script th:src="@{/js/vendors/tns-slider.js}"></script>
+        <script th:src="@{/js/vendors/zoom.js}"></script>
+        <script>
+            $(document).ready(function() {
+                $('.category-slider').slick({
+                    infinite: true,
+                    slidesToShow: 5,
+                    slidesToScroll: 1,
+                    arrows: true,
+                    dots: true,
+                    responsive: [
+                        {
+                            breakpoint: 1200,
+                            settings: {
+                                slidesToShow: 4,
+                            }
+                        },
+                        {
+                            breakpoint: 992,
+                            settings: {
+                                slidesToShow: 3,
+                            }
+                        },
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 2,
+                            }
+                        },
+                        {
+                            breakpoint: 576,
+                            settings: {
+                                slidesToShow: 1,
+                            }
+                        }
+                    ]
+                });
+                // Mostrar el carrusel una vez que esté inicializado
+                $('.category-slider').removeClass('hidden-until-loaded');
+            });
+
+
+        </script>
+        <script>
+            function zoom(f) {
+                var t = f.currentTarget;
+                var offsetX, offsetY;
+
+                // Establece el tamaño de zoom primero
+                t.style.backgroundSize = '200%';
+
+                if (f.type.includes('touch')) {
+                    offsetX = f.touches[0].pageX - t.getBoundingClientRect().left;
+                    offsetY = f.touches[0].pageY - t.getBoundingClientRect().top;
+                } else {
+                    offsetX = f.offsetX;
+                    offsetY = f.offsetY;
                 }
-            ]
-        });
-        // Mostrar el carrusel una vez que esté inicializado
-        $('.category-slider').removeClass('hidden-until-loaded');
-    });
 
+                var x = (offsetX / t.offsetWidth) * 100;
+                var y = (offsetY / t.offsetHeight) * 100;
 
-</script>
-    <script>
-        function zoom(f) {
-            var t = f.currentTarget;
-            var offsetX, offsetY;
-
-            // Establece el tamaño de zoom primero
-            t.style.backgroundSize = '200%';
-
-            if (f.type.includes('touch')) {
-                offsetX = f.touches[0].pageX - t.getBoundingClientRect().left;
-                offsetY = f.touches[0].pageY - t.getBoundingClientRect().top;
-            } else {
-                offsetX = f.offsetX;
-                offsetY = f.offsetY;
+                t.style.backgroundPosition = x + "% " + y + "%";
             }
 
-            var x = (offsetX / t.offsetWidth) * 100;
-            var y = (offsetY / t.offsetHeight) * 100;
+            function resetZoom(e) {
+                const container = e.currentTarget;
+                container.style.backgroundSize = 'contain';
+                container.style.backgroundPosition = 'center';
+            }
+        </script>
+        <script>
+            function toggleChat() {
+                const chatWindow = document.getElementById('chatbot-window');
+                if (chatWindow.classList.contains('hidden')) {
+                    chatWindow.classList.remove('hidden');
+                } else {
+                    chatWindow.classList.add('hidden');
+                }
+            }
 
-            t.style.backgroundPosition = x + "% " + y + "%";
-        }
+            function sendOption(option) {
+                alert(`Opción seleccionada: ${option}`);
+                // Aquí puedes añadir lógica para manejar las opciones seleccionadas
+            }
 
-        function resetZoom(e) {
-            const container = e.currentTarget;
-            container.style.backgroundSize = 'contain';
-            container.style.backgroundPosition = 'center';
-        }
-    </script>
-<script>
-    function toggleChat() {
-        const chatWindow = document.getElementById('chatbot-window');
-        if (chatWindow.classList.contains('hidden')) {
-            chatWindow.classList.remove('hidden');
-        } else {
-            chatWindow.classList.add('hidden');
-        }
-    }
-
-    function sendOption(option) {
-        alert(`Opción seleccionada: ${option}`);
-        // Aquí puedes añadir lógica para manejar las opciones seleccionadas
-    }
-
-</script>
-</body>
+        </script>
+    </body>
 </html>
