@@ -22,7 +22,23 @@
 
     <!-- Theme CSS -->
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
+    <style>
+        .zoom {
+            position: relative;
+            overflow: hidden;
+            width: 400px; /* Ancho fijo */
+            height: 400px; /* Alto fijo */
+            background-size: contain; /* Ajusta la imagen manteniendo su proporción */
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: zoom-in;
+            transition: background-size 0.3s ease; /* Añade una transición suave */
+        }
 
+        .zoom:hover {
+            background-size: 200%; /* Zoom al pasar el ratón */
+        }
+    </style>
 
 </head>
 
@@ -285,14 +301,19 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="row">
+
                             <div class="col-lg-6">
-                                <!-- Product Image -->
                                 <div class="product productModal" id="productModal">
-                                    <div class="zoom" th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.id} + ')'" style="background-size: contain; background-repeat: no-repeat;">
-                                        <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}" alt="Imagen del producto" />
+                                    <div class="zoom"
+                                         onmousemove="zoom(event)"
+                                         onmouseout="resetZoom(event)"
+                                         th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.id} + ');'">
                                     </div>
                                 </div>
                             </div>
+
+
+
                             <div class="col-lg-6">
                                 <div class="ps-lg-8 mt-6 mt-lg-0">
                                     <h2 class="mb-1 h1" th:text="${producto.nombreProducto}">Nombre del producto</h2>
@@ -432,6 +453,34 @@
 
 
 </script>
+    <script>
+        function zoom(f) {
+            var t = f.currentTarget;
+            var offsetX, offsetY;
+
+            // Establece el tamaño de zoom primero
+            t.style.backgroundSize = '200%';
+
+            if (f.type.includes('touch')) {
+                offsetX = f.touches[0].pageX - t.getBoundingClientRect().left;
+                offsetY = f.touches[0].pageY - t.getBoundingClientRect().top;
+            } else {
+                offsetX = f.offsetX;
+                offsetY = f.offsetY;
+            }
+
+            var x = (offsetX / t.offsetWidth) * 100;
+            var y = (offsetY / t.offsetHeight) * 100;
+
+            t.style.backgroundPosition = x + "% " + y + "%";
+        }
+
+        function resetZoom(e) {
+            const container = e.currentTarget;
+            container.style.backgroundSize = 'contain';
+            container.style.backgroundPosition = 'center';
+        }
+    </script>
 <script>
     function toggleChat() {
         const chatWindow = document.getElementById('chatbot-window');
