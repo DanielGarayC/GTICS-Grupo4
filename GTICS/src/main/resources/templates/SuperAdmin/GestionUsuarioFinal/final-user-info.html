@@ -61,7 +61,7 @@
                 </nav>
               </div>
               <div>
-                <button type="button" class="btn btn-danger" href="#" th:data-href="@{/SuperAdmin/banearUsuarioFinal/{id}(id=${finalUser.get().getId()})}" onclick="confirmDelete(this.getAttribute('data-href'))" data-bs-toggle="modal" data-bs-target="#delete" >Eliminar</button>
+                <button type="button" class="btn btn-danger" href="#" th:data-href="@{/SuperAdmin/banearUsuarioFinal/{id}(id=${finalUser.getId()})}" onclick="confirmDelete(this.getAttribute('data-href'))" data-bs-toggle="modal" data-bs-target="#delete" >Eliminar</button>
               </div>
             </div>
           </div>
@@ -78,7 +78,7 @@
                       <label for="userPhoto" class="form-label">Foto del Usuario:</label>
                       <div class="mb-3">
                         <img class="img-fluid rounded-circle"
-                             th:src="${finalUser.get().getFoto() != null ? '/usuarioFinal/' + finalUser.get().getId() : '/images/avatar/avatarGenerico.png'}"
+                             th:src="${finalUser.getFoto() != null ? '/usuarioFinal/' + finalUser.getId() : '/images/avatar/avatarGenerico.png'}"
                              alt="Foto del Usuario"
                              style="width: 150px; height: 150px; object-fit: cover;" />
                       </div>
@@ -88,13 +88,13 @@
                   <div class="row">
                     <div class="col-lg-6 col-12">
                       <label for="DNIFinalUser" class="form-label">DNI:</label>
-                      <input type="text" class="form-control" id="DNIFinalUser" disabled th:value="${finalUser.get().getDni()}" required />
+                      <input type="text" class="form-control" id="DNIFinalUser" disabled th:value="${finalUser.getDni()}" required />
                       <div class="invalid-feedback">Por favor ingrese el DNI del usuario</div>
                     </div>
 
                     <div class="col-lg-6 col-12">
                       <label for="creatCustomerName" class="form-label">Nombres:</label>
-                      <input type="text" class="form-control" id="creatCustomerName" disabled th:value="${finalUser.get().getNombre()}" required />
+                      <input type="text" class="form-control" id="creatCustomerName" disabled th:value="${finalUser.getNombre()}" required />
                       <div class="invalid-feedback">Por favor ingrese los nombres del usuario</div>
                     </div>
                   </div>
@@ -102,13 +102,13 @@
                   <div class="row">
                     <div class="col-lg-6 col-12">
                       <label for="creatFinalUserLastName1" class="form-label">Apellido Paterno:</label>
-                      <input type="text" class="form-control" disabled id="creatFinalUserLastName1" th:value="${finalUser.get().getApellidoPaterno()}" required />
+                      <input type="text" class="form-control" disabled id="creatFinalUserLastName1" th:value="${finalUser.getApellidoPaterno()}" required />
                       <div class="invalid-feedback">Por favor ingrese el apellido paterno del usuario</div>
                     </div>
 
                     <div class="col-lg-6 col-12">
                       <label for="creatFinalUserLastName" class="form-label">Apellido Materno:</label>
-                      <input type="text" class="form-control" disabled id="creatFinalUserLastName" th:value="${finalUser.get().getApellidoMaterno()}" required />
+                      <input type="text" class="form-control" disabled id="creatFinalUserLastName" th:value="${finalUser.getApellidoMaterno()}" required />
                       <div class="invalid-feedback">Por favor ingrese el apellido materno del usuario</div>
                     </div>
                   </div>
@@ -116,13 +116,13 @@
                   <div class="row">
                     <div class="col-lg-6 col-12">
                       <label for="creatFinalUserEmail" class="form-label">Email:</label>
-                      <input type="email" class="form-control" disabled id="creatFinalUserEmail" th:value="${finalUser.get().getEmail()}" required />
+                      <input type="email" class="form-control" disabled id="creatFinalUserEmail" th:value="${finalUser.getEmail()}" required />
                       <div class="invalid-feedback">Por favor ingrese el correo electrónico del usuario</div>
                     </div>
 
                     <div class="col-lg-6 col-12">
                       <label for="creatFinalUserDirection" class="form-label">Dirección:</label>
-                      <input type="text" class="form-control" disabled id="creatFinalUserDirection" th:value="${finalUser.get().getDireccion()}" required />
+                      <input type="text" class="form-control" disabled id="creatFinalUserDirection" th:value="${finalUser.getDireccion()}" required />
                       <div class="invalid-feedback">Por favor ingrese la dirección del usuario</div>
                     </div>
                   </div>
@@ -130,13 +130,13 @@
                   <div class="row">
                     <div class="col-lg-6 col-12">
                       <label for="creatFinalUserPhone" class="form-label">Teléfono:</label>
-                      <input type="text" disabled class="form-control" id="creatFinalUserPhone" th:value="${finalUser.get().getTelefono()}" required />
+                      <input type="text" disabled class="form-control" id="creatFinalUserPhone" th:value="${finalUser.getTelefono()}" required />
                       <div class="invalid-feedback">Por favor ingrese el número de teléfono</div>
                     </div>
 
                     <div class="col-lg-6 col-12">
                       <label class="form-label" for="creatFinalUserDistrict">Distrito:</label>
-                      <input type="text" disabled class="form-control" id="creatFinalUserDistrict" th:value="${finalUser.get().getDistrito().getNombre()}" required />
+                      <input type="text" disabled class="form-control" id="creatFinalUserDistrict" th:value="${finalUser.getDistrito().getNombre()}" required />
                       <div class="invalid-feedback">Por favor ingrese un distrito</div>
                     </div>
                   </div>
