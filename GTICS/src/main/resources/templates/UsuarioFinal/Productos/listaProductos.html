@@ -213,13 +213,12 @@
 
                         <!-- Slick slider container -->
                         <div class="product-slider">
-
                             <div th:each="producto : ${productos}">
                                 <div class="item">
                                     <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}" class="text-decoration-none text-inherit">
-                                        <div class="card card-product mb-lg-4" style="min-height: 400px; display: flex; flex-direction: column; justify-content: space-between;">
+                                        <div class="card card-product mb-lg-4" style="min-height: 400px; display: flex; flex-direction: column;">
                                             <!-- Cuerpo de la tarjeta -->
-                                            <div class="card-body d-flex flex-column">
+                                            <div class="card-body d-flex flex-column" style="height: 100%;">
                                                 <!-- Contenedor de la imagen del producto -->
                                                 <div class="text-center position-relative mb-3" style="height: 200px;">
                                                     <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}">
@@ -227,7 +226,6 @@
                                                              alt="Imagen de producto" class="img-fluid product-img"
                                                              style="max-height: 100%; object-fit: contain; width: auto;" />
                                                     </a>
-                                                    <!-- Acciones de la tarjeta (Vista rápida, etc.) -->
                                                     <div class="card-product-action">
                                                         <a href="#!" class="btn-action" data-bs-toggle="modal" th:data-bs-target="'#quickViewModal' + ${producto.id}">
                                                             <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista rápida"></i>
@@ -236,17 +234,19 @@
                                                 </div>
 
                                                 <!-- Información del producto -->
-                                                <div class="text-small mb-1" style="min-height: 20px;">
+                                                <div class="text-small mb-1">
                                                     <a class="text-decoration-none text-muted" th:text="${producto.idCategoria.nombreCategoria}"></a>
                                                 </div>
-                                                <h2 class="fs-6" style="min-height: 40px;">
+                                                <h2 class="fs-6 mb-2">
                                                     <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}"
                                                        class="text-inherit text-decoration-none" th:text="${producto.nombreProducto}"></a>
                                                 </h2>
                                                 <!-- Proveedor y Subcategoría -->
-                                                <a class="text-decoration-none text-muted small" style="min-height: 20px;" th:text="${producto.idSubcategoria.nombreSubcategoria}"></a>
-                                                <a class="text-decoration-none text-muted small" style="min-height: 20px;" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></a>
-                                                <div>
+                                                <div class="text-decoration-none text-muted small mb-1" th:text="${producto.idSubcategoria.nombreSubcategoria}"></div>
+                                                <div class="text-decoration-none text-muted small mb-2" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></div>
+
+                                                <!-- Estrellas y calificación -->
+                                                <div class="mb-4">
                                                     <small class="text-warning">
                                                         <i class="bi bi-star-fill"></i>
                                                         <i class="bi bi-star-fill"></i>
@@ -258,26 +258,17 @@
                                                 </div>
 
                                                 <!-- Precio y botón de agregar al carrito -->
-                                                <div class="d-flex justify-content-between align-items-center mt-3 mt-auto">
-                                                    <div>
-                                                        <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
+                                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                    <div class="text-dark fw-bold" style="font-size: 1rem; min-width: 80px;">
+                                                        <span th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
                                                     </div>
-                                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
+                                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="flex-shrink-0">
                                                         <input type="hidden" name="idProducto" th:value="${producto.id}" />
-                                                        <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
-                                                        <!-- Botón -->
-                                                       <br>
-                                                        <br>
-                                                        <br>
-                                                        <div class="d-grid">
-                                                            <button type="submit" class="btn btn-primary btn-sm w-100">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
-                                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                                </svg>
-                                                                Añadir al carrito
-                                                            </button>
-                                                        </div>
+                                                        <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" />
+                                                        <button type="submit" class="btn btn-primary btn-sm" style="width: 100px;">
+                                                            <i class="bi bi-plus"></i>
+                                                            Añadir
+                                                        </button>
                                                     </form>
                                                 </div>
                                             </div> <!-- card-body -->
@@ -285,7 +276,6 @@
                                     </a>
                                 </div> <!-- item -->
                             </div> <!-- th:each -->
-
                         </div>
 
 

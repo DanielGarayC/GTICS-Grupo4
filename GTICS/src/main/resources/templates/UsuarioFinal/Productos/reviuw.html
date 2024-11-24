@@ -64,7 +64,7 @@
                               <div class="border-bottom py-4 mb-4">
                                  <label for="selectProducto" class="form-label">Productos por hacer reseña:</label>
                                  <select class="form-select"  id="selectProducto"  th:field="*{producto.id}">
-                                    <option value="" disabled selected>--Seleccione un producto--</option>
+                                    <option value="" selected>--Seleccione un producto--</option>
                                     <option th:each="producto : ${productosSinResena}" th:value="${producto.idProducto}" th:text="${producto.nombreProducto}"></option>
                                  </select>
                                  <div class="invalid-feedback" th:if="${#fields.hasErrors('producto.id')}" th:errors="*{producto.id}"></div>
@@ -354,10 +354,10 @@
       </script>
       <script>
          document.addEventListener("DOMContentLoaded", function () {
-            const productosResena = document.getElementById("productosResena");
+            const productosResena = document.getElementById("selectProducto");
             const formFields = document.querySelectorAll("#uploadedPhotos, #reviewTitle, #reviewOpinion, #rater-calidad, #rater-atencion, #entregaRapidaSi, #entregaRapidaNo, #submitResena");
 
-            // Función para habilitar los campos del formulario
+            // Función para habilitar o deshabilitar los campos del formulario
             function habilitarCampos(habilitar) {
                formFields.forEach(function (field) {
                   field.disabled = !habilitar;
@@ -376,6 +376,7 @@
             // Inicialmente, deshabilitar todos los campos
             habilitarCampos(false);
          });
+
 
          document.addEventListener("DOMContentLoaded", function () {
             // Rater para la calidad del producto
