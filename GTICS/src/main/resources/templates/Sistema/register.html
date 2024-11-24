@@ -44,7 +44,7 @@
                     <input type="text" id="dni" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" required>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                     <div class="invalid-feedback" id="dni-error" style="display: none; color: red;">
-                        x
+
                     </div>
                 </div>
 
@@ -68,9 +68,15 @@
 
                 <div class="mb-3 col-lg-6">
                     <label for="email" class="form-label">Correo electrónico</label>
-                    <input type="email" id="email"  class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}" required>
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    <input type="email" id="email" class="form-control"
+                           th:field="*{email}"
+                           th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}"
+                           required>
+                    <div class="invalid-feedback" id="email-error"></div>
                 </div>
+
+
+
 
                 <div class="mb-3 col-lg-6">
                     <label for="telefono" class="form-label">Teléfono</label>
@@ -132,6 +138,7 @@
 <script th:src="@{/login/script.js}"></script>
 <script th:src="@{/js/validatePassword.js}"></script>
 <script th:src="@{/js/validateDNI.js}"></script>
+<script th:src="@{/js/validateEmail.js}"></script>
 
 
 

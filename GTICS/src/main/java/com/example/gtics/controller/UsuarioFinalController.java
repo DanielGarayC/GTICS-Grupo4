@@ -134,6 +134,15 @@ public class UsuarioFinalController {
         return ResponseEntity.ok(datos);
     }
 
+    @GetMapping("/consulta-email/{email}")
+    public ResponseEntity<Boolean> consultarEmail(@PathVariable String email) {
+        boolean existe = usuarioRepository.findAll()
+                .stream()
+                .anyMatch(user -> user.getEmail().equals(email));
+        return ResponseEntity.ok(existe);
+    }
+
+
     @ModelAttribute
     public void addUsuarioToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
