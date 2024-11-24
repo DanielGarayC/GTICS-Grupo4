@@ -1355,30 +1355,42 @@ public class UsuarioFinalController {
 
 
 
-     @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
+    @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
     public String guardarResena(@Valid @ModelAttribute("resena") Resena resena,
                                 BindingResult bindingResult,
                                 @RequestParam(value = "uploadedPhotos", required = false) MultipartFile[] uploadedPhotos,
                                 RedirectAttributes attr,
-                                Model model,HttpSession session ) {
+                                Model model) {
 
-         Integer idUsuarioFinal = (Integer) session.getAttribute("idUsuarioFinal");
+        // Obtain the authentication object
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-         // Set fields before validation check
-        Usuario user = usuarioRepository.findUsuarioById(idUsuarioFinal); // Replace with actual user retrieval logic
-        if (user == null) {
-            attr.addFlashAttribute("error", "Usuario no encontrado.");
-            return "redirect:/UsuarioFinal/Review";
+        // Check if the user is authenticated
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            attr.addFlashAttribute("error", "Usuario no autenticado.");
+            return "redirect:/ExpressDealsLogin";
         }
+
+        // Get the authenticated user's email
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        // Check if the user exists
+        if (!optUsuario.isPresent()) {
+            attr.addFlashAttribute("error", "Usuario no encontrado.");
+            return "redirect:/ExpressDealsLogin";
+        }
+
+        Usuario user = optUsuario.get();
         resena.setIdUsuario(user); // Assign the user to the review
 
         // Set the creation date
         resena.setFechaCreacion(LocalDate.now());
 
+        // Handle validation errors
         if (bindingResult.hasErrors()) {
             // Re-add necessary data to the model
-            Integer idUsuario = 3;  // Replace with actual user ID
-            List<ProductoDTO> productosSinResena = ordenRepository.obtenerProductosPorUsuarioSinResena(idUsuario);
+            List<ProductoDTO> productosSinResena = ordenRepository.obtenerProductosPorUsuarioSinResena(user.getId());
             model.addAttribute("productosSinResena", productosSinResena);
             return "UsuarioFinal/Productos/reviuw";
         }
@@ -1389,14 +1401,12 @@ public class UsuarioFinalController {
 
             for (MultipartFile uploadedPhoto : uploadedPhotos) {
                 if (!uploadedPhoto.isEmpty()) {
-                    if (uploadedPhoto.getSize() > 5000000) { //5MB
-
+                    if (uploadedPhoto.getSize() > 5000000) { // 5MB
                         attr.addFlashAttribute("error", "El tamaño de la foto excede el límite permitido.");
                         return "redirect:/UsuarioFinal/Review";
                     }
                     try {
                         Fotosresena fotosresena = new Fotosresena();
-
                         fotosresena.setFoto(uploadedPhoto.getBytes());
                         fotosresena.setTipo(uploadedPhoto.getContentType());
                         fotosresena.setIdResena(resena); // Associate the photo with the review
@@ -1417,6 +1427,7 @@ public class UsuarioFinalController {
 
         return "redirect:/UsuarioFinal/Reviews";
     }
+
 
     @GetMapping("/UsuarioFinal/chatbot")
     public String interactuarChatBot(){

@@ -31,6 +31,7 @@ public interface ResenaRepository extends JpaRepository<Resena, Integer> {
     );
 
 
+
 }
 
 
