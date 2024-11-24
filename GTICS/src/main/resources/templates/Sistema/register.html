@@ -40,12 +40,9 @@
 
             <div class="row">
                 <div class="mb-3 col-lg-6">
-                    <label for="DNI" class="form-label">DNI</label>
+                    <label for="dni" class="form-label">DNI</label>
                     <input type="text" id="dni" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" required>
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
-                    <div class="invalid-feedback" id="dni-error" style="display: none; color: red;">
-
-                    </div>
+                    <div class="invalid-feedback" id="dni-error"></div>
                 </div>
 
                 <div class="mb-3 col-lg-6">
@@ -82,6 +79,8 @@
                     <label for="telefono" class="form-label">Teléfono</label>
                     <input type="number" id="telefono" class="form-control" th:field="*{telefono}" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}" required>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+                    <div class="invalid-feedback" id="telefono-error"></div>
+
                 </div>
 
                 <div class="mb-3 col-lg-6">
@@ -139,6 +138,7 @@
 <script th:src="@{/js/validatePassword.js}"></script>
 <script th:src="@{/js/validateDNI.js}"></script>
 <script th:src="@{/js/validateEmail.js}"></script>
+<script th:src="@{/js/validatePhone.js}"></script>
 
 
 
