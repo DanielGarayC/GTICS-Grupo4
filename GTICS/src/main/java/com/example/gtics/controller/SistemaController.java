@@ -249,7 +249,9 @@ public class SistemaController {
         emailService.sendVerificationEmail(usuario.getEmail(), usuario.getNombre(), passwordParaEnviar);
 
         usuarioRepository.save(usuario);
+        attr.addFlashAttribute("usuarioCreado", "Usuario creado exitosamente");
         return "redirect:/ExpressDealsLogin";
+
     }
 
     @PostMapping("/enviarNuevaContra")
