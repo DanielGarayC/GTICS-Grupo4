@@ -1,50 +1,76 @@
-document.getElementById("dni").addEventListener("blur", function () {
-    const dni = this.value.trim();
+document.addEventListener("DOMContentLoaded", function () {
+    const dniField = document.getElementById("dni");
     const dniError = document.getElementById("dni-error");
+    const createAccountButton = document.querySelector('button[type="submit"]');
 
-    dniError.style.display = "none";
-    dniError.textContent = "";
+    createAccountButton.disabled = true;
 
-    if (dni.length === 8 && /^[0-9]+$/.test(dni)) {
-        fetch(`consulta-dni/${dni}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("DNI no encontrado o error en la API.");
-                }
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById("Nombre").value = data[0];
-                document.getElementById("ApellidoPaterno").value = data[1];
-                document.getElementById("ApellidoMaterno").value = data[2];
+    dniField.addEventListener("blur", function () {
+        const dni = this.value.trim();
 
-                document.getElementById("Nombre").readOnly = true;
-                document.getElementById("ApellidoPaterno").readOnly = true;
-                document.getElementById("ApellidoMaterno").readOnly = true;
-            })
-            .catch(error => {
-                dniError.style.display = "block";
-                dniError.textContent = error.message;
+        dniError.style.display = "none";
+        dniError.textContent = "";
+        createAccountButton.disabled = true;
 
-                document.getElementById("Nombre").value = "";
-                document.getElementById("ApellidoPaterno").value = "";
-                document.getElementById("ApellidoMaterno").value = "";
+        if (dni.length === 8 && /^[0-9]+$/.test(dni)) {
+            fetch(`consulta-dni/${dni}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("DNI no encontrado o error en la API.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Llenar los campos y marcarlos como solo lectura
+                    document.getElementById("Nombre").value = data[0];
+                    document.getElementById("ApellidoPaterno").value = data[1];
+                    document.getElementById("ApellidoMaterno").value = data[2];
 
-                document.getElementById("Nombre").readOnly = false;
-                document.getElementById("ApellidoPaterno").readOnly = false;
-                document.getElementById("ApellidoMaterno").readOnly = false;
-            });
-    } else {
+                    document.getElementById("Nombre").readOnly = true;
+                    document.getElementById("ApellidoPaterno").readOnly = true;
+                    document.getElementById("ApellidoMaterno").readOnly = true;
 
-        dniError.style.display = "block";
-        dniError.textContent = "Por favor, ingresa un DNI válido de 8 dígitos.";
+                    return fetch(`/existe-dni/${dni}`);
+                })
+                .then(response => response.json())
+                .then(dniExiste => {
+                    if (dniExiste) {
+                        dniError.style.display = "block";
+                        dniError.textContent = "Este DNI ya está registrado.";
+                        createAccountButton.disabled = true;
+                    } else {
+                        dniError.style.display = "none";
+                        dniError.textContent = "";
+                        createAccountButton.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    dniError.style.display = "block";
+                    dniError.textContent = error.message;
 
-        document.getElementById("Nombre").value = "";
-        document.getElementById("ApellidoPaterno").value = "";
-        document.getElementById("ApellidoMaterno").value = "";
+                    document.getElementById("Nombre").value = "";
+                    document.getElementById("ApellidoPaterno").value = "";
+                    document.getElementById("ApellidoMaterno").value = "";
 
-        document.getElementById("Nombre").readOnly = false;
-        document.getElementById("ApellidoPaterno").readOnly = false;
-        document.getElementById("ApellidoMaterno").readOnly = false;
-    }
+                    document.getElementById("Nombre").readOnly = false;
+                    document.getElementById("ApellidoPaterno").readOnly = false;
+                    document.getElementById("ApellidoMaterno").readOnly = false;
+
+                    createAccountButton.disabled = true;
+                });
+        } else {
+            dniError.style.display = "block";
+            dniError.textContent = "Por favor, ingresa un DNI válido de 8 dígitos.";
+
+            document.getElementById("Nombre").value = "";
+            document.getElementById("ApellidoPaterno").value = "";
+            document.getElementById("ApellidoMaterno").value = "";
+
+            document.getElementById("Nombre").readOnly = false;
+            document.getElementById("ApellidoPaterno").readOnly = false;
+            document.getElementById("ApellidoMaterno").readOnly = false;
+
+            createAccountButton.disabled = true;
+        }
+    });
 });

@@ -134,6 +134,14 @@ public class UsuarioFinalController {
         return ResponseEntity.ok(datos);
     }
 
+    @GetMapping("/existe-dni/{dni}")
+    public ResponseEntity<Boolean> existeDNI(@PathVariable String dni) {
+        boolean existe = usuarioRepository.findAll()
+                .stream()
+                .anyMatch(user -> user.getDni().equals(dni));
+        return ResponseEntity.ok(existe);
+    }
+
     @GetMapping("/consulta-email/{email}")
     public ResponseEntity<Boolean> consultarEmail(@PathVariable String email) {
         boolean existe = usuarioRepository.findAll()
