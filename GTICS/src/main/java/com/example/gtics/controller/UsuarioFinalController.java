@@ -125,6 +125,15 @@ public class UsuarioFinalController {
         this.messageRepository = messageRepository;
     }
 
+    @GetMapping("/consulta-dni/{dni}")
+    public ResponseEntity<?> consultarDNI(@PathVariable String dni) {
+        List<String> datos = DNIapi.getDni(dni);
+        if (datos.isEmpty()) {
+            return ResponseEntity.badRequest().body("DNI no encontrado");
+        }
+        return ResponseEntity.ok(datos);
+    }
+
     @ModelAttribute
     public void addUsuarioToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

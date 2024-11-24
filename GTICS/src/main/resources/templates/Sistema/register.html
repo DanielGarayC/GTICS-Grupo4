@@ -41,9 +41,11 @@
             <div class="row">
                 <div class="mb-3 col-lg-6">
                     <label for="DNI" class="form-label">DNI</label>
-                    <input type="text" id="DNI" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" required>
+                    <input type="text" id="dni" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" required>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
-
+                    <div class="invalid-feedback" id="dni-error" style="display: none; color: red;">
+                        x
+                    </div>
                 </div>
 
                 <div class="mb-3 col-lg-6">
@@ -129,6 +131,9 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/login/script.js}"></script>
 <script th:src="@{/js/validatePassword.js}"></script>
+<script th:src="@{/js/validateDNI.js}"></script>
+
+
 
 </body>
 </html>
