@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     return response.json();
                 })
                 .then(data => {
-                    // Llenar los campos y marcarlos como solo lectura
                     document.getElementById("Nombre").value = data[0];
                     document.getElementById("ApellidoPaterno").value = data[1];
                     document.getElementById("ApellidoMaterno").value = data[2];

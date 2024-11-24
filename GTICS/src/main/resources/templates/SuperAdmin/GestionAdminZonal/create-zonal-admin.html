@@ -118,11 +118,11 @@
                                                 </div>
                                                 <!-- DNI -->
                                                 <div class="col-lg-6 col-12">
-                                                    <label for="DNIFinalUser" class="form-label">
+                                                    <label for="dni" class="form-label">
                                                         DNI: <span style="visibility: hidden;">*</span>
                                                     </label>
-                                                    <input type="text" class="form-control" id="DNIFinalUser" name="dni" minlength="8" maxlength="8" pattern="\d{8}" placeholder="Ejemplo: 12345678" required />
-                                                    <div class="invalid-feedback" id="dni-feedback">Por favor ingrese un DNI válido con 8 dígitos</div>
+                                                    <input type="text" class="form-control" id="dni" name="dni" minlength="8" maxlength="8" pattern="\d{8}" placeholder="Ejemplo: 12345678" required />
+                                                    <div class="invalid-feedback" id="dni-error"></div>
                                                 </div>
 
                                                 <!-- Número telefónico -->
@@ -205,6 +205,7 @@
 
 <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
 <script th:src="@{/js/vendors/chart.js}"></script>
+<script th:src="@{/js/validateDNI.js}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
