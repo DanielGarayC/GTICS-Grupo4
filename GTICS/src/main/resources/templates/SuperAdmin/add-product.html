@@ -1,470 +1,651 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta content="Codescandy" name="author">
-    <title>Agregar Producto</title>
-    <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta content="Codescandy" name="author">
+        <title>Agregar Producto</title>
+        <!-- Favicon icon-->
+        <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
+        <!-- Libs CSS -->
+        <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+        <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+        <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
-    <!-- Libs CSS -->
-    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
-    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
-    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+        <!-- Theme CSS -->
+        <link rel="stylesheet" th:href="@{/css/theme.min.css}">
 
+        <style>
+            .logoImagen{
+                height: 80px;
+                width: 250px;
+            }
+            .logoImagenCelulares{
+                height: 80px;
+                width: 220px;
+            }
+            /* Estilos para el input-number */
+            .input-number {
+                display: flex;
+                align-items: center;
+            }
+            .input-number .btn-number {
+                width: 40px;
+                height: 40px;
+            }
+            .input-number input {
+                text-align: center;
+                width: 60px;
+                margin: 0 5px;
+            }
+            /* Estilos para las imágenes previsualizadas */
+            #extraImagesPreview img {
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                margin-right: 10px;
+                margin-bottom: 10px;
+            }
 
-    <!-- Theme CSS -->
-    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+        </style>
+    </head>
 
-    <style>
+    <body>
+        <!-- main -->
+        <div>
+            <!-- navbar -->
+            <div th:insert="~{fragments/navbarSuperior.html :: navbarSuperior}"></div>
 
-        .logoImagen{
-            height: 80px;
-            width: 250px;
-        }
-        .logoImagenCelulares{
-            height: 80px;
-            width: 220px;
-        }
-    </style>
-</head>
+            <div class="main-wrapper">
 
-<body>
-<!-- main -->
-<div>
-    <!-- navbar -->
-    <div th:insert="~{fragments/navbarSuperior.html :: navbarSuperior}"></div>
+                <!-- navbar -->
+                <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('productos')"></div>
+                <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('productos')"></div>
 
-
-    <div class="main-wrapper">
-
-        <!-- navbar -->
-        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalPc('productos')"></div>
-        <div th:insert="fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('productos')"></div>
-
-        <!-- CONTENIDO DE LA PAGINA -->
-        <main class="main-content-wrapper">
-            <!-- container -->
-            <div class="container">
-                <!-- row -->
-                <div class="row mb-8">
-                    <div class="col-md-12">
-                        <div class="d-md-flex justify-content-between align-items-center">
-                            <!-- page header -->
-                            <div>
-                                <h2>Agregar nuevo producto</h2>
-                                <!-- breacrumb -->
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a th:href="@{productos}" class="text-inherit">Productos</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Agregar nuevo producto</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                            <div>
-                                <a th:href="@{productos}" class="btn btn-light">Regresar a la lista de productos</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 col-12">
-                        <!-- card -->
-                        <div class="card mb-6 shadow border-0">
-                            <!-- card body -->
-                            <form id="productoForm" enctype="multipart/form-data" th:action="@{/SuperAdmin/crearProducto}" method="post" class="needs-validation" novalidate>
-                                <div class="card-body p-6">
-                                    <h4 class="mb-5 h5">Subir foto principal del Producto</h4>
-                                    <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
-                                        <div>
-                                            <img id="imagePreviewForm" class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/default-image.jpeg}" alt=" " />
-                                        </div>
-                                        <label for="fileInput" class="form-label">Subir foto:</label>
-
-                                        <div class="file-upload btn btn-light ms-md-4">
-                                            <input type="file" class="file-input opacity-0" id="fileInput" name="fotoPrincipal" accept="image/png, image/jpeg, image/gif" required />
-                                            <span>Elegir foto</span>
-                                        </div>
-
-                                        <span class="ms-2">JPG, GIF or PNG. 1MB Max.</span>
-                                        <div class="invalid-feedback">Debe subir una foto</div>
-
+                <!-- CONTENIDO DE LA PAGINA -->
+                <main class="main-content-wrapper">
+                    <!-- container -->
+                    <div class="container">
+                        <!-- row -->
+                        <div class="row mb-8">
+                            <div class="col-md-12">
+                                <div class="d-md-flex justify-content-between align-items-center">
+                                    <!-- page header -->
+                                    <div>
+                                        <h2>Agregar nuevo producto</h2>
+                                        <!-- breacrumb -->
+                                        <nav aria-label="breadcrumb">
+                                            <ol class="breadcrumb mb-0">
+                                                <li class="breadcrumb-item"><a th:href="@{dashboard}" class="text-inherit">Dashboard</a></li>
+                                                <li class="breadcrumb-item"><a th:href="@{productos}" class="text-inherit">Productos</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page">Agregar nuevo producto</li>
+                                            </ol>
+                                        </nav>
                                     </div>
-                                    <h4 class="mb-5 h5">Subir 3 fotos extras del producto (opcional)</h4>
-                                    <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
-                                        <label for="fileInputExtras" class="form-label">Subir fotos:</label>
-                                        <div class="file-upload btn btn-light ms-md-4">
-                                            <input type="file" class="file-input opacity-0" id="fileInputExtras" name="fotosExtras" accept="image/png, image/jpeg, image/gif" multiple required />
-                                            <span>Elegir 3 fotos</span>
-                                        </div>
-                                        <span class="ms-2">JPG, GIF o PNG. 1MB Máx por foto.</span>
-
-                                    </div>
-                                    <h4 class="mb-4 h5 mt-5">Información del Producto</h4>
-
-                                    <div class="row">
-                                        <!-- nombre del producto -->
-                                        <div class="mb-3 col-lg-12">
-                                            <label for="nombreProducto" class="form-label">Nombre del producto</label>
-                                            <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Nombre del producto" required />
-                                            <div class="invalid-feedback">Debe ingresar el nombre del producto</div>
-                                        </div>
-                                        <!-- categoría -->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="selectCategoria" class="form-label">Categoría</label>
-                                            <select class="form-select" name="idCategoria" id="selectCategoria" onchange="cargarSubcategorias()" required>
-                                                <option value="" selected disabled>--Seleccione una categoría--</option>
-                                                <option th:each="categoria : ${categorias}" th:text="${categoria.nombreCategoria}" th:value="${categoria.id}"></option>
-                                            </select>
-                                            <div class="invalid-feedback">Debe seleccionar una categoría</div>
-                                        </div>
-
-                                        <!-- Subcategoría (se cargará según la categoría seleccionada) -->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="selectSubcategoria" class="form-label">Subcategoría (debe seleccionar primero una categoría)</label>
-                                            <select class="form-select" name="idSubcategoria" id="selectSubcategoria" required>
-                                                <option value="" selected disabled>--Seleccione una subcategoría--</option>
-                                            </select>
-                                            <div class="invalid-feedback">Debe seleccionar una subcategoría</div>
-                                        </div>
-
-                                        <!-- Precio -->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="precio" class="form-label">Precio</label>
-                                            <input type="text" class="form-control" id="precio" name="precio" placeholder="Precio" required />
-                                            <div class="invalid-feedback" id="precio-vacio">Por favor ingrese el precio del producto</div>
-                                            <div class="invalid-feedback" id="precio-invalido">El precio debe ser un número válido con hasta 2 decimales</div>
-                                        </div>
-                                        <!-- Costo de envío -->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="costoEnvio" class="form-label">Costo de Envío</label>
-                                            <input type="text" class="form-control" id="costoEnvio" name="costoEnvio" placeholder="Costo de envío" required />
-                                            <div class="invalid-feedback" id="costoEnvio-vacio">Por favor ingrese el costo de envío</div>
-                                            <div class="invalid-feedback" id="costoEnvio-invalido">El costo de envío debe ser un número válido con hasta 2 decimales</div>                                        </div>
-                                        <!-- Proveedor -->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
-                                            <select class="form-select" name="idProveedor" id="selectProveedor" required>
-                                                <option value="" selected disabled>--Seleccione un proveedor--</option>
-                                                <option th:each="proveedor : ${proveedores}"
-                                                        th:text="${proveedor.tienda.nombreTienda}"
-                                                        th:value="${proveedor.id}">
-                                                </option>
-                                            </select>
-                                            <div class="invalid-feedback">Debe seleccionar un proveedor</div>
-                                        </div>
-
-                                        <!-- Zonas -->
-                                        <div class="mb-3 col-lg-6" th:each="zona : ${zonas}">
-                                            <label th:for="'cantidadZona' + ${zona.id}" th:text="'Cantidad para ' + ${zona.nombreZona}"></label>
-                                            <input type="number" class="form-control" th:id="'cantidadZona' + ${zona.id}"
-                                                   th:name="'zona-' + ${zona.id}" min="0" />
-                                            <div class="invalid-feedback" id="cantidad-vacio">Debe ingresar una cantidad para esta zona</div>
-                                            <div class="invalid-feedback" id="cantidad-invalida">La cantidad debe ser un número mayor o igual a 0</div>
-                                        </div>
-
-                                        <!-- Modelo (opcional) -->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="modelo" class="form-label">Modelo (opcional)</label>
-                                            <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo" />
-                                        </div>
-
-                                        <!-- Color (opcional) -->
-                                        <div class="mb-3 col-lg-6">
-                                            <label for="color" class="form-label">Color (opcional)</label>
-                                            <input type="text" class="form-control" id="color" name="color" placeholder="Color" />
-                                        </div>
-
-                                        <!-- input -->
-                                        <div class="mb-3 col-lg-12">
-                                            <label for="descripcion" class="form-label">Descripción</label>
-                                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Descripción" required></textarea>
-                                            <div class="invalid-feedback" id="descripcion-vacio">Debe ingresar una descripción</div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <button class="btn btn-primary" type="submit">Crear Producto</button>
-                                            <a th:href="@{/SuperAdmin/productos}" class="btn btn-secondary">Cancelar</a>
-                                        </div>
+                                    <div>
+                                        <a th:href="@{productos}" class="btn btn-light">Regresar a la lista de productos</a>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-12">
+                                <!-- card -->
+                                <div class="card mb-6 shadow border-0">
+                                    <!-- card body -->
+                                    <form id="productoForm" enctype="multipart/form-data" th:action="@{/SuperAdmin/crearProducto}" method="post" class="needs-validation" novalidate>
+                                        <div class="card-body p-6">
+                                            <!-- Subir foto principal del Producto -->
+                                            <!-- Sección para subir fotos del Producto -->
+                                            <h4 class="mb-5 h5">Subir fotos del Producto</h4>
+                                            <div class="row mb-4">
+                                                <!-- Columna para la foto principal -->
+                                                <div class="col-md-6 mb-4">
+                                                    <div class="card h-100">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Foto principal</h5>
+                                                            <div class="text-center mb-3">
+                                                                <img id="imagePreviewForm" class="image avatar avatar-lg rounded-3" th:src="@{/images/docs/default-image.jpeg}" alt=" " />
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="fileInput" class="form-label">Subir foto:</label>
+                                                                <div class="file-upload btn btn-light">
+                                                                    <input type="file" class="file-input opacity-0" id="fileInput" name="fotoPrincipal" accept="image/png, image/jpeg" required />
+                                                                    <span>Elegir foto</span>
+                                                                </div>
+                                                                <div class="form-text">JPG, PNG</div>
+                                                                <div class="invalid-feedback">Debe subir una foto</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Columna para las fotos extras -->
+                                                <div class="col-md-6 mb-4">
+                                                    <div class="card h-100">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Fotos adicionales (opcional)</h5>
+                                                            <div class="mb-3">
+                                                                <label for="fileInputExtras" class="form-label">Subir fotos:</label>
+                                                                <div class="file-upload btn btn-light">
+                                                                    <input type="file" class="file-input opacity-0" id="fileInputExtras" name="fotosExtras" accept="image/png, image/jpeg" multiple />
+                                                                    <span>Elegir fotos</span>
+                                                                </div>
+                                                                <div class="form-text">JPG, PNG. Hasta 3 fotos, 1MB máx por foto.</div>
+                                                                <div class="invalid-feedback">Puede subir hasta 3 fotos</div>
+                                                            </div>
+                                                            <!-- Contenedor para previsualizar las imágenes seleccionadas -->
+                                                            <div id="extraImagesPreview" class="d-flex flex-wrap"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <h4 class="mb-4 h5 mt-5">Información del Producto</h4>
+
+                                            <div class="row">
+                                                <!-- nombre del producto -->
+                                                <div class="mb-3 col-lg-12">
+                                                    <label for="nombreProducto" class="form-label">Nombre del producto</label>
+                                                    <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Nombre del producto" required />
+                                                    <div class="invalid-feedback">Debe ingresar el nombre del producto</div>
+                                                </div>
+                                                <!-- categoría -->
+                                                <div class="mb-3 col-lg-6">
+                                                    <label for="selectCategoria" class="form-label">Categoría</label>
+                                                    <select class="form-select" name="idCategoria" id="selectCategoria" onchange="cargarSubcategorias()" required>
+                                                        <option value="" selected disabled>--Seleccione una categoría--</option>
+                                                        <option th:each="categoria : ${categorias}" th:text="${categoria.nombreCategoria}" th:value="${categoria.id}"></option>
+                                                    </select>
+                                                    <div class="invalid-feedback">Debe seleccionar una categoría</div>
+                                                </div>
+
+                                                <!-- Subcategoría (se cargará según la categoría seleccionada) -->
+                                                <div class="mb-3 col-lg-6">
+                                                    <label for="selectSubcategoria" class="form-label">Subcategoría (debe seleccionar primero una categoría)</label>
+                                                    <select class="form-select" name="idSubcategoria" id="selectSubcategoria" required>
+                                                        <option value="" selected disabled>--Seleccione una subcategoría--</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">Debe seleccionar una subcategoría</div>
+                                                </div>
+
+                                                <!-- Precio -->
+                                                <div class="mb-3 col-lg-6">
+                                                    <label for="precio" class="form-label">Precio</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">S/.</span>
+                                                        <input type="text" class="form-control" id="precio" name="precio" placeholder="0.00" required />
+                                                    </div>
+                                                    <div class="invalid-feedback" id="precio-vacio">Por favor ingrese el precio del producto</div>
+                                                    <div class="invalid-feedback" id="precio-invalido">El precio debe ser un número válido con hasta 2 decimales</div>
+                                                </div>
+                                                <!-- Costo de envío -->
+                                                <div class="mb-3 col-lg-6">
+                                                    <label for="costoEnvio" class="form-label">Costo de Envío</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">S/.</span>
+                                                        <input type="text" class="form-control" id="costoEnvio" name="costoEnvio" placeholder="0.00" required />
+                                                    </div>
+                                                    <div class="invalid-feedback" id="costoEnvio-vacio">Por favor ingrese el costo de envío</div>
+                                                    <div class="invalid-feedback" id="costoEnvio-invalido">El costo de envío debe ser un número válido con hasta 2 decimales</div>
+                                                </div>
+
+                                                <!-- Proveedor -->
+                                                <div class="mb-3 col-lg-6">
+                                                    <label for="selectProveedor" class="form-label">Proveedor (nombre)</label>
+                                                    <select class="form-select" name="idProveedor" id="selectProveedor" required>
+                                                        <option value="" selected disabled>--Seleccione un proveedor--</option>
+                                                        <option th:each="proveedor : ${proveedores}"
+                                                                th:text="${proveedor.tienda.nombreTienda}"
+                                                                th:value="${proveedor.id}">
+                                                        </option>
+                                                    </select>
+                                                    <div class="invalid-feedback">Debe seleccionar un proveedor</div>
+                                                </div>
+
+                                                <div class="mb-3 col-lg-6">
+                                                    <label for="modelo" class="form-label">Modelo (opcional)</label>
+                                                    <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Ejemplo: iPhone 13, Galaxy S21" />
+                                                    <div class="form-text">Ingrese el modelo si corresponde al producto.</div>
+                                                </div>
+
+
+                                                <!-- Color (opcional) -->
+                                                <div class="mb-3 col-lg-6">
+                                                    <label for="colorPicker" class="form-label">Color (opcional)</label>
+                                                    <div class="input-group">
+                                                        <!-- Selector de color -->
+                                                        <input type="color" class="form-control form-control-color" id="colorPicker" title="Elige un color">
+                                                        <!-- Campo deshabilitado para mostrar el nombre del color -->
+                                                        <input type="text" class="form-control" id="colorName" name="color" placeholder="Nombre del color" readonly />
+                                                    </div>
+                                                    <div class="form-text">Selecciona un color y se mostrará su nombre.</div>
+                                                </div>
+
+
+                                                <!-- Descripción -->
+                                                <div class="mb-3 col-lg-12">
+                                                    <label for="descripcion" class="form-label">Descripción</label>
+                                                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Descripción" required></textarea>
+                                                    <div class="invalid-feedback" id="descripcion-vacio">Debe ingresar una descripción</div>
+                                                </div>
+
+                                                <!-- Cantidad por Zona -->
+                                                <h4 class="mb-4 h5 mt-5">Cantidad por Zona</h4>
+
+                                                <!-- Funcionalidad de aplicar cantidad global -->
+                                                <div class="mb-3 col-lg-12">
+                                                    <label for="cantidadGlobal" class="form-label">Cantidad para todas las zonas</label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" id="cantidadGlobal" min="0" placeholder="Ingrese una cantidad" />
+                                                        <button type="button" class="btn btn-primary" onclick="aplicarCantidadGlobal()">Aplicar a todas</button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Tabla de zonas con controles de incremento/decremento -->
+                                                <div class="table-responsive mb-3 col-lg-12">
+                                                    <table class="table table-bordered align-middle">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Zona</th>
+                                                                <th>Cantidad</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr th:each="zona : ${zonas}">
+                                                                <td th:text="${zona.nombreZona}"></td>
+                                                                <td>
+                                                                    <div class="input-group input-number">
+                                                                        <button type="button" class="btn btn-outline-secondary btn-number" data-type="minus" th:data-field="'zona-' + ${zona.id}">
+                                                                            <i class="bi bi-dash"></i>
+                                                                        </button>
+                                                                        <input type="number" class="form-control text-center" th:id="'cantidadZona' + ${zona.id}"
+                                                                               th:name="'zona-' + ${zona.id}" min="0" value="0" required />
+                                                                        <button type="button" class="btn btn-outline-secondary btn-number" data-type="plus" th:data-field="'zona-' + ${zona.id}">
+                                                                            <i class="bi bi-plus"></i>
+                                                                        </button>
+                                                                        <div class="invalid-feedback">Ingrese una cantidad válida para esta zona</div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="col-lg-12">
+                                                    <button class="btn btn-primary" type="submit">Crear Producto</button>
+                                                    <a th:href="@{/SuperAdmin/productos}" class="btn btn-secondary">Cancelar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
-        </main>
-    </div>
-</div>
+        </div>
 
-<!-- JavaScript para previsualizar las imágenes -->
-<script>
-    function previewImages(event) {
-        const previewContainer = document.getElementById('preview-container');
-        previewContainer.innerHTML = '';  // Limpiar cualquier previsualización anterior
-
-        const files = event.target.files;
-
-        if (files) {
-            Array.from(files).forEach(file => {
+        <!-- JavaScript para previsualizar las imágenes -->
+        <script>
+            document.getElementById('fileInput').addEventListener('change', function(event) {
                 const reader = new FileReader();
-                const img = document.createElement('img');
-                img.classList.add('image', 'icon-shape', 'icon-xxxl', 'bg-light', 'rounded-4');
-                img.style.marginRight = "10px";  // Espaciado entre imágenes
-
                 reader.onload = function(e) {
-                    img.src = e.target.result;
+                    document.getElementById('imagePreviewForm').src = e.target.result;
                 };
-
-                reader.readAsDataURL(file);
-                previewContainer.appendChild(img);  // Añadir la imagen al contenedor de previsualización
+                reader.readAsDataURL(event.target.files[0]);
             });
-        }
-    }
+        </script>
 
-</script>
+        <!-- JavaScript para cargar subcategorías -->
+        <script>
+            // Objeto que contiene las subcategorías asociadas a cada categoría
+            var subcategoriasPorCategoria = {
+                1: [ // Id de categoría 1
+                    { id: 1, nombre: 'Teléfonos móviles y Accesorios' },
+                    { id: 2, nombre: 'Electrodomésticos' },
+                    { id: 3, nombre: 'Cámaras y Fotografía' },
+                    { id: 4, nombre: 'Gaming' },
+                    { id: 5, nombre: 'Otro' },
+                ],
+                2: [ // Id de categoría 2
+                    { id: 6, nombre: 'Maquillaje y Cosméticos' },
+                    { id: 7, nombre: 'Fragancias' },
+                    { id: 8, nombre: 'Cuidado Corporal' },
+                    { id: 9, nombre: 'Cuidado capilar' },
+                    { id: 10, nombre: 'Otro' },
 
-<script>
-    function crearProducto() {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "¿Deseas crear un nuevo producto?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#28a745',
-            cancelButtonColor: '#dc3545',
-            confirmButtonText: 'Sí, crear',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = document.getElementById('productoForm');
-                if (form.checkValidity()) {
-                    form.submit();
-                } else {
-                    form.classList.add('was-validated');
+                ],
+
+                3: [ // Id de categoría 3
+                    { id: 11, nombre: 'Ropa' },
+                    { id: 12, nombre: 'Calzado' },
+                    { id: 13, nombre: 'Accesorios' },
+                    { id: 14, nombre: 'Joyería y relojes' },
+                    { id: 15, nombre: 'Otro' },
+
+                ],
+                4: [ // Id de categoría 4
+                    { id: 16, nombre: 'Muebles y Decoración' },
+                    { id: 17, nombre: 'Cocina y Utensilios' },
+                    { id: 18, nombre: 'Organización y Almacenamiento' },
+                    { id: 19, nombre: 'Limpieza y Cuidado del hogar' },
+                    { id: 20, nombre: 'Otro' },
+
+                ],
+
+            };
+
+            function cargarSubcategorias() {
+                var categoriaId = document.getElementById("selectCategoria").value;
+                var selectSubcategoria = document.getElementById("selectSubcategoria");
+
+                // Limpiar las opciones previas de subcategorías
+                selectSubcategoria.innerHTML = '<option value="" selected disabled>--Seleccione una subcategoría--</option>';
+
+                // Obtener las subcategorías correspondientes a la categoría seleccionada
+                var subcategorias = subcategoriasPorCategoria[categoriaId] || [];
+
+                // Poblamos el menú de subcategorías
+                subcategorias.forEach(function(subcat) {
+                    var option = document.createElement("option");
+                    option.value = subcat.id;
+                    option.text = subcat.nombre;
+                    selectSubcategoria.appendChild(option);
+                });
+            }
+        </script>
+
+        <!-- JavaScript para controles de incremento/decremento y cantidad global -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const buttons = document.querySelectorAll('.btn-number');
+                buttons.forEach(function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const type = btn.getAttribute('data-type');
+                        const fieldName = btn.getAttribute('data-field');
+                        const input = document.querySelector(`input[name='${fieldName}']`);
+                        let currentValue = parseInt(input.value);
+                        if (!isNaN(currentValue)) {
+                            if (type === 'minus' && currentValue > parseInt(input.min)) {
+                                input.value = currentValue - 1;
+                            } else if (type === 'plus') {
+                                input.value = currentValue + 1;
+                            }
+                        } else {
+                            input.value = 0;
+                        }
+                    });
+                });
+            });
+
+            function aplicarCantidadGlobal() {
+                const cantidadGlobal = document.getElementById('cantidadGlobal').value;
+                if (cantidadGlobal !== '') {
+                    const inputsZona = document.querySelectorAll('input[name^="zona-"]');
+                    inputsZona.forEach(function(input) {
+                        input.value = cantidadGlobal;
+                    });
                 }
             }
-        });
-    }
-</script>
+        </script>
 
-<script>
-    // Objeto que contiene las subcategorías asociadas a cada categoría
-    var subcategoriasPorCategoria = {
-        1: [ // Id de categoría 1
-            { id: 1, nombre: 'Teléfonos móviles y Accesorios' },
-            { id: 2, nombre: 'Electrodomésticos' },
-            { id: 3, nombre: 'Cámaras y Fotografía' },
-            { id: 4, nombre: 'Gaming' },
-            { id: 5, nombre: 'Otro' },
-        ],
-        2: [ // Id de categoría 2
-            { id: 6, nombre: 'Maquillaje y Cosméticos' },
-            { id: 7, nombre: 'Fragancias' },
-            { id: 8, nombre: 'Cuidado Corporal' },
-            { id: 9, nombre: 'Cuidado capilar' },
-            { id: 10, nombre: 'Otro' },
+        <!-- JavaScript para la validación del formulario -->
+        <script>
+            document.getElementById('productoForm').addEventListener('submit', function(event) {
+                let formIsValid = true;
 
-        ],
+                // Validar nombre del producto
+                const nombreProducto = document.getElementById('nombreProducto');
+                if (nombreProducto.value.trim() === "") {
+                    nombreProducto.classList.add('is-invalid');
+                    formIsValid = false;
+                } else {
+                    nombreProducto.classList.remove('is-invalid');
+                }
 
-        3: [ // Id de categoría 3
-            { id: 11, nombre: 'Ropa' },
-            { id: 12, nombre: 'Calzado' },
-            { id: 13, nombre: 'Accesorios' },
-            { id: 14, nombre: 'Joyería y relojes' },
-            { id: 15, nombre: 'Otro' },
+                // Expresión regular para enteros o decimales con hasta 2 decimales
+                const regexDecimal = /^\d+(\.\d{1,2})?$/;  // Permite enteros y decimales con hasta 2 decimales
 
-        ],
-        4: [ // Id de categoría 4
-            { id: 16, nombre: 'Muebles y Decoración' },
-            { id: 17, nombre: 'Cocina y Utensilios' },
-            { id: 18, nombre: 'Organización y Almacenamiento' },
-            { id: 19, nombre: 'Limpieza y Cuidado del hogar' },
-            { id: 20, nombre: 'Otro' },
+                // Validar precio
+                const precio = document.getElementById('precio');
+                const precioVacio = document.getElementById('precio-vacio');
+                const precioInvalido = document.getElementById('precio-invalido');
 
-        ],
+                if (precio.value.trim() === "") {
+                    precio.classList.add('is-invalid');
+                    precioVacio.style.display = 'block';
+                    precioInvalido.style.display = 'none';
+                    formIsValid = false;
+                } else if (!regexDecimal.test(precio.value)) {
+                    precio.classList.add('is-invalid');
+                    precioVacio.style.display = 'none';
+                    precioInvalido.style.display = 'block';
+                    formIsValid = false;
+                } else {
+                    precio.classList.remove('is-invalid');
+                    precioVacio.style.display = 'none';
+                    precioInvalido.style.display = 'none';
+                }
 
-    };
+                // Validar costo de envío
+                const costoEnvio = document.getElementById('costoEnvio');
+                const costoEnvioVacio = document.getElementById('costoEnvio-vacio');
+                const costoEnvioInvalido = document.getElementById('costoEnvio-invalido');
 
-    function cargarSubcategorias() {
-        var categoriaId = document.getElementById("selectCategoria").value;
-        var selectSubcategoria = document.getElementById("selectSubcategoria");
+                if (costoEnvio.value.trim() === "") {
+                    costoEnvio.classList.add('is-invalid');
+                    costoEnvioVacio.style.display = 'block';
+                    costoEnvioInvalido.style.display = 'none';
+                    formIsValid = false;
+                } else if (!regexDecimal.test(costoEnvio.value)) {
+                    costoEnvio.classList.add('is-invalid');
+                    costoEnvioVacio.style.display = 'none';
+                    costoEnvioInvalido.style.display = 'block';
+                    formIsValid = false;
+                } else {
+                    costoEnvio.classList.remove('is-invalid');
+                    costoEnvioVacio.style.display = 'none';
+                    costoEnvioInvalido.style.display = 'none';
+                }
 
-        // Limpiar las opciones previas de subcategorías
-        selectSubcategoria.innerHTML = '<option value="" selected disabled>--Seleccione una subcategoría--</option>';
+                // Validar descripción
+                const descripcion = document.getElementById('descripcion');
+                const descripcionVacio = document.getElementById('descripcion-vacio');
 
-        // Obtener las subcategorías correspondientes a la categoría seleccionada
-        var subcategorias = subcategoriasPorCategoria[categoriaId] || [];
+                if (descripcion.value.trim() === "") {
+                    descripcion.classList.add('is-invalid');
+                    descripcionVacio.style.display = 'block';
+                    formIsValid = false;
+                } else {
+                    descripcion.classList.remove('is-invalid');
+                    descripcionVacio.style.display = 'none';
+                }
 
-        // Poblamos el menú de subcategorías
-        subcategorias.forEach(function(subcat) {
-            var option = document.createElement("option");
-            option.value = subcat.id;
-            option.text = subcat.nombre;
-            selectSubcategoria.appendChild(option);
-        });
-    }
-</script>
-<script>
-    document.getElementById('productoForm').addEventListener('submit', function(event) {
-        let formIsValid = true;
+                // Validar categoría
+                const selectCategoria = document.getElementById('selectCategoria');
+                if (selectCategoria.value === "") {
+                    selectCategoria.classList.add('is-invalid');
+                    formIsValid = false;
+                } else {
+                    selectCategoria.classList.remove('is-invalid');
+                }
 
-        // Validar nombre del producto
-        const nombreProducto = document.getElementById('nombreProducto');
-        if (nombreProducto.value.trim() === "") {
-            nombreProducto.classList.add('is-invalid');
-            formIsValid = false;
-        } else {
-            nombreProducto.classList.remove('is-invalid');
-        }
+                // Validar subcategoría
+                const selectSubcategoria = document.getElementById('selectSubcategoria');
+                if (selectSubcategoria.value === "") {
+                    selectSubcategoria.classList.add('is-invalid');
+                    formIsValid = false;
+                } else {
+                    selectSubcategoria.classList.remove('is-invalid');
+                }
 
-        // Expresión regular para enteros o decimales con hasta 2 decimales
-        const regexDecimal = /^\d+(\.\d{1,2})?$/;  // Permite enteros y decimales con hasta 2 decimales
+                // Validar proveedor
+                const selectProveedor = document.getElementById('selectProveedor');
+                if (selectProveedor.value === "") {
+                    selectProveedor.classList.add('is-invalid');
+                    formIsValid = false;
+                } else {
+                    selectProveedor.classList.remove('is-invalid');
+                }
 
-        // Validar precio
-        const precio = document.getElementById('precio');
-        const precioVacio = document.getElementById('precio-vacio');
-        const precioInvalido = document.getElementById('precio-invalido');
+                // Validar cantidades por zona
+                const inputsZona = document.querySelectorAll('input[name^="zona-"]');
+                inputsZona.forEach(input => {
+                    const cantidad = input.value.trim();
+                    const errorFeedback = input.parentElement.querySelector('.invalid-feedback');
 
-        if (precio.value.trim() === "") {
-            precio.classList.add('is-invalid');
-            precioVacio.style.display = 'block';
-            precioInvalido.style.display = 'none';
-            formIsValid = false;
-        } else if (!regexDecimal.test(precio.value)) {
-            precio.classList.add('is-invalid');
-            precioVacio.style.display = 'none';
-            precioInvalido.style.display = 'block';
-            formIsValid = false;
-        } else {
-            precio.classList.remove('is-invalid');
-            precioVacio.style.display = 'none';
-            precioInvalido.style.display = 'none';
-        }
+                    if (cantidad === "") {
+                        input.classList.add('is-invalid');
+                        errorFeedback.textContent = 'Debe ingresar una cantidad para esta zona';
+                        formIsValid = false;
+                    } else if (isNaN(cantidad) || parseInt(cantidad) < 0) {
+                        input.classList.add('is-invalid');
+                        errorFeedback.textContent = 'La cantidad debe ser un número mayor o igual a 0';
+                        formIsValid = false;
+                    } else {
+                        input.classList.remove('is-invalid');
+                        errorFeedback.textContent = 'Ingrese una cantidad válida para esta zona';
+                    }
+                });
 
-        // Validar costo de envío
-        const costoEnvio = document.getElementById('costoEnvio');
-        const costoEnvioVacio = document.getElementById('costoEnvio-vacio');
-        const costoEnvioInvalido = document.getElementById('costoEnvio-invalido');
+                // Validar foto principal
+                const fileInput = document.getElementById('fileInput');
+                const fileInputFeedback = fileInput.nextElementSibling; // Div de error por archivo vacío
 
-        if (costoEnvio.value.trim() === "") {
-            costoEnvio.classList.add('is-invalid');
-            costoEnvioVacio.style.display = 'block';
-            costoEnvioInvalido.style.display = 'none';
-            formIsValid = false;
-        } else if (!regexDecimal.test(costoEnvio.value)) {
-            costoEnvio.classList.add('is-invalid');
-            costoEnvioVacio.style.display = 'none';
-            costoEnvioInvalido.style.display = 'block';
-            formIsValid = false;
-        } else {
-            costoEnvio.classList.remove('is-invalid');
-            costoEnvioVacio.style.display = 'none';
-            costoEnvioInvalido.style.display = 'none';
-        }
+                if (fileInput.files.length === 0) {
+                    fileInput.classList.add('is-invalid');
+                    fileInputFeedback.style.display = 'block'; // Show feedback
+                    formIsValid = false;
+                } else {
+                    fileInput.classList.remove('is-invalid');
+                    fileInputFeedback.style.display = 'none'; // Hide feedback
+                }
 
-        // Validar descripción
-        const descripcion = document.getElementById('descripcion');
-        const descripcionVacio = document.getElementById('descripcion-vacio');
+                // Prevenir el envío del formulario si hay errores
+                if (!formIsValid) {
+                    event.preventDefault();  // Prevenir que el formulario se envíe si hay algún error
+                    event.stopPropagation();
+                }
+            });
+        </script>
+        <script>
+            // Previsualización de la foto principal
+            document.getElementById('fileInput').addEventListener('change', function(event) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreviewForm').src = e.target.result;
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            });
 
-        if (descripcion.value.trim() === "") {
-            descripcion.classList.add('is-invalid');
-            descripcionVacio.style.display = 'block';
-            formIsValid = false;
-        } else {
-            descripcion.classList.remove('is-invalid');
-            descripcionVacio.style.display = 'none';
-        }
+            // Previsualización de las fotos extras
+            document.getElementById('fileInputExtras').addEventListener('change', function(event) {
+                const files = event.target.files;
+                const previewContainer = document.getElementById('extraImagesPreview');
+                previewContainer.innerHTML = ''; // Limpiar previsualizaciones anteriores
 
-        // Validar categoría
-        const selectCategoria = document.getElementById('selectCategoria');
-        if (selectCategoria.value === "") {
-            selectCategoria.classList.add('is-invalid');
-            formIsValid = false;
-        } else {
-            selectCategoria.classList.remove('is-invalid');
-        }
+                if (files.length > 3) {
+                    alert('Solo puedes subir hasta 3 fotos.');
+                    event.target.value = ''; // Limpiar selección de archivos
+                    return;
+                }
 
-        // Validar subcategoría
-        const selectSubcategoria = document.getElementById('selectSubcategoria');
-        if (selectSubcategoria.value === "") {
-            selectSubcategoria.classList.add('is-invalid');
-            formIsValid = false;
-        } else {
-            selectSubcategoria.classList.remove('is-invalid');
-        }
-
-        // Validar proveedor
-        const selectProveedor = document.getElementById('selectProveedor');
-        if (selectProveedor.value === "") {
-            selectProveedor.classList.add('is-invalid');
-            formIsValid = false;
-        } else {
-            selectProveedor.classList.remove('is-invalid');
-        }
-
-        // Validar cantidades por zona
-        const inputsZona = document.querySelectorAll('input[name^="zona-"]');
-        inputsZona.forEach(input => {
-            const cantidad = input.value.trim();
-            const errorVacio = input.nextElementSibling; // Div de error por valor vacío
-            const errorInvalido = input.nextElementSibling.nextElementSibling; // Div de error por valor inválido
-
-            if (cantidad === "") {
-                input.classList.add('is-invalid');
-                errorVacio.style.display = 'block';
-                errorInvalido.style.display = 'none';
-                formIsValid = false;
-            } else if (isNaN(cantidad) || parseFloat(cantidad) < 0) {
-                input.classList.add('is-invalid');
-                errorVacio.style.display = 'none';
-                errorInvalido.style.display = 'block';
-                formIsValid = false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorVacio.style.display = 'none';
-                errorInvalido.style.display = 'none';
+                Array.from(files).forEach(file => {
+                    if (file.size > 1048576) { // 1MB en bytes
+                        alert('Cada foto debe ser menor a 1MB.');
+                        event.target.value = ''; // Limpiar selección de archivos
+                        previewContainer.innerHTML = '';
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.classList.add('avatar', 'me-2', 'mb-2');
+                        img.style.width = '100px';
+                        img.style.height = '100px';
+                        img.style.objectFit = 'cover';
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        </script>
+        <script>
+            function formatCurrency(input) {
+                // Eliminar cualquier caracter que no sea número o punto decimal
+                let value = input.value.replace(/[^0-9.]/g, '');
+                // Si hay más de un punto decimal, eliminar los adicionales
+                const parts = value.split('.');
+                if (parts.length > 2) {
+                    parts.splice(2);
+                    value = parts.join('.');
+                }
+                input.value = value;
             }
-        });
-        // Validar foto principal
-        const fileInput = document.getElementById('fileInput');
-        const fileInputFeedback = fileInput.nextElementSibling; // Div de error por archivo vacío
 
-        if (fileInput.files.length === 0) {
-            fileInput.classList.add('is-invalid');
-            fileInputFeedback.style.display = 'block'; // Show feedback
-            formIsValid = false;
-        } else {
-            fileInput.classList.remove('is-invalid');
-            fileInputFeedback.style.display = 'none'; // Hide feedback
-        }
+            document.getElementById('precio').addEventListener('input', function() {
+                formatCurrency(this);
+            });
 
-        // Prevenir el envío del formulario si hay errores
-        if (!formIsValid) {
-            event.preventDefault();  // Prevenir que el formulario se envíe si hay algún error
-        }
+            document.getElementById('costoEnvio').addEventListener('input', function() {
+                formatCurrency(this);
+            });
+        </script>
 
-        // Prevenir el envío del formulario si hay errores
-        if (!formIsValid) {
-            event.preventDefault();  // Prevenir que el formulario se envíe si hay algún error
-        }
-    });
-</script>
+        <script>
+            // ... Otros scripts ...
 
+            // Manejo del selector de color
+            document.getElementById('colorPicker').addEventListener('input', function() {
+                const colorValue = this.value;
+                document.getElementById('colorHex').value = colorValue;
+            });
 
-<!-- Libs JS -->
-<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+            // ... Otros scripts ...
+        </script>
 
-<!-- Theme JS -->
-<script th:src="@{/js/theme.min.js}"></script>
+        <!-- Scripts -->
+        <script>
+            // Manejo del selector de color y obtención del nombre del color
+            document.getElementById('colorPicker').addEventListener('input', function() {
+                const colorValue = this.value.replace('#', '');
+                fetch(`https://www.thecolorapi.com/id?hex=${colorValue}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const colorName = data.name.value;
+                        // Ahora traducimos el nombre del color al español
+                        fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(colorName)}&langpair=en|es`)
+                            .then(response => response.json())
+                            .then(translationData => {
+                                const translatedColorName = translationData.responseData.translatedText;
+                                document.getElementById('colorName').value = translatedColorName;
+                            })
+                            .catch(error => {
+                                console.error('Error al traducir el nombre del color:', error);
+                                document.getElementById('colorName').value = 'Color desconocido';
+                            });
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener el nombre del color:', error);
+                        document.getElementById('colorName').value = 'Color desconocido';
+                    });
+            });
+        </script>
 
-<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
-<script th:src="@{/js/vendors/chart.js}"></script>
-</body>
+        <!-- Libs JS -->
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+        <!-- Theme JS -->
+        <script th:src="@{/js/theme.min.js}"></script>
+        <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+        <script th:src="@{/js/vendors/chart.js}"></script>
+    </body>
 </html>
