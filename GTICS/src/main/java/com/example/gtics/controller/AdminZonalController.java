@@ -70,13 +70,12 @@ public class AdminZonalController {
     @GetMapping({"AdminZonal", "AdminZonal/Dashboard"})
     public String Dashboard(Model model, HttpSession session){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+        System.out.println("Auth?: "+authentication);
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             String email = authentication.getName();
             Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
-
+            System.out.println(optUsuario);
             if (optUsuario.isPresent()) {
-
                 Usuario usuario = optUsuario.get();
                 Integer idAdminZonal = usuario.getId();
 
@@ -104,7 +103,6 @@ public class AdminZonalController {
                 //LI (arreglar la db csm)
                 model.addAttribute("ProductosMasImportados", productoRepository.findProductosRelevantesZona(idZona));
                 model.addAttribute("TotalVentas", productoRepository.getCantidadProductosZona(idZona));
-
                 //LD
                 model.addAttribute("topImportadores", usuarioRepository.getTopImportadores());
             }
@@ -164,6 +162,8 @@ public class AdminZonalController {
 
         Integer idAdminZonal = (Integer) session.getAttribute("id");
         System.out.println("Llega al método guardarAgente");
+        System.out.println(bindingResult);
+        System.out.println(agente.getAgtCodigojurisdiccion());
         if(bindingResult.hasErrors()){
             if (bindingResult.hasFieldErrors("dni")) {
                 if (bindingResult.getFieldError("dni").getCode().equals("NotBlank")) {
@@ -267,7 +267,6 @@ public class AdminZonalController {
             if(optUsuario.isPresent()){
                 Usuario adminzonal = optUsuario.get();
                 model.addAttribute("adminzonal",adminzonal);
-
                 // Obtener la lista de distritos asociados a la zona del Admin Zonal
                 List<Distrito> distritos = distritoRepository.findByZona_Id(adminzonal.getZona().getId());
                 //Funcion que valida si la cantidad de agentes asociados al coordinador es menor a 3
@@ -276,6 +275,7 @@ public class AdminZonalController {
             }
         }else {
             try {
+                System.out.println("LLega a la parte de guardado");
                 int idUsuarioSol = 0;
                 // Obtener el distrito seleccionado
                 Optional<Distrito> distritoOpt = distritoRepository.findById(agente.getDistrito().getId());
@@ -420,6 +420,7 @@ public class AdminZonalController {
                                @RequestParam("fechaEntrega") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fechaEntrega, RedirectAttributes attr){
         Optional<Producto> productoOPT = productoRepository.findById(productoId);
         System.out.println("ID: " + productoId);
+        System.out.println(productoOPT);
         if(productoOPT.isPresent()){
             Producto producto = productoOPT.get();
             producto.setFechaArribo(fechaEntrega);
