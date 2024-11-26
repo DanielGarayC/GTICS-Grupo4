@@ -27,5 +27,5 @@ public interface ProductoHasCarritocompraRepository extends JpaRepository<Produc
     List<ProductosCarritoDto> findProductosPorCarrito(@Param("idCarrito") Integer idCarrito);
 
 
-
+    int countById_IdCarritoCompra(Integer id);
 }

@@ -179,23 +179,49 @@ public class UsuarioFinalController {
     }
 
     @PostMapping("/UsuarioFinal/agregarAlCarrito")
-    public String agregarAlCarrito(@RequestParam("idProducto") Integer idProducto,
-                                   @RequestParam("cantidad") Integer cantidad,
-                                   RedirectAttributes attr,
-                                   HttpSession session) {
+    public ResponseEntity<Map<String, Object>> agregarAlCarrito(
+            @RequestParam("idProducto") Integer idProducto,
+            @RequestParam("cantidad") Integer cantidad,
+            HttpServletRequest request,
+            HttpSession session) {
+
+        boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // Verifica si el usuario está autenticado
         if (authentication == null || !authentication.isAuthenticated() ||
                 authentication instanceof AnonymousAuthenticationToken) {
-            attr.addFlashAttribute("error", "Debes iniciar sesión para agregar productos al carrito.");
-            return "redirect:/ExpressDealsLogin";
+            if (isAjax) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", false);
+                response.put("mensaje", "Debes iniciar sesión para agregar productos al carrito.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            } else {
+                // Respuesta tradicional
+                return ResponseEntity.status(HttpStatus.FOUND)
+                        .header("Location", "/ExpressDealsLogin")
+                        .build();
+            }
         }
 
         // Obtiene el usuario autenticado por su email
         String email = authentication.getName();
         Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (!optUsuario.isPresent()) {
+            if (isAjax) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", false);
+                response.put("mensaje", "Usuario no encontrado.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            } else {
+                // Respuesta tradicional
+                return ResponseEntity.status(HttpStatus.FOUND)
+                        .header("Location", "/ExpressDealsLogin")
+                        .build();
+            }
+        }
 
         Usuario usuario = optUsuario.get();
         Integer idUsuarioFinal = usuario.getId();
@@ -234,8 +260,21 @@ public class UsuarioFinalController {
             productoHasCarritocompraRepository.save(nuevoProductoEnCarrito);
         }
 
-        attr.addFlashAttribute("msg", "Producto agregado al carrito exitosamente.");
-        return "redirect:/UsuarioFinal/listaProductos";
+        if (isAjax) {
+            // Obtener el nuevo total de artículos en el carrito
+            int totalArticulos = productoHasCarritocompraRepository.countById_IdCarritoCompra(carrito.getId());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("mensaje", "Producto agregado al carrito exitosamente.");
+            response.put("totalArticulos", totalArticulos);
+            return ResponseEntity.ok(response);
+        } else {
+            // Respuesta tradicional
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header("Location", "/UsuarioFinal/listaProductos")
+                    .build();
+        }
     }
     @GetMapping("/UsuarioFinal/distritos/{zonaId}")
     @ResponseBody

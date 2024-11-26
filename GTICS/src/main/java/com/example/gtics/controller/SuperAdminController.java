@@ -785,6 +785,10 @@ public class SuperAdminController {
                                        @RequestParam("fotosExtras") MultipartFile[] fotosExtras,
                                        RedirectAttributes attr) {
         try {
+            // Generar código único para el producto
+            String codigoProducto = generarCodigoUnico();
+            producto.setCodigoProducto(codigoProducto);
+
             if (producto.getBorrado() == null) {
                 producto.setBorrado(0);
             }
@@ -820,6 +824,7 @@ public class SuperAdminController {
                             nuevoProductoPorZona.setBorrado(producto.getBorrado());
                             nuevoProductoPorZona.setDisponibilidad("En stock");
                             nuevoProductoPorZona.setZona(zona);
+                            nuevoProductoPorZona.setCodigoProducto(codigoProducto);
 
                             Producto savedProducto = productoRepository.save(nuevoProductoPorZona);
                             if (fotoPrincipal != null && !fotoPrincipal.isEmpty()) {
@@ -856,6 +861,17 @@ public class SuperAdminController {
         return "redirect:/SuperAdmin/productos";
     }
 
+    // Método para generar código único
+    private String generarCodigoUnico() {
+        String codigoProducto;
+        do {
+            String uuid = UUID.randomUUID().toString().replace("-", "").toUpperCase();
+            codigoProducto = uuid.substring(0, 8); // Ajusta la longitud según tus necesidades
+        } while (productoRepository.existsByCodigoProducto(codigoProducto));
+        return codigoProducto;
+    }
+
+
     @PostMapping("/SuperAdmin/guardarProducto")
     public String guardareditarProducto(@ModelAttribute("producto") Producto producto,
                                         @RequestParam("zonaId") Integer zonaId,
@@ -874,6 +890,10 @@ public class SuperAdminController {
                 Optional<Producto> productoEnZona = productoRepository.findByNombreProductoAndZona(producto.getNombreProducto(), zona);
                 if (productoEnZona.isPresent()) {
                     Producto productoActualizado = productoEnZona.get();
+
+                    // Mantener el código existente
+                    producto.setCodigoProducto(productoActualizado.getCodigoProducto());
+
                     productoActualizado.setDescripcion(producto.getDescripcion());
                     productoActualizado.setPrecio(producto.getPrecio());
                     productoActualizado.setCostoEnvio(producto.getCostoEnvio());

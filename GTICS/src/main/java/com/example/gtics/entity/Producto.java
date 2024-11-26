@@ -80,4 +80,7 @@ public class Producto {
     @Column(name = "disponibilidad", nullable = false)
     private String disponibilidad;
 
+    @Column(name = "codigoProducto", length = 30, unique = true)
+    private String codigoProducto;
+
 }

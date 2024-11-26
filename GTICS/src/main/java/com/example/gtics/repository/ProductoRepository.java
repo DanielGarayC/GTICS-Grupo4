@@ -143,4 +143,5 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
     List<Producto> findByIdCategoriaAndIdNot(Categoria idCategoria, Integer id);
 
+    boolean existsByCodigoProducto(String codigoProducto);
 }

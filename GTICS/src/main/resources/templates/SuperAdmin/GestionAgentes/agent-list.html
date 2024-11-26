@@ -1,166 +1,180 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta content="Codescandy" name="author">
-    <title>Lista de agentes</title>
-    <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+    <head>
+        <!-- Meta etiquetas requeridas -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Lista de agentes</title>
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
+        <!-- CSS de librerías -->
+        <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+        <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+        <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
-    <!-- Libs CSS -->
-    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
-    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
-    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+        <!-- CSS del tema -->
+        <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+        <!-- Estilos personalizados -->
+        <style>
+            .logoImagen{
+                height: 80px;
+                width: 250px;
+            }
+            .logoImagenCelulares{
+                height: 80px;
+                width: 220px;
+            }
+            /* Estilos para la barra de búsqueda */
+            .search-bar {
+                position: relative;
+            }
+            .search-bar input {
+                padding-left: 2.5rem;
+            }
+            .search-bar .bi-search {
+                position: absolute;
+                left: 0.75rem;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #aaa;
+            }
+            /* Estilos para la tabla */
+            .table-hover tbody tr:hover {
+                background-color: #f9f9f9;
+            }
+            /* Estilos para el badge de estado */
+            .estado-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                padding: 0.4em 0.75em;
+                font-size: 0.9em;
+                font-weight: 600;
+                border-radius: 0.5rem;
+                transition: background-color 0.3s, color 0.3s;
+            }
+            .estado-habilitado {
+                background: linear-gradient(45deg, #4caf50, #81c784);
+                color: #fff;
+            }
+            .estado-deshabilitado {
+                background: linear-gradient(45deg, #e53935, #ef5350);
+                color: #fff;
+            }
+            /* Efecto hover en los badges de estado */
+            .estado-badge:hover {
+                opacity: 0.9;
+            }
+        </style>
+    </head>
 
+    <body>
+        <!-- Contenido principal -->
+        <div>
+            <!-- Navbar superior -->
+            <div th:insert="~{fragments/navbarSuperior.html :: navbarSuperior}"></div>
 
-    <!-- Theme CSS -->
-    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
-    <style>
+            <div class="main-wrapper">
+                <!-- Navbar vertical (PC) -->
+                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaAgente')}"></div>
 
-        .logoImagen{
-            height: 80px;
-            width: 250px;
-        }
-        .logoImagenCelulares{
-            height: 80px;
-            width: 220px;
-        }
-    </style>
-</head>
+                <!-- Navbar vertical (Celulares) -->
+                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaAgente')}"></div>
 
-<body>
-<!-- main -->
-<div>
-    <!-- navbar -->
-    <div th:insert="~{fragments/navbarSuperior.html :: navbarSuperior}"></div>
-
-
-    <div class="main-wrapper">
-        <!-- navbar vertical (para pc)-->
-        <!-- navbar -->
-        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaAgente')}"></div>
-
-        <!-- navbar vertical (para celular)-->
-        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaAgente')}"></div>
-
-
-        <!-- COONTENIDO DE LA PAGINA -->
-        <main class="main-content-wrapper">
-            <div class="container">
-                <div class="row mb-8">
-                    <div class="col-md-12">
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
-                            <div>
+                <!-- Contenido de la página -->
+                <main class="main-content-wrapper">
+                    <div class="container">
+                        <div class="row mb-4">
+                            <div class="col-md-8">
                                 <h2>Lista de agentes</h2>
-                                <!-- breacrumb -->
-
                             </div>
-
+                            <div class="col-md-4">
+                                <form class="search-bar" role="search">
+                                    <i class="bi bi-search"></i>
+                                    <input class="form-control" type="search" id="searchAgentes" placeholder="Buscar agentes" aria-label="Search" th:value="${param.busqueda}" oninput="filterTable()"/>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-12 col-12 mb-5">
+
+                        <!-- Mensajes de alerta -->
+                        <div class="alert alert-success" role="alert" th:if="${message != null}" th:text="${message}"></div>
+                        <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}"></div>
+
+                        <!-- Tabla de agentes -->
                         <div class="card h-100 card-lg">
-                            <div class="p-6">
-                                <div class="row justify-content-between">
-                                    <div class="col-md-4 col-12">
-                                        <form class="d-flex" role="search">
-                                            <input class="form-control me-2" type="search" id="searchAgentes" placeholder="Buscar agentes" aria-label="Search" th:value="${param.busqueda}" oninput="filterTable()"/>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="alert alert-success" role="alert" th:if="${message != null}" th:text="${message}">
-
-                            </div>
-                            <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
-
-                            </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
-                                    <table class="table table-centered table-hover table-borderless mb-0 table-with-checkbox text-nowrap">
-
+                                    <table class="table table-centered table-hover mb-0 text-nowrap">
                                         <thead class="bg-light">
-                                        <tr >
-                                            <th></th>
-                                            <th>Nombres</th>
-                                            <th>Apellidos</th>
-                                            <th colspan="2" style="text-align: center;">
-                                                Código de D. Aduanero
-                                            </th>
-                                            <th style="word-wrap: break-word;">Código de Jurisdicción</th>
-                                            <th>Razón Social</th>
-                                            <th>Zona</th>
-                                            <th></th>
-                                        </tr>
+                                            <tr>
+                                                <th></th>
+                                                <th>Nombres</th>
+                                                <th>Apellidos</th>
+                                                <th>Código de D. Aduanero</th>
+                                                <th>Estado del Código</th>
+                                                <th>Código de Jurisdicción</th>
+                                                <th>Razón Social</th>
+                                                <th>Zona</th>
+                                                <th></th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-
-                                        <tr th:each="agente,var : ${agentes}">
-                                            <td th:text="${var.index+1}"></td>
-                                            <td th:text="${agente['nombre']}"></td>
-                                            <td th:text="${agente['apellidopaterno']} + ' ' + ${agente['apellidomaterno']}"></td>
-                                            <!-- Primera columna del Código de Aduanero -->
-                                            <td style="white-space: nowrap; padding-right: 5px;" th:text="${agente['agt_codigoaduana']}"></td>
-                                            <!-- Columna para el estado del código de aduana -->
-                                            <td class="text-center align-middle" style="padding-left: 5px;">
-                                            <span th:text="${agente['estadoCodigoAduana']}"
-                                                  th:classappend="${agente['estadoCodigoAduana']} == 'Habilitado' ? 'badge bg-success' : 'badge bg-secondary'">
+                                            <tr th:each="agente, var : ${agentes}">
+                                                <td th:text="${var.index+1}"></td>
+                                                <td th:text="${agente['nombre']}"></td>
+                                                <td th:text="${agente['apellidopaterno']} + ' ' + ${agente['apellidomaterno']}"></td>
+                                                <td th:text="${agente['agt_codigoaduana']}"></td>
+                                                <!-- Columna para el estado del código aduanero -->
+                                                <td class="text-center align-middle">
+                                            <span class="estado-badge" th:classappend="${agente['estadoCodigoAduana']} == 'Habilitado' ? 'estado-habilitado' : 'estado-deshabilitado'">
+                                                <i th:class="${agente['estadoCodigoAduana']} == 'Habilitado' ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
+                                                <span th:text="${agente['estadoCodigoAduana']}"></span>
                                             </span>
-                                            </td>
-                                            <td style="white-space: normal; word-wrap: break-word; max-width: 50px;" th:text="${agente['agt_codigojurisdiccion']}"></td>
-                                            <td th:text="${agente['agt_razonsocial']}"></td>
-                                            <td th:text="${agente['nombrezona']}"></td>
-
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" th:href="@{/SuperAdmin/editarAgente/{id}(id=${agente['idusuario']})}">
-                                                                <i class="bi bi-pencil-square me-3"></i>
-                                                                Editar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="#"
-                                                               th:data-idusuario="${agente['idusuario']}"
-                                                               onclick="confirmDelete(this)">
-                                                                <i class="bi bi-trash me-3"></i>
-                                                                Eliminar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" th:href="@{verAgente/{id}(id=${agente['idusuario']}, origin='listaAgente')}">
-                                                                <i class="bi bi-eye me-3"></i>
-                                                                Ver
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-
+                                                </td>
+                                                <td th:text="${agente['agt_codigojurisdiccion']}"></td>
+                                                <td th:text="${agente['agt_razonsocial']}"></td>
+                                                <td th:text="${agente['nombrezona']}"></td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="feather-icon icon-more-vertical fs-5"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a class="dropdown-item" th:href="@{/SuperAdmin/editarAgente/{id}(id=${agente['idusuario']})}">
+                                                                    <i class="bi bi-pencil-square me-3"></i>
+                                                                    Editar
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item" href="#"
+                                                                   th:data-idusuario="${agente['idusuario']}"
+                                                                   onclick="confirmDelete(this)">
+                                                                    <i class="bi bi-trash me-3"></i>
+                                                                    Eliminar
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item" th:href="@{verAgente/{id}(id=${agente['idusuario']}, origin='listaAgente')}">
+                                                                    <i class="bi bi-eye me-3"></i>
+                                                                    Ver
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
-
-
                                 </div>
 
-                                <!-- Mostrar información de paginación y botones -->
-                                <div class="d-flex flex-column align-items-center">
+                                <!-- Paginación -->
+                                <div class="d-flex flex-column align-items-center mt-3">
                                     <!-- Texto de paginación centrado -->
                                     <span id="paginationInfo" class="mb-2">
-                                        Mostrando página [[${currentPage != null ? currentPage + 1 : 1}]] de [[${totalPages != null ? totalPages : 1}]]
-                                    </span>
-
+                                Mostrando página [[${currentPage != null ? currentPage + 1 : 1}]] de [[${totalPages != null ? totalPages : 1}]]
+                            </span>
                                     <!-- Paginación centrada -->
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination justify-content-center">
@@ -168,12 +182,10 @@
                                             <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
                                                 <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
                                             </li>
-
                                             <!-- Páginas numeradas -->
                                             <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
                                                 <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${i})}" th:text="${i + 1}"></a>
                                             </li>
-
                                             <!-- Botón de "Siguiente" -->
                                             <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
                                                 <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
@@ -185,106 +197,74 @@
                             </div>
                         </div>
                     </div>
-                </div>
+
+                </main>
             </div>
 
-        </main>
-    </div>
+        </div>
 
-    </div>
+        <!-- Librerías JS -->
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
+        <!-- JS del tema -->
+        <script th:src="@{/js/theme.min.js}"></script>
+        <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+        <script th:src="@{/js/vendors/chart.js}"></script>
 
-<!-- Libs JS -->
-<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
-<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <!-- SweetAlert2 JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
-<!-- Theme JS -->
-<script th:src="@{/js/theme.min.js}"></script>
-
-<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
-<script th:src="@{/js/vendors/chart.js}"></script>
-
-<!-- SweetAlert2 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
-<!-- SweetAlert2 JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Función para manejar clic en las páginas
-        $('a.page-link').on('click', function () {
-            const page = $(this).data('page');
-            if (page !== undefined) {
-                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + page;
+        <!-- Script para confirmar eliminación -->
+        <script>
+            function confirmDelete(button) {
+                const idUsuario = button.getAttribute('data-idusuario');
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Los cambios no serán reversibles",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745', // Color verde para el botón de eliminar
+                    cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
+                    confirmButtonText: 'Eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `/SuperAdmin/eliminarAgente?id=` + idUsuario;
+                        Swal.fire(
+                            '¡Eliminado!',
+                            'El elemento ha sido eliminado con éxito.',
+                            'success'
+                        );
+                    }
+                });
             }
-        });
+        </script>
 
-        // Función para manejar clic en "Previo"
-        $('#prevPage').on('click', function () {
-            const currentPage = parseInt($('li.active a').data('page'));
-            if (currentPage > 0) {
-                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + (currentPage - 1);
-            }
-        });
+        <!-- Script para filtrar la tabla -->
+        <script>
+            function filterTable() {
+                const input = document.getElementById("searchAgentes");
+                const filter = input.value.toLowerCase();
+                const table = document.querySelector("table tbody");
+                const rows = table.getElementsByTagName("tr");
 
-        // Función para manejar clic en "Siguiente"
-        $('#nextPage').on('click', function () {
-            const currentPage = parseInt($('li.active a').data('page'));
-            const totalPages = parseInt([[${totalPages}]]);
-            if (currentPage < totalPages - 1) {
-                window.location.href = '/SuperAdmin/listaUsuarioFinal?page=' + (currentPage + 1);
-            }
-        });
-    });
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName("td");
+                    let match = false;
 
-</script>
-<script>
-function confirmDelete(button) {
-    const idUsuario = button.getAttribute('data-idusuario');
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "Los cambios no serán reversibles",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#28a745', // Color verde para el botón de eliminar
-        cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
-        confirmButtonText: 'Eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = `/SuperAdmin/eliminarAgente?id=` + idUsuario;
-            Swal.fire(
-                '¡Eliminado!',
-                'El elemento ha sido eliminado con éxito.',
-                'success'
-            );
-        }
-    });
-}
-
-
-</script>
-<script>
-    function filterTable() {
-        const input = document.getElementById("searchAgentes");
-        const filter = input.value.toLowerCase();
-        const table = document.querySelector("table tbody");
-        const rows = table.getElementsByTagName("tr");
-
-        for (let i = 0; i < rows.length; i++) {
-            const cells = rows[i].getElementsByTagName("td");
-            let match = false;
-
-            for (let j = 0; j < cells.length; j++) {
-                if (cells[j].innerText.toLowerCase().includes(filter)) {
-                    match = true;
-                    break;
+                    for (let j = 0; j < cells.length; j++) {
+                        if (cells[j].innerText.toLowerCase().includes(filter)) {
+                            match = true;
+                            break;
+                        }
+                    }
+                    rows[i].style.display = match ? "" : "none";
                 }
             }
-            rows[i].style.display = match ? "" : "none";
-        }
-    }
-</script>
-</body>
+        </script>
+
+    </body>
 </html>

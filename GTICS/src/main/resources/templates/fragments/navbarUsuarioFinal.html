@@ -99,8 +99,11 @@
                         <div class="list-inline">
                             <ul class="list-inline">
                                 <!-- Shopcart icon -->
+                                <!-- Icono de Carrito -->
+                                <!-- Icono de Carrito -->
                                 <li class="list-inline-item me-5">
                                     <a class="text-muted position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" href="#offcanvasExample" role="button" aria-controls="offcanvasRight">
+                                        <!-- SVG del icono de carrito -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
                                             <circle cx="9" cy="21" r="1"></circle>
                                             <circle cx="20" cy="21" r="1"></circle>
@@ -108,12 +111,16 @@
                                             <path d="M6 6h15l-1.68 8.39a1 1 0 0 1-1 .61H7"></path>
                                         </svg>
 
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
+                                        <!-- Contador del Carrito -->
+                                        <span id="carrito-count-desktop" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
                                               th:text="${totalCantidadProductos}">
-                                                0
-                                            </span>
+            0
+        </span>
                                     </a>
                                 </li>
+
+
+
                                 <!-- Notifications icon -->
                                 <li class="list-inline-item dropdown">
                                     <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -218,8 +225,10 @@
                         <div class="list-inline">
                             <ul class="list-inline">
                                 <!-- Shopcart icon -->
+                                <!-- Icono de Carrito -->
                                 <li class="list-inline-item me-5">
                                     <a class="text-muted position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" href="#offcanvasExample" role="button" aria-controls="offcanvasRight">
+                                        <!-- SVG del icono de carrito -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
                                             <circle cx="9" cy="21" r="1"></circle>
                                             <circle cx="20" cy="21" r="1"></circle>
@@ -227,13 +236,14 @@
                                             <path d="M6 6h15l-1.68 8.39a1 1 0 0 1-1 .61H7"></path>
                                         </svg>
 
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
+                                        <!-- Contador del Carrito -->
+                                        <span id="carrito-count-mobile" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
                                               th:text="${totalCantidadProductos}">
-                                                0
-                                            </span>
-
+            0
+        </span>
                                     </a>
                                 </li>
+
                                 <!-- Notifications icon -->
                                 <li class="list-inline-item dropdown">
                                     <a class="position-relative btn-icon btn-ghost-secondary btn rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

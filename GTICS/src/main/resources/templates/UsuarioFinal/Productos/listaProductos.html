@@ -22,6 +22,8 @@
 
         <!-- Theme CSS -->
         <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
+
+
         <style>
             .zoom {
                 position: relative;
@@ -39,7 +41,9 @@
                 background-size: 200%; /* Zoom al pasar el ratón */
             }
         </style>
-
+        <!-- CSRF Tokens -->
+        <meta name="_csrf" th:content="${_csrf.token}" />
+        <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     </head>
 
     <body>
@@ -244,6 +248,10 @@
                                                 <!-- Proveedor y Subcategoría -->
                                                 <div class="text-decoration-none text-muted small mb-1" th:text="${producto.idSubcategoria.nombreSubcategoria}"></div>
                                                 <div class="text-decoration-none text-muted small mb-2" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></div>
+                                                <div class="text-decoration-none text-muted small mb-3"
+                                                     th:text="${producto.codigoProducto != null} ? 'Código de producto: ' + ${producto.codigoProducto} : 'Código no disponible'">
+                                                </div>
+
 
                                                 <!-- Estrellas y calificación -->
                                                 <div class="mb-4">
@@ -262,7 +270,7 @@
                                                     <div class="text-dark fw-bold" style="font-size: 1rem; min-width: 80px;">
                                                         <span th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
                                                     </div>
-                                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="flex-shrink-0">
+                                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form flex-shrink-0">
                                                         <input type="hidden" name="idProducto" th:value="${producto.id}" />
                                                         <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" />
                                                         <button type="submit" class="btn btn-primary btn-sm" style="width: 100px;">
@@ -270,6 +278,8 @@
                                                             Añadir
                                                         </button>
                                                     </form>
+
+
                                                 </div>
                                             </div> <!-- card-body -->
                                         </div> <!-- card -->
@@ -488,6 +498,111 @@
                 alert(`Opción seleccionada: ${option}`);
                 // Aquí puedes añadir lógica para manejar las opciones seleccionadas
             }
+
+        </script>
+        <!-- Script para Manejar AJAX y CSRF -->
+        <script>
+            $(document).ready(function() {
+                // Obtener el token CSRF de los meta tags
+                var csrfToken = $('meta[name="_csrf"]').attr('content');
+                var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+                // Configurar AJAX para incluir el token en todas las solicitudes
+                $.ajaxSetup({
+                    beforeSend: function(xhr) {
+                        if (csrfToken && csrfHeader) {
+                            xhr.setRequestHeader(csrfHeader, csrfToken);
+                        }
+                    }
+                });
+
+                // Capturar el evento de envío del formulario
+                $('.add-to-cart-form').on('submit', function(event) {
+                    event.preventDefault(); // Prevenir la acción predeterminada del formulario
+
+                    var form = $(this);
+                    var url = form.attr('action');
+                    var method = form.attr('method');
+                    var data = form.serialize(); // Obtener los datos del formulario
+
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        data: data,
+                        success: function(response) {
+                            if (response.success) {
+                                // Actualizar el contador del carrito
+                                $('#carrito-count').text(response.totalArticulos);
+
+                                // Si tienes múltiples contadores, actualízalos también
+                                $('#carrito-count-desktop').text(response.totalArticulos);
+                                $('#carrito-count-mobile').text(response.totalArticulos);
+                            } else {
+                                // Manejar errores retornados por el servidor
+                                console.error(response.mensaje);
+                                // Opcional: Mostrar un mensaje de error en la página
+                                $('#error-message').text(response.mensaje).fadeIn().delay(3000).fadeOut();
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Manejar errores de la solicitud AJAX
+                            console.error('Error AJAX:', error);
+                            // Opcional: Mostrar un mensaje de error en la página
+                            $('#error-message').text('Ocurrió un error al intentar añadir el producto al carrito.').fadeIn().delay(3000).fadeOut();
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+                // Obtener el token CSRF de los meta tags
+                var csrfToken = $('meta[name="_csrf"]').attr('content');
+                var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+                // Configurar AJAX para incluir el token en todas las solicitudes
+                $.ajaxSetup({
+                    beforeSend: function(xhr) {
+                        if (csrfToken && csrfHeader) {
+                            xhr.setRequestHeader(csrfHeader, csrfToken);
+                        }
+                    }
+                });
+
+                // Capturar el evento de envío del formulario
+                $('.add-to-cart-form').on('submit', function(event) {
+                    event.preventDefault(); // Prevenir la acción predeterminada del formulario
+
+                    var form = $(this);
+                    var url = form.attr('action');
+                    var method = form.attr('method');
+                    var data = form.serialize(); // Obtener los datos del formulario
+
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        data: data,
+                        success: function(response) {
+                            if (response.success) {
+                                // Actualizar los contadores del carrito
+                                $('#carrito-count-desktop').text(response.totalArticulos);
+                                $('#carrito-count-mobile').text(response.totalArticulos);
+                            } else {
+                                // Manejar errores retornados por el servidor
+                                console.error(response.mensaje);
+                                // Mostrar mensaje de error en el contenedor
+                                $('#error-message').text(response.mensaje).fadeIn().delay(3000).fadeOut();
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Manejar errores de la solicitud AJAX
+                            console.error('Error AJAX:', error);
+                            // Mostrar mensaje de error en el contenedor
+                            $('#error-message').text('Ocurrió un error al intentar añadir el producto al carrito.').fadeIn().delay(3000).fadeOut();
+                        }
+                    });
+                });
+            });
 
         </script>
     </body>
