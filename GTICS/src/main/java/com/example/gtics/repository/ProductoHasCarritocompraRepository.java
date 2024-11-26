@@ -18,6 +18,9 @@ public interface ProductoHasCarritocompraRepository extends JpaRepository<Produc
 
     Optional<ProductoHasCarritocompra> findById_IdCarritoCompraAndId_IdProducto(Integer idCarritoCompra, Integer idProducto);
 
+    // Nuevo método para sumar las cantidades
+    @Query("SELECT SUM(p.cantidadProducto) FROM ProductoHasCarritocompra p WHERE p.id.idCarritoCompra = :idCarritoCompra")
+    int sumCantidadById_IdCarritoCompra(@Param("idCarritoCompra") Integer idCarritoCompra);
     @Query("SELECT p.idProducto.id AS idProducto, p.idProducto.nombreProducto AS nombreProducto, p.cantidadProducto AS cantidadProducto, " +
             "p.idProducto.precio AS precioUnidad, (p.cantidadProducto * p.idProducto.precio) AS precioTotalPorProducto, " +
             "p.idProducto.costoEnvio AS costoEnvio, f.foto AS foto " +

@@ -177,7 +177,7 @@ public class UsuarioFinalController {
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
     }
-
+    @Transactional
     @PostMapping("/UsuarioFinal/agregarAlCarrito")
     public ResponseEntity<Map<String, Object>> agregarAlCarrito(
             @RequestParam("idProducto") Integer idProducto,
@@ -235,7 +235,7 @@ public class UsuarioFinalController {
                     nuevoCarrito.setActivo(true); // Marca el carrito como activo
                     return carritoCompraRepository.save(nuevoCarrito);
                 });
-
+        logger.info("Carrito de compra encontrado o creado: idCarritoCompra={}", carrito.getId());
         // Busca si el producto ya está en el carrito
         Optional<ProductoHasCarritocompra> productoEnCarritoOpt =
                 productoHasCarritocompraRepository.findById_IdCarritoCompraAndId_IdProducto(carrito.getId(), idProducto);
@@ -245,6 +245,7 @@ public class UsuarioFinalController {
             ProductoHasCarritocompra productoEnCarrito = productoEnCarritoOpt.get();
             productoEnCarrito.setCantidadProducto(productoEnCarrito.getCantidadProducto() + cantidad);
             productoHasCarritocompraRepository.save(productoEnCarrito);
+            logger.info("Cantidad de producto actualizada en el carrito: idProducto={}, nuevaCantidad={}", idProducto, productoEnCarrito.getCantidadProducto());
         } else {
             // Si el producto no está en el carrito, lo agrega como un nuevo elemento
             Producto producto = productoRepository.findById(idProducto)
@@ -258,16 +259,19 @@ public class UsuarioFinalController {
             nuevoProductoEnCarrito.setIdCarritoCompra(carrito);
             nuevoProductoEnCarrito.setCantidadProducto(cantidad);
             productoHasCarritocompraRepository.save(nuevoProductoEnCarrito);
+            logger.info("Nuevo producto agregado al carrito: idProducto={}, cantidad={}", idProducto, cantidad);
         }
 
         if (isAjax) {
-            // Obtener el nuevo total de artículos en el carrito
-            int totalArticulos = productoHasCarritocompraRepository.countById_IdCarritoCompra(carrito.getId());
+            // Obtener el nuevo total de artículos en el carrito (suma de todas las cantidades)
+            int totalArticulos = productoHasCarritocompraRepository.sumCantidadById_IdCarritoCompra(carrito.getId());
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("mensaje", "Producto agregado al carrito exitosamente.");
             response.put("totalArticulos", totalArticulos);
+            logger.info("Respuesta AJAX enviada: success=true, totalArticulos={}", totalArticulos);
+
             return ResponseEntity.ok(response);
         } else {
             // Respuesta tradicional

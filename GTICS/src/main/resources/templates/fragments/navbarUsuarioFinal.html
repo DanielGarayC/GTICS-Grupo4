@@ -21,13 +21,19 @@
 
     <!-- Theme CSS -->
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
+    <style>
+        body {
+            padding-top: 80px; /* Ajusta según la altura de tu navbar */
+        }
+
+    </style>
 </head>
 <body>
 <!-- Fragmento de Navbar --->
 <div th:fragment="navbar">
     <!-- navbar -->
     <!-- Navbar para pantallas grandes -->
-    <div class="border-bottom d-none d-lg-block">
+    <div class="border-bottom d-none d-lg-block sticky-top">
         <div class="py-5">
             <div class="container">
                 <div class="row w-100 align-items-center gx-lg-2 gx-0 justify-content-between">
@@ -212,7 +218,7 @@
     <!-- fin navbar pantallas grandes -->
 
     <!-- Navbar para pantallas pequeñas -->
-    <div class="border-bottom d-lg-none">
+    <div class="border-bottom d-lg-none sticky-top">
         <div class="py-5">
             <div class="container">
                 <div class="row w-100 align-items-center gx-lg-2 gx-0">
