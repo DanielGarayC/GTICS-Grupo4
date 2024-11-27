@@ -79,7 +79,7 @@
 									<!-- Nombres -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Nombres:</label>
-										<input type="text" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}"  />
+										<input type="text" id="Nombre" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}"  />
 										<div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
 									</div>
 
@@ -87,21 +87,21 @@
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Apellido Paterno:</label>
 										<input type="text" class="form-control" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}"  />
-										<div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}" ></div>
+										<div class="invalid-feedback" id="ApellidoPaterno" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}" ></div>
 									</div>
 
 									<!-- input Apellido Materno -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Apellido Materno:</label>
-										<input type="text" class="form-control" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}"  />
+										<input type="text" id="ApellidoMaterno" class="form-control" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}"  />
 										<div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}" ></div>
 									</div>
 
 									<!-- input DNI -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">DNI:</label>
-										<input type="text" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}"/>
-										<div class="invalid-feedback" th:if="${dniError}" th:text="${dniError}"></div>
+										<input type="text" id="dni" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}"/>
+										<div class="invalid-feedback" id="dni-error" th:if="${dniError}" th:text="${dniError}"></div>
 									</div>
 									<!-- input Teléfono -->
 									<div class="col-lg-6 col-12">
@@ -113,8 +113,8 @@
 									<!-- input Correo electrónico -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Correo electrónico:</label>
-										<input type="email" class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}" />
-										<div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" ></div>
+										<input type="email" id="email" class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}" />
+										<div class="invalid-feedback" id="email-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" ></div>
 									</div>
 
 									<!-- input Dirección -->
@@ -171,7 +171,7 @@
 									</div>
 									<!-- Botones -->
 									<div class="col-12 mt-3">
-										<button type="submit" class="btn btn-success mb-2">Crear Agente</button>
+										<button type="submit" id="crearButton" class="btn btn-success mb-2">Crear Agente</button>
 										<a th:href="@{/AdminZonal/Agentes}" class="btn btn-danger mb-2">Cancelar</a>
 									</div>
 
@@ -195,6 +195,7 @@
 
 <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
 <script th:src="@{/js/vendors/chart.js}"></script>
+<script th:src="@{/js/validacionCrear.js}"></script>
 <script>
 	function actualizarCodigoJurisdiccion() {
 		var select = document.getElementById("distritoSelect");
