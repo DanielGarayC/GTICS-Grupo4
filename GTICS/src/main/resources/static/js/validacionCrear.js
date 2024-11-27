@@ -1,39 +1,116 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const dniInput = document.getElementById("dni");
-    const emailInput = document.getElementById("creatFinalUserEmail");
+    const dniInput = document.getElementById('dni');
+    const nombreInput = document.getElementById('Nombre');
+    const apellidoPaternoInput = document.getElementById('ApellidoPaterno');
+    const apellidoMaternoInput = document.getElementById('ApellidoMaterno');
+    const emailInput = document.getElementById('email');
+    const crearButton = document.getElementById('crearButton');
 
-    dniInput.addEventListener('blur', function() {
-        verificarYCompletarDNI(dniInput.value);
+    const dniError = document.getElementById('dni-error');
+    const emailError = document.getElementById('email-error');
+
+    dniInput.addEventListener('input', function() {
+        const dni = dniInput.value;
+        if (dni.length === 8 && /^\d+$/.test(dni)) {
+            verificarDniExistente(dni);
+        } else {
+            resetForm();
+            dniError.textContent = 'El DNI debe contener exactamente 8 dígitos numéricos.';
+            dniInput.classList.add('is-invalid');
+            crearButton.disabled = true;
+        }
     });
 
-    emailInput.addEventListener('blur', function() {
-        verificarEmail(emailInput.value);
+    function verificarDniExistente(dni) {
+        fetch(`/existe-dni/${dni}`)
+            .then(response => response.json())
+            .then(existe => {
+                if (existe) {
+                    dniError.textContent = 'El DNI ingresado ya está registrado en el sistema.';
+                    dniInput.classList.add('is-invalid');
+                    resetForm();
+                    crearButton.disabled = true;
+                } else {
+                    dniError.textContent = '';
+                    dniInput.classList.remove('is-invalid');
+                    consultarDNI(dni);
+                }
+            })
+            .catch(error => {
+                console.error('Error al verificar el DNI:', error);
+                crearButton.disabled = true;
+            });
+    }
+
+    function consultarDNI(dni) {
+        fetch(`/consulta-dni/${dni}`)
+            .then(response => response.json())
+            .then(datos => {
+                if (datos.length > 0) {
+                    nombreInput.value = datos[0];
+                    apellidoPaternoInput.value = datos[1];
+                    apellidoMaternoInput.value = datos[2];
+                    nombreInput.disabled = true;
+                    apellidoPaternoInput.disabled = true;
+                    apellidoMaternoInput.disabled = true;
+                    crearButton.disabled = false;
+                } else {
+                    resetForm();
+                    dniError.textContent = 'DNI no encontrado.';
+                    dniInput.classList.add('is-invalid');
+                    crearButton.disabled = true;
+                }
+            })
+            .catch(error => {
+                console.error('Error al consultar el DNI:', error);
+                crearButton.disabled = true;
+            });
+    }
+
+    function resetForm() {
+        nombreInput.value = '';
+        apellidoPaternoInput.value = '';
+        apellidoMaternoInput.value = '';
+        nombreInput.disabled = false;
+        apellidoPaternoInput.disabled = false;
+        apellidoMaternoInput.disabled = false;
+    }
+
+    emailInput.addEventListener('input', function() {
+        const email = emailInput.value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailPattern.test(email)) {
+            verificarEmailExistente(email);
+        } else {
+            emailError.textContent = 'Por favor ingrese un correo electrónico válido.';
+            emailInput.classList.add('is-invalid');
+            crearButton.disabled = true;
+        }
     });
+
+    function verificarEmailExistente(email) {
+        fetch(`/consulta-email/${email}`)
+            .then(response => response.json())
+            .then(existe => {
+                if (existe) {
+                    emailError.textContent = 'El correo electrónico ya está registrado en el sistema.';
+                    emailInput.classList.add('is-invalid');
+                    crearButton.disabled = true;
+                } else {
+                    emailError.textContent = '';
+                    emailInput.classList.remove('is-invalid');
+                    emailInput.classList.add('is-valid');
+                    crearButton.disabled = !validarFormulario();
+                }
+            })
+            .catch(error => {
+                console.error('Error al verificar el correo electrónico:', error);
+                crearButton.disabled = true;
+            });
+    }
+
+    function validarFormulario() {
+        const inputsRequeridos = document.querySelectorAll('.form-control');
+        return Array.from(inputsRequeridos).every(input => input.classList.contains('is-valid'));
+    }
 });
-
-function verificarYCompletarDNI(dni) {
-    fetch(`/consulta-dni/${dni}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.length > 0) {
-                document.getElementById('Nombre').value = data[0];  // Asumiendo que la posición 0 tiene el nombre
-                document.getElementById('ApellidoPaterno').value = data[1];  // Asumiendo que la posición 1 tiene el apellido paterno
-                document.getElementById('ApellidoMaterno').value = data[2];  // Asumiendo que la posición 2 tiene el apellido materno
-            } else {
-                alert("DNI no encontrado");
-            }
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-function verificarEmail(email) {
-    fetch(`/consulta-email/${email}`)
-        .then(response => response.json())
-        .then(existe => {
-            if (existe) {
-                alert('El correo electrónico ya está registrado.');
-                document.getElementById('creatFinalUserEmail').value = ''; // Limpiar el campo email
-            }
-        })
-        .catch(error => console.error('Error:', error));
-}

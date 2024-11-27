@@ -147,6 +147,9 @@ public class UsuarioFinalController {
         boolean existe = usuarioRepository.findAll()
                 .stream()
                 .anyMatch(user -> user.getEmail().equals(email));
+        if (existe){
+            System.out.println("El correo: "+email+ " ya existe en el sistema");
+        }
         return ResponseEntity.ok(existe);
     }
 
