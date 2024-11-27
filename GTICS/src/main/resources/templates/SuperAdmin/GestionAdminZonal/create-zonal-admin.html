@@ -140,7 +140,7 @@
                                                         Email: <span style="visibility: hidden;">*</span>
                                                     </label>
                                                     <input type="email" class="form-control" id="email" name="email" placeholder="Correo Electrónico" required />
-                                                    <div class="invalid-feedback" id="emai-error"></div>
+                                                    <div class="invalid-feedback" id="email-error"></div>
                                                 </div>
 
                                                 <!-- Dirección -->
@@ -179,7 +179,7 @@
                                                 <!-- Botones de acción -->
                                                 <div class="col-12 mt-3">
                                                     <div class="d-flex flex-column flex-md-row gap-2">
-                                                        <button class="btn btn-primary" type="button" onclick="confirmarRegistro()">Crear</button>
+                                                        <button class="btn btn-primary" id="crearButton" type="button" onclick="confirmarRegistro()">Crear</button>
                                                         <a th:href="@{/SuperAdmin/listaAdminZonal}" class="btn btn-secondary">Cancelar</a>
                                                     </div>
                                                 </div>
