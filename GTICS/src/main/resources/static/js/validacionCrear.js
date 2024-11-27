@@ -54,9 +54,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     apellidoPaternoInput.disabled = true;
                     apellidoMaternoInput.disabled = true;
                     crearButton.disabled = false;
+                    dniInput.classList.add('is-valid');
+                    dniInput.classList.remove('is-invalid');
                 } else {
                     resetForm();
                     dniError.textContent = 'DNI no encontrado.';
+                    dniInput.classList.remove('is-valid');
                     dniInput.classList.add('is-invalid');
                     crearButton.disabled = true;
                 }
@@ -80,9 +83,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const email = emailInput.value;
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (emailPattern.test(email)) {
+            emailInput.classList.add('is-valid');
+            emailInput.classList.remove('is-invalid');
             verificarEmailExistente(email);
         } else {
             emailError.textContent = 'Por favor ingrese un correo electrónico válido.';
+            emailInput.classList.remove('is-valid');
             emailInput.classList.add('is-invalid');
             crearButton.disabled = true;
         }
@@ -94,13 +100,14 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(existe => {
                 if (existe) {
                     emailError.textContent = 'El correo electrónico ya está registrado en el sistema.';
+                    emailInput.classList.remove('is-valid');
                     emailInput.classList.add('is-invalid');
                     crearButton.disabled = true;
                 } else {
                     emailError.textContent = '';
-                    emailInput.classList.remove('is-invalid');
                     emailInput.classList.add('is-valid');
-                    crearButton.disabled = !validarFormulario();
+                    emailInput.classList.remove('is-invalid');
+                    crearButton.disabled = false;
                 }
             })
             .catch(error => {

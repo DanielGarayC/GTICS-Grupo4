@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta content="Codescandy" name="author">
-	<title>Plantilla base para roles administrativos</title>
+	<title>Crear Nuevo Agente</title>
 	<!-- Favicon icon-->
 	<link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
@@ -76,33 +76,34 @@
 								<!-- card body -->
 								<div class="row">
 
+									<!-- input DNI -->
+									<div class="col-lg-6 col-12">
+										<label for="dni" class="form-label">DNI:</label>
+										<input type="text" id="dni" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}"/>
+										<div class="invalid-feedback" id="dni-error"></div>
+									</div>
+
 									<!-- Nombres -->
 									<div class="col-lg-6 col-12">
-										<label class="form-label">Nombres:</label>
-										<input type="text" id="Nombre" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}"  />
+										<label for="Nombre" class="form-label">Nombres:</label>
+										<input type="text" id="Nombre" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" required/>
 										<div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
 									</div>
 
 									<!-- input apellido paterno -->
 									<div class="col-lg-6 col-12">
-										<label class="form-label">Apellido Paterno:</label>
-										<input type="text" class="form-control" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}"  />
-										<div class="invalid-feedback" id="ApellidoPaterno" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}" ></div>
+										<label for="ApellidoPaterno" class="form-label">Apellido Paterno:</label>
+										<input type="text" id="ApellidoPaterno" class="form-control" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}" required/>
+										<div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}" ></div>
 									</div>
 
 									<!-- input Apellido Materno -->
 									<div class="col-lg-6 col-12">
-										<label class="form-label">Apellido Materno:</label>
-										<input type="text" id="ApellidoMaterno" class="form-control" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}"  />
+										<label for="ApellidoMaterno" class="form-label">Apellido Materno:</label>
+										<input type="text" id="ApellidoMaterno" class="form-control" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}" required/>
 										<div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}" ></div>
 									</div>
 
-									<!-- input DNI -->
-									<div class="col-lg-6 col-12">
-										<label class="form-label">DNI:</label>
-										<input type="text" id="dni" class="form-control" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}"/>
-										<div class="invalid-feedback" id="dni-error" th:if="${dniError}" th:text="${dniError}"></div>
-									</div>
 									<!-- input Teléfono -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Teléfono:</label>
@@ -112,9 +113,9 @@
 
 									<!-- input Correo electrónico -->
 									<div class="col-lg-6 col-12">
-										<label class="form-label">Correo electrónico:</label>
+										<label for="email" class="form-label">Correo electrónico:</label>
 										<input type="email" id="email" class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}" />
-										<div class="invalid-feedback" id="email-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" ></div>
+										<div class="invalid-feedback" id="email-error"></div>
 									</div>
 
 									<!-- input Dirección -->
