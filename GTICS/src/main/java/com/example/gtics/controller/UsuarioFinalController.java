@@ -661,7 +661,7 @@ public class UsuarioFinalController {
                 solicitudagente.setIdUsuario(usuario);
                 solicitudagente.setIndicadorSolicitud(0);
                 solicitudagente.setCodigoRuc(usuario.getAgtRuc()); // Si es necesario
-
+                solicitudagente.setCodigoJurisdiccion(String.valueOf(usuario.getDistrito().getCodigojurisdiccion()));
                 solicitudAgenteRepository.save(solicitudagente);
 
                 return "redirect:/UsuarioFinal";

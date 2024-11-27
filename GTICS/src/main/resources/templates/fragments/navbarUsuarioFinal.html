@@ -467,7 +467,7 @@
                         <!-- Código de jurisdicción -->
                         <div class="col-12">
                             <label for="codigoJurisdiccion" class="form-label">Código de jurisdicción</label>
-                            <input type="text" class="form-control" name="codigoJurisdiccion" placeholder="Ingrese su código de jurisdicción" required />
+                            <input type="text" class="form-control" th:value="${usuario.distrito.codigojurisdiccion}" aria-label="Codigo de jurisdiccion" disabled />
                         </div>
                         <!-- Código de aduana -->
                         <div class="col-12">
