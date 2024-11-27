@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     nombreInput.value = datos[0];
                     apellidoPaternoInput.value = datos[1];
                     apellidoMaternoInput.value = datos[2];
-                    nombreInput.disabled = true;
-                    apellidoPaternoInput.disabled = true;
-                    apellidoMaternoInput.disabled = true;
+                    nombreInput.readOnly = true;
+                    apellidoPaternoInput.readOnly = true;
+                    apellidoMaternoInput.readOnly = true;
                     crearButton.disabled = false;
                     dniInput.classList.add('is-valid');
                     dniInput.classList.remove('is-invalid');
