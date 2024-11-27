@@ -398,6 +398,7 @@
             }
 
             // Función para Descargar Reporte
+            // Función para Descargar Reporte
             function descargarReporte(cardNumber) {
                 const formatos = [];
                 if (document.getElementById(`pdfSwitch${cardNumber}`).checked) formatos.push('PDF');
@@ -458,20 +459,31 @@
                     return;
                 }
 
-                // Agregar los formatos seleccionados
-                params.append('formatos', formatos.join(','));
-
-                // Determinar la URL adecuada
                 let url = "";
-                if (cardNumber === 1) {
-                    url = `/descargarOrdenZIP?${params.toString()}`;
-                } else if (cardNumber === 2) {
-                    url = `/descargarReporteTotalOrdenesZIP?${params.toString()}`;
-                } else if (cardNumber === 3) {
-                    url = `/descargarReporteOrdenesPorZonaZIP?${params.toString()}`;
+
+                if (formatos.length === 1) {
+                    // Descarga directa del formato seleccionado
+                    const formato = formatos[0]; // Convertir a minúsculas para la URL
+                    if (cardNumber === 1) {
+                        url = `/descargarOrden${formato}?${params.toString()}`;
+                    } else if (cardNumber === 2) {
+                        url = `/descargarReporteTotalOrdenes${formato}?${params.toString()}`;
+                    } else if (cardNumber === 3) {
+                        url = `/descargarReporteOrdenesPorZona${formato}?${params.toString()}`;
+                    }
+                } else {
+                    // Descargar como archivo ZIP si hay más de un formato seleccionado
+                    params.append('formatos', formatos.join(','));
+                    if (cardNumber === 1) {
+                        url = `/descargarOrdenZIP?${params.toString()}`;
+                    } else if (cardNumber === 2) {
+                        url = `/descargarReporteTotalOrdenesZIP?${params.toString()}`;
+                    } else if (cardNumber === 3) {
+                        url = `/descargarReporteOrdenesPorZonaZIP?${params.toString()}`;
+                    }
                 }
 
-                // Iniciar la descarga del archivo ZIP
+                // Iniciar la descarga
                 fetch(url)
                     .then(response => {
                         if (!response.ok) {
@@ -482,17 +494,21 @@
                     .then(blob => {
                         const link = document.createElement('a');
                         link.href = window.URL.createObjectURL(blob);
-                        // Determinar nombre de archivo basado en el cardNumber
+
+                        // Determinar nombre de archivo basado en el formato o ZIP
                         let fileName = '';
-                        if (cardNumber === 1) {
-                            fileName = 'Reporte_Ordenes_Usuario.zip';
-                        } else if (cardNumber === 2) {
-                            fileName = 'Reporte_Total_Ordenes.zip';
-                        } else if (cardNumber === 3) {
-                            fileName = 'Reporte_Ordenes_Zona.zip';
+                        if (formatos.length === 1) {
+                            fileName = `Reporte.${formatos[0].toLowerCase()}`; // PDF, Excel, o CSV
                         } else {
-                            fileName = 'Reporte.zip';
+                            if (cardNumber === 1) {
+                                fileName = 'Reporte_Ordenes_Usuario.zip';
+                            } else if (cardNumber === 2) {
+                                fileName = 'Reporte_Total_Ordenes.zip';
+                            } else if (cardNumber === 3) {
+                                fileName = 'Reporte_Ordenes_Zona.zip';
+                            }
                         }
+
                         link.download = fileName;
                         document.body.appendChild(link);
                         link.click();
@@ -503,6 +519,7 @@
                         Swal.fire("Error", error.message, "error");
                     });
             }
+
 
             // Funciones para Actualizar Fechas
             function actualizarFechaFinMin() {

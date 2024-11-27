@@ -589,16 +589,43 @@ public class AgenteController {
         return ordenRepository.obtenerCarritoConDto(usuarioId, pageable).getContent();
     }
     @GetMapping("/descargarOrdenPDF")
-    public void descargarOrdenPDF(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException, DocumentException {
+    public void descargarOrdenPDF(@RequestParam("idOrden") Integer idOrden,
+                                  HttpServletResponse response,
+                                  HttpSession session) throws IOException, DocumentException {
         try {
-            byte[] pdfBytes = generarOrdenPDF(idOrden);
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".pdf");
-            response.getOutputStream().write(pdfBytes);
-        } catch (IOException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+            // Validar si la sesión del usuario está activa
+            Integer idAgente = (Integer) session.getAttribute("id");
+            if (idAgente == null) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuario no autenticado");
+                return;
+            }
+
+            // Verificar si la orden existe
+            Optional<Orden> optOrden = ordenRepository.findById(idOrden);
+            if (!optOrden.isPresent()) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
+                return;
+            }
+            Orden orden = optOrden.get();
+
+            // Generar el archivo PDF
+            byte[] fileBytes = generarOrdenPDF(idOrden);
+
+            if (fileBytes != null) {
+                // Configurar la respuesta para enviar el PDF directamente
+                response.setContentType("application/pdf");
+                response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".pdf");
+                response.getOutputStream().write(fileBytes);
+            } else {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo PDF");
+            }
+
+        } catch (IOException | DocumentException e) {
+            // Manejar cualquier excepción y enviar un error HTTP
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo PDF: " + e.getMessage());
         }
     }
+
 
 
     @GetMapping("/descargarOrdenExcel")
@@ -630,17 +657,36 @@ public class AgenteController {
     @GetMapping("/descargarOrdenZIP")
     public void descargarOrdenZIP(@RequestParam("idOrden") Integer idOrden,
                                   @RequestParam("formatos") String formatos,
-                                  HttpServletResponse response) throws IOException, DocumentException {
+                                  HttpServletResponse response,
+                                  HttpSession session) throws IOException, DocumentException {
         try {
+            // Validar si la sesión del usuario está activa
+            Integer idAgente = (Integer) session.getAttribute("id");
+            if (idAgente == null) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuario no autenticado");
+                return;
+            }
+
+            // Verificar si la orden existe
+            Optional<Orden> optOrden = ordenRepository.findById(idOrden);
+            if (!optOrden.isPresent()) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
+                return;
+            }
+            Orden orden = optOrden.get();
+
+            // Crear un ByteArrayOutputStream para almacenar los archivos ZIP
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ZipOutputStream zos = new ZipOutputStream(baos);
 
+            // Dividir los formatos solicitados en el parámetro "formatos"
             String[] formatosArray = formatos.split(",");
             for (String formato : formatosArray) {
                 formato = formato.trim();
                 byte[] fileBytes = null;
                 String fileName = "Orden_" + idOrden;
 
+                // Generar los archivos en el formato correspondiente
                 if (formato.equalsIgnoreCase("PDF")) {
                     fileBytes = generarOrdenPDF(idOrden);
                     fileName += ".pdf";
@@ -652,6 +698,7 @@ public class AgenteController {
                     fileName += ".csv";
                 }
 
+                // Si los bytes del archivo no son nulos, agregar el archivo al ZIP
                 if (fileBytes != null) {
                     ZipEntry zipEntry = new ZipEntry(fileName);
                     zos.putNextEntry(zipEntry);
@@ -660,15 +707,19 @@ public class AgenteController {
                 }
             }
 
+            // Cerrar el ZipOutputStream después de agregar todas las entradas
             zos.close();
 
+            // Establecer el tipo de contenido de la respuesta y el encabezado para la descarga
             response.setContentType("application/zip");
             response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".zip");
             response.getOutputStream().write(baos.toByteArray());
         } catch (IOException | DocumentException e) {
+            // Manejar cualquier excepción y enviar un error HTTP
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo ZIP: " + e.getMessage());
         }
     }
+
 
 
     private byte[] generarOrdenPDF(Integer idOrden) throws IOException, DocumentException {
@@ -800,6 +851,7 @@ public class AgenteController {
             throw new IOException("Orden no encontrada");
         }
     }
+
 
     // Clase para agregar encabezado y pie de página
     class HeaderFooterPageEvent extends PdfPageEventHelper {
@@ -1074,6 +1126,102 @@ public class AgenteController {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo ZIP: " + e.getMessage());
         }
     }
+    @GetMapping("/descargarReporteTotalOrdenesPDF")
+    public void descargarReporteTotalOrdenesPDF(
+            @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+            HttpServletResponse response) throws IOException, DocumentException {
+
+        try {
+            // Ajustar fechaFin si es necesario
+            LocalDate fechaFinInclusive = fechaFin.plusDays(1);
+
+            // Obtener las órdenes en el rango de fechas ajustado
+            List<Orden> ordenes = ordenRepository.findOrdenesByFechaOrdenBetween(fechaInicio, fechaFinInclusive);
+
+            if (ordenes.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron órdenes en el rango de fechas seleccionado.");
+                return;
+            }
+
+            // Generar el reporte en PDF
+            byte[] pdfBytes = generarReporteTotalOrdenesPDF(ordenes, fechaInicio, fechaFin);
+
+            // Configurar la respuesta para enviar el PDF
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=Reporte_Total_Ordenes_" + fechaInicio + "_al_" + fechaFin + ".pdf");
+            response.getOutputStream().write(pdfBytes);
+
+        } catch (IOException | DocumentException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el reporte PDF: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/descargarReporteTotalOrdenesCSV")
+    public void descargarReporteTotalOrdenesCSV(
+            @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+            HttpServletResponse response) throws IOException {
+
+        try {
+            // Ajustar fechaFin si es necesario
+            LocalDate fechaFinInclusive = fechaFin.plusDays(1);
+
+            // Obtener las órdenes en el rango de fechas ajustado
+            List<Orden> ordenes = ordenRepository.findOrdenesByFechaOrdenBetween(fechaInicio, fechaFinInclusive);
+
+            if (ordenes.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron órdenes en el rango de fechas seleccionado.");
+                return;
+            }
+
+            // Generar el reporte en CSV
+            byte[] csvBytes = generarReporteTotalOrdenesCSV(ordenes, fechaInicio, fechaFin);
+
+            // Configurar la respuesta para enviar el archivo CSV
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "attachment; filename=Reporte_Total_Ordenes_" + fechaInicio + "_al_" + fechaFin + ".csv");
+            response.getOutputStream().write(csvBytes);
+
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el reporte CSV: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/descargarReporteTotalOrdenesExcel")
+    public void descargarReporteTotalOrdenesExcel(
+            @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+            HttpServletResponse response) throws IOException {
+
+        try {
+            // Ajustar fechaFin si es necesario
+            LocalDate fechaFinInclusive = fechaFin.plusDays(1);
+
+            // Obtener las órdenes en el rango de fechas ajustado
+            List<Orden> ordenes = ordenRepository.findOrdenesByFechaOrdenBetween(fechaInicio, fechaFinInclusive);
+
+            if (ordenes.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron órdenes en el rango de fechas seleccionado.");
+                return;
+            }
+
+            // Generar el reporte en Excel (XLSX)
+            byte[] excelBytes = generarReporteTotalOrdenesExcel(ordenes, fechaInicio, fechaFin);
+
+            // Configurar la respuesta para enviar el archivo Excel
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "attachment; filename=Reporte_Total_Ordenes_" + fechaInicio + "_al_" + fechaFin + ".xlsx");
+            response.getOutputStream().write(excelBytes);
+
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el reporte Excel: " + e.getMessage());
+        }
+    }
+
+
+
+
 
 
 
@@ -1413,6 +1561,186 @@ public class AgenteController {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo ZIP: " + e.getMessage());
         }
     }
+    @GetMapping("/descargarReporteOrdenesPorZonaPDF")
+    public void descargarReporteOrdenesPorZonaPDF(
+            HttpSession session,
+            HttpServletResponse response) throws IOException, DocumentException {
+
+        // Obtener idAgente de la sesión
+        Integer idAgente = (Integer) session.getAttribute("id");
+
+        if (idAgente == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuario no autenticado");
+            return;
+        }
+
+        // Obtener el agente actual
+        Optional<Usuario> optAgente = usuarioRepository.findById(idAgente);
+        if (!optAgente.isPresent()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Agente no encontrado");
+            return;
+        }
+        Usuario agenteActual = optAgente.get();
+
+        // Obtener idZona del agente actual
+        Integer idZona = agenteActual.getDistrito().getZona().getId();
+
+        // Obtener todos los agentes con idRol=3 en esa zona
+        Integer idRol = 3;
+        List<Usuario> agentesEnZona = usuarioRepository.findByDistrito_Zona_IdAndRol_Id(idZona, idRol);
+
+        if (agentesEnZona.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron agentes con rol 3 en esta zona");
+            return;
+        }
+
+        // Obtener los IDs de los agentes
+        List<Integer> idAgentes = agentesEnZona.stream()
+                .map(Usuario::getId)
+                .collect(Collectors.toList());
+
+        // Obtener todas las órdenes asignadas a estos agentes
+        List<Orden> ordenes = ordenRepository.findByIdAgente_IdIn(idAgentes);
+
+        if (ordenes.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron órdenes asignadas a los agentes en esta zona");
+            return;
+        }
+
+        try {
+            // Generar el reporte en PDF
+            byte[] pdfBytes = generarReporteOrdenesPorZonaPDF(ordenes, idZona);
+
+            // Configurar la respuesta para enviar el PDF
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=Reporte_Ordenes_Zona_" + idZona + ".pdf");
+            response.getOutputStream().write(pdfBytes);
+        } catch (IOException | DocumentException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el reporte PDF: " + e.getMessage());
+        }
+    }
+    @GetMapping("/descargarReporteOrdenesPorZonaExcel")
+    public void descargarReporteOrdenesPorZonaExcel(
+            HttpSession session,
+            HttpServletResponse response) throws IOException {
+
+        // Obtener idAgente de la sesión
+        Integer idAgente = (Integer) session.getAttribute("id");
+
+        if (idAgente == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuario no autenticado");
+            return;
+        }
+
+        // Obtener el agente actual
+        Optional<Usuario> optAgente = usuarioRepository.findById(idAgente);
+        if (!optAgente.isPresent()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Agente no encontrado");
+            return;
+        }
+        Usuario agenteActual = optAgente.get();
+
+        // Obtener idZona del agente actual
+        Integer idZona = agenteActual.getDistrito().getZona().getId();
+
+        // Obtener todos los agentes con idRol=3 en esa zona
+        Integer idRol = 3;
+        List<Usuario> agentesEnZona = usuarioRepository.findByDistrito_Zona_IdAndRol_Id(idZona, idRol);
+
+        if (agentesEnZona.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron agentes con rol 3 en esta zona");
+            return;
+        }
+
+        // Obtener los IDs de los agentes
+        List<Integer> idAgentes = agentesEnZona.stream()
+                .map(Usuario::getId)
+                .collect(Collectors.toList());
+
+        // Obtener todas las órdenes asignadas a estos agentes
+        List<Orden> ordenes = ordenRepository.findByIdAgente_IdIn(idAgentes);
+
+        if (ordenes.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron órdenes asignadas a los agentes en esta zona");
+            return;
+        }
+
+        try {
+            // Generar el reporte en Excel
+            byte[] excelBytes = generarReporteOrdenesPorZonaExcel(ordenes, idZona);
+
+            // Configurar la respuesta para enviar el archivo Excel
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");  // Tipo MIME correcto para archivos .xlsx
+            response.setHeader("Content-Disposition", "attachment; filename=Reporte_Ordenes_Zona_" + idZona + ".xlsx");  // Nombre correcto para el archivo
+            response.getOutputStream().write(excelBytes);
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el reporte Excel: " + e.getMessage());
+        }
+    }
+
+
+    @GetMapping("/descargarReporteOrdenesPorZonaCSV")
+    public void descargarReporteOrdenesPorZonaCSV(
+            HttpSession session,
+            HttpServletResponse response) throws IOException {
+
+        // Obtener idAgente de la sesión
+        Integer idAgente = (Integer) session.getAttribute("id");
+
+        if (idAgente == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuario no autenticado");
+            return;
+        }
+
+        // Obtener el agente actual
+        Optional<Usuario> optAgente = usuarioRepository.findById(idAgente);
+        if (!optAgente.isPresent()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Agente no encontrado");
+            return;
+        }
+        Usuario agenteActual = optAgente.get();
+
+        // Obtener idZona del agente actual
+        Integer idZona = agenteActual.getDistrito().getZona().getId();
+
+        // Obtener todos los agentes con idRol=3 en esa zona
+        Integer idRol = 3;
+        List<Usuario> agentesEnZona = usuarioRepository.findByDistrito_Zona_IdAndRol_Id(idZona, idRol);
+
+        if (agentesEnZona.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron agentes con rol 3 en esta zona");
+            return;
+        }
+
+        // Obtener los IDs de los agentes
+        List<Integer> idAgentes = agentesEnZona.stream()
+                .map(Usuario::getId)
+                .collect(Collectors.toList());
+
+        // Obtener todas las órdenes asignadas a estos agentes
+        List<Orden> ordenes = ordenRepository.findByIdAgente_IdIn(idAgentes);
+
+        if (ordenes.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontraron órdenes asignadas a los agentes en esta zona");
+            return;
+        }
+
+        try {
+            // Generar el reporte en CSV
+            byte[] csvBytes = generarReporteOrdenesPorZonaCSV(ordenes, idZona);
+
+            // Configurar la respuesta para enviar el archivo CSV
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "attachment; filename=Reporte_Ordenes_Zona_" + idZona + ".csv");
+            response.getOutputStream().write(csvBytes);
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el reporte CSV: " + e.getMessage());
+        }
+    }
+
+
+
+
 
 
 
