@@ -22,51 +22,73 @@
     <!-- Theme CSS -->
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
     <style>
-        body {
-            padding-top: 80px; /* Ajusta según la altura de tu navbar */
-        }
-
-    </style>
-    <style>
-        .navbar-scroll {
-            transition: all 0.3s ease;
-            background-color: transparent; /* Fondo transparente inicialmente */
-            box-shadow: none; /* Sin sombra inicialmente */
-        }
-        /* Estado al hacer scroll */
-        .navbar-scroll.scrolled {
-            background-color: rgba(255, 255, 255, 0.95); /* Fondo semi-transparente al hacer scroll */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Añadir sombra */
-            transform: translateY(0); /* Asegura que esté en su posición original */
-        }
-    </style>
-    <style>
-        /* Estado por defecto del navbar */
+        /* Definir una transición suave para el padding-top del body */
         .navbar-scroll {
             transition: all 0.3s ease;
             background-color: transparent;
             box-shadow: none;
             position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             z-index: 1030;
-            height: 80px; /* Altura inicial */
+            height: 80px;
         }
 
-        /* Estado al hacer scroll */
         .navbar-scroll.scrolled {
             background-color: rgba(255, 255, 255, 0.95);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            height: 60px; /* Altura reducida */
+            height: 60px;
         }
 
+        body.scrolled {
+            padding-top: 60px;
+        }
     </style>
+<style>
+    /* Animación de rebote */
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-10px);
+        }
+        60% {
+            transform: translateY(-5px);
+        }
+    }
+
+    /* Clase para activar la animación */
+    .animate-bounce {
+        animation: bounce 0.5s;
+    }
+
+    /* Alternativamente, una animación de escala */
+    @keyframes scaleUp {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.3);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .animate-scale {
+        animation: scaleUp 0.5s;
+    }
+
+</style>
 </head>
 <body>
 <!-- Fragmento de Navbar --->
 <div th:fragment="navbar">
     <!-- navbar -->
     <!-- Navbar para pantallas grandes -->
-    <div class="border-bottom d-none d-lg-block sticky-top navbar-scroll">
+    <div class="border-bottom d-none d-lg-block navbar-scroll">
         <div class="py-5">
             <div class="container">
                 <div class="row w-100 align-items-center gx-lg-2 gx-0 justify-content-between">
@@ -251,7 +273,7 @@
     <!-- fin navbar pantallas grandes -->
 
     <!-- Navbar para pantallas pequeñas -->
-    <div class="border-bottom d-lg-none sticky-top navbar-scroll">
+    <div class="border-bottom d-lg-none navbar-scroll">
         <div class="py-5">
             <div class="container">
                 <div class="row w-100 align-items-center gx-lg-2 gx-0">
@@ -607,18 +629,33 @@
     </form>
     <script th:src="@{/js/vendors/validation.js}"></script>
 </div>
-
-    <!-- Script para animar el navbar al hacer scroll -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const navbar = document.querySelector('.navbar-scroll');
-            const scrollThreshold = 50; // Punto de corte para activar el efecto
+            const navbars = document.querySelectorAll('.navbar-scroll');
+            const scrollThreshold = 50;
+            const body = document.body;
+
+            console.log("Número de navbars:", navbars.length);
 
             window.addEventListener('scroll', () => {
+                console.log("Posición de scroll:", window.scrollY);
+
+                if (navbars.length === 0) {
+                    console.warn("No se encontraron navbars con la clase 'navbar-scroll'");
+                }
+
                 if (window.scrollY > scrollThreshold) {
-                    navbar.classList.add('scrolled');
+                    navbars.forEach(navbar => {
+                        navbar.classList.add('scrolled');
+                        console.log("Navbar scrolled agregado");
+                    });
+                    body.classList.add('scrolled');
                 } else {
-                    navbar.classList.remove('scrolled');
+                    navbars.forEach(navbar => {
+                        navbar.classList.remove('scrolled');
+                        console.log("Navbar scrolled removido");
+                    });
+                    body.classList.remove('scrolled');
                 }
             });
         });
