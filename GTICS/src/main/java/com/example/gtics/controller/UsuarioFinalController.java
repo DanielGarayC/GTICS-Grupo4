@@ -810,20 +810,14 @@ public class UsuarioFinalController {
 
     @GetMapping("/UsuarioFinal/producto/foto/{id}")
     public ResponseEntity<byte[]> obtenerFotoProducto(@PathVariable Integer id) {
-        List<Fotosproducto> fotosProductos = fotosProductoRepository.findByProducto_Id(id);
+        Optional<Fotosproducto> fotoOptional = fotosProductoRepository.findById(id);
 
-        if (!fotosProductos.isEmpty()) {
-            Fotosproducto fotoProducto = fotosProductos.get(0);
+        if (fotoOptional.isPresent()) {
+            Fotosproducto fotoProducto = fotoOptional.get();
             byte[] imagenComoBytes = fotoProducto.getFoto();
-
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.parseMediaType(fotoProducto.getFotoContentType()));
-
-            return new ResponseEntity<>(
-                    imagenComoBytes,
-                    httpHeaders,
-                    HttpStatus.OK
-            );
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
