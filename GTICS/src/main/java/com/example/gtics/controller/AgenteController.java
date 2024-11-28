@@ -15,6 +15,7 @@ import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -38,6 +39,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -589,40 +591,14 @@ public class AgenteController {
         return ordenRepository.obtenerCarritoConDto(usuarioId, pageable).getContent();
     }
     @GetMapping("/descargarOrdenPDF")
-    public void descargarOrdenPDF(@RequestParam("idOrden") Integer idOrden,
-                                  HttpServletResponse response,
-                                  HttpSession session) throws IOException, DocumentException {
+    public void descargarOrdenPDF(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException, DocumentException {
         try {
-            // Validar si la sesión del usuario está activa
-            Integer idAgente = (Integer) session.getAttribute("id");
-            if (idAgente == null) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuario no autenticado");
-                return;
-            }
-
-            // Verificar si la orden existe
-            Optional<Orden> optOrden = ordenRepository.findById(idOrden);
-            if (!optOrden.isPresent()) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
-                return;
-            }
-            Orden orden = optOrden.get();
-
-            // Generar el archivo PDF
-            byte[] fileBytes = generarOrdenPDF(idOrden);
-
-            if (fileBytes != null) {
-                // Configurar la respuesta para enviar el PDF directamente
-                response.setContentType("application/pdf");
-                response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".pdf");
-                response.getOutputStream().write(fileBytes);
-            } else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo PDF");
-            }
-
-        } catch (IOException | DocumentException e) {
-            // Manejar cualquier excepción y enviar un error HTTP
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo PDF: " + e.getMessage());
+            byte[] pdfBytes = generarOrdenPDF(idOrden);
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".pdf");
+            response.getOutputStream().write(pdfBytes);
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
     }
 
@@ -662,6 +638,7 @@ public class AgenteController {
     public void descargarOrdenZIP(@RequestParam("idOrden") Integer idOrden,
                                   @RequestParam("formatos") String formatos,
                                   HttpServletResponse response) throws IOException, DocumentException {
+        System.out.println("prueba error pdf aaaaaa");
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ZipOutputStream zos = new ZipOutputStream(baos);
@@ -704,27 +681,37 @@ public class AgenteController {
 
 
     private byte[] generarOrdenPDF(Integer idOrden) throws IOException, DocumentException {
+        // Buscar la orden
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
-        if (ordenOpt.isPresent()) {
-            Orden orden = ordenOpt.get();
-            List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+        if (!ordenOpt.isPresent()) {
+            throw new IOException("Orden no encontrada");
+        }
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Document document = new Document(PageSize.A4, 36, 36, 90, 55);
-            PdfWriter writer = PdfWriter.getInstance(document, baos);
+        Orden orden = ordenOpt.get();
+        List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
 
-            // Agregar encabezado y pie de página
-            writer.setPageEvent(new HeaderFooterPageEvent());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Document document = new Document(PageSize.A4, 36, 36, 90, 55);
+        PdfWriter writer = PdfWriter.getInstance(document, baos);
 
+        // Agregar encabezado y pie de página
+        writer.setPageEvent(new HeaderFooterPageEvent());
+
+        try {
             document.open();
+
+            // Cargar el logo
             ClassLoader classLoader = getClass().getClassLoader();
-            // Añadir logo
-            String logoPath = classLoader.getResource("static/images/logo/logoGTICS.jpeg").getPath();
-            Image logo = Image.getInstance(logoPath);
+            InputStream logoStream = classLoader.getResourceAsStream("static/images/logo/logoGTICS.jpeg");
+            if (logoStream == null) {
+                throw new IOException("No se pudo cargar el logo.");
+            }
+            Image logo = Image.getInstance(IOUtils.toByteArray(logoStream));
             logo.scaleToFit(100, 50);
+            logo.setAlignment(Image.ALIGN_LEFT);
             document.add(logo);
 
-            // Título de la orden
+            // Título
             Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
             Paragraph title = new Paragraph("Detalle de la Orden #" + idOrden, titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
@@ -756,11 +743,7 @@ public class AgenteController {
             // Encabezados de la tabla
             String[] headers = {"N°", "Descripción", "Cant.", "Precio Unit.", "Total"};
             for (String header : headers) {
-                PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
-                cell.setBackgroundColor(headerColor);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell.setPadding(5);
-                table.addCell(cell);
+                agregarCelda(table, header, headerFont, headerColor, Element.ALIGN_CENTER, true);
             }
 
             // Contenido de la tabla
@@ -771,66 +754,44 @@ public class AgenteController {
             for (ProductosxOrden producto : productosOrden) {
                 BaseColor rowColor = isEvenRow ? evenRowColor : oddRowColor;
 
-                PdfPCell cell1 = new PdfPCell(new Phrase(String.valueOf(itemNumber++), cellFont));
-                cell1.setBackgroundColor(rowColor);
-                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell1.setPadding(5);
-                table.addCell(cell1);
-
-                PdfPCell cell2 = new PdfPCell(new Phrase(producto.getNombreProducto(), cellFont));
-                cell2.setBackgroundColor(rowColor);
-                cell2.setPadding(5);
-                table.addCell(cell2);
-
-                PdfPCell cell3 = new PdfPCell(new Phrase(String.valueOf(producto.getCantidadProducto()), cellFont));
-                cell3.setBackgroundColor(rowColor);
-                cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell3.setPadding(5);
-                table.addCell(cell3);
-
-                PdfPCell cell4 = new PdfPCell(new Phrase("S/ " + df.format(producto.getPrecioUnidad()), cellFont));
-                cell4.setBackgroundColor(rowColor);
-                cell4.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell4.setPadding(5);
-                table.addCell(cell4);
+                agregarCelda(table, String.valueOf(itemNumber++), cellFont, rowColor, Element.ALIGN_CENTER, false);
+                agregarCelda(table, producto.getNombreProducto(), cellFont, rowColor, Element.ALIGN_LEFT, false);
+                agregarCelda(table, String.valueOf(producto.getCantidadProducto()), cellFont, rowColor, Element.ALIGN_CENTER, false);
+                agregarCelda(table, "S/ " + df.format(producto.getPrecioUnidad()), cellFont, rowColor, Element.ALIGN_RIGHT, false);
 
                 double totalProducto = producto.getPrecioTotalPorProducto();
                 subtotal += totalProducto;
-                PdfPCell cell5 = new PdfPCell(new Phrase("S/ " + df.format(totalProducto), cellFont));
-                cell5.setBackgroundColor(rowColor);
-                cell5.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                cell5.setPadding(5);
-                table.addCell(cell5);
+                agregarCelda(table, "S/ " + df.format(totalProducto), cellFont, rowColor, Element.ALIGN_RIGHT, false);
 
                 isEvenRow = !isEvenRow;
             }
 
             // Fila de subtotal
-            PdfPCell emptyCell = new PdfPCell(new Phrase(""));
-            emptyCell.setColspan(3);
-            emptyCell.setBorder(Rectangle.NO_BORDER);
-
-            PdfPCell subtotalCell = new PdfPCell(new Phrase("Subtotal", headerFont));
-            subtotalCell.setBackgroundColor(headerColor);
-            subtotalCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            subtotalCell.setPadding(5);
-
-            PdfPCell subtotalValueCell = new PdfPCell(new Phrase("S/ " + df.format(subtotal), cellFont));
-            subtotalValueCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            subtotalValueCell.setPadding(5);
-
-            table.addCell(emptyCell);
-            table.addCell(subtotalCell);
-            table.addCell(subtotalValueCell);
+            agregarCelda(table, "", cellFont, BaseColor.WHITE, Element.ALIGN_LEFT, false, 3);
+            agregarCelda(table, "Subtotal", headerFont, headerColor, Element.ALIGN_RIGHT, true);
+            agregarCelda(table, "S/ " + df.format(subtotal), cellFont, BaseColor.WHITE, Element.ALIGN_RIGHT, false);
 
             document.add(table);
-
+        } finally {
             document.close();
-
-            return baos.toByteArray();
-        } else {
-            throw new IOException("Orden no encontrada");
         }
+
+        return baos.toByteArray();
+    }
+
+    // Método auxiliar para agregar celdas a la tabla
+    private void agregarCelda(PdfPTable table, String texto, Font font, BaseColor backgroundColor, int alignment, boolean bold, int colSpan) {
+        PdfPCell cell = new PdfPCell(new Phrase(texto, font));
+        cell.setBackgroundColor(backgroundColor);
+        cell.setHorizontalAlignment(alignment);
+        cell.setPadding(5);
+        cell.setColspan(colSpan);
+        table.addCell(cell);
+    }
+
+    // Sobrecarga para usar valores por defecto
+    private void agregarCelda(PdfPTable table, String texto, Font font, BaseColor backgroundColor, int alignment, boolean bold) {
+        agregarCelda(table, texto, font, backgroundColor, alignment, bold, 1);
     }
 
 
