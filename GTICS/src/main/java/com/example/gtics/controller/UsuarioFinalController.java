@@ -166,20 +166,30 @@ public class UsuarioFinalController {
                 Usuario usuario = optUsuario.get();
                 model.addAttribute("usuario", usuario);
 
-                // Obtener los productos del carrito
-                List<ProductosCarritoDto> productosCarrito = ordenRepository.obtenerProductosPorUsuario(usuario.getId());
-                model.addAttribute("productosCarrito", productosCarrito);
+                // Obtener el carrito activo del usuario
+                Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivoTrue(usuario);
+                if (carritoOpt.isPresent()) {
+                    Carritocompra carrito = carritoOpt.get();
 
-                // Calcular la cantidad total de productos en el carrito
-                int totalCantidadProductos = productosCarrito.stream()
-                        .mapToInt(ProductosCarritoDto::getCantidadProducto)
-                        .sum();
-                model.addAttribute("totalCantidadProductos", totalCantidadProductos);
+                    // Obtener los productos del carrito utilizando el repositorio correcto
+                    List<ProductosCarritoDto> productosCarrito = productoHasCarritocompraRepository.findProductosPorCarrito(carrito.getId());
+                    model.addAttribute("productosCarrito", productosCarrito);
+
+                    // Calcular la cantidad total de productos en el carrito
+                    Integer totalCantidadProductos = productoHasCarritocompraRepository.sumCantidadById_IdCarritoCompra(carrito.getId());
+                    model.addAttribute("totalCantidadProductos", totalCantidadProductos != null ? totalCantidadProductos : 0);
+                } else {
+                    // Si no hay carrito activo, establecer valores por defecto
+                    model.addAttribute("productosCarrito", Collections.emptyList());
+                    model.addAttribute("totalCantidadProductos", 0);
+                }
             }
         }
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
     }
+
+
     @Transactional
     @PostMapping("/UsuarioFinal/agregarAlCarrito")
     public ResponseEntity<Map<String, Object>> agregarAlCarrito(
@@ -267,7 +277,7 @@ public class UsuarioFinalController {
 
         if (isAjax) {
             // Obtener el nuevo total de artículos en el carrito (suma de todas las cantidades)
-            int totalArticulos = productoHasCarritocompraRepository.sumCantidadById_IdCarritoCompra(carrito.getId());
+            Integer  totalArticulos = productoHasCarritocompraRepository.sumCantidadById_IdCarritoCompra(carrito.getId());
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
@@ -330,6 +340,131 @@ public class UsuarioFinalController {
             return "redirect:/ExpressDealsLogin";
         }
         return "redirect:/UsuarioFinal/listaProductos";
+    }
+    @DeleteMapping("/UsuarioFinal/eliminarProductoCarritoAjax/{idProducto}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> eliminarProductoCarritoAjax(
+            @PathVariable("idProducto") Integer idProducto,
+            Authentication authentication) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        // Verificar autenticación
+        if (authentication == null || !authentication.isAuthenticated() ||
+                authentication instanceof AnonymousAuthenticationToken) {
+            response.put("success", false);
+            response.put("mensaje", "Usuario no autenticado.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (!optUsuario.isPresent()) {
+            response.put("success", false);
+            response.put("mensaje", "Usuario no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        Usuario usuario = optUsuario.get();
+        Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
+
+        if (!carritoOpt.isPresent()) {
+            response.put("success", false);
+            response.put("mensaje", "Carrito no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        Carritocompra carrito = carritoOpt.get();
+        Optional<ProductoHasCarritocompra> productoOpt =
+                productoHasCarritocompraRepository.findById_IdCarritoCompraAndId_IdProducto(carrito.getId(), idProducto);
+
+        if (!productoOpt.isPresent()) {
+            response.put("success", false);
+            response.put("mensaje", "Producto no encontrado en el carrito.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        // Eliminar el producto del carrito
+        productoHasCarritocompraRepository.delete(productoOpt.get());
+
+        // Obtener el nuevo total de artículos
+        Integer  totalArticulos = productoHasCarritocompraRepository.sumCantidadById_IdCarritoCompra(carrito.getId());
+
+
+        // Preparar respuesta
+        response.put("success", true);
+        response.put("mensaje", "Producto eliminado correctamente.");
+        response.put("totalArticulos", totalArticulos);
+
+        return ResponseEntity.ok(response);
+    }
+    @PostMapping("/UsuarioFinal/actualizarCantidadCarritoAjax")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> actualizarCantidadCarritoAjax(
+            @RequestParam("idProducto") Integer idProducto,
+            @RequestParam("nuevaCantidad") Integer nuevaCantidad,
+            Authentication authentication) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        // Verificar autenticación
+        if (authentication == null || !authentication.isAuthenticated() ||
+                authentication instanceof AnonymousAuthenticationToken) {
+            response.put("success", false);
+            response.put("mensaje", "Usuario no autenticado.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (!optUsuario.isPresent()) {
+            response.put("success", false);
+            response.put("mensaje", "Usuario no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        Usuario usuario = optUsuario.get();
+        Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
+
+        if (!carritoOpt.isPresent()) {
+            response.put("success", false);
+            response.put("mensaje", "Carrito no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        Carritocompra carrito = carritoOpt.get();
+        Optional<ProductoHasCarritocompra> productoOpt =
+                productoHasCarritocompraRepository.findById_IdCarritoCompraAndId_IdProducto(carrito.getId(), idProducto);
+
+        if (!productoOpt.isPresent()) {
+            response.put("success", false);
+            response.put("mensaje", "Producto no encontrado en el carrito.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        // Validar la nueva cantidad
+        if (nuevaCantidad < 1) {
+            response.put("success", false);
+            response.put("mensaje", "La cantidad debe ser al menos 1.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        // Actualizar la cantidad
+        ProductoHasCarritocompra producto = productoOpt.get();
+        producto.setCantidadProducto(nuevaCantidad);
+        productoHasCarritocompraRepository.save(producto);
+
+        // Obtener el nuevo total de artículos
+        int totalArticulos = productoHasCarritocompraRepository.sumCantidadById_IdCarritoCompra(carrito.getId());
+
+        // Preparar respuesta
+        response.put("success", true);
+        response.put("mensaje", "Cantidad actualizada correctamente.");
+        response.put("totalArticulos", totalArticulos);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/UsuarioFinal/actualizarCantidadCarrito")
@@ -962,6 +1097,38 @@ public class UsuarioFinalController {
 
         return "UsuarioFinal/Productos/listaProductos";
     }
+    // **Nuevo Método para Listar Productos del Carrito via AJAX**
+    @GetMapping("/UsuarioFinal/listaCarrito")
+    @ResponseBody
+    public ResponseEntity<?> getListaCarrito(Authentication authentication) {
+        // Verificar si el usuario está autenticado
+        if (authentication == null || !authentication.isAuthenticated() ||
+                authentication instanceof AnonymousAuthenticationToken) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Collections.singletonMap("mensaje", "Usuario no autenticado."));
+        }
+
+        String email = authentication.getName();
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (!optUsuario.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("mensaje", "Usuario no encontrado."));
+        }
+
+        Usuario usuario = optUsuario.get();
+        Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
+
+        if (!carritoOpt.isPresent()) {
+            return ResponseEntity.ok(Collections.emptyList()); // Carrito vacío
+        }
+
+        Carritocompra carrito = carritoOpt.get();
+        List<ProductosCarritoDto> productosCarritoDTO = productoHasCarritocompraRepository.findProductosPorCarrito(carrito.getId());
+
+        return ResponseEntity.ok(productosCarritoDTO);
+    }
+
 
 
     @GetMapping("/UsuarioFinal/detallesProducto/{idProducto}")
