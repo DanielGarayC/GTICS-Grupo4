@@ -27,13 +27,46 @@
         }
 
     </style>
+    <style>
+        .navbar-scroll {
+            transition: all 0.3s ease;
+            background-color: transparent; /* Fondo transparente inicialmente */
+            box-shadow: none; /* Sin sombra inicialmente */
+        }
+        /* Estado al hacer scroll */
+        .navbar-scroll.scrolled {
+            background-color: rgba(255, 255, 255, 0.95); /* Fondo semi-transparente al hacer scroll */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Añadir sombra */
+            transform: translateY(0); /* Asegura que esté en su posición original */
+        }
+    </style>
+    <style>
+        /* Estado por defecto del navbar */
+        .navbar-scroll {
+            transition: all 0.3s ease;
+            background-color: transparent;
+            box-shadow: none;
+            position: fixed;
+            width: 100%;
+            z-index: 1030;
+            height: 80px; /* Altura inicial */
+        }
+
+        /* Estado al hacer scroll */
+        .navbar-scroll.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 60px; /* Altura reducida */
+        }
+
+    </style>
 </head>
 <body>
 <!-- Fragmento de Navbar --->
 <div th:fragment="navbar">
     <!-- navbar -->
     <!-- Navbar para pantallas grandes -->
-    <div class="border-bottom d-none d-lg-block sticky-top">
+    <div class="border-bottom d-none d-lg-block sticky-top navbar-scroll">
         <div class="py-5">
             <div class="container">
                 <div class="row w-100 align-items-center gx-lg-2 gx-0 justify-content-between">
@@ -218,7 +251,7 @@
     <!-- fin navbar pantallas grandes -->
 
     <!-- Navbar para pantallas pequeñas -->
-    <div class="border-bottom d-lg-none sticky-top">
+    <div class="border-bottom d-lg-none sticky-top navbar-scroll">
         <div class="py-5">
             <div class="container">
                 <div class="row w-100 align-items-center gx-lg-2 gx-0">
@@ -574,5 +607,21 @@
     </form>
     <script th:src="@{/js/vendors/validation.js}"></script>
 </div>
+
+    <!-- Script para animar el navbar al hacer scroll -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const navbar = document.querySelector('.navbar-scroll');
+            const scrollThreshold = 50; // Punto de corte para activar el efecto
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > scrollThreshold) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
