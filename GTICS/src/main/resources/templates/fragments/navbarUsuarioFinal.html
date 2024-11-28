@@ -157,14 +157,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" th:href="@{/UsuarioFinal/chatbot}">Soporte Técnico</a>
                             </li>
+                            <li class="nav-item" th:if="${session['isImpersonating'] != null}">
+                                <a class="nav-link" href="/revertImpersonation">Regresar</a>
+                            </li>
+
                         </ul>
                     </div>
 
-                    <div th:if="${session.isImpersonating}">
-                        <a href="/revertImpersonation" class="btn btn-outline-primary btn-sm me-3">
-                            <i class="bi bi-arrow-left me-2"></i>Volver a Super Admin
-                        </a>
-                    </div>
 
 
                     <!-- Iconos de notificaciones, cuenta y carrito -->
@@ -266,11 +265,13 @@
                                                 Solicitar ser agente
                                             </a>
                                         </div>
-                                        <div class="border-top px-0 py-1">
-                                            <a th:href="@{/ExpressDealsLogin}" style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
+                                        <div class="border-top px-0 py-1" th:if="${session['isImpersonating'] == null}">
+                                            <a th:href="@{/ExpressDealsLogin}"
+                                               style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
                                                 Cerrar sesión
                                             </a>
                                         </div>
+
                                     </div>
                                 </li>
 
@@ -389,11 +390,13 @@
                                                 Solicitar ser agente
                                             </a>
                                         </div>
-                                        <div class="border-top px-0 py-2">
-                                            <a th:href="@{/ExpressDealsController}" style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
+                                        <div class="border-top px-0 py-2" th:if="${session['isImpersonating'] == null}">
+                                            <a th:href="@{/ExpressDealsController}"
+                                               style="display: block; width: 100%; padding: 0.75rem; text-align: center; box-sizing: border-box; line-height: 0.6rem;">
                                                 Cerrar sesión
                                             </a>
                                         </div>
+
                                     </div>
                                 </li>
 
@@ -480,6 +483,9 @@
                                     </li>
                                     <li class="nav-item dropdown w-100 w-lg-auto">
                                         <a class="nav-link " th:href="@{/UsuarioFinal/chatbot}" role="button" data-bs-toggle="dropdown" aria-expanded="false">Soporte Técnico</a>
+                                    </li>
+                                    <li class="nav-item dropdown w-100 w-lg-auto" th:if="${session['isImpersonating'] != null}">
+                                        <a class="nav-link" href="/revertImpersonation">Regresar</a>
                                     </li>
                                 </ul>
                             </div>

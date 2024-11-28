@@ -1649,7 +1649,7 @@ public class UsuarioFinalController {
         Usuario usuario = usuarioRepository.findUsuarioById(idUsuario);
         List<Message> listaMensajesSala = messageRepository.findBySalaOrderByFechaEnvioAsc(room);
         model.addAttribute("ListaMensajesSala", listaMensajesSala);
-        model.addAttribute("idSender", 7);
+        model.addAttribute("idSender", usuario.getId());
 
         return "UsuarioFinal/chatAntiguo";
     }

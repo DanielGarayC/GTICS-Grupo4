@@ -39,7 +39,11 @@
 
 <!-- BARRA SUPERIOR -->
 <!-- NAVBAR  -->
-<div th:insert="~{fragments/navbarUsuarioFinal :: navbar}"></div>
+<div class="border-bottom">
+
+    <div th:insert="~{fragments/navbarUsuarioFinal :: navbar}"></div>
+
+</div>
 
 <div class="main-wrapper">
 
@@ -81,7 +85,7 @@
                                 </div>
                                 <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
                                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3" style="width: 40px; height: 100%;">
-                                    <input type="text" class="form-control form-control-lg " id="message" placeholder="Escribe algo...">
+                                    <input type="text" class="form-control form-control-lg " id="message" placeholder="Escribe algo..." onkeydown="detectarEnter(event)">
 
                                     <button class="ms-3 btn btn-primary" onclick="sendMessage()">Enviar</button>
                                 </div>
@@ -141,6 +145,11 @@
                 // Ajustar el scroll al final al conectar
                 scrollToBottom();
             });
+        }
+        function detectarEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
         }
 
         function showMessage(message) {
