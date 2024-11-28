@@ -9,13 +9,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class UserImpersonationController {
@@ -42,15 +43,23 @@ public class UserImpersonationController {
         // Buscar el usuario a suplantar
         Usuario userToImpersonate = usuarioRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        System.out.println(userToImpersonate.getNombre());
 
-        // Crear una nueva autenticación con los permisos del usuario
+        // Crear detalles de usuario con autoridades basadas en su rol
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(userToImpersonate.getRol().getNombreRol()));
 
+        // Crear UserDetails
+        UserDetails userDetails = User.withUsername(userToImpersonate.getEmail())
+                .password(userToImpersonate.getContrasena())
+                .authorities(authorities)
+                .build();
+
+        // Crear nueva autenticación con los detalles del usuario suplantado
         Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                userToImpersonate.getEmail(),
-                userToImpersonate.getContrasena(),
-                authorities
+                userDetails,
+                userDetails.getPassword(),
+                userDetails.getAuthorities()
         );
 
         // Establecer la nueva autenticación en el contexto de seguridad
@@ -83,16 +92,24 @@ public class UserImpersonationController {
             String originalUsername = (String) session.getAttribute("originalUser");
 
             // Cargar el usuario original
-            Optional<Usuario> originalUser = usuarioRepository.findByEmail(originalUsername);
+            Usuario originalUser = usuarioRepository.findByEmail(originalUsername)
+                    .orElseThrow(() -> new RuntimeException("Usuario original no encontrado"));
 
-            // Crear una nueva autenticación para el Super Admin
+            // Crear detalles de usuario con autoridades de Super Admin
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority("Super Admin"));
 
+            // Crear UserDetails para el Super Admin
+            UserDetails superAdminDetails = User.withUsername(originalUser.getEmail())
+                    .password(originalUser.getContrasena())
+                    .authorities(authorities)
+                    .build();
+
+            // Crear nueva autenticación para el Super Admin
             Authentication originalAuth = new UsernamePasswordAuthenticationToken(
-                    originalUser.get().getEmail(),
-                    originalUser.get().getContrasena(),
-                    authorities
+                    superAdminDetails,
+                    superAdminDetails.getPassword(),
+                    superAdminDetails.getAuthorities()
             );
 
             // Restablecer el contexto de seguridad
