@@ -27,6 +27,27 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "WHERE u.idUsuario = :idUsuario;")
     void cambiarContrasena(Integer idUsuario,String newPassword);
 
+    @Query(value = "SELECT * FROM usuario u " +
+            "WHERE u.idAgente = :idAgente " +
+            "AND u.idRol = 4 " +
+            "AND u.baneado = 0 " +
+            "AND u.activo = 1 " +
+            "AND (LOWER(u.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
+            "     OR LOWER(u.apellidoPaterno) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
+            "     OR LOWER(u.apellidoMaterno) LIKE LOWER(CONCAT('%', :busqueda, '%'))) ",
+            countQuery = "SELECT COUNT(*) FROM usuario u " +
+                    "WHERE u.idAgente = :idAgente " +
+                    "AND u.idRol = 4 " +
+                    "AND u.baneado = 0 " +
+                    "AND u.activo = 1 " +
+                    "AND (LOWER(u.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
+                    "     OR LOWER(u.apellidoPaterno) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
+                    "     OR LOWER(u.apellidoMaterno) LIKE LOWER(CONCAT('%', :busqueda, '%'))) ",
+            nativeQuery = true)
+    Page<Usuario> findUsuariosAsignados2(@Param("idAgente") Integer idAgente,
+                                         @Param("busqueda") String busqueda,
+                                         Pageable pageable);
+
 
     @Query(value = "SELECT COUNT(*) FROM usuario u " +
             "WHERE u.idAdminZonal = :idAdminZonal " + // Verifica que estén asignados a este Admin Zonal

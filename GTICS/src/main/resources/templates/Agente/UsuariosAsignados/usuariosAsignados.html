@@ -104,10 +104,12 @@
 						   <div class="row justify-content-between">
 							   <div class="col-md-4 col-12 mb-2 mb-md-0">
 								   <!-- form -->
-								   <form class="d-flex" role="search">
-									   <input class="form-control" type="search" id="searchUsuario"   placeholder="Buscar Usuario" aria-label="Search" th:value="${param.busqueda}" oninput="filterTable()" />
-
+								   <form class="d-flex" action="/Agente/UsuariosAsignados" method="get" onsubmit="return false;">
+									   <input class="form-control" type="search" id="searchUsuario" name="busqueda"
+											  placeholder="Buscar Usuario" aria-label="Search"
+											  th:value="${busqueda}" oninput="autoSearch()" />
 								   </form>
+
 							   </div>
 
 						   </div>
@@ -222,30 +224,33 @@
 						   <nav aria-label="Page navigation example">
 							   <ul class="pagination justify-content-center">
 								   <!-- Botón de "Previo" -->
-								   <li class="page-item" th:classappend="${currentPage == 0 || totalPages == 0} ? 'disabled'">
-									   <a class="page-link" th:href="@{/Agente/UsuariosAsignados(page=${currentPage - 1})}" th:if="${currentPage > 0}">Previo</a>
-									   <!-- Deshabilitado si es la primera página o no hay resultados -->
-									   <a class="page-link" th:if="${currentPage == 0 || totalPages == 0}" href="javascript:void(0)">Previo</a>
+								   <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+									   <a class="page-link"
+										  th:href="@{/Agente/UsuariosAsignados(page=${currentPage - 1}, busqueda=${busqueda})}">
+										   Previo
+									   </a>
 								   </li>
 
-								   <!-- Mostrar solo "1" cuando no haya resultados -->
-								   <li class="page-item active" th:if="${totalPages == 0}">
-									   <a class="page-link" href="javascript:void(0)">1</a>
+								   <!-- Páginas numeradas dinámicas -->
+								   <li th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+									   th:unless="${i < 0 || i >= totalPages}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+									   <a class="page-link"
+										  th:href="@{/Agente/UsuariosAsignados(page=${i}, busqueda=${busqueda})}"
+										  th:text="${i + 1}">
+									   </a>
 								   </li>
 
-								   <!-- Páginas numeradas (solo si hay resultados) -->
-								   <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:unless="${totalPages == 0}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-									   <a class="page-link" th:href="@{/Agente/UsuariosAsignados(page=${i})}" th:text="${i + 1}"></a>
-								   </li>
 
 								   <!-- Botón de "Siguiente" -->
-								   <li class="page-item" th:classappend="${currentPage + 1 == totalPages || totalPages == 0} ? 'disabled'">
-									   <a class="page-link" th:href="@{/Agente/UsuariosAsignados(page=${currentPage + 1})}" th:if="${currentPage + 1 < totalPages}">Siguiente</a>
-									   <!-- Deshabilitado si es la última página o no hay resultados -->
-									   <a class="page-link" th:if="${currentPage + 1 == totalPages || totalPages == 0}" href="javascript:void(0)">Siguiente</a>
+								   <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+									   <a class="page-link"
+										  th:href="@{/Agente/UsuariosAsignados(page=${currentPage + 1}, busqueda=${busqueda})}">
+										   Siguiente
+									   </a>
 								   </li>
 							   </ul>
 						   </nav>
+
 					   </div>
 
 
@@ -396,6 +401,24 @@
 	</div>
 
    <!-- POP UPS EXITOSOS -->
+   <script>
+	   let searchTimeout; // Variable para controlar el tiempo de espera
+
+	   function autoSearch() {
+		   clearTimeout(searchTimeout); // Limpia el temporizador anterior
+		   searchTimeout = setTimeout(() => {
+			   const input = document.getElementById("searchUsuario");
+			   const value = input.value;
+			   const urlParams = new URLSearchParams(window.location.search);
+			   urlParams.set('busqueda', value);
+			   urlParams.set('page', 0); // Reinicia a la primera página
+			   window.location.href = `/Agente/UsuariosAsignados?${urlParams.toString()}`;
+		   }, 500); // Espera 500 ms después de que el usuario deja de escribir
+	   }
+   </script>
+
+
+
    <script>
 	   const urlParams = new URLSearchParams(window.location.search);
 	   if (urlParams.has('usuarioBaneado')) {

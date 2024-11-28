@@ -197,27 +197,30 @@ public class AgenteController {
     }
 
     @GetMapping({"Agente/UsuariosAsignados"})
-    public String UsuariosAsignados(Model model,
-                                    @RequestParam(defaultValue = "0") int page,
-                                    HttpSession session) {
+    public String UsuariosAsignados(
+            Model model,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "") String busqueda,
+            HttpSession session) {
 
-        int pageSize = 6;
+        int pageSize = 5;
         Pageable pageable = PageRequest.of(page, pageSize);
 
         // Obtener el idAgente desde la sesión
         Integer idAgente = (Integer) session.getAttribute("id");
 
         if (idAgente == null) {
-            // Si el idAgente no está en la sesión, redirigir o manejar el error
+            // Redirigir al login si no hay idAgente en sesión
             return "redirect:/login";
         }
 
-        Page<Usuario> usuariosAsignados = usuarioRepository.findUsuariosAsignadosAlAgente(idAgente, pageable);
+        // Llamar al repositorio con búsqueda y paginación
+        Page<Usuario> usuariosAsignados = usuarioRepository.findUsuariosAsignados2(idAgente, busqueda, pageable);
+
         model.addAttribute("listaUsuariosAsignados", usuariosAsignados.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", usuariosAsignados.getTotalPages());
-
-
+        model.addAttribute("busqueda", busqueda);
 
         return "Agente/UsuariosAsignados/usuariosAsignados";
     }
