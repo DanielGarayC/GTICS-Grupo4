@@ -141,7 +141,7 @@
 									<!-- input Código de Jurisdicción -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Código de Jurisdicción:</label>
-										<input type="text" class="form-control" th:value="*{agtCodigojurisdiccion}" id="codigoJurisdiccion" readonly disabled/>
+										<input type="text" class="form-control" th:field="*{agtCodigojurisdiccion}" id="codigoJurisdiccion" readonly disabled/>
 
 
 										<div class="invalid-feedback" th:if="${agtCodigojurisdiccionError}" th:text="${agtCodigojurisdiccionError}"></div>
@@ -149,7 +149,7 @@
 									<!-- input Zona (deshabilitado porque se asigna automáticamente) -->
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Zona:</label>
-										<input type="text" class="form-control" th:value="${adminzonal.zona.nombreZona}" disabled />
+										<input type="text" class="form-control" th:field="${adminzonal.zona.nombreZona}" disabled />
 									</div>
 
 									<!-- input Razón social -->

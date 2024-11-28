@@ -161,6 +161,8 @@ public class AdminZonalController {
                                 HttpSession session){
 
         Integer idAdminZonal = (Integer) session.getAttribute("id");
+        System.out.println("Código de Jurisdicción recibido: " + agente.getAgtCodigojurisdiccion());
+
         System.out.println("Llega al método guardarAgente");
         System.out.println(bindingResult);
         System.out.println(agente.getAgtCodigojurisdiccion());
@@ -225,45 +227,7 @@ public class AdminZonalController {
                 }
             }
 
-            // Validación de Teléfono
-            if (bindingResult.hasFieldErrors("telefono")) {
-                if (bindingResult.getFieldError("telefono").getCode().equals("NotBlank")) {
-                    model.addAttribute("telefonoError", "Debe ingresar un número de teléfono");
-                } else if (bindingResult.getFieldError("telefono").getCode().equals("Size")) {
-                    model.addAttribute("telefonoError", "El teléfono debe tener exactamente 9 dígitos");
-                } else if (bindingResult.getFieldError("telefono").getCode().equals("Pattern")) {
-                    model.addAttribute("telefonoError", "El teléfono debe contener solo dígitos");
-                }
-            }
-            if (bindingResult.hasFieldErrors("agtCodigojurisdiccion")) {
-                if (bindingResult.getFieldError("agtCodigojurisdiccion").getCode().equals("NotBlank")) {
-                    model.addAttribute("agtCodigojurisdiccionError", "El código de jurisdicción no puede estar vacío");
-                } else if (bindingResult.getFieldError("agtCodigojurisdiccion").getCode().equals("Size")) {
-                    model.addAttribute("agtCodigojurisdiccionError", "El código de jurisdicción debe tener entre 4 y 6 dígitos");
-                } else if (bindingResult.getFieldError("agtCodigojurisdiccion").getCode().equals("Pattern")) {
-                    model.addAttribute("agtCodigojurisdiccionError", "El código de jurisdicción debe contener solo dígitos");
-                }
-            }
-            // Validación de Código Aduanero
-            if (bindingResult.hasFieldErrors("agtCodigoaduana")) {
-                if (bindingResult.getFieldError("agtCodigoaduana").getCode().equals("NotBlank")) {
-                    model.addAttribute("agtCodigoaduanaError", "El código aduanero no puede estar vacío");
-                } else if (bindingResult.getFieldError("agtCodigoaduana").getCode().equals("Size")) {
-                    model.addAttribute("agtCodigoaduanaError", "El código aduanero debe tener exactamente 6 dígitos");
-                } else if (bindingResult.getFieldError("agtCodigoaduana").getCode().equals("Pattern")) {
-                    model.addAttribute("agtCodigoaduanaError", "El código aduanero debe contener solo dígitos");
-                }
-            }
 
-            if (bindingResult.hasFieldErrors("agtRuc")) {
-                if (bindingResult.getFieldError("agtRuc").getCode().equals("NotBlank")) {
-                    model.addAttribute("agtRucError", "El RUC no puede estar vacío");
-                } else if (bindingResult.getFieldError("agtRuc").getCode().equals("Size")) {
-                    model.addAttribute("agtRucError", "El RUC debe tener exactamente 10 dígitos");
-                } else if (bindingResult.getFieldError("agtRuc").getCode().equals("Pattern")) {
-                    model.addAttribute("agtRucError", "El RUC debe contener solo dígitos");
-                }
-            }
             if(optUsuario.isPresent()){
                 Usuario adminzonal = optUsuario.get();
                 model.addAttribute("adminzonal",adminzonal);

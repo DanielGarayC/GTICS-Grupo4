@@ -70,7 +70,6 @@ public class Usuario {
 
 
     @Column(name = "agt_codigojurisdiccion", length = 45)
-    @NotBlank(message = "El código de jurisdicción no puede estar vacío", groups = {AgenteValidationGroup.class})
     @Size(min = 4, max = 6, message = "El código de jurisdicción debe tener entre 4 a 6 dígitos", groups = {AgenteValidationGroup.class})
     @Pattern(regexp = "\\d+", message = "El código de jurisdicción debe contener solo dígitos", groups = {AgenteValidationGroup.class})
     private String agtCodigojurisdiccion;
