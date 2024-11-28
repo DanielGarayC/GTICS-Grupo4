@@ -461,9 +461,10 @@
 
                 let url = "";
 
+                // Convertir a minúsculas para la URL
                 if (formatos.length === 1) {
                     // Descarga directa del formato seleccionado
-                    const formato = formatos[0]; // Convertir a minúsculas para la URL
+                    const formato = formatos[0];
                     if (cardNumber === 1) {
                         url = `/descargarOrden${formato}?${params.toString()}`;
                     } else if (cardNumber === 2) {
@@ -498,7 +499,8 @@
                         // Determinar nombre de archivo basado en el formato o ZIP
                         let fileName = '';
                         if (formatos.length === 1) {
-                            fileName = `Reporte.${formatos[0].toLowerCase()}`; // PDF, Excel, o CSV
+                            const extension = formatos[0] === 'Excel' ? 'xlsx' : formatos[0].toLowerCase();
+                            fileName = `Reporte_${formatos[0].toLowerCase()}.${extension}`; // PDF, XLSX, o CSV
                         } else {
                             if (cardNumber === 1) {
                                 fileName = 'Reporte_Ordenes_Usuario.zip';
@@ -519,6 +521,8 @@
                         Swal.fire("Error", error.message, "error");
                     });
             }
+
+
 
 
             // Funciones para Actualizar Fechas

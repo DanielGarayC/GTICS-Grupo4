@@ -641,6 +641,10 @@ public class AgenteController {
     }
 
 
+
+
+
+
     @GetMapping("/descargarOrdenCSV")
     public void descargarOrdenCSV(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException {
         try {
@@ -657,36 +661,17 @@ public class AgenteController {
     @GetMapping("/descargarOrdenZIP")
     public void descargarOrdenZIP(@RequestParam("idOrden") Integer idOrden,
                                   @RequestParam("formatos") String formatos,
-                                  HttpServletResponse response,
-                                  HttpSession session) throws IOException, DocumentException {
+                                  HttpServletResponse response) throws IOException, DocumentException {
         try {
-            // Validar si la sesión del usuario está activa
-            Integer idAgente = (Integer) session.getAttribute("id");
-            if (idAgente == null) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuario no autenticado");
-                return;
-            }
-
-            // Verificar si la orden existe
-            Optional<Orden> optOrden = ordenRepository.findById(idOrden);
-            if (!optOrden.isPresent()) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
-                return;
-            }
-            Orden orden = optOrden.get();
-
-            // Crear un ByteArrayOutputStream para almacenar los archivos ZIP
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ZipOutputStream zos = new ZipOutputStream(baos);
 
-            // Dividir los formatos solicitados en el parámetro "formatos"
             String[] formatosArray = formatos.split(",");
             for (String formato : formatosArray) {
                 formato = formato.trim();
                 byte[] fileBytes = null;
                 String fileName = "Orden_" + idOrden;
 
-                // Generar los archivos en el formato correspondiente
                 if (formato.equalsIgnoreCase("PDF")) {
                     fileBytes = generarOrdenPDF(idOrden);
                     fileName += ".pdf";
@@ -698,7 +683,6 @@ public class AgenteController {
                     fileName += ".csv";
                 }
 
-                // Si los bytes del archivo no son nulos, agregar el archivo al ZIP
                 if (fileBytes != null) {
                     ZipEntry zipEntry = new ZipEntry(fileName);
                     zos.putNextEntry(zipEntry);
@@ -707,15 +691,12 @@ public class AgenteController {
                 }
             }
 
-            // Cerrar el ZipOutputStream después de agregar todas las entradas
             zos.close();
 
-            // Establecer el tipo de contenido de la respuesta y el encabezado para la descarga
             response.setContentType("application/zip");
             response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".zip");
             response.getOutputStream().write(baos.toByteArray());
         } catch (IOException | DocumentException e) {
-            // Manejar cualquier excepción y enviar un error HTTP
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al generar el archivo ZIP: " + e.getMessage());
         }
     }
@@ -1073,7 +1054,7 @@ public class AgenteController {
             @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
             @RequestParam("formatos") String formatos,
             HttpServletResponse response) throws IOException, DocumentException {
-
+        System.out.println("prueba");
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ZipOutputStream zos = new ZipOutputStream(baos);
