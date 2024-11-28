@@ -162,6 +162,17 @@
 																Ver
 															</a>
 														</li>
+
+														<li>
+															<form id="impersonateForm" action="/impersonateUser" method="post">
+																<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+																<input type="hidden" name="email" value="${finalUser.email}"/>
+																<a href="#" class="dropdown-item" onclick="document.getElementById('impersonateForm').submit(); return false;">
+																	<i class="bi bi-door-open me-3"></i>
+																	Ingresar a la cuenta
+																</a>
+															</form>
+														</li>
 													</ul>
 												</div>
 											</td>
