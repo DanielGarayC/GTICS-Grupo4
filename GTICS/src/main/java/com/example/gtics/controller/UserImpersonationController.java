@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -31,7 +32,7 @@ public class UserImpersonationController {
     }
 
     @GetMapping("/SuperAdmin/impersonateUser/{userId}")
-    public String impersonateUser(@PathVariable Integer userId, HttpSession session) {
+    public String impersonateUser(@PathVariable Integer userId, HttpSession session, Model model) {
         // Verificar que el usuario actual es Super Admin
         Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
         boolean isSuperAdmin = currentAuth.getAuthorities().stream()
@@ -70,9 +71,12 @@ public class UserImpersonationController {
         // Guardar información de suplantación en la sesión
         session.setAttribute("originalUser", currentAuth.getName());
         session.setAttribute("usuario", usuarioSessionRepository.findByEmail(userToImpersonate.getEmail()));
+        session.setAttribute("isImpersonating", true);
+
 
         // Redirigir según el rol del usuario suplantado
         String rolNombre = userToImpersonate.getRol().getNombreRol();
+
         switch (rolNombre) {
             case "Usuario Final":
                 return "redirect:/UsuarioFinal";

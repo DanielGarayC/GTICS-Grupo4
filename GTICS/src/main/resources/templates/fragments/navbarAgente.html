@@ -70,6 +70,14 @@
                                 </div>
                             </a>
                         </li>
+                        <li class="nav-item" th:if="${session['isImpersonating'] == true}">
+                            <a class="nav-link text-danger" th:href="@{/revertImpersonation}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-arrow-left-circle-fill"></i></span>
+                                    <span class="nav-link-text">Regresar a Super Admin</span>
+                                </div>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -143,6 +151,14 @@
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-file-earmark-arrow-down-fill"></i></span>
                                     <span class="nav-link-text">Reportes</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item" th:if="${session['isImpersonating'] == true}">
+                            <a class="nav-link text-danger" th:href="@{/revertImpersonation}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-arrow-left-circle-fill"></i></span>
+                                    <span class="nav-link-text">Regresar a Super Admin</span>
                                 </div>
                             </a>
                         </li>
@@ -276,7 +292,7 @@
                                     <div class="border-top px-5 py-3">
                                         <a th:href="@{/Agente/perfil}">Mi perfil</a>
                                     </div>
-                                    <form id="logoutForm" th:action="@{/logout}" method="post">
+                                    <form id="logoutForm" th:action="@{/logout}" method="post" th:if="${session['isImpersonating'] == null}">
                                         <div class="border-top px-5 py-3">
                                             <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Cerrar sesión</a>
                                         </div>
