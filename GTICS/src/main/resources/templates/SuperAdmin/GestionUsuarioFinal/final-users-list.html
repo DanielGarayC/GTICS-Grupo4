@@ -164,13 +164,11 @@
 														</li>
 
 														<li>
-															<form id="impersonateForm" action="/impersonateUser" method="post">
-																<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-																<input type="hidden" name="email" value="${finalUser.email}"/>
-																<a href="#" class="dropdown-item" onclick="document.getElementById('impersonateForm').submit(); return false;">
+															<form id="impersonateForm" th:action="@{/SuperAdmin/impersonateUser/{userId}(userId=${finalUser.id})}" method="get">
+																<button type="submit" class="dropdown-item">
 																	<i class="bi bi-door-open me-3"></i>
 																	Ingresar a la cuenta
-																</a>
+																</button>
 															</form>
 														</li>
 													</ul>
