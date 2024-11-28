@@ -441,16 +441,23 @@
         <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
         <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
-        <!-- Theme JS -->
-        <script th:src="@{/js/theme.min.js}"></script>
-
+        <!-- Incluir jQuery una sola vez -->
         <script th:src="@{/js/vendors/jquery.min.js}"></script>
+
+        <!-- Incluir Bootstrap JS -->
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+
+        <!-- Incluir otros scripts dependientes de jQuery -->
+        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+        <script th:src="@{/js/theme.min.js}"></script>
         <script th:src="@{/js/vendors/countdown.js}"></script>
         <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
         <script th:src="@{/js/vendors/slick-slider.js}"></script>
         <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
         <script th:src="@{/js/vendors/tns-slider.js}"></script>
         <script th:src="@{/js/vendors/zoom.js}"></script>
+        <!-- Tus scripts personalizados -->
+
         <script>
             $(document).ready(function() {
                 $('.category-slider').slick({
@@ -536,82 +543,8 @@
             }
 
         </script>
-        <!-- Mantén solo este bloque y elimina el siguiente -->
+        <!-- Definición de animateCartIcon -->
         <script>
-            $(document).ready(function() {
-                // Obtener el token CSRF de los meta tags
-                var csrfToken = $('meta[name="_csrf"]').attr('content');
-                var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
-
-                console.log('CSRF Token:', csrfToken);
-                console.log('CSRF Header:', csrfHeader);
-
-                // Configurar AJAX para incluir el token en todas las solicitudes
-                $.ajaxSetup({
-                    beforeSend: function(xhr) {
-                        if (csrfToken && csrfHeader) {
-                            xhr.setRequestHeader(csrfHeader, csrfToken); // Corregido aquí
-                            console.log('Encabezado CSRF configurado.');
-                        }
-                    }
-                });
-
-                // Capturar el evento de envío del formulario
-                $('.add-to-cart-form').on('submit', function(event) {
-                    event.preventDefault(); // Prevenir la acción predeterminada del formulario
-
-                    var form = $(this);
-                    var url = form.attr('action');
-                    var method = form.attr('method');
-                    var data = form.serialize(); // Obtener los datos del formulario
-                    var button = form.find('button[type="submit"]');
-
-                    console.log('Formulario enviado:', url, method, data);
-
-                    // Deshabilitar el botón para prevenir múltiples clics
-                    button.prop('disabled', true);
-                    console.log('Botón deshabilitado.');
-
-                    $.ajax({
-                        url: url,
-                        type: method,
-                        data: data,
-                        success: function(response) {
-                            console.log('Respuesta del servidor:', response);
-                            if (response.success){
-                                // Actualizar los contadores del carrito
-                                $('#carrito-count-desktop').text(response.totalArticulos);
-                                $('#carrito-count-mobile').text(response.totalArticulos);
-// Animar el icono del carrito
-                                animateCartIcon();
-
-                            } else {
-                                // Manejar errores retornados por el servidor
-                                console.error('Error del servidor:', response.mensaje);
-                                // Mostrar mensaje de error usando alert
-                                alert(response.mensaje);
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            // Manejar errores de la solicitud AJAX
-                            console.error('Error AJAX:', error);
-                            // Mostrar mensaje de error usando alert
-                            alert('Ocurrió un error al intentar añadir el producto al carrito.');
-                        },
-                        complete: function() {
-                            // Rehabilitar el botón después de que la solicitud haya terminado
-                            button.prop('disabled', false);
-                            console.log('Botón reabilitado.');
-                        }
-                    });
-                });
-            });
-        </script>
-
-
-        <!-- NUEVO: Función para animar el icono del carrito -->
-        <script>
-            // Función para animar el icono del carrito
             function animateCartIcon() {
                 // Seleccionar los elementos SVG del carrito (desktop y mobile)
                 const cartIconDesktop = document.querySelector('#carrito-count-desktop').previousElementSibling;
@@ -639,36 +572,217 @@
                 });
             }
         </script>
+
+        <!-- Script Principal para Manejar el Carrito -->
         <script>
-            // Función para animar los badges del carrito
-            function animateCartBadge() {
-                // Seleccionar los badges del carrito (desktop y mobile)
-                const cartBadgeDesktop = document.getElementById('carrito-count-desktop');
-                const cartBadgeMobile = document.getElementById('carrito-count-mobile');
+            $(document).ready(function() {
+                // Obtener el token CSRF de los meta tags
+                var csrfToken = $('meta[name="_csrf"]').attr('content');
+                var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
 
-                // Lista de badges a animar
-                const cartBadges = [cartBadgeDesktop, cartBadgeMobile];
+                console.log('CSRF Token:', csrfToken);
+                console.log('CSRF Header:', csrfHeader);
 
-                cartBadges.forEach(badge => {
-                    if (badge) {
-                        // Remover clases de animación si ya están presentes
-                        badge.classList.remove('animate-bounce', 'animate-scale');
-
-                        // Forzar reflow para reiniciar la animación
-                        void badge.offsetWidth;
-
-                        // Agregar la clase de animación deseada
-                        badge.classList.add('animate-bounce'); // Puedes cambiar a 'animate-scale' si prefieres otra animación
-
-                        // Remover la clase de animación después de que termine
-                        badge.addEventListener('animationend', () => {
-                            badge.classList.remove('animate-bounce', 'animate-scale');
-                        }, { once: true });
+                // Configurar AJAX para incluir el token en todas las solicitudes
+                $.ajaxSetup({
+                    beforeSend: function(xhr) {
+                        if (csrfToken && csrfHeader) {
+                            xhr.setRequestHeader(csrfHeader, csrfToken);
+                            console.log('Encabezado CSRF configurado.');
+                        }
                     }
                 });
-            }
-        </script>
 
+                // Función para obtener y renderizar los productos del carrito
+                function fetchCartItems() {
+                    $.ajax({
+                        url: '/UsuarioFinal/listaCarrito',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            var cartList = $('#cart-items');
+                            cartList.empty(); // Limpiar la lista actual
+
+                            if (data.length > 0) {
+                                data.forEach(function(producto) {
+                                    var listItem = `
+                                <li class="list-group-item py-3 ps-0 border-top producto-item-${producto.idProducto}">
+                                    <div class="row align-items-center">
+                                        <div class="col-7 col-md-7 col-lg-7">
+                                            <div class="d-flex">
+                                                <img src="${producto.urlImagenProducto}" alt="Producto" class="icon-shape icon-xxl" />
+                                                <div class="ms-3">
+                                                    <a href="/UsuarioFinal/detallesProducto/${producto.idProducto}" class="text-inherit">
+                                                        <h6 class="mb-0">${producto.nombreProducto}</h6>
+                                                    </a>
+                                                    <div class="mt-2 mb-2">
+                                                        <span class="fw-bold" style="font-size: 0.9em;">S/. ${producto.precioTotalPorProducto.toFixed(2)}</span>
+                                                    </div>
+                                                    <div class="mt-2 small lh-1">
+                                                        <button type="button" class="text-decoration-none text-inherit eliminar-producto btn btn-link" data-id="${producto.idProducto}" style="padding: 0; border: none; background: none;">
+                                                            <span class="me-1 align-text-bottom">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 text-success">
+                                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                    </svg>
+                                                            </span>
+                                                            <span class="text-muted">Eliminar</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-5 col-md-5 col-lg-5">
+                                            <div class="d-flex align-items-center">
+                                                <div class="input-group input-spinner" style="max-width: 150px; display: flex; align-items: center;">
+                                                    <input type="button" value="-" class="button-minus btn btn-xs btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" style="width: 35px; padding: 0;"/>
+                                                    <input type="number" name="nuevaCantidad" value="${producto.cantidadProducto}" step="1" max="10" min="1" class="quantity-field form-control text-center" style="max-width: 50px; height: 35px; padding: 0;" />
+                                                    <input type="button" value="+" class="button-plus btn btn-xs btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" style="width: 35px; padding: 0;"/>
+                                                </div>
+                                                <button type="button" class="btn btn-primary btn-sm ms-2 actualizar-cantidad" data-id="${producto.idProducto}">Actualizar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            `;
+                                    cartList.append(listItem);
+                                });
+                            } else {
+                                $('#empty-cart-message').show();
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error al cargar el carrito:', error);
+
+                        }
+                    });
+                }
+
+                // Evento para cargar el carrito cuando se abra el offcanvas
+                $('#offcanvasRight').on('show.bs.offcanvas', function () {
+                    fetchCartItems();
+                });
+
+                // Capturar el evento de envío del formulario para agregar al carrito
+                $('.add-to-cart-form').on('submit', function(event) {
+                    event.preventDefault(); // Prevenir la acción predeterminada del formulario
+
+                    var form = $(this);
+                    var url = form.attr('action');
+                    var method = form.attr('method');
+                    var data = form.serialize(); // Obtener los datos del formulario
+                    var button = form.find('button[type="submit"]');
+
+                    console.log('Formulario enviado:', url, method, data);
+
+                    // Deshabilitar el botón para prevenir múltiples clics
+                    button.prop('disabled', true);
+                    console.log('Botón deshabilitado.');
+
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        data: data,
+                        dataType: 'json', // Asegurarse de recibir una respuesta JSON
+                        success: function(response) {
+                            console.log('Respuesta del servidor:', response);
+                            if (response.success){
+                                // Actualizar los contadores del carrito
+                                $('#carrito-count-desktop').text(response.totalArticulos);
+                                $('#carrito-count-mobile').text(response.totalArticulos);
+                                // Animar el icono del carrito
+                                animateCartIcon();
+
+                            } else {
+                                // Manejar errores retornados por el servidor
+                                console.error('Error del servidor:', response.mensaje);
+                                // Mostrar mensaje de error usando toastr
+
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Manejar errores de la solicitud AJAX
+                            console.error('Error AJAX:', error);
+                            // Mostrar mensaje de error usando toastr
+                            toastr.error('Ocurrió un error al intentar añadir el producto al carrito.');
+                        },
+                        complete: function() {
+                            // Rehabilitar el botón después de que la solicitud haya terminado
+                            button.prop('disabled', false);
+                            console.log('Botón reabilitado.');
+                        }
+                    });
+                });
+
+                // Manejar la eliminación de productos del carrito
+                $(document).on('click', '.eliminar-producto', function() {
+                    var idProducto = $(this).data('id');
+                    if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
+                        $.ajax({
+                            url: '/UsuarioFinal/eliminarProductoCarritoAjax/' + idProducto, // Ruta AJAX correcta
+                            type: 'DELETE',
+                            success: function(response) {
+                                if (response.success){
+                                    fetchCartItems(); // Actualizar la lista del carrito
+                                    // Actualizar contadores del carrito
+                                    $('#carrito-count-desktop').text(response.totalArticulos);
+                                    $('#carrito-count-mobile').text(response.totalArticulos);
+                                    animateCartIcon();
+
+                                } else {
+
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error al eliminar el producto:', error);
+                                toastr.error('Ocurrió un error al eliminar el producto del carrito.');
+                            }
+                        });
+                    }
+                });
+
+                // Manejar la actualización de la cantidad de productos en el carrito
+                $(document).on('click', '.actualizar-cantidad', function() {
+                    var button = $(this);
+                    var idProducto = button.data('id');
+                    var cantidad = button.closest('.d-flex').find('input[name="nuevaCantidad"]').val();
+
+                    // Validar que la cantidad sea un número válido
+                    if (!Number.isInteger(parseFloat(cantidad)) || parseInt(cantidad) < 1) {
+                        toastr.error('Por favor, ingresa una cantidad válida.');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/UsuarioFinal/actualizarCantidadCarritoAjax', // Ruta AJAX correcta
+                        type: 'POST',
+                        data: {
+                            idProducto: idProducto,
+                            nuevaCantidad: cantidad
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success){
+                                fetchCartItems(); // Actualizar la lista del carrito
+                                // Actualizar contadores del carrito
+                                $('#carrito-count-desktop').text(response.totalArticulos);
+                                $('#carrito-count-mobile').text(response.totalArticulos);
+                                animateCartIcon();
+
+                            } else {
+
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error al actualizar la cantidad:', error);
+                            toastr.error('Ocurrió un error al actualizar la cantidad del producto.');
+                        }
+                    });
+                });
+            });
+        </script>
 
 
     </body>
