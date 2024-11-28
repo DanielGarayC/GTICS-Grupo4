@@ -148,6 +148,14 @@
                                                                 Eliminar
                                                             </a>
                                                         </li>
+                                                        <li>
+                                                            <form id="impersonateForm" th:action="@{/SuperAdmin/impersonateUser/{userId}(userId=${usuario.id})}" method="get">
+                                                                <button type="submit" class="dropdown-item">
+                                                                    <i class="bi bi-door-open me-3"></i>
+                                                                    Ingresar a la cuenta
+                                                                </button>
+                                                            </form>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </td>

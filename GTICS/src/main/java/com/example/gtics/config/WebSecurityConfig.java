@@ -79,9 +79,10 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests()
                 .requestMatchers("/SuperAdmin", "/SuperAdmin/**").hasAnyAuthority("Super Admin")
-                .requestMatchers("/UsuarioFinal", "/UsuarioFinal/**").hasAnyAuthority("Usuario Final")
-                .requestMatchers("/AdminZonal", "/AdminZonal/**").hasAnyAuthority("Administrador Zonal")
-                .requestMatchers("/Agente", "/Agente/**").hasAnyAuthority("Agente")
+                .requestMatchers("/UsuarioFinal", "/UsuarioFinal/**").hasAnyAuthority("Usuario Final", "Super Admin")
+                .requestMatchers("/AdminZonal", "/AdminZonal/**").hasAnyAuthority("Administrador Zonal", "Super Admin")
+                .requestMatchers("/Agente", "/Agente/**").hasAnyAuthority("Agente", "Super Admin")
+                .requestMatchers("/SuperAdmin/impersonateUser/**").hasAuthority("Super Admin")
                 .anyRequest().permitAll();
         return http.build();
     }
