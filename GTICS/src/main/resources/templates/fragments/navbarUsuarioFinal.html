@@ -250,9 +250,9 @@
                                         <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-sm rounded-circle" /> <!-- Avatar más pequeño -->
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end p-0" style="width: 180px; font-size: 0.85rem; padding: 0.5rem;"> <!-- Ajuste de ancho y padding -->
-                                        <div class="lh-1 px-3 py-2 border-bottom text-center">
-                                            <h6 class="mb-1" style="font-size: 0.9rem;">Nombre Apellido</h6> <!-- Ajuste de tamaño de fuente -->
-                                            <small style="font-size: 0.75rem;">rol en la página</small> <!-- Texto más pequeño -->
+                                        <div class="lh-1 px-5 py-4 border-bottom">
+                                            <h5 class="mb-1 h6" th:text="${session.usuario.nombre} + ' ' + ${session.usuario.apellidoPaterno}"></h5>
+                                            <small>Rol: Usuario Final</small>
                                         </div>
                                         <div class="border-top px-0 py-1">
                                             <a th:href="@{/UsuarioFinal/miPerfil}" style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
