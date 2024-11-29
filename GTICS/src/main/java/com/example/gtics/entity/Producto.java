@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
+
 import com.example.gtics.ValidationGroup.InventarioProductosValidationGroup;
 @Getter
 @Setter
@@ -82,5 +84,8 @@ public class Producto {
 
     @Column(name = "codigoProducto", length = 30, unique = true)
     private String codigoProducto;
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Fotosproducto> fotos;
 
 }

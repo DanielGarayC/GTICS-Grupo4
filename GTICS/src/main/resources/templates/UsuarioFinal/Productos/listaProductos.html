@@ -41,6 +41,117 @@
                 background-size: 200%; /* Zoom al pasar el ratón */
             }
         </style>
+        <style>
+            /* Tus estilos existentes */
+            /* ... */
+
+            /* Animaciones definidas previamente */
+            @keyframes bounce {
+                0%, 20%, 50%, 80%, 100% {
+                    transform: translateY(0);
+                }
+                40% {
+                    transform: translateY(-10px);
+                }
+                60% {
+                    transform: translateY(-5px);
+                }
+            }
+
+            .animate-bounce {
+                animation: bounce 0.5s;
+            }
+
+            @keyframes scaleUp {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.3);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            .animate-scale {
+                animation: scaleUp 0.5s;
+            }
+        </style>
+
+        <style>
+            /* Estilo del contenedor de miniaturas */
+            .thumbnails {
+                display: flex;
+                flex-wrap: nowrap; /* Previene que las miniaturas se envuelvan */
+                gap: 0.75rem;
+                justify-content: flex-start;
+                margin-top: 1rem;
+            }
+            /* Contenedor individual de cada miniatura */
+            .thumbnails .col-3 {
+                flex: 0 0 auto; /* Evita que las columnas crezcan o se encogan */
+                width: calc(25% - 0.5625rem); /* 25% para 4 elementos, ajustando el gap */
+                padding: 0; /* Elimina el padding adicional */
+            }
+            /* Estilo de cada miniatura */
+            .thumbnails-img {
+                width: 100%;
+                aspect-ratio: 1/1; /* Mantiene proporción cuadrada */
+                position: relative;
+                overflow: hidden;
+                border-radius: 5px;
+                border: 1px solid #e5e7eb;
+            }
+
+            /* Optimización de las imágenes dentro de las miniaturas */
+            .thumbnails-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: center;
+                cursor: pointer;
+                padding: 0.25rem;
+                background-color: #fff;
+                transition: transform 0.2s ease-in-out;
+            }
+
+            /* Estilo para la miniatura activa */
+            .thumbnails-img img.active {
+                border: 2px solid #007bff;
+            }
+
+
+            /* Hover effect suave */
+            .thumbnails-img img:hover {
+                transform: scale(1.05);
+            }
+            /* Contenedor de miniaturas usando flexbox */
+            .thumbnails {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.75rem;
+                justify-content: start;
+            }
+
+            /* Miniaturas */
+            .thumbnails-img {
+                width: 120px;
+                height: 120px;
+                position: relative;
+                overflow: hidden;
+                border-radius: 5px;
+                border: 1px solid #e5e7eb;
+            }
+
+            /* Asegura que el contenedor de herramientas tenga el espacio adecuado */
+            .product-tools {
+                margin-top: 1rem;
+                width: 100%;
+            }
+
+
+        </style>
         <!-- CSRF Tokens -->
         <meta name="_csrf" th:content="${_csrf.token}" />
         <meta name="_csrf_header" th:content="${_csrf.headerName}" />
@@ -294,8 +405,8 @@
                 </section>
             </div>
 
+
             <div th:each="producto : ${productos}">
-                <!-- Modal -->
                 <div class="modal fade" th:id="'quickViewModal' + ${producto.id}" tabindex="-1" aria-hidden="true" role="dialog">
                     <div class="modal-dialog modal-xl modal-dialog-centered">
                         <div class="modal-content">
@@ -304,79 +415,113 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="row">
-
+                                    <!-- Columna de imágenes -->
                                     <div class="col-lg-6">
                                         <div class="product productModal" id="productModal">
-                                            <div class="zoom"
-                                                 onmousemove="zoom(event)"
-                                                 onmouseout="resetZoom(event)"
+                                            <!-- Imagen principal con zoom -->
+                                            <div class="zoom" onmousemove="zoom(event)" onmouseout="resetZoom(event)"
                                                  th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.id} + ');'">
+                                            </div>
+                                        </div>
+                                        <!-- Herramientas del producto - Miniaturas -->
+                                        <div class="product-tools mt-4">
+                                            <div class="thumbnails row g-3" id="productModalThumbnails">
+                                                <div th:each="foto : ${producto.fotos}" class="col-3">
+                                                    <div class="thumbnails-img">
+                                                        <img th:src="'/UsuarioFinal/producto/foto/' + ${foto.id}"
+                                                             alt=""
+                                                             class="img-thumbnail"
+                                                             th:data-foto-id="${foto.id}"
+                                                             onclick="changeMainImage(this.getAttribute('data-foto-id'), this.closest('.modal'))" />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-
-
+                                    <!-- Columna de detalles -->
                                     <div class="col-lg-6">
                                         <div class="ps-lg-8 mt-6 mt-lg-0">
+                                            <!-- Categoría -->
+                                            <a href="#!" class="mb-4 d-block text-muted" th:text="${producto.idCategoria.nombreCategoria}">Categoría</a>
+
+                                            <!-- Nombre del producto -->
                                             <h2 class="mb-1 h1" th:text="${producto.nombreProducto}">Nombre del producto</h2>
+
+                                            <!-- Reseñas -->
+                                            <div class="mb-4">
+                                                <small class="text-warning">
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-half"></i>
+                                                </small>
+                                                <a href="#" class="ms-2">(30 reviews)</a>
+                                            </div>
+
+                                            <!-- Precio -->
                                             <div class="fs-4">
                                                 <span class="fw-bold text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
                                             </div>
-                                            <hr class="my-6" />
-                                            <div>
-                                                <!-- Quantity Selector -->
-                                                <div class="input-group input-spinner" style="max-width: 120px; display: flex; align-items: center;">
-                                                    <input type="button" value="-" class="button-minus btn btn-xs btn-outline-secondary"
-                                                           onclick="var input = this.parentNode.querySelector('input[type=number]');
-                                                    if (input.value > 1) {
-                                                        input.stepDown();
-                                                        this.parentNode.querySelector('input[type=hidden]').value = input.value; // Actualiza el campo hidden
-                                                    }"
-                                                           style="width: 30px; padding: 0;" />
-                                                    <input type="number" name="cantidadVisible" value="1" step="1" max="10" min="1"
-                                                           class="quantity-field form-control text-center"
-                                                           style="max-width: 40px; height: 30px; padding: 0;"
-                                                           oninput="this.parentNode.querySelector('input[type=hidden]').value = this.value;" />
-                                                    <input type="button" value="+" class="button-plus btn btn-xs btn-outline-secondary"
-                                                           onclick="var input = this.parentNode.querySelector('input[type=number]');
-                                                    input.stepUp();
-                                                    this.parentNode.querySelector('input[type=hidden]').value = input.value;"
-                                                           style="width: 30px; padding: 0;" />
-                                                </div>
-                                            </div>
-                                            <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form">
-                                                <input type="hidden" name="idProducto" th:value="${producto.id}" />
-                                                <input type="hidden" name="cantidad" value="1" class="quantity-field form-control-sm form-input" />
-                                                <div class="d-grid">
-                                                    <button type="submit" class="btn btn-primary btn-sm w-100">
-                                                        Añadir al carrito
-                                                    </button>
-                                                </div>
-                                            </form>
 
                                             <hr class="my-6" />
+
+                                            <!-- Selector de cantidad -->
+                                            <div class="mb-4">
+                                                <div class="input-group input-spinner" style="max-width: 120px;">
+                                                    <input type="button" value="-" class="button-minus btn btn-sm btn-outline-secondary"
+                                                           onclick="updateQuantity(this, 'decrease')" />
+                                                    <input type="number" name="cantidadVisible"
+                                                           th:value="1" th:max="${producto.cantidadDisponible}" min="1"
+                                                           class="quantity-field form-control-sm form-input text-center"
+                                                           oninput="validateAndUpdateQuantity(this)" />
+                                                    <input type="button" value="+" class="button-plus btn btn-sm btn-outline-secondary"
+                                                           onclick="updateQuantity(this, 'increase')" />
+                                                </div>
+                                            </div>
+
+                                            <!-- Botones de acción -->
+                                            <div class="mt-3 row justify-content-start g-2 align-items-center">
+                                                <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form col-lg-6 col-md-6 col-12">
+                                                    <input type="hidden" name="idProducto" th:value="${producto.id}" />
+                                                    <input type="hidden" name="cantidad" th:value="1" class="quantity-hidden-field" />
+                                                    <button type="submit" class="btn btn-primary w-100">
+                                                        <i class="bi bi-cart-plus me-2"></i>Añadir al carrito
+                                                    </button>
+                                                </form>
+
+
+                                            </div>
+
+                                            <hr class="my-6" />
+
+                                            <!-- Detalles del producto -->
                                             <div>
                                                 <table class="table table-borderless">
                                                     <tbody>
                                                         <tr>
-                                                            <td style="font-size: 0.8rem;">Disponibilidad:</td>
-                                                            <td th:if="${producto.disponibilidad == 'En stock'}" style="font-size: 0.8rem;">
+                                                            <td>Código del producto:</td>
+                                                            <td th:text="${producto.codigoProducto}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Disponibilidad:</td>
+                                                            <td th:if="${producto.disponibilidad == 'En stock'}">
                                                                 <span class="badge bg-light-primary text-dark-primary">En Stock</span>
                                                             </td>
-                                                            <td th:if="${producto.disponibilidad == 'Fuera de stock'}" style="font-size: 0.8rem;">
+                                                            <td th:if="${producto.disponibilidad == 'Fuera de stock'}">
                                                                 <span class="badge bg-light-danger text-dark-danger">Fuera de stock</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td style="font-size: 0.8rem;">Tipo:</td>
-                                                            <td th:text="${producto.idCategoria.nombreCategoria}" style="font-size: 0.8rem;">Tecnología</td>
+                                                            <td>Tipo:</td>
+                                                            <td th:text="${producto.idSubcategoria.nombreSubcategoria}"></td>
                                                         </tr>
                                                         <tr>
-                                                            <td style="font-size: 0.8rem;">Fecha aproximada de entrega:</td>
-                                                            <td style="font-size: 0.8rem;">
+                                                            <td>Envío:</td>
+                                                            <td>
                                                                 <small th:if="${fechaFormateada != null}" th:text="${fechaFormateada}"></small>
-                                                                <small th:unless="${fechaFormateada != null}">No hay fecha aproximada</small>
+                                                                <small th:unless="${fechaFormateada != null}">Entrega en 1-2 días hábiles</small>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -393,6 +538,7 @@
 
 
 
+
         </main>
 
         <!-- Javascript-->
@@ -404,16 +550,23 @@
         <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
         <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
-        <!-- Theme JS -->
-        <script th:src="@{/js/theme.min.js}"></script>
-
+        <!-- Incluir jQuery una sola vez -->
         <script th:src="@{/js/vendors/jquery.min.js}"></script>
+
+        <!-- Incluir Bootstrap JS -->
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+
+        <!-- Incluir otros scripts dependientes de jQuery -->
+        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+        <script th:src="@{/js/theme.min.js}"></script>
         <script th:src="@{/js/vendors/countdown.js}"></script>
         <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
         <script th:src="@{/js/vendors/slick-slider.js}"></script>
         <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
         <script th:src="@{/js/vendors/tns-slider.js}"></script>
         <script th:src="@{/js/vendors/zoom.js}"></script>
+        <!-- Tus scripts personalizados -->
+
         <script>
             $(document).ready(function() {
                 $('.category-slider').slick({
@@ -456,32 +609,67 @@
 
         </script>
         <script>
-            function zoom(f) {
-                var t = f.currentTarget;
-                var offsetX, offsetY;
-
+            function zoom(event) {
+                var target = event.currentTarget;
                 // Establece el tamaño de zoom primero
-                t.style.backgroundSize = '200%';
+                target.style.backgroundSize = '200%';
 
-                if (f.type.includes('touch')) {
-                    offsetX = f.touches[0].pageX - t.getBoundingClientRect().left;
-                    offsetY = f.touches[0].pageY - t.getBoundingClientRect().top;
+                var offsetX, offsetY;
+                if (event.type.includes('touch')) {
+                    offsetX = event.touches[0].pageX - target.getBoundingClientRect().left;
+                    offsetY = event.touches[0].pageY - target.getBoundingClientRect().top;
                 } else {
-                    offsetX = f.offsetX;
-                    offsetY = f.offsetY;
+                    offsetX = event.offsetX;
+                    offsetY = event.offsetY;
                 }
 
-                var x = (offsetX / t.offsetWidth) * 100;
-                var y = (offsetY / t.offsetHeight) * 100;
+                var x = (offsetX / target.offsetWidth) * 100;
+                var y = (offsetY / target.offsetHeight) * 100;
 
-                t.style.backgroundPosition = x + "% " + y + "%";
+                target.style.backgroundPosition = x + "% " + y + "%";
             }
 
-            function resetZoom(e) {
-                const container = e.currentTarget;
+            function resetZoom(event) {
+                const container = event.currentTarget;
                 container.style.backgroundSize = 'contain';
                 container.style.backgroundPosition = 'center';
             }
+
+            function changeMainImage(fotoId, modalElement) {
+                // Find the specific zoom div within this modal
+                var zoomDiv = modalElement.querySelector('.zoom');
+                var thumbnails = modalElement.querySelectorAll('#productModalThumbnails img');
+
+                // Change main image
+                zoomDiv.style.backgroundImage = 'url(/UsuarioFinal/producto/foto/' + fotoId + ')';
+
+                // Reset zoom
+                zoomDiv.style.backgroundSize = 'contain';
+                zoomDiv.style.backgroundPosition = 'center';
+
+                // Highlight active thumbnail
+                thumbnails.forEach(function(thumb) {
+                    thumb.classList.remove('active');
+                    if (thumb.getAttribute('data-foto-id') === fotoId) {
+                        thumb.classList.add('active');
+                    }
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var modals = document.querySelectorAll('.modal');
+
+                modals.forEach(function(modal) {
+                    var thumbnails = modal.querySelectorAll('#productModalThumbnails img');
+
+                    thumbnails.forEach(function(thumb) {
+                        thumb.addEventListener('click', function() {
+                            var fotoId = this.getAttribute('data-foto-id');
+                            changeMainImage(fotoId, modal);
+                        });
+                    });
+                });
+            });
         </script>
         <script>
             function toggleChat() {
@@ -499,8 +687,44 @@
             }
 
         </script>
-        <!-- Mantén solo este bloque y elimina el siguiente -->
+        <!-- Definición de animateCartIcon -->
         <script>
+            function animateCartIcon() {
+                // Seleccionar los elementos SVG del carrito (desktop y mobile)
+                const cartIconDesktop = document.querySelector('#carrito-count-desktop').previousElementSibling;
+                const cartIconMobile = document.querySelector('#carrito-count-mobile').previousElementSibling;
+
+                // Lista de iconos a animar
+                const cartIcons = [cartIconDesktop, cartIconMobile];
+
+                cartIcons.forEach(icon => {
+                    if (icon) {
+                        // Remover clases de animación si ya están presentes
+                        icon.classList.remove('animate-bounce', 'animate-scale');
+
+                        // Forzar reflow para reiniciar la animación
+                        void icon.offsetWidth;
+
+                        // Agregar la clase de animación deseada
+                        icon.classList.add('animate-bounce'); // Puedes cambiar a 'animate-scale' si prefieres otra animación
+
+                        // Remover la clase de animación después de que termine
+                        icon.addEventListener('animationend', () => {
+                            icon.classList.remove('animate-bounce', 'animate-scale');
+                        }, { once: true });
+                    }
+                });
+            }
+        </script>
+
+        <!-- Script Principal para Manejar el Carrito -->
+        <script>
+            // Función para actualizar los contadores del carrito
+            function updateCartCounters(totalArticulos) {
+                $('#carrito-count-desktop').text(totalArticulos);
+                $('#carrito-count-mobile').text(totalArticulos);
+                animateCartIcon();
+            }
             $(document).ready(function() {
                 // Obtener el token CSRF de los meta tags
                 var csrfToken = $('meta[name="_csrf"]').attr('content');
@@ -513,13 +737,136 @@
                 $.ajaxSetup({
                     beforeSend: function(xhr) {
                         if (csrfToken && csrfHeader) {
-                            xhr.setRequestHeader(csrfHeader, csrfToken); // Corregido aquí
+                            xhr.setRequestHeader(csrfHeader, csrfToken);
                             console.log('Encabezado CSRF configurado.');
                         }
                     }
                 });
+                // Manejo del formulario de agregar al carrito
+                $('.add-to-cart-form').on('submit', function(event) {
+                    event.preventDefault();
+                    var form = $(this);
+                    var cantidad = parseInt(form.find('.quantity-hidden-field').val());
+                    var maxStock = parseInt(form.closest('.row').find('input[name="cantidadVisible"]').attr('max'));
 
-                // Capturar el evento de envío del formulario
+                    if (cantidad > maxStock) {
+                        toastr.error('La cantidad seleccionada excede el stock disponible');
+                        return;
+                    }
+
+                    var button = form.find('button[type="submit"]');
+                    button.prop('disabled', true);
+
+                    $.ajax({
+                        url: form.attr('action'),
+                        type: form.attr('method'),
+                        data: form.serialize(),
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                // Actualización instantánea de los contadores
+                                updateCartCounters(response.totalArticulos);
+
+                                // Actualizar el contenido del carrito si está abierto
+                                if ($('#offcanvasRight').hasClass('show')) {
+                                    fetchCartItems();
+                                }
+
+                                toastr.success('Producto agregado al carrito');
+
+                                // Si el modal está abierto, cerrarlo
+                                var modal = form.closest('.modal');
+                                if (modal.length) {
+                                    modal.modal('hide');
+                                }
+                            } else {
+                                toastr.error(response.mensaje || 'Error al agregar al carrito');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error AJAX:', error);
+                            toastr.error('Ocurrió un error al intentar añadir el producto al carrito.');
+                        },
+                        complete: function() {
+                            button.prop('disabled', false);
+                        }
+                    });
+                });
+
+
+                // Función para obtener y renderizar los productos del carrito
+                function fetchCartItems() {
+                    $.ajax({
+                        url: '/UsuarioFinal/listaCarrito',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            var cartList = $('#cart-items');
+                            cartList.empty(); // Limpiar la lista actual
+
+                            if (data.length > 0) {
+                                data.forEach(function(producto) {
+                                    var listItem = `
+                                <li class="list-group-item py-3 ps-0 border-top producto-item-${producto.idProducto}">
+                                    <div class="row align-items-center">
+                                        <div class="col-7 col-md-7 col-lg-7">
+                                            <div class="d-flex">
+                                                <img src="${producto.urlImagenProducto}" alt="Producto" class="icon-shape icon-xxl" />
+                                                <div class="ms-3">
+                                                    <a href="/UsuarioFinal/detallesProducto/${producto.idProducto}" class="text-inherit">
+                                                        <h6 class="mb-0">${producto.nombreProducto}</h6>
+                                                    </a>
+                                                    <div class="mt-2 mb-2">
+                                                        <span class="fw-bold" style="font-size: 0.9em;">S/. ${producto.precioTotalPorProducto.toFixed(2)}</span>
+                                                    </div>
+                                                    <div class="mt-2 small lh-1">
+                                                        <button type="button" class="text-decoration-none text-inherit eliminar-producto btn btn-link" data-id="${producto.idProducto}" style="padding: 0; border: none; background: none;">
+                                                            <span class="me-1 align-text-bottom">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 text-success">
+                                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                    </svg>
+                                                            </span>
+                                                            <span class="text-muted">Eliminar</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-5 col-md-5 col-lg-5">
+                                            <div class="d-flex align-items-center">
+                                                <div class="input-group input-spinner" style="max-width: 150px; display: flex; align-items: center;">
+                                                    <input type="button" value="-" class="button-minus btn btn-xs btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" style="width: 35px; padding: 0;"/>
+                                                    <input type="number" name="nuevaCantidad" value="${producto.cantidadProducto}" step="1" max="10" min="1" class="quantity-field form-control text-center" style="max-width: 50px; height: 35px; padding: 0;" />
+                                                    <input type="button" value="+" class="button-plus btn btn-xs btn-outline-secondary" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" style="width: 35px; padding: 0;"/>
+                                                </div>
+                                                <button type="button" class="btn btn-primary btn-sm ms-2 actualizar-cantidad" data-id="${producto.idProducto}">Actualizar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            `;
+                                    cartList.append(listItem);
+                                });
+                            } else {
+                                $('#empty-cart-message').show();
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error al cargar el carrito:', error);
+
+                        }
+                    });
+                }
+
+                // Evento para cargar el carrito cuando se abra el offcanvas
+                $('#offcanvasRight').on('show.bs.offcanvas', function () {
+                    fetchCartItems();
+                });
+
+                // Capturar el evento de envío del formulario para agregar al carrito
                 $('.add-to-cart-form').on('submit', function(event) {
                     event.preventDefault(); // Prevenir la acción predeterminada del formulario
 
@@ -539,27 +886,28 @@
                         url: url,
                         type: method,
                         data: data,
+                        dataType: 'json', // Asegurarse de recibir una respuesta JSON
                         success: function(response) {
                             console.log('Respuesta del servidor:', response);
                             if (response.success){
                                 // Actualizar los contadores del carrito
                                 $('#carrito-count-desktop').text(response.totalArticulos);
                                 $('#carrito-count-mobile').text(response.totalArticulos);
+                                // Animar el icono del carrito
+                                animateCartIcon();
 
-                                // Mostrar una alerta de éxito
-                                alert(response.mensaje);
                             } else {
                                 // Manejar errores retornados por el servidor
                                 console.error('Error del servidor:', response.mensaje);
-                                // Mostrar mensaje de error usando alert
-                                alert(response.mensaje);
+                                // Mostrar mensaje de error usando toastr
+
                             }
                         },
                         error: function(xhr, status, error) {
                             // Manejar errores de la solicitud AJAX
                             console.error('Error AJAX:', error);
-                            // Mostrar mensaje de error usando alert
-                            alert('Ocurrió un error al intentar añadir el producto al carrito.');
+                            // Mostrar mensaje de error usando toastr
+
                         },
                         complete: function() {
                             // Rehabilitar el botón después de que la solicitud haya terminado
@@ -568,12 +916,153 @@
                         }
                     });
                 });
+
+                // Manejar la eliminación de productos del carrito
+                $(document).on('click', '.eliminar-producto', function() {
+                    var idProducto = $(this).data('id');
+                    if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
+                        $.ajax({
+                            url: '/UsuarioFinal/eliminarProductoCarritoAjax/' + idProducto, // Ruta AJAX correcta
+                            type: 'DELETE',
+                            success: function(response) {
+                                if (response.success){
+                                    fetchCartItems(); // Actualizar la lista del carrito
+                                    // Actualizar contadores del carrito
+                                    $('#carrito-count-desktop').text(response.totalArticulos);
+                                    $('#carrito-count-mobile').text(response.totalArticulos);
+                                    animateCartIcon();
+
+                                } else {
+
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error al eliminar el producto:', error);
+
+                            }
+                        });
+                    }
+                });
+
+                // Manejar la actualización de la cantidad de productos en el carrito
+                $(document).on('click', '.actualizar-cantidad', function() {
+                    var button = $(this);
+                    var idProducto = button.data('id');
+                    var cantidad = button.closest('.d-flex').find('input[name="nuevaCantidad"]').val();
+
+                    // Validar que la cantidad sea un número válido
+                    if (!Number.isInteger(parseFloat(cantidad)) || parseInt(cantidad) < 1) {
+
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/UsuarioFinal/actualizarCantidadCarritoAjax', // Ruta AJAX correcta
+                        type: 'POST',
+                        data: {
+                            idProducto: idProducto,
+                            nuevaCantidad: cantidad
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success){
+                                fetchCartItems(); // Actualizar la lista del carrito
+                                // Actualizar contadores del carrito
+                                $('#carrito-count-desktop').text(response.totalArticulos);
+                                $('#carrito-count-mobile').text(response.totalArticulos);
+                                animateCartIcon();
+
+                            } else {
+
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error al actualizar la cantidad:', error);
+
+                        }
+                    });
+                });
             });
         </script>
 
+        <script>
+            function updateQuantity(button, action) {
+                const container = button.closest('.input-group');
+                const input = container.querySelector('input[type=number]');
+                const hiddenInput = button.closest('.mb-4').nextElementSibling.querySelector('.quantity-hidden-field');
+                const maxStock = parseInt(input.getAttribute('max'));
+                let currentValue = parseInt(input.value);
 
+                if (action === 'increase' && currentValue < maxStock) {
+                    currentValue++;
+                } else if (action === 'decrease' && currentValue > 1) {
+                    currentValue--;
+                }
 
+                input.value = currentValue;
+                hiddenInput.value = currentValue;
+            }
 
+            function validateAndUpdateQuantity(input) {
+                const maxStock = parseInt(input.getAttribute('max'));
+                let value = parseInt(input.value);
+                const hiddenInput = input.closest('.mb-4').nextElementSibling.querySelector('.quantity-hidden-field');
 
+                // Asegurarse de que el valor esté entre 1 y el stock disponible
+                if (isNaN(value) || value < 1) {
+                    value = 1;
+                } else if (value > maxStock) {
+                    value = maxStock;
+
+                }
+
+                input.value = value;
+                hiddenInput.value = value;
+            }
+
+            // Actualizar el código del evento submit del formulario
+            $(document).ready(function() {
+                $('.add-to-cart-form').on('submit', function(event) {
+                    event.preventDefault();
+                    var form = $(this);
+                    var cantidad = parseInt(form.find('.quantity-hidden-field').val());
+                    var maxStock = parseInt(form.closest('.row').find('input[name="cantidadVisible"]').attr('max'));
+
+                    if (cantidad > maxStock) {
+
+                        return;
+                    }
+
+                    // Resto del código del submit igual que antes...
+                    var url = form.attr('action');
+                    var method = form.attr('method');
+                    var data = form.serialize();
+                    var button = form.find('button[type="submit"]');
+
+                    button.prop('disabled', true);
+
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        data: data,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                $('#carrito-count-desktop').text(response.totalArticulos);
+                                $('#carrito-count-mobile').text(response.totalArticulos);
+                                animateCartIcon();
+
+                            }
+                        },
+                        error: function(xhr, status, error) {
+
+                        },
+                        complete: function() {
+                            button.prop('disabled', false);
+                        }
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

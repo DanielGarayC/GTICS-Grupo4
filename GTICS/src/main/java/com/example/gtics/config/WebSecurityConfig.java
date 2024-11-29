@@ -82,6 +82,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/UsuarioFinal", "/UsuarioFinal/**").hasAnyAuthority("Usuario Final")
                 .requestMatchers("/AdminZonal", "/AdminZonal/**").hasAnyAuthority("Administrador Zonal")
                 .requestMatchers("/Agente", "/Agente/**").hasAnyAuthority("Agente")
+                .requestMatchers("/SuperAdmin/impersonateUser/**").hasAuthority("Super Admin")
                 .anyRequest().permitAll();
         return http.build();
     }
