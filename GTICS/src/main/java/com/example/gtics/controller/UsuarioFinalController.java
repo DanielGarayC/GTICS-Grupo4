@@ -816,36 +816,6 @@ public class UsuarioFinalController {
 
             if (usuarioOpt.isPresent()) {
                 Usuario usuario = usuarioOpt.get();
-// Verifica si ya tiene la dirección generada
-                if (!usuario.isDirecciongenerada()) {
-                    Direccion nuevaDireccion = new Direccion();
-                    nuevaDireccion.setUsuario(usuario);
-
-                    // Concatenamos el nombre completo del usuario
-                    String nombreCompleto = usuario.getNombre() + " " + usuario.getApellidoPaterno() + " " + usuario.getApellidoMaterno();
-                    nuevaDireccion.setNombreContacto(nombreCompleto);
-
-                    // Asignamos el teléfono y la dirección del usuario
-                    nuevaDireccion.setTelefono(usuario.getTelefono());
-                    nuevaDireccion.setDireccion(usuario.getDireccion());
-
-                    // Asignamos el distrito y la zona del usuario
-                    nuevaDireccion.setDistrito(usuario.getDistrito());
-                    nuevaDireccion.setZona(usuario.getZona());
-
-                    // Si el usuario no tiene RUC, dejamos el campo vacío
-                    nuevaDireccion.setRuc(usuario.getAgtRuc() != null ? usuario.getAgtRuc() : "-");
-
-                    // Establecemos como predeterminada
-                    nuevaDireccion.setPredeterminado(true);
-
-                    // Guardamos la dirección en la base de datos
-                    direccionRepository.save(nuevaDireccion);
-
-                    // Marcamos en el usuario que ya tiene su dirección generada
-                    usuario.setDirecciongenerada(true);
-                    usuarioRepository.save(usuario); // Actualizamos el campo en la base de datos
-                }
 
                 Pageable pageable = PageRequest.of(0, 5); // Página 0 con 5 órdenes
 
