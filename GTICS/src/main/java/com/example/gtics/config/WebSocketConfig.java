@@ -23,6 +23,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // Se registra el endpoint '/chat-websocket' para que los clientes puedan conectarse a este punto
-        registry.addEndpoint("/chat-websocket").withSockJS();
+        registry.addEndpoint("/chat-websocket")
+                .setAllowedOrigins("https://expressdeals.online","http://expressdeals.online")
+                .withSockJS();
     }
 }
