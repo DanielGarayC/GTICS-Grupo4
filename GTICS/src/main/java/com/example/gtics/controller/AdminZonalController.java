@@ -165,7 +165,6 @@ public class AdminZonalController {
 
         System.out.println("Llega al método guardarAgente");
         System.out.println(bindingResult);
-        System.out.println(agente.getAgtCodigojurisdiccion());
         if(bindingResult.hasErrors()){
             if (bindingResult.hasFieldErrors("dni")) {
                 if (bindingResult.getFieldError("dni").getCode().equals("NotBlank")) {

@@ -142,6 +142,7 @@
 									<div class="col-lg-6 col-12">
 										<label class="form-label">Código de Jurisdicción:</label>
 										<input type="text" class="form-control" th:field="*{agtCodigojurisdiccion}" id="codigoJurisdiccion" readonly disabled/>
+										<input type="hidden" th:field="*{agtCodigojurisdiccion}" id="codigoJurisdiccionHidden"/>
 
 
 										<div class="invalid-feedback" th:if="${agtCodigojurisdiccionError}" th:text="${agtCodigojurisdiccionError}"></div>
@@ -203,6 +204,7 @@
 		var selectedOption = select.options[select.selectedIndex];
 		var codigoJurisdiccion = selectedOption.getAttribute("data-codigo");
 		document.getElementById("codigoJurisdiccion").value = codigoJurisdiccion;
+		document.getElementById("codigoJurisdiccionHidden").value = codigoJurisdiccion;
 	}
 </script>
 <script>
