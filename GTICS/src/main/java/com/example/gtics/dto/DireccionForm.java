@@ -8,6 +8,11 @@ public class DireccionForm {
     private Integer distritoId;
     private String etiquetaId;
     private boolean predeterminado;
+    private String ruc;
+
+    public String getRuc() {return ruc;}
+
+    public void setRuc(String ruc) {this.ruc = ruc;}
 
     public String getNombreContacto() {
         return nombreContacto;

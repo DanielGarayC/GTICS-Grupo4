@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Table(name = "orden")
 public class Orden {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idOrden", nullable = false)
     private Integer id;
 
@@ -47,5 +48,12 @@ public class Orden {
 
     @Column(name = "costosAdicionales")
     private Double costosAdicionales;
+
+    @Column(name = "comentarioOrden")
+    private String comentarioOrden;
+
+    @Column(name = "fechaLlegada")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaLlegada;
 
 }

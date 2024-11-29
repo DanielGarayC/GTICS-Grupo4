@@ -39,7 +39,10 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.example.gtics.entity.Tarjeta;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -70,10 +73,12 @@ public class UsuarioFinalController {
     private final SubcategoriaRepository subcategoriaRepository;
     private final ProductoHasCarritocompraRepository productoHasCarritocompraRepository;
     private final CarritoCompraRepository carritoCompraRepository;
+    private final TarjetaRepository tarjetaRepository;
+    private final ControlOrdenRepository controlOrdenRepository;
+
     // Aquí usaremos un HashMap en memoria (o una caché) para simular la relación
     private final Map<Integer, Set<String>> usuariosLikes = new HashMap<>();
     private final ZonaRepository zonaRepository;
-    private final EtiquetaRepository etiquetaRepository;
     @Autowired
     private ChatRoomService chatRoomService;
     @Autowired
@@ -103,6 +108,7 @@ public class UsuarioFinalController {
                                   ProductoRepository productoRepository, CategoriaRepository categoriaRepository,
                                   SubcategoriaRepository subcategoriaRepository, CarritoCompraRepository carritoCompraRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
+                                  ControlOrdenRepository controlOrdenRepository, TarjetaRepository tarjetaRepository,
                                   ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository,DireccionRepository direccionRepository,ZonaRepository zonaRepository,EtiquetaRepository etiquetaRepository, MessageRepository messageRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
@@ -121,8 +127,9 @@ public class UsuarioFinalController {
         this.carritoCompraRepository=carritoCompraRepository;
         this.direccionRepository=direccionRepository;
         this.zonaRepository=zonaRepository;
-        this.etiquetaRepository=etiquetaRepository;
         this.messageRepository = messageRepository;
+        this.controlOrdenRepository = controlOrdenRepository;
+        this.tarjetaRepository = tarjetaRepository;
     }
 
     @GetMapping("/consulta-dni/{dni}")
@@ -504,15 +511,15 @@ public class UsuarioFinalController {
         return "redirect:/UsuarioFinal/listaProductos";
     }
 
-
-
     @GetMapping("/UsuarioFinal/procesoCompra")
     public String procesoComprar(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
-        List<Zona> zonas = zonaRepository.findAll(); // Asegúrate de que estás trayendo todas las zonas
+        List<Zona> zonas = zonaRepository.findAll();
         model.addAttribute("zonas", zonas);
+        Orden orden = new Orden();
+        model.addAttribute("orden", orden);
 
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             String email = authentication.getName();
@@ -521,43 +528,15 @@ public class UsuarioFinalController {
             if (optUsuario.isPresent()) {
                 Usuario usuario = optUsuario.get();
 
-                // Obtener etiquetas predefinidas
-                List<String> etiquetasPredefinidas = Arrays.asList("Casa", "Oficina");
-
-                // Obtener etiquetas personalizadas del usuario
-                List<Etiqueta> etiquetasPersonalizadas = etiquetaRepository.findByUsuario(usuario);
-
-                // Pasar etiquetas al modelo para mostrarlas en la vista
-                model.addAttribute("etiquetasPredefinidas", etiquetasPredefinidas);
-                model.addAttribute("etiquetasPersonalizadas", etiquetasPersonalizadas);
-
-                // Buscar las direcciones del usuario
-                List<Direccion> direcciones = direccionRepository.findByUsuario(usuario);
-                model.addAttribute("direcciones", direcciones);
-
-                // Si el usuario no tiene su dirección generada, crear una automáticamente
-                if (!usuario.isDirecciongenerada()) {
-                    Direccion nuevaDireccion = new Direccion();
-                    nuevaDireccion.setUsuario(usuario);
-
-                    String nombreCompleto = usuario.getNombre() + " " + usuario.getApellidoPaterno() + " " + usuario.getApellidoMaterno();
-                    nuevaDireccion.setNombreContacto(nombreCompleto);
-                    nuevaDireccion.setTelefono(usuario.getTelefono());
-                    nuevaDireccion.setDireccion(usuario.getDireccion());
-                    nuevaDireccion.setDistrito(usuario.getDistrito());
-                    nuevaDireccion.setZona(usuario.getZona());
-                    nuevaDireccion.setRuc(usuario.getAgtRuc() != null ? usuario.getAgtRuc() : "-");
-                    nuevaDireccion.setPredeterminado(true);
-                    direccionRepository.save(nuevaDireccion);
-
-                    usuario.setDirecciongenerada(true);
-                    usuarioRepository.save(usuario); // Actualizar el campo en la base de datos
-                }
-
+                // Usar directamente la dirección del usuario
+                String direccion = usuario.getDireccion();
+                model.addAttribute("direccion", direccion);
+                model.addAttribute("user",usuario);
                 // Buscar el carrito activo del usuario
                 Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
                 if (carritoOpt.isPresent()) {
                     Carritocompra carrito = carritoOpt.get();
+                    model.addAttribute("carritoId", carrito.getId());
 
                     // Obtener los productos en el carrito
                     List<ProductosCarritoDto> productosCarrito = productoHasCarritocompraRepository.findProductosPorCarrito(carrito.getId());
@@ -592,6 +571,16 @@ public class UsuarioFinalController {
                     // Calcular el total
                     double total = subtotal + maxCostoEnvio;
                     model.addAttribute("total", total);
+
+                    // **Nuevo cálculo del tiempo de envío**
+                    LocalDate fechaCompra = LocalDate.now();
+                    LocalDate fechaEnvio = fechaCompra.plusMonths(1);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    String fechaEnvioFormateada = fechaEnvio.format(formatter);
+
+                    // Pasar la fecha al modelo
+                    model.addAttribute("fechaEnvioEstimada", fechaEnvioFormateada);
+
                 } else {
                     model.addAttribute("error", "No tienes un carrito activo para proceder con la compra.");
                     return "redirect:/UsuarioFinal/listaProductos";
@@ -601,104 +590,221 @@ public class UsuarioFinalController {
         return "UsuarioFinal/ProcesoCompra/proceso_compra";
     }
 
-
-    @PostMapping("/UsuarioFinal/agregarEtiquetaPersonalizada")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> agregarEtiquetaPersonalizada(@RequestBody EtiquetaForm etiquetaForm, Principal principal) {
-        String email = principal.getName();
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        // Guardar la etiqueta personalizada
-        Etiqueta etiqueta = new Etiqueta();
-        etiqueta.setNombreEtiqueta(etiquetaForm.getNombreEtiqueta());
-        etiqueta.setUsuario(usuario);
-        etiquetaRepository.save(etiqueta);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        return ResponseEntity.ok(response);
-    }
-
-
-
-
-    @PostMapping("/UsuarioFinal/agregarDireccion")
-    public String agregarDireccion(@ModelAttribute DireccionForm direccionForm, RedirectAttributes attr) {
+    @GetMapping("/UsuarioFinal/editarDireccion")
+    public String editarDireccion(Model model) {
+        // Obtener la autenticación del usuario actual
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             String email = authentication.getName();
-            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
+            // Obtener el usuario con su dirección
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
             if (optUsuario.isPresent()) {
                 Usuario usuario = optUsuario.get();
 
-                // Si la dirección es predeterminada, actualizar las demás
-                if (direccionForm.isPredeterminado()) {
-                    direccionRepository.updatePredeterminadaByUsuario(usuario.getId());
+                // Obtener todas las zonas
+                List<Zona> zonas = zonaRepository.findAll();
+                model.addAttribute("zonas", zonas);
+
+                List<Distrito> distritos = distritoRepository.findAll();
+                model.addAttribute("distritos", distritos);
+
+                model.addAttribute("user", usuario);
+
+                if (usuario.getDireccion() != null) {
+                    Zona zona = usuario.getZona();
+                    Distrito distrito = usuario.getDistrito();
+
+                    // Cargar las zonas y distritos seleccionados
+                    model.addAttribute("zonaSeleccionada", zona);
+                    model.addAttribute("distritoSeleccionado", distrito);
                 }
 
-                // Crear y guardar la nueva dirección
-                Direccion nuevaDireccion = new Direccion();
-                nuevaDireccion.setUsuario(usuario);
-                nuevaDireccion.setNombreContacto(direccionForm.getNombreContacto());
-                nuevaDireccion.setTelefono(direccionForm.getTelefono());
-                nuevaDireccion.setDireccion(direccionForm.getDireccion());
-                nuevaDireccion.setDistrito(distritoRepository.findById(direccionForm.getDistritoId()).orElse(null));
-                nuevaDireccion.setZona(zonaRepository.findById(direccionForm.getZonaId()).orElse(null));
-                nuevaDireccion.setPredeterminado(direccionForm.isPredeterminado());
-
-                // Asignar etiqueta (predefinida o personalizada)
-                if (direccionForm.getEtiquetaId() != null && direccionForm.getEtiquetaId().matches("\\d+")) {
-                    Etiqueta etiqueta = etiquetaRepository.findById(Integer.parseInt(direccionForm.getEtiquetaId())).orElse(null);
-                    nuevaDireccion.setEtiqueta(etiqueta);
-                } else if (direccionForm.getEtiquetaId() != null) {
-                    Etiqueta nuevaEtiqueta = new Etiqueta();
-                    nuevaEtiqueta.setNombreEtiqueta(direccionForm.getEtiquetaId());
-                    nuevaEtiqueta.setUsuario(usuario);
-                    etiquetaRepository.save(nuevaEtiqueta);
-                    nuevaDireccion.setEtiqueta(nuevaEtiqueta);
-                }
-
-                // Guardar la nueva dirección
-                direccionRepository.save(nuevaDireccion);
-                attr.addFlashAttribute("msg", "Dirección agregada exitosamente.");
-            } else {
-                attr.addFlashAttribute("error", "Usuario no encontrado.");
-                return "redirect:/login";
+                // Aquí podrías cargar más datos si es necesario
+                return "UsuarioFinal/ProcesoCompra/proceso_compra";
             }
-        } else {
-            attr.addFlashAttribute("error", "Usuario no autenticado.");
-            return "redirect:/login";
         }
 
-        return "redirect:/UsuarioFinal/procesoCompra";
+        // Si no se encuentra el usuario o no está autenticado
+        return "redirect:/UsuarioFinal/login";
     }
+
+    @PostMapping("/UsuarioFinal/guardar-y-validar-tarjeta")
+    @ResponseBody
+    public String guardarYValidarTarjeta(@RequestParam("numeroTarjeta") String numeroTarjeta,
+                                         @RequestParam("mesExpiracion") String mesExpiracion,
+                                         @RequestParam("anioExpiracion") String anioExpiracion,
+                                         @RequestParam("nombreTitular") String nombreTitular,
+                                         @RequestParam(value = "idTarjeta", required = false) Integer idTarjeta) {
+        // Validaciones iniciales
+        if (!numeroTarjeta.matches("\\d{16}")) {
+            return "El número de tarjeta debe contener 16 dígitos.";
+        }
+        if (!mesExpiracion.matches("(0[1-9]|1[0-2])") || !anioExpiracion.matches("\\d{2}")) {
+            return "Fecha de expiración inválida. El formato debe ser MM/AA.";
+        }
+        if (nombreTitular.isEmpty() || !nombreTitular.matches("[a-zA-Z ]{1,100}")) {
+            return "Nombre del titular inválido.";
+        }
+
+        // Convertir fecha de expiración a LocalDate
+        int mesExp = Integer.parseInt(mesExpiracion);
+        int anioExp = Integer.parseInt(anioExpiracion) + 2000; // Convertir a año con 4 dígitos
+        LocalDate fechaExpiracion = LocalDate.of(anioExp, mesExp, 1);
+
+        // Validar que la fecha de expiración no sea pasada
+        if (fechaExpiracion.isBefore(LocalDate.now())) {
+            return "La tarjeta ya ha expirado.";
+        }
+
+        // Proceso para guardar una nueva tarjeta
+        if (idTarjeta == null) {
+            // Hash del número de tarjeta
+            String numeroTarjetaHash = hashearNumeroTarjeta(numeroTarjeta);
+
+            // Últimos 4 dígitos de la tarjeta
+            String ultimosDigitos = numeroTarjeta.substring(numeroTarjeta.length() - 4);
+
+            // Crear nueva tarjeta
+            Tarjeta tarjeta = new Tarjeta();
+            tarjeta.setNombreTitular(nombreTitular);
+            tarjeta.setNumeroTarjetaHash(numeroTarjetaHash);
+            tarjeta.setUltimosDigitos(ultimosDigitos);
+            tarjeta.setFechaExpiracion(mesExpiracion + "/" + anioExpiracion);
+
+            // Guardar la tarjeta en la base de datos
+            tarjetaRepository.save(tarjeta);
+
+            return "Tarjeta guardada con éxito.";
+        } else {
+            // Validar tarjeta existente
+            Tarjeta tarjeta = tarjetaRepository.findById(idTarjeta)
+                    .orElseThrow(() -> new RuntimeException("Tarjeta no encontrada"));
+
+            // Validar los últimos 4 dígitos
+            String ultimosDigitosIngresados = numeroTarjeta.substring(numeroTarjeta.length() - 4);
+            if (!tarjeta.getUltimosDigitos().equals(ultimosDigitosIngresados)) {
+                return "El número de tarjeta no coincide con los últimos 4 dígitos.";
+            }
+
+            // Validar que la fecha de expiración de la tarjeta no sea pasada
+            String[] partesFecha = tarjeta.getFechaExpiracion().split("/");
+            int mesTarjeta = Integer.parseInt(partesFecha[0]);
+            int anioTarjeta = Integer.parseInt(partesFecha[1]) + 2000;
+            LocalDate fechaExpiracionTarjeta = LocalDate.of(anioTarjeta, mesTarjeta, 1);
+
+            if (fechaExpiracionTarjeta.isBefore(LocalDate.now())) {
+                return "La tarjeta ya ha expirado.";
+            }
+
+            return "Tarjeta válida.";
+        }
+    }
+
+    private String hashearNumeroTarjeta(String numeroTarjeta) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(numeroTarjeta.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al hashear el número de tarjeta", e);
+        }
+    }
+
+    @GetMapping("/UsuarioFinal/tarjetas")
+    public String listarTarjetas(Model model) {
+        List<Tarjeta> tarjetas = tarjetaRepository.findAll(); // Recupera todas las tarjetas
+        model.addAttribute("tarjetas", tarjetas);
+        return "UsuarioFinal/Tarjetas/lista_tarjetas";
+    }
+
 
 
     @PostMapping("/UsuarioFinal/procesarOrden")
-    public String procesarOrden(@RequestParam("idOrden") Integer idOrden, RedirectAttributes attr) {
-        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+    public String procesarOrden(@RequestParam("idCarritoCompra") Integer idCarritoCompra,
+                                @RequestParam(name = "comentarioOrden", required = false) String comentarioOrden,
+                                Model model) {
 
-        if (ordenOpt.isPresent()) {
-            Orden orden = ordenOpt.get();
-
-            // Verifica el estado de la orden
-            if (orden.getEstadoorden().getId() == 8) {
-                // Si el estado es 8, el carrito asociado debe estar activo
-                carritoCompraRepository.updateCarritoActivo(orden.getIdCarritoCompra().getId(), true);
-            } else {
-                // Si el estado no es 8, el carrito debe estar desactivado
-                carritoCompraRepository.updateCarritoActivo(orden.getIdCarritoCompra().getId(), false);
-            }
-
-            attr.addFlashAttribute("msg", "El estado de la orden se ha procesado correctamente.");
-        } else {
-            attr.addFlashAttribute("error", "Orden no encontrada.");
+        // Paso 1: Obtener el carrito de compras activo por idCarritoCompra
+        Optional<Carritocompra> carritoOpt = carritoCompraRepository.findById(idCarritoCompra);
+        if (carritoOpt.isEmpty()) {
+            model.addAttribute("error", "El carrito no existe o no está activo.");
+            return "UsuarioFinal/Error";
         }
 
-        return "redirect:/UsuarioFinal/listaMisOrdenes";
+        Carritocompra carrito = carritoOpt.get();
+
+        // Paso 2: Verificar si el carrito está activo
+        if (!carrito.getActivo()) {
+            model.addAttribute("error", "El carrito ya no está activo.");
+            return "UsuarioFinal/Error";
+        }
+
+        // Paso 3: Obtener los productos del carrito usando el repositorio
+        List<ProductosCarritoDto> productosCarrito = productoHasCarritocompraRepository.findProductosPorCarrito(idCarritoCompra);
+        if (productosCarrito.isEmpty()) {
+            model.addAttribute("error", "El carrito está vacío.");
+            return "UsuarioFinal/Error";
+        }
+
+        if (comentarioOrden == null || comentarioOrden.isEmpty()) {
+            comentarioOrden = "Sin comentarios";
+        }
+
+        LocalDate fechaLlegada = LocalDate.now().plusDays(30);
+
+        Estadoorden estadoOrden = estadoOrdenRepository.findById(1).orElseThrow(() -> new RuntimeException("Estado de orden no encontrado"));
+        ControlOrden controlOrden = controlOrdenRepository.findById(1).orElseThrow(() -> new RuntimeException("ControlOrden no encontrado"));
+
+        // Paso 4: Crear una nueva orden
+        Orden orden = new Orden();
+        orden.setIdCarritoCompra(carrito);
+        orden.setEstadoorden(estadoOrden); // Asignamos la entidad Estadoorden
+        orden.setFechaOrden(LocalDate.now()); // Fecha actual de la orden
+        orden.setFechaLlegada(fechaLlegada);
+        orden.setControlOrden(controlOrden);
+        orden.setComentarioOrden(comentarioOrden);
+        orden.setCostosAdicionales(0.0); // Si hay costos adicionales, se pueden agregar aquí
+        orden.setSolicitarCancelarOrden(0); // Si la orden no requiere cancelación
+        orden.setOrdenEliminada(0); // Marca que la orden no está eliminada
+
+        // Paso 5: Guardar la orden
+        Orden nuevaOrden = ordenRepository.save(orden);
+
+        // Paso 6: Actualizar los productos y cantidades disponibles
+        for (ProductosCarritoDto productoCarrito : productosCarrito) {
+            Producto producto = productoRepository.findById(productoCarrito.getIdProducto()).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+            int cantidadComprada = productoCarrito.getCantidadProducto();
+
+            // Reducir la cantidad de producto disponible
+            if (producto.getCantidadDisponible() >= cantidadComprada) {
+                producto.setCantidadDisponible(producto.getCantidadDisponible() - cantidadComprada);
+                productoRepository.save(producto);  // Actualizar el inventario del producto
+            } else {
+                model.addAttribute("error", "No hay suficiente stock para algunos productos.");
+                return "UsuarioFinal/Error";
+            }
+
+            // Eliminar el producto del carrito de compras
+            productoHasCarritocompraRepository.deleteById_IdCarritoCompraAndId_IdProducto(idCarritoCompra, productoCarrito.getIdProducto());
+        }
+
+        // Paso 7: Desactivar el carrito
+        carrito.setActivo(false);
+        carritoCompraRepository.save(carrito);
+
+        model.addAttribute("mensajeCompraRealizada", "Compra realizada con éxito");
+        model.addAttribute("orden", nuevaOrden);
+        return "UsuarioFinal/PaginaPrincipal/pagina_principalUF";
     }
+
 
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
     public String mostrarPagPrincipal(Model model, Authentication authentication){

@@ -70,6 +70,7 @@ public class Usuario {
 
 
     @Column(name = "agt_codigojurisdiccion", length = 45)
+    @NotBlank(message = "El código de jurisdicción no puede estar vacío", groups = {AgenteValidationGroup.class})
     @Size(min = 4, max = 6, message = "El código de jurisdicción debe tener entre 4 a 6 dígitos", groups = {AgenteValidationGroup.class})
     @Pattern(regexp = "\\d+", message = "El código de jurisdicción debe contener solo dígitos", groups = {AgenteValidationGroup.class})
     private String agtCodigojurisdiccion;
@@ -115,11 +116,11 @@ public class Usuario {
     @Pattern(regexp = "^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]*$", message = "El apellido materno solo puede contener letras, números y espacios", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
     private String apellidoMaterno;
 
-    //@NotBlank(message = "Debe ingresar una contraseña", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
+    @NotBlank(message = "Debe ingresar una contraseña", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
     @Pattern(regexp = "^(?=.*[0-9])(?=(.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]){2})(?=.*[a-zA-Z]).{8,16}$",
             message = "La contraseña debe contener al menos 1 número, 2 caracteres especiales, 1 letra y debe tener entre 8 y 16 caracteres.",
             groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
-    @Column(name = "contrasena", length = 45)
+    @Column(name = "contrasena", nullable = false, length = 45)
     private String contrasena;
 
     @Column(name = "activo")
@@ -127,9 +128,6 @@ public class Usuario {
 
     @Column(name = "u_cantImportaciones", length = 45)
     private String uCantimportaciones;
-
-    @Column(name = "direcciongenerada")
-    private boolean direcciongenerada;
 
     @Column(name = "razonBaneado")
     private String razonBaneado;

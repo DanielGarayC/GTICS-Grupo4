@@ -35,18 +35,10 @@ public class Direccion {
     @JoinColumn(name = "idzona", nullable = false)
     private Zona zona;  // Relación con la tabla `zona`
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idetiqueta")
-    private Etiqueta etiqueta;  // Relación con la tabla `etiquetas` (opcional)
-
     @Column(name = "ruc", length = 15)
     private String ruc;  // Número de RUC (opcional)
 
     @Column(name = "predeterminado", nullable = false)
     private Boolean predeterminado = false;  // Si es la dirección predeterminada o no
-
-    // Campo transitorio para manejar etiquetas predefinidas (no se guarda en la base de datos)
-    @Transient
-    private String etiquetaPredefinida;  // "Casa", "Oficina", etc.
 
 }
