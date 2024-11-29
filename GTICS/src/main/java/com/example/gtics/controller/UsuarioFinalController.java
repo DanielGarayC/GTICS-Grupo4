@@ -654,8 +654,14 @@ public class UsuarioFinalController {
         LocalDate fechaExpiracion = LocalDate.of(anioExp, mesExp, 1);
 
         // Validar que la fecha de expiración no sea pasada
-        if (fechaExpiracion.isBefore(LocalDate.now())) {
-            return "La tarjeta ya ha expirado.";
+        LocalDate now = LocalDate.now();
+        if (fechaExpiracion.isBefore(now)) {
+            return "La tarjeta ya ha expirado o está próxima a vencer.";
+        }
+
+        // Validar que no sea el mismo mes y año actuales
+        if (anioExp == now.getYear() && mesExp == now.getMonthValue()) {
+            return "La tarjeta no puede expirar este mes.";
         }
 
         // Proceso para guardar una nueva tarjeta
@@ -694,13 +700,14 @@ public class UsuarioFinalController {
             int anioTarjeta = Integer.parseInt(partesFecha[1]) + 2000;
             LocalDate fechaExpiracionTarjeta = LocalDate.of(anioTarjeta, mesTarjeta, 1);
 
-            if (fechaExpiracionTarjeta.isBefore(LocalDate.now())) {
-                return "La tarjeta ya ha expirado.";
+            if (fechaExpiracionTarjeta.isBefore(now)) {
+                return "La tarjeta ya ha expirado o está a punto de expirar.";
             }
 
             return "Tarjeta válida.";
         }
     }
+
 
     private String hashearNumeroTarjeta(String numeroTarjeta) {
         try {

@@ -166,128 +166,120 @@
          <div class="row">
             <!-- col -->
             <div class="col-12">
-               <!-- breadcrumb -->
-               <nav class="navbar navbar-light" style="border-bottom: 2px solid #959ea9; padding: 10px;">
+               <!-- navbar -->
+               <nav class="navbar navbar-light bg-light shadow-sm py-3 rounded">
                   <div class="container d-flex justify-content-between align-items-center">
-                     <a class="navbar-brand" th:href="@{/UsuarioFinal/pagPrincipal}">
-                        <img th:src="@{/images/logo/logoGTICS.jpeg}"  width="220" height="auto" class="d-inline-block align-top" alt="Logo de la Empresa">
+                     <!-- Logo -->
+                     <a class="navbar-brand d-flex align-items-center" th:href="@{/UsuarioFinal/pagPrincipal}">
+                        <img th:src="@{/images/logo/logoGTICSv2.png}" width="220" height="auto" class="d-inline-block align-top" alt="Logo de la Empresa">
                      </a>
-                     <!-- Botón Regresar alineado correctamente -->
-                     <a th:href="@{/UsuarioFinal/pagPrincipal}" class="btn btn-secondary">Regresar</a>
+                     <!-- Botón Regresar -->
+                     <a th:href="@{/UsuarioFinal/pagPrincipal}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i> Regresar
+                     </a>
                   </div>
                </nav>
-
             </div>
          </div>
       </div>
    </div>
    <!-- section -->
-   <section class="mb-lg-14 mb-8 mt-8">
-      <div class="container">
-         <!-- row -->
-         <div class="row">
-            <!-- col -->
-            <div class="col-12">
-               <div>
-                  <div class="mb-8">
-                     <!-- text -->
-                     <h1 class="fw-bold mb-0">Proceso de pago</h1>
-
+   <div class="mt-4">
+      <section class="mb-lg-14 mb-8 mt-8 py-5 px-4 bg-light shadow-sm rounded">
+         <div class="container">
+            <!-- row -->
+            <div class="row">
+               <!-- col -->
+               <div class="col-12">
+                  <div>
+                     <div class="mb-8">
+                        <!-- text -->
+                        <h1 class="fw-bold mb-3 text-primary">Proceso de Pago</h1>
+                        <p class="text-muted fs-5">¡Estamos a un paso de finalizar tu compra! Revisa la información y continúa.</p>
+                     </div>
                   </div>
                </div>
             </div>
-         </div>
-         <div>
-            <!-- row -->
-            <div class="row">
-               <div class="col-xl-7 col-lg-6 col-md-12">
-                  <!-- accordion -->
-                  <div class="accordion accordion-flush" id="accordionFlushExample">
-                     <!-- Dirección de Envío -->
-                     <div class="accordion-item py-4">
-                        <a href="#" class="text-inherit h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
-                           <i class="feather-icon icon-map-pin me-2 text-muted"></i>
-                           Dirección de envío
-                        </a>
-                        <div id="flush-collapseOne" class="accordion-collapse collapse show">
-                           <div class="mt-5">
-                              <div class="row">
-                                 <div>
-                                    <strong th:text="${user.nombre}"></strong><br />
-                                    <span th:text="${user.direccion}"></span>,
-                                    <span th:text="${user.distrito.nombre}">Distrito</span>,
-                                    <span th:text="${user.zona.nombreZona}">Zona</span>,
-                                    <span th:text="${user.distrito.nombre}">Distrito</span><br />
-                                    <span class="text-muted small" th:text="${user.telefono}"></span>
-                                 </div>
-                                 <div class="mt-3">
-                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">Editar Dirección</button>
+            <div>
+               <div class="container">
+                  <!-- row -->
+                  <div class="row">
+                     <div class="col-xl-7 col-lg-6 col-md-12">
+                        <!-- accordion -->
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                           <!-- Dirección de Envío -->
+                           <div class="accordion-item py-4 border rounded mb-3 shadow-sm">
+                              <a href="#" class="text-inherit h5 d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
+                                 <i class="feather-icon icon-map-pin me-2 text-primary"></i> Dirección de envío
+                              </a>
+                              <div id="flush-collapseOne" class="accordion-collapse collapse show">
+                                 <div class="p-4 bg-white rounded">
+                                    <div>
+                                       <strong th:text="${user.nombre}"></strong><br />
+                                       <span th:text="${user.direccion}"></span>,
+                                       <span th:text="${user.distrito.nombre}">Distrito</span>,
+                                       <span th:text="${user.zona.nombreZona}">Zona</span><br />
+                                       <span class="text-muted small" th:text="${user.telefono}"></span>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#editModal">
+                                       Editar Dirección
+                                    </button>
                                  </div>
                               </div>
                            </div>
-                        </div>
-                     </div>
 
-                     <!-- Tiempo de Entrega -->
-                     <div class="accordion-item py-4">
-                        <a href="#" class="text-inherit h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo">
-                           <i class="feather-icon icon-clock me-2 text-muted"></i>
-                           Tiempo aproximado del delivery
-                        </a>
-                        <div id="flush-collapseTwo" class="accordion-collapse collapse">
-                           <div class="alert alert-info mt-3" role="alert">
-                              <i class="feather-icon icon-info me-2"></i>
-                              La fecha de entrega es una estimación y puede variar según las condiciones de envío.
-                           </div>
-                           <div class="p-4">
-                              <div class="d-flex justify-content-between align-items-center">
-                                 <div>
-                                    <h6 class="mb-1">Fecha estimada de entrega</h6>
-                                    <p class="text-muted mb-0">
-                                       <strong th:text="${fechaEnvioEstimada}">Fecha de Entrega</strong>
-                                    </p>
+                           <div class="accordion-item py-4 border rounded mb-3 shadow-sm">
+                              <a href="#" class="text-inherit h5 d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo">
+                                 <i class="feather-icon icon-clock me-2 text-primary"></i> Tiempo aproximado del delivery
+                              </a>
+                              <div id="flush-collapseTwo" class="accordion-collapse collapse">
+                                 <div class="p-4 bg-white rounded">
+                                    <div class="alert alert-info" role="alert">
+                                       <i class="feather-icon icon-info me-2"></i>
+                                       La fecha de entrega es una estimación y puede variar según las condiciones de envío.
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                       <div>
+                                          <h6 class="mb-1">Fecha estimada de entrega</h6>
+                                          <p class="text-muted mb-0">
+                                             <strong th:text="${fechaEnvioEstimada}">Fecha de Entrega</strong>
+                                          </p>
+                                       </div>
+                                       <span class="badge bg-primary">Estimación</span>
+                                    </div>
                                  </div>
-                                 <span class="badge bg-primary">Estimación</span>
                               </div>
                            </div>
-                        </div>
-                     </div>
 
-                     <form th:action="@{/UsuarioFinal/procesarOrden}" method="post">
-                        <input type="hidden" name="idCarritoCompra" th:value="${carritoId}" />
-                        <!-- Comentarios Adicionales -->
-                        <div class="accordion-item py-4">
-                           <a href="#" class="text-inherit h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree">
-                              <i class="feather-icon icon-shopping-bag me-2 text-muted"></i>
-                              Comentarios adicionales
-                           </a>
-                           <div id="flush-collapseThree" class="accordion-collapse collapse">
-                              <div class="mt-5">
-                                 <label for="DeliveryInstructions" class="form-label">Instrucciones para el delivery</label>
-                                 <textarea class="form-control" id="DeliveryInstructions" name="comentarioOrden" rows="3" placeholder="Escribe las instrucciones para la entrega"></textarea>
-                                 <p class="form-text">Añade instrucciones sobre cómo desean que sea tratada su orden en el proceso de entrega</p>
+                           <form th:action="@{/UsuarioFinal/procesarOrden}" method="post">
+                              <input type="hidden" name="idCarritoCompra" th:value="${carritoId}" />
+                              <div class="accordion-item py-4 border rounded mb-3 shadow-sm">
+                                 <a href="#" class="text-inherit h5 d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree">
+                                    <i class="feather-icon icon-shopping-bag me-2 text-primary"></i> Comentarios adicionales
+                                 </a>
+                                 <div id="flush-collapseThree" class="accordion-collapse collapse">
+                                    <div class="p-4 bg-white rounded">
+                                       <label for="DeliveryInstructions" class="form-label">Instrucciones para el delivery</label>
+                                       <textarea class="form-control" id="DeliveryInstructions" name="comentarioOrden" rows="3" placeholder="Escribe las instrucciones para la entrega"></textarea>
+                                       <p class="form-text">Añade instrucciones sobre cómo desean que sea tratada su orden en el proceso de entrega</p>
+                                    </div>
+                                 </div>
                               </div>
-                           </div>
-                        </div>
 
-                        <!-- Método de Pago -->
-                        <div class="accordion-item py-4">
-                           <a href="#" class="text-inherit h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour">
-                              <i class="feather-icon icon-credit-card me-2 text-muted"></i>
-                              Métodos de pago
-                           </a>
-                           <div id="flush-collapseFour" class="accordion-collapse collapse">
-                              <div class="mt-5">
-                                 <div class="card card-bordered shadow-none mb-2">
-                                    <div class="card-body p-6">
-                                       <div class="d-flex">
-                                          <div class="form-check">
+                              <div class="accordion-item py-4 border rounded mb-3 shadow-sm">
+                                 <a href="#" class="text-inherit h5 d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour">
+                                    <i class="feather-icon icon-credit-card me-2 text-primary"></i> Métodos de pago
+                                 </a>
+                                 <div id="flush-collapseFour" class="accordion-collapse collapse">
+                                    <div class="p-4 bg-white rounded">
+                                       <div class="d-flex align-items-center">
+                                          <div class="form-check me-3">
                                              <input class="form-check-input" type="radio" name="metodoPago" id="cardPaymentRadio" data-bs-toggle="modal" data-bs-target="#addCardModal" />
                                           </div>
                                           <div>
                                              <h5 class="mb-1 h6">Tarjeta de crédito/débito</h5>
                                              <p class="mb-0 small">Transferencia de dinero segura utilizando su cuenta bancaria.</p>
-                                             <ul class="list-inline mb-0">
+                                             <ul class="list-inline mt-3">
                                                 <li class="list-inline-item">
                                                    <img th:src="@{/images/payment/mastercard.svg}" alt="Mastercard" />
                                                 </li>
@@ -307,64 +299,46 @@
                                     </div>
                                  </div>
                               </div>
-                           </div>
+                           </form>
                         </div>
-                     </form>
-                  </div>
 
-                  <form th:action="@{/UsuarioFinal/procesarOrden}" method="post">
-                     <!-- Campo oculto para enviar el idCarritoCompra -->
-                     <input type="hidden" name="idCarritoCompra" th:value="${carritoId}" />
+                        <form th:action="@{/UsuarioFinal/procesarOrden}" method="post">
+                           <!-- Campo oculto para enviar el idCarritoCompra -->
+                           <input type="hidden" name="idCarritoCompra" th:value="${carritoId}" />
 
-                     <!-- Otros campos del formulario -->
-                     <div class="col-12 text-end">
-                        <button type="submit" class="btn btn-primary">Procesar Orden</button>
+                           <!-- Otros campos del formulario -->
+                           <div class="col-12 text-end">
+                              <button type="submit" class="btn btn-primary fw-bold py-3 px-5 shadow-sm">
+                                 <i class="feather-icon icon-check-circle me-2"></i> Procesar Orden
+                              </button>                           </div>
+                        </form>
                      </div>
-                  </form>
 
-                  <div class="col-md-12 offset-xl-1 col-xl-4 col-lg-6">
-                     <div class="mt-4 mt-lg-0">
-                        <div class="card shadow-sm">
-                           <h5 class="px-6 py-4 bg-transparent mb-0">Resumen de la compra</h5>
+                     <div class="col-lg-4 col-md-12">
+                        <div class="card shadow-sm rounded p-4 mb-4">
+                           <h5 class="text-secondary mb-4">Resumen de la Compra</h5>
                            <ul class="list-group list-group-flush">
-                              <!-- list group item -->
-                              <li th:each="producto : ${productosCarrito}" class="list-group-item px-4 py-3">
-                                 <div class="row align-items-center">
-                                    <div class="col-2 col-md-2">
-                                       <img th:src="${productoImagenUrls[producto.idProducto]}" alt="Producto" class="img-fluid" />
-                                    </div>
-                                    <div class="col-5 col-md-5">
-                                       <h6 class="mb-0" th:text="${producto.nombreProducto}">Nombre del producto</h6>
-                                    </div>
-                                    <div class="col-2 col-md-2 text-center text-muted">
-                                       <span th:text="${producto.cantidadProducto}">1</span>
-                                    </div>
-                                    <div class="col-3 text-lg-end text-start text-md-end col-md-3">
-                                       <span class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precioTotalPorProducto, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</span>
-                                    </div>
-                                 </div>
-                              </li>
-
-                              <!-- list group item -->
-                              <li class="list-group-item px-4 py-3">
-                                 <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <div>Subtotal</div>
-                                    <div class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(subtotal, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</div>
-                                 </div>
-                                 <div class="d-flex align-items-center justify-content-between">
+                              <li th:each="producto : ${productosCarrito}" class="list-group-item d-flex justify-content-between align-items-center">
+                                 <div class="d-flex align-items-center">
+                                    <img th:src="${productoImagenUrls[producto.idProducto]}" alt="Producto" class="img-fluid rounded me-3" style="width: 50px; height: 50px;">
                                     <div>
-                                       Costo de envío
-                                       <i class="feather-icon icon-info text-muted" data-bs-toggle="tooltip" title="Tarifa de envío adicional. Puede variar según el destino"></i>
+                                       <h6 th:text="${producto.nombreProducto}" class="mb-0"></h6>
+                                       <small class="text-muted" th:text="${producto.cantidadProducto} + ' unidades'"></small>
                                     </div>
-                                    <div class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(costoEnvio, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</div>
                                  </div>
+                                 <span class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precioTotalPorProducto, 1, 'COMMA', 2, 'POINT')}"></span>
                               </li>
-                              <!-- list group item -->
-                              <li class="list-group-item px-4 py-3">
-                                 <div class="d-flex align-items-center justify-content-between fw-bold">
-                                    <div>Total</div>
-                                    <div th:text="'S/. ' + ${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</div>
-                                 </div>
+                              <li class="list-group-item d-flex justify-content-between align-items-center">
+                                 <span>Subtotal</span>
+                                 <span class="fw-bold text-primary" th:text="'S/. ' + ${#numbers.formatDecimal(subtotal, 1, 'COMMA', 2, 'POINT')}"></span>
+                              </li>
+                              <li class="list-group-item d-flex justify-content-between align-items-center">
+                                 <span>Costo de Envío</span>
+                                 <span class="fw-bold text-primary" th:text="'S/. ' + ${#numbers.formatDecimal(costoEnvio, 1, 'COMMA', 2, 'POINT')}"></span>
+                              </li>
+                              <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+                                 <span>Total</span>
+                                 <span class="text-success" th:text="'S/. ' + ${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')}"></span>
                               </li>
                            </ul>
                         </div>
@@ -373,8 +347,8 @@
                </div>
             </div>
          </div>
-      </div>
-   </section>
+      </section>
+   </div>
 </main>
 
 
@@ -460,13 +434,10 @@
                   <!-- Lista de tarjetas -->
                   <ul class="list-inline mb-0 d-inline-block">
                      <li class="list-inline-item">
-                        <a href="#!"><img src="../images/payment/american-express.svg" alt="" /></a>
+                        <a ><img src="../images/payment/mastercard.svg" alt="" /></a>
                      </li>
                      <li class="list-inline-item">
-                        <a href="#!"><img src="../images/payment/mastercard.svg" alt="" /></a>
-                     </li>
-                     <li class="list-inline-item">
-                        <a href="#!"><img src="../images/payment/visa.svg" alt="" /></a>
+                        <a ><img src="../images/payment/visa.svg" alt="" /></a>
                      </li>
                   </ul>
                </div>
@@ -720,68 +691,9 @@
       const mesExpiracion = document.getElementById("unique-expiry-month").value;
       const anioExpiracion = document.getElementById("unique-expiry-year").value;
       const nombreTitular = document.getElementById("unique-nameoncard").value.trim();
-      const cvv = document.getElementById("unique-cvv-input").value;
-
       const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
       const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
 
-      // Validaciones
-      if (!numeroTarjeta || numeroTarjeta.length !== 16) {
-         Swal.fire({
-            icon: "error",
-            title: "Número de tarjeta inválido",
-            text: "El número de tarjeta debe tener 16 dígitos.",
-            confirmButtonText: "Corregir"
-         });
-         return;
-      }
-
-      if (!/^[a-zA-Z\s]{1,100}$/.test(nombreTitular)) {
-         Swal.fire({
-            icon: "error",
-            title: "Nombre del titular inválido",
-            text: "El nombre del titular debe contener solo letras y espacios.",
-            confirmButtonText: "Corregir"
-         });
-         return;
-      }
-
-      if (!cvv || cvv.length !== 3 || !/^\d{3}$/.test(cvv)) {
-         Swal.fire({
-            icon: "error",
-            title: "Código CVV inválido",
-            text: "El código CVV debe tener exactamente 3 dígitos.",
-            confirmButtonText: "Corregir"
-         });
-         return;
-      }
-
-      if (!mesExpiracion || !anioExpiracion || !/^(0[1-9]|1[0-2])$/.test(mesExpiracion) || !/^\d{2}$/.test(anioExpiracion)) {
-         Swal.fire({
-            icon: "error",
-            title: "Fecha de expiración inválida",
-            text: "Por favor ingresa una fecha de expiración válida en formato MM/YY.",
-            confirmButtonText: "Corregir"
-         });
-         return;
-      }
-
-      const currentYear = new Date().getFullYear() % 100; // Últimos 2 dígitos del año actual
-      const currentMonth = new Date().getMonth() + 1; // Mes actual
-      const expirationYear = parseInt(anioExpiracion, 10);
-      const expirationMonth = parseInt(mesExpiracion, 10);
-
-      if (expirationYear < currentYear || (expirationYear === currentYear && expirationMonth < currentMonth)) {
-         Swal.fire({
-            icon: "error",
-            title: "Fecha de expiración inválida",
-            text: "La tarjeta ha expirado o la fecha es incorrecta.",
-            confirmButtonText: "Corregir"
-         });
-         return;
-      }
-
-      // Si todas las validaciones son correctas, enviar la solicitud
       fetch("/UsuarioFinal/guardar-y-validar-tarjeta", {
          method: "POST",
          headers: {
@@ -797,26 +709,25 @@
       })
               .then(response => response.text())
               .then(data => {
-                 Swal.fire({
-                    icon: "success",
-                    title: "Tarjeta Guardada",
-                    text: data,
-                    confirmButtonText: "Aceptar"
-                 }).then(() => {
-                    // Cerrar el modal manualmente
-                    const modal = bootstrap.Modal.getInstance(document.getElementById("addCardModal"));
-                    modal.hide();
-
-                    // Opcional: recargar la página para actualizar el estado
-                    location.reload();
-                 });
+                 if (data.includes("Tarjeta guardada")) {
+                    Swal.fire({
+                       icon: "success",
+                       title: "Éxito",
+                       text: data
+                    });
+                 } else {
+                    Swal.fire({
+                       icon: "error",
+                       title: "Error",
+                       text: data
+                    });
+                 }
               })
               .catch(error => {
                  Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "Ocurrió un problema al guardar la tarjeta. Inténtalo nuevamente.",
-                    confirmButtonText: "Aceptar"
+                    text: "Ocurrió un problema al guardar la tarjeta. Inténtalo nuevamente."
                  });
                  console.error("Error:", error);
               });
