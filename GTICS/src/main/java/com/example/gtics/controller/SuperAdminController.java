@@ -1001,7 +1001,7 @@ public class SuperAdminController {
                             @RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "0") Integer categoriaId // Cambiado a Integer
     ) {
-        int size = 2;
+        int size = 10;
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Producto> productosPage;

@@ -85,8 +85,8 @@
 
                                         <div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
                                             <div>
-                                                <img class="image avatar avatar-lg rounded-3" th:src="@{${usuario.getFoto() != null} ? '/usuarioFinal/' + ${usuario.getId()} : '/images/docs/placeholder-img.jpg'}" alt="Image" />
-                                            </div>
+
+                                            </div><img class="image avatar avatar-lg rounded-3" th:src="@{${usuario.getFoto() != null} ? '/usuarioFinal/' + ${usuario.getId()} : '/images/docs/placeholder-img.jpg'}" alt="Image" />
 
                                             <div class="file-upload btn btn-light ms-md-4">
                                                 <input type="file" class="file-input opacity-0" name="zonalAdminPhoto" />
