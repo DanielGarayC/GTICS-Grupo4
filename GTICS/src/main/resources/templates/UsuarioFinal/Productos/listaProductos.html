@@ -152,6 +152,59 @@
 
 
         </style>
+
+        <!-- Agrega estos estilos al <head>, debajo de tus estilos existentes -->
+        <style>
+            /* Estado normal del botón */
+            .btn-adding {
+                position: relative;
+                pointer-events: none; /* Evita clicks múltiples */
+                opacity: 0.9;
+                transition: transform 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
+                transform: scale(0.98);
+            }
+
+            /* Spinner dentro del botón */
+            .btn-adding::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 1em;
+                height: 1em;
+                margin-top: -0.5em;
+                margin-left: -0.5em;
+                border: 2px solid transparent;
+                border-top-color: #fff;
+                border-radius: 50%;
+                animation: spin 0.6s linear infinite;
+            }
+
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            /* Animación de éxito: pequeño check */
+            .btn-added-success {
+                position: relative;
+                background-color: #28a745 !important; /* Verde éxito */
+                color: #fff !important;
+            }
+
+            .btn-added-success::after {
+                content: "✔"; /* Símbolo de check */
+                position: absolute;
+                font-weight: bold;
+                font-size: 1em;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+        </style>
+
         <!-- CSRF Tokens -->
         <meta name="_csrf" th:content="${_csrf.token}" />
         <meta name="_csrf_header" th:content="${_csrf.headerName}" />
@@ -163,7 +216,7 @@
 
         <div class="border-bottom">
 
-            <div th:insert="~{fragments/navbarUsuarioFinal :: navbar}"></div>
+            <div th:replace="~{fragments/navbarUsuarioFinal :: navbar}"></div>
 
         </div>
 
@@ -173,7 +226,7 @@
             <section class="mb-lg-6 mt-lg-6 my-2">
                 <div class="container">
                     <div class="col-12 mb-6">
-                        <div class="mb-0" th:insert="~{fragments/navbarUsuarioFinal :: buscadorProducto}"></div>
+                        <div class="mb-0" th:replace="~{fragments/navbarUsuarioFinal :: buscadorProducto}"></div>
                     </div>
                 </div>
             </section>
@@ -232,7 +285,7 @@
                                         <div>
                                             <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">Precio: S/. 0.00</span>
                                         </div>
-                                        <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form">
+                                        <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form" data-context="general">
                                             <input type="hidden" name="idProducto" th:value="${producto.id}" />
                                             <input type="hidden" value="1" name="cantidad" />
                                             <div class="d-grid">
@@ -381,7 +434,7 @@
                                                     <div class="text-dark fw-bold" style="font-size: 1rem; min-width: 80px;">
                                                         <span th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
                                                     </div>
-                                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form flex-shrink-0">
+                                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form flex-shrink-0" data-context="recomendadomodsadasdsad">
                                                         <input type="hidden" name="idProducto" th:value="${producto.id}" />
                                                         <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" />
                                                         <button type="submit" class="btn btn-primary btn-sm" style="width: 100px;">
@@ -483,14 +536,13 @@
 
                                             <!-- Botones de acción -->
                                             <div class="mt-3 row justify-content-start g-2 align-items-center">
-                                                <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form col-lg-6 col-md-6 col-12">
+                                                <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form col-lg-6 col-md-6 col-12" data-context="modal">
                                                     <input type="hidden" name="idProducto" th:value="${producto.id}" />
                                                     <input type="hidden" name="cantidad" th:value="1" class="quantity-hidden-field" />
                                                     <button type="submit" class="btn btn-primary w-100">
                                                         <i class="bi bi-cart-plus me-2"></i>Añadir al carrito
                                                     </button>
                                                 </form>
-
 
                                             </div>
 
@@ -553,8 +605,6 @@
         <!-- Incluir jQuery una sola vez -->
         <script th:src="@{/js/vendors/jquery.min.js}"></script>
 
-        <!-- Incluir Bootstrap JS -->
-        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
 
         <!-- Incluir otros scripts dependientes de jQuery -->
         <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
@@ -565,6 +615,7 @@
         <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
         <script th:src="@{/js/vendors/tns-slider.js}"></script>
         <script th:src="@{/js/vendors/zoom.js}"></script>
+
         <!-- Tus scripts personalizados -->
 
         <script>
@@ -735,78 +786,127 @@
 
                 // Configurar AJAX para incluir el token en todas las solicitudes
                 $.ajaxSetup({
-                    beforeSend: function(xhr) {
+                    beforeSend: function (xhr) {
                         if (csrfToken && csrfHeader) {
                             xhr.setRequestHeader(csrfHeader, csrfToken);
                             console.log('Encabezado CSRF configurado.');
                         }
                     }
                 });
-                // Manejo del formulario de agregar al carrito
-                $('.add-to-cart-form').on('submit', function(event) {
-                    event.preventDefault();
-                    var form = $(this);
-                    var cantidad = parseInt(form.find('.quantity-hidden-field').val());
-                    var maxStock = parseInt(form.closest('.row').find('input[name="cantidadVisible"]').attr('max'));
+                $(document).ready(function () {
+                    var csrfToken = $('meta[name="_csrf"]').attr('content');
+                    var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
 
-                    if (cantidad > maxStock) {
-                        toastr.error('La cantidad seleccionada excede el stock disponible');
-                        return;
-                    }
-
-                    var button = form.find('button[type="submit"]');
-                    button.prop('disabled', true);
-
-                    $.ajax({
-                        url: form.attr('action'),
-                        type: form.attr('method'),
-                        data: form.serialize(),
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                // Actualización instantánea de los contadores
-                                updateCartCounters(response.totalArticulos);
-
-                                // Actualizar el contenido del carrito si está abierto
-                                if ($('#offcanvasRight').hasClass('show')) {
-                                    fetchCartItems();
-                                }
-
-                                toastr.success('Producto agregado al carrito');
-
-                                // Si el modal está abierto, cerrarlo
-                                var modal = form.closest('.modal');
-                                if (modal.length) {
-                                    modal.modal('hide');
-                                }
-                            } else {
-                                toastr.error(response.mensaje || 'Error al agregar al carrito');
+                    $.ajaxSetup({
+                        beforeSend: function(xhr) {
+                            if (csrfToken && csrfHeader) {
+                                xhr.setRequestHeader(csrfHeader, csrfToken);
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error AJAX:', error);
-                            toastr.error('Ocurrió un error al intentar añadir el producto al carrito.');
-                        },
-                        complete: function() {
-                            button.prop('disabled', false);
                         }
                     });
-                });
+
+                    // Manejo del formulario de agregar al carrito (UNICO .on('submit'))
+                    $('.add-to-cart-form').on('submit', function(event) {
+                        event.preventDefault();
+                        var form = $(this);
+                        var context = form.data('context'); // 'modal', 'general', 'recomendados', etc.
+                        var button = form.find('button[type="submit"]');
+                        var originalButtonText = button.html(); // Guardamos el texto original
+                        // Verificación de stock si aplica
+                        var cantidadHidden = form.find('.quantity-hidden-field');
+                        var cantidad = (cantidadHidden.length > 0) ? parseInt(cantidadHidden.val()) : 1;
+                        var cantidadVisibleInput = form.closest('.row').find('input[name="cantidadVisible"]');
+                        var maxStock = (cantidadVisibleInput.length > 0) ? parseInt(cantidadVisibleInput.attr('max')) : 9999;
+
+                        if (cantidad > maxStock) {
+
+                            return;
+                        }
+
+                        button.prop('disabled', true);
+                        button.addClass('btn-adding');
+                        // Cambiamos el texto temporalmente
+                        button.html('Agregando...');
+                        $.ajax({
+                            url: form.attr('action'),
+                            type: form.attr('method'),
+                            data: form.serialize(),
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    // Actualizar contadores del carrito
+                                    updateCartCounters(response.totalArticulos);
+
+                                    // Actualizar el contenido del carrito si está abierto
+                                    if ($('#offcanvasRight').hasClass('show')) {
+                                        fetchCartItems();
+                                    }
 
 
-                // Función para obtener y renderizar los productos del carrito
-                function fetchCartItems() {
-                    $.ajax({
-                        url: '/UsuarioFinal/listaCarrito',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            var cartList = $('#cart-items');
-                            cartList.empty(); // Limpiar la lista actual
 
-                            if (data.length > 0) {
-                                data.forEach(function(producto) {
-                                    var listItem = `
+                                    // Manejo según el contexto
+                                    if (context === 'modal') {
+                                        // Cerrar el modal si es contexto modal
+                                        var modal = form.closest('.modal');
+                                        if (modal.length) {
+                                            modal.modal('hide');
+                                        }
+                                    } else if (context === 'recomendados') {
+                                        // Lógica especial para recomendados (opcional)
+                                        console.log('Agregado desde recomendados');
+                                    } else if (context === 'general') {
+                                        // En general no hacemos nada especial
+                                        console.log('Agregado desde vista general');
+                                    }
+                                    // Efecto de éxito:
+                                    // Cambiamos a verde con check por un momento
+                                    button.removeClass('btn-adding');
+                                    // Deja el botón sin texto antes de mostrar el check verde
+                                    button.html('&nbsp;');
+
+                                    button.addClass('btn-added-success');
+
+                                    // Después de 1 segundo, volvemos al estado original
+                                    setTimeout(function(){
+                                        button.removeClass('btn-added-success');
+                                        button.html(originalButtonText);
+                                    }, 1290);
+                                    // No hay más AJAX ni preventDefault aquí.
+                                } else {
+// Si hubo error, restaurar el botón al estado original
+                                    button.removeClass('btn-adding');
+                                    button.html(originalButtonText);
+                                }
+
+
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error AJAX:', error);
+// Error, restaurar el botón
+                                button.removeClass('btn-adding');
+                                button.html(originalButtonText);
+                            },
+                            complete: function() {
+                                // Re-habilitar siempre el botón al finalizar
+                                button.prop('disabled', false);
+                            }
+                        });
+                    });
+
+
+                    // Función para obtener y renderizar los productos del carrito
+                    function fetchCartItems() {
+                        $.ajax({
+                            url: '/UsuarioFinal/listaCarrito',
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                var cartList = $('#cart-items');
+                                cartList.empty(); // Limpiar la lista actual
+
+                                if (data.length > 0) {
+                                    data.forEach(function (producto) {
+                                        var listItem = `
                                 <li class="list-group-item py-3 ps-0 border-top producto-item-${producto.idProducto}">
                                     <div class="row align-items-center">
                                         <div class="col-7 col-md-7 col-lg-7">
@@ -848,84 +948,74 @@
                                     </div>
                                 </li>
                             `;
-                                    cartList.append(listItem);
-                                });
-                            } else {
-                                $('#empty-cart-message').show();
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error al cargar el carrito:', error);
-
-                        }
-                    });
-                }
-
-                // Evento para cargar el carrito cuando se abra el offcanvas
-                $('#offcanvasRight').on('show.bs.offcanvas', function () {
-                    fetchCartItems();
-                });
-
-                // Capturar el evento de envío del formulario para agregar al carrito
-                $('.add-to-cart-form').on('submit', function(event) {
-                    event.preventDefault(); // Prevenir la acción predeterminada del formulario
-
-                    var form = $(this);
-                    var url = form.attr('action');
-                    var method = form.attr('method');
-                    var data = form.serialize(); // Obtener los datos del formulario
-                    var button = form.find('button[type="submit"]');
-
-                    console.log('Formulario enviado:', url, method, data);
-
-                    // Deshabilitar el botón para prevenir múltiples clics
-                    button.prop('disabled', true);
-                    console.log('Botón deshabilitado.');
-
-                    $.ajax({
-                        url: url,
-                        type: method,
-                        data: data,
-                        dataType: 'json', // Asegurarse de recibir una respuesta JSON
-                        success: function(response) {
-                            console.log('Respuesta del servidor:', response);
-                            if (response.success){
-                                // Actualizar los contadores del carrito
-                                $('#carrito-count-desktop').text(response.totalArticulos);
-                                $('#carrito-count-mobile').text(response.totalArticulos);
-                                // Animar el icono del carrito
-                                animateCartIcon();
-
-                            } else {
-                                // Manejar errores retornados por el servidor
-                                console.error('Error del servidor:', response.mensaje);
-                                // Mostrar mensaje de error usando toastr
+                                        cartList.append(listItem);
+                                    });
+                                } else {
+                                    $('#empty-cart-message').show();
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error al cargar el carrito:', error);
 
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            // Manejar errores de la solicitud AJAX
-                            console.error('Error AJAX:', error);
-                            // Mostrar mensaje de error usando toastr
+                        });
+                    }
 
-                        },
-                        complete: function() {
-                            // Rehabilitar el botón después de que la solicitud haya terminado
-                            button.prop('disabled', false);
-                            console.log('Botón reabilitado.');
+                    // Evento para cargar el carrito cuando se abra el offcanvas
+                    $('#offcanvasRight').on('show.bs.offcanvas', function () {
+                        fetchCartItems();
+                    });
+
+
+                    // Manejar la eliminación de productos del carrito
+                    $(document).on('click', '.eliminar-producto', function () {
+                        var idProducto = $(this).data('id');
+                        if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
+                            $.ajax({
+                                url: '/UsuarioFinal/eliminarProductoCarritoAjax/' + idProducto, // Ruta AJAX correcta
+                                type: 'DELETE',
+                                success: function (response) {
+                                    if (response.success) {
+                                        fetchCartItems(); // Actualizar la lista del carrito
+                                        // Actualizar contadores del carrito
+                                        $('#carrito-count-desktop').text(response.totalArticulos);
+                                        $('#carrito-count-mobile').text(response.totalArticulos);
+                                        animateCartIcon();
+
+                                    } else {
+
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('Error al eliminar el producto:', error);
+
+                                }
+                            });
                         }
                     });
-                });
 
-                // Manejar la eliminación de productos del carrito
-                $(document).on('click', '.eliminar-producto', function() {
-                    var idProducto = $(this).data('id');
-                    if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
+                    // Manejar la actualización de la cantidad de productos en el carrito
+                    $(document).on('click', '.actualizar-cantidad', function () {
+                        var button = $(this);
+                        var idProducto = button.data('id');
+                        var cantidad = button.closest('.d-flex').find('input[name="nuevaCantidad"]').val();
+
+                        // Validar que la cantidad sea un número válido
+                        if (!Number.isInteger(parseFloat(cantidad)) || parseInt(cantidad) < 1) {
+
+                            return;
+                        }
+
                         $.ajax({
-                            url: '/UsuarioFinal/eliminarProductoCarritoAjax/' + idProducto, // Ruta AJAX correcta
-                            type: 'DELETE',
-                            success: function(response) {
-                                if (response.success){
+                            url: '/UsuarioFinal/actualizarCantidadCarritoAjax', // Ruta AJAX correcta
+                            type: 'POST',
+                            data: {
+                                idProducto: idProducto,
+                                nuevaCantidad: cantidad
+                            },
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.success) {
                                     fetchCartItems(); // Actualizar la lista del carrito
                                     // Actualizar contadores del carrito
                                     $('#carrito-count-desktop').text(response.totalArticulos);
@@ -936,50 +1026,11 @@
 
                                 }
                             },
-                            error: function(xhr, status, error) {
-                                console.error('Error al eliminar el producto:', error);
+                            error: function (xhr, status, error) {
+                                console.error('Error al actualizar la cantidad:', error);
 
                             }
                         });
-                    }
-                });
-
-                // Manejar la actualización de la cantidad de productos en el carrito
-                $(document).on('click', '.actualizar-cantidad', function() {
-                    var button = $(this);
-                    var idProducto = button.data('id');
-                    var cantidad = button.closest('.d-flex').find('input[name="nuevaCantidad"]').val();
-
-                    // Validar que la cantidad sea un número válido
-                    if (!Number.isInteger(parseFloat(cantidad)) || parseInt(cantidad) < 1) {
-
-                        return;
-                    }
-
-                    $.ajax({
-                        url: '/UsuarioFinal/actualizarCantidadCarritoAjax', // Ruta AJAX correcta
-                        type: 'POST',
-                        data: {
-                            idProducto: idProducto,
-                            nuevaCantidad: cantidad
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success){
-                                fetchCartItems(); // Actualizar la lista del carrito
-                                // Actualizar contadores del carrito
-                                $('#carrito-count-desktop').text(response.totalArticulos);
-                                $('#carrito-count-mobile').text(response.totalArticulos);
-                                animateCartIcon();
-
-                            } else {
-
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error al actualizar la cantidad:', error);
-
-                        }
                     });
                 });
             });
@@ -1020,49 +1071,7 @@
                 hiddenInput.value = value;
             }
 
-            // Actualizar el código del evento submit del formulario
-            $(document).ready(function() {
-                $('.add-to-cart-form').on('submit', function(event) {
-                    event.preventDefault();
-                    var form = $(this);
-                    var cantidad = parseInt(form.find('.quantity-hidden-field').val());
-                    var maxStock = parseInt(form.closest('.row').find('input[name="cantidadVisible"]').attr('max'));
 
-                    if (cantidad > maxStock) {
-
-                        return;
-                    }
-
-                    // Resto del código del submit igual que antes...
-                    var url = form.attr('action');
-                    var method = form.attr('method');
-                    var data = form.serialize();
-                    var button = form.find('button[type="submit"]');
-
-                    button.prop('disabled', true);
-
-                    $.ajax({
-                        url: url,
-                        type: method,
-                        data: data,
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                $('#carrito-count-desktop').text(response.totalArticulos);
-                                $('#carrito-count-mobile').text(response.totalArticulos);
-                                animateCartIcon();
-
-                            }
-                        },
-                        error: function(xhr, status, error) {
-
-                        },
-                        complete: function() {
-                            button.prop('disabled', false);
-                        }
-                    });
-                });
-            });
         </script>
     </body>
 </html>
