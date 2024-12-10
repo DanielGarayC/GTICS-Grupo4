@@ -16,6 +16,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -1202,8 +1205,19 @@ public class SuperAdminController {
 
 
     @GetMapping("SuperAdmin/perfil")
-    public String anadirCategoria() {
+    public String perfil() {
 
         return "SuperAdmin/perfilSuperAdmin";
+    }
+    @ModelAttribute
+    public void addUsuarioToModel(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String email = authentication.getName(); // Obtener el email del usuario autenticado
+            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+            optUsuario.ifPresent(usuario -> model.addAttribute("usuario", usuario));
+        }
     }
 }
