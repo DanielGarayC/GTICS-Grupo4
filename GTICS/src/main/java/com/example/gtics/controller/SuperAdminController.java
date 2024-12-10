@@ -6,6 +6,8 @@ import com.example.gtics.ValidationGroup.UsuarioFinalValidationGroup;
 import com.example.gtics.dto.solAgente;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
+import com.example.gtics.service.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,6 +39,10 @@ public class SuperAdminController {
     private final SubcategoriaRepository subcategoriaRepository;
     private final TiendaRepository tiendaRepository;
     private final FotosProductoRepository fotosProductoRepository;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public SuperAdminController(UsuarioRepository usuarioRepository, ZonaRepository zonaRepository,
                                 RolRepository rolRepository,
@@ -208,6 +215,13 @@ public class SuperAdminController {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
             }
             usuario.setFoto(foto.getBytes());
+
+            String passwordParaEnviar = usuario.getContrasena();
+            System.out.println("contra a enviar: " + passwordParaEnviar);
+            String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
+            usuario.setContrasena(encryptedPassword);
+            emailService.sendVerificationEmail(usuario.getEmail(), usuario.getNombre(), passwordParaEnviar);
+            usuario.setActivo(1);
             usuarioRepository.save(usuario);
         } catch (Exception e) {
             attr.addFlashAttribute("error", "Ocurrió un error al guardar el Admin Zonal.");
