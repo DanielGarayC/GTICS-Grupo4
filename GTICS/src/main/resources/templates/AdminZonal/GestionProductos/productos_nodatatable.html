@@ -59,10 +59,10 @@
          <div class="main-wrapper">
 			 <!-- navbar -->
 			 <!-- navbar vertical (para pc)-->
-			 <div th:insert="fragments/navbarAdminZonal.html :: navbarVerticalPc('Productos')"></div>
+			 <div th:insert="~{fragments/navbarAdminZonal.html :: navbarVerticalPc('Productos')}"></div>
 
 			 <!-- navbar vertical (para celular)-->
-			 <div th:insert="fragments/navbarAdminZonal.html :: navbarVerticalCelulares('Productos')"></div>
+			 <div th:insert="~{fragments/navbarAdminZonal.html :: navbarVerticalCelulares('Productos')}"></div>
 
 			 <!-- COONTENIDO DE LA PAGINA -->
             <main class="main-content-wrapper">

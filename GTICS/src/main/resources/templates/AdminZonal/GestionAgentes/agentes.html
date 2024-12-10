@@ -41,10 +41,10 @@
 	<div class="main-wrapper">
 		<!-- navbar -->
 		<!-- navbar vertical (para pc)-->
-		<div th:insert="fragments/navbarAdminZonal.html :: navbarVerticalPc('Agentes')"></div>
+		<div th:insert="~{fragments/navbarAdminZonal.html :: navbarVerticalPc('Agentes')}"></div>
 
 		<!-- navbar vertical (para celular)-->
-		<div th:insert="fragments/navbarAdminZonal.html :: navbarVerticalCelulares('Agentes')"></div>
+		<div th:insert="~{fragments/navbarAdminZonal.html :: navbarVerticalCelulares('Agentes')}"></div>
 
 		<!-- COONTENIDO DE LA PAGINA -->
 		<main class="main-content-wrapper">
