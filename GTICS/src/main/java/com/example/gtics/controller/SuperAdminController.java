@@ -641,11 +641,20 @@ public class SuperAdminController {
     }
 
     @PostMapping("/SuperAdmin/UsuarioFinal/Actualizar")
-    public String actualizarUsuarioFinal(@ModelAttribute("usuario") @Validated(UsuarioFinalValidationGroup.class) Usuario usuario, BindingResult bindingResult, Model model, @RequestParam("UserPhoto") MultipartFile foto) throws IOException {
+    public String actualizarUsuarioFinal(@ModelAttribute("usuario") @Validated(UsuarioFinalValidationGroup.class) Usuario usuario,
+                                         BindingResult bindingResult,
+                                         Model model,
+                                         @RequestParam("UserPhoto") MultipartFile foto) throws IOException {
 
-        System.out.println("Llega al método guardarUsuario");
-        System.out.println(usuario.getId());
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
+            System.out.println("Errores de validación:");
+            bindingResult.getAllErrors().forEach(error -> {
+                System.out.println(error.getDefaultMessage());
+            });
+
+            // Agrega el objeto usuario al modelo con el nombre esperado por la vista
+            model.addAttribute("finalUser", usuario);
+
             // Validación de DNI con prioridad
             if (bindingResult.hasFieldErrors("dni")) {
                 if (bindingResult.getFieldError("dni").getCode().equals("NotBlank")) {
@@ -668,17 +677,16 @@ public class SuperAdminController {
                 }
             }
 
-
-
-
+            // Agrega la lista de distritos
             List<Distrito> listaDistritos = distritoRepository.findAll();
             model.addAttribute("listaDistritos", listaDistritos);
+
             return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
         }
 
-
+        // Actualización de datos del usuario
         if (foto.isEmpty()) {
-            Usuario finalUser = usuarioRepository.findById(usuario.getId()).get();
+            Usuario finalUser = usuarioRepository.findById(usuario.getId()).orElseThrow();
             usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(), usuario.getId());
         } else {
             try {
@@ -686,7 +694,6 @@ public class SuperAdminController {
                 usuario.setFoto(fotoBytes);
                 usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(), usuario.getId());
             } catch (IOException ignored) {
-
             }
         }
 
