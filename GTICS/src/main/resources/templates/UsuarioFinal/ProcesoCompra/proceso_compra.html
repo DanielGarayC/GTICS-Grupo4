@@ -151,6 +151,9 @@
 
 
 </style>
+   <!-- CSRF Tokens -->
+   <meta name="_csrf" th:content="${_csrf.token}" />
+   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
 <body>
@@ -745,8 +748,10 @@
 
 <script th:src="@{/libs/imask/dist/imask.min.js}"></script>
 <script th:src="@{/js/vendors/inputmask.js}"></script>
+   <script th:src="@{/js/carrito.js}"></script>
 
-<script>
+
+   <script>
    document.getElementById('unique-card-number-input').addEventListener('input', function () {
       const cardNumber = this.value.replace(/\D/g, '').slice(0, 16);
       this.value = cardNumber.replace(/(\d{4})(?=\d)/g, '$1-');

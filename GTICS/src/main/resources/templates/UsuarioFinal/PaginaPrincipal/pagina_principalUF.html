@@ -54,6 +54,9 @@
          color: black; /* Texto negro para el cuerpo de la tabla */
       }
    </style>
+   <!-- CSRF Tokens -->
+   <meta name="_csrf" th:content="${_csrf.token}" />
+   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
 <body>
@@ -584,5 +587,7 @@
    <script th:src="@{/libs/sticky-sidebar/dist/sticky-sidebar.min.js}"></script>
    <script th:src="@{/js/vendors/sticky.js}"></script>
    <script th:src="@{/js/vendors/modal.js}"></script>
+   <script th:src="@{/js/carrito.js}"></script>
+
 </body>
 </html>

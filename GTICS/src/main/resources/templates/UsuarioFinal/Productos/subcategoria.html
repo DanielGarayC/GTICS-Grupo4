@@ -42,6 +42,9 @@
             justify-content: space-between;
         }
     </style>
+    <!-- CSRF Tokens -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
 <body>
@@ -366,5 +369,7 @@
 <script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
 <script th:src="@{/js/vendors/tns-slider.js}"></script>
 <script th:src="@{/js/vendors/zoom.js}"></script>
+    <script th:src="@{/js/carrito.js}"></script>
+
 </body>
 </html>

@@ -146,6 +146,9 @@
 
     <!-- Theme CSS -->
     <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+    <!-- CSRF Tokens -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 <body>
 
@@ -156,7 +159,9 @@
     <input type="text" id="message" placeholder="Escribe un mensaje..." />
     <button onclick="sendMessage()">Enviar</button>
 </div>
+    <script th:src="@{/js/carrito.js}"></script>
 
 <div id="response"></div>
+
 </body>
 </html>

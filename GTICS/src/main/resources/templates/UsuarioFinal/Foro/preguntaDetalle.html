@@ -43,6 +43,9 @@
 
     <!-- SweetAlert2 JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- CSRF Tokens -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
 <body>
@@ -116,8 +119,10 @@
 
 <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
 <script th:src="@{/js/vendors/chart.js}"></script>
+    <script th:src="@{/js/carrito.js}"></script>
 
-<style>
+
+    <style>
     @import url('https://fonts.googleapis.com/css?family=Hind:300,400&display=swap');
 
 

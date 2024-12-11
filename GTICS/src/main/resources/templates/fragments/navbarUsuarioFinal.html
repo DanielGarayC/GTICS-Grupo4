@@ -575,8 +575,9 @@
                     <a th:href="@{UsuarioFinal/listaProductos}" class="alert-link">Ve a la sección proceso de compras ya!</a>
                 </div>
                 <ul class="list-group list-group-flush" id="cart-items">
+                    <li th:if="${productosCarrito.isEmpty()}" class="list-group-item" id="empty-cart-message" style="display: none;">El carrito está vacío.</li>
 
-                    <li class="list-group-item" id="empty-cart-message" style="display: none;">El carrito está vacío.</li>
+
                 </ul>
 
                 <!-- btn -->
@@ -602,7 +603,7 @@
         <button class="btn btn-outline-success" type="submit" style="margin-left: 10px;">Buscar</button>
     </form>
     <script th:src="@{/js/vendors/validation.js}"></script>
-</div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const navbars = document.querySelectorAll('.navbar-scroll');
@@ -634,6 +635,8 @@
             });
         });
     </script>
+
+</div>
 
 </body>
 </html>

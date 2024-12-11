@@ -23,7 +23,9 @@
 
       <!-- Theme CSS -->
       <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
-
+      <!-- CSRF Tokens -->
+      <meta name="_csrf" th:content="${_csrf.token}" />
+      <meta name="_csrf_header" th:content="${_csrf.headerName}" />
    </head>
 
    <body>
@@ -313,6 +315,7 @@
       <script th:src="@{/js/vendors/zoom.js}"></script>
       <script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
       <script th:src="@{/js/vendors/slick-slider.js}"></script>
+      <script th:src="@{/js/carrito.js}"></script>
 
 
 

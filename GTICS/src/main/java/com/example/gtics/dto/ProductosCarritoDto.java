@@ -8,5 +8,6 @@ public interface ProductosCarritoDto {
     Double getPrecioTotalPorProducto();
     String getUrlImagenProducto();
    Double getCostoEnvio();
+    Integer getCantidadDisponible(); // Añadido
 
 }

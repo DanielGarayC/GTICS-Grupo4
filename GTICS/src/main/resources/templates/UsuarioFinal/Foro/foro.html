@@ -137,7 +137,9 @@
             }
 
         </style>
-
+        <!-- CSRF Tokens -->
+        <meta name="_csrf" th:content="${_csrf.token}" />
+        <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     </head>
 
     <body>
@@ -444,6 +446,7 @@
 
             <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
             <script th:src="@{/js/vendors/chart.js}"></script>
+              <script th:src="@{/js/carrito.js}"></script>
         <!-- Tu script personalizado -->
 
             <script>

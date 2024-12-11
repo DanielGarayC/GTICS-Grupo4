@@ -25,8 +25,9 @@ public interface ProductoHasCarritocompraRepository extends JpaRepository<Produc
 
 
     @Query("SELECT p.idProducto.id AS idProducto, p.idProducto.nombreProducto AS nombreProducto, p.cantidadProducto AS cantidadProducto, " +
-            "p.idProducto.precio AS precioUnidad, (p.cantidadProducto * p.idProducto.precio) AS precioTotalPorProducto, " +
+            "p.idProducto.precio AS precioUnidad, (p.cantidadProducto * p.idProducto.precio) AS precioTotalPorProducto,p.idProducto.cantidadDisponible AS cantidadDisponible, " +
             "p.idProducto.costoEnvio AS costoEnvio, CONCAT('/UsuarioFinal/producto/foto/', p.idProducto.id) AS urlImagenProducto " +
+
             "FROM ProductoHasCarritocompra p " +
             "WHERE p.idCarritoCompra.id = :idCarrito")
     List<ProductosCarritoDto> findProductosPorCarrito(@Param("idCarrito") Integer idCarrito);
