@@ -784,11 +784,29 @@ public class UsuarioFinalController {
 
         // Paso 5: Guardar la orden
         Orden nuevaOrden = ordenRepository.save(orden);
-
+        System.out.println("pruebaaa");
         // Paso 6: Actualizar los productos y cantidades disponibles
         for (ProductosCarritoDto productoCarrito : productosCarrito) {
-            Producto producto = productoRepository.findById(productoCarrito.getIdProducto()).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+            Producto producto = productoRepository.findById(productoCarrito.getIdProducto())
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
             int cantidadComprada = productoCarrito.getCantidadProducto();
+
+            // Configurar la clave primaria compuesta
+            ProductoHasCarritocompraId productoHasCarritoId = new ProductoHasCarritocompraId();
+            productoHasCarritoId.setIdProducto(producto.getId());
+            productoHasCarritoId.setIdCarritoCompra(carrito.getId());
+
+            // Configurar la entidad ProductoHasCarritocompra
+            ProductoHasCarritocompra productoHasCarritocompra = new ProductoHasCarritocompra();
+            productoHasCarritocompra.setId(productoHasCarritoId); // Asignar la clave compuesta
+            productoHasCarritocompra.setIdProducto(producto);
+            productoHasCarritocompra.setIdCarritoCompra(carrito);
+            productoHasCarritocompra.setCantidadProducto(cantidadComprada);
+            productoHasCarritocompra.setResenaCreada(false);
+
+            // Guardar la relación producto-carrito
+            productoHasCarritocompraRepository.save(productoHasCarritocompra);
 
             // Reducir la cantidad de producto disponible
             if (producto.getCantidadDisponible() >= cantidadComprada) {
@@ -800,7 +818,8 @@ public class UsuarioFinalController {
             }
 
             // Eliminar el producto del carrito de compras
-            productoHasCarritocompraRepository.deleteById_IdCarritoCompraAndId_IdProducto(idCarritoCompra, productoCarrito.getIdProducto());
+            //productoHasCarritocompraRepository.deleteById_IdCarritoCompraAndId_IdProducto(
+              //      idCarritoCompra, productoCarrito.getIdProducto());
         }
 
         // Paso 7: Desactivar el carrito
