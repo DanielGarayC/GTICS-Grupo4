@@ -146,8 +146,14 @@
                 <div class="col-lg-3 d-flex flex-column align-items-center">
                     <div class="card shadow-sm p-3 text-center">
                         <div class="mb-3">
-                            <img id="profileImage-1" th:src="@{/images/avatar/avatar-1.jpg}" alt="Profile Picture"
-                                 class="rounded-circle img-fluid" style="width: 200px; height: 200px; object-fit: cover;">
+
+
+                            <img id="profileImage-1"  class="rounded-circle img-fluid"
+                                 th:src="${usuario.getFoto() != null ? '/usuarioFinal/' + usuario.id : '/images/avatar/avatarGenerico.png'}"
+                                 alt="Foto del Usuario"
+                                 style="width: 200px; height: 200px; object-fit: cover;">
+
+
                         </div>
                         <div class="file-upload btn btn-light">
                             <input type="file" class="file-input opacity-0" id="fileInput-1" name="foto"

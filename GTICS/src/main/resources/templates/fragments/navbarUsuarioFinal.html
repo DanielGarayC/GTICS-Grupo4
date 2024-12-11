@@ -247,7 +247,10 @@
                                 <!-- Avatar -->
                                 <li class="list-inline-item dropdown">
                                     <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-sm rounded-circle" /> <!-- Avatar más pequeño -->
+                                        <img class="avatar avatar-sm rounded-circle"
+                                             th:src="${usuario.getFoto() != null ? '/usuarioFinal/' + usuario.id : '/images/avatar/avatarGenerico.png'}"
+                                             alt="Foto del Usuario"
+                                        />
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end p-0" style="width: 180px; font-size: 0.85rem; padding: 0.5rem;"> <!-- Ajuste de ancho y padding -->
                                         <div class="lh-1 px-5 py-4 border-bottom">

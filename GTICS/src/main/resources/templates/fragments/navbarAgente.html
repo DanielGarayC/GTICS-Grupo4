@@ -280,7 +280,11 @@
                             </li>
                             <li class="dropdown ms-4">
                                 <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img th:src="@{/images/avatar/avatar-1.jpg}" alt="" class="avatar avatar-md rounded-circle" />
+                                    <!--<img th:src="@{/images/avatar/avatar-12.jpg}" alt="" class="" />-->
+                                    <img class="avatar avatar-md rounded-circle"
+                                         th:src="${usuario.getFoto() != null ? '/usuarioFinal/' + usuario.id : '/images/avatar/avatarGenerico.png'}"
+                                         alt="Foto del Usuario"
+                                    />
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end p-0">
