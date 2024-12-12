@@ -14,10 +14,13 @@ import java.time.LocalDate;
 public interface ResenaRepository extends JpaRepository<Resena, Integer> {
 
     @Query("SELECT r FROM Resena r JOIN r.producto p JOIN p.idProveedor prov " +
-            "WHERE " +
-            "(:searchKeyword IS NULL OR " +
-            "(:searchCriteria = 'name' AND p.nombreProducto LIKE CONCAT('%', :searchKeyword, '%')) OR " +
-            "(:searchCriteria = 'provider' AND prov.nombreProveedor LIKE CONCAT('%', :searchKeyword, '%'))) " +
+            "WHERE (" +
+            "  (:searchKeyword IS NULL OR " +
+            "   (:searchCriteria = 'name' AND p.nombreProducto LIKE CONCAT('%', :searchKeyword, '%')) OR " +
+            "   (:searchCriteria = 'provider' AND prov.nombreProveedor LIKE CONCAT('%', :searchKeyword, '%')) OR " +
+            "   (:searchCriteria = 'code' AND p.codigoProducto LIKE CONCAT('%', :searchKeyword, '%')) " +
+            "  )" +
+            ") " +
             "AND (:rating IS NULL OR r.idCalidad.id = :rating) " +
             "AND (:startDate IS NULL OR r.fechaCreacion >= :startDate) " +
             "AND (:endDate IS NULL OR r.fechaCreacion <= :endDate)")
@@ -29,6 +32,7 @@ public interface ResenaRepository extends JpaRepository<Resena, Integer> {
             @Param("endDate") LocalDate endDate,
             Pageable pageable
     );
+
 
 
 

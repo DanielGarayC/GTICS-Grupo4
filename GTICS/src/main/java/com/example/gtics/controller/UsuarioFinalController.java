@@ -1662,8 +1662,25 @@ public class UsuarioFinalController {
 
         // Configuración de paginación avanzada
         int pageDisplayLimit = 5;
-        int startPage = Math.max(1, page - 2);
-        int endPage = Math.min(startPage + pageDisplayLimit - 1, resenaPage.getTotalPages());
+        int totalPages = resenaPage.getTotalPages();
+        int startPage;
+        int endPage;
+
+        if (totalPages <= pageDisplayLimit) {
+            startPage = 0;
+            endPage = totalPages - 1;
+        } else {
+            startPage = page - 2;
+            if (startPage < 0) {
+                startPage = 0;
+            }
+            endPage = startPage + pageDisplayLimit - 1;
+            if (endPage >= totalPages) {
+                endPage = totalPages - 1;
+                startPage = endPage - pageDisplayLimit + 1;
+            }
+        }
+
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 

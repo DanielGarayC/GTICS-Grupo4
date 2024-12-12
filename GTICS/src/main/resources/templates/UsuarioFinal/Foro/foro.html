@@ -137,6 +137,16 @@
             }
 
         </style>
+        <style>
+            .badge-custom {
+                background-color: #28a745; /* Verde */
+                color: white;
+                font-size: 0.9em;
+                padding: 0.5em 0.75em;
+                border-radius: 0.25rem;
+            }
+
+        </style>
         <!-- CSRF Tokens -->
         <meta name="_csrf" th:content="${_csrf.token}" />
         <meta name="_csrf_header" th:content="${_csrf.headerName}" />
@@ -174,6 +184,7 @@
                                                     <select id="searchCriteriaSelect" name="searchCriteria" class="form-select mb-2" onchange="updatePlaceholder()">
                                                         <option value="name" th:selected="${searchCriteria == 'name'}">Nombre del Producto</option>
                                                         <option value="provider" th:selected="${searchCriteria == 'provider'}">Proveedor</option>
+                                                        <option value="code" th:selected="${searchCriteria == 'code'}">Código del Producto</option> <!-- Nueva Opción -->
                                                     </select>
                                                     <!-- Campo de búsqueda -->
                                                     <input type="text" id="searchKeywordInput" name="searchKeyword" class="form-control" placeholder="Ingrese el nombre del producto" th:value="${searchKeyword}" />
@@ -271,6 +282,7 @@
                                                     <p class="text-primary fw-bold">
                                                         Producto: <span th:text="${resena.producto.nombreProducto}"></span> -
                                                         Proveedor: <span th:text="${resena.producto.idProveedor.nombreProveedor}"></span>
+                                                        <span class="badge badge-custom ms-2" th:text="${resena.producto.codigoProducto}">CODE123</span>
                                                     </p>
 
                                                     <div class="mb-2" th:if="${resena.idCalidad != null}" th:with="
@@ -306,7 +318,8 @@
                                                                         data-opinion=${resena.opinion},
                                                                         data-imagen-src=@{'/UsuarioFinal/Resena/Fotos/' + ${foto.id}},
                                                                         data-producto-nombre=${resena.producto.nombreProducto},
-                                                                        data-proveedor-nombre=${resena.producto.idProveedor.nombreProveedor}">
+                                                                        data-proveedor-nombre=${resena.producto.idProveedor.nombreProveedor},
+                                                                        data-codigo-producto=${resena.producto.codigoProducto}">
                                                                     <img th:src="@{'/UsuarioFinal/Resena/Fotos/' + ${foto.id}}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" />
                                                                 </a>
 
@@ -358,24 +371,28 @@
                                             <ul class="pagination">
                                                 <!-- Botón "Anterior" deshabilitado si estamos en la primera página -->
                                                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                                    <a class="page-link" th:href="${currentPage > 0} ? @{/UsuarioFinal/Reviews(page=${currentPage - 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'" aria-label="Anterior">
+                                                    <a class="page-link"
+                                                       th:href="${currentPage > 0} ? @{/UsuarioFinal/Reviews(page=${currentPage - 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'"
+                                                       aria-label="Anterior">
                                                         <span aria-hidden="true">&laquo;</span>
                                                     </a>
                                                 </li>
 
-                                                <!-- Solo muestra la página 1 si no hay resultados -->
-                                                <li class="page-item" th:classappend="${currentPage == 0} ? 'active'">
-                                                    <a class="page-link" th:href="@{/UsuarioFinal/Reviews(page=0, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}">1</a>
-                                                </li>
-
-                                                <!-- No mostrar paginación si no hay más de una página -->
-                                                <li th:each="i : ${#numbers.sequence(startPage, endPage)}" th:if="${totalPages > 1}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                                    <a class="page-link" th:href="@{/UsuarioFinal/Reviews(page=${i}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}" th:text="${i + 1}"></a>
+                                                <!-- Enlaces de Páginas -->
+                                                <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                                                    th:classappend="${i == currentPage} ? 'active'"
+                                                    class="page-item">
+                                                    <a class="page-link"
+                                                       th:href="@{/UsuarioFinal/Reviews(page=${i}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}"
+                                                       th:text="${i + 1}">
+                                                    </a>
                                                 </li>
 
                                                 <!-- Botón "Siguiente" deshabilitado si estamos en la última página -->
                                                 <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
-                                                    <a class="page-link" th:href="${currentPage + 1 < totalPages} ? @{/UsuarioFinal/Reviews(page=${currentPage + 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'" aria-label="Siguiente">
+                                                    <a class="page-link"
+                                                       th:href="${currentPage + 1 < totalPages} ? @{/UsuarioFinal/Reviews(page=${currentPage + 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'"
+                                                       aria-label="Siguiente">
                                                         <span aria-hidden="true">&raquo;</span>
                                                     </a>
                                                 </li>
@@ -418,6 +435,10 @@
                                 <!-- Agregamos aquí el nombre del producto y proveedor -->
                                 <p class="text-primary fw-bold">
                                     Proveedor: <span id="modalResenaProveedor"></span>
+                                </p>
+                                <!-- Nombre del producto y código del producto -->
+                                <p class="text-primary fw-bold">
+                                    <span class="badge bg-secondary ms-2" id="modalResenaCodigo"></span> <!-- Nueva Etiqueta para Código -->
                                 </p>
 
                                 <div id="modalResenaCalificacion"></div>
@@ -465,7 +486,9 @@
                     var opinion = button.getAttribute('data-opinion');
                     var imagenSrc = button.getAttribute('data-imagen-src');
                     var productoNombre = button.getAttribute('data-producto-nombre'); // Nombre del producto
-                    var proveedorNombre = button.getAttribute('data-proveedor-nombre'); // Nombre del proveedor
+                    var proveedorNombre = button.getAttribute('data-proveedor-nombre'); // Nombre del
+                    var codigoProducto = button.getAttribute('data-codigo-producto'); // Código del producto
+
 
                     // Actualiza el contenido del modal con los datos extraídos
                     var modalUsuarioNombre = modalResena.querySelector('#modalResenaUsuario');
@@ -485,6 +508,7 @@
                     modalImagen.src = imagenSrc;
                     modalProductoNombre.textContent = productoNombre; // Mostrar nombre del producto
                     modalProveedorNombre.textContent = proveedorNombre; // Mostrar nombre del proveedor
+                    modalCodigoProducto.textContent = codigoProducto; // Mostrar código del producto
 
                     // Generar las estrellas según la calificación
                     var calificacionHtml = '';
@@ -580,6 +604,8 @@
                     searchKeywordInput.placeholder = 'Ingrese el nombre del producto';
                 } else if (searchCriteria === 'provider') {
                     searchKeywordInput.placeholder = 'Ingrese el nombre del proveedor';
+                }else if (searchCriteria === 'code') {
+                    searchKeywordInput.placeholder = 'Ingrese el código del producto'; // Nuevo Placeholder
                 }
             }
         </script>
