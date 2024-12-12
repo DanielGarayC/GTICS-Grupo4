@@ -373,10 +373,10 @@ public class AgenteController {
                                    @RequestParam("idOrden") Integer idOrden,
                                    RedirectAttributes attr,
                                    HttpSession session){
-
+        System.out.println("prueba owowowo");
         // Obtener el idAgente desde la sesión
         Integer idAgente = (Integer) session.getAttribute("id");
-
+        Integer idDuenoOrden = ordenRepository.obtenerUsuarioDuenoDeOrden(idOrden);
         if (idAgente == null) {
             // Si el idAgente no está en la sesión, redirigir o manejar el error
             return "redirect:/login";
@@ -384,6 +384,7 @@ public class AgenteController {
 
         try{
             ordenRepository.autoAsignarOrden(idAgente,idOrden);
+            ordenRepository.solicitarUnAgenteParaUsuario(idAgente,idDuenoOrden );
             attr.addAttribute("autoasignacionExito",true);
         }catch (Exception e){
             attr.addAttribute("autoasignacionError",true);
