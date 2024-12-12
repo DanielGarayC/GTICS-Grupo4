@@ -7,11 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta content="Codescandy" name="author" />
     <title>Productos</title>
-    <!-- jQuery (si aún no lo has incluido) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Toastr CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
     <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
@@ -93,6 +88,38 @@
             top: 100% !important;
             bottom: auto !important;
             transform: none !important;
+        }
+    </style>
+    <!-- CSS añadido -->
+    <!-- CSS Añadido -->
+    <style>
+        .offcanvas-body {
+            overflow-y: auto;
+            max-height: 80vh; /* Ajusta según el diseño de tu sitio */
+        }
+
+        /* Asegurar que los items del carrito no tengan alturas fijas */
+        .offcanvas-body .list-group-item {
+            height: auto;
+        }
+
+        /* Opcional: Personalizar la apariencia del scrollbar */
+        /* Webkit Browsers */
+        .offcanvas-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .offcanvas-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .offcanvas-body::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .offcanvas-body::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
     </style>
 </head>
@@ -292,7 +319,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <div>
                         <ul class="navbar-nav align-items-center">
                             <li class="dropdown me-6 d-none d-lg-block">
                                 <a href="#" class="text-inherit" data-bs-toggle="dropdown" aria-expanded="false">
@@ -368,7 +394,7 @@
 
 
                         </ul>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -672,6 +698,7 @@
     </div>
 
     <!-- CARRITO DE COMPRAS -->
+    <!-- CARRITO DE COMPRAS -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header border-bottom">
             <div class="text-start">
@@ -680,26 +707,23 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div>
-                <!-- alert -->
-                <div class="alert alert-danger p-2" role="alert">
-                    Tenemos los mejores productos.
-                    <a th:href="@{/UsuarioFinal/listaProductos}" class="alert-link">Ve a la sección proceso de compras ya!</a>
-                </div>
-                <ul class="list-group list-group-flush" id="cart-items">
-                    <li th:if="${productosCarrito.isEmpty()}" class="list-group-item" id="empty-cart-message" style="display: none;">El carrito está vacío.</li>
+            <!-- Alert -->
+            <div class="alert alert-danger p-2" role="alert">
+                Tenemos los mejores productos.
+                <a th:href="@{/UsuarioFinal/listaProductos}" class="alert-link">Ve a la sección proceso de compras ya!</a>
+            </div>
+            <ul class="list-group list-group-flush" id="cart-items">
+                <li th:if="${productosCarrito.isEmpty()}" class="list-group-item" id="empty-cart-message" style="display: none;">El carrito está vacío.</li>
+            </ul>
 
-
-                </ul>
-
-                <!-- btn -->
-                <div class="d-flex justify-content-between mt-4">
-                    <a th:href="@{/UsuarioFinal/listaProductos}" class="btn btn-primary">Continuar comprando</a>
-                    <a th:href="@{/UsuarioFinal/procesoCompra}" class="btn btn-dark">Ir a Proceso de Compra</a>
-                </div>
+            <!-- Botones -->
+            <div class="d-flex justify-content-between mt-4">
+                <a th:href="@{/UsuarioFinal/listaProductos}" class="btn btn-primary">Continuar comprando</a>
+                <a th:href="@{/UsuarioFinal/procesoCompra}" class="btn btn-dark">Ir a Proceso de Compra</a>
             </div>
         </div>
     </div>
+
 
     <script th:src="@{/js/vendors/validation.js}"></script>
 

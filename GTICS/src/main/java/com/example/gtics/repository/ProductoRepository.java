@@ -1,6 +1,7 @@
 package com.example.gtics.repository;
 
 import com.example.gtics.dto.CantidadProductos;
+import com.example.gtics.dto.ProductoConCalificacionDTO;
 import com.example.gtics.dto.ProductoRelevanteDTO;
 import com.example.gtics.dto.ProductoTabla;
 import com.example.gtics.entity.Categoria;
@@ -134,6 +135,16 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
     @Query("SELECT p FROM Producto p WHERE p.zona.id = :zonaId")
     List<Producto> findProductosPorZona(@Param("zonaId") Integer zonaId);
+
+
+    // **Nuevo Método para Obtener Calificaciones y Conteo de Reseñas**
+    @Query("SELECT p.id, " +
+            "COALESCE(AVG((r.idCalidad.id + r.idAtencion.id) / 2.0), 0.0) as avgRating, " +
+            "COUNT(r) as reviewCount " +
+            "FROM Producto p LEFT JOIN Resena r ON p.id = r.producto.id " +
+            "WHERE p.zona.id = :zonaId AND p.borrado = 0 " +
+            "GROUP BY p.id")
+    List<Object[]> findAverageRatingAndReviewCountByZonaId(@Param("zonaId") Integer zonaId);
 
     @Query("SELECT p FROM Producto p WHERE p.zona.id = :zonaId AND p.idCategoria.id = :categoriaId")
     Page<Producto> findProductosPorZonaYCategoria(@Param("zonaId") Integer zonaId, @Param("categoriaId") Integer categoriaId, Pageable pageable);

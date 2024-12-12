@@ -290,7 +290,9 @@
                                                     Añadir al carrito
                                                 </button>
                                             </div>
+
                                         </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -410,16 +412,17 @@
                                                 </div>
 
 
-                                                <!-- Estrellas y calificación -->
                                                 <div class="mb-4">
-                                                    <small class="text-warning">
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-half"></i>
+                                                    <small class="text-warning" aria-label="Calificación promedio">
+        <span th:each="i : ${#numbers.sequence(1,5)}">
+            <i class="bi"
+               th:classappend="${producto.averageRating >= i} ? ' bi-star-fill' :
+                             (${producto.averageRating >= (i - 0.5)} ? ' bi-star-half' :
+                             ' bi-star')"
+               th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+        </span>
                                                     </small>
-                                                    <span class="text-muted small">4.5(149)</span>
+                                                    <span class="text-muted small" th:text="${producto.averageRating} + ' (' + ${producto.reviewCount} + ')'"></span>
                                                 </div>
 
                                                 <!-- Precio y botón de agregar al carrito -->
@@ -592,11 +595,11 @@
         <!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
         <!-- Libs JS -->
         <!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
-        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
         <!-- Incluir jQuery una sola vez -->
         <script th:src="@{/js/vendors/jquery.min.js}"></script>
+        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+
 
 
         <!-- Incluir otros scripts dependientes de jQuery -->

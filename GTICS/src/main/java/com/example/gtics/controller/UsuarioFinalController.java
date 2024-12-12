@@ -1194,6 +1194,28 @@ public class UsuarioFinalController {
                 // Filtrar los productos por la zona del usuario
                 List<Producto> productos = productoRepository.findProductosPorZona(zonaUsuario.getId());
 
+                // Obtener calificaciones y conteo de reseñas
+                List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCountByZonaId(zonaUsuario.getId());
+
+                // Mapear las calificaciones a los productos
+                Map<Integer, RatingData> ratingsMap = ratings.stream()
+                        .collect(Collectors.toMap(
+                                row -> (Integer) row[0],
+                                row -> new RatingData((Double) row[1], (Long) row[2])
+                        ));
+
+                // Asignar las calificaciones a cada producto
+                for (Producto producto : productos) {
+                    RatingData ratingData = ratingsMap.get(producto.getId());
+                    if (ratingData != null) {
+                        producto.setAverageRating(ratingData.getAverageRating());
+                        producto.setReviewCount(ratingData.getReviewCount());
+                    } else {
+                        producto.setAverageRating(0.0);
+                        producto.setReviewCount(0);
+                    }
+                }
+
                 model.addAttribute("productos", productos);
 
                 // Si hay productos, pasar el primero y sus detalles al modelo
@@ -1208,6 +1230,25 @@ public class UsuarioFinalController {
         }
 
         return "UsuarioFinal/Productos/listaProductos";
+    }
+
+    // **Clase Interna para Almacenar Calificaciones**
+    private static class RatingData {
+        private double averageRating;
+        private long reviewCount;
+
+        public RatingData(double averageRating, long reviewCount) {
+            this.averageRating = averageRating;
+            this.reviewCount = reviewCount;
+        }
+
+        public double getAverageRating() {
+            return averageRating;
+        }
+
+        public long getReviewCount() {
+            return reviewCount;
+        }
     }
 
     // **Nuevo Método para Listar Productos del Carrito via AJAX**

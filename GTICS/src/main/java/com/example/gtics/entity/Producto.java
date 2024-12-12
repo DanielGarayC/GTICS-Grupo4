@@ -88,4 +88,11 @@ public class Producto {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Fotosproducto> fotos;
 
+    // **Campos Transitorios para Calificación**
+    @Transient
+    private double averageRating;
+
+    @Transient
+    private long reviewCount;
+
 }
