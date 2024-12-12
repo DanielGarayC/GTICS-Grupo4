@@ -11,6 +11,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.apache.commons.compress.utils.IOUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -41,6 +42,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.example.gtics.entity.Tarjeta;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.io.File;
@@ -102,14 +105,14 @@ public class UsuarioFinalController {
         }
     }
 
-    public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository,DistritoRepository distritoRepository, UsuarioRepository usuarioRepository,
+    public UsuarioFinalController(SolicitudAgenteRepository solicitudAgenteRepository, DistritoRepository distritoRepository, UsuarioRepository usuarioRepository,
                                   FotosProductoRepository fotosProductoRepository, OrdenRepository ordenRepository,
                                   EstadoOrdenRepository estadoOrdenRepository, ProductoHasCarritocompraRepository productoHasCarritocompraRepository,
                                   ProductoRepository productoRepository, CategoriaRepository categoriaRepository,
                                   SubcategoriaRepository subcategoriaRepository, CarritoCompraRepository carritoCompraRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
                                   ControlOrdenRepository controlOrdenRepository, TarjetaRepository tarjetaRepository,
-                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository,DireccionRepository direccionRepository,ZonaRepository zonaRepository,EtiquetaRepository etiquetaRepository, MessageRepository messageRepository) {
+                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository, DireccionRepository direccionRepository, ZonaRepository zonaRepository, EtiquetaRepository etiquetaRepository, MessageRepository messageRepository) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.fotosProductoRepository = fotosProductoRepository;
@@ -119,14 +122,14 @@ public class UsuarioFinalController {
         this.fotosResenaRepository = fotosResenaRepository;
         this.foroPreguntaRepository = foroPreguntaRepository;
         this.foroRespuestaRepository = foroRespuestaRepository;
-        this.distritoRepository=distritoRepository;
-        this.productoRepository=productoRepository;
-        this.categoriaRepository=categoriaRepository;
-        this.subcategoriaRepository=subcategoriaRepository;
-        this.productoHasCarritocompraRepository=productoHasCarritocompraRepository;
-        this.carritoCompraRepository=carritoCompraRepository;
-        this.direccionRepository=direccionRepository;
-        this.zonaRepository=zonaRepository;
+        this.distritoRepository = distritoRepository;
+        this.productoRepository = productoRepository;
+        this.categoriaRepository = categoriaRepository;
+        this.subcategoriaRepository = subcategoriaRepository;
+        this.productoHasCarritocompraRepository = productoHasCarritocompraRepository;
+        this.carritoCompraRepository = carritoCompraRepository;
+        this.direccionRepository = direccionRepository;
+        this.zonaRepository = zonaRepository;
         this.messageRepository = messageRepository;
         this.controlOrdenRepository = controlOrdenRepository;
         this.tarjetaRepository = tarjetaRepository;
@@ -154,8 +157,8 @@ public class UsuarioFinalController {
         boolean existe = usuarioRepository.findAll()
                 .stream()
                 .anyMatch(user -> user.getEmail().equals(email));
-        if (existe){
-            System.out.println("El correo: "+email+ " ya existe en el sistema");
+        if (existe) {
+            System.out.println("El correo: " + email + " ya existe en el sistema");
         }
         return ResponseEntity.ok(existe);
     }
@@ -284,7 +287,7 @@ public class UsuarioFinalController {
 
         if (isAjax) {
             // Obtener el nuevo total de artículos en el carrito (suma de todas las cantidades)
-            Integer  totalArticulos = productoHasCarritocompraRepository.sumCantidadById_IdCarritoCompra(carrito.getId());
+            Integer totalArticulos = productoHasCarritocompraRepository.sumCantidadById_IdCarritoCompra(carrito.getId());
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
@@ -300,6 +303,7 @@ public class UsuarioFinalController {
                     .build();
         }
     }
+
     @GetMapping("/UsuarioFinal/distritos/{zonaId}")
     @ResponseBody
     public List<DistritoDTO> obtenerDistritosPorZona(@PathVariable Integer zonaId) {
@@ -348,6 +352,7 @@ public class UsuarioFinalController {
         }
         return "redirect:/UsuarioFinal/listaProductos";
     }
+
     @DeleteMapping("/UsuarioFinal/eliminarProductoCarritoAjax/{idProducto}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> eliminarProductoCarritoAjax(
@@ -396,7 +401,7 @@ public class UsuarioFinalController {
         productoHasCarritocompraRepository.delete(productoOpt.get());
 
         // Obtener el nuevo total de artículos
-        Integer  totalArticulos = productoHasCarritocompraRepository.sumCantidadById_IdCarritoCompra(carrito.getId());
+        Integer totalArticulos = productoHasCarritocompraRepository.sumCantidadById_IdCarritoCompra(carrito.getId());
 
 
         // Preparar respuesta
@@ -406,6 +411,7 @@ public class UsuarioFinalController {
 
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/UsuarioFinal/actualizarCantidadCarritoAjax")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> actualizarCantidadCarritoAjax(
@@ -531,7 +537,7 @@ public class UsuarioFinalController {
                 // Usar directamente la dirección del usuario
                 String direccion = usuario.getDireccion();
                 model.addAttribute("direccion", direccion);
-                model.addAttribute("user",usuario);
+                model.addAttribute("user", usuario);
                 // Buscar el carrito activo del usuario
                 Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
                 if (carritoOpt.isPresent()) {
@@ -733,7 +739,6 @@ public class UsuarioFinalController {
     }
 
 
-
     @PostMapping("/UsuarioFinal/procesarOrden")
     public String procesarOrden(@RequestParam("idCarritoCompra") Integer idCarritoCompra,
                                 @RequestParam(name = "comentarioOrden", required = false) String comentarioOrden,
@@ -819,7 +824,7 @@ public class UsuarioFinalController {
 
             // Eliminar el producto del carrito de compras
             //productoHasCarritocompraRepository.deleteById_IdCarritoCompraAndId_IdProducto(
-              //      idCarritoCompra, productoCarrito.getIdProducto());
+            //      idCarritoCompra, productoCarrito.getIdProducto());
         }
 
         // Paso 7: Desactivar el carrito
@@ -833,7 +838,7 @@ public class UsuarioFinalController {
 
 
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
-    public String mostrarPagPrincipal(Model model, Authentication authentication){
+    public String mostrarPagPrincipal(Model model, Authentication authentication) {
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
         if (authentication != null && authentication.isAuthenticated()) {
@@ -924,6 +929,7 @@ public class UsuarioFinalController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/UsuarioFinal/foto/{id}")
     public ResponseEntity<byte[]> obtenerFotoUsuario(@PathVariable Integer id) {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
@@ -941,7 +947,7 @@ public class UsuarioFinalController {
     }
 
     @GetMapping("/UsuarioFinal/miPerfil")
-    public String miPerfil(Model model){
+    public String miPerfil(Model model) {
 
         List<Distrito> listaDistritos = distritoRepository.findAll();
         model.addAttribute("listaDistritos", listaDistritos);
@@ -967,10 +973,6 @@ public class UsuarioFinalController {
         // Redirige a la página de perfil
         return "redirect:/UsuarioFinal/miPerfil";
     }
-
-
-
-
 
 
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
@@ -1112,34 +1114,36 @@ public class UsuarioFinalController {
 
 
     @PostMapping("/UsuarioFinal/editarDireccionOrden")
-    public String editarOrden(Orden orden,RedirectAttributes redd,@RequestParam("idUsuario") Integer idUsuario){
+    public String editarOrden(Orden orden, RedirectAttributes redd, @RequestParam("idUsuario") Integer idUsuario) {
         System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDireccion());
         System.out.println(orden.getIdCarritoCompra().getIdUsuario().getDistrito().getId());
         System.out.println(idUsuario);
 
-        if(orden.getEstadoorden().getId() >=3){
+        if (orden.getEstadoorden().getId() >= 3) {
             redd.addAttribute("ordenEditadaError", true);
-        }else{
-            ordenRepository.actualizarOrdenParaUsuarioFinal(idUsuario,orden.getIdCarritoCompra().getIdUsuario().getDireccion(),orden.getIdCarritoCompra().getIdUsuario().getDistrito().getId());
+        } else {
+            ordenRepository.actualizarOrdenParaUsuarioFinal(idUsuario, orden.getIdCarritoCompra().getIdUsuario().getDireccion(), orden.getIdCarritoCompra().getIdUsuario().getDistrito().getId());
             redd.addAttribute("ordenEditadaExitosamente", true);
         }
         return "redirect:/UsuarioFinal/listaMisOrdenes";
 
     }
+
     @GetMapping("/UsuarioFinal/eliminarOrden")
-    public String solicitarEliminarOrden(@RequestParam Integer idOrden, RedirectAttributes attr){
+    public String solicitarEliminarOrden(@RequestParam Integer idOrden, RedirectAttributes attr) {
         Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
-        if(ordenOpt.get().getEstadoorden().getId()>=3){
+        if (ordenOpt.get().getEstadoorden().getId() >= 3) {
             attr.addAttribute("ordenEliminadaEstadoNoValido", true);
-        }else{
+        } else {
             ordenRepository.solicitarEliminarOrden(idOrden);
             attr.addAttribute("ordenEliminadaExitosamente", true);
         }
 
         return "redirect:/UsuarioFinal/listaMisOrdenes";
     }
+
     @GetMapping("/UsuarioFinal/solicitarApoyo")
-    public String solicitarApoyoOrden(@RequestParam Integer idOrden, RedirectAttributes attr){
+    public String solicitarApoyoOrden(@RequestParam Integer idOrden, RedirectAttributes attr) {
         ordenRepository.solicitarUnAgente(idOrden);//se le asigna la orden al agente de id = 13 -> arreglar mas adelante
         attr.addAttribute("solicitudAgenteExitosamente", true);
         return "redirect:/UsuarioFinal/listaMisOrdenes";
@@ -1193,6 +1197,7 @@ public class UsuarioFinalController {
 
         return "UsuarioFinal/Productos/listaProductos";
     }
+
     // **Nuevo Método para Listar Productos del Carrito via AJAX**
     @GetMapping("/UsuarioFinal/listaCarrito")
     @ResponseBody
@@ -1224,7 +1229,6 @@ public class UsuarioFinalController {
 
         return ResponseEntity.ok(productosCarritoDTO);
     }
-
 
 
     @GetMapping("/UsuarioFinal/detallesProducto/{idProducto}")
@@ -1461,6 +1465,7 @@ public class UsuarioFinalController {
             return "redirect:/UsuarioFinal/listaProductos";
         }
     }
+
     @GetMapping("/UsuarioFinal/Review")
     public String mostrarReview(Model model,
                                 Authentication authentication,
@@ -1569,8 +1574,6 @@ public class UsuarioFinalController {
     }
 
 
-
-
     @PostConstruct
     public void inicializarLikesEnMemoria() {
         List<Resena> resenas = resenaRepository.findAll();
@@ -1581,12 +1584,6 @@ public class UsuarioFinalController {
 
         logger.info("Likes inicializados en memoria.");
     }
-
-
-
-
-
-
 
 
     @GetMapping("/UsuarioFinal/Reviews")
@@ -1660,8 +1657,6 @@ public class UsuarioFinalController {
 
         return "UsuarioFinal/Foro/foro";
     }
-
-
 
 
     @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
@@ -1739,15 +1734,16 @@ public class UsuarioFinalController {
 
 
     @GetMapping("/UsuarioFinal/chatbot")
-    public String interactuarChatBot(){
+    public String interactuarChatBot() {
 
         return "UsuarioFinal/ProcesoCompra/chatbot";
     }
+
     @GetMapping("/UsuarioFinal/chatSoporte")
     public String getChatPage(String room, String name, Model model) {
         model.addAttribute("room", room);
         model.addAttribute("name", name);
-        int idUsuario= Integer.parseInt(room.split("_")[1]);
+        int idUsuario = Integer.parseInt(room.split("_")[1]);
         Usuario usuario = usuarioRepository.findUsuarioById(idUsuario);
         List<Message> listaMensajesSala = messageRepository.findBySalaOrderByFechaEnvioAsc(room);
         model.addAttribute("ListaMensajesSala", listaMensajesSala);
@@ -1755,9 +1751,10 @@ public class UsuarioFinalController {
 
         return "UsuarioFinal/chatAntiguo";
     }
+
     @GetMapping("/UsuarioFinal/obtenerMensajesChat")
     @ResponseBody
-    public List<Message> obtenerMensajes(String room){
+    public List<Message> obtenerMensajes(String room) {
         List<Message> ListaMensajesSala = messageRepository.findBySalaOrderByFechaEnvioAsc(room);
         ListaMensajesSala.forEach(mensaje -> Hibernate.initialize(mensaje.getIdUsuario()));
         return ListaMensajesSala;
@@ -1773,13 +1770,14 @@ public class UsuarioFinalController {
         model.addAttribute("idSender", 7);
         return "UsuarioFinal/chatAntiguo";
     }
+
     @GetMapping("UsuarioFinal/join-chat")
     public ModelAndView joinChat(@RequestParam("name") String name) {
         // Crear o redirigir al usuario a su sala
         String room = chatRoomService.createOrJoinRoom(name);
         Optional<Usuario> user1 = usuarioRepository.findById(Integer.parseInt(name));
         Usuario u = new Usuario();
-        if(user1.isPresent()){
+        if (user1.isPresent()) {
             u = user1.get();
         }
         String nombreUsuario = u.getNombre() + "_" + u.getApellidoPaterno();
@@ -1789,50 +1787,53 @@ public class UsuarioFinalController {
         modelAndView.addObject("name", nombreUsuario);
         return modelAndView;
     }
+
     @GetMapping("/UsuarioFinal/foro")
-    public String verForo(){
+    public String verForo() {
 
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
+
     @GetMapping("/UsuarioFinal/faq")
-    public String preguntasFrecuentes( @RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "3") int size,Model model, @ModelAttribute("preguntaForm") Foropregunta preguntaForm){
+    public String preguntasFrecuentes(@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "3") int size, Model model, @ModelAttribute("preguntaForm") Foropregunta preguntaForm) {
         Page<Foropregunta> preguntasPage = foroPreguntaRepository.findAll(PageRequest.of(page, size));
         model.addAttribute("preguntasPage", preguntasPage);
         model.addAttribute("preguntas", preguntasPage.getContent());  // Las preguntas actuales
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", preguntasPage.getTotalPages());
-        model.addAttribute("respuestas",foroRespuestaRepository.findAll());
+        model.addAttribute("respuestas", foroRespuestaRepository.findAll());
         return "UsuarioFinal/Foro/preguntasFrecuentes";
     }
+
     @GetMapping("/UsuarioFinal/faq/verPregunta")
-    public String verPregunta(Model model, @RequestParam("id") Integer id, @ModelAttribute("respuestaForm") Fororespuesta respuestaForm){
+    public String verPregunta(Model model, @RequestParam("id") Integer id, @ModelAttribute("respuestaForm") Fororespuesta respuestaForm) {
 
         Optional<Foropregunta> optP = foroPreguntaRepository.findById(id);
-        if(optP.isPresent()){
+        if (optP.isPresent()) {
             Foropregunta p = optP.get();
             List<Fororespuesta> listaRespuestas = foroRespuestaRepository.findByIdPregunta(p);
             model.addAttribute("pregunta", p);
             model.addAttribute("listaRespuestas", listaRespuestas);
             return "UsuarioFinal/Foro/preguntaDetalle";
-        }
-        else{
+        } else {
             return "UsuarioFinal/Foro/preguntasFrecuentes";
         }
 
     }
+
     @GetMapping(value = "/prueba_api")
-    public String pruebaDniApi(){
+    public String pruebaDniApi() {
 
         List<String> datosRENIEC = DNIAPI.getDni("11111111");
 
-        if (!datosRENIEC.isEmpty()){
+        if (!datosRENIEC.isEmpty()) {
             String apiDni = datosRENIEC.get(3);
             String apiNombres = datosRENIEC.get(0);
             String apiApellidos = (datosRENIEC.get(1) + " " + datosRENIEC.get(2));
-            if(apiNombres.isEmpty()){
+            if (apiNombres.isEmpty()) {
                 System.out.println("El DNI no existe");
-            }else{
+            } else {
                 System.out.println("Datos de la persona");
                 System.out.println("DNI: " + apiDni);
                 System.out.println("Nombres: " + apiNombres);
@@ -1913,251 +1914,170 @@ public class UsuarioFinalController {
             return "redirect:/ExpressDealsLogin";
         }
     }
+    @GetMapping("/UsuarioFinal/descargarOrdenPDFF")
+    public void descargarOrdenPDF(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws IOException, DocumentException {
+        System.out.println("ola esto es una prueba");
 
-    @GetMapping("/UsuarioFinal/descargarOrdenPDF")
-    public void descargarOrdenPDF(@RequestParam("idOrden") Integer idOrden, HttpServletResponse response) throws DocumentException, IOException {
-        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
-
-        if (ordenOpt.isPresent()) {
-            Orden orden = ordenOpt.get();
-            List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
-
-            // Configurar la respuesta para PDF
+        try {
+            byte[] pdfBytes = generarOrdenPDF(idOrden);
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "attachment; filename=Orden_" + idOrden + ".pdf");
+            response.getOutputStream().write(pdfBytes);
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+        }
+    }
 
-            // Crear el documento PDF con márgenes ajustados
-            Document document = new Document(PageSize.A4, 36, 36, 90, 55);
-            PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
 
-            // Agregar evento para encabezado y pie de página
-            HeaderFooterPageEvent event = new HeaderFooterPageEvent();
-            writer.setPageEvent(event);
 
+
+    private byte[] generarOrdenPDF(Integer idOrden) throws IOException, DocumentException {
+        // Buscar la orden
+        Optional<Orden> ordenOpt = ordenRepository.findById(idOrden);
+        if (!ordenOpt.isPresent()) {
+            throw new IOException("Orden no encontrada");
+        }
+
+        Orden orden = ordenOpt.get();
+        List<ProductosxOrden> productosOrden = ordenRepository.obtenerProductosPorOrden(idOrden);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Document document = new Document(PageSize.A4, 36, 36, 90, 55);
+        PdfWriter writer = PdfWriter.getInstance(document, baos);
+
+        // Agregar encabezado y pie de página
+        writer.setPageEvent(new UsuarioFinalController.HeaderFooterPageEvent());
+
+        try {
             document.open();
 
-            // Estilos de fuente
+            // Cargar el logo
+            ClassLoader classLoader = getClass().getClassLoader();
+            InputStream logoStream = classLoader.getResourceAsStream("static/images/logo/logoGTICSv2.jpeg");
+            if (logoStream == null) {
+                throw new IOException("No se pudo cargar el logo.");
+            }
+            Image logo = Image.getInstance(IOUtils.toByteArray(logoStream));
+            logo.scaleToFit(100, 50);
+            logo.setAlignment(Image.ALIGN_LEFT);
+            document.add(logo);
 
+            // Título
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
+            Paragraph title = new Paragraph("Detalle de la Orden #" + idOrden, titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20);
+            document.add(title);
 
+            // Información de la orden
+            Font infoFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Paragraph info = new Paragraph(
+                    "Fecha de emisión: " + orden.getFechaOrden() + "\n" +
+                            "Cliente: " + orden.getIdCarritoCompra().getIdUsuario().getNombre() + "\n" +
+                            "Dirección: " + orden.getIdCarritoCompra().getIdUsuario().getDireccion(),
+                    infoFont);
+            info.setSpacingAfter(20);
+            document.add(info);
 
-
-            BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            Font titleFont = new Font(baseFont, 18, Font.BOLD, BaseColor.BLACK);
-            Font subtitleFont = new Font(baseFont, 14, Font.BOLD, BaseColor.DARK_GRAY);
-            Font normalFont = new Font(baseFont, 11, Font.NORMAL, BaseColor.BLACK);
-
-
-
-
-
-            Font boldFont = new Font(baseFont, 11, Font.BOLD, BaseColor.BLACK);
-            Font tableHeaderFont = new Font(baseFont, 12, Font.BOLD, BaseColor.WHITE);
-            DecimalFormat df = new DecimalFormat("0.00");
-
-
-            // Información de la Orden
-            PdfPTable infoTable = new PdfPTable(2);
-            infoTable.setWidthPercentage(100);
-            infoTable.setWidths(new int[]{1, 2});
-            infoTable.setSpacingAfter(20);
-
-            // Número de Orden y Fecha
-            infoTable.addCell(getCell("Número de Orden:", boldFont, Element.ALIGN_LEFT, Rectangle.NO_BORDER));
-            infoTable.addCell(getCell("#" + idOrden, normalFont, Element.ALIGN_LEFT, Rectangle.NO_BORDER));
-            infoTable.addCell(getCell("Fecha de Emisión:", boldFont, Element.ALIGN_LEFT, Rectangle.NO_BORDER));
-            infoTable.addCell(getCell(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), normalFont, Element.ALIGN_LEFT, Rectangle.NO_BORDER));
-
-            document.add(infoTable);
-
-            // Sección "Vendido por" y "Enviado a"
-            PdfPTable sellerBuyerTable = new PdfPTable(2);
-            sellerBuyerTable.setWidthPercentage(100);
-            sellerBuyerTable.setSpacingAfter(20);
-
-            PdfPCell sellerCell = new PdfPCell();
-            sellerCell.addElement(new Phrase("Vendido por:", boldFont));
-            sellerCell.addElement(new Phrase("Nombre de la Empresa", normalFont));
-            sellerCell.addElement(new Phrase("Dirección de la Empresa", normalFont));
-            sellerCell.addElement(new Phrase("Teléfono: 123-456-789", normalFont));
-            sellerCell.setBorder(Rectangle.NO_BORDER);
-            sellerBuyerTable.addCell(sellerCell);
-
-            PdfPCell buyerCell = new PdfPCell();
-            buyerCell.addElement(new Phrase("Enviado a:", boldFont));
-            buyerCell.addElement(new Phrase(orden.getIdCarritoCompra().getIdUsuario().getNombre(), normalFont));
-            buyerCell.addElement(new Phrase(orden.getIdCarritoCompra().getIdUsuario().getDireccion(), normalFont));
-            buyerCell.setBorder(Rectangle.NO_BORDER);
-            sellerBuyerTable.addCell(buyerCell);
-
-            document.add(sellerBuyerTable);
-
-            // Tabla de Detalles de la Orden
+            // Tabla de productos
             PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
-            table.setWidths(new int[]{1, 4, 1, 2, 2});
-            table.setSpacingAfter(20);
+            table.setWidths(new float[]{1, 4, 1, 2, 2});
+
+            // Estilos para la tabla
+            Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL, BaseColor.BLACK);
+            BaseColor headerColor = new BaseColor(0, 121, 107); // Verde oscuro
+            BaseColor evenRowColor = new BaseColor(224, 242, 241); // Verde claro
+            BaseColor oddRowColor = BaseColor.WHITE;
 
             // Encabezados de la tabla
-            String[] headers = {"N°", "Descripción", "Cant.", "Precio Unit. (S/.)", "Total (S/.)"};
+            String[] headers = {"N°", "Descripción", "Cant.", "Precio Unit.", "Total"};
             for (String header : headers) {
-                PdfPCell headerCell = new PdfPCell(new Phrase(header, tableHeaderFont));
-                headerCell.setBackgroundColor(BaseColor.GRAY);
-                headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                headerCell.setPadding(5);
-                table.addCell(headerCell);
+                agregarCelda(table, header, headerFont, headerColor, Element.ALIGN_CENTER, true);
             }
 
-            // Contenido de la tabla de productos
+            // Contenido de la tabla
             double subtotal = 0;
             int itemNumber = 1;
+            boolean isEvenRow = true;
+            DecimalFormat df = new DecimalFormat("0.00");
             for (ProductosxOrden producto : productosOrden) {
-                table.addCell(getCell(String.valueOf(itemNumber++), normalFont, Element.ALIGN_CENTER, Rectangle.BOX));
-                table.addCell(getCell(producto.getNombreProducto(), normalFont, Element.ALIGN_LEFT, Rectangle.BOX));
-                table.addCell(getCell(String.valueOf(producto.getCantidadProducto()), normalFont, Element.ALIGN_CENTER, Rectangle.BOX));
-                table.addCell(getCell(df.format(producto.getPrecioUnidad()), normalFont, Element.ALIGN_RIGHT, Rectangle.BOX));
-                double precioTotal = producto.getPrecioTotalPorProducto();
-                subtotal += precioTotal;
-                table.addCell(getCell(df.format(precioTotal), normalFont, Element.ALIGN_RIGHT, Rectangle.BOX));
+                BaseColor rowColor = isEvenRow ? evenRowColor : oddRowColor;
+
+                agregarCelda(table, String.valueOf(itemNumber++), cellFont, rowColor, Element.ALIGN_CENTER, false);
+                agregarCelda(table, producto.getNombreProducto(), cellFont, rowColor, Element.ALIGN_LEFT, false);
+                agregarCelda(table, String.valueOf(producto.getCantidadProducto()), cellFont, rowColor, Element.ALIGN_CENTER, false);
+                agregarCelda(table, "S/ " + df.format(producto.getPrecioUnidad()), cellFont, rowColor, Element.ALIGN_RIGHT, false);
+
+                double totalProducto = producto.getPrecioTotalPorProducto();
+                subtotal += totalProducto;
+                agregarCelda(table, "S/ " + df.format(totalProducto), cellFont, rowColor, Element.ALIGN_RIGHT, false);
+
+                isEvenRow = !isEvenRow;
             }
 
-            // Filas de totales
-            addEmptyRow(table, 5); // Agregar una fila vacía con 5 columnas
-            table.addCell(getCell("", normalFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER, 3));
-            table.addCell(getCell("Subtotal:", boldFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER));
-            table.addCell(getCell("S/." + df.format(subtotal), normalFont, Element.ALIGN_RIGHT, Rectangle.BOX));
-
-            double maxCostoEnvio = productosOrden.stream()
-                    .mapToDouble(ProductosxOrden::getCostoEnvio)
-                    .max()
-                    .orElse(0.0);
-
-            table.addCell(getCell("", normalFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER, 3));
-            table.addCell(getCell("Costo de Envío:", boldFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER));
-            table.addCell(getCell("S/." + df.format(maxCostoEnvio), normalFont, Element.ALIGN_RIGHT, Rectangle.BOX));
-
-            Double costoAdicional = ordenRepository.obtenerCostoAdicionalxOrden(idOrden);
-            table.addCell(getCell("", normalFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER, 3));
-            table.addCell(getCell("Costos Adicionales:", boldFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER));
-            table.addCell(getCell("S/." + df.format(costoAdicional != null ? costoAdicional : 0.00), normalFont, Element.ALIGN_RIGHT, Rectangle.BOX));
-
-            double total = subtotal + maxCostoEnvio + (costoAdicional != null ? costoAdicional : 0.00);
-            table.addCell(getCell("", normalFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER, 3));
-            PdfPCell totalCell = getCell("Total a Pagar:", boldFont, Element.ALIGN_RIGHT, Rectangle.NO_BORDER);
-            totalCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            table.addCell(totalCell);
-            PdfPCell totalAmountCell = getCell("S/." + df.format(total), boldFont, Element.ALIGN_RIGHT, Rectangle.BOX);
-            totalAmountCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            table.addCell(totalAmountCell);
+            // Fila de subtotal
+            agregarCelda(table, "", cellFont, BaseColor.WHITE, Element.ALIGN_LEFT, false, 3);
+            agregarCelda(table, "Subtotal", headerFont, headerColor, Element.ALIGN_RIGHT, true);
+            agregarCelda(table, "S/ " + df.format(subtotal), cellFont, BaseColor.WHITE, Element.ALIGN_RIGHT, false);
 
             document.add(table);
-
-            // Términos y Condiciones
-            Paragraph terms = new Paragraph("Términos y Condiciones", subtitleFont);
-            terms.setSpacingBefore(20);
-            terms.setSpacingAfter(10);
-            document.add(terms);
-
-            Paragraph termsContent = new Paragraph("Este documento es válido para los fines de despacho aduanero. La mercancía detallada está sujeta a las regulaciones vigentes y debe ser manejada de acuerdo con las normativas establecidas por las autoridades competentes.", normalFont);
-            termsContent.setAlignment(Element.ALIGN_JUSTIFIED);
-            document.add(termsContent);
-
+        } finally {
             document.close();
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada");
         }
+        return baos.toByteArray();
     }
 
-    // Método para crear celdas de tabla con estilo
-    private PdfPCell getCell(String text, Font font, int alignment, int border) {
-        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+    // Método auxiliar para agregar celdas a la tabla
+    private void agregarCelda(PdfPTable table, String texto, Font font, BaseColor backgroundColor, int alignment, boolean bold, int colSpan) {
+        PdfPCell cell = new PdfPCell(new Phrase(texto, font));
+        cell.setBackgroundColor(backgroundColor);
         cell.setHorizontalAlignment(alignment);
-        cell.setBorder(border);
         cell.setPadding(5);
-        return cell;
+        cell.setColspan(colSpan);
+        table.addCell(cell);
     }
 
-    // Sobrecarga para combinar celdas
-    private PdfPCell getCell(String text, Font font, int alignment, int border, int colspan) {
-        PdfPCell cell = getCell(text, font, alignment, border);
-        cell.setColspan(colspan);
-        return cell;
+    // Sobrecarga para usar valores por defecto
+    private void agregarCelda(PdfPTable table, String texto, Font font, BaseColor backgroundColor, int alignment, boolean bold) {
+        agregarCelda(table, texto, font, backgroundColor, alignment, bold, 1);
     }
 
-    // Método para agregar una fila vacía en la tabla
-    private void addEmptyRow(PdfPTable table, int cols) {
-        PdfPCell emptyCell = new PdfPCell(new Phrase(" "));
-        emptyCell.setColspan(cols);
-        emptyCell.setBorder(Rectangle.NO_BORDER);
-        table.addCell(emptyCell);
-    }
-
-    // Clase para manejar encabezado y pie de página
+    // Clase para agregar encabezado y pie de página
     class HeaderFooterPageEvent extends PdfPageEventHelper {
-        Font footerFont;
-        Font boldFont;
-        Font normalFont;
-
-        public HeaderFooterPageEvent() throws DocumentException, IOException {
-            BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            this.footerFont = new Font(baseFont, 9, Font.NORMAL, BaseColor.GRAY);
-            this.boldFont = new Font(baseFont, 11, Font.BOLD, BaseColor.BLACK);
-            this.normalFont = new Font(baseFont, 11, Font.NORMAL, BaseColor.BLACK);
-        }
+        Font footerFont = new Font(Font.FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.GRAY);
 
         @Override
         public void onEndPage(PdfWriter writer, Document document) {
-            PdfPTable header = new PdfPTable(3);
+            // Pie de página
+            PdfPTable footer = new PdfPTable(2);
             try {
-                header.setWidths(new int[]{24, 24, 2});
-                header.setTotalWidth(527);
-                header.setLockedWidth(true);
-                header.getDefaultCell().setFixedHeight(40);
-                header.getDefaultCell().setBorder(Rectangle.BOTTOM);
-                header.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
+                footer.setWidths(new int[]{24, 24});
+                footer.setTotalWidth(527);
+                footer.setLockedWidth(true);
+                footer.getDefaultCell().setFixedHeight(20);
+                footer.getDefaultCell().setBorder(Rectangle.TOP);
+                footer.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
 
-                ClassLoader classLoader = getClass().getClassLoader();
-                String logoPath = classLoader.getResource("static/images/logo/logoGTICS.jpeg").getPath();
-                Image logo = Image.getInstance(logoPath);
-                logo.scaleToFit(50, 50);
-                PdfPCell logoCell = new PdfPCell(logo, true);
-                logoCell.setBorder(Rectangle.BOTTOM);
-                logoCell.setBorderColor(BaseColor.LIGHT_GRAY);
-                header.addCell(logoCell);
+                footer.addCell(new Phrase("Reporte generado por ExpressDeals", footerFont));
+                footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+                footer.addCell(new Phrase(String.format("Página %d", writer.getPageNumber()), footerFont));
 
-                PdfPCell titleCell = new PdfPCell();
-                titleCell.setBorder(Rectangle.BOTTOM);
-                titleCell.setBorderColor(BaseColor.LIGHT_GRAY);
-                titleCell.addElement(new Phrase("Recibo de Orden para Aduanas", boldFont));
-                header.addCell(titleCell);
-
-                PdfPCell emptyCell = new PdfPCell();
-                emptyCell.setBorder(Rectangle.BOTTOM);
-                emptyCell.setBorderColor(BaseColor.LIGHT_GRAY);
-                header.addCell(emptyCell);
-
-                header.writeSelectedRows(0, -1, 34, 803, writer.getDirectContent());
-            } catch (DocumentException | IOException e) {
-                e.printStackTrace();
+                footer.writeSelectedRows(0, -1, 34, 50, writer.getDirectContent());
+            } catch (DocumentException de) {
+                throw new ExceptionConverter(de);
             }
-
-            PdfPTable footer = new PdfPTable(1);
-            footer.setTotalWidth(527);
-            footer.setLockedWidth(true);
-            footer.getDefaultCell().setFixedHeight(30);
-            footer.getDefaultCell().setBorder(Rectangle.TOP);
-            footer.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
-
-            footer.addCell(new Phrase(String.format("Página %d", writer.getPageNumber()), footerFont));
-
-            footer.writeSelectedRows(0, -1, 34, 50, writer.getDirectContent());
         }
     }
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
+

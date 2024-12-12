@@ -705,7 +705,7 @@ public class AgenteController {
 
             // Cargar el logo
             ClassLoader classLoader = getClass().getClassLoader();
-            InputStream logoStream = classLoader.getResourceAsStream("static/images/logo/logoGTICS.jpeg");
+            InputStream logoStream = classLoader.getResourceAsStream("static/images/logo/logoGTICSv2.jpeg");
             if (logoStream == null) {
                 throw new IOException("No se pudo cargar el logo.");
             }
