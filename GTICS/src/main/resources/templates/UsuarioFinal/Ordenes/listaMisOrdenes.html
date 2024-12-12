@@ -107,7 +107,8 @@
                                             <thead class="bg-light">
                                             <tr>
                                                 <th>Nº de orden</th>
-                                                <th>Fecha de entrega</th>
+                                                <th>Fecha de orden</th>
+                                                <th>Fecha de llegada</th>
                                                 <th>Estado</th>
                                                 <th>Monto total (S/.)</th>
                                                 <th>Opciones</th>
@@ -117,6 +118,8 @@
                                                 <tr th:each="orden,var: ${ordenCarrito}">
                                                     <td th:text="${var.index+1}">#1234</td>
                                                     <td th:text="${#temporals.format(orden.fechaOrden, 'dd-MM-yyyy')}"></td>
+                                                    <td th:text="${#temporals.format(orden.fechaLlegada, 'dd-MM-yyyy')}"></td>
+
                                                     <td th:switch="${orden.estadoOrden}">
                                                         <div class="mb-2" th:case="1"><span th:text="'Creado'" class="badge bg-light-primary text-dark-primary"></span></div>
                                                         <div class="mb-2" th:case="2"><span th:text="'En validación'" class="badge bg-light-secondary text-dark-secondary"></span></div>

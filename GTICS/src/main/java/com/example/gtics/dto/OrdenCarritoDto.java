@@ -6,6 +6,7 @@ public interface OrdenCarritoDto{
 
     Integer getPrimerIdProducto();
     LocalDate getFechaOrden();
+    LocalDate getFechaLlegada();
     double getMontoTotal();
     Integer getEstadoOrden();
     Integer getControlOrden();
