@@ -1156,6 +1156,7 @@ public class UsuarioFinalController {
 
         ordenRepository.solicitarUnAgenteparaOrden(idOrden,idAgenteRandom);//se le asigna la orden al agente
         ordenRepository.solicitarUnAgenteParaUsuario(idAgenteRandom,idUsuarioDuenoOrden);//se asigna usuario al agente
+        ordenRepository.cambiarDeOrdenSinAsignar(idOrden);//cambia estado de orden
         attr.addAttribute("solicitudAgenteExitosamente", true);
         return "redirect:/UsuarioFinal/listaMisOrdenes";
     }

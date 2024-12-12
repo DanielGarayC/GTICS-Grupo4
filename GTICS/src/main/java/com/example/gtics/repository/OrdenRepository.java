@@ -509,4 +509,11 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM usuario where idZona=?1 and idRol=3 limit 1; ")
     Integer obtenerAgenteRandomDeSuZona(Integer zonaUsuario);
 
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `gticsdb`.`orden` SET `idControlOrden` = '2' WHERE (`idOrden` = ?1);\n ")
+    Integer cambiarDeOrdenSinAsignar(Integer idOrden);
+
+
 }
