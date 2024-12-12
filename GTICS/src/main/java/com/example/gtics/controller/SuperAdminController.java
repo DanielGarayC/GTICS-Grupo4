@@ -7,6 +7,7 @@ import com.example.gtics.dto.solAgente;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 import com.example.gtics.service.EmailService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
@@ -159,17 +160,20 @@ public class SuperAdminController {
 
     @GetMapping("SuperAdmin/crearAdminZonal")
     public String crearAdminZonal(Model model) {
-        Usuario usuario = new Usuario();
-
+        System.out.println("ola");
+        Usuario usuarioNuevoAdminZonal = new Usuario();
+        //usuario1.setId(usuarioRepository.ultimoId()+1);
         model.addAttribute("distritos", distritoRepository.findAll());
-        model.addAttribute("usuario", usuario);
+        model.addAttribute("usuarioAdminZ", usuarioNuevoAdminZonal);
         model.addAttribute("zonas", zonaRepository.findAll());
         return "SuperAdmin/GestionAdminZonal/create-zonal-admin";
     }
 
     @PostMapping("/SuperAdmin/AdminZonal/guardar")
     public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario, @RequestParam("zonaId") Integer zonaId, RedirectAttributes attr, @RequestParam("zonalAdminPhoto") MultipartFile foto) {
-
+        System.out.println("guardar nuevo admin zonal prueba");
+        //usuario.setId(null);
+        //usuario.setId(null);
         try {
             // Verificar si ya existen 2 coordinadores en la zona
             int cantidadCoordinadores = usuarioRepository.countCoordinadoresByZona(zonaId);
@@ -544,12 +548,14 @@ public class SuperAdminController {
     public String cambiarRolaAgente(Model model, @RequestParam("id") Integer id,
                                     @RequestParam("indicador") Integer indicador,
                                     RedirectAttributes redirectAttributes) {
-
+        System.out.println("pruebaaaa");
         // Obtener el usuario solicitante por ID
         Usuario usuario = usuarioRepository.findUsuarioById(id);
-
+        Integer zonaUsuario = usuario.getDistrito().getZona().getId();
+        Integer idAdminZonal = usuarioRepository.obtenerUnAdminZonalDesuZona(zonaUsuario);
+        usuarioRepository.asignarAdminZonalAUsuario(idAdminZonal,id);
         // Verificar si el Admin Zonal ya tiene 3 agentes activos asignados
-        int cantidadAgentes = usuarioRepository.contarAgentesPorAdminZonal(usuario.getIdAdminZonal().getId());
+        Integer cantidadAgentes = usuarioRepository.contarAgentesPorAdminZonal(idAdminZonal);
         System.out.println(cantidadAgentes);
 
         if (cantidadAgentes >= 3) {
@@ -1210,7 +1216,15 @@ public class SuperAdminController {
         return "SuperAdmin/perfilSuperAdmin";
     }
     @ModelAttribute
-    public void addUsuarioToModel(Model model) {
+    public void addUsuarioToModel(HttpServletRequest request, Model model) {
+        // Obtiene la URI o nombre de la vista actual
+        String uri = request.getRequestURI();
+
+        // Excluye la vista específica
+        if (uri.contains("/SuperAdmin/crearAdminZonal") || uri.contains("/SuperAdmin/AdminZonal/guardar") ) { // Cambia "/vista-excluida" por la URI que quieres excluir
+            return; // No ejecutar el código si la vista es la excluida
+        }
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
@@ -1220,4 +1234,5 @@ public class SuperAdminController {
             optUsuario.ifPresent(usuario -> model.addAttribute("usuario", usuario));
         }
     }
+
 }

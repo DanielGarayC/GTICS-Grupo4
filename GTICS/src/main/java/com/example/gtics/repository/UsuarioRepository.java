@@ -54,7 +54,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "AND u.idRol = 3 " + // Deben tener el rol de agente
             "AND u.activo = 1", // Solo cuenta a los agentes activos
             nativeQuery = true)
-    int contarAgentesPorAdminZonal(@Param("idAdminZonal") Integer idAdminZonal);
+    Integer contarAgentesPorAdminZonal(@Param("idAdminZonal") Integer idAdminZonal);
     
     @Query(value = "SELECT u.idusuario, u.nombre, u.apellidopaterno, u.apellidomaterno, u.dni, u.telefono,\n" +
             "       s.indicadorSolicitud,\n" +
@@ -310,5 +310,20 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
     // Nuevo método para encontrar agentes por zona y rol
     List<Usuario> findByDistrito_Zona_IdAndRol_Id(Integer idZona, Integer idRol);
+
+
+    @Query(value = "select u.idUsuario from usuario u \n" +
+            "JOIN zona z ON u.idzona = z.idzona\n" +
+            "where u.idRol=2 and z.idZona = ?1\n" +
+            "limit 1", nativeQuery = true)
+    Integer obtenerUnAdminZonalDesuZona(Integer zona);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE usuario SET idAdminZonal = ?1 WHERE idUsuario = ?2;\n", nativeQuery = true)
+    void asignarAdminZonalAUsuario(Integer idAdminZonal,Integer IdUsuario);
+
+    @Query(value = "SELECT idUsuario FROM usuario ORDER BY idUsuario DESC LIMIT 1;\n", nativeQuery = true)
+    Integer ultimoId();
 
 }

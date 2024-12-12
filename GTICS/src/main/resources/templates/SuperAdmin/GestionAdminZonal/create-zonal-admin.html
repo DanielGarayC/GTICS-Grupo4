@@ -89,7 +89,7 @@
                                         <div th:if="${error}" class="alert alert-danger">
                                             <span th:text="${error}"></span>
                                         </div>
-                                            <input type="hidden" name="idusuario" th:value="${usuario.id != null ? usuario.id : ''}" />
+                                            <input type="hidden" name="id" id="id" th:value="${usuarioAdminZ.id != null ? usuarioAdminZ.id : ''}" />
                                             <div class="row g-3">
 
                                                 <!-- Nombres -->
@@ -279,7 +279,7 @@
         }
         });
 
-            // Validar todo el formulario al enviarlo
+            // Validartodo el formulario al enviarlo
             form.addEventListener('submit', function (event) {
             if (!form.checkValidity()) {
             event.preventDefault();
