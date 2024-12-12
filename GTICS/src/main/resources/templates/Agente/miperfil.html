@@ -96,8 +96,7 @@
                                 <p th:text="${error}"></p>
                             </div>
                             <!-- Formulario de edición del perfil -->
-                            <form id="profileForm" method="post" th:action="@{'/Agente/savePerfil'}" th:object="${usuarioLogueado}">
-
+                            <form id="profileForm" method="post" th:action="@{'/Agente/savePerfil'}" th:object="${usuarioLogueado}" enctype="multipart/form-data">
                                 <input type="hidden" name="id" th:value="${usuarioLogueado.id}">
 
                                 <!-- Nombre Completo (no editable) -->
@@ -115,7 +114,7 @@
                                 <!-- Distrito (editable) -->
                                 <div class="mb-3">
                                     <label class="form-label">Distrito</label>
-                                    <select class="form-select" th:field="*{distrito} " name="idDistrito">
+                                    <select class="form-select" th:field="*{distrito}" name="idDistrito">
                                         <option th:each="distrito : ${listaDistritos}" th:text="${distrito.getNombre()}"
                                                 th:value="${distrito.getId()}"></option>
                                     </select>
@@ -124,20 +123,27 @@
                                 <!-- Dirección (editable) -->
                                 <div class="mb-3">
                                     <label class="form-label">Dirección</label>
-                                    <input type="text" class="form-control editable-field" id="direccion"  name="direccion" th:value="${usuarioLogueado.direccion}"  />
+                                    <input type="text" class="form-control editable-field" id="direccion" name="direccion" th:value="${usuarioLogueado.direccion}" />
                                 </div>
 
                                 <!-- Email (editable) -->
                                 <div class="mb-3">
                                     <label class="form-label">Email</label>
-                                    <input type="email" class="form-control editable-field" id="email"  name="email" th:value="${usuarioLogueado.email}"  />
+                                    <input type="email" class="form-control editable-field" id="email" name="email" th:value="${usuarioLogueado.email}" />
                                 </div>
+
+                                <!-- Foto de perfil
+                                <div class="mb-3">
+                                    <label class="form-label">Foto de Perfil</label>
+                                    <input type="file" class="form-control" name="fotoPerfil" accept="image/png, image/jpeg, image/gif" />
+                                </div>-->
 
                                 <!-- Botones de acción -->
                                 <div class="text-center mt-4">
                                     <button type="submit" id="saveButton" class="btn btn-primary">Actualizar datos</button>
                                 </div>
                             </form>
+
                         </div>
                     </div>
                 </div>
@@ -146,18 +152,14 @@
                 <div class="col-lg-3 d-flex flex-column align-items-center">
                     <div class="card shadow-sm p-3 text-center">
                         <div class="mb-3">
-
-
-                            <img id="profileImage-1"  class="rounded-circle img-fluid"
+                            <img id="profileImage-1" class="rounded-circle img-fluid"
                                  th:src="${usuario.getFoto() != null ? '/usuarioFinal/' + usuario.id : '/images/avatar/avatarGenerico.png'}"
                                  alt="Foto del Usuario"
                                  style="width: 200px; height: 200px; object-fit: cover;">
-
-
                         </div>
                         <div class="file-upload btn btn-light">
-                            <input type="file" class="file-input opacity-0" id="fileInput-1" name="foto"
-                                   accept="image/png, image/jpeg, image/gif" required />
+                            <input type="file" class="file-input opacity-0" id="fileInput-1" name="fotoPerfil"
+                                   accept="image/png, image/jpeg, image/gif" />
                             <span>Cambiar foto de perfil</span>
                         </div>
                     </div>
@@ -255,6 +257,57 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileInput = document.getElementById('fileInput');
+            const imagePreview = document.getElementById('imagePreviewForm'); // Asegúrate de seleccionar solo la imagen del formulario
+
+            fileInput.addEventListener('change', function () {
+                const file = fileInput.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result;  // Cambia solo la imagen del formulario
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.src = '/images/docs/placeholder-img.jpg';  // Vuelve a la imagen por defecto si no es válida
+                }
+            });
+        });
+
+
+        document.getElementById("profileForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // Evita el envío estándar del formulario
+
+            // Crea un objeto FormData
+            const formData = new FormData(this);
+
+            // Obtiene el archivo del input externo
+            const fileInput = document.getElementById("fileInput-1");
+            if (fileInput && fileInput.files.length > 0) {
+                formData.append("fotoPerfil", fileInput.files[0]);
+            }
+
+            // Enviar la solicitud manualmente con fetch
+            fetch(this.action, {
+                method: this.method,
+                body: formData,
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        window.location.href = "/Agente/perfil"; // Redirige después de guardar
+                    } else {
+                        alert("Error al actualizar el perfil.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    alert("Ocurrió un error.");
+                });
+        });
+
+    </script>
     <script>
         console.log('SweetAlert2 cargado:', Swal);
     </script>
