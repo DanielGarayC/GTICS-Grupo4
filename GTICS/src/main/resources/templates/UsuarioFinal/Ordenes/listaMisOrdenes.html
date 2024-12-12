@@ -339,7 +339,7 @@
                        }
                    }).then((result) => {
                        if (result.isConfirmed) {
-                           // Redirigir al controlador con la ID de la orden para eliminarla
+                           // Redirigir al controlador con la ID de la orden para solicitar apoyo
                            window.location.href = `/UsuarioFinal/solicitarApoyo?idOrden=${idOrden}`;
                        }
                    });

@@ -1144,7 +1144,18 @@ public class UsuarioFinalController {
 
     @GetMapping("/UsuarioFinal/solicitarApoyo")
     public String solicitarApoyoOrden(@RequestParam Integer idOrden, RedirectAttributes attr) {
-        ordenRepository.solicitarUnAgente(idOrden);//se le asigna la orden al agente de id = 13 -> arreglar mas adelante
+        System.out.println("pruebaaa");
+        Integer zonaUsuario = ordenRepository.obtenerZonaDeUsuarioDuenoDeOrden(idOrden);
+        Integer idUsuarioDuenoOrden = ordenRepository.obtenerUsuarioDuenoDeOrden(idOrden);
+        Integer idAgenteRandom = ordenRepository.obtenerAgenteRandomDeSuZona(zonaUsuario);
+
+        //si no hay ningun agente asignado a su zona, elegimos uno random (solo para que funcione xd)
+        if(idAgenteRandom==null){
+            idAgenteRandom = ordenRepository.obtenerAgenteRandom();
+        }
+
+        ordenRepository.solicitarUnAgenteparaOrden(idOrden,idAgenteRandom);//se le asigna la orden al agente
+        ordenRepository.solicitarUnAgenteParaUsuario(idAgenteRandom,idUsuarioDuenoOrden);//se asigna usuario al agente
         attr.addAttribute("solicitudAgenteExitosamente", true);
         return "redirect:/UsuarioFinal/listaMisOrdenes";
     }

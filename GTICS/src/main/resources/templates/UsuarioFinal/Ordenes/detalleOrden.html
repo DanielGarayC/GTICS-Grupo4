@@ -222,6 +222,7 @@
                                     <div class="d-flex flex-column justify-content-center align-items-center">
                                         <h2 class="mb-0" th:text="|Estado: ${orden.estadoorden.nombreEstado}|"></h2>
                                         <h5 style="color: gray; margin-top: 5px" th:text="|Orden de usuario: ${orden.idCarritoCompra.idUsuario.nombre} ${orden.idCarritoCompra.idUsuario.apellidoPaterno}|"></h5>
+                                        <h5 th:if="${usuario.idAgente != null}" style="color: #424040; margin-top: 5px" th:text="|Agente asignado: ${orden.idCarritoCompra.idUsuario.idAgente.nombre} ${orden.idCarritoCompra.idUsuario.idAgente.apellidoPaterno}|"></h5>
                                     </div>
 
                                 </div>

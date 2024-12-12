@@ -447,8 +447,18 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     void solicitarEliminarOrden(Integer idOrden);
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE `gticsdb`.`orden` SET `idAgente` = '13' WHERE (`idOrden` = ?1);")
-    void solicitarUnAgente(Integer idOrden);
+    @Query(nativeQuery = true, value = "UPDATE `gticsdb`.`orden` SET `idAgente` = ?2 WHERE (`idOrden` = ?1);")
+    void solicitarUnAgenteparaOrden(Integer idOrden,Integer idAgenteRandom);
+
+    @Query(nativeQuery = true, value = "SELECT u.idUsuario FROM orden o\n" +
+            "JOIN carritocompra cp ON cp.idCarritoCompra = o.idCarritoCompra\n" +
+            "JOIN usuario u ON u.idUsuario = cp.idUsuario\n" +
+            "where idOrden = ?1 ")
+    Integer obtenerUsuarioDuenoDeOrden(Integer idOrden);
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE `gticsdb`.`usuario` SET `idAgente` = ?1 WHERE (`idUsuario` = ?2);\n")
+    void solicitarUnAgenteParaUsuario(Integer idAgenteRandom,Integer idUsuarioDuenoOrden);
 
     @Query(nativeQuery = true, value = "SELECT p.idProducto AS idProducto, " +
             "p.nombreProducto AS nombreProducto, " +
@@ -486,4 +496,17 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     // Nuevo método para encontrar órdenes asignadas a una lista de agentes
     // Método corregido
     List<Orden> findByIdAgente_IdIn(List<Integer> idAgentes);
+
+    @Query(nativeQuery = true, value = "SELECT u.idZona FROM orden o\n" +
+            "JOIN carritocompra cp ON cp.idCarritoCompra = o.idCarritoCompra\n" +
+            "JOIN usuario u ON u.idUsuario = cp.idUsuario\n" +
+            "where idOrden = ?1 ")
+    Integer obtenerZonaDeUsuarioDuenoDeOrden(Integer idOrden);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM usuario where idRol=3 and activo=1 limit 1; ")
+    Integer obtenerAgenteRandom();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM usuario where idZona=?1 and idRol=3 limit 1; ")
+    Integer obtenerAgenteRandomDeSuZona(Integer zonaUsuario);
+
 }
