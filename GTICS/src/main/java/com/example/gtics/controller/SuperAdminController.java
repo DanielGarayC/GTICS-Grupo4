@@ -855,7 +855,7 @@ public class SuperAdminController {
                             nuevoProductoPorZona.setDisponibilidad("En stock");
                             nuevoProductoPorZona.setZona(zona);
                             nuevoProductoPorZona.setCodigoProducto(codigoProducto);
-                            nuevoProductoPorZona.setCantVentas(0);
+
                             Producto savedProducto = productoRepository.save(nuevoProductoPorZona);
                             if (fotoPrincipal != null && !fotoPrincipal.isEmpty()) {
                                 Fotosproducto fotoPrincipalEntity = new Fotosproducto();

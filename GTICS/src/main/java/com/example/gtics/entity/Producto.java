@@ -63,7 +63,7 @@ public class Producto {
 
 
     @Column(name = "cantVentas", nullable = false, length = 45)
-    private Integer cantVentas;
+    private Integer cantVentas = 0;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "idSubcategoria", nullable = true)
