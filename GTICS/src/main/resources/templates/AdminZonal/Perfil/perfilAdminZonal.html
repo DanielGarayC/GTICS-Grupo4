@@ -62,7 +62,7 @@
                                     <p th:text="${error}"></p>
                                 </div>
                                 <!-- Formulario de edición del perfil -->
-                                <form id="profileForm" method="post" th:action="@{'/AdminZonal/savePerfil'}" th:object="${adminZonal}">
+                                <form id="profileForm" method="post" th:action="@{'/AdminZonal/savePerfil'}" th:object="${adminZonal}" enctype="multipart/form-data">
 
                                     <input type="hidden" name="id" th:value="${adminZonal.id}">
 
@@ -112,17 +112,14 @@
                     <div class="col-lg-3 d-flex flex-column align-items-center">
                         <div class="card shadow-sm p-3 text-center">
                             <div class="mb-3">
-                                <!--<img id="profileImage-1" th:src="@{/images/avatar/avatar-1.jpg}" alt="Profile Picture"
-                                     class="rounded-circle img-fluid" style="width: 200px; height: 200px; object-fit: cover;">-->
-
-                                <img class="rounded-circle img-fluid"
-                                     th:src="${usuario.getFoto() != null ? '/usuarioFinal/' + usuario.id : '/images/avatar/avatarGenerico.png'}"
+                                <img id="profileImage-1" class="rounded-circle img-fluid"
+                                     th:src="${adminZonal.getFoto() != null ? '/usuarioFinal/' + adminZonal.id : '/images/avatar/avatarGenerico.png'}"
                                      alt="Foto del Usuario"
-                                     style="width: 200px; height: 200px; object-fit: cover;" />
+                                     style="width: 200px; height: 200px; object-fit: cover;">
                             </div>
                             <div class="file-upload btn btn-light">
-                                <input type="file" class="file-input opacity-0" id="fileInput-1" name="foto"
-                                       accept="image/png, image/jpeg, image/gif" required />
+                                <input type="file" class="file-input opacity-0" id="fileInput-1" name="fotoPerfil"
+                                       accept="image/png, image/jpeg, image/gif" />
                                 <span>Cambiar foto de perfil</span>
                             </div>
                         </div>
@@ -201,23 +198,172 @@
 <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
 <script th:src="@{/js/vendors/chart.js}"></script>
 <script>
-    document.getElementById('passwordChangeForm').addEventListener('submit', function (e) {
-        var newPassword = document.getElementById('newPassword').value;
-        var confirmNewPassword = document.getElementById('confirmNewPassword').value;
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreviewForm'); // Asegúrate de seleccionar solo la imagen del formulario
 
-        if (newPassword !== confirmNewPassword) {
-            e.preventDefault();  // Evitar que el formulario se envíe si las contraseñas no coinciden
-            document.getElementById('confirmNewPassword').classList.add('is-invalid');
-        } else {
-            document.getElementById('confirmNewPassword').classList.remove('is-invalid');
+        fileInput.addEventListener('change', function () {
+            const file = fileInput.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;  // Cambia solo la imagen del formulario
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.src = '/images/docs/placeholder-img.jpg';  // Vuelve a la imagen por defecto si no es válida
+            }
+        });
+    });
+
+
+    document.getElementById("profileForm").addEventListener("submit", function (e) {
+        e.preventDefault(); // Evita el envío estándar del formulario
+
+        // Crea un objeto FormData
+        const formData = new FormData(this);
+
+        // Obtiene el archivo del input externo
+        const fileInput = document.getElementById("fileInput-1");
+        if (fileInput && fileInput.files.length > 0) {
+            formData.append("fotoPerfil", fileInput.files[0]);
+        }
+
+        // Enviar la solicitud manualmente con fetch
+        fetch(this.action, {
+            method: this.method,
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    window.location.href = "/AdminZonal/Perfil"; // Redirige después de guardar
+                } else {
+                    alert("Error al actualizar el perfil.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("Ocurrió un error.");
+            });
+    });
+
+</script>
+<script>
+    console.log('SweetAlert2 cargado:', Swal);
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Asignar el valor a partir de lo que envía el controlador
+        let result = /*[[${result}]]*/ ''; // Asegúrate de que este valor se imprime correctamente en tu vista.
+
+        // Si hay un resultado, almacenarlo en localStorage
+        if (result) {
+            localStorage.setItem('passwordChangeResult', result);
+        }
+
+        // Verifica si el pop-up debe mostrarse
+        const storedResult = localStorage.getItem('passwordChangeResult');
+        if (storedResult === 'success') {
+            Swal.fire({
+                title: 'Éxito',
+                text: 'La contraseña ha sido cambiada correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                localStorage.removeItem('passwordChangeResult'); // Elimina el estado después de mostrar el pop-up
+            });
+        } else if (storedResult === 'error') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Ocurrió un error al cambiar la contraseña. Por favor, verifica los datos.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                localStorage.removeItem('passwordChangeResult'); // Elimina el estado después de mostrar el pop-up
+            });
         }
     });
+</script>
 
-    var myModal = new bootstrap.Modal(document.getElementById('editInfoModal'), {
-        keyboard: false
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verificar si hay un mensaje de éxito
+        var successMessage = /*[[${success}]]*/ null;
+        if (successMessage) {
+            swal("¡Éxito!", successMessage, "success");
+        }
+
+        // Verificar si hay un mensaje de error
+        var errorMessage = /*[[${error}]]*/ null;
+        if (errorMessage) {
+            swal("¡Error!", errorMessage, "error");
+        }
+    });
+</script>
+
+<script>
+    // Seleccionar el input y la imagen específicos para este contenedor
+    const fileInput1 = document.getElementById('fileInput-1');
+    const profileImage1 = document.getElementById('profileImage-1');
+
+    // Escuchar el evento 'change' del input de archivo
+    fileInput1.addEventListener('change', function(event) {
+        const file = event.target.files[0]; // Obtener el archivo seleccionado
+
+        if (file) {
+            // Crear un objeto URL temporal para mostrar la imagen seleccionada
+            const imageUrl = URL.createObjectURL(file);
+            profileImage1.src = imageUrl; // Actualizar el src de la imagen con el nuevo archivo
+
+            // Asegurar que la imagen sigue siendo circular y mantiene el tamaño
+            profileImage1.style.objectFit = 'cover';
+            profileImage1.style.width = '200px';
+            profileImage1.style.height = '200px';
+        }
+    });
+</script>
+<script>
+    // Referencias a botones y campos
+    const editButton = document.getElementById('editButton');
+    const saveButton = document.getElementById('saveButton');
+    const cancelButton = document.getElementById('cancelButton');
+    const editableFields = document.querySelectorAll('.editable-field'); // Solo campos editables
+
+    // Función para habilitar solo los campos Distrito, Dirección y Email
+    editButton.addEventListener('click', () => {
+        editableFields.forEach(field => field.disabled = false); // Habilitar solo campos editables
+        editButton.classList.add('d-none'); // Ocultar botón Editar
+        saveButton.classList.remove('d-none'); // Mostrar botón Guardar
+        cancelButton.classList.remove('d-none'); // Mostrar botón Cancelar
     });
 
-    myModal.show();
+    // Función para cancelar la edición
+    cancelButton.addEventListener('click', () => {
+        editableFields.forEach(field => field.disabled = true); // Deshabilitar campos
+        editButton.classList.remove('d-none'); // Mostrar botón Editar
+        saveButton.classList.add('d-none'); // Ocultar botón Guardar
+        cancelButton.classList.add('d-none'); // Ocultar botón Cancelar
+    });
+
+    // Validación del formulario y guardado
+    document.getElementById('profileForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevenir el envío real del formulario
+
+        // Validaciones adicionales (ej. validación de email)
+        let emailField = document.getElementById('email');
+        if (!validateEmail(emailField.value)) {
+            alert('Por favor, ingresa un email válido.');
+            return;
+        }
+
+    });
+
+    // Función para validar email
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    }
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
