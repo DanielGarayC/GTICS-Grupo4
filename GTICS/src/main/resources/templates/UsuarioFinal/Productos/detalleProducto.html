@@ -22,8 +22,135 @@
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
 
     <style>
-        .producto .zoom img:hover {
-            transform: scale(1.1);
+        /* Estilos para el contenedor principal de zoom */
+        .zoom {
+            position: relative;
+            overflow: hidden;
+            width: 100%; /* Toma el ancho disponible */
+            max-width: 400px; /* Ajusta según sea necesario */
+            height: 400px; /* Altura fija */
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: zoom-in;
+            transition: background-size 0.3s ease;
+        }
+
+        .zoom:hover {
+            background-size: 200%; /* Zoom al pasar el ratón */
+        }
+
+        /* Estilos para las miniaturas */
+        .thumbnails {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: flex-start;
+            margin-top: 1rem;
+        }
+
+        .thumbnails .col-3 {
+            flex: 0 0 auto;
+            width: calc(25% - 0.5625rem); /* 4 miniaturas por fila */
+            padding: 0;
+        }
+
+        .thumbnails-img {
+            width: 100%;
+            aspect-ratio: 1/1; /* Mantiene proporción cuadrada */
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .thumbnails-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            cursor: pointer;
+            padding: 0.25rem;
+            background-color: #fff;
+            transition: transform 0.2s ease-in-out, border 0.2s ease-in-out;
+        }
+
+        .thumbnails-img img.active {
+            border: 2px solid #007bff;
+        }
+
+        .thumbnails-img img:hover {
+            transform: scale(1.05);
+        }
+
+        .product-tools {
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        /* Estilos para la tarjeta de productos recomendados */
+        .card-product {
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-product .card-body {
+            flex: 1 1 auto;
+        }
+
+        /* Ajustar la apariencia de la sección de productos recomendados */
+        .product-slider .item {
+            padding: 10px;
+        }
+        /* Contenedor principal de miniaturas */
+        .thumbnails-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 16px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* Contenedor individual de cada miniatura */
+        .thumbnail-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%; /* Aspect ratio 1:1 */
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Imagen dentro del contenedor */
+        .thumbnail-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Mantiene la proporción sin recortar */
+            padding: 4px;
+            transition: transform 0.2s ease;
+        }
+
+        /* Estado hover */
+        .thumbnail-wrapper:hover .thumbnail-image {
+            transform: scale(1.05);
+        }
+
+        /* Estado activo */
+        .thumbnail-wrapper.active {
+            border: 2px solid #007bff;
+        }
+
+        /* Asegurarse que las imágenes sean visibles */
+        img {
+            display: block;
+            max-width: 100%;
         }
     </style>
     <!-- CSRF Tokens -->
@@ -42,47 +169,55 @@
     <section class="mt-8">
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-xl-7">
-                    <!-- Contenedor de la imagen del producto -->
-                    <div class="producto" id="producto" style="max-width: 100%; overflow: hidden;">
-                        <!-- img principal del producto -->
-                        <div style="background-size: contain; background-repeat: no-repeat; max-height: 400px; overflow: hidden; position: relative;">
-                            <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}"
-                                 alt="Imagen del producto"
-                                 style="width: 100%; height: auto; max-height: 400px; object-fit: contain;" />
+                <!-- Imagen del Producto y Miniaturas -->
+                <div class="col-md-5 col-xl-6">
+                    <!-- Contenedor Principal del Producto -->
+                    <div class="product" id="product">
+                        <!-- Imagen Principal con Zoom -->
+                        <div class="zoom"
+                             onmousemove="zoom(event)"
+                             onmouseout="resetZoom(event)"
+                             th:style="|background-image: url('/UsuarioFinal/producto/foto/${producto.id}');|">
                         </div>
+
                     </div>
 
-                    <!-- Miniaturas de imagen del producto -->
+                    <!-- Miniaturas de Imágenes -->
                     <div class="product-tools">
-                        <div class="thumbnails row g-3" id="productModalThumbnails">
-                            <div th:each="imagen : ${imagenes}" class="col-3">
-                                <div class="thumbnails-img">
-                                    <img th:src="@{'/UsuarioFinal/producto/foto/' + ${imagen.producto.id}}"
-                                         alt="Imagen del producto"
-                                         style="width: 100%; height: auto; max-height: 100px; object-fit: contain;" />
-                                </div>
+                        <div class="thumbnails-container">
+                            <div th:each="imagen : ${imagenes}" class="thumbnail-wrapper">
+                                <img
+                                        th:src="@{'/UsuarioFinal/producto/foto/' + ${imagen.id}}"
+                                        th:data-foto-id="${imagen.id}"
+                                        onclick="changeMainImage(this.getAttribute('data-foto-id'))"
+                                        class="thumbnail-image"
+                                        alt="Miniatura del producto"
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-xl-5"> <!-- Ajustar a 6 y 5 columnas respectivamente -->
-                    <div class="ps-lg-3 mt-2 mt-md-0">
+
+
+                <div class="col-md-7 col-xl-6">
+                    <div class="ps-lg-10 mt-6 mt-md-0">
                         <!-- content -->
-                        <a class="mb-2 d-block" style="font-size: 0.8rem;" th:text="${nombreCategoria}">Electrónica y Tecnología</a>
+                        <a class="mb-4 d-block" th:text="${nombreCategoria}">Electrónica y Tecnología</a>
                         <!-- heading -->
-                        <h1 class="mb-1" style="font-size: 1rem;" th:text="${producto.nombreProducto}">Laptop HP 13 pulgadas core i7</h1>
-                        <div class="mb-2">
+                        <h1 class="mb-1" th:text="${producto.nombreProducto}">Laptop HP 13 pulgadas core i7</h1>
+                        <div class="mb-4">
                             <!-- rating -->
-                            <small class="text-warning" style="font-size: 0.7rem;">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
+                            <small class="text-warning" aria-label="Calificación promedio">
+        <span th:each="i : ${#numbers.sequence(1,5)}">
+            <i class="bi"
+               th:classappend="${producto.averageRating >= i} ? ' bi-star-fill' :
+                             (${producto.averageRating >= (i - 0.5)} ? ' bi-star-half' :
+                             ' bi-star')"
+               th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+        </span>
                             </small>
-                            <a href="#" class="ms-1" style="font-size: 0.7rem;">(30 reseñas)</a>
+                            <a href="#" class="ms-2" th:text="${producto.averageRating} + ' (' + ${producto.reviewCount} + ')'"></a>
                         </div>
                         <div class="fs-4" style="font-size: 0.9rem;">
                             <!-- price -->
@@ -108,9 +243,9 @@
                                             Comprar
                                         </button>-->
                                         <!-- Botón secundario -->
-                                        <button type="submit" class="btn btn-primary flex-grow-1" style="font-size: 0.7rem; padding: 0.3rem 0.7rem;">
-                                            <i class="feather-icon icon-shopping-cart me-2"></i>
-                                            Añadir al carrito
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="feather-icon icon-shopping-bag me-2"></i>
+                                            Añadir al Carrito
                                         </button>
                                     </div>
                                 </div>
@@ -120,24 +255,24 @@
                         <hr class="my-3" />
                         <div>
                             <!-- table -->
-                            <table class="table table-borderless mb-0 text-center">
+                            <table class="table table-borderless mb-0">
                                 <tbody>
                                 <tr>
-                                    <td style="font-size: 0.8rem;">Disponibilidad:</td>
-                                    <td th:if="${producto.disponibilidad == 'En stock'}" style="font-size: 0.8rem;">
+                                    <td >Disponibilidad:</td>
+                                    <td th:if="${producto.disponibilidad == 'En stock'}" >
                                         <span class="badge bg-light-primary text-dark-primary">En Stock</span>
                                     </td>
-                                    <td th:if="${producto.disponibilidad == 'Fuera de stock'}" style="font-size: 0.8rem;">
+                                    <td th:if="${producto.disponibilidad == 'Fuera de stock'}">
                                         <span class="badge bg-light-danger text-dark-danger">Fuera de stock</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="font-size: 0.8rem;">Tipo:</td>
-                                    <td th:text="${nombreCategoria}" style="font-size: 0.8rem;">Tecnología</td>
+                                    <td>Tipo:</td>
+                                    <td th:text="${nombreCategoria}" >Tecnología</td>
                                 </tr>
                                 <tr>
-                                    <td style="font-size: 0.8rem;">Fecha aproximada de entrega:</td>
-                                    <td style="font-size: 0.8rem;">
+                                    <td >Fecha aproximada de entrega:</td>
+                                    <td >
                                         <small th:if="${fechaFormateada != null}" th:text="${fechaFormateada}"></small>
                                         <small th:unless="${fechaFormateada != null}">No hay fecha aproximada</small>
                                     </td>
@@ -278,6 +413,25 @@
 <div th:insert="~{fragments/modalProducto :: modalProducto(${producto}, ${imagenes}, ${fechaFormateada})}
 "></div>
 
+
+
+
+<!-- Javascript-->
+<script th:src="@{/libs/rater-js/index.js}"></script>
+<script th:src="@{/libs/dropzone/dist/min/dropzone.min.js}"></script>
+<!-- Libs JS -->
+<!-- <script th:src="@{/assets/libs/jquery/dist/jquery.min.js}"></script> -->
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+<!-- Theme JS -->
+<script th:src="@{/js/theme.min.js}"></script>
+
+<script th:src="@{/js/vendors/jquery.min.js}"></script>
+<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+<script th:src="@{/js/vendors/tns-slider.js}"></script>
+<script th:src="@{/js/vendors/dropzone.js}"></script>
+    <script th:src="@{/js/carrito.js}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Manejar el clic en los botones "+"
@@ -305,54 +459,96 @@
                 }
             });
         });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+
+        // Inicializar el slider de productos recomendados
         var slider = tns({
             container: '.product-slider',
             items: 4,                  // Mostrar 4 productos
             slideBy: 'page',
             autoplay: false,
-            controls: false,            // Activar flechas de navegación
+            controls: false,           // Desactivar flechas de navegación
             nav: false,                // Desactivar paginación por puntos
             mouseDrag: true,
             gutter: 10,                // Espacio entre los elementos
             responsive: {
-                640: {
-                    items: 2
-                },
-                768: {
-                    items: 3
-                },
-                1024: {
-                    items: 4
-                }
+                640: { items: 2 },
+                768: { items: 3 },
+                1024: { items: 4 }
             }
         });
     });
 
+    // Funciones de Zoom
+    function zoom(event) {
+        const target = event.currentTarget;
+        target.style.backgroundSize = '200%'; // Activa el zoom
 
+        let offsetX, offsetY;
+
+        if (event.type.includes('touch')) {
+            offsetX = event.touches[0].pageX - target.getBoundingClientRect().left;
+            offsetY = event.touches[0].pageY - target.getBoundingClientRect().top;
+        } else {
+            offsetX = event.offsetX;
+            offsetY = event.offsetY;
+        }
+
+        const x = (offsetX / target.offsetWidth) * 100;
+        const y = (offsetY / target.offsetHeight) * 100;
+
+        target.style.backgroundPosition = `${x}% ${y}%`;
+    }
+
+    function resetZoom(event) {
+        const target = event.currentTarget;
+        target.style.backgroundSize = 'contain'; // Restaura el tamaño original
+        target.style.backgroundPosition = 'center'; // Restaura la posición centrada
+    }
+
+    // Función para cambiar la imagen principal al hacer clic en una miniatura
+    function changeMainImage(fotoId) {
+        // Actualizar la imagen principal
+        const mainZoomDiv = document.querySelector('.zoom');
+        if (mainZoomDiv) {
+            mainZoomDiv.style.backgroundImage = `url('/UsuarioFinal/producto/foto/${fotoId}')`;
+        }
+
+        // Actualizar el estado activo de las miniaturas
+        document.querySelectorAll('.thumbnail-wrapper').forEach(wrapper => {
+            const img = wrapper.querySelector('img');
+            if (img.getAttribute('data-foto-id') === fotoId) {
+                wrapper.classList.add('active');
+            } else {
+                wrapper.classList.remove('active');
+            }
+        });
+    }
+
+    // Marcar la primera miniatura como activa al cargar
+    document.addEventListener('DOMContentLoaded', function() {
+        const firstThumbnail = document.querySelector('.thumbnail-wrapper img');
+        if (firstThumbnail) {
+            const fotoId = firstThumbnail.getAttribute('data-foto-id');
+            changeMainImage(fotoId);
+        }
+    });
 </script>
 
+<!-- Opcional: Scripts para Chatbot u otras funcionalidades -->
+<script>
+    function toggleChat() {
+        const chatWindow = document.getElementById('chatbot-window');
+        if (chatWindow.classList.contains('hidden')) {
+            chatWindow.classList.remove('hidden');
+        } else {
+            chatWindow.classList.add('hidden');
+        }
+    }
 
-<!-- Javascript-->
-<script th:src="@{/libs/rater-js/index.js}"></script>
-<script th:src="@{/libs/dropzone/dist/min/dropzone.min.js}"></script>
-<!-- Libs JS -->
-<!-- <script th:src="@{/assets/libs/jquery/dist/jquery.min.js}"></script> -->
-<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
-
-<!-- Theme JS -->
-<script th:src="@{/js/theme.min.js}"></script>
-
-<script th:src="@{/js/vendors/jquery.min.js}"></script>
-<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
-<script th:src="@{/js/vendors/tns-slider.js}"></script>
-<script th:src="@{/js/vendors/zoom.js}"></script>
-<script th:src="@{/js/vendors/dropzone.js}"></script>
-    <script th:src="@{/js/carrito.js}"></script>
-
+    function sendOption(option) {
+        alert(`Opción seleccionada: ${option}`);
+        // Aquí puedes añadir lógica para manejar las opciones seleccionadas
+    }
+</script>
 </body>
 </html>
