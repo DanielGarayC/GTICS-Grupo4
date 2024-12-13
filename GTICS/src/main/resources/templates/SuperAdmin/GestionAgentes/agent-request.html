@@ -212,7 +212,7 @@
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a class="dropdown-item" th:href="@{/SuperAdmin/aceptarSolicitud(id=${agente.getIdusuario()}, indicador=${agente.getIndicadorSolicitud()})}">
+                                                                        <a class="dropdown-item" th:href="@{/SuperAdmin/aceptarSolicitud(id=${agente.getIdusuario()}, indicador=${agente.getIndicadorSolicitud()}, codigoAduana=${agente.getSoladuana()}, codigoJurisdiccion=${agente.getSoljurisdiccion()})}">
                                                                             <i class="bi bi-check-circle me-3"></i>
                                                                             Aceptar
                                                                         </a>

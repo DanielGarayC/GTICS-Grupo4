@@ -547,6 +547,8 @@ public class SuperAdminController {
     @GetMapping("SuperAdmin/aceptarSolicitud")
     public String cambiarRolaAgente(Model model, @RequestParam("id") Integer id,
                                     @RequestParam("indicador") Integer indicador,
+                                    @RequestParam("codigoAduana") Integer codigoAduana,
+                                    @RequestParam("codigoJurisdiccion") Integer codigoJurisdiccion,
                                     RedirectAttributes redirectAttributes) {
         System.out.println("pruebaaaa");
         // Obtener el usuario solicitante por ID
@@ -567,7 +569,7 @@ public class SuperAdminController {
         // Cambiar el rol del usuario o activar la cuenta, según el indicador
         switch (indicador) {
             case 0:
-                usuarioRepository.actualizarRolAAgente(id);
+                usuarioRepository.actualizarRolAAgente(id,codigoAduana,codigoJurisdiccion);
                 break;
             case 1:
                 usuarioRepository.activarCuenta(id);
