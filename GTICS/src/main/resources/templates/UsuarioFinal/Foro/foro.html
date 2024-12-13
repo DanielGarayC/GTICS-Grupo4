@@ -268,7 +268,7 @@
 
                                             <div th:each="resena : ${listaResenas}" class="d-flex border-bottom pb-6 mb-6">
                                                 <div class="reseña-avatar" style="width: 100px;">
-                                                    <img th:src="${usuario.foto != null ? '/UsuarioFinal/foto/' + usuario.id : '/images/avatar/avatarGenerico.png'}" alt="Foto de usuario" class="rounded-circle avatar-lg">
+                                                    <img th:src="${resena.idUsuario.foto != null ? '/UsuarioFinal/foto/' + resena.idUsuario : '/images/avatar/avatarGenerico.png'}" alt="Foto de usuario" class="rounded-circle avatar-lg">
                                                 </div>
 
                                                 <div class="ms-5 reseña-contenido" style="flex-grow: 1;">
