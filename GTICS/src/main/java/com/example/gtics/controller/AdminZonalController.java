@@ -25,8 +25,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.*;
@@ -500,12 +502,26 @@ public class AdminZonalController {
             @RequestParam("id") String id,
             @RequestParam("distrito") String idDistrito,
             @RequestParam("direccion") String direccion,
-            @RequestParam("email") String email,
+            @RequestParam("email") String email,@RequestParam(value  = "fotoPerfil",required = false) MultipartFile foto,
             RedirectAttributes attr) {
 
         // Actualiza el usuario
         usuarioRepository.actualizarUsuario(idDistrito, direccion, email, id);
 
+        Optional<Usuario> uOpt = usuarioRepository.findById(Integer.parseInt(id));
+        if(uOpt.isPresent()) {
+            Usuario usuario = uOpt.get();
+            if (foto != null && !foto.isEmpty()) {
+                try {
+                    usuario.setFoto(foto.getBytes());
+                } catch (IOException e) {
+                    attr.addFlashAttribute("error", "Error al procesar la foto de perfil.");
+                    return "redirect:/Agente/perfil";
+                }
+            }
+
+
+        }
         // Añade un mensaje de éxito
         attr.addFlashAttribute("mensaje", "Perfil actualizado con éxito.");
 
