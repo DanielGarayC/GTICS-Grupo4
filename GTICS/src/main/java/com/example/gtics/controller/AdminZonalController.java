@@ -516,7 +516,7 @@ public class AdminZonalController {
                     usuario.setFoto(foto.getBytes());
                 } catch (IOException e) {
                     attr.addFlashAttribute("error", "Error al procesar la foto de perfil.");
-                    return "redirect:/Agente/perfil";
+                    return "redirect:/AdminZonal/Perfil";
                 }
             }
 

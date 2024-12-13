@@ -59,7 +59,7 @@
                                 <p th:text="${mensaje}" class="mb-0"></p>
                             </div>
                             <!-- Formulario de edición del perfil -->
-                            <form id="profileForm" method="post" th:action="@{'/UsuarioFinal/savePerfil'}" th:object="${usuario}">
+                            <form id="profileForm" method="post" th:action="@{'/UsuarioFinal/savePerfil'}" th:object="${usuario}" enctype="multipart/form-data">
                                 <!-- Nombre Completo (no editable) -->
                                 <input type="hidden" name="id" th:value="${usuario.id}">
 
@@ -109,15 +109,14 @@
                 <div class="col-lg-3 d-flex flex-column align-items-center">
                     <div class="card shadow-sm p-3 text-center">
                         <div class="mb-3">
-
-                            <img class="rounded-circle img-fluid" style="width: 200px; height: 200px; object-fit: cover;"
+                            <img id="profileImage-1" class="rounded-circle img-fluid"
                                  th:src="${usuario.getFoto() != null ? '/usuarioFinal/' + usuario.id : '/images/avatar/avatarGenerico.png'}"
                                  alt="Foto del Usuario"
-                            />
+                                 style="width: 200px; height: 200px; object-fit: cover;">
                         </div>
                         <div class="file-upload btn btn-light">
-                            <input type="file" class="file-input opacity-0" id="fileInput-1" name="foto"
-                                   accept="image/png, image/jpeg, image/gif" required />
+                            <input type="file" class="file-input opacity-0" id="fileInput-1" name="fotoPerfil"
+                                   accept="image/png, image/jpeg, image/gif" />
                             <span>Cambiar foto de perfil</span>
                         </div>
                     </div>
@@ -203,124 +202,240 @@
 <script th:src="@{/js/vendors/zoom.js}"></script>
     <script th:src="@{/js/carrito.js}"></script>
 
-    <script>
-        // Seleccionar el input y la imagen específicos para este contenedor
-        const fileInput1 = document.getElementById('fileInput-1');
-        const profileImage1 = document.getElementById('profileImage-1');
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreviewForm'); // Asegúrate de seleccionar solo la imagen del formulario
 
-        // Escuchar el evento 'change' del input de archivo
-        fileInput1.addEventListener('change', function(event) {
-            const file = event.target.files[0]; // Obtener el archivo seleccionado
-
-            if (file) {
-                // Crear un objeto URL temporal para mostrar la imagen seleccionada
-                const imageUrl = URL.createObjectURL(file);
-                profileImage1.src = imageUrl; // Actualizar el src de la imagen con el nuevo archivo
-
-                // Asegurar que la imagen sigue siendo circular y mantiene el tamaño
-                profileImage1.style.objectFit = 'cover';
-                profileImage1.style.width = '200px';
-                profileImage1.style.height = '200px';
+        fileInput.addEventListener('change', function () {
+            const file = fileInput.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;  // Cambia solo la imagen del formulario
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.src = '/images/docs/placeholder-img.jpg';  // Vuelve a la imagen por defecto si no es válida
             }
         });
-    </script>
-    <script>
-        // Referencias a botones y campos
-        const editButton = document.getElementById('editButton');
-        const saveButton = document.getElementById('saveButton');
-        const cancelButton = document.getElementById('cancelButton');
-        const editableFields = document.querySelectorAll('.editable-field'); // Solo campos editables
+    });
 
-        // Función para habilitar solo los campos Distrito, Dirección y Email
-        editButton.addEventListener('click', () => {
-            editableFields.forEach(field => field.disabled = false); // Habilitar solo campos editables
-            editButton.classList.add('d-none'); // Ocultar botón Editar
-            saveButton.classList.remove('d-none'); // Mostrar botón Guardar
-            cancelButton.classList.remove('d-none'); // Mostrar botón Cancelar
-        });
 
-        // Función para cancelar la edición
-        cancelButton.addEventListener('click', () => {
-            editableFields.forEach(field => field.disabled = true); // Deshabilitar campos
-            editButton.classList.remove('d-none'); // Mostrar botón Editar
-            saveButton.classList.add('d-none'); // Ocultar botón Guardar
-            cancelButton.classList.add('d-none'); // Ocultar botón Cancelar
-        });
+    document.getElementById("profileForm").addEventListener("submit", function (e) {
+        e.preventDefault(); // Evita el envío estándar del formulario
 
-        // Validación del formulario y guardado
-        document.getElementById('profileForm').addEventListener('submit', function (e) {
-            e.preventDefault(); // Prevenir el envío real del formulario
+        // Crea un objeto FormData
+        const formData = new FormData(this);
 
-            // Validaciones adicionales (ej. validación de email)
-            let emailField = document.getElementById('email');
-            if (!validateEmail(emailField.value)) {
-                alert('Por favor, ingresa un email válido.');
-                return;
-            }
-
-        });
-        //Función pa contraseñas
-        document.getElementById('savePasswordButton').addEventListener('click', function (event) {
-            event.preventDefault();
-
-            // Obtener los valores de los campos
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
-            console.log("Contraseña actual ingresada:", currentPassword);
-            // Limpiar mensajes de error
-            document.getElementById('currentPasswordError').textContent = '';
-            document.getElementById('passwordError').style.display = 'none';
-
-            let hasError = false;
-
-            // Validación de nueva contraseña (más de 8 caracteres)
-            if (newPassword.length < 8) {
-                document.getElementById('passwordError').textContent = 'La nueva contraseña debe tener al menos 8 caracteres.';
-                document.getElementById('passwordError').style.display = 'block';
-                hasError = true;
-            }
-
-            // Validación de coincidencia de la nueva contraseña
-            if (newPassword !== confirmNewPassword) {
-                document.getElementById('passwordError').textContent = 'Las contraseñas no coinciden.';
-                document.getElementById('passwordError').style.display = 'block';
-                hasError = true;
-            }
-
-            // Si hubo errores, no continuar
-            if (hasError) {
-                return;
-            }
-
-            // Envío de solicitud AJAX para verificar la contraseña actual
-            fetch('/validatePassword', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ currentPassword: currentPassword })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.valid) {
-                        // Si la contraseña actual es válida, enviar el formulario
-                        document.getElementById('changePasswordForm').submit();
-                    } else {
-                        // Mostrar error si la contraseña actual es incorrecta
-                        document.getElementById('currentPasswordError').textContent = 'La contraseña actual es incorrecta.';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error en la validación de la contraseña:', error);
-                });
-        });
-
-        // Función para validar email
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(String(email).toLowerCase());
+        // Obtiene el archivo del input externo
+        const fileInput = document.getElementById("fileInput-1");
+        if (fileInput && fileInput.files.length > 0) {
+            formData.append("fotoPerfil", fileInput.files[0]);
         }
-    </script>
+
+        // Enviar la solicitud manualmente con fetch
+        fetch(this.action, {
+            method: this.method,
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    window.location.href = "/UsuarioFinal/miPerfil"; // Redirige después de guardar
+                } else {
+                    alert("Error al actualizar el perfil.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("Ocurrió un error.");
+            });
+    });
+
+</script>
+<script>
+    console.log('SweetAlert2 cargado:', Swal);
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Asignar el valor a partir de lo que envía el controlador
+        let result = /*[[${result}]]*/ ''; // Asegúrate de que este valor se imprime correctamente en tu vista.
+
+        // Si hay un resultado, almacenarlo en localStorage
+        if (result) {
+            localStorage.setItem('passwordChangeResult', result);
+        }
+
+        // Verifica si el pop-up debe mostrarse
+        const storedResult = localStorage.getItem('passwordChangeResult');
+        if (storedResult === 'success') {
+            Swal.fire({
+                title: 'Éxito',
+                text: 'La contraseña ha sido cambiada correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                localStorage.removeItem('passwordChangeResult'); // Elimina el estado después de mostrar el pop-up
+            });
+        } else if (storedResult === 'error') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Ocurrió un error al cambiar la contraseña. Por favor, verifica los datos.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                localStorage.removeItem('passwordChangeResult'); // Elimina el estado después de mostrar el pop-up
+            });
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verificar si hay un mensaje de éxito
+        var successMessage = /*[[${success}]]*/ null;
+        if (successMessage) {
+            swal("¡Éxito!", successMessage, "success");
+        }
+
+        // Verificar si hay un mensaje de error
+        var errorMessage = /*[[${error}]]*/ null;
+        if (errorMessage) {
+            swal("¡Error!", errorMessage, "error");
+        }
+    });
+</script>
+
+<script>
+    // Seleccionar el input y la imagen específicos para este contenedor
+    const fileInput1 = document.getElementById('fileInput-1');
+    const profileImage1 = document.getElementById('profileImage-1');
+
+    // Escuchar el evento 'change' del input de archivo
+    fileInput1.addEventListener('change', function(event) {
+        const file = event.target.files[0]; // Obtener el archivo seleccionado
+
+        if (file) {
+            // Crear un objeto URL temporal para mostrar la imagen seleccionada
+            const imageUrl = URL.createObjectURL(file);
+            profileImage1.src = imageUrl; // Actualizar el src de la imagen con el nuevo archivo
+
+            // Asegurar que la imagen sigue siendo circular y mantiene el tamaño
+            profileImage1.style.objectFit = 'cover';
+            profileImage1.style.width = '200px';
+            profileImage1.style.height = '200px';
+        }
+    });
+</script>
+<script>
+    // Referencias a botones y campos
+    const editButton = document.getElementById('editButton');
+    const saveButton = document.getElementById('saveButton');
+    const cancelButton = document.getElementById('cancelButton');
+    const editableFields = document.querySelectorAll('.editable-field'); // Solo campos editables
+
+    // Función para habilitar solo los campos Distrito, Dirección y Email
+    editButton.addEventListener('click', () => {
+        editableFields.forEach(field => field.disabled = false); // Habilitar solo campos editables
+        editButton.classList.add('d-none'); // Ocultar botón Editar
+        saveButton.classList.remove('d-none'); // Mostrar botón Guardar
+        cancelButton.classList.remove('d-none'); // Mostrar botón Cancelar
+    });
+
+    // Función para cancelar la edición
+    cancelButton.addEventListener('click', () => {
+        editableFields.forEach(field => field.disabled = true); // Deshabilitar campos
+        editButton.classList.remove('d-none'); // Mostrar botón Editar
+        saveButton.classList.add('d-none'); // Ocultar botón Guardar
+        cancelButton.classList.add('d-none'); // Ocultar botón Cancelar
+    });
+
+    // Validación del formulario y guardado
+    document.getElementById('profileForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevenir el envío real del formulario
+
+        // Validaciones adicionales (ej. validación de email)
+        let emailField = document.getElementById('email');
+        if (!validateEmail(emailField.value)) {
+            alert('Por favor, ingresa un email válido.');
+            return;
+        }
+
+    });
+
+    // Función para validar email
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const savePasswordButton = document.getElementById('savePasswordButton');
+
+        if (savePasswordButton) {
+            savePasswordButton.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                // Obtener los valores de los campos
+                const currentPassword = document.getElementById('currentPassword').value.trim();
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+                // Agregar logs para revisar los valores capturados
+
+                // Limpiar mensajes de error
+                document.getElementById('currentPasswordError').textContent = '';
+                document.getElementById('passwordError').style.display = 'none';
+
+                let hasError = false;
+
+                // Envío de solicitud para validar la contraseña actual
+                fetch('/validateCurrentPassword?currentPassword=' + encodeURIComponent(currentPassword))
+                    .then(response => {
+                        if (response.ok) {
+                            // La contraseña es válida
+                            console.log('Contraseña válida');
+
+                            // Validación de nueva contraseña (más de 8 caracteres)
+                            if (newPassword.length < 8) {
+                                document.getElementById('passwordError').textContent = 'La nueva contraseña debe tener al menos 8 caracteres.';
+                                document.getElementById('passwordError').style.display = 'block';
+                                hasError = true;
+                            }
+
+                            // Validación de coincidencia de la nueva contraseña
+                            if (newPassword !== confirmNewPassword) {
+                                document.getElementById('passwordError').textContent = 'Las contraseñas no coinciden.';
+                                document.getElementById('passwordError').style.display = 'block';
+                                hasError = true;
+                            }
+
+                            // Si hubo errores, no continuar
+                            if (hasError) {
+                                console.log('Errores encontrados, el formulario no se enviará.');
+                                return;
+                            }
+
+                            // Si todas las validaciones pasan, enviar el formulario
+                            console.log('No hay errores, enviando el formulario...');
+                            document.getElementById('changePasswordForm').submit();
+                        } else {
+                            // La contraseña es incorrecta
+                            response.text().then(errorMessage => {
+                                document.getElementById('currentPasswordError').textContent = errorMessage;
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al validar la contraseña actual:', error);
+                    });
+            });
+        } else {
+            console.error('El botón de guardar contraseña no fue encontrado.');
+        }
+    });
+</script>
 </body>
 </html>
