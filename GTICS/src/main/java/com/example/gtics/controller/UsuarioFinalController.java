@@ -866,20 +866,71 @@ public class UsuarioFinalController {
             @RequestParam(value = "minPrice", required = false) Double minPrice,
             @RequestParam(value = "maxPrice", required = false) Double maxPrice,
             @RequestParam(value = "sortOrder", defaultValue = "asc") String sortOrder,
+            Authentication authentication,
             Model model) {
-        List<Producto> productos = productoRepository.findByNombreContainingIgnoreCase(nombre);
-        List<Categoria> categorias = categoriaRepository.findAll();
-        model.addAttribute("categorias", categorias);
+
+        // Verificar si el usuario está autenticado
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/ExpressDealsLogin";
+        }
+
+        // Obtener el usuario autenticado
+        String email = authentication.getName();
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        if (!usuarioOpt.isPresent()) {
+            return "redirect:/ExpressDealsLogin";
+        }
+
+        Usuario usuario = usuarioOpt.get();
+        Zona zonaUsuario = usuario.getZona();
+        Integer idZona = zonaUsuario.getId();
+
+        // Usar el nuevo método que filtra por nombre y zona
+        List<Producto> productos = productoRepository.findByNombreContainingIgnoreCaseDistinctAndZonaId(nombre, idZona);
+
+        // Filtrar por precio si es necesario
         if (minPrice != null && maxPrice != null) {
             productos = productos.stream()
                     .filter(producto -> producto.getPrecio() >= minPrice && producto.getPrecio() <= maxPrice)
                     .collect(Collectors.toList());
         }
+
+        // Ordenar los productos
         if ("asc".equalsIgnoreCase(sortOrder)) {
             productos.sort(Comparator.comparing(Producto::getPrecio));
         } else if ("desc".equalsIgnoreCase(sortOrder)) {
             productos.sort(Comparator.comparing(Producto::getPrecio).reversed());
         }
+
+        // Eliminar duplicados como medida de seguridad adicional
+        Set<Producto> productoSet = new LinkedHashSet<>(productos);
+        productos = new ArrayList<>(productoSet);
+
+        // Obtener calificaciones y conteo de reseñas
+        List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCountByZonaId(idZona);
+
+        // Mapear las calificaciones a los productos
+        Map<Integer, RatingData> ratingsMap = ratings.stream()
+                .collect(Collectors.toMap(
+                        row -> (Integer) row[0],
+                        row -> new RatingData((Double) row[1], (Long) row[2])
+                ));
+
+        // Asignar las calificaciones a cada producto
+        for (Producto producto : productos) {
+            RatingData ratingData = ratingsMap.get(producto.getId());
+            if (ratingData != null) {
+                producto.setAverageRating(ratingData.getAverageRating());
+                producto.setReviewCount(ratingData.getReviewCount());
+            } else {
+                producto.setAverageRating(0.0);
+                producto.setReviewCount(0);
+            }
+        }
+
+        // Agregar atributos al modelo
+        List<Categoria> categorias = categoriaRepository.findAll();
+        model.addAttribute("categorias", categorias);
         model.addAttribute("productos", productos);
         model.addAttribute("nombreBusqueda", nombre);
         model.addAttribute("minPrice", minPrice);
@@ -888,6 +939,9 @@ public class UsuarioFinalController {
 
         return "UsuarioFinal/Productos/listaProductos";
     }
+
+
+
 
 
     @PostMapping("/UsuarioFinal/solicitudAgente")

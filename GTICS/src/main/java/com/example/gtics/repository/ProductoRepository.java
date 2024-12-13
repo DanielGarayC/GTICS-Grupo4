@@ -130,9 +130,8 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     @Query(value = "SELECT DATE_FORMAT(p.fechaArribo, '%d-%m-%Y') FROM producto p WHERE p.idProducto = :id", nativeQuery = true)
     String findFechaFormateadaById(@Param("id") Integer id);
 
-    @Query("SELECT p FROM Producto p WHERE LOWER(p.nombreProducto) LIKE LOWER(CONCAT('%', :nombre, '%'))")
-    List<Producto> findByNombreContainingIgnoreCase(@Param("nombre") String nombre);
-
+    @Query("SELECT DISTINCT p FROM Producto p WHERE LOWER(p.nombreProducto) LIKE LOWER(CONCAT('%', :nombre, '%')) AND p.borrado = 0 AND p.zona.id = :zonaId")
+    List<Producto> findByNombreContainingIgnoreCaseDistinctAndZonaId(@Param("nombre") String nombre, @Param("zonaId") Integer zonaId);
     @Query("SELECT p FROM Producto p WHERE p.zona.id = :zonaId")
     List<Producto> findProductosPorZona(@Param("zonaId") Integer zonaId);
 
