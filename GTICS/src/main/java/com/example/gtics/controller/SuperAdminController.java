@@ -170,7 +170,8 @@ public class SuperAdminController {
     }
 
     @PostMapping("/SuperAdmin/AdminZonal/guardar")
-    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario, @RequestParam("zonaId") Integer zonaId, RedirectAttributes attr, @RequestParam("zonalAdminPhoto") MultipartFile foto) {
+    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario, @RequestParam("zonaId") Integer zonaId, RedirectAttributes attr,
+                                    @RequestParam("zonalAdminPhoto") MultipartFile foto) {
         System.out.println("guardar nuevo admin zonal prueba");
         //usuario.setId(null);
         //usuario.setId(null);
@@ -655,7 +656,7 @@ public class SuperAdminController {
     public String actualizarUsuarioFinal(@ModelAttribute("usuario") @Validated(UsuarioFinalValidationGroup.class) Usuario usuario,
                                          BindingResult bindingResult,
                                          Model model,
-                                         @RequestParam("UserPhoto") MultipartFile foto) throws IOException {
+                                         @RequestParam("UserPhoto") MultipartFile foto, RedirectAttributes attr) throws IOException {
 
         if (bindingResult.hasErrors()) {
             System.out.println("Errores de validación:");
@@ -707,7 +708,7 @@ public class SuperAdminController {
             } catch (IOException ignored) {
             }
         }
-
+        attr.addFlashAttribute("msg", "Información del usuario final actualizada exitosamente");
         return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 
@@ -1223,7 +1224,7 @@ public class SuperAdminController {
         String uri = request.getRequestURI();
 
         // Excluye la vista específica
-        if (uri.contains("/SuperAdmin/crearAdminZonal") || uri.contains("/SuperAdmin/AdminZonal/guardar") ) { // Cambia "/vista-excluida" por la URI que quieres excluir
+        if (uri.contains("/SuperAdmin/crearAdminZonal") || uri.contains("/SuperAdmin/AdminZonal/guardar") || uri.contains("/SuperAdmin/UsuarioFinal/Actualizar")) { // Cambia "/vista-excluida" por la URI que quieres excluir
             return; // No ejecutar el código si la vista es la excluida
         }
 

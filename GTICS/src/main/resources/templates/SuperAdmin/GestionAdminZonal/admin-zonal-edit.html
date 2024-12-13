@@ -97,48 +97,34 @@
                                         </div>
                                         <!-- Nombres -->
                                         <div class="col-lg-6 col-12">
-                                            <div>
-                                                <label for="creatCustomerName" class="form-label">
-                                                    Nombres:
-                                                    <span style="visibility: hidden;">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="creatCustomerName" name="nombre" th:value="${usuario.nombre}" required />
-                                                <div class="invalid-feedback">Por favor ingrese los nombres del admin zonal</div>
-                                            </div>
+                                            <label for="creatCustomerName" class="form-label">Nombres:</label>
+                                            <input id="creatCustomerName" type="text" class="form-control" value="Lucía" disabled />
+                                            <input type="hidden" name="nombre" th:value="${usuario.nombre}" />
                                         </div>
 
-                                        <!-- Apellidos -->
+                                        <!-- Apellido Paterno -->
                                         <div class="col-lg-6 col-12">
-                                            <div>
-                                                <label for="creatFinalUserLastNameP" class="form-label">
-                                                    Apellido Paterno:
-                                                    <span style="visibility: hidden;">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastNameP" name="apellidoPaterno" th:value="${usuario.apellidoPaterno}" required />
-                                                <div class="invalid-feedback">Por favor ingrese el apellido paterno del admin zonal</div>
-                                            </div>
+                                            <label for="creatFinalUserLastNameP" class="form-label">Apellido Paterno:</label>
+                                            <input id="creatFinalUserLastNameP" type="text" class="form-control" value="Rojas" disabled />
+                                            <input type="hidden" name="apellidoPaterno" th:value="${usuario.apellidoPaterno}" />
                                         </div>
+
+                                        <!-- Apellido Materno -->
                                         <div class="col-lg-6 col-12">
-                                            <div>
-                                                <label for="creatFinalUserLastNameM" class="form-label">
-                                                    Apellido Materno:
-                                                    <span style="visibility: hidden;">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="creatFinalUserLastNameM" name="apellidoMaterno" th:value="${usuario.apellidoMaterno}" required />
-                                                <div class="invalid-feedback">Por favor ingrese el apellido materno del admin zonal</div>
-                                            </div>
+                                            <label for="creatFinalUserLastNameM" class="form-label">Apellido Materno:</label>
+                                            <input id="creatFinalUserLastNameM"  type="text" class="form-control" value="Rojas" disabled />
+                                            <input type="hidden" name="apellidoMaterno" th:value="${usuario.apellidoMaterno}" />
                                         </div>
 
                                         <!-- DNI -->
-                                    <!-- DNI -->
-                                    <div class="col-lg-6 col-12">
-                                        <label for="DNIFinalUser" class="form-label">DNI:</label>
-                                        <input type="text" class="form-control" id="DNIFinalUser" name="dni" minlength="8" maxlength="8" pattern="\d{8}" placeholder="Ejemplo: 12345678" th:value="${usuario.dni}" required />
-                                        <div class="invalid-feedback" id="dni-feedback">Por favor ingrese un DNI válido con 8 dígitos</div>
-                                    </div>
+                                        <div class="col-lg-6 col-12">
+                                            <label for="DNIFinalUser" class="form-label">DNI:</label>
+                                            <input id="DNIFinalUser" type="text" class="form-control" value="75893456" disabled />
+                                            <input type="hidden" name="dni" th:value="${usuario.dni}" />
+                                        </div>
 
 
-                                    <!-- Número telefónico -->
+                                        <!-- Número telefónico -->
                                     <div class="col-lg-6 col-12">
                                         <label for="phoneAdminZonal" class="form-label">Número telefónico:</label>
                                         <input type="text" class="form-control" id="phoneAdminZonal" name="telefono" minlength="9" maxlength="9" pattern="\d{9}" placeholder="Ejemplo: 987654321" th:value="${usuario.telefono}" required />
