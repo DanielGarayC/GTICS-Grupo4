@@ -98,28 +98,28 @@
                                         <!-- Nombres -->
                                         <div class="col-lg-6 col-12">
                                             <label for="creatCustomerName" class="form-label">Nombres:</label>
-                                            <input id="creatCustomerName" type="text" class="form-control" value="Lucía" disabled />
+                                            <input id="creatCustomerName" type="text" class="form-control" th:value="${usuario.getNombre()}" disabled />
                                             <input type="hidden" name="nombre" th:value="${usuario.nombre}" />
                                         </div>
 
                                         <!-- Apellido Paterno -->
                                         <div class="col-lg-6 col-12">
                                             <label for="creatFinalUserLastNameP" class="form-label">Apellido Paterno:</label>
-                                            <input id="creatFinalUserLastNameP" type="text" class="form-control" value="Rojas" disabled />
+                                            <input id="creatFinalUserLastNameP" type="text" class="form-control" th:value="${usuario.getApellidoPaterno()}" disabled />
                                             <input type="hidden" name="apellidoPaterno" th:value="${usuario.apellidoPaterno}" />
                                         </div>
 
                                         <!-- Apellido Materno -->
                                         <div class="col-lg-6 col-12">
                                             <label for="creatFinalUserLastNameM" class="form-label">Apellido Materno:</label>
-                                            <input id="creatFinalUserLastNameM"  type="text" class="form-control" value="Rojas" disabled />
+                                            <input id="creatFinalUserLastNameM"  type="text" class="form-control" th:value="${usuario.getApellidoMaterno()}" disabled />
                                             <input type="hidden" name="apellidoMaterno" th:value="${usuario.apellidoMaterno}" />
                                         </div>
 
                                         <!-- DNI -->
                                         <div class="col-lg-6 col-12">
                                             <label for="DNIFinalUser" class="form-label">DNI:</label>
-                                            <input id="DNIFinalUser" type="text" class="form-control" value="75893456" disabled />
+                                            <input id="DNIFinalUser" type="text" class="form-control" th:value="${usuario.getDni()}" disabled />
                                             <input type="hidden" name="dni" th:value="${usuario.dni}" />
                                         </div>
 
@@ -170,7 +170,7 @@
                                         <!-- Fecha de nacimiento -->
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label" for="creatFinalUserDate">Fecha de nacimiento</label>
-                                            <input type="text" class="form-control flatpickr" id="creatFinalUserDate" name="azFechanacimiento" th:value="${usuario.azFechanacimiento}" required />
+                                            <input type="text" class="form-control flatpickr" id="creatFinalUserDate" name="azFechanacimiento" th:value="${usuario.getAzFechanacimiento()}" required />
                                             <div class="invalid-feedback">Por favor ingrese la fecha de nacimiento</div>
                                         </div>
 

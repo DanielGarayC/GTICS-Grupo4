@@ -5,6 +5,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class EmailService {
 
@@ -42,4 +44,33 @@ public class EmailService {
         message.setText(text);
         emailSender.send(message);
     }
+
+    public void actualizacionAdminZonal(String to, String username, ArrayList<String> camposModificados,
+                                        ArrayList<String> datosAntiguos, ArrayList<String> datosNuevos) {
+        String subject = "Actualización de información de tu cuenta";
+        StringBuilder text = new StringBuilder();
+        text.append("Hola ").append(username).append(",\n\n")
+                .append("Se han realizado algunos cambios en la información de tu cuenta.\n");
+
+        if (camposModificados.isEmpty()) {
+            text.append("No se han hecho cambios.\n");
+        } else {
+            text.append("A continuación, se detallan los cambios realizados:\n\n");
+
+            for (int i = 0; i < camposModificados.size(); i++) {
+                text.append("- ").append(camposModificados.get(i)).append(": \n")
+                        .append("   Antes: ").append(datosAntiguos.get(i)).append("\n")
+                        .append("   Ahora: ").append(datosNuevos.get(i)).append("\n\n");
+            }
+        }
+
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text.toString());
+        emailSender.send(message);
+    }
+
+
 }

@@ -92,14 +92,14 @@
 											<!-- DNI -->
 											<div class="col-lg-6 col-12">
 												<label for="DNIFinalUser" class="form-label">DNI:</label>
-												<input type="text" class="form-control" id="DNIFinalUser" value="75893456" disabled />
+												<input type="text" class="form-control" id="DNIFinalUser" th:field="*{dni}" disabled />
 												<input type="hidden" name="dni" value="75893456" />
 											</div>
 
 											<!-- Nombres -->
 											<div class="col-lg-6 col-12">
 												<label for="creatCustomerName" class="form-label">Nombres:</label>
-												<input type="text" class="form-control" id="creatCustomerName" value="Lucía" disabled />
+												<input type="text" class="form-control" id="creatCustomerName" th:field="*{nombre}" disabled />
 												<input type="hidden" name="nombre" value="Lucía" />
 											</div>
 										</div>
@@ -108,14 +108,14 @@
 											<!-- Apellido Paterno -->
 											<div class="col-lg-6 col-12">
 												<label for="creatFinalUserLastName1" class="form-label">Apellido Paterno:</label>
-												<input type="text" class="form-control" id="creatFinalUserLastName1" value="Rojas" disabled />
+												<input type="text" class="form-control" id="creatFinalUserLastName1" th:field="*{apellidoPaterno}" disabled />
 												<input type="hidden" name="apellidoPaterno" value="Rojas" />
 											</div>
 
 											<!-- Apellido Materno -->
 											<div class="col-lg-6 col-12">
 												<label for="creatFinalUserLastName" class="form-label">Apellido Materno:</label>
-												<input type="text" class="form-control" id="creatFinalUserLastName" value="Rojas" disabled />
+												<input type="text" class="form-control" id="creatFinalUserLastName" th:field="*{apellidoMaterno}" disabled />
 												<input type="hidden" name="apellidoMaterno" value="Rojas" />
 											</div>
 										</div>

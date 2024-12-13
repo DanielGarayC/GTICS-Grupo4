@@ -222,13 +222,52 @@ public class SuperAdminController {
             } else {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
             }
-            usuario.setFoto(foto.getBytes());
+            Optional<Usuario> usuario1 = usuarioRepository.findById(usuario.getId());
+            if (foto.isEmpty()){
+
+                usuario.setFoto(usuario1.get().getFoto());
+            }else{
+                usuario.setFoto(foto.getBytes());
+            }
 
             String passwordParaEnviar = usuario.getContrasena();
             System.out.println("contra a enviar: " + passwordParaEnviar);
             String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
             usuario.setContrasena(encryptedPassword);
-            emailService.sendVerificationEmail(usuario.getEmail(), usuario.getNombre(), passwordParaEnviar);
+            ArrayList<String> datosAntiguos = new ArrayList<>();
+            ArrayList<String> datosNuevos = new ArrayList<>();
+            ArrayList<String> camposModificados = new ArrayList<>();
+
+            if (!Objects.equals(usuario.getTelefono(), usuario1.get().getTelefono())) {
+                datosNuevos.add(usuario.getTelefono());
+                datosAntiguos.add(usuario1.get().getTelefono());
+                camposModificados.add("Teléfono");
+            }
+            if (!Objects.equals(usuario.getEmail(), usuario1.get().getEmail())) {
+                datosNuevos.add(usuario.getEmail());
+                datosAntiguos.add(usuario1.get().getEmail());
+                camposModificados.add("Email");
+            }
+            if (!Objects.equals(usuario.getDireccion(), usuario1.get().getDireccion())) {
+                datosNuevos.add(usuario.getDireccion());
+                datosAntiguos.add(usuario1.get().getDireccion());
+                camposModificados.add("Dirección");
+            }
+            if (!Objects.equals(usuario.getZona().getNombreZona(), usuario1.get().getZona().getNombreZona())) {
+                datosNuevos.add(usuario.getZona().getNombreZona());
+                datosAntiguos.add(usuario1.get().getZona().getNombreZona());
+                camposModificados.add("Zona");
+            }
+            if (!Objects.equals(usuario.getAzFechanacimiento(), usuario1.get().getAzFechanacimiento())) {
+                datosNuevos.add(String.valueOf(usuario.getAzFechanacimiento()));
+                datosAntiguos.add(String.valueOf(usuario1.get().getAzFechanacimiento()));
+                camposModificados.add("Fecha de nacimiento");
+            }
+
+
+            if (!datosAntiguos.isEmpty()) {
+                emailService.actualizacionAdminZonal(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
+            }
             usuario.setActivo(1);
             usuarioRepository.save(usuario);
         } catch (Exception e) {
