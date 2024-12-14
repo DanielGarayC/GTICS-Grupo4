@@ -798,14 +798,27 @@ public class SuperAdminController {
                 .body(resource);
     }
 
-    @PostMapping("/SuperAdmin/banearUsuarioFinal")
-    public String banearUsuarioFinal(
+    @PostMapping("/SuperAdmin/banearUsuario")
+    public String banearUsuario(
             @RequestParam("idUsuarioFinal") Integer idUsuarioFinal,
-            @RequestParam("razon") String razon) {
+            @RequestParam("razon") String razon, RedirectAttributes attr) {
         System.out.println(idUsuarioFinal);
         System.out.println(razon);
         usuarioRepository.banUsuario(idUsuarioFinal, razon);
-        return "redirect:/SuperAdmin/listaUsuarioFinal";
+        Usuario usuario = usuarioRepository.findById(idUsuarioFinal).orElseThrow();
+        attr.addFlashAttribute("msg", "Usuario eliminado exitosamente");
+        switch (usuario.getRol().getId()){
+            case 4:
+                return "redirect:/SuperAdmin/listaUsuarioFinal";
+            case 3:
+                attr.addFlashAttribute("message", "Usuario eliminado exitosamente");
+                return "redirect:/SuperAdmin/listaAgente";
+            case 2:
+                return "redirect:/SuperAdmin/listaAdminZonal";
+            default:
+                return "redirect:/SuperAdmin";
+        }
+
     }
 
 

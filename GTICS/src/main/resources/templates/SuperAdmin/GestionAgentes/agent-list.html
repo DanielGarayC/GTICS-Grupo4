@@ -101,6 +101,32 @@
                         <div class="alert alert-success" role="alert" th:if="${message != null}" th:text="${message}"></div>
                         <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}"></div>
 
+                        <!-- Modal para la razón de eliminación -->
+                        <div class="modal fade" id="deleteReasonModal" tabindex="-1" aria-labelledby="deleteReasonModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteReasonModalLabel">Razón para eliminar</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form id="deleteUserForm" method="post" th:action="@{/SuperAdmin/banearUsuario}">
+                                        <div class="modal-body">
+                                            <input type="hidden" id="userIdToDelete" name="idUsuarioFinal">
+                                            <div class="mb-3">
+                                                <label for="deleteReason" class="form-label">Razón</label>
+                                                <textarea id="deleteReason" name="razon" class="form-control" rows="4" required
+                                                          placeholder="Escribe la razón para eliminar al usuario"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-danger">Confirmar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Tabla de agentes -->
                         <div class="card h-100 card-lg">
                             <div class="card-body p-0">
@@ -148,9 +174,11 @@
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a class="dropdown-item" href="#"
-                                                                   th:data-idusuario="${agente['idusuario']}"
-                                                                   onclick="confirmDelete(this)">
+                                                                <a href="javascript:void(0);"
+                                                                   class="dropdown-item"
+                                                                   data-bs-toggle="modal"
+                                                                   data-bs-target="#deleteReasonModal"
+                                                                   th:data-id="${agente['idusuario']}">
                                                                     <i class="bi bi-trash me-3"></i>
                                                                     Eliminar
                                                                 </a>
@@ -226,6 +254,14 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
         <!-- Script para confirmar eliminación -->
+        <script>
+            // Para eliminar a alguien :D
+            document.getElementById('deleteReasonModal').addEventListener('show.bs.modal', function (event) {
+                const triggerElement = event.relatedTarget;
+                const userId = triggerElement.getAttribute('data-id');
+                document.getElementById('userIdToDelete').value = userId;
+            });
+        </script>
         <script>
             function confirmDelete(button) {
                 const idUsuario = button.getAttribute('data-idusuario');

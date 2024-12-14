@@ -60,8 +60,41 @@
                   </ol>
                 </nav>
               </div>
+              <!-- Modal para la razón de eliminación -->
+              <div class="modal fade" id="deleteReasonModal" tabindex="-1" aria-labelledby="deleteReasonModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="deleteReasonModalLabel">Razón para eliminar</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="deleteUserForm" method="post" th:action="@{/SuperAdmin/banearUsuario}">
+                      <div class="modal-body">
+                        <input type="hidden" id="userIdToDelete" name="idUsuarioFinal">
+                        <div class="mb-3">
+                          <label for="deleteReason" class="form-label">Razón</label>
+                          <textarea id="deleteReason" name="razon" class="form-control" rows="4" required
+                                    placeholder="Escribe la razón para eliminar al usuario"></textarea>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Confirmar</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
               <div>
-                <button type="button" class="btn btn-danger" href="#" th:data-href="@{/SuperAdmin/banearUsuarioFinal/{id}(id=${finalUser.getId()})}" onclick="confirmDelete(this.getAttribute('data-href'))" data-bs-toggle="modal" data-bs-target="#delete" >Eliminar</button>
+                <a href="javascript:void(0);"
+                   type="button"
+                   class="btn btn-danger"
+                   data-bs-toggle="modal"
+                   data-bs-target="#deleteReasonModal"
+                   th:data-id="${finalUser.getId()}">
+                  Eliminar
+                </a>
               </div>
             </div>
           </div>
@@ -218,6 +251,15 @@
       allowEnterKey: true
     });
   }
+</script>
+
+<script>
+  // Para eliminar a alguien :D
+  document.getElementById('deleteReasonModal').addEventListener('show.bs.modal', function (event) {
+    const triggerElement = event.relatedTarget;
+    const userId = triggerElement.getAttribute('data-id');
+    document.getElementById('userIdToDelete').value = userId;
+  });
 </script>
 
 
