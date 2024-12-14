@@ -40,6 +40,121 @@
 
 </style>
     <style>
+
+        .form-control::placeholder {
+            font-size: 12px; /* Cambia el tamaño del texto del placeholder */
+        }
+        .info-box {
+            display: flex;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: -100px;
+        }
+        .highlight-text {
+            font-style: italic; /* Texto en cursiva */
+            font-weight: bold; /* Texto en negritas */
+            color:black;
+            letter-spacing: 1px; /* Espaciado entre letras */
+            text-align: center; /* Centrar el texto */
+            font-family: 'Arial', sans-serif; /* Puedes cambiar la fuente si lo prefieres */
+            font-size: 1.2em; /* Tamaño del texto ajustable */
+            text-transform: uppercase; /* Convertir el texto a mayúsculas */
+            margin-top: 20px;
+        }
+        .button-container {
+            text-align: center; /* Centra el botón horizontalmente */
+        }
+        .table {
+            width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
+            text-align: center; /* Centra el contenido horizontalmente */
+        }
+        .table tbody td {
+            color: black; /* Texto negro para el cuerpo de la tabla */
+        }
+
+        /* Botón "Útil" estilizado */
+        .like-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            font-weight: normal;
+            font-size: 14px;
+            color: #6c757d;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .like-btn i {
+            font-size: 18px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        /* Estilo cuando está marcado (like) */
+        .like-btn.liked {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .like-btn.liked i {
+            color: #007bff;
+            transform: scale(1.2);
+        }
+
+        /* Animación de rebote (bounce) cuando se hace click */
+        @keyframes bounce {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .like-btn.liked i {
+            animation: bounce 0.4s ease-out;
+        }
+
+        /* Partículas de "like" */
+        .like-btn .particles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            display: none;
+        }
+
+        .like-btn.liked .particles {
+            display: block;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: #007bff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particle-animation 0.6s forwards ease-out;
+        }
+
+        @keyframes particle-animation {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--x), var(--y)) scale(0.6);
+            }
+        }
+
+    </style>
+
+    <style>
         /* Estilos para el contenedor principal de zoom */
         .zoom {
             position: relative;
@@ -339,15 +454,18 @@
                         <div class="mb-4">
                             <!-- Rating -->
                             <small class="text-warning" aria-label="Calificación promedio">
-                <span th:each="i : ${#numbers.sequence(1,5)}">
-                    <i class="bi"
-                       th:classappend="${producto.averageRating >= i} ? ' bi-star-fill' :
-                                     (${producto.averageRating >= (i - 0.5)} ? ' bi-star-half' :
-                                     ' bi-star')"
-                       th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
-                </span>
+                                <!-- Estrellas Dinámicas -->
+                                <span th:each="i : ${#numbers.sequence(1,5)}">
+                        <i class="bi"
+                           th:classappend="${averageRating >= i} ? ' bi-star-fill' :
+                                         (${averageRating >= (i - 0.5)} ? ' bi-star-half' :
+                                         ' bi-star')"
+                           th:attr="aria-label=${averageRating >= i ? 'Estrella llena' : (averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+                    </span>
                             </small>
-                            <a href="#" class="ms-2" th:text="${producto.averageRating} + ' (' + ${producto.reviewCount} + ')'"></a>
+                            <!-- Promedio de Calificación -->
+                            <a href="#" class="ms-2" th:text="${#numbers.formatDecimal(averageRating, 1, 1)} + ' ('+ ${totalReviews} + ')'"></a>
+
                         </div>
 
                         <div class="fs-4" style="font-size: 0.9rem;">
@@ -538,23 +656,28 @@
                                     <div class="col-md-4">
                                         <div class="me-lg-12 mb-6 mb-md-0">
                                             <div class="mb-5">
-                                                <!-- title -->
-                                                <h4 class="mb-3">Customer reviews</h4>
+                                                <!-- Título -->
+                                                <h4 class="mb-3">Opiniones de clientes</h4>
                                                 <span>
-                                             <!-- rating -->
-                                             <small class="text-warning">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-half"></i>
-                                             </small>
-                                             <span class="ms-3">4.1 out of 5</span>
-                                             <small class="ms-3">11,130 global ratings</small>
-                                          </span>
+                <!-- Calificación Promedio -->
+                <small class="text-warning" aria-label="Calificación promedio">
+                    <!-- Estrellas Dinámicas -->
+                    <span th:each="i : ${#numbers.sequence(1,5)}">
+                        <i class="bi"
+                           th:classappend="${averageRating >= i} ? ' bi-star-fill' :
+                                         (${averageRating >= (i - 0.5)} ? ' bi-star-half' :
+                                         ' bi-star')"
+                           th:attr="aria-label=${averageRating >= i ? 'Estrella llena' : (averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+                    </span>
+                </small>
+                                                    <!-- Promedio de Calificación -->
+                <span class="ms-3" th:text="${#numbers.formatDecimal(averageRating, 1, 1)} + ' de 5'">4.1 de 5</span>
+                                                    <!-- Total de Reseñas -->
+                <small class="ms-3" th:text="${totalReviews} + ' reseñas totales'">11,130 global ratings</small>
+            </span>
                                             </div>
                                             <div class="mb-8">
-                                                <!-- progress -->
+                                                <!-- Progress 5 estrellas -->
                                                 <div class="d-flex align-items-center mb-2">
                                                     <div class="text-nowrap me-3 text-muted">
                                                         <span class="d-inline-block align-middle text-muted">5</span>
@@ -562,12 +685,15 @@
                                                     </div>
                                                     <div class="w-100">
                                                         <div class="progress" style="height: 6px">
-                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                 th:style="'width: ' + ${percent5Star} + '%'"
+                                                                 th:attr="aria-valuenow=${percent5Star}, aria-valuemin='0', aria-valuemax='100'">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <span class="text-muted ms-3">53%</span>
+                                                    <span class="text-muted ms-3" th:text="${#numbers.formatDecimal(percent5Star, 1, 1)} + '%'">53%</span>
                                                 </div>
-                                                <!-- progress -->
+                                                <!-- Progress 4 estrellas -->
                                                 <div class="d-flex align-items-center mb-2">
                                                     <div class="text-nowrap me-3 text-muted">
                                                         <span class="d-inline-block align-middle text-muted">4</span>
@@ -575,12 +701,15 @@
                                                     </div>
                                                     <div class="w-100">
                                                         <div class="progress" style="height: 6px">
-                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50"></div>
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                 th:style="'width: ' + ${percent4Star} + '%'"
+                                                                 th:attr="aria-valuenow=${percent4Star}, aria-valuemin='0', aria-valuemax='100'">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <span class="text-muted ms-3">22%</span>
+                                                    <span class="text-muted ms-3" th:text="${#numbers.formatDecimal(percent4Star, 1, 1)} + '%'">22%</span>
                                                 </div>
-                                                <!-- progress -->
+                                                <!-- Progress 3 estrellas -->
                                                 <div class="d-flex align-items-center mb-2">
                                                     <div class="text-nowrap me-3 text-muted">
                                                         <span class="d-inline-block align-middle text-muted">3</span>
@@ -588,12 +717,15 @@
                                                     </div>
                                                     <div class="w-100">
                                                         <div class="progress" style="height: 6px">
-                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="35"></div>
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                 th:style="'width: ' + ${percent3Star} + '%'"
+                                                                 th:attr="aria-valuenow=${percent3Star}, aria-valuemin='0', aria-valuemax='100'">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <span class="text-muted ms-3">14%</span>
+                                                    <span class="text-muted ms-3" th:text="${#numbers.formatDecimal(percent3Star, 1, 1)} + '%'">14%</span>
                                                 </div>
-                                                <!-- progress -->
+                                                <!-- Progress 2 estrellas -->
                                                 <div class="d-flex align-items-center mb-2">
                                                     <div class="text-nowrap me-3 text-muted">
                                                         <span class="d-inline-block align-middle text-muted">2</span>
@@ -601,12 +733,15 @@
                                                     </div>
                                                     <div class="w-100">
                                                         <div class="progress" style="height: 6px">
-                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 22%" aria-valuenow="22" aria-valuemin="0" aria-valuemax="22"></div>
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                 th:style="'width: ' + ${percent2Star} + '%'"
+                                                                 th:attr="aria-valuenow=${percent2Star}, aria-valuemin='0', aria-valuemax='100'">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <span class="text-muted ms-3">5%</span>
+                                                    <span class="text-muted ms-3" th:text="${#numbers.formatDecimal(percent2Star, 1, 1)} + '%'">5%</span>
                                                 </div>
-                                                <!-- progress -->
+                                                <!-- Progress 1 estrella -->
                                                 <div class="d-flex align-items-center mb-2">
                                                     <div class="text-nowrap me-3 text-muted">
                                                         <span class="d-inline-block align-middle text-muted">1</span>
@@ -614,198 +749,116 @@
                                                     </div>
                                                     <div class="w-100">
                                                         <div class="progress" style="height: 6px">
-                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 14%" aria-valuenow="14" aria-valuemin="0" aria-valuemax="14"></div>
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                 th:style="'width: ' + ${percent1Star} + '%'"
+                                                                 th:attr="aria-valuenow=${percent1Star}, aria-valuemin='0', aria-valuemax='100'">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <span class="text-muted ms-3">7%</span>
+                                                    <span class="text-muted ms-3" th:text="${#numbers.formatDecimal(percent1Star, 1, 1)} + '%'">7%</span>
                                                 </div>
-                                            </div>
-                                            <div class="d-grid">
-                                                <h4>Review this product</h4>
-                                                <p class="mb-0">Share your thoughts with other customers.</p>
-                                                <a href="#" class="btn btn-outline-gray-400 mt-4 text-muted">Write the Review</a>
                                             </div>
                                         </div>
                                     </div>
+
+
                                     <!-- col -->
                                     <div class="col-md-8">
                                         <div class="mb-10">
                                             <div class="d-flex justify-content-between align-items-center mb-8">
                                                 <div>
                                                     <!-- heading -->
-                                                    <h4>Reviews</h4>
+                                                    <h4>Reseñas del Producto</h4>
                                                 </div>
-                                                <div>
+                                                <!-- <div>
                                                     <select class="form-select">
-                                                        <option selected>Top Reviews</option>
-                                                        <option value="Most Recent">Most Recent</option>
+                                                        <option value="mostHelpful" th:selected="${sortOrder == 'mostHelpful'}">Más útiles</option>
+                                                        <option value="recent" th:selected="${sortOrder == 'recent'}">Más recientes</option>
                                                     </select>
-                                                </div>
+                                                </div> -->
+
                                             </div>
-                                            <div class="d-flex border-bottom pb-6 mb-6">
-                                                <!-- img -->
-                                                <!-- img -->
-                                                <img src="../assets/images/avatar/avatar-10.jpg" alt="" class="rounded-circle avatar-lg" />
-                                                <div class="ms-5">
-                                                    <h6 class="mb-1">Shankar Subbaraman</h6>
-                                                    <!-- select option -->
-                                                    <!-- content -->
+                                            <!-- Aquí imprimimos como máximo 3 reseñas -->
+                                            <div th:each="resena, iterStat : ${resenas}" th:if="${iterStat.index < 3}" class="d-flex border-bottom pb-6 mb-6">
+                                                <img th:src="${resena.idUsuario.foto != null ? '/UsuarioFinal/foto/' + resena.idUsuario : '/images/avatar/avatarGenerico.png'}"
+                                                     alt="Foto de usuario" class="rounded-circle avatar-lg">
+                                                <div class="ms-5 reseña-contenido" style="flex-grow: 1;">
+                                                    <h6 class="mb-1" th:text="${resena.idUsuario.nombre + ' ' + resena.idUsuario.apellidoPaterno + ' ' + resena.idUsuario.apellidoMaterno}"></h6>
                                                     <p class="small">
-                                                        <span class="text-muted">30 December 2022</span>
-                                                        <span class="text-primary ms-3 fw-bold">Verified Purchase</span>
+                                                        <span class="text-muted" th:text="${#temporals.format(resena.fechaCreacion, 'dd MMMM yyyy')}"></span>
                                                     </p>
-                                                    <!-- rating -->
-                                                    <div class="mb-2">
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <span class="ms-3 text-dark fw-bold">Need to recheck the weight at delivery point</span>
+                                                    <p class="text-primary fw-bold">
+                                                        Producto: <span th:text="${resena.producto.nombreProducto}"></span> -
+                                                        Proveedor: <span th:text="${resena.producto.idProveedor.nombreProveedor}"></span>
+                                                        <span class="badge badge-custom ms-2" th:text="${resena.producto.codigoProducto}">CODE123</span>
+                                                    </p>
+                                                    <div class="mb-2" th:if="${resena.idCalidad != null}"
+                                                         th:with="filledStars = ${resena.idCalidad.id}, emptyStars = ${5 - resena.idCalidad.id}">
+                <span th:each="i : ${#numbers.sequence(1, filledStars)}">
+                    <i class="bi bi-star-fill text-warning"></i>
+                </span>
+                                                        <span th:if="${emptyStars > 0}" th:each="i : ${#numbers.sequence(1, emptyStars)}">
+                    <i class="bi bi-star text-warning"></i>
+                </span>
+                                                        <span class="ms-3 text-dark fw-bold" th:text="${resena.tema}"></span>
                                                     </div>
-                                                    <!-- text-->
-                                                    <p>
-                                                        Product quality is good. But, weight seemed less than 1kg. Since it is being sent in open package, there is a possibility of pilferage in between.
-                                                        FreshCart sends the veggies and fruits through sealed plastic covers and Barcode on the weight etc. .
-                                                    </p>
-                                                    <div>
-                                                        <div class="border icon-shape icon-lg border-2">
-                                                            <!-- img -->
-                                                            <img src="../assets/images/products/product-img-1.jpg" alt="" class="img-fluid" />
+                                                    <p th:text="${resena.opinion}"></p>
+                                                    <div class="d-flex reseña-fotos mt-3">
+                                                        <div th:if="${not #lists.isEmpty(resena.fotosresenas)}">
+                                                            <div th:each="foto : ${resena.fotosresenas}"
+                                                                 class="border icon-shape icon-lg border-2 me-1"
+                                                                 style="width: 100px; height: 100px; overflow: hidden;">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modalResena"
+                                                                   th:attr="
+                                data-usuario-nombre=${resena.idUsuario.nombre},
+                                data-fecha-creacion=${#temporals.format(resena.fechaCreacion, 'dd MMMM yyyy')},
+                                data-calificacion=${resena.idCalidad.id},
+                                data-tema=${resena.tema},
+                                data-opinion=${resena.opinion},
+                                data-imagen-src=@{'/UsuarioFinal/Resena/Fotos/' + ${foto.id}},
+                                data-producto-nombre=${resena.producto.nombreProducto},
+                                data-proveedor-nombre=${resena.producto.idProveedor.nombreProveedor},
+                                data-codigo-producto=${resena.producto.codigoProducto}
+                            ">
+                                                                    <img th:src="@{'/UsuarioFinal/Resena/Fotos/' + ${foto.id}}"
+                                                                         class="img-fluid"
+                                                                         style="width: 100%; height: 100%; object-fit: cover;" />
+                                                                </a>
+                                                            </div>
                                                         </div>
-                                                        <div class="border icon-shape icon-lg border-2 ms-1">
-                                                            <!-- img -->
-                                                            <img src="../assets/images/products/product-img-2.jpg" alt="" class="img-fluid" />
-                                                        </div>
-                                                        <div class="border icon-shape icon-lg border-2 ms-1">
-                                                            <!-- img -->
-                                                            <img src="../assets/images/products/product-img-3.jpg" alt="" class="img-fluid" />
-                                                        </div>
                                                     </div>
-                                                    <!-- icon -->
+                                                    <!-- Botón útil (like) y contador -->
                                                     <div class="d-flex justify-content-end mt-4">
-                                                        <a href="#" class="text-muted">
+                                                        <a href="#" class="text-muted like-btn"
+                                                           th:attr="data-resena-id=${resena.id}"
+                                                           th:classappend="${usuariosLikes != null and usuariosLikes[resena.id] != null and usuariosLikes[resena.id].contains(usuario.email)} ? 'liked' : ''">
                                                             <i class="feather-icon icon-thumbs-up me-1"></i>
-                                                            Helpful
-                                                        </a>
-                                                        <a href="#" class="text-muted ms-4">
-                                                            <i class="feather-icon icon-flag me-2"></i>
-                                                            Report abuse
+                                                            Útil (<span class="like-count" th:text="${resena.util}">0</span>)
+                                                            <!-- Partículas de animación -->
+                                                            <div class="particles">
+                                                                <div class="particle" style="--x: -20px; --y: -30px;"></div>
+                                                                <div class="particle" style="--x: 20px; --y: -30px;"></div>
+                                                                <div class="particle" style="--x: -30px; --y: 10px;"></div>
+                                                                <div class="particle" style="--x: 30px; --y: 10px;"></div>
+                                                                <div class="particle" style="--x: 0px; --y: -40px;"></div>
+                                                            </div>
                                                         </a>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="d-flex border-bottom pb-6 mb-6 pt-4">
-                                                <!-- img -->
-                                                <img src="../assets/images/avatar/avatar-12.jpg" alt="" class="rounded-circle avatar-lg" />
-                                                <div class="ms-5">
-                                                    <h6 class="mb-1">Robert Thomas</h6>
-                                                    <!-- content -->
-                                                    <p class="small">
-                                                        <span class="text-muted">29 December 2022</span>
-                                                        <span class="text-primary ms-3 fw-bold">Verified Purchase</span>
-                                                    </p>
-                                                    <!-- rating -->
-                                                    <div class="mb-2">
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star text-warning"></i>
-                                                        <span class="ms-3 text-dark fw-bold">Need to recheck the weight at delivery point</span>
-                                                    </div>
 
-                                                    <p>
-                                                        Product quality is good. But, weight seemed less than 1kg. Since it is being sent in open package, there is a possibility of pilferage in between.
-                                                        FreshCart sends the veggies and fruits through sealed plastic covers and Barcode on the weight etc. .
-                                                    </p>
-
-                                                    <!-- icon -->
-                                                    <div class="d-flex justify-content-end mt-4">
-                                                        <a href="#" class="text-muted">
-                                                            <i class="feather-icon icon-thumbs-up me-1"></i>
-                                                            Helpful
-                                                        </a>
-                                                        <a href="#" class="text-muted ms-4">
-                                                            <i class="feather-icon icon-flag me-2"></i>
-                                                            Report abuse
-                                                        </a>
-                                                    </div>
+                                            <div th:if="${resenas.isEmpty()}">
+                                                <div class="alert alert-warning" role="alert">
+                                                    <strong>No se encontraron resultados</strong> Aún no se han hecho reseñas para este producto.
                                                 </div>
                                             </div>
-                                            <div class="d-flex border-bottom pb-6 mb-6 pt-4">
-                                                <!-- img -->
-                                                <img src="../assets/images/avatar/avatar-9.jpg" alt="" class="rounded-circle avatar-lg" />
-                                                <div class="ms-5">
-                                                    <h6 class="mb-1">Barbara Tay</h6>
-                                                    <!-- content -->
-                                                    <p class="small">
-                                                        <span class="text-muted">28 December 2022</span>
-                                                        <span class="text-danger ms-3 fw-bold">Unverified Purchase</span>
-                                                    </p>
-                                                    <!-- rating -->
-                                                    <div class="mb-2">
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star text-warning"></i>
-                                                        <span class="ms-3 text-dark fw-bold">Need to recheck the weight at delivery point</span>
-                                                    </div>
-
-                                                    <p>Everytime i ordered from fresh i got greenish yellow bananas just like i wanted so go for it , its happens very rare that u get over riped ones.</p>
-
-                                                    <!-- icon -->
-                                                    <div class="d-flex justify-content-end mt-4">
-                                                        <a href="#" class="text-muted">
-                                                            <i class="feather-icon icon-thumbs-up me-1"></i>
-                                                            Helpful
-                                                        </a>
-                                                        <a href="#" class="text-muted ms-4">
-                                                            <i class="feather-icon icon-flag me-2"></i>
-                                                            Report abuse
-                                                        </a>
-                                                    </div>
-                                                </div>
+                                            <!-- Botón "Ver más reseñas" si hay más de 3 -->
+                                            <div th:if="${resenas.size()} > 3" class="mt-4">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalResenas">
+                                                    Ver más reseñas
+                                                </button>
                                             </div>
-                                            <div class="d-flex border-bottom pb-6 mb-6 pt-4">
-                                                <!-- img -->
-                                                <img src="../assets/images/avatar/avatar-8.jpg" alt="" class="rounded-circle avatar-lg" />
-                                                <div class="ms-5 flex-grow-1">
-                                                    <h6 class="mb-1">Sandra Langevin</h6>
-                                                    <!-- content -->
-                                                    <p class="small">
-                                                        <span class="text-muted">8 December 2022</span>
-                                                        <span class="text-danger ms-3 fw-bold">Unverified Purchase</span>
-                                                    </p>
-                                                    <!-- rating -->
-                                                    <div class="mb-2">
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star-fill text-warning"></i>
-                                                        <i class="bi bi-star text-warning"></i>
-                                                        <span class="ms-3 text-dark fw-bold">Great product</span>
-                                                    </div>
 
-                                                    <p>Great product & package. Delivery can be expedited.</p>
-
-                                                    <!-- icon -->
-                                                    <div class="d-flex justify-content-end mt-4">
-                                                        <a href="#" class="text-muted">
-                                                            <i class="feather-icon icon-thumbs-up me-1"></i>
-                                                            Helpful
-                                                        </a>
-                                                        <a href="#" class="text-muted ms-4">
-                                                            <i class="feather-icon icon-flag me-2"></i>
-                                                            Report abuse
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <a href="#" class="btn btn-outline-gray-400 text-muted">Read More Reviews</a>
-                                            </div>
                                         </div>
 
                                     </div>
@@ -892,6 +945,139 @@
 
 
 </main>
+
+<!-- Campo Oculto para el ID del Producto -->
+<input type="hidden" id="idProducto" th:value="${producto.id}" />
+
+<!-- Modal para Mostrar una Reseña Detallada -->
+<div class="modal fade" id="modalResena" tabindex="-1" aria-labelledby="modalResenaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <div class="position-absolute top-0 end-0 me-3 mt-3">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 id="modalResenaUsuario"></h5>
+                        <p class="small text-muted" id="modalResenaFecha"></p>
+
+                        <p class="text-primary fw-bold">
+                            Producto: <span id="modalResenaProducto"></span>
+                        </p>
+                        <p class="text-primary fw-bold">
+                            Proveedor: <span id="modalResenaProveedor"></span>
+                        </p>
+                        <p class="text-primary fw-bold">
+                            <span class="badge bg-secondary ms-2" id="modalResenaCodigo"></span>
+                        </p>
+
+                        <div id="modalResenaCalificacion"></div>
+                        <h6 class="mt-3" id="modalResenaTema"></h6>
+                        <p id="modalResenaOpinion"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <img id="modalResenaImagen" src="#" alt="Imagen de la reseña" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODAL PARA MOSTRAR TODAS LAS RESEÑAS ================= -->
+<div class="modal fade" id="modalResenas" tabindex="-1" aria-labelledby="modalResenasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalResenasLabel">Reseñas de clientes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Estructura en 2 columnas: Izq -> Calificaciones ; Der -> Reseñas -->
+                <div class="row">
+                    <!-- ================= COL 1: PANEL DE CALIFICACIONES ================= -->
+                    <div class="col-md-4">
+                        <div class="me-lg-4 mb-6 mb-md-0">
+                            <div class="mb-5">
+                                <h4 class="mb-3">Opiniones de clientes</h4>
+                                <span>
+                                    <small class="text-warning" aria-label="Calificación promedio">
+                                        <span th:each="i : ${#numbers.sequence(1,5)}">
+                                            <i class="bi"
+                                               th:classappend="
+    ${averageRating >= i} ? 'bi-star-fill text-warning' :
+    (${averageRating >= (i - 0.5)} ? 'bi-star-half text-warning' : 'bi-star text-warning')
+"
+                                            >
+                                            </i>
+                                        </span>
+                                    </small>
+                                    <span class="ms-3" th:text="${#numbers.formatDecimal(averageRating,1,1)} + ' de 5'">4.1 de 5</span>
+                                    <small class="ms-3" th:text="${totalReviews} + ' reseñas totales'">1130 reseñas</small>
+                                </span>
+                            </div>
+                            <div class="mb-8">
+                                <!-- Barra de progreso para cada calificación (5 a 1) -->
+                                <div th:each="star : ${#numbers.sequence(5,1,-1)}" class="d-flex align-items-center mb-2">
+                                    <div class="text-nowrap me-3 text-muted">
+                                        <span class="d-inline-block align-middle" th:text="${star}">5</span>
+                                        <i class="bi bi-star-fill ms-1 small text-warning"></i>
+                                    </div>
+                                    <div class="w-100">
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                 th:style="'width: ' + (
+                                                   star == 5 ? ${percent5Star} :
+                                                   (star == 4 ? ${percent4Star} :
+                                                   (star == 3 ? ${percent3Star} :
+                                                   (star == 2 ? ${percent2Star} : ${percent1Star})))
+                                                 ) + '%'"
+                                                 th:attr="
+                                                   aria-valuenow=${
+                                                      star == 5 ? percent5Star :
+                                                      (star == 4 ? percent4Star :
+                                                      (star == 3 ? percent3Star :
+                                                      (star == 2 ? percent2Star : percent1Star)))
+                                                   },
+                                                   aria-valuemin='0',
+                                                   aria-valuemax='100'
+                                                 ">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted ms-3"
+                                          th:text="${
+                                            star == 5 ? #numbers.formatDecimal(percent5Star,1,1) :
+                                            (star == 4 ? #numbers.formatDecimal(percent4Star,1,1) :
+                                            (star == 3 ? #numbers.formatDecimal(percent3Star,1,1) :
+                                            (star == 2 ? #numbers.formatDecimal(percent2Star,1,1) :
+                                             #numbers.formatDecimal(percent1Star,1,1))))
+                                          } + '%'">
+                                        53%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ================= COL 2: CONTENEDOR DE TODAS LAS RESEÑAS ================= -->
+                    <div class="col-md-8">
+                        <div id="reseñas-container" class="row">
+                            <!-- Aquí se van a cargar dinámicamente las reseñas completas -->
+                        </div>
+                        <!-- Botón para cargar más reseñas (si no usas infinite scroll puro) -->
+                        <div class="text-center mt-4">
+                            <button id="cargar-mas-btn" class="btn btn-primary">Cargar más reseñas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div><!-- /.modal -->
+
+
 
 <!-- modal -->
 <div th:insert="~{fragments/modalProducto :: modalProducto(${producto}, ${imagenes}, ${fechaFormateada})}
@@ -1033,6 +1219,242 @@
         alert(`Opción seleccionada: ${option}`);
         // Aquí puedes añadir lógica para manejar las opciones seleccionadas
     }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var modalResena = document.getElementById('modalResena');
+        modalResena.addEventListener('show.bs.modal', function (event) {
+            // Obtén el enlace que activó el modal
+            var button = event.relatedTarget;
+
+            // Extrae la información de los atributos data-* del enlace
+            var usuarioNombre = button.getAttribute('data-usuario-nombre');
+            var fechaCreacion = button.getAttribute('data-fecha-creacion');
+            var calificacion = parseInt(button.getAttribute('data-calificacion')); // Convertir a entero
+            var tema = button.getAttribute('data-tema');
+            var opinion = button.getAttribute('data-opinion');
+            var imagenSrc = button.getAttribute('data-imagen-src');
+            var productoNombre = button.getAttribute('data-producto-nombre'); // Nombre del producto
+            var proveedorNombre = button.getAttribute('data-proveedor-nombre'); // Nombre del proveedor
+            var codigoProducto = button.getAttribute('data-codigo-producto'); // Código del producto
+
+            // Actualiza el contenido del modal con los datos extraídos
+            var modalUsuarioNombre = modalResena.querySelector('#modalResenaUsuario');
+            var modalFechaCreacion = modalResena.querySelector('#modalResenaFecha');
+            var modalTema = modalResena.querySelector('#modalResenaTema');
+            var modalOpinion = modalResena.querySelector('#modalResenaOpinion');
+            var modalImagen = modalResena.querySelector('#modalResenaImagen');
+            var modalCalificacion = modalResena.querySelector('#modalResenaCalificacion');
+            var modalProductoNombre = modalResena.querySelector('#modalResenaProducto');
+            var modalProveedorNombre = modalResena.querySelector('#modalResenaProveedor');
+            var modalCodigoProducto = modalResena.querySelector('#modalResenaCodigo'); // Asegúrate de tener este ID
+
+            // Asignar valores al modal
+            modalUsuarioNombre.textContent = usuarioNombre;
+            modalFechaCreacion.textContent = fechaCreacion;
+            modalTema.textContent = tema;
+            modalOpinion.textContent = opinion;
+            modalImagen.src = imagenSrc;
+            modalProductoNombre.textContent = productoNombre;
+            modalProveedorNombre.textContent = proveedorNombre;
+            modalCodigoProducto.textContent = codigoProducto;
+
+            // Generar las estrellas según la calificación
+            var calificacionHtml = '';
+            for (var i = 1; i <= calificacion; i++) {
+                calificacionHtml += '<i class="bi bi-star-fill text-warning"></i>';
+            }
+            for (var i = calificacion + 1; i <= 5; i++) {
+                calificacionHtml += '<i class="bi bi-star text-warning"></i>';
+            }
+            modalCalificacion.innerHTML = calificacionHtml;
+        });
+    });
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Seleccionar todos los botones de "Útil"
+        document.querySelectorAll('.like-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(event) {
+                event.preventDefault();  // Evita la recarga de página
+
+                const resenaId = this.getAttribute('data-resena-id');
+
+                // Obtener el token CSRF y el header desde las meta tags
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                // Realiza la solicitud al servidor para alternar el estado de "Útil"
+                fetch('/UsuarioFinal/Resena/' + resenaId + '/like', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken  // Enviar el token CSRF en el encabezado
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Actualiza el contador en la interfaz
+                            this.querySelector('.like-count').textContent = data.newUtilCount;
+
+                            // Alterna la clase 'liked'
+                            this.classList.toggle('liked');
+
+                            // Si el botón ha sido marcado como "liked", dispara la animación
+                            if (this.classList.contains('liked')) {
+                                this.querySelectorAll('.particle').forEach(function(particle) {
+                                    particle.style.animation = 'none';
+                                    setTimeout(function() {
+                                        particle.style.animation = '';
+                                    }, 10);
+                                });
+                            }
+                        } else {
+                            console.error(data.message || 'Error desconocido.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+
+</script>
+<!-- ========================== SCRIPTS JAVASCRIPT ========================== -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Contenedor donde se van a añadir las reseñas en el modal
+        const reseñasContainer = document.getElementById('reseñas-container');
+        const loadMoreBtn      = document.getElementById('cargar-mas-btn');
+        let page = 0;         // Control de página
+        const size = 5;       // Cuántas reseñas cargar por request
+        // Orden (por fecha, etc.) - si tienes un <select id="sortSelect">, obtén su valor
+        const sortOrder = document.getElementById('sortSelect') ? document.getElementById('sortSelect').value : 'recent';
+
+        // Suponiendo que tienes un campo oculto o forma de obtener el ID de producto
+        // <input type="hidden" id="idProducto" th:value="${producto.id}" />
+        // O algo similar.
+        const idProductoInput = document.getElementById('idProducto');
+        const productoId = idProductoInput ? idProductoInput.value : null;
+
+        // Función para cargar reseñas de manera paginada
+        const loadReviews = async () => {
+            if (!productoId) {
+                console.error('ID del producto no encontrado');
+                return;
+            }
+            try {
+                const response = await fetch(`/UsuarioFinal/Reviews/ajax?page=${page}&size=${size}&productId=${productoId}&sort=${sortOrder}`);
+                // Ajusta la URL al endpoint que tengas en tu backend
+                const data = await response.json();
+
+                if (data.resenas && data.resenas.length > 0) {
+                    data.resenas.forEach(resena => {
+                        const reviewElement = createReviewElement(resena);
+                        reseñasContainer.appendChild(reviewElement);
+                    });
+                    page++;
+                } else {
+                    loadMoreBtn.disabled = true;
+                    loadMoreBtn.textContent = 'No hay más reseñas';
+                }
+            } catch (error) {
+                console.error('Error al cargar reseñas:', error);
+            }
+        };
+
+        // Función para crear el elemento HTML de una reseña dentro del modal
+        const createReviewElement = (resena) => {
+            // Contenedor principal de una reseña
+            const div = document.createElement('div');
+            div.className = 'd-flex border-bottom pb-6 mb-6';
+
+            // Generar estrellas
+            const starRatingHtml = generateStarRating(resena.idCalidad ? resena.idCalidad.id : 0);
+
+            // Generar fotos
+            const photosHtml = generatePhotoGallery(resena.fotosresenas);
+
+            div.innerHTML = `
+            <img src="${resena.idUsuario.foto ? '/UsuarioFinal/foto/' + resena.idUsuario.id : '/images/avatar/avatarGenerico.png'}"
+                 alt="Foto de usuario" class="rounded-circle avatar-lg">
+            <div class="ms-5 reseña-contenido" style="flex-grow: 1;">
+                <h6 class="mb-1">
+                    ${resena.idUsuario.nombre} ${resena.idUsuario.apellidoPaterno} ${resena.idUsuario.apellidoMaterno}
+                </h6>
+                <p class="small">
+                    <span class="text-muted">${resena.fechaCreacion}</span>
+                </p>
+                <p class="text-primary fw-bold">
+                    Producto: ${resena.producto.nombreProducto} -
+                    Proveedor: ${resena.producto.idProveedor.nombreProveedor}
+                    <span class="badge badge-custom ms-2">${resena.producto.codigoProducto}</span>
+                </p>
+                <div class="mb-2">
+                    ${starRatingHtml}
+                    <span class="ms-3 text-dark fw-bold">${resena.tema}</span>
+                </div>
+                <p>${resena.opinion}</p>
+                ${photosHtml}
+                <div class="d-flex justify-content-end mt-4">
+                    <a href="#" class="text-muted like-btn" data-resena-id="${resena.id}">
+                        <i class="feather-icon icon-thumbs-up me-1"></i>
+                        Útil (<span class="like-count">${resena.util != null ? resena.util : 0}</span>)
+                    </a>
+                </div>
+            </div>
+        `;
+            return div;
+        };
+
+        // Generar estrellas
+        const generateStarRating = (rating) => {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += `<i class="bi ${i <= rating ? 'bi-star-fill' : 'bi-star'} text-warning"></i>`;
+            }
+            return stars;
+        };
+
+        // Generar galería de fotos
+        const generatePhotoGallery = (photos) => {
+            if (!photos || photos.length === 0) return '';
+            let galleryHtml = '<div class="d-flex reseña-fotos mt-3">';
+            photos.forEach(photo => {
+                galleryHtml += `
+                <div class="border icon-shape icon-lg border-2 me-1" style="width: 100px; height: 100px; overflow: hidden;">
+                    <img src="/UsuarioFinal/Resena/Fotos/${photo.id}" class="img-fluid"
+                         style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+            `;
+            });
+            galleryHtml += '</div>';
+            return galleryHtml;
+        };
+
+        // Evento click en el botón "Cargar más reseñas"
+        loadMoreBtn.addEventListener('click', loadReviews);
+
+        // Cuando se abra el modal, reiniciamos variables y cargamos reseñas desde cero
+        const modalResenas = document.getElementById('modalResenas');
+        modalResenas.addEventListener('show.bs.modal', () => {
+            page = 0;
+            reseñasContainer.innerHTML = '';
+            loadMoreBtn.disabled = false;
+            loadMoreBtn.textContent = 'Cargar más reseñas';
+            loadReviews();
+        });
+
+        // Ejemplo de infinite scroll dentro del modal (opcional)
+        const modalBody = modalResenas.querySelector('.modal-body');
+        modalBody.addEventListener('scroll', () => {
+            // Si el scroll llega al final, cargamos más reseñas
+            if (modalBody.scrollHeight - modalBody.scrollTop === modalBody.clientHeight) {
+                loadReviews();
+            }
+        });
+    });
 </script>
 </body>
 </html>

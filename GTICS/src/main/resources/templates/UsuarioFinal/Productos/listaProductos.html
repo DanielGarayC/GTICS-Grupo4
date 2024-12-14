@@ -425,7 +425,7 @@
                th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
         </span>
                                                     </small>
-                                                    <span class="text-muted small" th:text="${producto.averageRating} + ' (' + ${producto.reviewCount} + ')'"></span>
+                                                        <span class="text-muted small" th:text="${producto.averageRating} + ' (' + ${producto.reviewCount} + ')'"></span>
                                                 </div>
 
                                                 <!-- Precio y botón de agregar al carrito -->

@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.security.Principal;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -1399,7 +1400,48 @@ public class UsuarioFinalController {
                     producto.getIdCategoria(), idProducto);
 
             model.addAttribute("productosRecomendados", productosRecomendados.stream().limit(8).collect(Collectors.toList()));
+            // Obtener datos de reseñas
+            Double averageRating = resenaRepository.findAverageRatingByProductoId(idProducto);
+            Long totalReviews = resenaRepository.countByProductoId(idProducto);
 
+            // Manejar null para averageRating si no hay reseñas
+            if (averageRating == null) {
+                averageRating = 0.0;
+            }
+
+            // Contar reseñas por cada estrella
+            Long count5Star = resenaRepository.countByProductoIdAndRating(idProducto, 5);
+            Long count4Star = resenaRepository.countByProductoIdAndRating(idProducto, 4);
+            Long count3Star = resenaRepository.countByProductoIdAndRating(idProducto, 3);
+            Long count2Star = resenaRepository.countByProductoIdAndRating(idProducto, 2);
+            Long count1Star = resenaRepository.countByProductoIdAndRating(idProducto, 1);
+
+            // Calcular porcentajes
+            double percent5Star = totalReviews > 0 ? ((double) count5Star / totalReviews) * 100 : 0.0;
+            double percent4Star = totalReviews > 0 ? ((double) count4Star / totalReviews) * 100 : 0.0;
+            double percent3Star = totalReviews > 0 ? ((double) count3Star / totalReviews) * 100 : 0.0;
+            double percent2Star = totalReviews > 0 ? ((double) count2Star / totalReviews) * 100 : 0.0;
+            double percent1Star = totalReviews > 0 ? ((double) count1Star / totalReviews) * 100 : 0.0;
+
+
+            // Añadir al modelo
+            // Agregar al modelo
+            model.addAttribute("averageRating", averageRating);
+            model.addAttribute("totalReviews", totalReviews);
+            model.addAttribute("count5Star", count5Star);
+            model.addAttribute("percent5Star", percent5Star);
+            model.addAttribute("count4Star", count4Star);
+            model.addAttribute("percent4Star", percent4Star);
+            model.addAttribute("count3Star", count3Star);
+            model.addAttribute("percent3Star", percent3Star);
+            model.addAttribute("count2Star", count2Star);
+            model.addAttribute("percent2Star", percent2Star);
+            model.addAttribute("count1Star", count1Star);
+            model.addAttribute("percent1Star", percent1Star);
+
+            // Opcional: Obtener las reseñas para mostrar en la página
+            List<Resena> resenas = resenaRepository.findByProducto_Id(idProducto);
+            model.addAttribute("resenas", resenas);
             return "UsuarioFinal/Productos/detalleProducto";
         } else {
             return "redirect:/UsuarioFinal/listaProductos";
@@ -1822,8 +1864,125 @@ public class UsuarioFinalController {
         return "UsuarioFinal/Foro/foro";
     }
 
+    // Método consolidado para manejar todas las solicitudes AJAX de reseñas
+    @GetMapping("/ajax")
+    public ResponseEntity<Map<String, Object>> getResenas(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "recent") String sortOrder,
+            @RequestParam Long idProducto) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Pageable paging;
+            if (sortOrder.equals("mostHelpful")) {
+                paging = PageRequest.of(page, size, Sort.by("util").descending());
+            } else {
+                paging = PageRequest.of(page, size, Sort.by("fechaCreacion").descending());
+            }
 
-    @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
+            Page<Resena> pagedResult = resenaRepository.findByProductoId(idProducto, paging);
+
+            List<Map<String, Object>> resenas = pagedResult.getContent().stream().map(resena -> {
+                Map<String, Object> resenaMap = new HashMap<>();
+                resenaMap.put("id", resena.getId());
+                resenaMap.put("usuario", resena.getIdUsuario().getNombre() + " " + resena.getIdUsuario().getApellidoPaterno() + " " + resena.getIdUsuario().getApellidoMaterno());
+                resenaMap.put("fechaCreacion", new SimpleDateFormat("dd MMMM yyyy").format(resena.getFechaCreacion()));
+                resenaMap.put("calificacion", resena.getIdCalidad() != null ? resena.getIdCalidad().getId() : 0);
+                resenaMap.put("tema", resena.getTema());
+                resenaMap.put("opinion", resena.getOpinion());
+                resenaMap.put("util", resena.getUtil() != null ? resena.getUtil() : 0);
+                resenaMap.put("productoNombre", resena.getProducto().getNombreProducto());
+                resenaMap.put("proveedorNombre", resena.getProducto().getIdProveedor().getNombreProveedor());
+                resenaMap.put("codigoProducto", resena.getProducto().getCodigoProducto());
+                resenaMap.put("fotos", resena.getFotosresenas().stream().map(Fotosresena::getId).collect(Collectors.toList()));
+                resenaMap.put("usuarioFoto", resena.getIdUsuario().getFoto()); // Asumiendo que hay un campo 'foto' en Usuario
+                resenaMap.put("usuarioId", resena.getIdUsuario().getId()); // Para construir la URL de la foto
+                return resenaMap;
+            }).collect(Collectors.toList());
+
+            response.put("resenas", resenas);
+            response.put("currentPage", pagedResult.getNumber());
+            response.put("totalPages", pagedResult.getTotalPages());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("message", "Error al obtener reseñas");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/UsuarioFinal/Reviews/modal")
+    @ResponseBody
+    public Map<String, Object> cargarMasResena(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "5") int size,
+                                                @RequestParam(defaultValue = "recent") String sortOrder,
+                                                @RequestParam Long idProducto) {
+        Sort sort = Sort.by("fechaCreacion").descending();
+        if ("mostHelpful".equals(sortOrder)) {
+            sort = Sort.by("util").descending();
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Resena> resenaPage = resenaRepository.findByProductoId(idProducto, pageable);
+
+        List<Map<String, Object>> resenaList = resenaPage.getContent().stream().map(resena -> {
+            Map<String, Object> resenaData = new HashMap<>();
+            resenaData.put("usuario", resena.getIdUsuario().getNombre());
+            resenaData.put("opinion", resena.getOpinion());
+            resenaData.put("calificacion", resena.getIdCalidad().getId());
+            return resenaData;
+        }).collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("resenas", resenaList);
+        response.put("hasMore", resenaPage.hasNext());
+        return response;
+    }
+
+
+    // Endpoint para manejar el "like" en una reseña
+    @PostMapping("/{id}/like")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> toggleLike(@PathVariable("id") Long id, Principal principal) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Optional<Resena> optionalResena = resenaRepository.findById(Math.toIntExact(id));
+            if (optionalResena.isPresent()) {
+                Resena resena = optionalResena.get();
+
+                // Inicializa 'util' si es null
+                if (resena.getUtil() == null) {
+                    resena.setUtil(0);
+                }
+
+                String userEmail = principal.getName();  // Obtener email del usuario autenticado
+                Usuario usuario = usuarioRepository.findByEmail(userEmail)
+                        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+                // Verifica si el usuario ya dio like
+                // Implementa una lógica adecuada para verificar si el usuario ya dio like.
+                // Por ejemplo, podrías tener una tabla "likes" que relacione usuarios y reseñas.
+
+                // Aquí, por simplicidad, suponemos que puedes incrementar el contador.
+                resena.setUtil(resena.getUtil() + 1);
+
+                // Guardar los cambios de la reseña
+                resenaRepository.save(resena);
+
+                response.put("success", true);
+                response.put("newUtilCount", resena.getUtil());  // Devolver el nuevo conteo de "útil"
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("success", false);
+                response.put("message", "Reseña no encontrada.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Ocurrió un error al procesar la solicitud.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }       @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
     public String guardarResena(@Valid @ModelAttribute("resena") Resena resena,
                                 BindingResult bindingResult,
                                 @RequestParam(value = "uploadedPhotos", required = false) MultipartFile[] uploadedPhotos,

@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface ResenaRepository extends JpaRepository<Resena, Integer> {
@@ -33,7 +34,24 @@ public interface ResenaRepository extends JpaRepository<Resena, Integer> {
             Pageable pageable
     );
 
+    // Contar las reseñas por cada nivel de estrella para un producto
+    @Query("SELECT COUNT(r) FROM Resena r WHERE r.producto.id = :idProducto AND r.idCalidad.id = :rating")
+    Long countByProductoIdAndRating(Integer idProducto, Integer rating);
 
+    // Contar el total de reseñas para un producto
+    @Query("SELECT COUNT(r) FROM Resena r WHERE r.producto.id = :idProducto")
+    Long countByProductoId(Integer idProducto);
+    // Obtener todas las reseñas para un producto específico
+
+
+    // Obtener el promedio de calificaciones para un producto
+    @Query("SELECT AVG(c.id) FROM Resena r JOIN r.idCalidad c WHERE r.producto.id = :idProducto")
+    Double findAverageRatingByProductoId(Integer idProducto);
+
+
+    Page<Resena> findByProductoId(Long idProducto, Pageable pageable);
+
+    List<Resena> findByProducto_Id(Integer idProducto);
 
 
 }
