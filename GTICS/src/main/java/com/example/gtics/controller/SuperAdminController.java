@@ -170,7 +170,8 @@ public class SuperAdminController {
     }
 
     @PostMapping("/SuperAdmin/AdminZonal/guardar")
-    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario, @RequestParam("zonaId") Integer zonaId, RedirectAttributes attr, @RequestParam("zonalAdminPhoto") MultipartFile foto) {
+    public String guardarAdminZonal(@ModelAttribute("usuario") Usuario usuario, @RequestParam("zonaId") Integer zonaId, RedirectAttributes attr,
+                                    @RequestParam("zonalAdminPhoto") MultipartFile foto) {
         System.out.println("guardar nuevo admin zonal prueba");
         //usuario.setId(null);
         //usuario.setId(null);
@@ -221,13 +222,53 @@ public class SuperAdminController {
             } else {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
             }
-            usuario.setFoto(foto.getBytes());
+            Optional<Usuario> usuario1 = usuarioRepository.findById(usuario.getId());
+            boolean fotoActualizada = false;
+            if (foto.isEmpty()){
+                usuario.setFoto(usuario1.get().getFoto());
+            }else{
+                fotoActualizada = true;
+                usuario.setFoto(foto.getBytes());
+            }
 
             String passwordParaEnviar = usuario.getContrasena();
             System.out.println("contra a enviar: " + passwordParaEnviar);
             String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
             usuario.setContrasena(encryptedPassword);
-            emailService.sendVerificationEmail(usuario.getEmail(), usuario.getNombre(), passwordParaEnviar);
+            ArrayList<String> datosAntiguos = new ArrayList<>();
+            ArrayList<String> datosNuevos = new ArrayList<>();
+            ArrayList<String> camposModificados = new ArrayList<>();
+
+            if (!Objects.equals(usuario.getTelefono(), usuario1.get().getTelefono())) {
+                datosNuevos.add(usuario.getTelefono());
+                datosAntiguos.add(usuario1.get().getTelefono());
+                camposModificados.add("Teléfono");
+            }
+            if (!Objects.equals(usuario.getEmail(), usuario1.get().getEmail())) {
+                datosNuevos.add(usuario.getEmail());
+                datosAntiguos.add(usuario1.get().getEmail());
+                camposModificados.add("Email");
+            }
+            if (!Objects.equals(usuario.getDireccion(), usuario1.get().getDireccion())) {
+                datosNuevos.add(usuario.getDireccion());
+                datosAntiguos.add(usuario1.get().getDireccion());
+                camposModificados.add("Dirección");
+            }
+            if (!Objects.equals(usuario.getZona().getNombreZona(), usuario1.get().getZona().getNombreZona())) {
+                datosNuevos.add(usuario.getZona().getNombreZona());
+                datosAntiguos.add(usuario1.get().getZona().getNombreZona());
+                camposModificados.add("Zona");
+            }
+            if (!Objects.equals(usuario.getAzFechanacimiento(), usuario1.get().getAzFechanacimiento())) {
+                datosNuevos.add(String.valueOf(usuario.getAzFechanacimiento()));
+                datosAntiguos.add(String.valueOf(usuario1.get().getAzFechanacimiento()));
+                camposModificados.add("Fecha de nacimiento");
+            }
+
+
+            if (!datosAntiguos.isEmpty() || fotoActualizada) {
+                emailService.actualizacionInfoUserGenerico(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
+            }
             usuario.setActivo(1);
             usuarioRepository.save(usuario);
         } catch (Exception e) {
@@ -655,7 +696,7 @@ public class SuperAdminController {
     public String actualizarUsuarioFinal(@ModelAttribute("usuario") @Validated(UsuarioFinalValidationGroup.class) Usuario usuario,
                                          BindingResult bindingResult,
                                          Model model,
-                                         @RequestParam("UserPhoto") MultipartFile foto) throws IOException {
+                                         @RequestParam("UserPhoto") MultipartFile foto, RedirectAttributes attr) throws IOException {
 
         if (bindingResult.hasErrors()) {
             System.out.println("Errores de validación:");
@@ -694,12 +735,14 @@ public class SuperAdminController {
 
             return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
         }
-
+        boolean fotoActualizada= false;
         // Actualización de datos del usuario
         if (foto.isEmpty()) {
+
             Usuario finalUser = usuarioRepository.findById(usuario.getId()).orElseThrow();
             usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(), usuario.getId());
         } else {
+            fotoActualizada = true;
             try {
                 byte[] fotoBytes = foto.getBytes();
                 usuario.setFoto(fotoBytes);
@@ -707,7 +750,38 @@ public class SuperAdminController {
             } catch (IOException ignored) {
             }
         }
+        attr.addFlashAttribute("msg", "Información del usuario final actualizada exitosamente");
 
+
+        Optional<Usuario> usuario1 = usuarioRepository.findById(usuario.getId());
+
+        ArrayList<String> datosAntiguos = new ArrayList<>();
+        ArrayList<String> datosNuevos = new ArrayList<>();
+        ArrayList<String> camposModificados = new ArrayList<>();
+
+        if (!Objects.equals(usuario.getTelefono(), usuario1.get().getTelefono())) {
+            datosNuevos.add(usuario.getTelefono());
+            datosAntiguos.add(usuario1.get().getTelefono());
+            camposModificados.add("Teléfono");
+        }
+        if (!Objects.equals(usuario.getEmail(), usuario1.get().getEmail())) {
+            datosNuevos.add(usuario.getEmail());
+            datosAntiguos.add(usuario1.get().getEmail());
+            camposModificados.add("Email");
+        }
+        if (!Objects.equals(usuario.getDireccion(), usuario1.get().getDireccion())) {
+            datosNuevos.add(usuario.getDireccion());
+            datosAntiguos.add(usuario1.get().getDireccion());
+            camposModificados.add("Dirección");
+        }
+        if (!Objects.equals(usuario.getDistrito().getNombre(), usuario1.get().getDistrito().getNombre())) {
+            datosNuevos.add(String.valueOf(usuario.getDistrito().getNombre()));
+            datosAntiguos.add(String.valueOf(usuario1.get().getDistrito().getNombre()));
+            camposModificados.add("Distrito");
+        }
+        if (!datosAntiguos.isEmpty() || fotoActualizada) {
+            emailService.actualizacionInfoUserGenerico(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
+        }
         return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 
@@ -1223,7 +1297,7 @@ public class SuperAdminController {
         String uri = request.getRequestURI();
 
         // Excluye la vista específica
-        if (uri.contains("/SuperAdmin/crearAdminZonal") || uri.contains("/SuperAdmin/AdminZonal/guardar") ) { // Cambia "/vista-excluida" por la URI que quieres excluir
+        if (uri.contains("/SuperAdmin/crearAdminZonal") || uri.contains("/SuperAdmin/AdminZonal/guardar") || uri.contains("/SuperAdmin/UsuarioFinal/Actualizar")) { // Cambia "/vista-excluida" por la URI que quieres excluir
             return; // No ejecutar el código si la vista es la excluida
         }
 

@@ -67,13 +67,13 @@
 					<div class="col-12">
 						<div class="card card-lg border-0">
 							<div class="card-body d-flex flex-column gap-8 p-7">
-								<form class="row g-3 needs-validation" enctype="multipart/form-data"   method="post" th:action="@{/SuperAdmin/UsuarioFinal/Actualizar}" th:object="${finalUser}"  novalidate>
-									<input type="hidden" class="form-control" th:value="${finalUser}" th:field="*{id}" />
+								<form id="UsuarioFinalForm" class="row g-3 needs-validation" enctype="multipart/form-data"   method="post" th:action="@{/SuperAdmin/UsuarioFinal/Actualizar}" th:object="${finalUser}"  novalidate>
+									<input type="hidden" class="form-control" th:value="${finalUser}" th:field="*{id}" 	/>
 									<div class="d-flex flex-column flex-md-row align-items-center mb-4 file-input-wrapper gap-2">
 										<div>
-											<!--<img class="image avatar avatar-lg rounded-3"
+											<img class="image avatar avatar-lg rounded-3"
 												 th:src="@{${finalUser.getFoto() != null} ? '/usuarioFinal/' + ${finalUser.getId()} : '/images/avatar/avatarGenerico.png'}"
-												 alt="Image" />-->
+												 alt="Image" />
 										</div>
 
 										<div class="file-upload btn btn-light ms-md-4">
@@ -89,43 +89,37 @@
 										<h4 class="mb-0 h5">Información del usuario final</h4>
 
 										<div class="row">
+											<!-- DNI -->
 											<div class="col-lg-6 col-12">
-												<label for="DNIFinalUser" class="form-label">
-													DNI:
-													<span class="text-danger">*</span>
-												</label>
-												<input type="text" class="form-control" id="DNIFinalUser" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" />
-												<div class="invalid-feedback" th:if="${dniError}" th:text="${dniError}"></div>
+												<label for="DNIFinalUser" class="form-label">DNI:</label>
+												<input type="text" class="form-control" id="DNIFinalUser" th:field="*{dni}" disabled />
+												<input type="hidden" name="dni" value="75893456" />
 											</div>
 
+											<!-- Nombres -->
 											<div class="col-lg-6 col-12">
-												<label for="creatCustomerName" class="form-label">
-													Nombres:
-													<span class="text-danger">*</span>
-												</label>
-												<input type="text" class="form-control" id="creatCustomerName" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" />
-												<div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>                                                    </div>
+												<label for="creatCustomerName" class="form-label">Nombres:</label>
+												<input type="text" class="form-control" id="creatCustomerName" th:field="*{nombre}" disabled />
+												<input type="hidden" name="nombre" value="Lucía" />
 											</div>
 										</div>
 
 										<div class="row">
+											<!-- Apellido Paterno -->
 											<div class="col-lg-6 col-12">
-												<label for="creatFinalUserLastName1" class="form-label">
-													Apellido Paterno:
-													<span class="text-danger">*</span>
-												</label>
-												<input type="text" class="form-control" id="creatFinalUserLastName1" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}" />
-												<div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></div>
+												<label for="creatFinalUserLastName1" class="form-label">Apellido Paterno:</label>
+												<input type="text" class="form-control" id="creatFinalUserLastName1" th:field="*{apellidoPaterno}" disabled />
+												<input type="hidden" name="apellidoPaterno" value="Rojas" />
 											</div>
 
+											<!-- Apellido Materno -->
 											<div class="col-lg-6 col-12">
-												<label for="creatFinalUserLastName" class="form-label">
-													Apellido Materno:
-													<span class="text-danger">*</span>
-												</label>
-												<input type="text" class="form-control" id="creatFinalUserLastName" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}" />
-												<div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></div>
+												<label for="creatFinalUserLastName" class="form-label">Apellido Materno:</label>
+												<input type="text" class="form-control" id="creatFinalUserLastName" th:field="*{apellidoMaterno}" disabled />
+												<input type="hidden" name="apellidoMaterno" value="Rojas" />
+											</div>
 										</div>
+
 
 										<div class="row">
 											<div class="col-lg-6 col-12">
@@ -170,7 +164,7 @@
 
 										<div class="col-12 mt-3">
 											<div class="d-flex flex-column flex-md-row gap-2">
-												<button class="btn btn-primary" type="submit">Actualizar</button>
+												<button class="btn btn-primary" type="button" onclick="confirmarRegistro()">Actualizar</button>
 												<a th:href="@{/SuperAdmin/listaUsuarioFinal}" ><button class="btn btn-secondary" type="button" >Cancelar</button></a>
 											</div>
 										</div>
@@ -230,6 +224,29 @@
 		});
 	}
 
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+	function confirmarRegistro() {
+		Swal.fire({
+			title: '¿Estás seguro?',
+			text: "¿Deseas actualizar la información de este usuario?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#28a745',
+			cancelButtonColor: '#dc3545',
+			confirmButtonText: 'Sí, actualizar',
+			cancelButtonText: 'Cancelar'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				const form = document.getElementById('UsuarioFinalForm');
+				form.submit();
+
+			}
+		});
+	}
 </script>
 
 <script>
