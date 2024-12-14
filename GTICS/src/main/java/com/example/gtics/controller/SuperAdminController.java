@@ -798,11 +798,16 @@ public class SuperAdminController {
                 .body(resource);
     }
 
-    @GetMapping("SuperAdmin/banearUsuarioFinal/{id}")
-    public String banearUsuarioFinal(@PathVariable("id") Integer idUsuarioFinal, Model model) {
-        usuarioRepository.banUsuario(idUsuarioFinal,"Mal comportamiento"); // corregir y poner razon de baneado (copia y pega el pop up de agente) ROBERTO CHAMBEA
+    @PostMapping("/SuperAdmin/banearUsuarioFinal")
+    public String banearUsuarioFinal(
+            @RequestParam("idUsuarioFinal") Integer idUsuarioFinal,
+            @RequestParam("razon") String razon) {
+        System.out.println(idUsuarioFinal);
+        System.out.println(razon);
+        usuarioRepository.banUsuario(idUsuarioFinal, razon);
         return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
+
 
     @GetMapping("SuperAdmin/agregarProducto")
     public String agregarProducto(@ModelAttribute("producto") Producto producto,Model model, @RequestParam(value = "idCategoria", required = false) Integer idCategoria) {
