@@ -45,7 +45,7 @@ public class EmailService {
         emailSender.send(message);
     }
 
-    public void actualizacionAdminZonal(String to, String username, ArrayList<String> camposModificados,
+    public void actualizacionInfoUserGenerico(String to, String username, ArrayList<String> camposModificados,
                                         ArrayList<String> datosAntiguos, ArrayList<String> datosNuevos) {
         String subject = "Actualización de información de tu cuenta";
         StringBuilder text = new StringBuilder();
@@ -55,7 +55,7 @@ public class EmailService {
         if (camposModificados.isEmpty()) {
             text.append("No se han hecho cambios.\n");
         } else {
-            text.append("A continuación, se detallan los cambios realizados:\n\n");
+            text.append("A continuación, se presentan las modificaciones: \n\n");
 
             for (int i = 0; i < camposModificados.size(); i++) {
                 text.append("- ").append(camposModificados.get(i)).append(": \n")

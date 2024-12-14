@@ -223,10 +223,11 @@ public class SuperAdminController {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
             }
             Optional<Usuario> usuario1 = usuarioRepository.findById(usuario.getId());
+            boolean fotoActualizada = false;
             if (foto.isEmpty()){
-
                 usuario.setFoto(usuario1.get().getFoto());
             }else{
+                fotoActualizada = true;
                 usuario.setFoto(foto.getBytes());
             }
 
@@ -265,8 +266,8 @@ public class SuperAdminController {
             }
 
 
-            if (!datosAntiguos.isEmpty()) {
-                emailService.actualizacionAdminZonal(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
+            if (!datosAntiguos.isEmpty() || fotoActualizada) {
+                emailService.actualizacionInfoUserGenerico(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
             }
             usuario.setActivo(1);
             usuarioRepository.save(usuario);
@@ -734,12 +735,14 @@ public class SuperAdminController {
 
             return "SuperAdmin/GestionUsuarioFinal/final-user-edit";
         }
-
+        boolean fotoActualizada= false;
         // Actualización de datos del usuario
         if (foto.isEmpty()) {
+
             Usuario finalUser = usuarioRepository.findById(usuario.getId()).orElseThrow();
             usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(), usuario.getId());
         } else {
+            fotoActualizada = true;
             try {
                 byte[] fotoBytes = foto.getBytes();
                 usuario.setFoto(fotoBytes);
@@ -748,6 +751,37 @@ public class SuperAdminController {
             }
         }
         attr.addFlashAttribute("msg", "Información del usuario final actualizada exitosamente");
+
+
+        Optional<Usuario> usuario1 = usuarioRepository.findById(usuario.getId());
+
+        ArrayList<String> datosAntiguos = new ArrayList<>();
+        ArrayList<String> datosNuevos = new ArrayList<>();
+        ArrayList<String> camposModificados = new ArrayList<>();
+
+        if (!Objects.equals(usuario.getTelefono(), usuario1.get().getTelefono())) {
+            datosNuevos.add(usuario.getTelefono());
+            datosAntiguos.add(usuario1.get().getTelefono());
+            camposModificados.add("Teléfono");
+        }
+        if (!Objects.equals(usuario.getEmail(), usuario1.get().getEmail())) {
+            datosNuevos.add(usuario.getEmail());
+            datosAntiguos.add(usuario1.get().getEmail());
+            camposModificados.add("Email");
+        }
+        if (!Objects.equals(usuario.getDireccion(), usuario1.get().getDireccion())) {
+            datosNuevos.add(usuario.getDireccion());
+            datosAntiguos.add(usuario1.get().getDireccion());
+            camposModificados.add("Dirección");
+        }
+        if (!Objects.equals(usuario.getDistrito().getNombre(), usuario1.get().getDistrito().getNombre())) {
+            datosNuevos.add(String.valueOf(usuario.getDistrito().getNombre()));
+            datosAntiguos.add(String.valueOf(usuario1.get().getDistrito().getNombre()));
+            camposModificados.add("Distrito");
+        }
+        if (!datosAntiguos.isEmpty() || fotoActualizada) {
+            emailService.actualizacionInfoUserGenerico(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
+        }
         return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 

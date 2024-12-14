@@ -95,25 +95,25 @@
                                                     <!-- Nombres -->
                                                     <div class="col-lg-6 col-12">
                                                         <label for="creatCustomerName" class="form-label">Nombres:</label>
-                                                        <input type="text" class="form-control" id="creatCustomerName"  th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" />
+                                                        <input type="text" disabled class="form-control" id="creatCustomerName"  th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" />
                                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>                                                    </div>
 
                                                     <!-- Apellido Paterno -->
                                                     <div class="col-lg-6 col-12">
                                                         <label for="creatFinalUserLastNameP" class="form-label">Apellido Paterno:</label>
-                                                        <input type="text" class="form-control" id="creatFinalUserLastNameP" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}" />
+                                                        <input type="text" disabled class="form-control" id="creatFinalUserLastNameP" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}" />
                                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></div>                                                    </div>
 
                                                     <!-- Apellido Materno -->
                                                     <div class="col-lg-6 col-12">
                                                         <label for="creatFinalUserLastNameM" class="form-label">Apellido Materno:</label>
-                                                        <input type="text" class="form-control" id="creatFinalUserLastNameM" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}" />
+                                                        <input type="text" disabled class="form-control" id="creatFinalUserLastNameM" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}" />
                                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></div>                                                    </div>
 
                                                     <!-- DNI -->
                                                     <div class="col-lg-6 col-12">
                                                         <label for="DNIFinalUser" class="form-label">DNI:</label>
-                                                        <input type="text" class="form-control" id="DNIFinalUser" name="dni" minlength="8" maxlength="8" pattern="\d{8}" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}"/>
+                                                        <input type="text" disabled class="form-control" id="DNIFinalUser" name="dni" minlength="8" maxlength="8" pattern="\d{8}" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}"/>
                                                         <div class="invalid-feedback" th:if="${dniError}" th:text="${dniError}"></div>
                                                     </div>
 
