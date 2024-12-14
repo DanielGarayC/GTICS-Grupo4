@@ -147,7 +147,7 @@
 													</a>
 													<ul class="dropdown-menu">
 														<li>
-															<a class="dropdown-item" href="#" th:data-href="@{/SuperAdmin/banearUsuarioFinal/{id}(id=${finalUser.getId()})}" onclick="confirmDelete(this.getAttribute('data-href'))">
+															<a class="dropdown-item" href="#" th:data-href="@{/SuperAdmin/banearUsuarioFinal/{id}(id=${finalUser.getId()})}">
 																<i class="bi bi-trash me-3"></i>
 																Eliminar
 															</a>
@@ -263,7 +263,7 @@
 		});
 	});
 </script>
-	
+
 <script>
 	function confirmDelete(url) {
 		Swal.fire({
