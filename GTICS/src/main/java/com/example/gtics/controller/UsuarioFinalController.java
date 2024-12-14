@@ -78,6 +78,7 @@ public class UsuarioFinalController {
     private final CarritoCompraRepository carritoCompraRepository;
     private final TarjetaRepository tarjetaRepository;
     private final ControlOrdenRepository controlOrdenRepository;
+    private final TiendaRepository tiendaRepository;
 
     // Aquí usaremos un HashMap en memoria (o una caché) para simular la relación
     private final Map<Integer, Set<String>> usuariosLikes = new HashMap<>();
@@ -112,7 +113,7 @@ public class UsuarioFinalController {
                                   SubcategoriaRepository subcategoriaRepository, CarritoCompraRepository carritoCompraRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
                                   ControlOrdenRepository controlOrdenRepository, TarjetaRepository tarjetaRepository,
-                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository, DireccionRepository direccionRepository, ZonaRepository zonaRepository, EtiquetaRepository etiquetaRepository, MessageRepository messageRepository) {
+                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository, DireccionRepository direccionRepository, ZonaRepository zonaRepository, EtiquetaRepository etiquetaRepository, MessageRepository messageRepository, TiendaRepository tiendaRepository ) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.fotosProductoRepository = fotosProductoRepository;
@@ -133,6 +134,7 @@ public class UsuarioFinalController {
         this.messageRepository = messageRepository;
         this.controlOrdenRepository = controlOrdenRepository;
         this.tarjetaRepository = tarjetaRepository;
+        this.tiendaRepository = tiendaRepository;
     }
 
     @GetMapping("/consulta-dni/{dni}")
@@ -479,6 +481,8 @@ public class UsuarioFinalController {
 
         return ResponseEntity.ok(response);
     }
+
+
 
     @PostMapping("/UsuarioFinal/actualizarCantidadCarrito")
     public String actualizarCantidadCarrito(
@@ -984,7 +988,7 @@ public class UsuarioFinalController {
         }
     }
 
-    @GetMapping("/UsuarioFinal/foto/{id}")
+    @GetMapping("/UsuarioFinal/tienda/foto/{id}")
     public ResponseEntity<byte[]> obtenerFotoUsuario(@PathVariable Integer id) {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
 
@@ -995,6 +999,27 @@ public class UsuarioFinalController {
             httpHeaders.setContentType(MediaType.IMAGE_PNG);
 
             return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/foto/{idTienda}")
+    public ResponseEntity<byte[]> obtenerFotoTienda(@PathVariable Integer idTienda) {
+        Optional<Tienda> tiendaOptional = tiendaRepository.findById(idTienda);
+
+        if (tiendaOptional.isPresent()) {
+            Tienda tienda = tiendaOptional.get();
+            byte[] imagenComoBytes = tienda.getFotoTienda();
+            if (imagenComoBytes != null && imagenComoBytes.length > 0) {
+                HttpHeaders httpHeaders = new HttpHeaders();
+                // Asumiendo que todas las imágenes son PNG. Si no, debes almacenar el tipo de contenido en la base de datos.
+                httpHeaders.setContentType(MediaType.IMAGE_PNG);
+                return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+            } else {
+                // Si no hay imagen, retornar un 404 o una imagen por defecto
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

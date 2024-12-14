@@ -21,6 +21,24 @@
     <!-- Theme CSS -->
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
 
+<style>
+    /* Estilos para la imagen de la tienda */
+    .tienda-logo {
+        width: 70px; /* Ajusta el tamaño según tus necesidades */
+        height: 70px; /* Asegura que la imagen sea cuadrada para mantener el círculo */
+        object-fit: cover; /* Corta la imagen para llenar el círculo sin distorsión */
+        border: 2px solid #dee2e6; /* Opcional: Borde para resaltar la imagen */
+    }
+
+    /* Responsividad: Ajustar el tamaño de la imagen en pantallas más pequeñas */
+    @media (max-width: 576px) {
+        .tienda-logo {
+            width: 80px;
+            height: 80px;
+        }
+    }
+
+</style>
     <style>
         /* Estilos para el contenedor principal de zoom */
         .zoom {
@@ -153,6 +171,94 @@
             max-width: 100%;
         }
     </style>
+
+    <!-- Agrega estos estilos al <head>, debajo de tus estilos existentes -->
+    <style>
+        /* Estado normal del botón */
+        .btn-adding {
+            position: relative;
+            pointer-events: none; /* Evita clicks múltiples */
+            opacity: 0.9;
+            transition: transform 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
+            transform: scale(0.98);
+        }
+
+        /* Spinner dentro del botón */
+        .btn-adding::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1em;
+            height: 1em;
+            margin-top: -0.5em;
+            margin-left: -0.5em;
+            border: 2px solid transparent;
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Animación de éxito: pequeño check */
+        .btn-added-success {
+            position: relative;
+            background-color: #28a745 !important; /* Verde éxito */
+            color: #fff !important;
+        }
+
+        .btn-added-success::after {
+            content: "✔"; /* Símbolo de check */
+            position: absolute;
+            font-weight: bold;
+            font-size: 1em;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+    </style>
+
+    <style>
+        /* Animación de Fade-In */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Efecto Hover para la Etiqueta */
+        .badge:hover {
+            background-color: #0056b3; /* Cambia a un color más oscuro al pasar el ratón */
+            cursor: default; /* Indica que no es interactiva */
+            transition: background-color 0.3s ease;
+        }
+
+        /* Asegurar que el H1 no exceda el ancho del contenedor y prevenir envoltura no deseada */
+        h1.d-flex {
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Ajustar el tamaño de la etiqueta para que no empuje el nombre del producto */
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.5em 0.75em;
+        }
+
+
+    </style>
+
     <!-- CSRF Tokens -->
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
@@ -166,6 +272,25 @@
 </div>
 
 <main>
+    <div class="mt-4">
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- col -->
+                <div class="col-12">
+                    <!-- breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a th:href="@{'/UsuarioFinal/listaProductos'}">Productos</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{'/UsuarioFinal/categorias/' + ${producto.idCategoria.id}}" th:text="${producto.idCategoria.nombreCategoria}" ></a></li>
+
+                            <li class="breadcrumb-item active" aria-current="page" th:href="@{'/UsuarioFinal/subcategoria/' + ${producto.idSubcategoria.id}}" th:text="${producto.idSubcategoria.nombreSubcategoria}"></li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="mt-8">
         <div class="container">
             <div class="row">
@@ -202,48 +327,49 @@
 
                 <div class="col-md-7 col-xl-6">
                     <div class="ps-lg-10 mt-6 mt-md-0">
-                        <!-- content -->
+                        <!-- Contenido -->
                         <a class="mb-4 d-block" th:text="${nombreCategoria}">Electrónica y Tecnología</a>
-                        <!-- heading -->
-                        <h1 class="mb-1" th:text="${producto.nombreProducto}">Laptop HP 13 pulgadas core i7</h1>
+
+                        <!-- Nombre del Producto y Código en la Misma Línea -->
+                        <h1 class="mb-1 d-flex align-items-center flex-wrap">
+                            <span th:text="${producto.nombreProducto}">Laptop HP 13 pulgadas core i7</span>
+                            <span class="badge bg-secondary ms-3 animate-fade-in" th:text="'#' + ${producto.codigoProducto}">#12345</span>
+                        </h1>
+
                         <div class="mb-4">
-                            <!-- rating -->
+                            <!-- Rating -->
                             <small class="text-warning" aria-label="Calificación promedio">
-        <span th:each="i : ${#numbers.sequence(1,5)}">
-            <i class="bi"
-               th:classappend="${producto.averageRating >= i} ? ' bi-star-fill' :
-                             (${producto.averageRating >= (i - 0.5)} ? ' bi-star-half' :
-                             ' bi-star')"
-               th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
-        </span>
+                <span th:each="i : ${#numbers.sequence(1,5)}">
+                    <i class="bi"
+                       th:classappend="${producto.averageRating >= i} ? ' bi-star-fill' :
+                                     (${producto.averageRating >= (i - 0.5)} ? ' bi-star-half' :
+                                     ' bi-star')"
+                       th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+                </span>
                             </small>
                             <a href="#" class="ms-2" th:text="${producto.averageRating} + ' (' + ${producto.reviewCount} + ')'"></a>
                         </div>
+
                         <div class="fs-4" style="font-size: 0.9rem;">
-                            <!-- price -->
+                            <!-- Precio -->
                             <span class="fw-bold text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">S/. 3000.00</span>
                         </div>
 
-                        <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
+                        <!-- Formulario para agregar al carrito -->
+                        <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form" data-context="general">
                             <input type="hidden" name="idProducto" th:value="${producto.id}" />
                             <div>
-                                <!-- input -->
-                                <div class="input-group input-spinner">
-                                    <input type="button" value="-" class="button-minus btn btn-sm" data-field="quantity" style="font-size: 0.7rem;" />
-                                    <input type="number" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
-                                    <input type="button" value="+" class="button-plus btn btn-sm" data-field="quantity" style="font-size: 0.7rem;" />
+                                <!-- Selector de cantidad -->
+                                <div class="input-group input-spinner" style="max-width: 120px;">
+                                    <input type="button" value="-" class="button-minus btn btn-sm btn-outline-secondary" onclick="updateQuantity(this, 'decrease')" />
+                                    <input type="number" name="cantidad" th:value="1" th:max="${producto.cantidadDisponible}" min="1" class="quantity-field form-control-sm form-input text-center" oninput="validateAndUpdateQuantity(this)" />
+                                    <input type="button" value="+" class="button-plus btn btn-sm btn-outline-secondary" onclick="updateQuantity(this, 'increase')" />
                                 </div>
                             </div>
                             <div class="mt-2 row g-1 align-items-center">
                                 <div class="col-12">
                                     <div class="d-flex gap-2">
-                                        <!-- Botón principal -->
-                                        <!--<button type="submit" class="btn btn-primary flex-grow-1" style="font-size: 0.7rem; padding: 0.3rem 0.7rem;">
-                                            <i class="feather-icon icon-credit-card me-2"></i>
-                                            Comprar
-                                        </button>-->
-                                        <!-- Botón secundario -->
-                                        <button type="button" class="btn btn-primary">
+                                        <button type="submit" class="btn btn-primary">
                                             <i class="feather-icon icon-shopping-bag me-2"></i>
                                             Añadir al Carrito
                                         </button>
@@ -251,15 +377,17 @@
                                 </div>
                             </div>
                         </form>
-                        <!-- hr -->
+
+                        <!-- Separador -->
                         <hr class="my-3" />
+
                         <div>
-                            <!-- table -->
+                            <!-- Tabla de detalles adicionales -->
                             <table class="table table-borderless mb-0">
                                 <tbody>
                                 <tr>
-                                    <td >Disponibilidad:</td>
-                                    <td th:if="${producto.disponibilidad == 'En stock'}" >
+                                    <td>Disponibilidad:</td>
+                                    <td th:if="${producto.disponibilidad == 'En stock'}">
                                         <span class="badge bg-light-primary text-dark-primary">En Stock</span>
                                     </td>
                                     <td th:if="${producto.disponibilidad == 'Fuera de stock'}">
@@ -268,21 +396,21 @@
                                 </tr>
                                 <tr>
                                     <td>Tipo:</td>
-                                    <td th:text="${nombreCategoria}" >Tecnología</td>
+                                    <td th:text="${nombreCategoria}">Tecnología</td>
                                 </tr>
                                 <tr>
-                                    <td >Fecha aproximada de entrega:</td>
-                                    <td >
+                                    <td>Fecha aproximada de entrega:</td>
+                                    <td>
                                         <small th:if="${fechaFormateada != null}" th:text="${fechaFormateada}"></small>
                                         <small th:unless="${fechaFormateada != null}">No hay fecha aproximada</small>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -305,7 +433,21 @@
                                     role="tab"
                                     aria-controls="product-tab-pane"
                                     aria-selected="true">
-                                Detalles del producto
+                                    Detalles del producto
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <!-- btn -->
+                            <button
+                                    class="nav-link"
+                                    id="reviews-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#reviews-tab-pane"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="reviews-tab-pane"
+                                    aria-selected="false">
+                                Reseñas
                             </button>
                         </li>
 
@@ -315,19 +457,359 @@
                         <!-- tab pane -->
                         <div class="tab-pane fade show active" id="product-tab-pane" role="tabpanel" aria-labelledby="product-tab" tabindex="0">
                             <div class="my-8">
+                                <!-- Descripción del Producto -->
                                 <div class="mb-5">
-                                    <!-- text -->
+                                    <h5 class="mb-1">Descripción</h5>
                                     <p th:text="${producto.descripcion}" class="mb-0">
                                         Descripción del producto
                                     </p>
                                 </div>
 
-                                <!-- content -->
+                                <!-- Detalles Adicionales del Producto -->
                                 <div class="mb-5">
-                                    <h5 class="mb-1">Vendedor</h5>
-                                    <p th:text="${producto.idProveedor.tienda.nombreTienda}" class="mb-0">DMart Pvt. LTD</p>
+                                    <h5 class="mb-1">Detalles del Producto</h5>
+                                    <ul class="list-group list-group-flush">
+                                        <!-- Unidades Disponibles (cantidadDisponible - cantVentas) -->
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span>Unidades Disponibles:</span>
+                                            <span th:text="${producto.cantidadDisponible - producto.cantVentas}">10</span>
+                                        </li>
+
+                                        <!-- Costo de Envío -->
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span>Costo de Envío:</span>
+                                            <span th:text="'S/. ' + ${#numbers.formatDecimal(producto.costoEnvio, 1, 'COMMA', 2, 'POINT')}">S/. 15.00</span>
+                                        </li>
+
+                                        <!-- Modelo (Opcional) -->
+                                        <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${producto.modelo != null}">
+                                            <span>Modelo:</span>
+                                            <span th:text="${producto.modelo}">Modelo X</span>
+                                        </li>
+
+                                        <!-- Color (Opcional) -->
+                                        <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${producto.color != null}">
+                                            <span>Color:</span>
+                                            <span th:text="${producto.color}">Negro</span>
+                                        </li>
+                                    </ul>
                                 </div>
 
+                                <!-- Información del Vendedor -->
+                                <div class="mb-5">
+                                    <h5 class="mb-1">Vendedor</h5>
+                                    <div class="d-flex align-items-center">
+                                        <!-- Logo de la Tienda o Imagen por Defecto -->
+                                        <div class="me-3">
+                                            <img th:if="${producto.idProveedor.tienda.fotoTienda != null and producto.idProveedor.tienda.fotoTienda.length > 0}"
+                                                 th:src="@{'/UsuarioFinal/tienda/foto/' + ${producto.idProveedor.tienda.idTienda}}"
+                                                 alt="Logo de la Tienda"
+                                                 class="rounded-circle tienda-logo" />
+
+                                            <img th:unless="${producto.idProveedor.tienda.fotoTienda != null and producto.idProveedor.tienda.fotoTienda.length > 0}"
+                                                 th:src="@{/images/default-store-logo.png}"
+                                                 alt="Logo por Defecto"
+                                                 class="rounded-circle tienda-logo" />
+
+                                        </div>
+                                        <!-- Información de la Tienda -->
+                                        <div>
+                                            <p th:text="${producto.idProveedor.tienda.nombreTienda}" class="mb-1 fw-bold">Nombre de la Tienda</p>
+                                            <p class="mb-0">
+                                                <a th:href="'mailto:' + ${producto.idProveedor.tienda.emailVendedor}"
+                                                   th:text="${producto.idProveedor.tienda.emailVendedor}"
+                                                   class="text-decoration-none text-primary">
+                                                    email@tienda.com
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-- tab pane -->
+                        <div class="tab-pane fade" id="reviews-tab-pane" role="tabpanel" aria-labelledby="reviews-tab" tabindex="0">
+                            <div class="my-8">
+                                <!-- row -->
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="me-lg-12 mb-6 mb-md-0">
+                                            <div class="mb-5">
+                                                <!-- title -->
+                                                <h4 class="mb-3">Customer reviews</h4>
+                                                <span>
+                                             <!-- rating -->
+                                             <small class="text-warning">
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-half"></i>
+                                             </small>
+                                             <span class="ms-3">4.1 out of 5</span>
+                                             <small class="ms-3">11,130 global ratings</small>
+                                          </span>
+                                            </div>
+                                            <div class="mb-8">
+                                                <!-- progress -->
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="text-nowrap me-3 text-muted">
+                                                        <span class="d-inline-block align-middle text-muted">5</span>
+                                                        <i class="bi bi-star-fill ms-1 small text-warning"></i>
+                                                    </div>
+                                                    <div class="w-100">
+                                                        <div class="progress" style="height: 6px">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+                                                    <span class="text-muted ms-3">53%</span>
+                                                </div>
+                                                <!-- progress -->
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="text-nowrap me-3 text-muted">
+                                                        <span class="d-inline-block align-middle text-muted">4</span>
+                                                        <i class="bi bi-star-fill ms-1 small text-warning"></i>
+                                                    </div>
+                                                    <div class="w-100">
+                                                        <div class="progress" style="height: 6px">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50"></div>
+                                                        </div>
+                                                    </div>
+                                                    <span class="text-muted ms-3">22%</span>
+                                                </div>
+                                                <!-- progress -->
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="text-nowrap me-3 text-muted">
+                                                        <span class="d-inline-block align-middle text-muted">3</span>
+                                                        <i class="bi bi-star-fill ms-1 small text-warning"></i>
+                                                    </div>
+                                                    <div class="w-100">
+                                                        <div class="progress" style="height: 6px">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="35"></div>
+                                                        </div>
+                                                    </div>
+                                                    <span class="text-muted ms-3">14%</span>
+                                                </div>
+                                                <!-- progress -->
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="text-nowrap me-3 text-muted">
+                                                        <span class="d-inline-block align-middle text-muted">2</span>
+                                                        <i class="bi bi-star-fill ms-1 small text-warning"></i>
+                                                    </div>
+                                                    <div class="w-100">
+                                                        <div class="progress" style="height: 6px">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 22%" aria-valuenow="22" aria-valuemin="0" aria-valuemax="22"></div>
+                                                        </div>
+                                                    </div>
+                                                    <span class="text-muted ms-3">5%</span>
+                                                </div>
+                                                <!-- progress -->
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="text-nowrap me-3 text-muted">
+                                                        <span class="d-inline-block align-middle text-muted">1</span>
+                                                        <i class="bi bi-star-fill ms-1 small text-warning"></i>
+                                                    </div>
+                                                    <div class="w-100">
+                                                        <div class="progress" style="height: 6px">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 14%" aria-valuenow="14" aria-valuemin="0" aria-valuemax="14"></div>
+                                                        </div>
+                                                    </div>
+                                                    <span class="text-muted ms-3">7%</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-grid">
+                                                <h4>Review this product</h4>
+                                                <p class="mb-0">Share your thoughts with other customers.</p>
+                                                <a href="#" class="btn btn-outline-gray-400 mt-4 text-muted">Write the Review</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- col -->
+                                    <div class="col-md-8">
+                                        <div class="mb-10">
+                                            <div class="d-flex justify-content-between align-items-center mb-8">
+                                                <div>
+                                                    <!-- heading -->
+                                                    <h4>Reviews</h4>
+                                                </div>
+                                                <div>
+                                                    <select class="form-select">
+                                                        <option selected>Top Reviews</option>
+                                                        <option value="Most Recent">Most Recent</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex border-bottom pb-6 mb-6">
+                                                <!-- img -->
+                                                <!-- img -->
+                                                <img src="../assets/images/avatar/avatar-10.jpg" alt="" class="rounded-circle avatar-lg" />
+                                                <div class="ms-5">
+                                                    <h6 class="mb-1">Shankar Subbaraman</h6>
+                                                    <!-- select option -->
+                                                    <!-- content -->
+                                                    <p class="small">
+                                                        <span class="text-muted">30 December 2022</span>
+                                                        <span class="text-primary ms-3 fw-bold">Verified Purchase</span>
+                                                    </p>
+                                                    <!-- rating -->
+                                                    <div class="mb-2">
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <span class="ms-3 text-dark fw-bold">Need to recheck the weight at delivery point</span>
+                                                    </div>
+                                                    <!-- text-->
+                                                    <p>
+                                                        Product quality is good. But, weight seemed less than 1kg. Since it is being sent in open package, there is a possibility of pilferage in between.
+                                                        FreshCart sends the veggies and fruits through sealed plastic covers and Barcode on the weight etc. .
+                                                    </p>
+                                                    <div>
+                                                        <div class="border icon-shape icon-lg border-2">
+                                                            <!-- img -->
+                                                            <img src="../assets/images/products/product-img-1.jpg" alt="" class="img-fluid" />
+                                                        </div>
+                                                        <div class="border icon-shape icon-lg border-2 ms-1">
+                                                            <!-- img -->
+                                                            <img src="../assets/images/products/product-img-2.jpg" alt="" class="img-fluid" />
+                                                        </div>
+                                                        <div class="border icon-shape icon-lg border-2 ms-1">
+                                                            <!-- img -->
+                                                            <img src="../assets/images/products/product-img-3.jpg" alt="" class="img-fluid" />
+                                                        </div>
+                                                    </div>
+                                                    <!-- icon -->
+                                                    <div class="d-flex justify-content-end mt-4">
+                                                        <a href="#" class="text-muted">
+                                                            <i class="feather-icon icon-thumbs-up me-1"></i>
+                                                            Helpful
+                                                        </a>
+                                                        <a href="#" class="text-muted ms-4">
+                                                            <i class="feather-icon icon-flag me-2"></i>
+                                                            Report abuse
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex border-bottom pb-6 mb-6 pt-4">
+                                                <!-- img -->
+                                                <img src="../assets/images/avatar/avatar-12.jpg" alt="" class="rounded-circle avatar-lg" />
+                                                <div class="ms-5">
+                                                    <h6 class="mb-1">Robert Thomas</h6>
+                                                    <!-- content -->
+                                                    <p class="small">
+                                                        <span class="text-muted">29 December 2022</span>
+                                                        <span class="text-primary ms-3 fw-bold">Verified Purchase</span>
+                                                    </p>
+                                                    <!-- rating -->
+                                                    <div class="mb-2">
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star text-warning"></i>
+                                                        <span class="ms-3 text-dark fw-bold">Need to recheck the weight at delivery point</span>
+                                                    </div>
+
+                                                    <p>
+                                                        Product quality is good. But, weight seemed less than 1kg. Since it is being sent in open package, there is a possibility of pilferage in between.
+                                                        FreshCart sends the veggies and fruits through sealed plastic covers and Barcode on the weight etc. .
+                                                    </p>
+
+                                                    <!-- icon -->
+                                                    <div class="d-flex justify-content-end mt-4">
+                                                        <a href="#" class="text-muted">
+                                                            <i class="feather-icon icon-thumbs-up me-1"></i>
+                                                            Helpful
+                                                        </a>
+                                                        <a href="#" class="text-muted ms-4">
+                                                            <i class="feather-icon icon-flag me-2"></i>
+                                                            Report abuse
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex border-bottom pb-6 mb-6 pt-4">
+                                                <!-- img -->
+                                                <img src="../assets/images/avatar/avatar-9.jpg" alt="" class="rounded-circle avatar-lg" />
+                                                <div class="ms-5">
+                                                    <h6 class="mb-1">Barbara Tay</h6>
+                                                    <!-- content -->
+                                                    <p class="small">
+                                                        <span class="text-muted">28 December 2022</span>
+                                                        <span class="text-danger ms-3 fw-bold">Unverified Purchase</span>
+                                                    </p>
+                                                    <!-- rating -->
+                                                    <div class="mb-2">
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star text-warning"></i>
+                                                        <span class="ms-3 text-dark fw-bold">Need to recheck the weight at delivery point</span>
+                                                    </div>
+
+                                                    <p>Everytime i ordered from fresh i got greenish yellow bananas just like i wanted so go for it , its happens very rare that u get over riped ones.</p>
+
+                                                    <!-- icon -->
+                                                    <div class="d-flex justify-content-end mt-4">
+                                                        <a href="#" class="text-muted">
+                                                            <i class="feather-icon icon-thumbs-up me-1"></i>
+                                                            Helpful
+                                                        </a>
+                                                        <a href="#" class="text-muted ms-4">
+                                                            <i class="feather-icon icon-flag me-2"></i>
+                                                            Report abuse
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex border-bottom pb-6 mb-6 pt-4">
+                                                <!-- img -->
+                                                <img src="../assets/images/avatar/avatar-8.jpg" alt="" class="rounded-circle avatar-lg" />
+                                                <div class="ms-5 flex-grow-1">
+                                                    <h6 class="mb-1">Sandra Langevin</h6>
+                                                    <!-- content -->
+                                                    <p class="small">
+                                                        <span class="text-muted">8 December 2022</span>
+                                                        <span class="text-danger ms-3 fw-bold">Unverified Purchase</span>
+                                                    </p>
+                                                    <!-- rating -->
+                                                    <div class="mb-2">
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                        <i class="bi bi-star text-warning"></i>
+                                                        <span class="ms-3 text-dark fw-bold">Great product</span>
+                                                    </div>
+
+                                                    <p>Great product & package. Delivery can be expedited.</p>
+
+                                                    <!-- icon -->
+                                                    <div class="d-flex justify-content-end mt-4">
+                                                        <a href="#" class="text-muted">
+                                                            <i class="feather-icon icon-thumbs-up me-1"></i>
+                                                            Helpful
+                                                        </a>
+                                                        <a href="#" class="text-muted ms-4">
+                                                            <i class="feather-icon icon-flag me-2"></i>
+                                                            Report abuse
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <a href="#" class="btn btn-outline-gray-400 text-muted">Read More Reviews</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -369,14 +851,16 @@
                                 <a class="text-decoration-none text-muted small" style="min-height: 20px;" th:text="${productoRelacionado.idSubcategoria.nombreSubcategoria}"></a>
                                 <a class="text-decoration-none text-muted small" style="min-height: 20px;" th:text="'Proveedor: ' + ${productoRelacionado.idProveedor.tienda.nombreTienda}"></a>
                                 <div>
-                                    <small class="text-warning">
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-half"></i>
+                                    <small class="text-warning" aria-label="Calificación promedio">
+        <span th:each="i : ${#numbers.sequence(1,5)}">
+            <i class="bi"
+               th:classappend="${productoRelacionado.averageRating >= i} ? ' bi-star-fill' :
+                             (${productoRelacionado.averageRating >= (i - 0.5)} ? ' bi-star-half' :
+                             ' bi-star')"
+               th:attr="aria-label=${productoRelacionado.averageRating >= i ? 'Estrella llena' : (productoRelacionado.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+        </span>
                                     </small>
-                                    <span class="text-muted small">4.5(149)</span>
+                                    <span class="text-muted small" th:text="${productoRelacionado.averageRating} + ' (' + ${productoRelacionado.reviewCount} + ')'"></span>
                                 </div>
 
                                 <!-- Price and cart button -->
@@ -384,9 +868,9 @@
                                     <div>
                                         <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(productoRelacionado.precio, 1, 'COMMA', 2, 'POINT')}"></span>
                                     </div>
-                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
+                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form flex-shrink-0" data-context="recomendados">
                                         <input type="hidden" name="idProducto" th:value="${productoRelacionado.id}" />
-                                        <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
+                                        <input type="hidden" step="1" th:max="${productoRelacionado.cantidadDisponible}" value="1" name="cantidad" class="quantity-field form-control-sm form-input" />
                                         <div class="d-grid">
                                             <button type="submit" class="btn btn-primary btn-sm w-100">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
@@ -416,22 +900,22 @@
 
 
 
-<!-- Javascript-->
-<script th:src="@{/libs/rater-js/index.js}"></script>
-<script th:src="@{/libs/dropzone/dist/min/dropzone.min.js}"></script>
-<!-- Libs JS -->
-<!-- <script th:src="@{/assets/libs/jquery/dist/jquery.min.js}"></script> -->
+<!-- Librerías JS necesarias -->
+<script th:src="@{/js/vendors/jquery.min.js}"></script>
 <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+<!-- Libs JS -->
+<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+<script th:src="@{/js/vendors/tns-slider.js}"></script>
+<script th:src="@{/libs/dropzone/dist/min/dropzone.min.js}"></script>
 
 <!-- Theme JS -->
 <script th:src="@{/js/theme.min.js}"></script>
 
-<script th:src="@{/js/vendors/jquery.min.js}"></script>
-<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
-<script th:src="@{/js/vendors/tns-slider.js}"></script>
-<script th:src="@{/js/vendors/dropzone.js}"></script>
-    <script th:src="@{/js/carrito.js}"></script>
+<!-- Script personalizado de carrito -->
+<script th:src="@{/js/carrito.js}"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Manejar el clic en los botones "+"

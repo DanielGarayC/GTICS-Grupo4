@@ -40,4 +40,8 @@ public class Tienda {
     @Lob
     @Column(name = "fotoTienda", nullable = false)
     private byte[] fotoTienda;
+
+    @Column(name = "fotoContentType", nullable = false)
+    private String fotoContentType;
+
 }

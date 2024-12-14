@@ -433,7 +433,7 @@
                                                     <div class="text-dark fw-bold" style="font-size: 1rem; min-width: 80px;">
                                                         <span th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
                                                     </div>
-                                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form flex-shrink-0" data-context="recomendadomodsadasdsad">
+                                                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form flex-shrink-0" data-context="recomendados">
                                                         <input type="hidden" name="idProducto" th:value="${producto.id}" />
                                                         <input type="hidden" step="1" th:max="${producto.cantidadDisponible}" value="1" name="cantidad" class="quantity-field form-control-sm form-input" />
                                                         <button type="submit" class="btn btn-primary btn-sm" style="width: 100px;">
