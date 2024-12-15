@@ -798,11 +798,29 @@ public class SuperAdminController {
                 .body(resource);
     }
 
-    @GetMapping("SuperAdmin/banearUsuarioFinal/{id}")
-    public String banearUsuarioFinal(@PathVariable("id") Integer idUsuarioFinal, Model model) {
-        usuarioRepository.banUsuario(idUsuarioFinal,"Mal comportamiento"); // corregir y poner razon de baneado (copia y pega el pop up de agente) ROBERTO CHAMBEA
-        return "redirect:/SuperAdmin/listaUsuarioFinal";
+    @PostMapping("/SuperAdmin/banearUsuario")
+    public String banearUsuario(
+            @RequestParam("idUsuarioFinal") Integer idUsuarioFinal,
+            @RequestParam("razon") String razon, RedirectAttributes attr) {
+        System.out.println(idUsuarioFinal);
+        System.out.println(razon);
+        usuarioRepository.banUsuario(idUsuarioFinal, razon);
+        Usuario usuario = usuarioRepository.findById(idUsuarioFinal).orElseThrow();
+        attr.addFlashAttribute("msg", "Usuario eliminado exitosamente");
+        switch (usuario.getRol().getId()){
+            case 4:
+                return "redirect:/SuperAdmin/listaUsuarioFinal";
+            case 3:
+                attr.addFlashAttribute("message", "Usuario eliminado exitosamente");
+                return "redirect:/SuperAdmin/listaAgente";
+            case 2:
+                return "redirect:/SuperAdmin/listaAdminZonal";
+            default:
+                return "redirect:/SuperAdmin";
+        }
+
     }
+
 
     @GetMapping("SuperAdmin/agregarProducto")
     public String agregarProducto(@ModelAttribute("producto") Producto producto,Model model, @RequestParam(value = "idCategoria", required = false) Integer idCategoria) {
