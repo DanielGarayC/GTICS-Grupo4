@@ -20,7 +20,14 @@
 
     <!-- Theme CSS -->
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
+<style>
+    /* Agrega estos estilos a tu sección <style> existente o en tu archivo CSS principal */
+    #modalResenas .modal-body {
+        max-height: 70vh; /* Ajusta según tus necesidades */
+        overflow-y: auto;
+    }
 
+</style>
 <style>
     /* Estilos para la imagen de la tienda */
     .tienda-logo {
@@ -624,6 +631,7 @@
                                                  alt="Logo de la Tienda"
                                                  class="rounded-circle tienda-logo" />
 
+
                                             <img th:unless="${producto.idProveedor.tienda.fotoTienda != null and producto.idProveedor.tienda.fotoTienda.length > 0}"
                                                  th:src="@{/images/default-store-logo.png}"
                                                  alt="Logo por Defecto"
@@ -882,6 +890,8 @@
             </div>
 
             <!-- Slick slider container -->
+            <div th:if="${productosRecomendados.size() > 0}">
+
             <div class="product-slider">
                 <div th:each="productoRelacionado : ${productosRecomendados}" class="item">
                     <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${productoRelacionado.id})}" class="text-decoration-none text-inherit">
@@ -939,6 +949,11 @@
                         </div>
                     </a>
                 </div>
+            </div>
+            </div>
+            <!-- Mensaje de Advertencia Si No Hay Productos Recomendados -->
+            <div th:if="${productosRecomendados.size() == 0}" class="alert alert-warning" role="alert">
+                <strong>No se encontraron productos recomendados</strong>
             </div>
         </div>
     </section>
@@ -1274,7 +1289,7 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Seleccionar todos los botones de "Útil"
+        // Dentro de tu script para manejar "likes"
         document.querySelectorAll('.like-btn').forEach(function(btn) {
             btn.addEventListener('click', function(event) {
                 event.preventDefault();  // Evita la recarga de página
@@ -1318,25 +1333,109 @@
                     .catch(error => console.error('Error:', error));
             });
         });
+
     });
 
 </script>
 <!-- ========================== SCRIPTS JAVASCRIPT ========================== -->
+<!-- ... tu HTML existente ... -->
+<!-- ... tu HTML existente ... -->
+
+<!-- Asegúrate de que estos scripts estén incluidos al final del <body> -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Contenedor donde se van a añadir las reseñas en el modal
+        // Variables globales
         const reseñasContainer = document.getElementById('reseñas-container');
-        const loadMoreBtn      = document.getElementById('cargar-mas-btn');
-        let page = 0;         // Control de página
-        const size = 5;       // Cuántas reseñas cargar por request
-        // Orden (por fecha, etc.) - si tienes un <select id="sortSelect">, obtén su valor
-        const sortOrder = document.getElementById('sortSelect') ? document.getElementById('sortSelect').value : 'recent';
-
-        // Suponiendo que tienes un campo oculto o forma de obtener el ID de producto
-        // <input type="hidden" id="idProducto" th:value="${producto.id}" />
-        // O algo similar.
+        const loadMoreBtn = document.getElementById('cargar-mas-btn');
+        let page = 0;
+        const size = 5;
+        const sortOrder = 'recent'; // Ajusta según tu lógica
         const idProductoInput = document.getElementById('idProducto');
         const productoId = idProductoInput ? idProductoInput.value : null;
+
+        // Función para generar estrellas
+        const generateStarRating = (rating) => {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += `<i class="bi ${i <= rating ? 'bi-star-fill' : 'bi-star'} text-warning"></i>`;
+            }
+            return stars;
+        };
+
+        // Función para generar la galería de fotos
+        const generatePhotoGallery = (photos, resena) => {
+            if (!photos || photos.length === 0) return '';
+            let galleryHtml = '<div class="d-flex reseña-fotos mt-3">';
+            photos.forEach(photoId => {
+                galleryHtml += `
+                <div class="border icon-shape icon-lg border-2 me-1" style="width: 100px; height: 100px; overflow: hidden;">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalResena"
+                       data-usuario-nombre="${resena.idUsuario.nombre} ${resena.idUsuario.apellidoPaterno} ${resena.idUsuario.apellidoMaterno}"
+                       data-fecha-creacion="${new Date(resena.fechaCreacion).toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' })}"
+                       data-calificacion="${resena.calificacion ? resena.calificacion : 0}"
+                       data-tema="${resena.tema}"
+                       data-opinion="${resena.opinion}"
+                       data-imagen-src="/UsuarioFinal/Resena/Fotos/${photoId}"
+                       data-producto-nombre="${resena.producto.nombreProducto}"
+                       data-proveedor-nombre="${resena.producto.idProveedor.nombreProveedor}"
+                       data-codigo-producto="${resena.producto.codigoProducto}">
+                        <img src="/UsuarioFinal/Resena/Fotos/${photoId}" class="img-fluid"
+                             style="width: 100%; height: 100%; object-fit: cover;" />
+                    </a>
+                </div>
+            `;
+            });
+            galleryHtml += '</div>';
+            return galleryHtml;
+        };
+
+        // Función para crear un elemento de reseña
+        const createReviewElement = (resena) => {
+            const div = document.createElement('div');
+            div.className = 'd-flex border-bottom pb-6 mb-6';
+
+            const starRatingHtml = generateStarRating(resena.calificacion || 0);
+            const photosHtml = generatePhotoGallery(resena.fotosresenas, resena);
+
+            div.innerHTML = `
+            <img src="${resena.idUsuario.foto ? '/UsuarioFinal/foto/' + resena.idUsuario.id : '/images/avatar/avatarGenerico.png'}"
+                 alt="Foto de usuario" class="rounded-circle avatar-lg">
+            <div class="ms-5 reseña-contenido" style="flex-grow: 1;">
+                <h6 class="mb-1">
+                    ${resena.idUsuario.nombre} ${resena.idUsuario.apellidoPaterno} ${resena.idUsuario.apellidoMaterno}
+                </h6>
+                <p class="small">
+                    <span class="text-muted">${new Date(resena.fechaCreacion).toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+                </p>
+                <p class="text-primary fw-bold">
+                    Producto: ${resena.producto.nombreProducto} -
+                    Proveedor: ${resena.producto.idProveedor.nombreProveedor}
+                    <span class="badge badge-custom ms-2">${resena.producto.codigoProducto}</span>
+                </p>
+                <div class="mb-2">
+                    ${starRatingHtml}
+                    <span class="ms-3 text-dark fw-bold">${resena.tema}</span>
+                </div>
+                <p>${resena.opinion}</p>
+                ${photosHtml}
+                <div class="d-flex justify-content-end mt-4">
+                    <a href="#" class="text-muted like-btn" data-resena-id="${resena.id}">
+                        <i class="feather-icon icon-thumbs-up me-1"></i>
+                        Útil (<span class="like-count">${resena.util != null ? resena.util : 0}</span>)
+                        <!-- Partículas de animación -->
+                        <div class="particles">
+                            <div class="particle" style="--x: -20px; --y: -30px;"></div>
+                            <div class="particle" style="--x: 20px; --y: -30px;"></div>
+                            <div class="particle" style="--x: -30px; --y: 10px;"></div>
+                            <div class="particle" style="--x: 30px; --y: 10px;"></div>
+                            <div class="particle" style="--x: 0px; --y: -40px;"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        `;
+            return div;
+        };
 
         // Función para cargar reseñas de manera paginada
         const loadReviews = async () => {
@@ -1346,7 +1445,9 @@
             }
             try {
                 const response = await fetch(`/UsuarioFinal/Reviews/ajax?page=${page}&size=${size}&productId=${productoId}&sort=${sortOrder}`);
-                // Ajusta la URL al endpoint que tengas en tu backend
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
                 const data = await response.json();
 
                 if (data.resenas && data.resenas.length > 0) {
@@ -1364,79 +1465,10 @@
             }
         };
 
-        // Función para crear el elemento HTML de una reseña dentro del modal
-        const createReviewElement = (resena) => {
-            // Contenedor principal de una reseña
-            const div = document.createElement('div');
-            div.className = 'd-flex border-bottom pb-6 mb-6';
-
-            // Generar estrellas
-            const starRatingHtml = generateStarRating(resena.idCalidad ? resena.idCalidad.id : 0);
-
-            // Generar fotos
-            const photosHtml = generatePhotoGallery(resena.fotosresenas);
-
-            div.innerHTML = `
-            <img src="${resena.idUsuario.foto ? '/UsuarioFinal/foto/' + resena.idUsuario.id : '/images/avatar/avatarGenerico.png'}"
-                 alt="Foto de usuario" class="rounded-circle avatar-lg">
-            <div class="ms-5 reseña-contenido" style="flex-grow: 1;">
-                <h6 class="mb-1">
-                    ${resena.idUsuario.nombre} ${resena.idUsuario.apellidoPaterno} ${resena.idUsuario.apellidoMaterno}
-                </h6>
-                <p class="small">
-                    <span class="text-muted">${resena.fechaCreacion}</span>
-                </p>
-                <p class="text-primary fw-bold">
-                    Producto: ${resena.producto.nombreProducto} -
-                    Proveedor: ${resena.producto.idProveedor.nombreProveedor}
-                    <span class="badge badge-custom ms-2">${resena.producto.codigoProducto}</span>
-                </p>
-                <div class="mb-2">
-                    ${starRatingHtml}
-                    <span class="ms-3 text-dark fw-bold">${resena.tema}</span>
-                </div>
-                <p>${resena.opinion}</p>
-                ${photosHtml}
-                <div class="d-flex justify-content-end mt-4">
-                    <a href="#" class="text-muted like-btn" data-resena-id="${resena.id}">
-                        <i class="feather-icon icon-thumbs-up me-1"></i>
-                        Útil (<span class="like-count">${resena.util != null ? resena.util : 0}</span>)
-                    </a>
-                </div>
-            </div>
-        `;
-            return div;
-        };
-
-        // Generar estrellas
-        const generateStarRating = (rating) => {
-            let stars = '';
-            for (let i = 1; i <= 5; i++) {
-                stars += `<i class="bi ${i <= rating ? 'bi-star-fill' : 'bi-star'} text-warning"></i>`;
-            }
-            return stars;
-        };
-
-        // Generar galería de fotos
-        const generatePhotoGallery = (photos) => {
-            if (!photos || photos.length === 0) return '';
-            let galleryHtml = '<div class="d-flex reseña-fotos mt-3">';
-            photos.forEach(photo => {
-                galleryHtml += `
-                <div class="border icon-shape icon-lg border-2 me-1" style="width: 100px; height: 100px; overflow: hidden;">
-                    <img src="/UsuarioFinal/Resena/Fotos/${photo.id}" class="img-fluid"
-                         style="width: 100%; height: 100%; object-fit: cover;" />
-                </div>
-            `;
-            });
-            galleryHtml += '</div>';
-            return galleryHtml;
-        };
-
         // Evento click en el botón "Cargar más reseñas"
         loadMoreBtn.addEventListener('click', loadReviews);
 
-        // Cuando se abra el modal, reiniciamos variables y cargamos reseñas desde cero
+        // Listener para abrir el modal y cargar reseñas
         const modalResenas = document.getElementById('modalResenas');
         modalResenas.addEventListener('show.bs.modal', () => {
             page = 0;
@@ -1446,15 +1478,58 @@
             loadReviews();
         });
 
-        // Ejemplo de infinite scroll dentro del modal (opcional)
-        const modalBody = modalResenas.querySelector('.modal-body');
-        modalBody.addEventListener('scroll', () => {
-            // Si el scroll llega al final, cargamos más reseñas
-            if (modalBody.scrollHeight - modalBody.scrollTop === modalBody.clientHeight) {
-                loadReviews();
+        // Event Delegation para botones "Útil" y enlaces de detalles de reseñas
+        modalResenas.addEventListener('click', function(event) {
+            // Manejo de botones "Útil"
+            if (event.target.closest('.like-btn')) {
+                event.preventDefault();
+                const likeBtn = event.target.closest('.like-btn');
+                const resenaId = likeBtn.getAttribute('data-resena-id');
+
+                // Obtener el token CSRF y el header desde las meta tags
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                // Realiza la solicitud al servidor para alternar el estado de "Útil"
+                fetch(`/UsuarioFinal/Resena/${resenaId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken  // Enviar el token CSRF en el encabezado
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Actualiza el contador en la interfaz
+                            likeBtn.querySelector('.like-count').textContent = data.newUtilCount;
+
+                            // Alterna la clase 'liked'
+                            likeBtn.classList.toggle('liked');
+
+                            // Si el botón ha sido marcado como "liked", dispara la animación
+                            if (likeBtn.classList.contains('liked')) {
+                                likeBtn.querySelectorAll('.particle').forEach(function(particle) {
+                                    particle.style.animation = 'none';
+                                    setTimeout(function() {
+                                        particle.style.animation = '';
+                                    }, 10);
+                                });
+                            }
+                        } else {
+                            console.error(data.message || 'Error desconocido.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
             }
+
+            // No es necesario manejar los clicks en enlaces de detalles aquí si ya están correctamente configurados
         });
     });
+
 </script>
+
+
+
 </body>
 </html>
