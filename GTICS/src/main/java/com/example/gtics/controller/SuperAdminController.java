@@ -280,7 +280,7 @@ public class SuperAdminController {
     }
 
     @GetMapping("/SuperAdmin/AdminZonal/eliminar")
-    public String eliminarAdminZonal(@RequestParam("id") int id, RedirectAttributes attr) {
+    public String eliminarAdminZonal(@RequestParam("idUsuarioFinal") int id, RedirectAttributes attr) {
 
         Optional<Usuario> optProduct = usuarioRepository.findById(id);
 
@@ -807,14 +807,15 @@ public class SuperAdminController {
         System.out.println(razon);
         usuarioRepository.banUsuario(idUsuarioFinal, razon);
         Usuario usuario = usuarioRepository.findById(idUsuarioFinal).orElseThrow();
-        attr.addFlashAttribute("msg", "Usuario eliminado exitosamente");
         switch (usuario.getRol().getId()){
             case 4:
+                attr.addFlashAttribute("msg", "Usuario eliminado exitosamente");
                 return "redirect:/SuperAdmin/listaUsuarioFinal";
             case 3:
-                attr.addFlashAttribute("message", "Usuario eliminado exitosamente");
+                attr.addFlashAttribute("msg", "Agente eliminado exitosamente");
                 return "redirect:/SuperAdmin/listaAgente";
             case 2:
+                attr.addFlashAttribute("msg", "Admin Zonal eliminado exitosamente");
                 return "redirect:/SuperAdmin/listaAdminZonal";
             default:
                 return "redirect:/SuperAdmin";
