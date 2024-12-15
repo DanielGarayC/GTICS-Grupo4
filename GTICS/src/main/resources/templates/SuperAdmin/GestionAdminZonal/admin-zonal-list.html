@@ -102,12 +102,12 @@
                                                 <div class="mb-3">
                                                     <label for="deleteReason" class="form-label">Razón</label>
                                                     <textarea id="deleteReason" name="razon" class="form-control" rows="4" required
-                                                              placeholder="Escribe la razón para eliminar al usuario"></textarea>
+                                                              placeholder="Escribe la razón para eliminar al Admin Zonal"></textarea>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                <button type="submit" class="btn btn-danger">Confirmar</button>
+                                                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Confirmar</button>
                                             </div>
                                         </form>
                                     </div>
@@ -288,22 +288,29 @@
 </script>
 
 <script>
-    function confirmDelete(id) {
+    function confirmDelete() {
         Swal.fire({
             title: '¿Estás seguro?',
             text: "Los cambios no serán reversibles",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#28a745',
-            cancelButtonColor: '#dc3545',
+            confirmButtonColor: '#28a745', // Color verde para el botón de confirmar
+            cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
             confirmButtonText: 'Eliminar',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = `/SuperAdmin/AdminZonal/eliminar?id=${id}`;
+                const form = document.getElementById('deleteUserForm');
+                if (result.isConfirmed) {
+                    if (form.checkValidity()) {
+                        form.submit();
+                    }
+                }
             }
         });
     }
+
+
 function filterTable() {
     const input = document.getElementById("searchCustomers");
     const filter = input.value.toLowerCase();

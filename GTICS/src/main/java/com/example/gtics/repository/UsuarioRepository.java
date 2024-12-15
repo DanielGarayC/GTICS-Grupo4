@@ -87,9 +87,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "u.agt_razonsocial, z.nombrezona " +
             "FROM usuario u " +
             "JOIN zona z ON u.idzona = z.idzona " +
-            "WHERE u.idRol = 3 AND u.activo = 1 " +
+            "WHERE u.idRol = 3 AND u.activo = 1 AND u.baneado = FALSE " +
             "GROUP BY u.idusuario",
-            countQuery = "SELECT COUNT(*) FROM usuario u WHERE u.idRol = 3",
+            countQuery = "SELECT COUNT(*) FROM usuario u WHERE u.idRol = 3 AND u.baneado = FALSE",
             nativeQuery = true)
     Page<Object[]> mostrarAgentesConPaginacion(Pageable pageable);
     // Método personalizado para buscar usuarios por el ID del rol con paginación

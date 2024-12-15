@@ -1,314 +1,314 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <!-- Meta etiquetas requeridas -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Lista de agentes</title>
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+<head>
+    <!-- Meta etiquetas requeridas -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lista de agentes</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
 
-        <!-- CSS de librerías -->
-        <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
-        <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
-        <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+    <!-- CSS de librerías -->
+    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
 
-        <!-- CSS del tema -->
-        <link rel="stylesheet" th:href="@{/css/theme.min.css}">
-        <!-- Estilos personalizados -->
-        <style>
-            .logoImagen{
-                height: 80px;
-                width: 250px;
-            }
-            .logoImagenCelulares{
-                height: 80px;
-                width: 220px;
-            }
-            /* Estilos para la barra de búsqueda */
-            .search-bar {
-                position: relative;
-            }
-            .search-bar input {
-                padding-left: 2.5rem;
-            }
-            .search-bar .bi-search {
-                position: absolute;
-                left: 0.75rem;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #aaa;
-            }
-            /* Estilos para la tabla */
-            .table-hover tbody tr:hover {
-                background-color: #f9f9f9;
-            }
-            /* Estilos para el badge de estado */
-            .estado-badge {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.35rem;
-                padding: 0.4em 0.75em;
-                font-size: 0.9em;
-                font-weight: 600;
-                border-radius: 0.5rem;
-                transition: background-color 0.3s, color 0.3s;
-            }
-            .estado-habilitado {
-                background: linear-gradient(45deg, #4caf50, #81c784);
-                color: #fff;
-            }
-            .estado-deshabilitado {
-                background: linear-gradient(45deg, #e53935, #ef5350);
-                color: #fff;
-            }
-            /* Efecto hover en los badges de estado */
-            .estado-badge:hover {
-                opacity: 0.9;
-            }
-        </style>
-    </head>
+    <!-- CSS del tema -->
+    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+    <!-- Estilos personalizados -->
+    <style>
+        .logoImagen{
+            height: 80px;
+            width: 250px;
+        }
+        .logoImagenCelulares{
+            height: 80px;
+            width: 220px;
+        }
+        /* Estilos para la barra de búsqueda */
+        .search-bar {
+            position: relative;
+        }
+        .search-bar input {
+            padding-left: 2.5rem;
+        }
+        .search-bar .bi-search {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        /* Estilos para la tabla */
+        .table-hover tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        /* Estilos para el badge de estado */
+        .estado-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4em 0.75em;
+            font-size: 0.9em;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .estado-habilitado {
+            background: linear-gradient(45deg, #4caf50, #81c784);
+            color: #fff;
+        }
+        .estado-deshabilitado {
+            background: linear-gradient(45deg, #e53935, #ef5350);
+            color: #fff;
+        }
+        /* Efecto hover en los badges de estado */
+        .estado-badge:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
 
-    <body>
-        <!-- Contenido principal -->
-        <div>
-            <!-- Navbar superior -->
-            <div th:insert="~{fragments/navbarSuperior.html :: navbarSuperior}"></div>
+<body>
+<!-- Contenido principal -->
+<div>
+    <!-- Navbar superior -->
+    <div th:insert="~{fragments/navbarSuperior.html :: navbarSuperior}"></div>
 
-            <div class="main-wrapper">
-                <!-- Navbar vertical (PC) -->
-                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaAgente')}"></div>
+    <div class="main-wrapper">
+        <!-- Navbar vertical (PC) -->
+        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalPc('listaAgente')}"></div>
 
-                <!-- Navbar vertical (Celulares) -->
-                <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaAgente')}"></div>
+        <!-- Navbar vertical (Celulares) -->
+        <div th:insert="~{fragments/navbarSuperAdmin.html :: navbarVerticalCelulares('listaAgente')}"></div>
 
-                <!-- Contenido de la página -->
-                <main class="main-content-wrapper">
-                    <div class="container">
-                        <div class="row mb-4">
-                            <div class="col-md-8">
-                                <h2>Lista de agentes</h2>
+        <!-- Contenido de la página -->
+        <main class="main-content-wrapper">
+            <div class="container">
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h2>Lista de agentes</h2>
+                    </div>
+                    <div class="col-md-4">
+                        <form class="search-bar" role="search">
+                            <i class="bi bi-search"></i>
+                            <input class="form-control" type="search" id="searchAgentes" placeholder="Buscar agentes" aria-label="Search" th:value="${param.busqueda}" oninput="filterTable()"/>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Mensajes de alerta -->
+                <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}"></div>
+                <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}"></div>
+
+                <!-- Modal para la razón de eliminación -->
+                <div class="modal fade" id="deleteReasonModal" tabindex="-1" aria-labelledby="deleteReasonModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteReasonModalLabel">Razón para eliminar</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="col-md-4">
-                                <form class="search-bar" role="search">
-                                    <i class="bi bi-search"></i>
-                                    <input class="form-control" type="search" id="searchAgentes" placeholder="Buscar agentes" aria-label="Search" th:value="${param.busqueda}" oninput="filterTable()"/>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Mensajes de alerta -->
-                        <div class="alert alert-success" role="alert" th:if="${message != null}" th:text="${message}"></div>
-                        <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}"></div>
-
-                        <!-- Modal para la razón de eliminación -->
-                        <div class="modal fade" id="deleteReasonModal" tabindex="-1" aria-labelledby="deleteReasonModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteReasonModalLabel">Razón para eliminar</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <form id="deleteUserForm" method="post" th:action="@{/SuperAdmin/banearUsuario}">
+                                <div class="modal-body">
+                                    <input type="hidden" id="userIdToDelete" name="idUsuarioFinal">
+                                    <div class="mb-3">
+                                        <label for="deleteReason" class="form-label">Razón</label>
+                                        <textarea id="deleteReason" name="razon" class="form-control" rows="4" required
+                                                  placeholder="Escribe la razón para eliminar al usuario"></textarea>
                                     </div>
-                                    <form id="deleteUserForm" method="post" th:action="@{/SuperAdmin/banearUsuario}">
-                                        <div class="modal-body">
-                                            <input type="hidden" id="userIdToDelete" name="idUsuarioFinal">
-                                            <div class="mb-3">
-                                                <label for="deleteReason" class="form-label">Razón</label>
-                                                <textarea id="deleteReason" name="razon" class="form-control" rows="4" required
-                                                          placeholder="Escribe la razón para eliminar al usuario"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <button type="submit" class="btn btn-danger">Confirmar</button>
-                                        </div>
-                                    </form>
                                 </div>
-                            </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-danger">Confirmar</button>
+                                </div>
+                            </form>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Tabla de agentes -->
-                        <div class="card h-100 card-lg">
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-centered table-hover mb-0 text-nowrap">
-                                        <thead class="bg-light">
-                                            <tr>
-                                                <th></th>
-                                                <th>Nombres</th>
-                                                <th>Apellidos</th>
-                                                <th>Código de D. Aduanero</th>
-                                                <th>Estado del Código</th>
-                                                <th>Código de Jurisdicción</th>
-                                                <th>Razón Social</th>
-                                                <th>Zona</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="agente, var : ${agentes}">
-                                                <td th:text="${var.index+1}"></td>
-                                                <td th:text="${agente['nombre']}"></td>
-                                                <td th:text="${agente['apellidopaterno']} + ' ' + ${agente['apellidomaterno']}"></td>
-                                                <td th:text="${agente['agt_codigoaduana']}"></td>
-                                                <!-- Columna para el estado del código aduanero -->
-                                                <td class="text-center align-middle">
+                <!-- Tabla de agentes -->
+                <div class="card h-100 card-lg">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-centered table-hover mb-0 text-nowrap">
+                                <thead class="bg-light">
+                                <tr>
+                                    <th></th>
+                                    <th>Nombres</th>
+                                    <th>Apellidos</th>
+                                    <th>Código de D. Aduanero</th>
+                                    <th>Estado del Código</th>
+                                    <th>Código de Jurisdicción</th>
+                                    <th>Razón Social</th>
+                                    <th>Zona</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="agente, var : ${agentes}">
+                                    <td th:text="${var.index+1}"></td>
+                                    <td th:text="${agente['nombre']}"></td>
+                                    <td th:text="${agente['apellidopaterno']} + ' ' + ${agente['apellidomaterno']}"></td>
+                                    <td th:text="${agente['agt_codigoaduana']}"></td>
+                                    <!-- Columna para el estado del código aduanero -->
+                                    <td class="text-center align-middle">
                                             <span class="estado-badge" th:classappend="${agente['estadoCodigoAduana']} == 'Habilitado' ? 'estado-habilitado' : 'estado-deshabilitado'">
                                                 <i th:class="${agente['estadoCodigoAduana']} == 'Habilitado' ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
                                                 <span th:text="${agente['estadoCodigoAduana']}"></span>
                                             </span>
-                                                </td>
-                                                <td th:text="${agente['agt_codigojurisdiccion']}"></td>
-                                                <td th:text="${agente['agt_razonsocial']}"></td>
-                                                <td th:text="${agente['nombrezona']}"></td>
-                                                <td>
-                                                    <div class="dropdown">
-                                                        <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="feather-icon icon-more-vertical fs-5"></i>
-                                                        </a>
-                                                        <ul class="dropdown-menu">
-                                                            <li>
-                                                                <a class="dropdown-item" th:href="@{/SuperAdmin/editarAgente/{id}(id=${agente['idusuario']})}">
-                                                                    <i class="bi bi-pencil-square me-3"></i>
-                                                                    Editar
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0);"
-                                                                   class="dropdown-item"
-                                                                   data-bs-toggle="modal"
-                                                                   data-bs-target="#deleteReasonModal"
-                                                                   th:data-id="${agente['idusuario']}">
-                                                                    <i class="bi bi-trash me-3"></i>
-                                                                    Eliminar
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="dropdown-item" th:href="@{verAgente/{id}(id=${agente['idusuario']}, origin='listaAgente')}">
-                                                                    <i class="bi bi-eye me-3"></i>
-                                                                    Ver
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <form id="impersonateForm" th:action="@{/SuperAdmin/impersonateUser/{userId}(userId=${agente['idusuario']}, origin='listaAgente')}" method="get">
-                                                                    <button type="submit" class="dropdown-item">
-                                                                        <i class="bi bi-door-open me-3"></i>
-                                                                        Ingresar a la cuenta
-                                                                    </button>
-                                                                </form>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </td>
+                                    <td th:text="${agente['agt_codigojurisdiccion']}"></td>
+                                    <td th:text="${agente['agt_razonsocial']}"></td>
+                                    <td th:text="${agente['nombrezona']}"></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="feather-icon icon-more-vertical fs-5"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" th:href="@{/SuperAdmin/editarAgente/{id}(id=${agente['idusuario']})}">
+                                                        <i class="bi bi-pencil-square me-3"></i>
+                                                        Editar
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);"
+                                                       class="dropdown-item"
+                                                       data-bs-toggle="modal"
+                                                       data-bs-target="#deleteReasonModal"
+                                                       th:data-id="${agente['idusuario']}">
+                                                        <i class="bi bi-trash me-3"></i>
+                                                        Eliminar
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" th:href="@{verAgente/{id}(id=${agente['idusuario']}, origin='listaAgente')}">
+                                                        <i class="bi bi-eye me-3"></i>
+                                                        Ver
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <form id="impersonateForm" th:action="@{/SuperAdmin/impersonateUser/{userId}(userId=${agente['idusuario']}, origin='listaAgente')}" method="get">
+                                                        <button type="submit" class="dropdown-item">
+                                                            <i class="bi bi-door-open me-3"></i>
+                                                            Ingresar a la cuenta
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                                <!-- Paginación -->
-                                <div class="d-flex flex-column align-items-center mt-3">
-                                    <!-- Texto de paginación centrado -->
-                                    <span id="paginationInfo" class="mb-2">
+                        <!-- Paginación -->
+                        <div class="d-flex flex-column align-items-center mt-3">
+                            <!-- Texto de paginación centrado -->
+                            <span id="paginationInfo" class="mb-2">
                                 Mostrando página [[${currentPage != null ? currentPage + 1 : 1}]] de [[${totalPages != null ? totalPages : 1}]]
                             </span>
-                                    <!-- Paginación centrada -->
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination justify-content-center">
-                                            <!-- Botón de "Previo" -->
-                                            <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
-                                                <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
-                                            </li>
-                                            <!-- Páginas numeradas -->
-                                            <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                                <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${i})}" th:text="${i + 1}"></a>
-                                            </li>
-                                            <!-- Botón de "Siguiente" -->
-                                            <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
-                                                <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-
-                            </div>
+                            <!-- Paginación centrada -->
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                    <!-- Botón de "Previo" -->
+                                    <li class="page-item" th:classappend="${currentPage == 0 or currentPage == null} ? 'disabled'">
+                                        <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${currentPage != null ? currentPage - 1 : 0})}">Previo</a>
+                                    </li>
+                                    <!-- Páginas numeradas -->
+                                    <li th:each="i : ${#numbers.sequence(0, totalPages != null ? totalPages - 1 : 0)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                        <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${i})}" th:text="${i + 1}"></a>
+                                    </li>
+                                    <!-- Botón de "Siguiente" -->
+                                    <li class="page-item" th:classappend="${currentPage != null && (currentPage + 1 == totalPages)} ? 'disabled'">
+                                        <a class="page-link" th:href="@{/SuperAdmin/listaAgente(page=${currentPage != null ? currentPage + 1 : 1})}">Siguiente</a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
-                    </div>
 
-                </main>
+                    </div>
+                </div>
             </div>
 
-        </div>
+        </main>
+    </div>
 
-        <!-- Librerías JS -->
-        <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-        <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+</div>
 
-        <!-- JS del tema -->
-        <script th:src="@{/js/theme.min.js}"></script>
-        <script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
-        <script th:src="@{/js/vendors/chart.js}"></script>
+<!-- Librerías JS -->
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
 
-        <!-- SweetAlert2 CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-        <!-- SweetAlert2 JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<!-- JS del tema -->
+<script th:src="@{/js/theme.min.js}"></script>
+<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
+<script th:src="@{/js/vendors/chart.js}"></script>
 
-        <!-- Script para confirmar eliminación -->
-        <script>
-            // Para eliminar a alguien :D
-            document.getElementById('deleteReasonModal').addEventListener('show.bs.modal', function (event) {
-                const triggerElement = event.relatedTarget;
-                const userId = triggerElement.getAttribute('data-id');
-                document.getElementById('userIdToDelete').value = userId;
-            });
-        </script>
-        <script>
-            function confirmDelete(button) {
-                const idUsuario = button.getAttribute('data-idusuario');
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: "Los cambios no serán reversibles",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#28a745', // Color verde para el botón de eliminar
-                    cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
-                    confirmButtonText: 'Eliminar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = `/SuperAdmin/eliminarAgente?id=` + idUsuario;
-                        Swal.fire(
-                            '¡Eliminado!',
-                            'El elemento ha sido eliminado con éxito.',
-                            'success'
-                        );
-                    }
-                });
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<!-- Script para confirmar eliminación -->
+<script>
+    // Para eliminar a alguien :D
+    document.getElementById('deleteReasonModal').addEventListener('show.bs.modal', function (event) {
+        const triggerElement = event.relatedTarget;
+        const userId = triggerElement.getAttribute('data-id');
+        document.getElementById('userIdToDelete').value = userId;
+    });
+</script>
+<script>
+    function confirmDelete(button) {
+        const idUsuario = button.getAttribute('data-idusuario');
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Los cambios no serán reversibles",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745', // Color verde para el botón de eliminar
+            cancelButtonColor: '#dc3545', // Color rojo para el botón de cancelar
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/SuperAdmin/eliminarAgente?id=` + idUsuario;
+                Swal.fire(
+                    '¡Eliminado!',
+                    'El elemento ha sido eliminado con éxito.',
+                    'success'
+                );
             }
-        </script>
+        });
+    }
+</script>
 
-        <!-- Script para filtrar la tabla -->
-        <script>
-            function filterTable() {
-                const input = document.getElementById("searchAgentes");
-                const filter = input.value.toLowerCase();
-                const table = document.querySelector("table tbody");
-                const rows = table.getElementsByTagName("tr");
+<!-- Script para filtrar la tabla -->
+<script>
+    function filterTable() {
+        const input = document.getElementById("searchAgentes");
+        const filter = input.value.toLowerCase();
+        const table = document.querySelector("table tbody");
+        const rows = table.getElementsByTagName("tr");
 
-                for (let i = 0; i < rows.length; i++) {
-                    const cells = rows[i].getElementsByTagName("td");
-                    let match = false;
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let match = false;
 
-                    for (let j = 0; j < cells.length; j++) {
-                        if (cells[j].innerText.toLowerCase().includes(filter)) {
-                            match = true;
-                            break;
-                        }
-                    }
-                    rows[i].style.display = match ? "" : "none";
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j].innerText.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
                 }
             }
-        </script>
+            rows[i].style.display = match ? "" : "none";
+        }
+    }
+</script>
 
-    </body>
+</body>
 </html>

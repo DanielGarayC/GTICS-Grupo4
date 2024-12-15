@@ -119,7 +119,7 @@
 											</div>
 											<div class="modal-footer">
 												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-												<button type="submit" class="btn btn-danger">Confirmar</button>
+												<button type="button" class="btn btn-danger" onclick="confirmDelete()">Eliminar</button>
 											</div>
 										</form>
 									</div>
@@ -305,7 +305,7 @@
 
 
 <script>
-	function confirmDelete(url) {
+	function confirmDelete() {
 		Swal.fire({
 			title: '¿Estás seguro?',
 			text: "Los cambios no serán reversibles",
@@ -317,15 +317,12 @@
 			cancelButtonText: 'Cancelar'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				Swal.fire(
-						'¡Eliminado!',
-						'El usuario ha sido baneado con éxito.',
-						'success'
-				).then((result) => {
-					if (result.isConfirmed) {
-						window.location.href = url; // Redirecciona al usuario a la URL del enlace
+				const form = document.getElementById('deleteUserForm');
+				if (result.isConfirmed) {
+					if (form.checkValidity()) {
+						form.submit();
 					}
-				});
+				}
 			}
 		});
 	}
