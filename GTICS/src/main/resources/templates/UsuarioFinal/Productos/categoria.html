@@ -76,7 +76,7 @@
                 <!-- title -->
 
                 <h5 class="mb-3">
-                  <a th:href="@{'/UsuarioFinal/categorias/' + ${idCategoria}}" th:text="${nombreCategoria}">Categoría: Electrónica y Tecnología</a>
+                    <a th:href="@{'/UsuarioFinal/categorias/' + ${producto.idCategoria.id}}" th:text="${nombreCategoria}">Categoría: Electrónica y Tecnología</a>
                 </h5>
                 <!-- nav -->
                 <ul class="nav nav-category" id="categoryCollapseMenu">
@@ -233,27 +233,29 @@
                   </div>
                   <!-- heading -->
                   <!-- Producto -->
+                  <!-- Información del producto -->
                   <div class="text-small mb-1">
-                    <a class="text-decoration-none text-muted" th:text="${nombreCategoria}"><small></small></a>
+                    <a class="text-decoration-none text-muted" th:text="${producto.idCategoria.nombreCategoria}"></a>
                   </div>
                   <h2 class="fs-5">
-                    <a th:href="@{'/UsuarioFinal/detallesProducto/' + ${producto.id}}"
-                       class="text-inherit text-decoration-none"
-                       th:text="${producto.nombreProducto}"></a>
+                    <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}"
+                       class="text-inherit text-decoration-none" th:text="${producto.nombreProducto}"></a>
                   </h2>
                   <a class="text-decoration-none text-muted small" th:text="${nombreSubcategoria}"></a>
                   <a class="text-decoration-none text-muted small" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></a>
 
                   <div class="mt-auto">
                     <!-- rating -->
-                    <small class="text-warning">
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-half"></i>
+                    <small class="text-warning" aria-label="Calificación promedio">
+        <span th:each="i : ${#numbers.sequence(1,5)}">
+            <i class="bi"
+               th:classappend="${producto.averageRating >= i} ? ' bi-star-fill' :
+                             (${producto.averageRating >= (i - 0.5)} ? ' bi-star-half' :
+                             ' bi-star')"
+               th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+        </span>
                     </small>
-                    <span class="text-muted small">4.5(149)</span>
+                    <span class="text-muted small" th:text="${producto.averageRating} + ' (' + ${producto.reviewCount} + ')'"></span>
                   </div>
 
                   <!-- price -->
@@ -271,7 +273,7 @@
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                           </svg>
-                          Añadir al carrito
+                          Añadir
                         </button>
                       </div>
                     </form>

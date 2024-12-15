@@ -987,6 +987,8 @@ public class UsuarioFinalController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+
     }
 
     @GetMapping("UsuarioFinal/foto/{id}")
