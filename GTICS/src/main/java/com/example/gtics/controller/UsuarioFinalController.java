@@ -989,40 +989,21 @@ public class UsuarioFinalController {
         }
     }
 
-    @GetMapping("/UsuarioFinal/tienda/foto/{id}")
-    public ResponseEntity<byte[]> obtenerFotoUsuario(@PathVariable Integer id) {
-        Usuario usuario = usuarioRepository.findById(id).orElse(null);
 
-        if (usuario != null && usuario.getFoto() != null) {
-            byte[] imagenComoBytes = usuario.getFoto();
+    @GetMapping("/UsuarioFinal/tienda/foto/{id}")
+    public ResponseEntity<byte[]> obtenerFotoTienda(@PathVariable Integer id) {
+        Tienda tienda = tiendaRepository.findById(id).orElse(null);
+
+        if (tienda != null && tienda.getFotoTienda() != null) {
+            byte[] imagenComoBytes = tienda.getFotoTienda();
 
             HttpHeaders httpHeaders = new HttpHeaders();
+            // Ajusta el tipo de contenido según el formato de tu imagen
             httpHeaders.setContentType(MediaType.IMAGE_PNG);
 
-            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+            return ResponseEntity.ok().headers(httpHeaders).body(imagenComoBytes);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/foto/{idTienda}")
-    public ResponseEntity<byte[]> obtenerFotoTienda(@PathVariable Integer idTienda) {
-        Optional<Tienda> tiendaOptional = tiendaRepository.findById(idTienda);
-
-        if (tiendaOptional.isPresent()) {
-            Tienda tienda = tiendaOptional.get();
-            byte[] imagenComoBytes = tienda.getFotoTienda();
-            if (imagenComoBytes != null && imagenComoBytes.length > 0) {
-                HttpHeaders httpHeaders = new HttpHeaders();
-                // Asumiendo que todas las imágenes son PNG. Si no, debes almacenar el tipo de contenido en la base de datos.
-                httpHeaders.setContentType(MediaType.IMAGE_PNG);
-                return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
-            } else {
-                // Si no hay imagen, retornar un 404 o una imagen por defecto
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -1383,6 +1364,14 @@ public class UsuarioFinalController {
     public String mostrarDetallesProducto(@PathVariable("idProducto") Integer idProducto, Model model) {
         Optional<Producto> productoOpt = productoRepository.findById(idProducto);
         String fechaFormateada = productoRepository.findFechaFormateadaById(idProducto);
+// Obtener el usuario autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String emailUsuario = authentication.getName();
+        Usuario usuario = usuarioRepository.findByEmail(emailUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Obtener la zonaId del usuario
+        Long zonaId = Long.valueOf(usuario.getZona().getId());
 
         if (productoOpt.isPresent()) {
             Producto producto = productoOpt.get();
@@ -1396,8 +1385,7 @@ public class UsuarioFinalController {
             model.addAttribute("fechaFormateada", fechaFormateada);
 
             // Obtener productos recomendados de la misma categoría
-            List<Producto> productosRecomendados = productoRepository.findByIdCategoriaAndIdNot(
-                    producto.getIdCategoria(), idProducto);
+            List<Producto> productosRecomendados = productoRepository.findByIdCategoriaAndZonaIdAndIdNot(producto.getIdCategoria(),zonaId ,idProducto);
 
             model.addAttribute("productosRecomendados", productosRecomendados.stream().limit(8).collect(Collectors.toList()));
             // Obtener datos de reseñas
@@ -1763,6 +1751,7 @@ public class UsuarioFinalController {
     }
 
 
+
     @PostConstruct
     public void inicializarLikesEnMemoria() {
         List<Resena> resenas = resenaRepository.findAll();
@@ -1772,6 +1761,84 @@ public class UsuarioFinalController {
         }
 
         logger.info("Likes inicializados en memoria.");
+    }
+
+    @GetMapping("/UsuarioFinal/Reviews/ajax")
+    public ResponseEntity<Map<String, Object>> getResenasA(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "recent") String sortOrder,
+            @RequestParam Long productId) {
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // Configurar la paginación y ordenamiento
+            Sort sort;
+            if ("mostHelpful".equals(sortOrder)) {
+                sort = Sort.by("util").descending();
+            } else {
+                sort = Sort.by("fechaCreacion").descending();
+            }
+            Pageable pageable = PageRequest.of(page, size, sort);
+
+            // Obtener las reseñas paginadas
+            Page<Resena> pagedResult = resenaRepository.findByProductoId(productId, pageable);
+
+            // Mapear las reseñas a un formato compatible con el frontend
+            List<Map<String, Object>> resenas = pagedResult.getContent().stream().map(resena -> {
+                Map<String, Object> resenaMap = new HashMap<>();
+                resenaMap.put("id", resena.getId());
+
+                // Mapeo de Usuario
+                resenaMap.put("idUsuario", new HashMap<String, Object>() {{
+                    put("id", resena.getIdUsuario().getId());
+                    put("nombre", resena.getIdUsuario().getNombre());
+                    put("apellidoPaterno", resena.getIdUsuario().getApellidoPaterno());
+                    put("apellidoMaterno", resena.getIdUsuario().getApellidoMaterno());
+                    put("foto", resena.getIdUsuario().getFoto());
+                }});
+
+                // Mapeo de Fecha de Creación
+                resenaMap.put("fechaCreacion", resena.getFechaCreacion());
+
+                // Mapeo de Calidad (Solo el ID)
+                resenaMap.put("calificacion", resena.getIdCalidad() != null ? resena.getIdCalidad().getId() : 0);
+
+                // Mapeo de Tema y Opinión
+                resenaMap.put("tema", resena.getTema());
+                resenaMap.put("opinion", resena.getOpinion());
+
+                // Mapeo de Utilidad
+                resenaMap.put("util", resena.getUtil() != null ? resena.getUtil() : 0);
+
+                // Mapeo de Producto
+                resenaMap.put("producto", new HashMap<String, Object>() {{
+                    put("nombreProducto", resena.getProducto().getNombreProducto());
+                    put("codigoProducto", resena.getProducto().getCodigoProducto());
+                    put("idProveedor", new HashMap<String, Object>() {{
+                        put("nombreProveedor", resena.getProducto().getIdProveedor().getNombreProveedor());
+                    }});
+                }});
+
+                // Mapeo de Fotos de la Reseña (Solo IDs)
+                resenaMap.put("fotosresenas", resena.getFotosresenas().stream()
+                        .map(Fotosresena::getId)
+                        .collect(Collectors.toList()));
+
+                return resenaMap;
+            }).collect(Collectors.toList());
+
+            // Construir la respuesta
+            response.put("resenas", resenas);
+            response.put("currentPage", pagedResult.getNumber());
+            response.put("totalPages", pagedResult.getTotalPages());
+            response.put("hasMore", pagedResult.hasNext());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("message", "Error al obtener reseñas: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -1911,6 +1978,7 @@ public class UsuarioFinalController {
         }
     }
 
+
     @GetMapping("/UsuarioFinal/Reviews/modal")
     @ResponseBody
     public Map<String, Object> cargarMasResena(@RequestParam(defaultValue = "0") int page,
@@ -1940,49 +2008,7 @@ public class UsuarioFinalController {
     }
 
 
-    // Endpoint para manejar el "like" en una reseña
-    @PostMapping("/{id}/like")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> toggleLike(@PathVariable("id") Long id, Principal principal) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            Optional<Resena> optionalResena = resenaRepository.findById(Math.toIntExact(id));
-            if (optionalResena.isPresent()) {
-                Resena resena = optionalResena.get();
-
-                // Inicializa 'util' si es null
-                if (resena.getUtil() == null) {
-                    resena.setUtil(0);
-                }
-
-                String userEmail = principal.getName();  // Obtener email del usuario autenticado
-                Usuario usuario = usuarioRepository.findByEmail(userEmail)
-                        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-                // Verifica si el usuario ya dio like
-                // Implementa una lógica adecuada para verificar si el usuario ya dio like.
-                // Por ejemplo, podrías tener una tabla "likes" que relacione usuarios y reseñas.
-
-                // Aquí, por simplicidad, suponemos que puedes incrementar el contador.
-                resena.setUtil(resena.getUtil() + 1);
-
-                // Guardar los cambios de la reseña
-                resenaRepository.save(resena);
-
-                response.put("success", true);
-                response.put("newUtilCount", resena.getUtil());  // Devolver el nuevo conteo de "útil"
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("success", false);
-                response.put("message", "Reseña no encontrada.");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            }
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Ocurrió un error al procesar la solicitud.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }       @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
+    @PostMapping("/UsuarioFinal/Resena/GuardarDatos")
     public String guardarResena(@Valid @ModelAttribute("resena") Resena resena,
                                 BindingResult bindingResult,
                                 @RequestParam(value = "uploadedPhotos", required = false) MultipartFile[] uploadedPhotos,
@@ -2050,6 +2076,8 @@ public class UsuarioFinalController {
 
         // Save the review
         resenaRepository.save(resena);
+        usuariosLikes.putIfAbsent(resena.getId(), new HashSet<>()); // Agregar al HashMap
+
         attr.addFlashAttribute("msg", "Reseña creada exitosamente.");
 
         return "redirect:/UsuarioFinal/Reviews";

@@ -10,6 +10,8 @@ import com.example.gtics.ValidationGroup.AdminZonalValidationGroup;
 import com.example.gtics.ValidationGroup.AgenteValidationGroup;
 import com.example.gtics.ValidationGroup.UsuarioFinalValidationGroup;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -127,5 +129,6 @@ public class Usuario {
 
     @Column(name = "razonBaneado")
     private String razonBaneado;
+
 
 }

@@ -151,7 +151,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     @Query("SELECT p FROM Producto p WHERE p.idSubcategoria.id = :subcategoriaId AND p.zona.id = :zonaId")
     Page<Producto> findProductosPorZonaYSubcategoria(@Param("zonaId") Integer zonaId, @Param("subcategoriaId") Integer subcategoriaId, Pageable pageable);
 
-    List<Producto> findByIdCategoriaAndIdNot(Categoria idCategoria, Integer id);
+    List<Producto> findByIdCategoriaAndZonaIdAndIdNot(Categoria idCategoria, Long zonaId, Integer id);
 
     boolean existsByCodigoProducto(String codigoProducto);
 }
