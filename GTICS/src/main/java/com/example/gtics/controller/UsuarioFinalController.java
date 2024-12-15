@@ -989,7 +989,27 @@ public class UsuarioFinalController {
         }
     }
 
+    @GetMapping("UsuarioFinal/foto/{id}")
+    public ResponseEntity<byte[]> obtenerFotoUsuario(@PathVariable Integer id) {
 
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+
+        if (usuario != null && usuario.getFoto() != null) {
+            byte[] imagenComoBytes = usuario.getFoto();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+
+            httpHeaders.setContentType(MediaType.IMAGE_PNG);
+
+
+            return ResponseEntity.ok()
+                    .headers(httpHeaders)
+                    .body(imagenComoBytes);
+        } else {
+
+            return ResponseEntity.notFound().build();
+        }
+    }
     @GetMapping("/UsuarioFinal/tienda/foto/{id}")
     public ResponseEntity<byte[]> obtenerFotoTienda(@PathVariable Integer id) {
         Tienda tienda = tiendaRepository.findById(id).orElse(null);
