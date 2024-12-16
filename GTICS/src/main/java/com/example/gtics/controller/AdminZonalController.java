@@ -287,7 +287,6 @@ public class AdminZonalController {
                             // Log para ver si el usuario se ha guardado correctamente
                             System.out.println("Usuario (Agente) guardado con ID: " + idUsuarioSol);
 
-                            emailService.emailParaAgente(nuevoAgente.getEmail(),nuevoAgente.getNombre(),nuevoAgente.getContrasena(),nuevoAgente.getZona().getNombreZona(), nuevoAgente.getNombre(), nuevoAgente.getApellidoPaterno());
                             attr.addFlashAttribute("msg", "El nuevo agente fue creado exitosamente.");
                         } else {
                             attr.addFlashAttribute("error", "No se pudo encontrar el Admin Zonal.");

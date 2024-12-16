@@ -175,6 +175,7 @@ public class SuperAdminController {
         System.out.println("guardar nuevo admin zonal prueba");
         //usuario.setId(null);
         //usuario.setId(null);
+        String passGuardada = null;
         try {
             // Verificar si ya existen 2 coordinadores en la zona
             int cantidadCoordinadores = usuarioRepository.countCoordinadoresByZona(zonaId);
@@ -266,12 +267,13 @@ public class SuperAdminController {
                     emailService.actualizacionInfoUserGenerico(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
                 }
             }else {
+                passGuardada = usuario.getContrasena();
                 String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
                 usuario.setContrasena(encryptedPassword);
             }
             usuario.setActivo(1);
             if (usuario.getId() == null) {
-                emailService.emailParaAdminZonal(usuario.getEmail(), usuario.getNombre(), usuario.getContrasena(), usuario.getZona().getNombreZona());
+                emailService.emailParaAdminZonal(usuario.getEmail(), usuario.getNombre(), passGuardada, usuario.getZona().getNombreZona());
                 attr.addFlashAttribute("msg", "Admin Zonal creado exitosamente");
             } else {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
@@ -662,6 +664,7 @@ public class SuperAdminController {
             redirectAttributes.addFlashAttribute("error", "Faltan parámetros obligatorios (ID o Indicador).");
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }
+        String passG = null;
         try {
             // Obtener el usuario solicitante por ID
             Usuario usuario = usuarioRepository.findUsuarioById(id);
@@ -677,6 +680,13 @@ public class SuperAdminController {
                 redirectAttributes.addFlashAttribute("error", "Este Administrador Zonal ya tiene el máximo de 3 agentes activos.");
                 return "redirect:/SuperAdmin/listaSolicitudesAgentes";
             }
+            Usuario agente= usuarioRepository.findById(id).orElseThrow();
+            Usuario AdminZonal = usuarioRepository.findById(idAdminZonal).orElseThrow();
+
+            String passEncriptada = passwordEncoder.encode(agente.getContrasena());
+            passG = agente.getContrasena();
+
+            usuarioRepository.actualizarPasswordAAgente(id, passEncriptada);
 
             // Cambiar el rol del usuario o activar la cuenta, según el indicador
             switch (indicador) {
@@ -690,6 +700,7 @@ public class SuperAdminController {
 
             // Eliminar la solicitud
             solicitudAgenteRepository.deleteByIdUsuario(usuario);
+            emailService.emailParaAgente(agente.getEmail(),agente.getNombre(),passG,agente.getZona().getNombreZona(), AdminZonal.getNombre(),AdminZonal.getApellidoPaterno());
             redirectAttributes.addFlashAttribute("msg", "Solicitud aceptada con éxito!");
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }catch(Exception e) {
