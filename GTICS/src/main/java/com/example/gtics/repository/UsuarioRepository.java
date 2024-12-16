@@ -205,6 +205,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(nativeQuery=true,value="UPDATE usuario SET `AGT_codigoAduana` = ?2, `AGT_codigoJurisdiccion` = ?3, `idRol` = '3' WHERE (`idUsuario` = ?1);\n")
     void actualizarRolAAgente(Integer idUsuario,String aduana,String jurisdiccion);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery=true,value="UPDATE usuario SET `contrasena` = ?2, `idRol` = '3' WHERE (`idUsuario` = ?1);\n")
+    void actualizarPasswordAAgente(Integer idUsuario,String contrasena);
+
     @Query(value = "SELECT COUNT(u.idusuario) as cantUsuariosBaneados " +
             "FROM usuario u WHERE u.baneado = 1 AND u.idRol = 4", nativeQuery = true)
     CantUsuariosBaneados getCantidadBaneados();
