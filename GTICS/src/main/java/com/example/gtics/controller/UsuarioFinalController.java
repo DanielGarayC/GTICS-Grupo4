@@ -898,7 +898,7 @@ public class UsuarioFinalController {
         productos = new ArrayList<>(productoSet);
 
         // Obtener calificaciones y conteo de reseñas
-        List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCountByZonaId(idZona);
+        List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCount();
 
         // Mapear las calificaciones a los productos
         Map<Integer, RatingData> ratingsMap = ratings.stream()
@@ -1285,7 +1285,7 @@ public class UsuarioFinalController {
                 List<Producto> productos = productoRepository.findProductosPorZona(zonaUsuario.getId());
 
                 // Obtener calificaciones y conteo de reseñas
-                List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCountByZonaId(zonaUsuario.getId());
+                List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCount();
 
                 // Mapear las calificaciones a los productos
                 Map<Integer, RatingData> ratingsMap = ratings.stream()
@@ -1493,6 +1493,26 @@ public class UsuarioFinalController {
                 // Consulta paginada con el criterio de zona y categoría
                 Page<Producto> productosPage = productoRepository.findProductosPorZonaYCategoria(zonaUsuario.getId(), idCategoria, pageable);
                 List<Producto> productos = productosPage.getContent();
+
+
+                List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCount();
+                Map<Integer, RatingData> ratingsMap = ratings.stream()
+                        .collect(Collectors.toMap(
+                                row -> (Integer) row[0],
+                                row -> new RatingData((Double) row[1], (Long) row[2])
+                        ));
+
+                for (Producto producto : productos) {
+                    RatingData ratingData = ratingsMap.get(producto.getId());
+                    if (ratingData != null) {
+                        producto.setAverageRating(ratingData.getAverageRating());
+                        producto.setReviewCount(ratingData.getReviewCount());
+                    } else {
+                        producto.setAverageRating(0.0);
+                        producto.setReviewCount(0);
+                    }
+                }
+
                 model.addAttribute("productos", productos);
 
                 // Total de productos y número de páginas
