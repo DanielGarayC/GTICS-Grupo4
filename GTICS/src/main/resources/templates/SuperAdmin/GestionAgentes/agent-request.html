@@ -163,6 +163,9 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                <tr th:if="${listaUsuariosSolicitudes.size() == 0}">
+                                                    <td colspan="11" class="text-center">No hay solicitudes pendientes.</td>
+                                                </tr>
                                                     <tr th:each="agente, var : ${listaUsuariosSolicitudes}">
                                                         <td th:text="${var.index+1}"></td>
                                                         <td th:text="${agente.getNombre()}"></td> <!-- Nombre -->
