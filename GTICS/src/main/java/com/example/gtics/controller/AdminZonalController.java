@@ -7,6 +7,7 @@ import com.example.gtics.dto.ProductoTabla;
 import com.example.gtics.entity.*;
 import com.example.gtics.repository.*;
 
+import com.example.gtics.service.EmailService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.boot.Banner;
@@ -43,16 +44,18 @@ public class AdminZonalController {
     private final RolRepository rolRepository;
     private final ProductoRepository productoRepository;
     private final SolicitudreposicionRepository solicitudreposicionRepository;
+    private final EmailService emailService;
 
-    public  AdminZonalController(SolicitudAgenteRepository solicitudAgenteRepository, UsuarioRepository usuarioRepository,DistritoRepository distritoRepository,RolRepository rolRepository,
+    public  AdminZonalController(SolicitudAgenteRepository solicitudAgenteRepository, UsuarioRepository usuarioRepository, DistritoRepository distritoRepository, RolRepository rolRepository,
                                  ProductoRepository productoRepository,
-                                 SolicitudreposicionRepository solicitudreposicionRepository){
+                                 SolicitudreposicionRepository solicitudreposicionRepository, EmailService emailService){
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.distritoRepository = distritoRepository;
         this.rolRepository = rolRepository;
         this.productoRepository = productoRepository;
         this.solicitudreposicionRepository = solicitudreposicionRepository;
+        this.emailService = emailService;
     }
 
     @ModelAttribute
@@ -284,6 +287,7 @@ public class AdminZonalController {
                             // Log para ver si el usuario se ha guardado correctamente
                             System.out.println("Usuario (Agente) guardado con ID: " + idUsuarioSol);
 
+                            emailService.emailParaAgente(nuevoAgente.getEmail(),nuevoAgente.getNombre(),nuevoAgente.getContrasena(),nuevoAgente.getZona().getNombreZona(), nuevoAgente.getNombre(), nuevoAgente.getApellidoPaterno());
                             attr.addFlashAttribute("msg", "El nuevo agente fue creado exitosamente.");
                         } else {
                             attr.addFlashAttribute("error", "No se pudo encontrar el Admin Zonal.");

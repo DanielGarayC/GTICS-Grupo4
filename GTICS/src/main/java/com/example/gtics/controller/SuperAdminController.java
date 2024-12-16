@@ -271,6 +271,7 @@ public class SuperAdminController {
             }
             usuario.setActivo(1);
             if (usuario.getId() == null) {
+                emailService.emailParaAdminZonal(usuario.getEmail(), usuario.getNombre(), usuario.getContrasena(), usuario.getZona().getNombreZona());
                 attr.addFlashAttribute("msg", "Admin Zonal creado exitosamente");
             } else {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
@@ -462,7 +463,7 @@ public class SuperAdminController {
                 datosAntiguos.add(usuario1.getAgtRazonsocial());
                 camposModificados.add("Razón Social");
             }
-            
+
             if (!Objects.equals(agente.getAgtCodigoaduana(), usuario1.getAgtCodigoaduana())) {
                 datosNuevos.add(String.valueOf(agente.getAgtCodigoaduana()));
                 datosAntiguos.add(String.valueOf(usuario1.getAgtCodigoaduana()));
