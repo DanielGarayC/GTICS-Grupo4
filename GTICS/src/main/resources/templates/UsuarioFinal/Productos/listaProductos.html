@@ -367,9 +367,107 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div th:if="${ventaDelMomento != null}" class="mb-6" style="margin-top: 27px">
+                                <div class="mb-6">
+                                    <h3 class="mb-1">¡Venta del momento!</h3>
+                                    <p th:text="'¡El producto ' + ${ventaDelMomento.nombreProducto} + ' está en oferta, ¡cómpralo ya!'">
+                                        El producto está pero candela compralo ya!
+                                    </p>
+                                </div>
+                                <div class="card border border-danger p-6">
+                                    <div class="row">
+                                        <!-- Imagen del Producto -->
+                                        <div class="col-lg-5 text-center">
+                                            <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${ventaDelMomento.id})}">
+                                                <img th:src="@{'/UsuarioFinal/producto/foto/' + ${ventaDelMomento.fotos[0].id}}"
+                                                     alt="Producto destacado" class="img-fluid" />
+                                            </a>
+                                        </div>
+
+                                        <!-- Detalles del Producto -->
+                                        <div class="col-lg-7 text-center text-lg-start">
+                                            <!-- Calificación -->
+                                            <div class="mb-3">
+                                                <small class="text-warning">
+                        <span th:each="i : ${#numbers.sequence(1,5)}">
+                            <i class="bi"
+                               th:classappend="${ventaDelMomento.averageRating >= i} ? ' bi-star-fill' :
+                                             (${ventaDelMomento.averageRating >= (i - 0.5)} ? ' bi-star-half' : ' bi-star')"
+                               th:attr="aria-label=${ventaDelMomento.averageRating >= i ? 'Estrella llena' : (ventaDelMomento.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+                        </span>
+                                                </small>
+                                                <span><small th:text="${#numbers.formatDecimal(ventaDelMomento.averageRating, 1, 1)} + ' (' + ${ventaDelMomento.reviewCount} + ')'">4.5 (30)</small></span>
+                                            </div>
+
+                                            <!-- Nombre del Producto -->
+                                            <h2 class="fs-4">
+                                                <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${ventaDelMomento.id})}"
+                                                   class="text-inherit text-decoration-none" th:text="${ventaDelMomento.nombreProducto}">
+                                                    Nombre del producto
+                                                </a>
+                                            </h2>
+
+                                            <!-- Precio y Descuento -->
+                                            <div class="d-flex justify-content-center align-items-center justify-content-lg-between mt-3">
+                                                <div>
+                                                    <span class="text-dark fs-5 fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(ventaDelMomento.precio, 1, 'COMMA', 2, 'POINT')}">S/. 100</span>
+                                                    <span class="text-decoration-line-through text-muted fs-5"
+                                                          th:text="'S/. ' + ${#numbers.formatDecimal(ventaDelMomento.precio + 50, 1, 'COMMA', 2, 'POINT')}">S/. 150</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Botón Añadir al Carrito -->
+                                            <div class="mt-2">
+                                                <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form">
+                                                    <input type="hidden" name="idProducto" th:value="${ventaDelMomento.id}" />
+                                                    <input type="hidden" name="cantidad" th:value="1" />
+                                                    <button type="submit" class="btn btn-primary w-100">
+                                                        <i class="bi bi-cart-plus me-2"></i>Añadir al carrito
+                                                    </button>
+                                                </form>
+                                            </div>
+
+                                            <!-- Progreso de Ventas -->
+                                            <div class="mt-6 mb-6">
+                                                <div class="d-flex justify-content-between mb-2">
+                        <span>
+                            Ya vendido:
+                            <span class="text-dark fs-6 fw-bold" th:text="${ventaDelMomento.cantVentas}">45</span>
+                        </span>
+                                                    <span>
+                            Disponible:
+                            <span class="text-dark fs-6 fw-bold" th:text="${ventaDelMomento.cantidadDisponible}">25</span>
+                        </span>
+                                                </div>
+                                                <div class="progress bg-light-danger" role="progressbar" aria-label="Progreso de ventas"
+                                                     aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="height: 5px">
+                                                    <div class="progress-bar bg-danger"
+                                                         th:style="|width: ${((ventaDelMomento.cantVentas / (ventaDelMomento.cantVentas + ventaDelMomento.cantidadDisponible)) * 100)}%|">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Mensaje de Urgencia -->
+                                            <p class="fw-bold text-dark mb-0">¡Apresúrate, la oferta termina pronto!</p>
+
+                                            <!-- Countdown en Español -->
+                                            <div class="d-flex justify-content-center justify-content-lg-start text-center mt-1">
+                                                <div class="deals-countdown" th:data-countdown="${fechaFinOferta != null} ? ${#dates.format(fechaFinOferta, 'yyyy/MM/dd HH:mm:ss')} : '2025/10/10 00:00:00'"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                         </div>
                     </div>
                 </section>
+
+
+
 
 
                 <section class="my-lg-8 my-8">
@@ -749,6 +847,20 @@
             }
 
         </script>
+
+
+        <script>
+            $(document).ready(function() {
+                $('.deals-countdown').each(function() {
+                    var countdownDate = $(this).data('countdown');
+                    $(this).countdown(countdownDate, function(event) {
+                        $(this).html(event.strftime('%D días %H:%M:%S'));
+                    });
+                });
+            });
+        </script>
+
+
 
 
     </body>

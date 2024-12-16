@@ -61,7 +61,8 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     @Query(value="SELECT * FROM producto p WHERE p.borrado = 0", nativeQuery = true)
     List<Producto> findAllActive();
 
-    // Consulta nativa para obtener productos relevantes
+    Optional<Producto> findTopByZona_IdOrderByCantVentasDesc(Integer zonaId);
+
     @Query(value = "SELECT p.idProducto, p.nombreProducto, p.cantVentas FROM producto p ORDER BY p.cantVentas DESC LIMIT 10", nativeQuery = true)
     List<ProductoRelevanteDTO> findProductosRelevantes();
 

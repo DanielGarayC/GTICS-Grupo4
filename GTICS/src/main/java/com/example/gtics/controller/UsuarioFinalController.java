@@ -1286,6 +1286,9 @@ public class UsuarioFinalController {
                 // Filtrar los productos por la zona del usuario
                 List<Producto> productos = productoRepository.findProductosPorZona(zonaUsuario.getId());
 
+                Optional<Producto> topProductoOpt = productoRepository.findTopByZona_IdOrderByCantVentasDesc(zonaUsuario.getId());
+                topProductoOpt.ifPresent(topProducto -> model.addAttribute("ventaDelMomento", topProducto));
+
                 // Obtener calificaciones y conteo de reseñas
                 List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCount();
 
