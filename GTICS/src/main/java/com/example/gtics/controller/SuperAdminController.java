@@ -574,7 +574,7 @@ public class SuperAdminController {
 
             solicitudAgenteRepository.deleteByIdUsuario(usuario);
 
-            redirectAttributes.addFlashAttribute("successMessage", "El usuario ha sido rechazado éxitosamente.");
+            redirectAttributes.addFlashAttribute("msg", "La solicitud ha sido rechazada exitosamente.");
 
             switch (indicador){
                 case 0:
@@ -589,6 +589,8 @@ public class SuperAdminController {
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
 
         } else {
+            redirectAttributes.addFlashAttribute("error", "Ha ocurrido un error al rechazar la solicitud.");
+
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }
 
@@ -606,39 +608,51 @@ public class SuperAdminController {
     @GetMapping("SuperAdmin/aceptarSolicitud")
     public String cambiarRolaAgente(Model model, @RequestParam("id") Integer id,
                                     @RequestParam("indicador") Integer indicador,
-                                    @RequestParam("codigoAduana") Integer codigoAduana,
-                                    @RequestParam("codigoJurisdiccion") Integer codigoJurisdiccion,
+                                    @RequestParam("codigoAduana") String codigoAduana,
+                                    @RequestParam("codigoJurisdiccion") String codigoJurisdiccion,
                                     RedirectAttributes redirectAttributes) {
         System.out.println("pruebaaaa");
-        // Obtener el usuario solicitante por ID
-        Usuario usuario = usuarioRepository.findUsuarioById(id);
-        Integer zonaUsuario = usuario.getDistrito().getZona().getId();
-        Integer idAdminZonal = usuarioRepository.obtenerUnAdminZonalDesuZona(zonaUsuario);
-        usuarioRepository.asignarAdminZonalAUsuario(idAdminZonal,id);
-        // Verificar si el Admin Zonal ya tiene 3 agentes activos asignados
-        Integer cantidadAgentes = usuarioRepository.contarAgentesPorAdminZonal(idAdminZonal);
-        System.out.println(cantidadAgentes);
-
-        if (cantidadAgentes >= 3) {
-            // Usar RedirectAttributes para que el mensaje se vea después del redirect
-            redirectAttributes.addFlashAttribute("error", "Este Administrador Zonal ya tiene el máximo de 3 agentes activos.");
+        System.out.println("ID: " + id + ", Indicador: " + indicador + ", Codigo Aduana: " + codigoAduana + ", Codigo Jurisdicción: " + codigoJurisdiccion);
+        if (id == null || indicador == null) {
+            redirectAttributes.addFlashAttribute("error", "Faltan parámetros obligatorios (ID o Indicador).");
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }
+        try {
+            // Obtener el usuario solicitante por ID
+            Usuario usuario = usuarioRepository.findUsuarioById(id);
+            Integer zonaUsuario = usuario.getDistrito().getZona().getId();
+            Integer idAdminZonal = usuarioRepository.obtenerUnAdminZonalDesuZona(zonaUsuario);
+            usuarioRepository.asignarAdminZonalAUsuario(idAdminZonal, id);
+            // Verificar si el Admin Zonal ya tiene 3 agentes activos asignados
+            Integer cantidadAgentes = usuarioRepository.contarAgentesPorAdminZonal(idAdminZonal);
+            System.out.println(cantidadAgentes);
 
-        // Cambiar el rol del usuario o activar la cuenta, según el indicador
-        switch (indicador) {
-            case 0:
-                usuarioRepository.actualizarRolAAgente(id,codigoAduana,codigoJurisdiccion);
-                break;
-            case 1:
-                usuarioRepository.activarCuenta(id);
-                break;
+            if (cantidadAgentes >= 3) {
+                // Usar RedirectAttributes para que el mensaje se vea después del redirect
+                redirectAttributes.addFlashAttribute("error", "Este Administrador Zonal ya tiene el máximo de 3 agentes activos.");
+                return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+            }
+
+            // Cambiar el rol del usuario o activar la cuenta, según el indicador
+            switch (indicador) {
+                case 0:
+                    usuarioRepository.actualizarRolAAgente(id, codigoAduana, codigoJurisdiccion);
+                    break;
+                case 1:
+                    usuarioRepository.activarCuenta(id);
+                    break;
+            }
+
+            // Eliminar la solicitud
+            solicitudAgenteRepository.deleteByIdUsuario(usuario);
+            redirectAttributes.addFlashAttribute("msg", "Solicitud aceptada con éxito!");
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+        }catch(Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Ocurrió un error al procesar la solicitud.");
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+
         }
-
-        // Eliminar la solicitud
-        solicitudAgenteRepository.deleteByIdUsuario(usuario);
-
-        return "redirect:/SuperAdmin/listaSolicitudesAgentes";
     }
 
 
