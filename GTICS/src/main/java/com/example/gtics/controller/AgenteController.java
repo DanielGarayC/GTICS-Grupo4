@@ -13,6 +13,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.compress.utils.IOUtils;
@@ -414,19 +415,25 @@ public class AgenteController {
     public String OrdenesUsuario(@RequestParam("idUsuario") Integer idUsuario,
                                  Model model,
                                  @RequestParam(defaultValue = "0") int page){
+        if (idUsuario == null) {
+            throw new IllegalArgumentException("El parámetro idUsuario no puede ser null");
+        }
         int pageSize = 6;
         Pageable pageable = PageRequest.of(page, pageSize);
-
         Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoConDto(idUsuario, pageable);
         Optional<Usuario> usr = usuarioRepository.findById(idUsuario);
 
+        if (usr.isEmpty()) {
+            throw new EntityNotFoundException("No se encontró el usuario con id " + idUsuario);
+        }
 
-        model.addAttribute("ordenCarrito",ordenCarrito.getContent());
+        model.addAttribute("ordenCarrito", ordenCarrito.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", ordenCarrito.getTotalPages());
-        model.addAttribute("usuario",usr.get());
+        model.addAttribute("usuario", usr.get());
         return "Agente/OrdenesDeUsuario/ordenesDeUsuario";
     }
+
 
 
 

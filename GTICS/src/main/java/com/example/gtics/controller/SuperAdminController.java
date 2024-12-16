@@ -175,6 +175,7 @@ public class SuperAdminController {
         System.out.println("guardar nuevo admin zonal prueba");
         //usuario.setId(null);
         //usuario.setId(null);
+        String passGuardada = null;
         try {
             // Verificar si ya existen 2 coordinadores en la zona
             int cantidadCoordinadores = usuarioRepository.countCoordinadoresByZona(zonaId);
@@ -258,17 +259,21 @@ public class SuperAdminController {
                     datosAntiguos.add(String.valueOf(usuario1.get().getAzFechanacimiento()));
                     camposModificados.add("Fecha de nacimiento");
                 }
-
+                if(fotoActualizada){
+                    camposModificados.add("La foto de perfil ha sido actualizada");
+                }
 
                 if (!datosAntiguos.isEmpty() || fotoActualizada) {
                     emailService.actualizacionInfoUserGenerico(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
                 }
             }else {
+                passGuardada = usuario.getContrasena();
                 String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
                 usuario.setContrasena(encryptedPassword);
             }
             usuario.setActivo(1);
             if (usuario.getId() == null) {
+                emailService.emailParaAdminZonal(usuario.getEmail(), usuario.getNombre(), passGuardada, usuario.getZona().getNombreZona());
                 attr.addFlashAttribute("msg", "Admin Zonal creado exitosamente");
             } else {
                 attr.addFlashAttribute("msg", "Información del admin zonal actualizada exitosamente");
@@ -440,6 +445,37 @@ public class SuperAdminController {
         }
 
         try {
+            Usuario usuario1 = usuarioRepository.findUsuarioById(agente.getId());
+            ArrayList<String> datosAntiguos = new ArrayList<>();
+            ArrayList<String> datosNuevos = new ArrayList<>();
+            ArrayList<String> camposModificados = new ArrayList<>();
+
+            if (!Objects.equals(agente.getTelefono(), usuario1.getTelefono())) {
+                datosNuevos.add(agente.getTelefono());
+                datosAntiguos.add(usuario1.getTelefono());
+                camposModificados.add("Teléfono");
+            }
+            if (!Objects.equals(agente.getEmail(), usuario1.getEmail())) {
+                datosNuevos.add(agente.getEmail());
+                datosAntiguos.add(usuario1.getEmail());
+                camposModificados.add("Email");
+            }
+            if (!Objects.equals(agente.getAgtRazonsocial(), usuario1.getAgtRazonsocial())) {
+                datosNuevos.add(agente.getAgtRazonsocial());
+                datosAntiguos.add(usuario1.getAgtRazonsocial());
+                camposModificados.add("Razón Social");
+            }
+
+            if (!Objects.equals(agente.getAgtCodigoaduana(), usuario1.getAgtCodigoaduana())) {
+                datosNuevos.add(String.valueOf(agente.getAgtCodigoaduana()));
+                datosAntiguos.add(String.valueOf(usuario1.getAgtCodigoaduana()));
+                camposModificados.add("Codigo de despachador aduanero");
+            }
+            if (!Objects.equals(agente.getAgtCodigojurisdiccion(), usuario1.getAgtCodigojurisdiccion())) {
+                datosNuevos.add(String.valueOf(agente.getAgtCodigojurisdiccion()));
+                datosAntiguos.add(String.valueOf(usuario1.getAgtCodigojurisdiccion()));
+                camposModificados.add("Codigo jurisdiccion");
+            }
             // Buscar el agente existente
             Usuario agenteExistente = usuarioRepository.findById(agente.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Agente no encontrado"));
@@ -482,12 +518,23 @@ public class SuperAdminController {
             }
             System.out.println("Foto vacía: " + foto.isEmpty());
             System.out.println("Bytes de foto: " + (foto.isEmpty() ? "No hay bytes" : foto.getBytes().length));
+
+
+            boolean fotoActualizada = false;
             if (foto != null && !foto.isEmpty()) {
                 // Solo actualiza la foto si se subió una nueva
+                fotoActualizada = true;
                 agenteExistente.setFoto(foto.getBytes());
             } else {
                 // Mantén la foto existente si no se subió ninguna nueva
                 agenteExistente.setFoto(agenteExistente.getFoto());
+            }
+            if(fotoActualizada){
+                camposModificados.add("La foto de perfil ha sido actualizada");
+            }
+
+            if (!datosAntiguos.isEmpty() || fotoActualizada) {
+                emailService.actualizacionInfoUserGenerico(agente.getEmail(), agente.getNombre(),camposModificados, datosAntiguos, datosNuevos);
             }
             usuarioRepository.save(agenteExistente);
             attr.addFlashAttribute("msg", "Información del agente actualizada exitosamente");
@@ -617,6 +664,7 @@ public class SuperAdminController {
             redirectAttributes.addFlashAttribute("error", "Faltan parámetros obligatorios (ID o Indicador).");
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }
+        String passG = null;
         try {
             // Obtener el usuario solicitante por ID
             Usuario usuario = usuarioRepository.findUsuarioById(id);
@@ -632,6 +680,13 @@ public class SuperAdminController {
                 redirectAttributes.addFlashAttribute("error", "Este Administrador Zonal ya tiene el máximo de 3 agentes activos.");
                 return "redirect:/SuperAdmin/listaSolicitudesAgentes";
             }
+            Usuario agente= usuarioRepository.findById(id).orElseThrow();
+            Usuario AdminZonal = usuarioRepository.findById(idAdminZonal).orElseThrow();
+
+            String passEncriptada = passwordEncoder.encode(agente.getContrasena());
+            passG = agente.getContrasena();
+
+            usuarioRepository.actualizarPasswordAAgente(id, passEncriptada);
 
             // Cambiar el rol del usuario o activar la cuenta, según el indicador
             switch (indicador) {
@@ -645,6 +700,7 @@ public class SuperAdminController {
 
             // Eliminar la solicitud
             solicitudAgenteRepository.deleteByIdUsuario(usuario);
+            emailService.emailParaAgente(agente.getEmail(),agente.getNombre(),passG,agente.getZona().getNombreZona(), AdminZonal.getNombre(),AdminZonal.getApellidoPaterno());
             redirectAttributes.addFlashAttribute("msg", "Solicitud aceptada con éxito!");
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }catch(Exception e) {
@@ -730,6 +786,7 @@ public class SuperAdminController {
                                          Model model,
                                          @RequestParam("UserPhoto") MultipartFile foto, RedirectAttributes attr) throws IOException {
 
+        System.out.println("Hola: " + usuario.getNombre());
         if (bindingResult.hasErrors()) {
             System.out.println("Errores de validación:");
             bindingResult.getAllErrors().forEach(error -> {
@@ -769,22 +826,6 @@ public class SuperAdminController {
         }
         boolean fotoActualizada= false;
         // Actualización de datos del usuario
-        if (foto.isEmpty()) {
-
-            Usuario finalUser = usuarioRepository.findById(usuario.getId()).orElseThrow();
-            usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(), usuario.getId());
-        } else {
-            fotoActualizada = true;
-            try {
-                byte[] fotoBytes = foto.getBytes();
-                usuario.setFoto(fotoBytes);
-                usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(), usuario.getId());
-            } catch (IOException ignored) {
-            }
-        }
-        attr.addFlashAttribute("msg", "Información del usuario final actualizada exitosamente");
-
-
         Optional<Usuario> usuario1 = usuarioRepository.findById(usuario.getId());
 
         ArrayList<String> datosAntiguos = new ArrayList<>();
@@ -811,9 +852,27 @@ public class SuperAdminController {
             datosAntiguos.add(String.valueOf(usuario1.get().getDistrito().getNombre()));
             camposModificados.add("Distrito");
         }
-        if (!datosAntiguos.isEmpty() || fotoActualizada) {
+        usuario.setNombre(usuario1.get().getNombre());
+        usuario.setApellidoPaterno(usuario1.get().getApellidoPaterno());
+        usuario.setApellidoMaterno(usuario1.get().getApellidoMaterno());
+        if (foto.isEmpty()) {
+
+            Usuario finalUser = usuarioRepository.findById(usuario.getId()).orElseThrow();
             emailService.actualizacionInfoUserGenerico(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
+            usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), finalUser.getFoto(), usuario.getId());
+        } else {
+            fotoActualizada = true;
+            try {
+                byte[] fotoBytes = foto.getBytes();
+                usuario.setFoto(fotoBytes);
+                camposModificados.add("La foto de perfil ha sido actualizada");
+                emailService.actualizacionInfoUserGenerico(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
+                usuarioRepository.actualizarUsuarioFinal(usuario.getDni(), usuario.getNombre(), usuario.getApellidoPaterno(), usuario.getApellidoMaterno(), usuario.getEmail(), usuario.getDireccion(), usuario.getTelefono(), usuario.getDistrito().getId(), usuario.getFoto(), usuario.getId());
+            } catch (IOException ignored) {
+            }
         }
+        attr.addFlashAttribute("msg", "Información del usuario final actualizada exitosamente");
+
         return "redirect:/SuperAdmin/listaUsuarioFinal";
     }
 

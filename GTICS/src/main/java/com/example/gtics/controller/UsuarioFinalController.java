@@ -1018,53 +1018,85 @@ public class UsuarioFinalController {
     }
 
     @GetMapping("/UsuarioFinal/miPerfil")
-    public String miPerfil(Model model, HttpSession session, @ModelAttribute("product") Usuario usuario) {
+    public String miPerfil(Model model, HttpSession session, @ModelAttribute("product") Usuario usuario, RedirectAttributes attr) {
+        // Verificar si el atributo 'id' existe en la sesión
         Integer idUsuario = (Integer) session.getAttribute("id");
-        Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(idUsuario);
-        List<Distrito> listaDistritos = distritoRepository.findAll();
 
-        if(OptAdminZonal.isPresent()){
-            model.addAttribute("listaDistritos", listaDistritos);
-
-            model.addAttribute("usuarioLogueado",OptAdminZonal.get());
+        if (idUsuario == null) {
+            // Si no existe, redirigir a la página de inicio con un mensaje
+            attr.addFlashAttribute("error", "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+            return "redirect:/UsuarioFinal";
         }
 
+        // Obtener el usuario y los distritos si la sesión es válida
+        Optional<Usuario> OptAdminZonal = usuarioRepository.findById(idUsuario);
+        List<Distrito> listaDistritos = distritoRepository.findAll();
+
+        if (OptAdminZonal.isPresent()) {
+            model.addAttribute("listaDistritos", listaDistritos);
+            model.addAttribute("usuarioLogueado", OptAdminZonal.get());
+        } else {
+            // Manejar el caso en que el usuario no exista en la base de datos
+            attr.addFlashAttribute("error", "Usuario no encontrado.");
+            return "redirect:/UsuarioFinal";
+        }
+
+        // Mostrar la página de perfil
         return "UsuarioFinal/Perfil/miperfil";
     }
+
 
 
     @PostMapping("/UsuarioFinal/savePerfil")
     public String guardarPerfil(
             @RequestParam("id") String id,
-            @RequestParam("distrito") String idDistrito, // Suponiendo que usas el ID del distrito
+            @RequestParam("distrito") String idDistrito,
             @RequestParam("direccion") String direccion,
-            @RequestParam("email") String email,@RequestParam(value  = "fotoPerfil",required = false) MultipartFile foto,
-            RedirectAttributes attr) {
+            @RequestParam("email") String email,
+            @RequestParam(value = "fotoPerfil", required = false) MultipartFile foto,
+            RedirectAttributes attr, HttpSession session) {
+
+        // Obtener el usuario antes de la actualización
+        Optional<Usuario> uOptBefore = usuarioRepository.findById(Integer.parseInt(id));
+        if (!uOptBefore.isPresent()) {
+            attr.addFlashAttribute("error", "Usuario no encontrado.");
+            return "redirect:/UsuarioFinal/miPerfil";
+        }
+        Usuario usuarioBefore = uOptBefore.get();
 
         // Actualiza el usuario
         usuarioRepository.actualizarUsuario(idDistrito, direccion, email, id);
 
-        Optional<Usuario> uOpt = usuarioRepository.findById(Integer.parseInt(id));
-        if(uOpt.isPresent()) {
-            Usuario usuario = uOpt.get();
+        Optional<Usuario> uOptAfter = usuarioRepository.findById(Integer.parseInt(id));
+        if (uOptAfter.isPresent()) {
+            Usuario usuarioAfter = uOptAfter.get();
+
             if (foto != null && !foto.isEmpty()) {
                 try {
-                    usuario.setFoto(foto.getBytes());
+                    usuarioAfter.setFoto(foto.getBytes());
                 } catch (IOException e) {
                     attr.addFlashAttribute("error", "Error al procesar la foto de perfil.");
                     return "redirect:/UsuarioFinal/miPerfil";
                 }
             }
 
-
+            // Verificar si el correo fue actualizado
+            if (!usuarioBefore.getEmail().equals(email)) {
+                // Invalida la sesión si se cambió el correo
+                session.invalidate();
+                attr.addFlashAttribute("sweetAlertRedirect", "Correo actualizado. Serás redirigido al login para ingresar con tu nuevo correo.");
+                return "redirect:/ExpressDealsLogin";
+            }
+        } else {
+            attr.addFlashAttribute("error", "Error al actualizar los datos del usuario.");
+            return "redirect:/UsuarioFinal/miPerfil";
         }
 
-        // Añade un mensaje de éxito
+        // Si no se cambió el correo, solo redirige con un mensaje de éxito
         attr.addFlashAttribute("mensaje", "Perfil actualizado con éxito.");
-
-        // Redirige a la página de perfil
         return "redirect:/UsuarioFinal/miPerfil";
     }
+
 
 
     @GetMapping("/UsuarioFinal/listaMisOrdenes")
