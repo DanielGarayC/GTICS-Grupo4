@@ -143,6 +143,9 @@
 										</tr>
 										</thead>
 										<tbody>
+										<tr th:if="${finalUsersList.size() == 0}">
+											<td colspan="8" class="text-center">No hay usuarios registrados.</td>
+										</tr>
 										<tr th:each="finalUser,var : ${finalUsersList}">
 
 

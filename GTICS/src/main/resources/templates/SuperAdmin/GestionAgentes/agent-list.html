@@ -146,6 +146,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <tr th:if="${agentes.size() == 0}">
+                                    <td colspan="9" class="text-center">No hay agentes registrados.</td>
+                                </tr>
                                 <tr th:each="agente, var : ${agentes}">
                                     <td th:text="${var.index+1}"></td>
                                     <td th:text="${agente['nombre']}"></td>

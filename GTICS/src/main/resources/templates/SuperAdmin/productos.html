@@ -85,10 +85,10 @@
                                     </div>
 
                                     <!-- select option -->
-                                    <div class="col-xl-2 col-md-4 col-12">
+                                    <div class="col-xl-2 col-md-4 col-12" >
                                         <form method="get" action="/SuperAdmin/productos">
                                             <!-- Select para la categoría -->
-                                            <div class="col-xl-2 col-md-4 col-12">
+                                            <div class="col-xl-2 col-md-4 col-12" >
                                                 <select class="form-select" name="categoriaId"
                                                         style="width: 100%; min-width: 200px; font-size: 16px; font-family: Arial, sans-serif; padding: 8px;"
                                                         onchange="this.form.submit()">
@@ -107,6 +107,11 @@
 
 
                                     </div>
+                                <div style="margin-bottom: -20px; margin-top: 10px;">
+                                    <!-- Mensajes de alerta -->
+                                    <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}"></div>
+                                    <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}"></div>
+                                </div>
                                 </div>
                             </div>
                             <!-- card body -->
