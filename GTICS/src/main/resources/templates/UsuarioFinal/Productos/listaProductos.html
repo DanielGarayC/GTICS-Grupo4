@@ -241,8 +241,11 @@
                                     <!-- Imagen del producto -->
                                     <div class="text-center position-relative mb-3" style="height: 200px;">
                                         <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}">
-                                            <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}"
-                                                 alt="Imagen de producto" class="img-fluid product-img"
+                                            <img th:each="foto, iterStat : ${producto.fotos}"
+                                                 th:if="${iterStat.index == 0}"
+                                                 th:src="@{'/UsuarioFinal/producto/foto/' + ${foto.id}}"
+                                                 alt="Imagen de producto"
+                                                 class="img-fluid product-img"
                                                  style="max-height: 100%; object-fit: contain; width: auto;" />
                                         </a>
                                         <div class="card-product-action">
@@ -381,16 +384,20 @@
                         <div class="product-slider">
                             <div th:each="producto : ${productos}">
                                 <div class="item">
-                                    <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}" class="text-decoration-none text-inherit">
+                                    <a th:src="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}" class="text-decoration-none text-inherit">
                                         <div class="card card-product mb-lg-4" style="min-height: 400px; display: flex; flex-direction: column;">
                                             <!-- Cuerpo de la tarjeta -->
                                             <div class="card-body d-flex flex-column" style="height: 100%;">
                                                 <!-- Contenedor de la imagen del producto -->
                                                 <div class="text-center position-relative mb-3" style="height: 200px;">
                                                     <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}">
-                                                        <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}"
-                                                             alt="Imagen de producto" class="img-fluid product-img"
+                                                        <img th:each="foto, iterStat : ${producto.fotos}"
+                                                             th:if="${iterStat.index == 0}"
+                                                             th:src="@{'/UsuarioFinal/producto/foto/' + ${foto.id}}"
+                                                             alt="Imagen de producto"
+                                                             class="img-fluid product-img"
                                                              style="max-height: 100%; object-fit: contain; width: auto;" />
+
                                                     </a>
                                                     <div class="card-product-action">
                                                         <a href="#!" class="btn-action" data-bs-toggle="modal" th:data-bs-target="'#quickViewModal' + ${producto.id}">
@@ -472,9 +479,10 @@
                                         <div class="product productModal" id="productModal">
                                             <!-- Imagen principal con zoom -->
                                             <div class="zoom" onmousemove="zoom(event)" onmouseout="resetZoom(event)"
-                                                 th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.id} + ');'">
+                                                 th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.fotos.get(0).id} + ');'">
                                             </div>
                                         </div>
+
                                         <!-- Herramientas del producto - Miniaturas -->
                                         <div class="product-tools mt-4">
                                             <div class="thumbnails row g-3" id="productModalThumbnails">
@@ -488,6 +496,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
 
