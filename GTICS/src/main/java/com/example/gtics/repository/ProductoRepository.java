@@ -138,12 +138,12 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
     // **Nuevo Método para Obtener Calificaciones y Conteo de Reseñas**
     @Query("SELECT p.id, " +
-            "COALESCE(AVG((r.idCalidad.id + r.idAtencion.id) / 2.0), 0.0) as avgRating, " +
+            "COALESCE(AVG((r.idCalidad.id) / 1.0), 0.0) as avgRating, " +
             "COUNT(r) as reviewCount " +
             "FROM Producto p LEFT JOIN Resena r ON p.id = r.producto.id " +
-            "WHERE p.zona.id = :zonaId AND p.borrado = 0 " +
+            "WHERE p.borrado = 0 " +
             "GROUP BY p.id")
-    List<Object[]> findAverageRatingAndReviewCountByZonaId(@Param("zonaId") Integer zonaId);
+    List<Object[]> findAverageRatingAndReviewCount();
 
     @Query("SELECT p FROM Producto p WHERE p.zona.id = :zonaId AND p.idCategoria.id = :categoriaId")
     Page<Producto> findProductosPorZonaYCategoria(@Param("zonaId") Integer zonaId, @Param("categoriaId") Integer categoriaId, Pageable pageable);

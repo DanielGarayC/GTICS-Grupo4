@@ -20,7 +20,16 @@
 
   <!-- Theme CSS -->
   <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
+<style>
+  .card-product .card-body {
+    padding: 0.75rem; /* Ajusta el padding según sea necesario */
+  }
 
+  .card-product h2 {
+    margin-bottom: 0.5rem; /* Reduce el espacio debajo del título */
+  }
+
+</style>
   <style>
     .product-img {
       height: 150px;
@@ -42,6 +51,196 @@
       justify-content: space-between;
     }
   </style>
+
+  <style>
+    .text-wrap {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+  </style>
+
+
+  <style>
+    .zoom {
+      position: relative;
+      overflow: hidden;
+      width: 400px; /* Ancho fijo */
+      height: 400px; /* Alto fijo */
+      background-size: contain; /* Ajusta la imagen manteniendo su proporción */
+      background-position: center;
+      background-repeat: no-repeat;
+      cursor: zoom-in;
+      transition: background-size 0.3s ease; /* Añade una transición suave */
+    }
+
+    .zoom:hover {
+      background-size: 200%; /* Zoom al pasar el ratón */
+    }
+  </style>
+  <style>
+    /* Tus estilos existentes */
+    /* ... */
+
+    /* Animaciones definidas previamente */
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .animate-bounce {
+      animation: bounce 0.5s;
+    }
+
+    @keyframes scaleUp {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.3);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .animate-scale {
+      animation: scaleUp 0.5s;
+    }
+  </style>
+
+  <style>
+    /* Estilo del contenedor de miniaturas */
+    .thumbnails {
+      display: flex;
+      flex-wrap: nowrap; /* Previene que las miniaturas se envuelvan */
+      gap: 0.75rem;
+      justify-content: flex-start;
+      margin-top: 1rem;
+    }
+    /* Contenedor individual de cada miniatura */
+    .thumbnails .col-3 {
+      flex: 0 0 auto; /* Evita que las columnas crezcan o se encogan */
+      width: calc(25% - 0.5625rem); /* 25% para 4 elementos, ajustando el gap */
+      padding: 0; /* Elimina el padding adicional */
+    }
+    /* Estilo de cada miniatura */
+    .thumbnails-img {
+      width: 100%;
+      aspect-ratio: 1/1; /* Mantiene proporción cuadrada */
+      position: relative;
+      overflow: hidden;
+      border-radius: 5px;
+      border: 1px solid #e5e7eb;
+    }
+
+    /* Optimización de las imágenes dentro de las miniaturas */
+    .thumbnails-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      cursor: pointer;
+      padding: 0.25rem;
+      background-color: #fff;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    /* Estilo para la miniatura activa */
+    .thumbnails-img img.active {
+      border: 2px solid #007bff;
+    }
+
+
+    /* Hover effect suave */
+    .thumbnails-img img:hover {
+      transform: scale(1.05);
+    }
+    /* Contenedor de miniaturas usando flexbox */
+    .thumbnails {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: start;
+    }
+
+    /* Miniaturas */
+    .thumbnails-img {
+      width: 120px;
+      height: 120px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 5px;
+      border: 1px solid #e5e7eb;
+    }
+
+    /* Asegura que el contenedor de herramientas tenga el espacio adecuado */
+    .product-tools {
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+
+  </style>
+
+  <!-- Agrega estos estilos al <head>, debajo de tus estilos existentes -->
+  <style>
+    /* Estado normal del botón */
+    .btn-adding {
+      position: relative;
+      pointer-events: none; /* Evita clicks múltiples */
+      opacity: 0.9;
+      transition: transform 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
+      transform: scale(0.98);
+    }
+
+    /* Spinner dentro del botón */
+    .btn-adding::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 1em;
+      height: 1em;
+      margin-top: -0.5em;
+      margin-left: -0.5em;
+      border: 2px solid transparent;
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Animación de éxito: pequeño check */
+    .btn-added-success {
+      position: relative;
+      background-color: #28a745 !important; /* Verde éxito */
+      color: #fff !important;
+    }
+
+    .btn-added-success::after {
+      content: "✔"; /* Símbolo de check */
+      position: absolute;
+      font-weight: bold;
+      font-size: 1em;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+  </style>
+
   <!-- CSRF Tokens -->
   <meta name="_csrf" th:content="${_csrf.token}" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
@@ -216,7 +415,7 @@
             <!-- col -->
             <div th:each="producto : ${productos}" class="col d-flex">
               <!-- card -->
-              <div class="card card-product flex-fill d-flex flex-column">
+              <div class="card card-product flex-fill d-flex flex-column" style="max-width: 18rem;">
                 <div class="card-body d-flex flex-column">
                   <!-- badge -->
                   <div class="text-center position-relative mb-3">
@@ -226,7 +425,7 @@
                     </a>
                     <!-- action btn MODAL VISTA RÁPIDA -->
                     <div class="card-product-action">
-                      <a href="#!" class="btn-action" data-bs-toggle="modal" data-id="${producto.id}" data-bs-target="#quickViewModal">
+                      <a href="#!" class="btn-action" data-bs-toggle="modal" th:data-bs-target="'#quickViewModal' + ${producto.id}">
                         <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista rápida"></i>
                       </a>
                     </div>
@@ -237,12 +436,12 @@
                   <div class="text-small mb-1">
                     <a class="text-decoration-none text-muted" th:text="${producto.idCategoria.nombreCategoria}"></a>
                   </div>
-                  <h2 class="fs-5">
+                  <h2 class="fs-5 text-wrap w-100">
                     <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}"
                        class="text-inherit text-decoration-none" th:text="${producto.nombreProducto}"></a>
                   </h2>
-                  <a class="text-decoration-none text-muted small" th:text="${nombreSubcategoria}"></a>
-                  <a class="text-decoration-none text-muted small" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></a>
+                  <a class="text-decoration-none text-muted small text-wrap w-100" th:text="${producto.idSubcategoria.nombreSubcategoria}"></a>
+                  <a class="text-decoration-none text-muted small text-wrap w-100" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></a>
 
                   <div class="mt-auto">
                     <!-- rating -->
@@ -255,7 +454,7 @@
                th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
         </span>
                     </small>
-                    <span class="text-muted small" th:text="${producto.averageRating} + ' (' + ${producto.reviewCount} + ')'"></span>
+                    <span class="text-muted small" th:text="${#numbers.formatDecimal(producto.averageRating, 1, 1)} + ' (' + ${producto.reviewCount} + ')'"></span>
                   </div>
 
                   <!-- price -->
@@ -263,19 +462,13 @@
                     <div>
                       <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">Precio: S/. 0.00</span>
                     </div>
-                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
-                        <input type="hidden" name="idProducto" th:value="${producto.id}" />
-                        <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
-                      <!-- btn -->
-                      <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-sm w-100">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                          </svg>
-                          Añadir
-                        </button>
-                      </div>
+                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form flex-shrink-0" data-context="recomendados">
+                      <input type="hidden" name="idProducto" th:value="${producto.id}" />
+                      <input type="hidden" step="1" th:max="${producto.cantidadDisponible}" value="1" name="cantidad" class="quantity-field form-control-sm form-input" />
+                      <button type="submit" class="btn btn-primary btn-sm" style="width: 100px;">
+                        <i class="bi bi-plus"></i>
+                        Añadir
+                      </button>
                     </form>
                   </div>
                 </div>
@@ -316,13 +509,167 @@
       </div>
     </div>
   </div>
+
+
+  <!-- MODAL QUICK VIEW -->
+  <div th:each="producto : ${productos}">
+    <div class="modal fade" th:id="'quickViewModal' + ${producto.id}" tabindex="-1" aria-hidden="true" role="dialog">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body p-8">
+            <div class="position-absolute top-0 end-0 me-3 mt-3">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="row">
+              <!-- Columna de imágenes -->
+              <div class="col-lg-6">
+                <div class="product productModal" id="productModal">
+                  <!-- Imagen principal con zoom -->
+                  <div class="zoom" onmousemove="zoom(event)" onmouseout="resetZoom(event)"
+                       th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.fotos.get(0).id} + ');'">
+                  </div>
+                </div>
+
+                <!-- Herramientas del producto - Miniaturas -->
+                <div class="product-tools mt-4">
+                  <div class="thumbnails row g-3" id="productModalThumbnails">
+                    <div th:each="foto : ${producto.fotos}" class="col-3">
+                      <div class="thumbnails-img">
+                        <img th:src="'/UsuarioFinal/producto/foto/' + ${foto.id}"
+                             alt=""
+                             class="img-thumbnail"
+                             th:data-foto-id="${foto.id}"
+                             onclick="changeMainImage(this.getAttribute('data-foto-id'), this.closest('.modal'))" />
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Columna de detalles -->
+              <div class="col-lg-6">
+                <div class="ps-lg-8 mt-6 mt-lg-0">
+                  <!-- Categoría -->
+                  <a href="#!" class="mb-4 d-block text-muted" th:text="${producto.idCategoria.nombreCategoria}">Categoría</a>
+
+                  <!-- Nombre del producto -->
+                  <h2 class="mb-1 h1" th:text="${producto.nombreProducto}">Nombre del producto</h2>
+
+                  <!-- Reseñas -->
+                  <div class="mb-4">
+                    <small class="text-warning" aria-label="Calificación promedio">
+        <span th:each="i : ${#numbers.sequence(1,5)}">
+            <i class="bi"
+               th:classappend="${producto.averageRating >= i} ? ' bi-star-fill' :
+                             (${producto.averageRating >= (i - 0.5)} ? ' bi-star-half' :
+                             ' bi-star')"
+               th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+        </span>
+                    </small>
+                    <a href="#" class="ms-2" th:text=" ' (' + ${producto.reviewCount} + ' reviews)'"></a>
+                  </div>
+
+                  <!-- Precio -->
+                  <div class="fs-4">
+                    <span class="fw-bold text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
+                  </div>
+
+                  <hr class="my-6" />
+
+                  <!-- Selector de cantidad -->
+                  <div class="mb-4">
+                    <div class="input-group input-spinner" style="max-width: 120px;">
+                      <input type="button" value="-" class="button-minus btn btn-sm btn-outline-secondary"
+                             onclick="updateQuantity(this, 'decrease')" />
+                      <input type="number" name="cantidadVisible"
+                             th:value="1" th:max="${producto.cantidadDisponible}" min="1"
+                             class="quantity-field form-control-sm form-input text-center"
+                             oninput="validateAndUpdateQuantity(this)" />
+                      <input type="button" value="+" class="button-plus btn btn-sm btn-outline-secondary"
+                             onclick="updateQuantity(this, 'increase')" />
+                    </div>
+                  </div>
+
+                  <!-- Botones de acción -->
+                  <div class="mt-3 row justify-content-start g-2 align-items-center">
+                    <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form col-lg-6 col-md-6 col-12" data-context="modal">
+                      <input type="hidden" name="idProducto" th:value="${producto.id}" />
+                      <input type="hidden" name="cantidad" th:value="1" th:max="${producto.cantidadDisponible}" class="quantity-hidden-field" />
+                      <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-cart-plus me-2"></i>Añadir al carrito
+                      </button>
+                    </form>
+
+                  </div>
+
+                  <hr class="my-6" />
+
+                  <!-- Detalles del producto -->
+                  <div>
+                    <table class="table table-borderless">
+                      <tbody>
+                      <tr>
+                        <td>Código del producto:</td>
+                        <td th:text="${producto.codigoProducto}"></td>
+                      </tr>
+                      <tr>
+                        <td>Disponibilidad:</td>
+                        <td th:if="${producto.disponibilidad == 'En stock'}">
+                          <span class="badge bg-light-primary text-dark-primary">En Stock</span>
+                        </td>
+                        <td th:if="${producto.disponibilidad == 'Fuera de stock'}">
+                          <span class="badge bg-light-danger text-dark-danger">Fuera de stock</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Tipo:</td>
+                        <td th:text="${producto.idSubcategoria.nombreSubcategoria}"></td>
+                      </tr>
+                      <tr>
+                        <td>Envío:</td>
+                        <td>
+                          <small th:if="${fechaFormateada != null}" th:text="${fechaFormateada}"></small>
+                          <small th:unless="${fechaFormateada != null}">Entrega en 1-2 días hábiles</small>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
-<!-- MODAL QUICK VIEW -->
-<div th:if="${producto != null}">
-  <div th:insert="~{fragments/modalProducto :: modalProducto(${producto}, ${imagenes}, ${fechaFormateada})}"></div>
-</div>
+
 <!-- Javascript-->
+
+
+
+<!-- Libs JS -->
+<!-- Incluir jQuery primero -->
+<script th:src="@{/js/vendors/jquery.min.js}"></script>
+
+<!-- Luego Bootstrap -->
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+<script th:src="@{/js/theme.min.js}"></script>
+
+<!-- Otros scripts dependientes de jQuery -->
+<script th:src="@{/js/vendors/countdown.js}"></script>
+<script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+<script th:src="@{/js/vendors/slick-slider.js}"></script>
+<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+<script th:src="@{/js/vendors/tns-slider.js}"></script>
+<script th:src="@{/js/vendors/zoom.js}"></script>
+<script th:src="@{/js/carrito.js}"></script>
+
 
 <script>
   $(document).ready(function(){
@@ -361,43 +708,72 @@
     });
   });
 
-  $(document).on('click', '.btn-action', function() {
-    var productId = $(this).data('id');  // Obtener el ID del producto desde el atributo data-id
-
-    // Hacer una petición AJAX para obtener la información del producto
-    $.ajax({
-      url: '/UsuarioFinal/producto/quickView/' + productId,  // Llamada a tu controlador
-      method: 'GET',
-      success: function(data) {
-        // Inyectar el contenido del modal con la respuesta
-        $('#quickViewModal .modal-content').html(data);
-        // Mostrar el modal
-        $('#quickViewModal').modal('show');
-      },
-      error: function() {
-        console.error("Error al cargar el producto.");
-      }
-    });
-  });
 
 </script>
 
-<!-- Libs JS -->
-<!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
-<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+<script>
+  function zoom(event) {
+    var target = event.currentTarget;
+    // Establece el tamaño de zoom primero
+    target.style.backgroundSize = '200%';
 
-<!-- Theme JS -->
-<script th:src="@{/js/theme.min.js}"></script>
+    var offsetX, offsetY;
+    if (event.type.includes('touch')) {
+      offsetX = event.touches[0].pageX - target.getBoundingClientRect().left;
+      offsetY = event.touches[0].pageY - target.getBoundingClientRect().top;
+    } else {
+      offsetX = event.offsetX;
+      offsetY = event.offsetY;
+    }
 
-<script th:src="@{/js/vendors/jquery.min.js}"></script>
-<script th:src="@{/js/vendors/countdown.js}"></script>
-<script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
-<script th:src="@{/js/vendors/slick-slider.js}"></script>
-<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
-<script th:src="@{/js/vendors/tns-slider.js}"></script>
-<script th:src="@{/js/vendors/zoom.js}"></script>
-  <script th:src="@{/js/carrito.js}"></script>
+    var x = (offsetX / target.offsetWidth) * 100;
+    var y = (offsetY / target.offsetHeight) * 100;
+
+    target.style.backgroundPosition = x + "% " + y + "%";
+  }
+
+  function resetZoom(event) {
+    const container = event.currentTarget;
+    container.style.backgroundSize = 'contain';
+    container.style.backgroundPosition = 'center';
+  }
+
+  function changeMainImage(fotoId, modalElement) {
+    // Find the specific zoom div within this modal
+    var zoomDiv = modalElement.querySelector('.zoom');
+    var thumbnails = modalElement.querySelectorAll('#productModalThumbnails img');
+
+    // Change main image
+    zoomDiv.style.backgroundImage = 'url(/UsuarioFinal/producto/foto/' + fotoId + ')';
+
+    // Reset zoom
+    zoomDiv.style.backgroundSize = 'contain';
+    zoomDiv.style.backgroundPosition = 'center';
+
+    // Highlight active thumbnail
+    thumbnails.forEach(function(thumb) {
+      thumb.classList.remove('active');
+      if (thumb.getAttribute('data-foto-id') === fotoId) {
+        thumb.classList.add('active');
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var modals = document.querySelectorAll('.modal');
+
+    modals.forEach(function(modal) {
+      var thumbnails = modal.querySelectorAll('#productModalThumbnails img');
+
+      thumbnails.forEach(function(thumb) {
+        thumb.addEventListener('click', function() {
+          var fotoId = this.getAttribute('data-foto-id');
+          changeMainImage(fotoId, modal);
+        });
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
