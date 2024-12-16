@@ -166,31 +166,41 @@
                                 </div>
                             </div>
                             <div class="d-flex flex-column align-items-center">
-                                <!-- Texto de paginación centrado -->
+                                <!-- Texto de paginación -->
                                 <span id="paginationInfo" class="mb-2">
-                                    Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
-                                </span>
+        Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
+    </span>
 
-                                <!-- Paginación centrada -->
+                                <!-- Paginación -->
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination justify-content-center">
-                                        <!-- Botón de "Previo" -->
+                                        <!-- Botón "Previo" -->
                                         <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage - 1}, categoriaId=${selectedCategory})}">Previo</a>
+                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage - 1}, categoriaId=${selectedCategory})}">
+                                                Previo
+                                            </a>
                                         </li>
 
-                                        <!-- Páginas numeradas -->
-                                        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${i}, categoriaId=${selectedCategory})}" th:text="${i + 1}"></a>
+                                        <!-- Páginas numeradas dinámicas -->
+                                        <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                                            th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${i}, categoriaId=${selectedCategory})}"
+                                               th:text="${i + 1}">
+                                            </a>
                                         </li>
 
-                                        <!-- Botón de "Siguiente" -->
+                                        <!-- Botón "Siguiente" -->
                                         <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage + 1}, categoriaId=${selectedCategory})}">Siguiente</a>
+                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage + 1}, categoriaId=${selectedCategory})}">
+                                                Siguiente
+                                            </a>
                                         </li>
                                     </ul>
                                 </nav>
                             </div>
+
+
+
                         </div>
                     </div>
                 </div>
