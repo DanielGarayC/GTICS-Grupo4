@@ -1015,7 +1015,7 @@ public class SuperAdminController {
             Optional<Zona> optionalZona = zonaRepository.findById(zonaId);
             if (optionalZona.isPresent()) {
                 Zona zona = optionalZona.get();
-                Optional<Producto> productoEnZona = productoRepository.findByNombreProductoAndZona(producto.getNombreProducto(), zona);
+                Optional<Producto> productoEnZona = productoRepository.findByIdAndZona(producto.getId(), zona);
                 if (productoEnZona.isPresent()) {
                     Producto productoActualizado = productoEnZona.get();
 
@@ -1023,6 +1023,7 @@ public class SuperAdminController {
                     producto.setCodigoProducto(productoActualizado.getCodigoProducto());
 
                     productoActualizado.setDescripcion(producto.getDescripcion());
+                    productoActualizado.setNombreProducto(producto.getNombreProducto());
                     productoActualizado.setPrecio(producto.getPrecio());
                     productoActualizado.setCostoEnvio(producto.getCostoEnvio());
                     productoActualizado.setModelo(producto.getModelo());

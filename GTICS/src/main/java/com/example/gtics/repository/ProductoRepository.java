@@ -98,7 +98,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
             "            where p.idProducto = ?1", nativeQuery = true)
     ProductoTabla getProductosTablaId(int id);
 
-    Optional<Producto> findByNombreProductoAndZona(String nombreProducto, Zona zona);
+    Optional<Producto> findByIdAndZona(Integer id, Zona zona);
 
     @Query(value = "SELECT COUNT(*) FROM producto WHERE idCategoria = :idCategoria", nativeQuery = true)
     long contarProductosPorCategoria(@Param("idCategoria") Integer idCategoria);
