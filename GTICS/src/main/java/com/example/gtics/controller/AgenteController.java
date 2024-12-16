@@ -26,8 +26,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -429,29 +431,48 @@ public class AgenteController {
     }
 
 
-
-    @PostMapping({"/Agente/Orden/editarOrden"})
-    public String editarOrden(Orden orden,RedirectAttributes attr){
-
-        System.out.println( "nueva fecha: " + orden.getFechaOrden());
-        System.out.println("nuevo distrito: " + orden.getIdCarritoCompra().getIdUsuario().getDistrito().getNombre());
-        System.out.println( "nueva direccion: " + orden.getIdCarritoCompra().getIdUsuario().getDireccion());
-
-        /*
-        orden.setSolicitarCancelarOrden(0);
-        orden.setOrdenEliminada(0);
-
-         */
+    @PostMapping("/Agente/Orden/editarOrden")
+    public String editarOrden(Orden orden, RedirectAttributes attr) {
         try {
             ordenRepository.save(orden);
-            attr.addAttribute("msg", "La orden se ha actualizado exitosamente!");
-            return "redirect:/Agente/Ordenes";
 
-        }catch (Exception e){
-            attr.addAttribute("error", "Ha ocurrido un error al editar la orden.");
+            // Enviar notificación al usuario final relacionado con la orden
+            Integer idUsuario = orden.getIdCarritoCompra().getIdUsuario().getId();
+            enviarNotificacion(idUsuario, "La orden #" + orden.getId() + " ha sido actualizada.");
+
+            attr.addFlashAttribute("msg", "La orden se ha actualizado exitosamente!");
+            return "redirect:/Agente/Ordenes";
+        } catch (Exception e) {
+            attr.addFlashAttribute("error", "Ha ocurrido un error al editar la orden.");
             return "redirect:/Agente/Ordenes";
         }
+    }
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+    private void enviarNotificacion(Integer idUsuario, String mensaje) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
+        usuarioOpt.ifPresent(usuario -> {
+            messagingTemplate.convertAndSendToUser(usuario.getEmail(), "/queue/notifications", mensaje);
+        });
+    }
+
+    @PostMapping("/Agente/enviarNotificacion")
+    public ResponseEntity<String> enviarNotificacion(@RequestParam("idUsuario") Integer idUsuario) {
+        // Obtén al usuario destino desde el repositorio
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
+
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            String mensaje = "Tu orden ha sido actualizada por el agente.";
+
+            // Envía la notificación al canal privado del usuario
+            messagingTemplate.convertAndSendToUser(usuario.getEmail(), "/queue/notifications", mensaje);
+
+            return ResponseEntity.ok("Notificación enviada");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        }
     }
 
     @GetMapping({"Agente/Ordenes/DetallesOrdenSinAsignar"})
