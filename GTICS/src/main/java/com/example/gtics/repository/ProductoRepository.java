@@ -21,6 +21,40 @@ import java.util.Optional;
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
+    @Query("SELECT p FROM Producto p " +
+            "JOIN p.idProveedor pr " +
+            "LEFT JOIN p.resenas r " +
+            "WHERE p.zona.id = :zonaId " +
+            "AND p.idCategoria.id = :categoriaId " +
+            "AND (:proveedores IS NULL OR pr.tienda.nombreTienda IN :proveedores) " +
+            "AND (:proveedorBusqueda IS NULL OR LOWER(pr.tienda.nombreTienda) LIKE CONCAT('%', LOWER(:proveedorBusqueda), '%')) " +
+            "AND (:ratings IS NULL OR r.idCalidad.id IN :ratings) " +
+            "GROUP BY p.id")
+    Page<Producto> findByFilters(
+            @Param("zonaId") Integer zonaId,
+            @Param("categoriaId") Integer categoriaId,
+            @Param("proveedores") List<String> proveedores,
+            @Param("proveedorBusqueda") String proveedorBusqueda,
+            @Param("ratings") List<Integer> ratings,
+            Pageable pageable);
+
+    @Query("SELECT p FROM Producto p " +
+            "JOIN p.idProveedor pr " +
+            "LEFT JOIN p.resenas r " +
+            "WHERE p.zona.id = :zonaId " +
+            "AND p.idSubcategoria.id = :subcategoriaId " +
+            "AND (:proveedores IS NULL OR pr.tienda.nombreTienda IN :proveedores) " +
+            "AND (:proveedorBusqueda IS NULL OR LOWER(pr.tienda.nombreTienda) LIKE CONCAT('%', LOWER(:proveedorBusqueda), '%')) " +
+            "AND (:ratings IS NULL OR r.idCalidad.id IN :ratings) " +
+            "GROUP BY p.id")
+    Page<Producto> findByFilters2(
+            @Param("zonaId") Integer zonaId,
+            @Param("subcategoriaId") Integer subcategoriaId,
+            @Param("proveedores") List<String> proveedores,
+            @Param("proveedorBusqueda") String proveedorBusqueda,
+            @Param("ratings") List<Integer> ratings,
+            Pageable pageable);
+
     @Query(value = "SELECT * FROM producto p WHERE p.borrado = 0", nativeQuery = true)
     Page<Producto> findAllActiveConpaginacion(Pageable pageable);
     // Consulta nativa para obtener productos activos

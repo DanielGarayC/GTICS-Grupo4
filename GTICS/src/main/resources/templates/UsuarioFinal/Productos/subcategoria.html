@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta content="Codescandy" name="author" />
-    <title th:text="${nombreSubcategoria}">Subcategoría</title>
+    <title th:text="${nombreCategoria}">Subcategoria</title>
     <link th:href="@{/libs/slick-carousel/slick/slick.css}" rel="stylesheet" />
     <link th:href="@{/libs/slick-carousel/slick/slick-theme.css}" rel="stylesheet" />
     <link th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" rel="stylesheet" />
@@ -20,7 +20,25 @@
 
     <!-- Theme CSS -->
     <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
+    <style>
+        .price {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100px; /* Ajusta según sea necesario */
+        }
 
+    </style>
+    <style>
+        .card-product .card-body {
+            padding: 0.75rem; /* Ajusta el padding según sea necesario */
+        }
+
+        .card-product h2 {
+            margin-bottom: 0.5rem; /* Reduce el espacio debajo del título */
+        }
+
+    </style>
     <style>
         .product-img {
             height: 150px;
@@ -42,6 +60,220 @@
             justify-content: space-between;
         }
     </style>
+
+    <style>
+        .no-wrap {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        /* Controlar el comportamiento flex */
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .flex-item {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .form-container {
+            flex: 0 0 auto;
+        }
+
+        /* Evitar el wrapping y truncar el texto */
+        .text-truncate-custom {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    </style>
+
+
+    <style>
+        .zoom {
+            position: relative;
+            overflow: hidden;
+            width: 400px; /* Ancho fijo */
+            height: 400px; /* Alto fijo */
+            background-size: contain; /* Ajusta la imagen manteniendo su proporción */
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: zoom-in;
+            transition: background-size 0.3s ease; /* Añade una transición suave */
+        }
+
+        .zoom:hover {
+            background-size: 200%; /* Zoom al pasar el ratón */
+        }
+    </style>
+    <style>
+        /* Tus estilos existentes */
+        /* ... */
+
+        /* Animaciones definidas previamente */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .animate-bounce {
+            animation: bounce 0.5s;
+        }
+
+        @keyframes scaleUp {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate-scale {
+            animation: scaleUp 0.5s;
+        }
+    </style>
+
+    <style>
+        /* Estilo del contenedor de miniaturas */
+        .thumbnails {
+            display: flex;
+            flex-wrap: nowrap; /* Previene que las miniaturas se envuelvan */
+            gap: 0.75rem;
+            justify-content: flex-start;
+            margin-top: 1rem;
+        }
+        /* Contenedor individual de cada miniatura */
+        .thumbnails .col-3 {
+            flex: 0 0 auto; /* Evita que las columnas crezcan o se encogan */
+            width: calc(25% - 0.5625rem); /* 25% para 4 elementos, ajustando el gap */
+            padding: 0; /* Elimina el padding adicional */
+        }
+        /* Estilo de cada miniatura */
+        .thumbnails-img {
+            width: 100%;
+            aspect-ratio: 1/1; /* Mantiene proporción cuadrada */
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Optimización de las imágenes dentro de las miniaturas */
+        .thumbnails-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            cursor: pointer;
+            padding: 0.25rem;
+            background-color: #fff;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* Estilo para la miniatura activa */
+        .thumbnails-img img.active {
+            border: 2px solid #007bff;
+        }
+
+
+        /* Hover effect suave */
+        .thumbnails-img img:hover {
+            transform: scale(1.05);
+        }
+        /* Contenedor de miniaturas usando flexbox */
+        .thumbnails {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: start;
+        }
+
+        /* Miniaturas */
+        .thumbnails-img {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Asegura que el contenedor de herramientas tenga el espacio adecuado */
+        .product-tools {
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+
+    </style>
+
+    <!-- Agrega estos estilos al <head>, debajo de tus estilos existentes -->
+    <style>
+        /* Estado normal del botón */
+        .btn-adding {
+            position: relative;
+            pointer-events: none; /* Evita clicks múltiples */
+            opacity: 0.9;
+            transition: transform 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
+            transform: scale(0.98);
+        }
+
+        /* Spinner dentro del botón */
+        .btn-adding::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1em;
+            height: 1em;
+            margin-top: -0.5em;
+            margin-left: -0.5em;
+            border: 2px solid transparent;
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Animación de éxito: pequeño check */
+        .btn-added-success {
+            position: relative;
+            background-color: #28a745 !important; /* Verde éxito */
+            color: #fff !important;
+        }
+
+        .btn-added-success::after {
+            content: "✔"; /* Símbolo de check */
+            position: absolute;
+            font-weight: bold;
+            font-size: 1em;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+    </style>
+
     <!-- CSRF Tokens -->
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
@@ -76,7 +308,7 @@
                                 <!-- title -->
 
                                 <h5 class="mb-3">
-                                    <a th:href="@{'/UsuarioFinal/categorias/' + ${categoria}}" th:text="${nombreCategoria}">Categoría: Electrónica y Tecnología</a>
+                                    <a th:href="@{'/UsuarioFinal/categorias/' + ${idCategoria}}" th:text="${nombreCategoria}">Categoría: Electrónica y Tecnología</a>
                                 </h5>
                                 <!-- nav -->
                                 <ul class="nav nav-category" id="categoryCollapseMenu">
@@ -94,88 +326,121 @@
                                 </ul>
                             </div>
 
-                            <div class="mb-8">
-                                <h5 class="mb-3">Proveedores</h5>
-                                <div class="my-4">
-                                    <!-- input -->
-                                    <input type="search" class="form-control" placeholder="Buscar por proveedores" />
+                            <!-- Formulario de Filtros y Ordenamiento -->
+                            <form id="filterForm" th:action="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria})}" method="get">
+                                <!-- Campo oculto para la página actual -->
+                                <input type="hidden" name="page" th:value="${currentPage}" />
+
+                                <!-- Filtros de Proveedores -->
+                                <!-- Filtros de Proveedores -->
+                                <div class="mb-8">
+                                    <h5 class="mb-3">Proveedores</h5>
+                                    <div class="my-4">
+                                        <!-- Campo de Búsqueda de Proveedores con Input Group -->
+                                        <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">
+          <i class="bi bi-search"></i>
+        </span>
+                                            <input type="search" class="form-control" placeholder="Buscar por proveedores"
+                                                   name="proveedorBusqueda" th:value="${proveedorBusqueda}" id="proveedorBusqueda" aria-label="Buscar por proveedores" aria-describedby="basic-addon1" />
+                                        </div>
+
+                                        <!-- Lista de Proveedores con Checkboxes -->
+                                        <div th:if="${proveedores != null}">
+                                            <div th:each="proveedor : ${proveedores}" class="form-check mb-2 proveedor-item">
+                                                <input class="form-check-input" type="checkbox" name="proveedores" th:value="${proveedor}"
+                                                       th:id="'proveedor' + ${#strings.toLowerCase(proveedor)}"
+                                                       th:checked="${proveedoresSeleccionados != null and proveedoresSeleccionados.contains(proveedor)}" />
+                                                <label class="form-check-label" th:for="'proveedor' + ${#strings.toLowerCase(proveedor)}">
+                                                    <span th:text="${proveedor}">Proveedor</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                            </div>
-                            <!-- rating -->
-                            <div class="mb-8">
-                                <h5 class="mb-3">Rating</h5>
-                                <div>
-                                    <!-- form check -->
-                                    <div class="form-check mb-2">
-                                        <!-- input -->
-                                        <input class="form-check-input" type="checkbox" value="" id="ratingFive" />
-                                        <label class="form-check-label" for="ratingFive">
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                        </label>
-                                    </div>
-                                    <!-- form check -->
-                                    <div class="form-check mb-2">
-                                        <!-- input -->
-                                        <input class="form-check-input" type="checkbox" value="" id="ratingFour" checked />
-                                        <label class="form-check-label" for="ratingFour">
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star text-warning"></i>
-                                        </label>
-                                    </div>
-                                    <!-- form check -->
-                                    <div class="form-check mb-2">
-                                        <!-- input -->
-                                        <input class="form-check-input" type="checkbox" value="" id="ratingThree" />
-                                        <label class="form-check-label" for="ratingThree">
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star text-warning"></i>
-                                            <i class="bi bi-star text-warning"></i>
-                                        </label>
-                                    </div>
-                                    <!-- form check -->
-                                    <div class="form-check mb-2">
-                                        <!-- input -->
-                                        <input class="form-check-input" type="checkbox" value="" id="ratingTwo" />
-                                        <label class="form-check-label" for="ratingTwo">
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star text-warning"></i>
-                                            <i class="bi bi-star text-warning"></i>
-                                            <i class="bi bi-star text-warning"></i>
-                                        </label>
-                                    </div>
-                                    <!-- form check -->
-                                    <div class="form-check mb-2">
-                                        <!-- input -->
-                                        <input class="form-check-input" type="checkbox" value="" id="ratingOne" />
-                                        <label class="form-check-label" for="ratingOne">
-                                            <i class="bi bi-star-fill text-warning"></i>
-                                            <i class="bi bi-star text-warning"></i>
-                                            <i class="bi bi-star text-warning"></i>
-                                            <i class="bi bi-star text-warning"></i>
-                                            <i class="bi bi-star text-warning"></i>
-                                        </label>
+                                <!-- Filtros de Rating -->
+                                <!-- Filtros de Rating -->
+                                <div class="mb-8">
+                                    <h5 class="mb-3">Rating</h5>
+                                    <div>
+                                        <!-- Rating 5 Estrellas -->
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="ratings" value="5" id="ratingFive"
+                                                   th:checked="${ratingsSeleccionadas != null and ratingsSeleccionadas.contains(5)}" />
+                                            <label class="form-check-label" for="ratingFive">
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                            </label>
+                                        </div>
+                                        <!-- Rating 4 Estrellas -->
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="ratings" value="4" id="ratingFour"
+                                                   th:checked="${ratingsSeleccionadas != null and ratingsSeleccionadas.contains(4)}" />
+                                            <label class="form-check-label" for="ratingFour">
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star text-warning"></i>
+                                            </label>
+                                        </div>
+                                        <!-- Rating 3 Estrellas -->
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="ratings" value="3" id="ratingThree"
+                                                   th:checked="${ratingsSeleccionadas != null and ratingsSeleccionadas.contains(3)}" />
+                                            <label class="form-check-label" for="ratingThree">
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star text-warning"></i>
+                                                <i class="bi bi-star text-warning"></i>
+                                            </label>
+                                        </div>
+                                        <!-- Rating 2 Estrellas -->
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="ratings" value="2" id="ratingTwo"
+                                                   th:checked="${ratingsSeleccionadas != null and ratingsSeleccionadas.contains(2)}" />
+                                            <label class="form-check-label" for="ratingTwo">
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star text-warning"></i>
+                                                <i class="bi bi-star text-warning"></i>
+                                                <i class="bi bi-star text-warning"></i>
+                                            </label>
+                                        </div>
+                                        <!-- Rating 1 Estrella -->
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="ratings" value="1" id="ratingOne"
+                                                   th:checked="${ratingsSeleccionadas != null and ratingsSeleccionadas.contains(1)}" />
+                                            <label class="form-check-label" for="ratingOne">
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <i class="bi bi-star text-warning"></i>
+                                                <i class="bi bi-star text-warning"></i>
+                                                <i class="bi bi-star text-warning"></i>
+                                                <i class="bi bi-star text-warning"></i>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+
+                                <!-- Botones de Acción -->
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-block">Aplicar Filtros</button>
+                                    <a th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria})}" class="btn btn-secondary btn-block">Borrar Filtros</a>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </aside>
                 <section class="col-lg-9 col-md-12">
-                    <!-- card -->
-                    <div class="card mb-4 bg-light border-0">
-                        <!-- card body -->
-                        <div class="card-body p-2">
+                <!-- card -->
+                <div class="card mb-4 bg-light border-0">
+                    <!-- card body -->
+                    <div class="card-body p-2">
                             <h6 class="mb-0 fs-1" th:text="${nombreSubcategoria}">Electrónica y Tecnología</h6>
                         </div>
                     </div>
@@ -188,6 +453,10 @@
                             </p>
                         </div>
 
+                        <div class="d-md-flex justify-content-between align-items-center">
+
+                            <div class="d-flex mt-2 mt-lg-0">
+                                <div>
                         <!-- Formulario de ordenamiento -->
                         <form id="ordenForm" th:action="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria})}" method="get">
                             <input type="hidden" name="page" th:value="${currentPage}" />
@@ -200,14 +469,17 @@
                                 <option th:value="'desc'" th:selected="${sortOrder == 'desc'}">Precio: Más a Menos</option>
                             </select>
                         </form>
+                                </div>
+                            </div>
 
+                        </div>
                     </div>
                     <!-- row -->
                     <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-2 row-cols-md-2 mt-2">
                         <!-- col -->
                         <div th:each="producto : ${productos}" class="col d-flex">
                             <!-- card -->
-                            <div class="card card-product flex-fill d-flex flex-column">
+                            <div class="card card-product flex-fill d-flex flex-column" style="max-width: 18rem;">
                                 <div class="card-body d-flex flex-column">
                                     <!-- badge -->
                                     <div class="text-center position-relative mb-3">
@@ -217,89 +489,154 @@
                                         </a>
                                         <!-- action btn MODAL VISTA RÁPIDA -->
                                         <div class="card-product-action">
-                                            <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <a href="#!" class="btn-action" data-bs-toggle="modal" th:data-bs-target="'#quickViewModal' + ${producto.id}">
                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Vista rápida"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <!-- heading -->
                                     <!-- Producto -->
+                                    <!-- Información del producto -->
                                     <div class="text-small mb-1">
-                                        <a class="text-decoration-none text-muted" th:text="${nombreCategoria}"><small></small></a>
+                                        <a class="text-decoration-none text-muted" th:text="${producto.idCategoria.nombreCategoria}"></a>
                                     </div>
-                                    <h2 class="fs-5">
-                                        <a th:href="@{'/UsuarioFinal/detallesProducto/' + ${producto.id}}"
-                                           class="text-inherit text-decoration-none"
-                                           th:text="${producto.nombreProducto}"></a>
+                                    <h2 class="fs-5 w-100 no-wrap">
+                                        <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}"
+                                           class="text-inherit text-decoration-none" th:text="${producto.nombreProducto}"></a>
                                     </h2>
-                                    <a class="text-decoration-none text-muted small" th:text="${nombreSubcategoria}"></a>
-                                    <a class="text-decoration-none text-muted small" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></a>
+                                    <a class="text-decoration-none text-muted small text-wrap w-100" th:text="${producto.idSubcategoria.nombreSubcategoria}"></a>
+                                    <a class="text-decoration-none text-muted small text-wrap w-100" th:text="'Proveedor: ' + ${producto.idProveedor.tienda.nombreTienda}"></a>
 
                                     <div class="mt-auto">
                                         <!-- rating -->
-                                        <small class="text-warning">
-                                            <i class="bi bi-star-fill"></i>
-                                            <i class="bi bi-star-fill"></i>
-                                            <i class="bi bi-star-fill"></i>
-                                            <i class="bi bi-star-fill"></i>
-                                            <i class="bi bi-star-half"></i>
+                                        <small class="text-warning" aria-label="Calificación promedio">
+        <span th:each="i : ${#numbers.sequence(1,5)}">
+            <i class="bi"
+               th:classappend="${producto.averageRating >= i} ? ' bi-star-fill' :
+                             (${producto.averageRating >= (i - 0.5)} ? ' bi-star-half' :
+                             ' bi-star')"
+               th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+        </span>
                                         </small>
-                                        <span class="text-muted small">4.5(149)</span>
+                                        <span class="text-muted small" th:text="${#numbers.formatDecimal(producto.averageRating, 1, 1)} + ' (' + ${producto.reviewCount} + ')'"></span>
                                     </div>
 
                                     <!-- price -->
-                                    <div class="d-flex justify-content-between align-items-center mt-3">
-                                        <div>
-                                            <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">Precio: S/. 0.00</span>
+                                    <div class="d-flex justify-content-between align-items-center mt-3 flex-container">
+                                        <div class="flex-item">
+                                            <span class="text-dark price" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">Precio: S/. 0.00</span>
                                         </div>
-                                        <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post">
+                                        <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form flex-shrink-0" data-context="recomendados">
                                             <input type="hidden" name="idProducto" th:value="${producto.id}" />
-                                            <input type="hidden" step="1" max="10" value="1" name="cantidad" class="quantity-field form-control-sm form-input" style="width: 40px; font-size: 0.7rem;" />
-                                            <!-- btn -->
-                                            <div class="d-grid">
-                                                <button type="submit" class="btn btn-primary btn-sm w-100">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
-                                                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                    </svg>
-                                                    Añadir al carrito
-                                                </button>
-                                            </div>
+                                            <input type="hidden" step="1" th:max="${producto.cantidadDisponible}" value="1" name="cantidad" class="quantity-field form-control-sm form-input" />
+                                            <button type="submit" class="btn btn-primary btn-sm" style="width: 100px;">
+                                                <i class="bi bi-plus"></i>
+                                                Añadir
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
-                    <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-2 row-cols-md-2 mt-2">
-                        <!-- Columna con cada producto -->
-                        <div th:each="producto : ${productos}" class="col">
-                            <!-- Aquí va el código de la tarjeta de producto -->
+                    <div th:if="${productos.isEmpty()}" class="col-12">
+                        <div class="alert alert-warning text-center" role="alert">
+                            <strong>No se encontraron productos</strong>. Actualmente, no hay productos disponibles en esta subcategoria.
                         </div>
                     </div>
 
                     <!-- Paginación -->
-                    <div class="d-flex flex-column align-items-center mt-4">
-                        <span th:text="'Mostrando página ' + (${currentPage} + 1) + ' de ' + ${totalPages}"></span>
+                    <div class="d-flex flex-column align-items-center">
+                        <!-- Texto de paginación centrado -->
+                        <span id="paginationInfo" class="mb-2" th:if="${totalPages >= 1}">
+        Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
+    </span>
 
-                        <nav aria-label="Page navigation example">
+                        <!-- Paginación centrada -->
+                        <nav aria-label="Page navigation example" th:if="${totalPages >= 1}">
                             <ul class="pagination justify-content-center">
-                                <!-- Botón de "Anterior" -->
+                                <!-- Botón de "Primero" -->
                                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${currentPage - 1}, sortOrder=${sortOrder})}" tabindex="-1">Anterior</a>
+                                    <a class="page-link"
+                                       th:href="${currentPage > 0} ? @{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=0, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})} : '#'"
+                                       aria-label="Primero">
+                                        Primero
+                                    </a>
                                 </li>
 
-                                <!-- Páginas numeradas -->
-                                <li th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${i}, sortOrder=${sortOrder})}" th:text="${i + 1}">1</a>
+
+
+                                <!-- Botón de "Anterior" -->
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:href="${currentPage > 0} ? @{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${currentPage - 1}, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})} : '#'"
+                                       aria-label="Anterior">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+
+
+                                <!-- Primera página siempre visible -->
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'active'">
+                                    <a class="page-link"
+                                       th:href="@{/UsuarioFinal/subcategoria/{idCategoria}(idSubcategoria=${idSubcategoria}, page=0, sortOrder=${sortOrder} , proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})}">1</a>
+                                </li>
+
+                                <!-- Puntos suspensivos al inicio (solo si hay más de 7 páginas y estás en una página más allá de la 3) -->
+                                <li class="page-item disabled" th:if="${currentPage >= 3 and totalPages > 7}">
+                                    <span class="page-link">...</span>
+                                </li>
+
+                                <!-- Páginas numeradas alrededor de la página actual -->
+                                <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                                    th:if="${(i >= currentPage - 1 and i <= currentPage + 1) and i > 0 and i < totalPages - 1}"
+                                    class="page-item"
+                                    th:classappend="${i == currentPage} ? 'active'">
+                                    <a class="page-link"
+                                       th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${i}, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})}"
+                                       th:text="${i + 1}">2</a>
+                                </li>
+
+
+                                <!-- Puntos suspensivos antes de la última página (solo si hay más de 7 páginas y estás antes de las últimas 4) -->
+                                <li class="page-item disabled" th:if="${currentPage <= totalPages - 4 and totalPages > 7}">
+                                    <span class="page-link">...</span>
+                                </li>
+
+                                <!-- Última página siempre visible (solo si hay más de 1 página) -->
+                                <li class="page-item" th:if="${totalPages > 1}" th:classappend="${currentPage == totalPages - 1} ? 'active'">
+                                    <a class="page-link"
+                                       th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${totalPages - 1}, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})}"
+                                       th:text="${totalPages}">Última</a>
                                 </li>
 
                                 <!-- Botón de "Siguiente" -->
                                 <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                                    <a class="page-link" th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${currentPage + 1}, sortOrder=${sortOrder})}">Siguiente</a>
+                                    <a class="page-link"
+                                       th:href="${currentPage + 1 < totalPages} ? @{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${currentPage + 1}, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})} : '#'"
+                                       aria-label="Siguiente">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
                                 </li>
+
+
+                                <!-- Botón de "Último" -->
+                                <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:href="@{/UsuarioFinal/subcategoria/{idSubcategoria}(idSubcategoria=${idSubcategoria}, page=${totalPages - 1}, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})}"
+                                       aria-label="Último">
+                                        Último
+                                    </a>
+                                </li>
+
                             </ul>
                         </nav>
+                    </div>
+
+                    <!-- Mensaje cuando no hay resultados -->
+                    <div class="d-flex flex-column align-items-center" th:if="${totalPages == 0}">
+                        <p>No hay resultados para mostrar.</p>
                     </div>
 
 
@@ -307,13 +644,163 @@
             </div>
         </div>
     </div>
+    <!-- MODAL QUICK VIEW -->
+    <div th:each="producto : ${productos}">
+        <div class="modal fade" th:id="'quickViewModal' + ${producto.id}" tabindex="-1" aria-hidden="true" role="dialog">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-8">
+                        <div class="position-absolute top-0 end-0 me-3 mt-3">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="row">
+                            <!-- Columna de imágenes -->
+                            <div class="col-lg-6">
+                                <div class="product productModal" id="productModal">
+                                    <!-- Imagen principal con zoom -->
+                                    <div class="zoom" onmousemove="zoom(event)" onmouseout="resetZoom(event)"
+                                         th:style="'background-image: url(/UsuarioFinal/producto/foto/' + ${producto.fotos.get(0).id} + ');'">
+                                    </div>
+                                </div>
+
+                                <!-- Herramientas del producto - Miniaturas -->
+                                <div class="product-tools mt-4">
+                                    <div class="thumbnails row g-3" id="productModalThumbnails">
+                                        <div th:each="foto : ${producto.fotos}" class="col-3">
+                                            <div class="thumbnails-img">
+                                                <img th:src="'/UsuarioFinal/producto/foto/' + ${foto.id}"
+                                                     alt=""
+                                                     class="img-thumbnail"
+                                                     th:data-foto-id="${foto.id}"
+                                                     onclick="changeMainImage(this.getAttribute('data-foto-id'), this.closest('.modal'))" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Columna de detalles -->
+                            <div class="col-lg-6">
+                                <div class="ps-lg-8 mt-6 mt-lg-0">
+                                    <!-- Categoría -->
+                                    <a href="#!" class="mb-4 d-block text-muted" th:text="${producto.idCategoria.nombreCategoria}">Categoría</a>
+
+                                    <!-- Nombre del producto -->
+                                    <h2 class="mb-1 h1" th:text="${producto.nombreProducto}">Nombre del producto</h2>
+
+                                    <!-- Reseñas -->
+                                    <div class="mb-4">
+                                        <small class="text-warning" aria-label="Calificación promedio">
+        <span th:each="i : ${#numbers.sequence(1,5)}">
+            <i class="bi"
+               th:classappend="${producto.averageRating >= i} ? ' bi-star-fill' :
+                             (${producto.averageRating >= (i - 0.5)} ? ' bi-star-half' :
+                             ' bi-star')"
+               th:attr="aria-label=${producto.averageRating >= i ? 'Estrella llena' : (producto.averageRating >= (i - 0.5) ? 'Media estrella' : 'Estrella vacía')}"></i>
+        </span>
+                                        </small>
+                                        <a href="#" class="ms-2" th:text=" ' (' + ${producto.reviewCount} + ' reviews)'"></a>
+                                    </div>
+
+                                    <!-- Precio -->
+                                    <div class="fs-4">
+                                        <span class="fw-bold text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}"></span>
+                                    </div>
+
+                                    <hr class="my-6" />
+
+                                    <!-- Selector de cantidad -->
+                                    <div class="mb-4">
+                                        <div class="input-group input-spinner" style="max-width: 120px;">
+                                            <input type="button" value="-" class="button-minus btn btn-sm btn-outline-secondary"
+                                                   onclick="updateQuantity(this, 'decrease')" />
+                                            <input type="number" name="cantidadVisible"
+                                                   th:value="1" th:max="${producto.cantidadDisponible}" min="1"
+                                                   class="quantity-field form-control-sm form-input text-center"
+                                                   oninput="validateAndUpdateQuantity(this)" />
+                                            <input type="button" value="+" class="button-plus btn btn-sm btn-outline-secondary"
+                                                   onclick="updateQuantity(this, 'increase')" />
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones de acción -->
+                                    <div class="mt-3 row justify-content-start g-2 align-items-center">
+                                        <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form col-lg-6 col-md-6 col-12" data-context="modal">
+                                            <input type="hidden" name="idProducto" th:value="${producto.id}" />
+                                            <input type="hidden" name="cantidad" th:value="1" th:max="${producto.cantidadDisponible}" class="quantity-hidden-field" />
+                                            <button type="submit" class="btn btn-primary w-100">
+                                                <i class="bi bi-cart-plus me-2"></i>Añadir al carrito
+                                            </button>
+                                        </form>
+
+                                    </div>
+
+                                    <hr class="my-6" />
+
+                                    <!-- Detalles del producto -->
+                                    <div>
+                                        <table class="table table-borderless">
+                                            <tbody>
+                                            <tr>
+                                                <td>Código del producto:</td>
+                                                <td th:text="${producto.codigoProducto}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Disponibilidad:</td>
+                                                <td th:if="${producto.disponibilidad == 'En stock'}">
+                                                    <span class="badge bg-light-primary text-dark-primary">En Stock</span>
+                                                </td>
+                                                <td th:if="${producto.disponibilidad == 'Fuera de stock'}">
+                                                    <span class="badge bg-light-danger text-dark-danger">Fuera de stock</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tipo:</td>
+                                                <td th:text="${producto.idSubcategoria.nombreSubcategoria}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Envío:</td>
+                                                <td>
+                                                    <small th:if="${fechaFormateada != null}" th:text="${fechaFormateada}"></small>
+                                                    <small th:unless="${fechaFormateada != null}">Entrega en 1-2 días hábiles</small>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
-<div th:if="${producto != null}">
-    <div th:insert="~{fragments/modalProducto :: modalProducto(${producto}, ${imagenes}, ${fechaFormateada})}"></div>
-</div>
 
 <!-- Javascript-->
+
+
+<!-- Libs JS -->
+<!-- Incluir jQuery primero -->
+<script th:src="@{/js/vendors/jquery.min.js}"></script>
+
+<!-- Luego Bootstrap -->
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+<script th:src="@{/js/theme.min.js}"></script>
+
+<!-- Otros scripts dependientes de jQuery -->
+<script th:src="@{/js/vendors/countdown.js}"></script>
+<script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+<script th:src="@{/js/vendors/slick-slider.js}"></script>
+<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+<script th:src="@{/js/vendors/tns-slider.js}"></script>
+<script th:src="@{/js/vendors/zoom.js}"></script>
+<script th:src="@{/js/carrito.js}"></script>
+
 
 <script>
     $(document).ready(function(){
@@ -352,24 +839,91 @@
         });
     });
 
+
 </script>
 
-<!-- Libs JS -->
-<!-- <script src="./assets/libs/jquery/dist/jquery.min.js"></script> -->
-<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+<script>
+    function zoom(event) {
+        var target = event.currentTarget;
+        // Establece el tamaño de zoom primero
+        target.style.backgroundSize = '200%';
 
-<!-- Theme JS -->
-<script th:src="@{/js/theme.min.js}"></script>
+        var offsetX, offsetY;
+        if (event.type.includes('touch')) {
+            offsetX = event.touches[0].pageX - target.getBoundingClientRect().left;
+            offsetY = event.touches[0].pageY - target.getBoundingClientRect().top;
+        } else {
+            offsetX = event.offsetX;
+            offsetY = event.offsetY;
+        }
 
-<script th:src="@{/js/vendors/jquery.min.js}"></script>
-<script th:src="@{/js/vendors/countdown.js}"></script>
-<script th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
-<script th:src="@{/js/vendors/slick-slider.js}"></script>
-<script th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
-<script th:src="@{/js/vendors/tns-slider.js}"></script>
-<script th:src="@{/js/vendors/zoom.js}"></script>
-    <script th:src="@{/js/carrito.js}"></script>
+        var x = (offsetX / target.offsetWidth) * 100;
+        var y = (offsetY / target.offsetHeight) * 100;
+
+        target.style.backgroundPosition = x + "% " + y + "%";
+    }
+
+    function resetZoom(event) {
+        const container = event.currentTarget;
+        container.style.backgroundSize = 'contain';
+        container.style.backgroundPosition = 'center';
+    }
+
+    function changeMainImage(fotoId, modalElement) {
+        // Find the specific zoom div within this modal
+        var zoomDiv = modalElement.querySelector('.zoom');
+        var thumbnails = modalElement.querySelectorAll('#productModalThumbnails img');
+
+        // Change main image
+        zoomDiv.style.backgroundImage = 'url(/UsuarioFinal/producto/foto/' + fotoId + ')';
+
+        // Reset zoom
+        zoomDiv.style.backgroundSize = 'contain';
+        zoomDiv.style.backgroundPosition = 'center';
+
+        // Highlight active thumbnail
+        thumbnails.forEach(function(thumb) {
+            thumb.classList.remove('active');
+            if (thumb.getAttribute('data-foto-id') === fotoId) {
+                thumb.classList.add('active');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var modals = document.querySelectorAll('.modal');
+
+        modals.forEach(function(modal) {
+            var thumbnails = modal.querySelectorAll('#productModalThumbnails img');
+
+            thumbnails.forEach(function(thumb) {
+                thumb.addEventListener('click', function() {
+                    var fotoId = this.getAttribute('data-foto-id');
+                    changeMainImage(fotoId, modal);
+                });
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const proveedorBusqueda = document.getElementById('proveedorBusqueda');
+        const proveedorItems = document.querySelectorAll('.proveedor-item');
+
+        proveedorBusqueda.addEventListener('keyup', function() {
+            const query = this.value.toLowerCase();
+            proveedorItems.forEach(function(item) {
+                const label = item.querySelector('.form-check-label span').textContent.toLowerCase();
+                if (label.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>

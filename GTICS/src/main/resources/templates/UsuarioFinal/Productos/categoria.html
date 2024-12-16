@@ -300,7 +300,7 @@
         <aside class="col-lg-3 col-md-4 mb-6 mb-md-0">
           <div class="offcanvas offcanvas-start offcanvas-collapse w-md-50" tabindex="-1" id="offcanvasCategory" aria-labelledby="offcanvasCategoryLabel">
             <div class="offcanvas-header d-lg-none">
-              <h5 class="offcanvas-title" id="offcanvasCategoryLabel">Filter</h5>
+              <h5 class="offcanvas-title" id="offcanvasCategoryLabel">Filtrar Productos</h5>
               <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body ps-lg-2 pt-lg-0">
@@ -326,80 +326,115 @@
                 </ul>
               </div>
 
-              <div class="mb-8">
-                <h5 class="mb-3">Proveedores</h5>
-                <div class="my-4">
-                  <!-- input -->
-                  <input type="search" class="form-control" placeholder="Buscar por proveedores" />
+              <!-- Formulario de Filtros y Ordenamiento -->
+              <form id="filterForm" th:action="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria})}" method="get">
+                <!-- Campo oculto para la página actual -->
+                <input type="hidden" name="page" th:value="${currentPage}" />
+
+                <!-- Filtros de Proveedores -->
+                <!-- Filtros de Proveedores -->
+                <div class="mb-8">
+                  <h5 class="mb-3">Proveedores</h5>
+                  <div class="my-4">
+                    <!-- Campo de Búsqueda de Proveedores con Input Group -->
+                    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">
+          <i class="bi bi-search"></i>
+        </span>
+                      <input type="search" class="form-control" placeholder="Buscar por proveedores"
+                             name="proveedorBusqueda" th:value="${proveedorBusqueda}" id="proveedorBusqueda" aria-label="Buscar por proveedores" aria-describedby="basic-addon1" />
+                    </div>
+
+                    <!-- Lista de Proveedores con Checkboxes -->
+                    <div th:if="${proveedores != null}">
+                      <div th:each="proveedor : ${proveedores}" class="form-check mb-2 proveedor-item">
+                        <input class="form-check-input" type="checkbox" name="proveedores" th:value="${proveedor}"
+                               th:id="'proveedor' + ${#strings.toLowerCase(proveedor)}"
+                               th:checked="${proveedoresSeleccionados != null and proveedoresSeleccionados.contains(proveedor)}" />
+                        <label class="form-check-label" th:for="'proveedor' + ${#strings.toLowerCase(proveedor)}">
+                          <span th:text="${proveedor}">Proveedor</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-              </div>
-              <!-- rating -->
-              <div class="mb-8">
-                <h5 class="mb-3">Rating</h5>
-                <div>
-                  <!-- form check -->
-                  <div class="form-check mb-2">
-                    <!-- input -->
-                    <input class="form-check-input" type="checkbox" value="" id="ratingFive" />
-                    <label class="form-check-label" for="ratingFive">
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                    </label>
-                  </div>
-                  <!-- form check -->
-                  <div class="form-check mb-2">
-                    <!-- input -->
-                    <input class="form-check-input" type="checkbox" value="" id="ratingFour" checked />
-                    <label class="form-check-label" for="ratingFour">
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star text-warning"></i>
-                    </label>
-                  </div>
-                  <!-- form check -->
-                  <div class="form-check mb-2">
-                    <!-- input -->
-                    <input class="form-check-input" type="checkbox" value="" id="ratingThree" />
-                    <label class="form-check-label" for="ratingThree">
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star text-warning"></i>
-                      <i class="bi bi-star text-warning"></i>
-                    </label>
-                  </div>
-                  <!-- form check -->
-                  <div class="form-check mb-2">
-                    <!-- input -->
-                    <input class="form-check-input" type="checkbox" value="" id="ratingTwo" />
-                    <label class="form-check-label" for="ratingTwo">
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star text-warning"></i>
-                      <i class="bi bi-star text-warning"></i>
-                      <i class="bi bi-star text-warning"></i>
-                    </label>
-                  </div>
-                  <!-- form check -->
-                  <div class="form-check mb-2">
-                    <!-- input -->
-                    <input class="form-check-input" type="checkbox" value="" id="ratingOne" />
-                    <label class="form-check-label" for="ratingOne">
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star text-warning"></i>
-                      <i class="bi bi-star text-warning"></i>
-                      <i class="bi bi-star text-warning"></i>
-                      <i class="bi bi-star text-warning"></i>
-                    </label>
+                <!-- Filtros de Rating -->
+                <!-- Filtros de Rating -->
+                <div class="mb-8">
+                  <h5 class="mb-3">Rating</h5>
+                  <div>
+                    <!-- Rating 5 Estrellas -->
+                    <div class="form-check mb-2">
+                      <input class="form-check-input" type="checkbox" name="ratings" value="5" id="ratingFive"
+                             th:checked="${ratingsSeleccionadas != null and ratingsSeleccionadas.contains(5)}" />
+                      <label class="form-check-label" for="ratingFive">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                      </label>
+                    </div>
+                    <!-- Rating 4 Estrellas -->
+                    <div class="form-check mb-2">
+                      <input class="form-check-input" type="checkbox" name="ratings" value="4" id="ratingFour"
+                             th:checked="${ratingsSeleccionadas != null and ratingsSeleccionadas.contains(4)}" />
+                      <label class="form-check-label" for="ratingFour">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
+                      </label>
+                    </div>
+                    <!-- Rating 3 Estrellas -->
+                    <div class="form-check mb-2">
+                      <input class="form-check-input" type="checkbox" name="ratings" value="3" id="ratingThree"
+                             th:checked="${ratingsSeleccionadas != null and ratingsSeleccionadas.contains(3)}" />
+                      <label class="form-check-label" for="ratingThree">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
+                      </label>
+                    </div>
+                    <!-- Rating 2 Estrellas -->
+                    <div class="form-check mb-2">
+                      <input class="form-check-input" type="checkbox" name="ratings" value="2" id="ratingTwo"
+                             th:checked="${ratingsSeleccionadas != null and ratingsSeleccionadas.contains(2)}" />
+                      <label class="form-check-label" for="ratingTwo">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
+                      </label>
+                    </div>
+                    <!-- Rating 1 Estrella -->
+                    <div class="form-check mb-2">
+                      <input class="form-check-input" type="checkbox" name="ratings" value="1" id="ratingOne"
+                             th:checked="${ratingsSeleccionadas != null and ratingsSeleccionadas.contains(1)}" />
+                      <label class="form-check-label" for="ratingOne">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
+                      </label>
+                    </div>
                   </div>
                 </div>
-              </div>
+
+                <!-- Botones de Acción -->
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary btn-block">Aplicar Filtros</button>
+                  <a th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria})}" class="btn btn-secondary btn-block">Borrar Filtros</a>
+                </div>
+              </form>
+              <!-- rating -->
+
             </div>
           </div>
         </aside>
@@ -526,25 +561,28 @@
                 <!-- Botón de "Primero" -->
                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                   <a class="page-link"
-                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=0, sortOrder=${sortOrder})}"
+                     th:href="${currentPage > 0} ? @{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=0, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})} : '#'"
                      aria-label="Primero">
                     Primero
                   </a>
                 </li>
 
+
+
                 <!-- Botón de "Anterior" -->
                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                   <a class="page-link"
-                     th:href="${currentPage > 0} ? @{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage - 1}, sortOrder=${sortOrder})} : '#'"
+                     th:href="${currentPage > 0} ? @{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage - 1}, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})} : '#'"
                      aria-label="Anterior">
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
 
+
                 <!-- Primera página siempre visible -->
                 <li class="page-item" th:classappend="${currentPage == 0} ? 'active'">
                   <a class="page-link"
-                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=0, sortOrder=${sortOrder})}">1</a>
+                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=0, sortOrder=${sortOrder} , proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})}">1</a>
                 </li>
 
                 <!-- Puntos suspensivos al inicio (solo si hay más de 7 páginas y estás en una página más allá de la 3) -->
@@ -553,14 +591,15 @@
                 </li>
 
                 <!-- Páginas numeradas alrededor de la página actual -->
-                <li th:each="i : ${#numbers.sequence(1, totalPages - 2)}"
+                <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
                     th:if="${(i >= currentPage - 1 and i <= currentPage + 1) and i > 0 and i < totalPages - 1}"
                     class="page-item"
                     th:classappend="${i == currentPage} ? 'active'">
                   <a class="page-link"
-                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${i}, sortOrder=${sortOrder})}"
+                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${i}, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})}"
                      th:text="${i + 1}">2</a>
                 </li>
+
 
                 <!-- Puntos suspensivos antes de la última página (solo si hay más de 7 páginas y estás antes de las últimas 4) -->
                 <li class="page-item disabled" th:if="${currentPage <= totalPages - 4 and totalPages > 7}">
@@ -570,27 +609,29 @@
                 <!-- Última página siempre visible (solo si hay más de 1 página) -->
                 <li class="page-item" th:if="${totalPages > 1}" th:classappend="${currentPage == totalPages - 1} ? 'active'">
                   <a class="page-link"
-                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${totalPages - 1}, sortOrder=${sortOrder})}"
+                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${totalPages - 1}, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})}"
                      th:text="${totalPages}">Última</a>
                 </li>
 
                 <!-- Botón de "Siguiente" -->
                 <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
                   <a class="page-link"
-                     th:href="${currentPage + 1 < totalPages} ? @{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage + 1}, sortOrder=${sortOrder})} : '#'"
+                     th:href="${currentPage + 1 < totalPages} ? @{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage + 1}, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})} : '#'"
                      aria-label="Siguiente">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
                 </li>
 
+
                 <!-- Botón de "Último" -->
                 <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
                   <a class="page-link"
-                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${totalPages - 1}, sortOrder=${sortOrder})}"
+                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${totalPages - 1}, sortOrder=${sortOrder}, proveedores=${proveedoresSeleccionados}, ratings=${ratingsSeleccionadas}, proveedorBusqueda=${proveedorBusqueda})}"
                      aria-label="Último">
                     Último
                   </a>
                 </li>
+
               </ul>
             </nav>
           </div>
@@ -870,6 +911,25 @@
           var fotoId = this.getAttribute('data-foto-id');
           changeMainImage(fotoId, modal);
         });
+      });
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const proveedorBusqueda = document.getElementById('proveedorBusqueda');
+    const proveedorItems = document.querySelectorAll('.proveedor-item');
+
+    proveedorBusqueda.addEventListener('keyup', function() {
+      const query = this.value.toLowerCase();
+      proveedorItems.forEach(function(item) {
+        const label = item.querySelector('.form-check-label span').textContent.toLowerCase();
+        if (label.includes(query)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
       });
     });
   });

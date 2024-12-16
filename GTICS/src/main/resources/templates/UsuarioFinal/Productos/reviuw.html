@@ -65,10 +65,11 @@
 
                               <div class="border-bottom py-4 mb-4">
                                  <label for="selectProducto" class="form-label">Productos por hacer reseña:</label>
-                                 <select class="form-select"  id="selectProducto"  th:field="*{producto.id}">
+                                 <select class="form-select" id="selectProducto" th:field="*{producto.id}" name="producto.id">
                                     <option value="" selected>--Seleccione un producto--</option>
                                     <option th:each="producto : ${productosSinResena}" th:value="${producto.idProducto}" th:text="${producto.nombreProducto}"></option>
                                  </select>
+
                                  <div class="invalid-feedback" th:if="${#fields.hasErrors('producto.id')}" th:errors="*{producto.id}"></div>
 
                               </div>
