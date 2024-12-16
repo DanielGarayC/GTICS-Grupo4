@@ -25,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -823,7 +824,7 @@ public class UsuarioFinalController {
 
 
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
-    public String mostrarPagPrincipal(Model model, Authentication authentication) {
+    public String mostrarPagPrincipal(Model model, Authentication authentication, HttpSession session) {
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
         if (authentication != null && authentication.isAuthenticated()) {
@@ -832,6 +833,11 @@ public class UsuarioFinalController {
 
             if (usuarioOpt.isPresent()) {
                 Usuario usuario = usuarioOpt.get();
+
+                Integer idUsuario = usuario.getId();
+
+                // Almacenar el idAgente en la sesión
+                session.setAttribute("id", idUsuario);
 
                 Pageable pageable = PageRequest.of(0, 5); // Página 0 con 5 órdenes
 
@@ -1010,14 +1016,20 @@ public class UsuarioFinalController {
     }
 
     @GetMapping("/UsuarioFinal/miPerfil")
-    public String miPerfil(Model model) {
-
+    public String miPerfil(Model model, HttpSession session, @ModelAttribute("product") Usuario usuario) {
+        Integer idUsuario = (Integer) session.getAttribute("id");
+        Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(idUsuario);
         List<Distrito> listaDistritos = distritoRepository.findAll();
-        model.addAttribute("listaDistritos", listaDistritos);
 
+        if(OptAdminZonal.isPresent()){
+            model.addAttribute("listaDistritos", listaDistritos);
+
+            model.addAttribute("usuarioLogueado",OptAdminZonal.get());
+        }
 
         return "UsuarioFinal/Perfil/miperfil";
     }
+
 
     @PostMapping("/UsuarioFinal/savePerfil")
     public String guardarPerfil(
@@ -2194,6 +2206,7 @@ public class UsuarioFinalController {
         }
 
     }
+
 
     @GetMapping(value = "/prueba_api")
     public String pruebaDniApi() {

@@ -228,8 +228,7 @@ public class SuperAdminController {
                     usuario.setFoto(foto.getBytes());
                 }
 
-                String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
-                usuario.setContrasena(encryptedPassword);
+
                 ArrayList<String> datosAntiguos = new ArrayList<>();
                 ArrayList<String> datosNuevos = new ArrayList<>();
                 ArrayList<String> camposModificados = new ArrayList<>();
@@ -264,6 +263,9 @@ public class SuperAdminController {
                 if (!datosAntiguos.isEmpty() || fotoActualizada) {
                     emailService.actualizacionInfoUserGenerico(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
                 }
+            } else {
+                String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
+                usuario.setContrasena(encryptedPassword);
             }
             usuario.setActivo(1);
             if (usuario.getId() == null) {
