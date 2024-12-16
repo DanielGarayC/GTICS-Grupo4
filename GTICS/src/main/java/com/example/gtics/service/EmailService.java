@@ -110,11 +110,15 @@ public class EmailService {
         } else {
             htmlContent.append("<p>A continuación, se presentan las modificaciones:</p>")
                     .append("<ul>");
-            for (int i = 0; i < camposModificados.size(); i++) {
+            for (int i = 0; i < datosNuevos.size(); i++) {
                 htmlContent.append("<li><b>").append(camposModificados.get(i)).append(":</b><br>")
                         .append("<b>Antes:</b> ").append(datosAntiguos.get(i)).append("<br>")
                         .append("<b>Ahora:</b> ").append(datosNuevos.get(i)).append("</li>");
             }
+            if (datosAntiguos.size() != camposModificados.size()){
+                htmlContent.append("<li><b>").append(camposModificados.get(camposModificados.size() - 1)).append("</b><br>");
+            }
+
             htmlContent.append("</ul>");
         }
 
