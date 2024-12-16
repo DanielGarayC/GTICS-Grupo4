@@ -100,7 +100,7 @@
 											<div class="col-lg-6 col-12">
 												<label for="creatCustomerName" class="form-label">Nombres:</label>
 												<input type="text" class="form-control" id="creatCustomerName" th:field="*{nombre}" disabled />
-												<input type="hidden" name="nombre" value="Lucía" />
+												<input type="hidden" name="nombre" th:field="*{nombre}" />
 											</div>
 										</div>
 
@@ -109,14 +109,14 @@
 											<div class="col-lg-6 col-12">
 												<label for="creatFinalUserLastName1" class="form-label">Apellido Paterno:</label>
 												<input type="text" class="form-control" id="creatFinalUserLastName1" th:field="*{apellidoPaterno}" disabled />
-												<input type="hidden" name="apellidoPaterno" value="Rojas" />
+												<input type="hidden" name="apellidoPaterno" th:field="*{apellidoPaterno}" />
 											</div>
 
 											<!-- Apellido Materno -->
 											<div class="col-lg-6 col-12">
 												<label for="creatFinalUserLastName" class="form-label">Apellido Materno:</label>
 												<input type="text" class="form-control" id="creatFinalUserLastName" th:field="*{apellidoMaterno}" disabled />
-												<input type="hidden" name="apellidoMaterno" value="Rojas" />
+												<input type="hidden" name="apellidoMaterno" th:field="*{apellidoMaterno}" />
 											</div>
 										</div>
 

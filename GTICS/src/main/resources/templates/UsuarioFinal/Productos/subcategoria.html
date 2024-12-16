@@ -485,7 +485,12 @@
                                     <div class="text-center position-relative mb-3">
                                         <a th:href="@{/UsuarioFinal/detallesProducto}">
                                             <!-- img -->
-                                            <img th:src="@{'/UsuarioFinal/producto/foto/' + ${producto.id}}" alt="Imagen de producto" class="img-fluid product-img" />
+                                            <img th:each="foto, iterStat : ${producto.fotos}"
+                                                 th:if="${iterStat.index == 0}"
+                                                 th:src="@{'/UsuarioFinal/producto/foto/' + ${foto.id}}"
+                                                 alt="Imagen de producto"
+                                                 class="img-fluid product-img"
+                                                 style="max-height: 100%; object-fit: contain; width: auto;" />
                                         </a>
                                         <!-- action btn MODAL VISTA RÁPIDA -->
                                         <div class="card-product-action">

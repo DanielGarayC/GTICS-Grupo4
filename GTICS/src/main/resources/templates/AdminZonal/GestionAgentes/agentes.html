@@ -60,6 +60,11 @@
 
 				<div class ="row justify-content-center">
 					<!--card-->
+					<div>
+						<div th:if="${#lists.isEmpty(listaAgentes)}" class="text-center">
+							<h3>No tienes agentes registrados</h3>
+						</div>
+					</div>
 					<div th:each="agente : ${listaAgentes}" class="card card-product me-5" style="max-width: 390px;">
 						<div class="card-body">
 							<div class="text-center position-relative">

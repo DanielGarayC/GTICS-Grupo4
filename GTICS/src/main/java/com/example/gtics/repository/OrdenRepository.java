@@ -74,15 +74,16 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    o.idOrden, \n" +
             "    o.fechaOrden, \n" +
-            "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal,  -- Cálculo del monto total con máximo costo de envío\n" +
+            "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal, \n" +
             "    eo.idEstadoOrden AS estadoOrden, \n" +
             "    co.idControlOrden AS controlOrden, \n" +
             "    u.nombre, \n" +
             "    u.apellidoPaterno,\n" +
             "    (SELECT phc.idProducto \n" +
             "     FROM producto_has_carritocompra phc \n" +
-            "     WHERE phc.idCarritoCompra = o.idCarritoCompra \n" +
-            "     ORDER BY phc.idProducto ASC LIMIT 1) AS primerIdProducto  -- Subconsulta para obtener el primer idProducto de la orden\n" +
+            "     JOIN carritocompra c ON phc.idCarritoCompra = c.idCarritoCompra \n" +
+            "     WHERE phc.idCarritoCompra = c.idCarritoCompra \n" +
+            "     ORDER BY phc.idProducto ASC LIMIT 1) AS primerIdProducto\n" +
             "FROM \n" +
             "    usuario u \n" +
             "JOIN \n" +
@@ -98,11 +99,12 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "JOIN \n" +
             "    controlorden co ON o.idControlOrden = co.idControlOrden \n" +
             "WHERE \n" +
-            "    u.idUsuario = ?1\n" +
-            "    AND ordenEliminada = 0\n" +
+            "    u.idUsuario = :idUsuario\n" +
+            "    AND o.ordenEliminada = 0\n" +
             "GROUP BY \n" +
             "    o.idOrden;\n")
-    Page<OrdenCarritoDto> obtenerCarritoConDto(Integer idUsuario, Pageable pageable);
+    Page<OrdenCarritoDto> obtenerCarritoConDto(@Param("idUsuario") Integer idUsuario, Pageable pageable);
+
 
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    o.idOrden, \n" +
@@ -129,6 +131,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    o.idOrden, \n" +
             "    o.fechaOrden, \n" +
+            "    o.fechaLlegada, \n" +
             "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal,  -- Cálculo del monto total con máximo costo de envío\n" +
             "    eo.idEstadoOrden AS estadoOrden, \n" +
             "    co.idControlOrden AS controlOrden, \n" +
