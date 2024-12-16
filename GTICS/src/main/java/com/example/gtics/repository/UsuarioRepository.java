@@ -62,10 +62,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "       s.codigoRuc as solruc,\n" +
             "       s.codigoJurisdiccion as soljurisdiccion,\n" +
             "       COALESCE((SELECT cj.estadoCodigo\n" +
-            "                 FROM CodigosJurisdiccion cj\n" +
+            "                 FROM codigosjurisdiccion cj\n" +
             "                 WHERE cj.codigoJurisdiccion = s.codigoJurisdiccion), 'No encontrado') as estadoCodigoJurisdiccion,\n" +
             "       COALESCE((SELECT ca.estadoCodigo\n" +
-            "                 FROM CodigosAduaneros ca\n" +
+            "                 FROM codigosaduaneros ca\n" +
             "                 WHERE ca.codigoAduanero = s.codigoAduana), 'No encontrado') as estadoCodigoAduana,\n" +
             "       z.nombrezona\n" +
             "FROM usuario u, solicitudagente s, zona z\n" +
@@ -175,10 +175,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
             "       s.codigoRuc as solruc,\n" +
             "       s.codigoJurisdiccion as soljurisdiccion,\n" +
             "       COALESCE((SELECT cj.estadoCodigo\n" +
-            "                 FROM CodigosJurisdiccion cj\n" +
+            "                 FROM codigosjurisdiccion cj\n" +
             "                 WHERE cj.codigoJurisdiccion = s.codigoJurisdiccion), 'No encontrado') as estadoCodigoJurisdiccion,\n" +
             "       COALESCE((SELECT ca.estadoCodigo\n" +
-            "                 FROM CodigosAduaneros ca\n" +
+            "                 FROM codigosaduaneros ca\n" +
             "                 WHERE ca.codigoAduanero = s.codigoAduana), 'No encontrado') as estadoCodigoAduana,\n" +
             "       z.nombrezona\n" +
             "FROM usuario u, solicitudagente s, zona z\n" +
