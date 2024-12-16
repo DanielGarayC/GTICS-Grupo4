@@ -129,6 +129,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    o.idOrden, \n" +
             "    o.fechaOrden, \n" +
+            "    o.fechaLlegada, \n" +
             "    SUM(phc.cantidadProducto * p.precio + COALESCE(o.costosAdicionales, 0.00)) + MAX(p.costoEnvio) AS montoTotal,  -- Cálculo del monto total con máximo costo de envío\n" +
             "    eo.idEstadoOrden AS estadoOrden, \n" +
             "    co.idControlOrden AS controlOrden, \n" +
