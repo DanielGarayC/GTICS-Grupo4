@@ -25,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -531,6 +532,8 @@ public class UsuarioFinalController {
         model.addAttribute("zonas", zonas);
         Orden orden = new Orden();
         model.addAttribute("orden", orden);
+        List<Distrito> listaDistritos = distritoRepository.findAll();
+        model.addAttribute("listaDistritos", listaDistritos);
 
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             String email = authentication.getName();
@@ -541,7 +544,10 @@ public class UsuarioFinalController {
 
                 // Usar directamente la dirección del usuario
                 String direccion = usuario.getDireccion();
+                String distrito = usuario.getDistrito().getNombre();
                 model.addAttribute("direccion", direccion);
+                model.addAttribute("direccion", direccion);
+
                 model.addAttribute("user", usuario);
                 // Buscar el carrito activo del usuario
                 Optional<Carritocompra> carritoOpt = carritoCompraRepository.findByIdUsuarioAndActivo(usuario, true);
@@ -601,44 +607,25 @@ public class UsuarioFinalController {
         return "UsuarioFinal/ProcesoCompra/proceso_compra";
     }
 
-    @GetMapping("/UsuarioFinal/editarDireccion")
-    public String editarDireccion(Model model) {
-        // Obtener la autenticación del usuario actual
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
-            String email = authentication.getName();
-
-            // Obtener el usuario con su dirección
-            Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
-            if (optUsuario.isPresent()) {
-                Usuario usuario = optUsuario.get();
-
-                // Obtener todas las zonas
-                List<Zona> zonas = zonaRepository.findAll();
-                model.addAttribute("zonas", zonas);
-
-                List<Distrito> distritos = distritoRepository.findAll();
-                model.addAttribute("distritos", distritos);
-
-                model.addAttribute("user", usuario);
-
-                if (usuario.getDireccion() != null) {
-                    Zona zona = usuario.getZona();
-                    Distrito distrito = usuario.getDistrito();
-
-                    // Cargar las zonas y distritos seleccionados
-                    model.addAttribute("zonaSeleccionada", zona);
-                    model.addAttribute("distritoSeleccionado", distrito);
-                }
-
-                // Aquí podrías cargar más datos si es necesario
-                return "UsuarioFinal/ProcesoCompra/proceso_compra";
-            }
+    @PostMapping("/UsuarioFinal/editarDireccionUsuario")
+    public String editarDireccionUsuario(
+            @RequestParam("idUsuario") Integer idUsuario,
+            @RequestParam("direccion") String direccion,
+            @RequestParam("distritoId") Integer distritoId,
+            RedirectAttributes attributes) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            usuario.setDireccion(direccion);
+            Distrito distrito = distritoRepository.findById(distritoId)
+                    .orElseThrow(() -> new IllegalArgumentException("Distrito no encontrado"));
+            usuario.setDistrito(distrito);
+            usuarioRepository.save(usuario);
+            attributes.addFlashAttribute("mensaje", "Dirección actualizada correctamente.");
+        } else {
+            attributes.addFlashAttribute("error", "No se encontró el usuario.");
         }
-
-        // Si no se encuentra el usuario o no está autenticado
-        return "redirect:/UsuarioFinal/login";
+        return "redirect:/UsuarioFinal/procesoCompra";
     }
 
     @PostMapping("/UsuarioFinal/guardar-y-validar-tarjeta")
@@ -652,6 +639,13 @@ public class UsuarioFinalController {
         if (!numeroTarjeta.matches("\\d{16}")) {
             return "El número de tarjeta debe contener 16 dígitos.";
         }
+
+        // Validar tipo de tarjeta
+        String tipoTarjeta = obtenerTipoTarjeta(numeroTarjeta);
+        if (tipoTarjeta.equals("Desconocido")) {
+            return "La tarjeta no es una Visa ni MasterCard válida.";
+        }
+
         if (!mesExpiracion.matches("(0[1-9]|1[0-2])") || !anioExpiracion.matches("\\d{2}")) {
             return "Fecha de expiración inválida. El formato debe ser MM/AA.";
         }
@@ -661,7 +655,7 @@ public class UsuarioFinalController {
 
         // Convertir fecha de expiración a LocalDate
         int mesExp = Integer.parseInt(mesExpiracion);
-        int anioExp = Integer.parseInt(anioExpiracion) + 2000; // Convertir a año con 4 dígitos
+        int anioExp = Integer.parseInt(anioExpiracion) + 2000;
         LocalDate fechaExpiracion = LocalDate.of(anioExp, mesExp, 1);
 
         // Validar que la fecha de expiración no sea pasada
@@ -670,53 +664,46 @@ public class UsuarioFinalController {
             return "La tarjeta ya ha expirado o está próxima a vencer.";
         }
 
-        // Validar que no sea el mismo mes y año actuales
         if (anioExp == now.getYear() && mesExp == now.getMonthValue()) {
             return "La tarjeta no puede expirar este mes.";
         }
 
-        // Proceso para guardar una nueva tarjeta
+        // Guardar nueva tarjeta
         if (idTarjeta == null) {
-            // Hash del número de tarjeta
             String numeroTarjetaHash = hashearNumeroTarjeta(numeroTarjeta);
-
-            // Últimos 4 dígitos de la tarjeta
             String ultimosDigitos = numeroTarjeta.substring(numeroTarjeta.length() - 4);
 
-            // Crear nueva tarjeta
             Tarjeta tarjeta = new Tarjeta();
             tarjeta.setNombreTitular(nombreTitular);
             tarjeta.setNumeroTarjetaHash(numeroTarjetaHash);
             tarjeta.setUltimosDigitos(ultimosDigitos);
             tarjeta.setFechaExpiracion(mesExpiracion + "/" + anioExpiracion);
 
-            // Guardar la tarjeta en la base de datos
             tarjetaRepository.save(tarjeta);
 
-            return "Tarjeta guardada con éxito.";
+            return "Tarjeta guardada con éxito.!";
         } else {
             // Validar tarjeta existente
             Tarjeta tarjeta = tarjetaRepository.findById(idTarjeta)
                     .orElseThrow(() -> new RuntimeException("Tarjeta no encontrada"));
 
-            // Validar los últimos 4 dígitos
             String ultimosDigitosIngresados = numeroTarjeta.substring(numeroTarjeta.length() - 4);
             if (!tarjeta.getUltimosDigitos().equals(ultimosDigitosIngresados)) {
                 return "El número de tarjeta no coincide con los últimos 4 dígitos.";
             }
 
-            // Validar que la fecha de expiración de la tarjeta no sea pasada
-            String[] partesFecha = tarjeta.getFechaExpiracion().split("/");
-            int mesTarjeta = Integer.parseInt(partesFecha[0]);
-            int anioTarjeta = Integer.parseInt(partesFecha[1]) + 2000;
-            LocalDate fechaExpiracionTarjeta = LocalDate.of(anioTarjeta, mesTarjeta, 1);
-
-            if (fechaExpiracionTarjeta.isBefore(now)) {
-                return "La tarjeta ya ha expirado o está a punto de expirar.";
-            }
-
             return "Tarjeta válida.";
         }
+    }
+
+    // Método para validar el tipo de tarjeta (Visa o MasterCard)
+    private String obtenerTipoTarjeta(String numeroTarjeta) {
+        if (numeroTarjeta.startsWith("4")) {
+            return "Visa";
+        } else if (numeroTarjeta.matches("^5[1-5]\\d{14}$") || numeroTarjeta.matches("^2(2[2-9][1-9]|2[3-9]\\d{2}|[3-6]\\d{3}|7[0-1]\\d{2}|720)\\d{12}$")) {
+            return "MasterCard";
+        }
+        return "Desconocido";
     }
 
 
@@ -736,12 +723,6 @@ public class UsuarioFinalController {
         }
     }
 
-    @GetMapping("/UsuarioFinal/tarjetas")
-    public String listarTarjetas(Model model) {
-        List<Tarjeta> tarjetas = tarjetaRepository.findAll(); // Recupera todas las tarjetas
-        model.addAttribute("tarjetas", tarjetas);
-        return "UsuarioFinal/Tarjetas/lista_tarjetas";
-    }
 
 
     @PostMapping("/UsuarioFinal/procesarOrden")
@@ -843,7 +824,7 @@ public class UsuarioFinalController {
 
 
     @GetMapping({"/UsuarioFinal", "/UsuarioFinal/pagPrincipal"})
-    public String mostrarPagPrincipal(Model model, Authentication authentication) {
+    public String mostrarPagPrincipal(Model model, Authentication authentication, HttpSession session) {
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
         if (authentication != null && authentication.isAuthenticated()) {
@@ -852,6 +833,11 @@ public class UsuarioFinalController {
 
             if (usuarioOpt.isPresent()) {
                 Usuario usuario = usuarioOpt.get();
+
+                Integer idUsuario = usuario.getId();
+
+                // Almacenar el idAgente en la sesión
+                session.setAttribute("id", idUsuario);
 
                 Pageable pageable = PageRequest.of(0, 5); // Página 0 con 5 órdenes
 
@@ -912,7 +898,7 @@ public class UsuarioFinalController {
         productos = new ArrayList<>(productoSet);
 
         // Obtener calificaciones y conteo de reseñas
-        List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCountByZonaId(idZona);
+        List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCount();
 
         // Mapear las calificaciones a los productos
         Map<Integer, RatingData> ratingsMap = ratings.stream()
@@ -987,9 +973,31 @@ public class UsuarioFinalController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+
     }
 
+    @GetMapping("UsuarioFinal/foto/{id}")
+    public ResponseEntity<byte[]> obtenerFotoUsuario(@PathVariable Integer id) {
 
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+
+        if (usuario != null && usuario.getFoto() != null) {
+            byte[] imagenComoBytes = usuario.getFoto();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+
+            httpHeaders.setContentType(MediaType.IMAGE_PNG);
+
+
+            return ResponseEntity.ok()
+                    .headers(httpHeaders)
+                    .body(imagenComoBytes);
+        } else {
+
+            return ResponseEntity.notFound().build();
+        }
+    }
     @GetMapping("/UsuarioFinal/tienda/foto/{id}")
     public ResponseEntity<byte[]> obtenerFotoTienda(@PathVariable Integer id) {
         Tienda tienda = tiendaRepository.findById(id).orElse(null);
@@ -1008,14 +1016,20 @@ public class UsuarioFinalController {
     }
 
     @GetMapping("/UsuarioFinal/miPerfil")
-    public String miPerfil(Model model) {
-
+    public String miPerfil(Model model, HttpSession session, @ModelAttribute("product") Usuario usuario) {
+        Integer idUsuario = (Integer) session.getAttribute("id");
+        Optional<Usuario> OptAdminZonal =  usuarioRepository.findById(idUsuario);
         List<Distrito> listaDistritos = distritoRepository.findAll();
-        model.addAttribute("listaDistritos", listaDistritos);
 
+        if(OptAdminZonal.isPresent()){
+            model.addAttribute("listaDistritos", listaDistritos);
+
+            model.addAttribute("usuarioLogueado",OptAdminZonal.get());
+        }
 
         return "UsuarioFinal/Perfil/miperfil";
     }
+
 
     @PostMapping("/UsuarioFinal/savePerfil")
     public String guardarPerfil(
@@ -1271,7 +1285,7 @@ public class UsuarioFinalController {
                 List<Producto> productos = productoRepository.findProductosPorZona(zonaUsuario.getId());
 
                 // Obtener calificaciones y conteo de reseñas
-                List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCountByZonaId(zonaUsuario.getId());
+                List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCount();
 
                 // Mapear las calificaciones a los productos
                 Map<Integer, RatingData> ratingsMap = ratings.stream()
@@ -1479,6 +1493,26 @@ public class UsuarioFinalController {
                 // Consulta paginada con el criterio de zona y categoría
                 Page<Producto> productosPage = productoRepository.findProductosPorZonaYCategoria(zonaUsuario.getId(), idCategoria, pageable);
                 List<Producto> productos = productosPage.getContent();
+
+
+                List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCount();
+                Map<Integer, RatingData> ratingsMap = ratings.stream()
+                        .collect(Collectors.toMap(
+                                row -> (Integer) row[0],
+                                row -> new RatingData((Double) row[1], (Long) row[2])
+                        ));
+
+                for (Producto producto : productos) {
+                    RatingData ratingData = ratingsMap.get(producto.getId());
+                    if (ratingData != null) {
+                        producto.setAverageRating(ratingData.getAverageRating());
+                        producto.setReviewCount(ratingData.getReviewCount());
+                    } else {
+                        producto.setAverageRating(0.0);
+                        producto.setReviewCount(0);
+                    }
+                }
+
                 model.addAttribute("productos", productos);
 
                 // Total de productos y número de páginas
@@ -2172,6 +2206,7 @@ public class UsuarioFinalController {
         }
 
     }
+
 
     @GetMapping(value = "/prueba_api")
     public String pruebaDniApi() {

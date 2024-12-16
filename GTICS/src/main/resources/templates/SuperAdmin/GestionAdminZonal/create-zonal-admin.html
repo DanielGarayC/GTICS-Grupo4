@@ -92,6 +92,15 @@
                                             <input type="hidden" name="id" id="id" th:value="${usuarioAdminZ.id != null ? usuarioAdminZ.id : ''}" />
                                             <div class="row g-3">
 
+                                                <!-- DNI -->
+                                                <div class="col-lg-6 col-12">
+                                                    <label for="dni" class="form-label">
+                                                        DNI: <span style="visibility: hidden;">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="dni" name="dni" minlength="8" maxlength="8" pattern="\d{8}" placeholder="Ejemplo: 12345678" required />
+                                                    <div class="invalid-feedback" id="dni-error"></div>
+                                                </div>
+
                                                 <!-- Nombres -->
                                                 <div class="col-lg-6 col-12">
                                                     <label for="Nombre" class="form-label">
@@ -116,14 +125,7 @@
                                                     <input type="text" class="form-control" id="ApellidoMaterno" name="apellidoMaterno" placeholder="Apellido materno del admin zonal" required />
                                                     <div class="invalid-feedback">Por favor ingrese el apellido materno del admin zonal</div>
                                                 </div>
-                                                <!-- DNI -->
-                                                <div class="col-lg-6 col-12">
-                                                    <label for="dni" class="form-label">
-                                                        DNI: <span style="visibility: hidden;">*</span>
-                                                    </label>
-                                                    <input type="text" class="form-control" id="dni" name="dni" minlength="8" maxlength="8" pattern="\d{8}" placeholder="Ejemplo: 12345678" required />
-                                                    <div class="invalid-feedback" id="dni-error"></div>
-                                                </div>
+
 
                                                 <!-- Número telefónico -->
                                                 <div class="col-lg-6 col-12">

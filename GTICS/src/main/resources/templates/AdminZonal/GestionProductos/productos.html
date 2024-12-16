@@ -129,6 +129,36 @@
                 <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
                 </div>
                 <div class="table-responsive border-0">
+
+                    <form id="formAgregarFecha" th:action="@{/AdminZonal/Productos/guardarFecha}" method="post" style="display: none;">
+                        <input type="hidden" name="productoId" id="productoId" value="" />
+                        <input type="hidden" name="fechaEntrega" id="fechaEntrega" value="" />
+                    </form>
+
+                    <form id="formEditarSolicitud" th:action="@{/AdminZonal/Productos/GuardarSolReposicion}" method="post" style="display: none;">
+                        <input type="hidden" name="productoId" id="editarProductoId" value="" />
+                        <input type="hidden" name="cantidad" id="editarCantidad" value="" />
+                    </form>
+
+                    <form id="formEliminarSolicitud" th:action="@{/AdminZonal/Productos/EliminarSolReposicion}" method="post" style="display: none;">
+                        <input type="hidden" name="productoId" id="eliminarProductoId" value="" />
+                    </form>
+
+                    <form id="formCrearSolicitud" th:action="@{/AdminZonal/Productos/GuardarSolReposicion}" method="post" style="display: none;">
+                        <input type="hidden" name="productoId" id="crearProductoId" value="" />
+                        <input type="hidden" name="cantidad" id="crearCantidad" value="" />
+                    </form>
+
+                    <form id="formEditarFechaArribo" th:action="@{/AdminZonal/Productos/guardarFecha}" method="post" style="display: none;">
+                        <input type="hidden" name="productoId" id="editarFechaProductoId" value="" />
+                        <input type="hidden" name="fechaEntrega" id="fechaEntrega" value="" />
+                    </form>
+
+                    <form id="formEliminarFechaArribo" th:action="@{/AdminZonal/Productos/EliminarFechaArribo}" method="post" style="display: none;">
+                        <input type="hidden" name="productoId" id="eliminarFechaProductoId" value="" />
+                    </form>
+
+
                     <!-- Table -->
                     <table id="productosTable" class="table mb-0 text-nowrap" style ="padding-top: 3vh; border-color: #d5d7d7;">
                         <!-- Table Head -->
@@ -153,7 +183,7 @@
                             <td class="align-middle text-center" th:text="${producto.nombreProducto}"></td>
                             <td class="align-middle text-center" th:text="${producto.cantidadDisponible}"></td>
                             <td class="align-middle text-center">
-                                <button th:if="${producto.fechaArribo} == null" class="btn btn-primary addDate" style="width: 80%" th:data-product-id="${producto.idProducto}">
+                                <button th:if="${producto.fechaArribo} == null" class="btn btn-primary addDate" th:data-product-id="${producto.idProducto}" style="width: 80%;">
                                     <p style="margin-bottom: 0px;">Agregar fecha <i class="bi-calendar-plus" style="margin-left: 5px;"></i></p>
                                 </button>
 
@@ -164,12 +194,15 @@
                                     </label>
 
                                     <!-- Botón de editar -->
-                                    <button type="submit" class="btn btn-primary saveButton saveAlert" style="margin-left: 5px;" th:data-product-id="${producto.idProducto}">
+                                    <button type="button" class="btn btn-primary editarFechaArribo" style="margin-left: 5px;"
+                                            th:data-product-id="${producto.idProducto}"
+                                            th:data-fecha-actual="${#dates.format(producto.fechaArribo, 'dd/MM/yyyy')}">
                                         <i class="bi-pencil-fill"></i>
                                     </button>
 
                                     <!-- Botón de eliminar -->
-                                    <button type="submit" class="btn btn-danger eliminarFechaArribo" style="margin-left: 5px;" th:data-product-id="${producto.idProducto}">
+                                    <button type="button" class="btn btn-danger eliminarFechaArribo" style="margin-left: 5px;"
+                                            th:data-product-id="${producto.idProducto}">
                                         <i class="bi-trash"></i>
                                     </button>
                                 </div>
@@ -199,7 +232,6 @@
                                         type="button"
                                         class="btn btn-outline-danger eliminarSolicitud"
                                         th:data-product-id="${producto.idProducto}"
-                                        th:data-cantidad-solicitada="${producto.cantidadSolicitada}"
                                         title="Eliminar solicitud">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -207,7 +239,7 @@
                                 <!-- Si cantidadSolicitada es null y cantidadDisponible <= 25, mostrar botón habilitado para Solicitar Reposición -->
                                 <button th:if="${producto.cantidadSolicitada == null and producto.cantidadDisponible <= 25}"
                                         type="button"
-                                        class="btn btn-outline-primary reposicion"
+                                        class="btn btn-outline-primary crearSolicitud"
                                         th:data-product-id="${producto.idProducto}"
                                         title="Solicitar reposición">
                                     <i class="fas fa-cart-plus"></i> Solicitar
@@ -299,61 +331,44 @@
 
 
 <script>
-    //Popup reposicion
-    document.querySelectorAll('.reposicion').forEach(button => {
-    button.addEventListener('click', function() {
-    // Aquí obtenemos el valor del atributo data-product-id
-    const productoId = button.getAttribute('data-product-id');
+    document.querySelectorAll('.crearSolicitud').forEach(button => {
+        button.addEventListener('click', function () {
+            const productoId = button.getAttribute('data-product-id');
+            const form = document.getElementById('formCrearSolicitud');
 
-    // Aquí usas el productoId en el Swal popup y lo pasas en el formulario
-    Swal.fire({
-    showCloseButton: true,
-    title: 'Solicitud de reposición',
-    html: `
-    <p>Ingrese la cantidad de productos que desea solicitar:</p>
-    <input type="number" id="productQuantity" class="swal2-input" value="0" min="0">
-    `,
-    showCancelButton: true,
-    confirmButtonText: 'Enviar',
-    cancelButtonText: 'Cancelar',
-    customClass:{
-    popup: 'custom-popup'
-    },
-    focusConfirm: false,
-    preConfirm: () => {
-    const quantity = Swal.getPopup().querySelector('#productQuantity').value;
-    if (!quantity || quantity <= 0) {
-    Swal.showValidationMessage(`Por favor ingrese una cantidad válida.`);
-    }
-    // Aquí retorna el productoId junto con la cantidad
-    return { quantity, productoId };
-    }
-    }).then((result) => {
-    if (result.isConfirmed) {
-    // Crear y enviar un formulario con el productoId y la cantidad
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/AdminZonal/Productos/GuardarSolReposicion';  // Define la acción del formulario
+            // Asignar el productoId al formulario oculto
+            form.querySelector('#crearProductoId').value = productoId;
 
-    // Agregar campo oculto para el idProducto
-    const inputProductoId = document.createElement('input');
-    inputProductoId.type = 'hidden';
-    inputProductoId.name = 'productoId';
-    inputProductoId.value = result.value.productoId;
-    form.appendChild(inputProductoId);
-
-    // Agregar campo oculto para la cantidad
-    const inputCantidad = document.createElement('input');
-    inputCantidad.type = 'hidden';
-    inputCantidad.name = 'cantidad';
-    inputCantidad.value = result.value.quantity;
-    form.appendChild(inputCantidad);
-
-    document.body.appendChild(form);
-    form.submit();
-    }
-    });
-    });
+            Swal.fire({
+                title: 'Crear Solicitud de Reposición',
+                html: `
+                    <p>Ingrese la cantidad de productos que desea solicitar:</p>
+                    <input type="number" id="nuevaCantidad" class="swal2-input" min="1" required />
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Guardar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'custom-popup'
+                },
+                focusConfirm: false,
+                preConfirm: () => {
+                    const cantidad = Swal.getPopup().querySelector('#nuevaCantidad').value;
+                    if (!cantidad || cantidad <= 0) {
+                        Swal.showValidationMessage('Por favor, ingrese una cantidad válida.');
+                        return false;
+                    }
+                    // Asignar la cantidad al formulario oculto
+                    form.querySelector('#crearCantidad').value = cantidad;
+                    return true;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Enviar el formulario al backend
+                    form.submit();
+                }
+            });
+        });
     });
 </script>
 <script>
@@ -377,17 +392,91 @@
         });
     });
     });
+
+</script>
+
+<script>
+    document.querySelectorAll('.eliminarFechaArribo').forEach(button => {
+        button.addEventListener('click', function () {
+            const productoId = button.getAttribute('data-product-id');
+            const form = document.getElementById('formEliminarFechaArribo');
+
+            // Asignar el productoId al formulario oculto
+            form.querySelector('#eliminarFechaProductoId').value = productoId;
+
+            Swal.fire({
+                title: 'Confirmar Eliminación',
+                text: "¿Está seguro de que desea eliminar la fecha de arribo?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'custom-popup'
+                },
+                preConfirm: () => {
+                    // Confirmar la acción sin requerir más validaciones
+                    return true;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Enviar el formulario al backend
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    document.querySelectorAll('.eliminarSolicitud').forEach(button => {
+        button.addEventListener('click', function () {
+            const productoId = button.getAttribute('data-product-id');
+            const form = document.getElementById('formEliminarSolicitud');
+
+            // Asignar el productoId al formulario oculto
+            form.querySelector('#eliminarProductoId').value = productoId;
+
+            Swal.fire({
+                title: 'Confirmar Eliminación',
+                text: "¿Está seguro de que desea eliminar esta solicitud de reposición?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'custom-popup'
+                },
+                preConfirm: () => {
+                    // Confirmar la acción sin requerir más validaciones
+                    return true;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Enviar el formulario oculto al backend
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+
+<script>
     document.querySelectorAll('.editarSolicitud').forEach(button => {
         button.addEventListener('click', function () {
-            const cantidadSolicitada = button.getAttribute('data-cantidad-solicitada');
             const productoId = button.getAttribute('data-product-id');
+            const cantidadActual = button.getAttribute('data-cantidad-solicitada');
+            const form = document.getElementById('formEditarSolicitud');
+
+            // Asignar valores al formulario oculto
+            form.querySelector('#editarProductoId').value = productoId;
 
             Swal.fire({
                 title: 'Editar Solicitud de Reposición',
                 html: `
-                <p>Ingrese la nueva cantidad de productos que desea solicitar:</p>
-                <input type="number" id="productQuantityEdit" class="swal2-input" value="${cantidadSolicitada}" min="0">
-            `,
+                    <p>Ingrese la nueva cantidad de productos que desea solicitar:</p>
+                    <input type="number" id="nuevaCantidad" class="swal2-input" value="${cantidadActual}" min="1" required />
+                `,
                 showCancelButton: true,
                 confirmButtonText: 'Guardar',
                 cancelButtonText: 'Cancelar',
@@ -396,106 +485,25 @@
                 },
                 focusConfirm: false,
                 preConfirm: () => {
-                    const newQuantity = Swal.getPopup().querySelector('#productQuantityEdit').value;
-                    if (!newQuantity || newQuantity <= 0) {
-                        Swal.showValidationMessage('Por favor ingrese una cantidad válida.');
+                    const nuevaCantidad = Swal.getPopup().querySelector('#nuevaCantidad').value;
+                    if (!nuevaCantidad || nuevaCantidad <= 0) {
+                        Swal.showValidationMessage('Por favor, ingrese una cantidad válida.');
                         return false;
                     }
-                    return newQuantity;
+                    // Asignar la nueva cantidad al formulario
+                    form.querySelector('#editarCantidad').value = nuevaCantidad;
+                    return true;
                 }
-            }).then((editResult) => {
-                if (editResult.isConfirmed) {
-                    // Crear y enviar un formulario para guardar los cambios
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '/AdminZonal/Productos/GuardarSolReposicion'; // Ruta del controller para guardar
-
-                    const inputProductoId = document.createElement('input');
-                    inputProductoId.type = 'hidden';
-                    inputProductoId.name = 'productoId';
-                    inputProductoId.value = productoId; // ID del producto
-                    form.appendChild(inputProductoId);
-
-                    const inputCantidad = document.createElement('input');
-                    inputCantidad.type = 'hidden';
-                    inputCantidad.name = 'cantidad';
-                    inputCantidad.value = editResult.value; // Nueva cantidad
-                    form.appendChild(inputCantidad);
-
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            });
-        });
-    });
-    document.querySelectorAll('.eliminarSolicitud').forEach(button => {
-        button.addEventListener('click', function () {
-            const productoId = button.getAttribute('data-product-id');
-
-            Swal.fire({
-                title: 'Confirmar eliminación',
-                text: "¿Está seguro de que deseas eliminar esta solicitud de reposición?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar',
-                customClass: {
-                    popup: 'custom-popup'
-                }
-            }).then((deleteResult) => {
-                if (deleteResult.isConfirmed) {
-                    // Crear y enviar un formulario para eliminar la solicitud
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '/AdminZonal/Productos/EliminarSolReposicion'; // Ruta del controller para eliminar
-
-                    const inputProductoId = document.createElement('input');
-                    inputProductoId.type = 'hidden';
-                    inputProductoId.name = 'productoId';
-                    inputProductoId.value = productoId; // ID del producto
-                    form.appendChild(inputProductoId);
-
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            });
-        });
-    });
-
-    document.querySelectorAll('.eliminarFechaArribo').forEach(button => {
-        button.addEventListener('click', function () {
-            const productoId = button.getAttribute('data-product-id');
-
-            Swal.fire({
-                title: 'Confirmar eliminación',
-                text: "¿Está seguro de que deseas eliminar esta fecha de arribo?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar',
-                customClass: {
-                    popup: 'custom-popup'
-                }
-            }).then((deleteResult) => {
-                if (deleteResult.isConfirmed) {
-                    // Crear y enviar un formulario para eliminar la solicitud
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '/AdminZonal/Productos/EliminarFechaArribo'; // Ruta del controller para eliminar
-
-                    const inputProductoId = document.createElement('input');
-                    inputProductoId.type = 'hidden';
-                    inputProductoId.name = 'productoId';
-                    inputProductoId.value = productoId; // ID del producto
-                    form.appendChild(inputProductoId);
-
-                    document.body.appendChild(form);
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Enviar el formulario al backend
                     form.submit();
                 }
             });
         });
     });
 </script>
+
 <script>
     function filterTable() {
     const input = document.getElementById("searchCustomers");
@@ -518,86 +526,21 @@
     }
 </script>
 <script>
-
     document.querySelectorAll('.addDate').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
+            const productoId = button.getAttribute('data-product-id');
+            const form = document.getElementById('formAgregarFecha');
+
+            // Asignar el ID del producto al formulario
+            form.querySelector('#productoId').value = productoId;
+
             Swal.fire({
-                showCloseButton: true,
-                title: 'Fecha de entrega',
+                title: 'Agregar Fecha de Arribo',
                 html: `
-                <p>Ingrese la fecha de entrega:</p>
-                <input type="date" id="deliveryDate" class="swal2-input" required>
+                <p>Ingrese la fecha de arribo:</p>
+                <input type="date" id="fechaSwal" class="swal2-input" required
+                       min="${new Date().toISOString().split('T')[0]}" />
             `,
-                showCancelButton: true,
-                confirmButtonText: 'Guardar',
-                cancelButtonText: 'Cancelar',
-                customClass: {
-                    popup: 'custom-popup'
-                },
-                preConfirm: () => {
-                    const fechaIngresada = Swal.getPopup().querySelector('#deliveryDate').value;
-                    const fechaHoy = new Date(new Date().toLocaleDateString('en-CA')).toISOString().split('T')[0]; // Obtener fecha de hoy en formato yyyy-mm-dd
-
-                    // Verificar si la fecha fue ingresada
-                    if (!fechaIngresada) {
-                        Swal.showValidationMessage('Por favor ingrese una fecha válida.');
-                        return false;
-                    }
-
-                    // Validar que la fecha ingresada sea una fecha futura
-                    if (new Date(fechaIngresada) <= new Date(fechaHoy)) {
-                        Swal.showValidationMessage('La fecha de arribo debe ser una fecha futura.');
-                        return false;
-                    }
-
-                    return fechaIngresada; // Retornar la fecha si es válida
-                }
-
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Verifica si el productoId está siendo obtenido correctamente
-                    const productoId = button.getAttribute('data-product-id');
-                    console.log("Producto ID: ", productoId);  // Añadir log para comprobar
-
-                    if (productoId) {
-                        // Crear y enviar un formulario oculto con la fecha y el productoId al servidor
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = '/AdminZonal/Productos/guardarFecha';  // Endpoint del backend
-
-                        const inputProductoId = document.createElement('input');
-                        inputProductoId.type = 'hidden';
-                        inputProductoId.name = 'productoId';
-                        inputProductoId.value = productoId; // Asegúrate de que este valor no sea null
-
-                        const inputFecha = document.createElement('input');
-                        inputFecha.type = 'hidden';
-                        inputFecha.name = 'fechaEntrega';
-                        inputFecha.value = result.value;
-
-                        form.appendChild(inputProductoId);
-                        form.appendChild(inputFecha);
-                        document.body.appendChild(form);
-                        form.submit();
-                    } else {
-                        console.error("El ID del producto no está disponible.");
-                    }
-                }
-            });
-        });
-    });
-
-</script>
-<script>
-    document.querySelectorAll('.saveAlert').forEach(button => {
-        button.addEventListener('click', function() {
-            Swal.fire({
-                showCloseButton: true,
-                title: 'Editar fecha de arribo',
-                html: `
-                    <p>Ingrese la nueva fecha de arribo:</p>
-                    <input type="date" id="productQuantity" class="swal2-input" value="" min="0">
-                `,
                 showCancelButton: true,
                 confirmButtonText: 'Guardar',
                 cancelButtonText: 'Cancelar',
@@ -606,52 +549,83 @@
                 },
                 focusConfirm: false,
                 preConfirm: () => {
-                    const fechaIngresada = Swal.getPopup().querySelector('#productQuantity').value;
-                    const fechaHoy = new Date(new Date().toLocaleDateString('en-CA')).toISOString().split('T')[0]; // Obtener fecha de hoy en formato yyyy-mm-dd
+                    const fechaIngresada = Swal.getPopup().querySelector('#fechaSwal').value;
 
-                    // Verificar si la fecha fue ingresada
+                    // Validaciones de la fecha ingresada
+                    const fechaHoy = new Date().toISOString().split('T')[0];
                     if (!fechaIngresada) {
-                        Swal.showValidationMessage('Por favor ingrese una fecha válida.');
+                        Swal.showValidationMessage('Por favor, ingrese una fecha válida.');
+                        return false;
+                    }
+                    if (fechaIngresada <= fechaHoy) {
+                        Swal.showValidationMessage('La fecha debe ser futura.');
                         return false;
                     }
 
-                    // Validar que la fecha ingresada sea una fecha futura
-                    if (new Date(fechaIngresada) <= new Date(fechaHoy)) {
-                        Swal.showValidationMessage('La fecha de arribo debe ser una fecha futura.');
-                        return false;
-                    }
+                    // Asignar la fecha al formulario
+                    form.querySelector('#fechaEntrega').value = fechaIngresada;
 
-                    return fechaIngresada; // Retornar la fecha si es válida
+                    return true;
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Verifica si el productoId está siendo obtenido correctamente
-                    const productoId = button.getAttribute('data-product-id');
-                    console.log("Producto ID: ", productoId);  // Añadir log para comprobar
+                    // Enviar el formulario al backend
+                    form.submit();
+                }
 
-                    if (productoId) {
-                        // Crear y enviar un formulario oculto con la fecha y el productoId al servidor
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = '/AdminZonal/Productos/guardarFecha';  // Endpoint del backend
+            });
+        });
+    });
 
-                        const inputProductoId = document.createElement('input');
-                        inputProductoId.type = 'hidden';
-                        inputProductoId.name = 'productoId';
-                        inputProductoId.value = productoId; // Asegúrate de que este valor no sea null
+</script>
+<script>
+    document.querySelectorAll('.editarFechaArribo').forEach(button => {
+        button.addEventListener('click', function () {
+            const productoId = button.getAttribute('data-product-id');
+            const fechaActual = button.getAttribute('data-fecha-actual'); // Formato yyyy-MM-dd
+            const form = document.getElementById('formEditarFechaArribo');
 
-                        const inputFecha = document.createElement('input');
-                        inputFecha.type = 'hidden';
-                        inputFecha.name = 'fechaEntrega';
-                        inputFecha.value = result.value;
+            // Asignar el productoId al formulario oculto
+            form.querySelector('#editarFechaProductoId').value = productoId;
 
-                        form.appendChild(inputProductoId);
-                        form.appendChild(inputFecha);
-                        document.body.appendChild(form);
-                        form.submit();
-                    } else {
-                        console.error("El ID del producto no está disponible.");
+            Swal.fire({
+                title: 'Editar Fecha de Arribo',
+                html: `
+                <p>Ingrese la nueva fecha de arribo:</p>
+                <input type="date" id="nuevaFecha" class="swal2-input" value="${fechaActual}"
+                       min="${new Date().toISOString().split('T')[0]}" required />
+            `,
+                showCancelButton: true,
+                confirmButtonText: 'Guardar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'custom-popup'
+                },
+                focusConfirm: false,
+                preConfirm: () => {
+                    const nuevaFecha = Swal.getPopup().querySelector('#nuevaFecha').value;
+
+                    if (!nuevaFecha) {
+                        Swal.showValidationMessage('Por favor, ingrese una fecha válida.');
+                        return false;
                     }
+
+                    // Validar que la fecha sea futura
+                    const hoy = new Date().toISOString().split('T')[0];
+                    if (nuevaFecha <= hoy) {
+                        Swal.showValidationMessage('La fecha debe ser futura.');
+                        return false;
+                    }
+
+                    // Asignar la nueva fecha al formulario
+                    form.querySelector('#fechaEntrega').value = nuevaFecha;
+
+                    return true;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Enviar el formulario al backend
+                    form.submit();
                 }
             });
         });
