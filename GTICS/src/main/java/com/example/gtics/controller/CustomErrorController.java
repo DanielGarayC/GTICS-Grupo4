@@ -39,6 +39,14 @@ public class CustomErrorController implements ErrorController {
             } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
                 model.addAttribute("userRole", userRole);
                 return "VistasErrores/Error-500";
+            }else if (statusCode == HttpStatus.BAD_REQUEST.value()) {
+                return "VistasErrores/Error-400";
+            } else if (statusCode == HttpStatus.UNAUTHORIZED.value()) {
+                return "VistasErrores/Error-403";
+            } else if (statusCode == HttpStatus.SERVICE_UNAVAILABLE.value()) {
+                return "VistasErrores/Error-500";
+            } else if (statusCode == HttpStatus.METHOD_NOT_ALLOWED.value()) {
+                return "VistasErrores/Error-400";
             }
         }
         return "error";
