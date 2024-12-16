@@ -132,23 +132,9 @@
       color: #999;
    }
 
-   #chipsContainer {
-      visibility: visible !important;
-      opacity: 1;
+   .input-group .form-control {
+      padding-right: 45px; /* Espacio adicional a la derecha para el ícono */
    }
-
-   .selectable-chip {
-      visibility: visible !important;
-      opacity: 1 !important;
-      background-color: #f8f9fa;
-      color: #212529;
-      transition: background-color 0.3s, color 0.3s;
-   }
-   .selectable-chip.selected {
-      background-color: #007bff !important;
-      color: white !important;
-   }
-
 
 </style>
    <!-- CSRF Tokens -->
@@ -173,7 +159,7 @@
                <nav class="navbar navbar-light bg-light shadow-sm py-3 rounded">
                   <div class="container d-flex justify-content-between align-items-center">
                      <!-- Logo -->
-                     <a class="navbar-brand d-flex align-items-center" th:href="@{/UsuarioFinal/pagPrincipal}">
+                     <a class="navbar-brand d-flex align-items-center">
                         <img th:src="@{/images/logo/logoGTICSv2.png}" width="220" height="auto" class="d-inline-block align-top" alt="Logo de la Empresa">
                      </a>
                      <!-- Botón Regresar -->
@@ -258,7 +244,7 @@
                               <input type="hidden" name="idCarritoCompra" th:value="${carritoId}" />
                               <div class="accordion-item py-4 border rounded mb-3 shadow-sm">
                                  <a href="#" class="text-inherit h5 d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree">
-                                    <i class="feather-icon icon-shopping-bag me-2 text-primary"></i> Comentarios adicionales
+                                    <i class="feather-icon icon-shopping-bag me-2 text-primary"></i> Comentarios adicionales (opcional)
                                  </a>
                                  <div id="flush-collapseThree" class="accordion-collapse collapse">
                                     <div class="p-4 bg-white rounded">
@@ -311,9 +297,9 @@
 
                            <!-- Otros campos del formulario -->
                            <div class="col-12 text-end">
-                              <button type="submit" class="btn btn-primary fw-bold py-3 px-5 shadow-sm">
+                              <button type="submit" id="procesarOrdenBtn" class="btn btn-primary fw-bold py-3 px-5 shadow-sm" disabled>
                                  <i class="feather-icon icon-check-circle me-2"></i> Procesar Orden
-                              </button>                           </div>
+                              </button>                         </div>
                         </form>
                      </div>
 
@@ -360,68 +346,67 @@
    <div class="modal-dialog">
       <div class="modal-content">
          <div class="modal-body p-6">
-            <form th:action="@{/UsuarioFinal/editarDireccion}" method="post" id="editAddressForm">
-               <!-- Cambiar el campo de identificación si es necesario -->
-               <input type="hidden" id="editDireccionId" name="direccionId" value="${user.direccion.id}" />
+            <form id="editAddressForm" th:action="@{/UsuarioFinal/editarDireccionUsuario}" method="post">
+               <input type="hidden" name="idUsuario" th:value="${user.id}" />
 
-               <div class="d-flex justify-content-between mb-5">
-                  <h5 class="h6 mb-1" id="editModalLabel">Editar dirección</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               <h1>Editar Dirección</h1>
+
+               <!-- Mensaje de advertencia -->
+               <div class="alert alert-danger" role="alert">
+                  <strong>Nota:</strong> Este cambio de dirección afectará tu información personal para usos futuros.
                </div>
 
-               <div class="row g-3">
-                  <!-- Teléfono -->
-                  <div class="col-12">
-                     <label for="telefonoEdit" class="form-label">Teléfono</label>
-                     <input type="tel" class="form-control" id="telefonoEdit" name="telefono" required th:value="${user.telefono}">
-                  </div>
+               <!-- Dirección -->
+               <div class="mb-3">
+                  <label for="direccionEdit" class="form-label">Dirección:</label>
+                  <input type="text" class="form-control" id="direccionEdit" name="direccion"
+                         th:value="${user.direccion}" required />
+               </div>
 
-                  <div class="col-12">
-                     <label for="zonaEdit" class="form-label">Zona</label>
-                     <select id="zonaEdit" name="zonaId" class="form-select" required disabled>
-                        <option value="" disabled selected hidden>Selecciona una zona</option>
-                        <!-- Aquí llenamos las zonas desde el modelo -->
-                        <option th:each="zona : ${zonas}" th:value="${zona.id}" th:text="${zona.nombreZona}"
-                                th:selected="${zona.id == user.zona.id}"></option>
-                     </select>
-                     <!-- Campo hidden para enviar el valor del ID de la zona -->
-                     <input type="hidden" name="zonaId" value="${user.zona.id}">
-                  </div>
+               <!-- Distrito -->
+               <div class="mb-3">
+                  <label for="distritoEdit" class="form-label">Distrito:</label>
+                  <select class="form-control" id="distritoEdit" name="distritoId" required>
+                     <option th:each="distrito : ${listaDistritos}"
+                             th:value="${distrito.id}"
+                             th:text="${distrito.nombre}"
+                             th:selected="${distrito.id == user.distrito.id}">
+                     </option>
+                  </select>
+               </div>
 
-                  <!-- Distrito -->
-                  <div class="col-12">
-                     <label for="distritoEdit" class="form-label">Distrito</label>
-                     <select id="distritoEdit" name="distritoId" class="form-select" required>
-                        <option th:each="distrito : ${distritos}"
-                                th:value="${distrito.id}"
-                                th:text="${distrito.nombreDistrito}"
-                                th:selected="${distritoSeleccionado != null && distritoSeleccionado.id == user.distrito.id}"></option>
-                     </select>
-                  </div>
-
-                  <!-- Dirección -->
-                  <div class="col-12">
-                     <label for="direccionEdit" class="form-label">Dirección</label>
-                     <input type="text" class="form-control" id="direccionEdit" name="direccion" required th:value="${user.direccion}">
-                  </div>
-
-                  <!-- RUC (Opcional) -->
-                  <div class="col-12">
-                     <label for="rucEdit" class="form-label">Número de RUC (Opcional)</label>
-                     <input type="text" class="form-control" id="rucEdit" name="ruc" th:value="${user.agtRuc}">
-                  </div>
-
-                  <!-- Botones -->
-                  <div class="col-12 text-end">
-                     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
-                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                  </div>
+               <!-- Botones -->
+               <div class="text-end">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Guardar cambios</button>
                </div>
             </form>
          </div>
       </div>
    </div>
 </div>
+
+<script>
+   document.getElementById("editAddressForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevenir el envío del formulario por defecto
+
+      Swal.fire({
+         title: '¿Estás seguro?',
+         text: "Este cambio afectará tu información personal para usos futuros.",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Sí, guardar cambios',
+         cancelButtonText: 'Cancelar'
+      }).then((result) => {
+         if (result.isConfirmed) {
+            // Enviar el formulario si el usuario confirma
+            event.target.submit();
+         }
+      });
+   });
+</script>
 
 
 <!-- Modal -->
@@ -479,11 +464,17 @@
                   <div class="col-md-6 col-12">
                      <div class="mb-3">
                         <label for="unique-card-number-input" class="form-label">Número de tarjeta</label>
-                        <input type="text" class="form-control" id="unique-card-number-input" name="numeroTarjeta"
-                               placeholder="xxxx-xxxx-xxxx-xxxx" required maxlength="19" inputmode="numeric" />
+                        <div class="input-group position-relative">
+                           <input type="text" class="form-control pe-5" id="unique-card-number-input" name="numeroTarjeta"
+                                  placeholder="xxxx-xxxx-xxxx-xxxx" required maxlength="19" inputmode="numeric" />
+                           <!-- Ícono dinámico -->
+                           <div class="position-absolute" style="right: 15px; top: 50%; transform: translateY(-50%);">
+                              <img id="card-type-icon" src="" alt="Tipo de tarjeta" style="width: 30px; height: auto; display: none;">
+                           </div>
+                        </div>
                         <small id="card-number-error" class="text-danger"></small> <!-- Mensaje de error -->
-
                      </div>
+
                   </div>
 
                   <div class="col-md-6 col-12">
@@ -551,47 +542,6 @@
    </div>
 </div>
 
-<script>
-   // Llenar los distritos dinámicamente cuando se selecciona una zona
-   document.getElementById("zonaEdit").addEventListener("change", function() {
-      var zonaId = this.value;  // Obtener el id de la zona seleccionada
-      var distritoSelect = document.getElementById("distritoEdit");
-      distritoSelect.innerHTML = '<option value="" disabled selected hidden>Selecciona un distrito</option>'; // Limpiar los distritos actuales
-
-      if (zonaId) {
-         // Realizar la petición AJAX para obtener los distritos de la zona seleccionada
-         fetch(`/UsuarioFinal/distritosPorZona/${zonaId}`)
-                 .then(response => response.json())
-                 .then(distritos => {
-                    // Llenar el select de distritos con las opciones correspondientes
-                    distritos.forEach(distrito => {
-                       var option = document.createElement("option");
-                       option.value = distrito.id;
-                       option.textContent = distrito.nombreDistrito;
-                       distritoSelect.appendChild(option);
-                    });
-
-                    // Seleccionar el distrito que ya tiene el usuario
-                    var distritoSeleccionado = "${user.distrito.id}";
-                    if (distritoSeleccionado) {
-                       distritoSelect.value = distritoSeleccionado;
-                    }
-                 })
-                 .catch(error => {
-                    console.error('Error al cargar los distritos:', error);
-                 });
-      }
-   });
-
-   // Ejecutar el código cuando el modal se abre para cargar los distritos si la zona ya está seleccionada
-   document.addEventListener("DOMContentLoaded", function() {
-      var zonaId = document.getElementById("zonaEdit").value;
-      if (zonaId) {
-         document.getElementById("zonaEdit").dispatchEvent(new Event("change"));
-      }
-   });
-</script>
-
 <!-- Footer -->
 
 <!-- JavaScript para el formateo automático del número de tarjeta -->
@@ -621,6 +571,27 @@
          alert('La tarjeta ha expirado o la fecha es inválida.');
          // Puedes mostrar un mensaje o marcar el campo como inválido
       }
+
+      const cardNumber = this.value.replace(/\D/g, ''); // Solo números
+      const cardIcon = document.getElementById('card-type-icon');
+
+      // Expresiones regulares para detectar el tipo de tarjeta
+      const visaRegex = /^4[0-9]{0,15}$/; // Visa: inicia con 4
+      const masterCardRegex = /^5[1-5][0-9]{0,14}$/; // MasterCard: inicia con 51-55
+
+      if (visaRegex.test(cardNumber)) {
+         cardIcon.src = '/images/payment/visa.svg'; // Ruta al ícono de Visa
+         cardIcon.style.display = 'block';
+      } else if (masterCardRegex.test(cardNumber)) {
+         cardIcon.src = '/images/payment/mastercard.svg'; // Ruta al ícono de MasterCard
+         cardIcon.style.display = 'block';
+      } else {
+         cardIcon.style.display = 'none'; // Ocultar si no coincide
+      }
+
+      // Formatear el número de tarjeta en bloques de 4
+      this.value = cardNumber.replace(/(\d{4})(?=\d)/g, '$1-').slice(0, 19);
+
    });
 
    document.getElementById('save-card-btn').addEventListener('click', function () {
@@ -717,6 +688,19 @@
                        icon: "success",
                        title: "Éxito",
                        text: data
+                    }).then(() => {
+                       // Mostrar los últimos 4 dígitos de la tarjeta guardada
+                       const lastFourDigits = numeroTarjeta.slice(-4);
+                       document.getElementById("saved-card-number").textContent = `**** **** **** ${lastFourDigits}`;
+                       document.getElementById("saved-card-expiry").textContent = `${mesExpiracion}/${anioExpiracion}`;
+                       document.getElementById("saved-card").style.display = "block";
+
+                       document.getElementById("procesarOrdenBtn").removeAttribute("disabled");
+
+                       // Cerrar el modal
+                       const modalElement = document.getElementById("addCardModal");
+                       const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                       modalInstance.hide();
                     });
                  } else {
                     Swal.fire({
@@ -806,30 +790,6 @@
       document.getElementById('unique-card-preview').classList.remove('flipped');
    });
 </script>
-<script>
-   document.getElementById('selectZona').addEventListener('change', function () {
-      var zonaId = this.value;
-      var distritoSelect = document.getElementById('selectDistrito');
-
-      // Limpiamos el select de distritos
-      distritoSelect.innerHTML = '<option value="" selected disabled hidden>Distrito</option>';
-
-      // Llamamos a la API para obtener los distritos de la zona seleccionada
-      fetch('/UsuarioFinal/distritos/' + zonaId)
-              .then(response => response.json())
-              .then(distritos => {
-                 // Iteramos sobre los distritos y los agregamos al select
-                 distritos.forEach(distrito => {
-                    var option = document.createElement('option');
-                    option.value = distrito.id;
-                    option.textContent = distrito.nombre;
-                    distritoSelect.appendChild(option);
-                 });
-              })
-              .catch(error => console.error('Error al cargar los distritos:', error));
-   });
-
-</script>
 
 <script>
    function editarTarjeta() {
@@ -870,6 +830,8 @@
    });
 
 </script>
+
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

@@ -326,4 +326,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Query(value = "SELECT idUsuario FROM usuario ORDER BY idUsuario DESC LIMIT 1;\n", nativeQuery = true)
     Integer ultimoId();
 
+
+    @Modifying
+    @Query("UPDATE Usuario u SET u.direccion = :direccion, u.distrito.id = :distritoId WHERE u.id = :idUsuario")
+    void actualizarDireccionYDistrito(
+            @Param("idUsuario") Integer idUsuario,
+            @Param("direccion") String direccion,
+            @Param("distritoId") Integer distritoId
+    );
+
 }
