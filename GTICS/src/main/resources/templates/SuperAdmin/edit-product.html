@@ -195,7 +195,7 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
-                                        <button class="btn btn-primary" type="submit" onclick="validarFormulario()">Actualizar Producto</button>
+                                        <button class="btn btn-primary" type="button" onclick="confirmarActualizacion()">Actualizar Producto</button>
                                         <a th:href="@{/SuperAdmin/productos}" class="btn btn-secondary">Cancelar</a>
                                     </div>
                                 </div>
@@ -207,7 +207,7 @@
         </main>
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function previewImages(event) {
         const previewContainer = document.getElementById('preview-container');
@@ -234,23 +234,22 @@
 
 </script>
 <script>
-    function crearProducto() {
+    function confirmarActualizacion() {
         Swal.fire({
             title: '¿Estás seguro?',
-            text: "¿Deseas crear un nuevo producto?",
+            text: "¿Quieres actualizar este producto?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#28a745',
-            cancelButtonColor: '#dc3545',
-            confirmButtonText: 'Sí, crear',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, actualizar',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
+                validarFormulario(); // Llama a tu función de validación
                 const form = document.getElementById('productoForm');
                 if (form.checkValidity()) {
-                    form.submit();
-                } else {
-                    form.classList.add('was-validated');
+                    form.submit(); // Envía el formulario si es válido
                 }
             }
         });

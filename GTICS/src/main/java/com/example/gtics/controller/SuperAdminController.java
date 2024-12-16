@@ -228,8 +228,7 @@ public class SuperAdminController {
                     usuario.setFoto(foto.getBytes());
                 }
 
-                String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
-                usuario.setContrasena(encryptedPassword);
+
                 ArrayList<String> datosAntiguos = new ArrayList<>();
                 ArrayList<String> datosNuevos = new ArrayList<>();
                 ArrayList<String> camposModificados = new ArrayList<>();
@@ -264,6 +263,9 @@ public class SuperAdminController {
                 if (!datosAntiguos.isEmpty() || fotoActualizada) {
                     emailService.actualizacionInfoUserGenerico(usuario.getEmail(), usuario.getNombre(),camposModificados, datosAntiguos, datosNuevos);
                 }
+            }else {
+                String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
+                usuario.setContrasena(encryptedPassword);
             }
             usuario.setActivo(1);
             if (usuario.getId() == null) {
@@ -1013,7 +1015,7 @@ public class SuperAdminController {
             Optional<Zona> optionalZona = zonaRepository.findById(zonaId);
             if (optionalZona.isPresent()) {
                 Zona zona = optionalZona.get();
-                Optional<Producto> productoEnZona = productoRepository.findByNombreProductoAndZona(producto.getNombreProducto(), zona);
+                Optional<Producto> productoEnZona = productoRepository.findByIdAndZona(producto.getId(), zona);
                 if (productoEnZona.isPresent()) {
                     Producto productoActualizado = productoEnZona.get();
 
@@ -1021,6 +1023,7 @@ public class SuperAdminController {
                     producto.setCodigoProducto(productoActualizado.getCodigoProducto());
 
                     productoActualizado.setDescripcion(producto.getDescripcion());
+                    productoActualizado.setNombreProducto(producto.getNombreProducto());
                     productoActualizado.setPrecio(producto.getPrecio());
                     productoActualizado.setCostoEnvio(producto.getCostoEnvio());
                     productoActualizado.setModelo(producto.getModelo());
@@ -1125,9 +1128,9 @@ public class SuperAdminController {
     @GetMapping("SuperAdmin/productos")
     public String productos(Model model,
                             @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "0") Integer categoriaId // Cambiado a Integer
-    ) {
-        int size = 10;
+                            @RequestParam(defaultValue = "0") Integer categoriaId) {
+
+        int size = 2; // Tamaño de página
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Producto> productosPage;
@@ -1140,15 +1143,34 @@ public class SuperAdminController {
             productosPage = productoRepository.findAllActiveConpaginacion(pageable);
         }
 
+        int totalPages = productosPage.getTotalPages();
+        int currentPage = page;
+
+        // Calcular el rango de páginas visibles
+        int startPage = Math.max(0, currentPage - 1);
+        int endPage = Math.min(currentPage + 1, totalPages - 1);
+
+        if (currentPage == 0) {
+            // Si es la primera página, mostrar solo 2 páginas
+            endPage = Math.min(1, totalPages - 1);
+        } else if (currentPage == totalPages - 1) {
+            // Si es la última página, ajustar el rango para mostrar las últimas 2
+            startPage = Math.max(totalPages - 2, 0);
+        }
+
         // Añadir atributos al modelo
         model.addAttribute("productos", productosPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", productosPage.getTotalPages());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("totalItems", productosPage.getTotalElements());
-        model.addAttribute("selectedCategory", categoriaId); // Mantener la categoría seleccionada
+        model.addAttribute("selectedCategory", categoriaId);
 
         return "SuperAdmin/productos";
     }
+
+
 
     //
     @GetMapping("SuperAdmin/proveedores")
@@ -1158,24 +1180,63 @@ public class SuperAdminController {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Tienda> tiendas = tiendaRepository.findAll(pageable);
 
+        int totalPages = tiendas.getTotalPages();
+        int currentPage = page;
+
+        // Calcular el rango de páginas visibles
+        int startPage = Math.max(0, currentPage - 1);
+        int endPage = Math.min(currentPage + 1, totalPages - 1);
+
+        if (currentPage == 0) {
+            // Si es la primera página, mostrar solo 2 páginas
+            endPage = Math.min(1, totalPages - 1);
+        } else if (currentPage == totalPages - 1) {
+            // Si es la última página, mostrar las últimas 2 páginas
+            startPage = Math.max(totalPages - 2, 0);
+        }
+
         model.addAttribute("tiendas", tiendas.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", tiendas.getTotalPages());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
         return "SuperAdmin/GestionProveedores/vendor-grid";
     }
+
 
     @GetMapping("/SuperAdmin/listaProveedores")
     public String listaProveedores(Model model,
                                    @RequestParam(defaultValue = "0") int page) {
-        int pageSize = 10;
+        int pageSize = 3;
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Proveedor> proveedores = proveedorRepository.findAll(pageable);
 
+        int totalPages = proveedores.getTotalPages();
+        int currentPage = page;
+
+        // Calcular el rango de páginas visibles
+        int startPage = Math.max(0, currentPage - 1);
+        int endPage = Math.min(currentPage + 1, totalPages - 1);
+
+        if (currentPage == 0) {
+            // Si es la primera página, mostrar solo las primeras 2 páginas
+            endPage = Math.min(1, totalPages - 1);
+        } else if (currentPage == totalPages - 1) {
+            // Si es la última página, mostrar solo las últimas 2 páginas
+            startPage = Math.max(totalPages - 2, 0);
+        }
+
+        // Añadir atributos al modelo
         model.addAttribute("proveedores", proveedores.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", proveedores.getTotalPages());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
         return "SuperAdmin/GestionProveedores/vendor-list";
     }
+
 
     @GetMapping("/SuperAdmin/borrar")
     public String borrar(@RequestParam("id") int id, RedirectAttributes attr) {

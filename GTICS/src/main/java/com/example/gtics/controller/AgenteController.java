@@ -219,7 +219,7 @@ public class AgenteController {
             @RequestParam(defaultValue = "") String busqueda,
             HttpSession session) {
 
-        int pageSize = 5;
+        int pageSize = 2;
         Pageable pageable = PageRequest.of(page, pageSize);
 
         // Obtener el idAgente desde la sesión

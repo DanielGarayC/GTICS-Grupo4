@@ -85,10 +85,10 @@
                                     </div>
 
                                     <!-- select option -->
-                                    <div class="col-xl-2 col-md-4 col-12">
+                                    <div class="col-xl-2 col-md-4 col-12" >
                                         <form method="get" action="/SuperAdmin/productos">
                                             <!-- Select para la categoría -->
-                                            <div class="col-xl-2 col-md-4 col-12">
+                                            <div class="col-xl-2 col-md-4 col-12" >
                                                 <select class="form-select" name="categoriaId"
                                                         style="width: 100%; min-width: 200px; font-size: 16px; font-family: Arial, sans-serif; padding: 8px;"
                                                         onchange="this.form.submit()">
@@ -107,6 +107,11 @@
 
 
                                     </div>
+                                <div style="margin-bottom: -20px; margin-top: 10px;">
+                                    <!-- Mensajes de alerta -->
+                                    <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}"></div>
+                                    <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}"></div>
+                                </div>
                                 </div>
                             </div>
                             <!-- card body -->
@@ -166,31 +171,41 @@
                                 </div>
                             </div>
                             <div class="d-flex flex-column align-items-center">
-                                <!-- Texto de paginación centrado -->
+                                <!-- Texto de paginación -->
                                 <span id="paginationInfo" class="mb-2">
-                                    Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
-                                </span>
+        Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
+    </span>
 
-                                <!-- Paginación centrada -->
+                                <!-- Paginación -->
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination justify-content-center">
-                                        <!-- Botón de "Previo" -->
+                                        <!-- Botón "Previo" -->
                                         <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage - 1}, categoriaId=${selectedCategory})}">Previo</a>
+                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage - 1}, categoriaId=${selectedCategory})}">
+                                                Previo
+                                            </a>
                                         </li>
 
-                                        <!-- Páginas numeradas -->
-                                        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${i}, categoriaId=${selectedCategory})}" th:text="${i + 1}"></a>
+                                        <!-- Páginas numeradas dinámicas -->
+                                        <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                                            th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${i}, categoriaId=${selectedCategory})}"
+                                               th:text="${i + 1}">
+                                            </a>
                                         </li>
 
-                                        <!-- Botón de "Siguiente" -->
+                                        <!-- Botón "Siguiente" -->
                                         <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage + 1}, categoriaId=${selectedCategory})}">Siguiente</a>
+                                            <a class="page-link" th:href="@{/SuperAdmin/productos(page=${currentPage + 1}, categoriaId=${selectedCategory})}">
+                                                Siguiente
+                                            </a>
                                         </li>
                                     </ul>
                                 </nav>
                             </div>
+
+
+
                         </div>
                     </div>
                 </div>

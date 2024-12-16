@@ -131,6 +131,9 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        <tr th:if="${usuarios.size() == 0}">
+                                            <td colspan="8" class="text-center">No hay Administradores zonales registrados.</td>
+                                        </tr>
                                         <tr th:each="usuario,var : ${usuarios}">
 <!--
                                             <td>
