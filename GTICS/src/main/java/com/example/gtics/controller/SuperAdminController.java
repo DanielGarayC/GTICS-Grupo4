@@ -1223,15 +1223,35 @@ public class SuperAdminController {
     @GetMapping("/SuperAdmin/listaProveedores")
     public String listaProveedores(Model model,
                                    @RequestParam(defaultValue = "0") int page) {
-        int pageSize = 10;
+        int pageSize = 3;
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Proveedor> proveedores = proveedorRepository.findAll(pageable);
 
+        int totalPages = proveedores.getTotalPages();
+        int currentPage = page;
+
+        // Calcular el rango de páginas visibles
+        int startPage = Math.max(0, currentPage - 1);
+        int endPage = Math.min(currentPage + 1, totalPages - 1);
+
+        if (currentPage == 0) {
+            // Si es la primera página, mostrar solo las primeras 2 páginas
+            endPage = Math.min(1, totalPages - 1);
+        } else if (currentPage == totalPages - 1) {
+            // Si es la última página, mostrar solo las últimas 2 páginas
+            startPage = Math.max(totalPages - 2, 0);
+        }
+
+        // Añadir atributos al modelo
         model.addAttribute("proveedores", proveedores.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", proveedores.getTotalPages());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
         return "SuperAdmin/GestionProveedores/vendor-list";
     }
+
 
     @GetMapping("/SuperAdmin/borrar")
     public String borrar(@RequestParam("id") int id, RedirectAttributes attr) {

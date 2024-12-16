@@ -20,6 +20,15 @@
 
   <!-- Theme CSS -->
   <link th:href="@{/css/theme.min.css}" rel="stylesheet" />
+  <style>
+    .price {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100px; /* Ajusta según sea necesario */
+    }
+
+  </style>
 <style>
   .card-product .card-body {
     padding: 0.75rem; /* Ajusta el padding según sea necesario */
@@ -53,10 +62,34 @@
   </style>
 
   <style>
-    .text-wrap {
-      word-break: break-word;
-      overflow-wrap: break-word;
+    .no-wrap {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    /* Controlar el comportamiento flex */
+    .flex-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .flex-item {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .form-container {
+      flex: 0 0 auto;
+    }
+
+    /* Evitar el wrapping y truncar el texto */
+    .text-truncate-custom {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
   </style>
 
 
@@ -275,7 +308,7 @@
                 <!-- title -->
 
                 <h5 class="mb-3">
-                    <a th:href="@{'/UsuarioFinal/categorias/' + ${producto.idCategoria.id}}" th:text="${nombreCategoria}">Categoría: Electrónica y Tecnología</a>
+                    <a th:href="@{'/UsuarioFinal/categorias/' + ${idCategoria}}" th:text="${nombreCategoria}">Categoría: Electrónica y Tecnología</a>
                 </h5>
                 <!-- nav -->
                 <ul class="nav nav-category" id="categoryCollapseMenu">
@@ -436,7 +469,7 @@
                   <div class="text-small mb-1">
                     <a class="text-decoration-none text-muted" th:text="${producto.idCategoria.nombreCategoria}"></a>
                   </div>
-                  <h2 class="fs-5 text-wrap w-100">
+                  <h2 class="fs-5 w-100 no-wrap">
                     <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${producto.id})}"
                        class="text-inherit text-decoration-none" th:text="${producto.nombreProducto}"></a>
                   </h2>
@@ -458,9 +491,9 @@
                   </div>
 
                   <!-- price -->
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <div>
-                      <span class="text-dark" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">Precio: S/. 0.00</span>
+                  <div class="d-flex justify-content-between align-items-center mt-3 flex-container">
+                    <div class="flex-item">
+                      <span class="text-dark price" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">Precio: S/. 0.00</span>
                     </div>
                     <form th:action="@{/UsuarioFinal/agregarAlCarrito}" method="post" class="add-to-cart-form flex-shrink-0" data-context="recomendados">
                       <input type="hidden" name="idProducto" th:value="${producto.id}" />
@@ -474,33 +507,100 @@
                 </div>
               </div>
             </div>
+
+          </div>
+          <div th:if="${productos.isEmpty()}" class="col-12">
+            <div class="alert alert-warning text-center" role="alert">
+              <strong>No se encontraron productos</strong>. Actualmente, no hay productos disponibles en esta categoría.
+            </div>
           </div>
           <div class="d-flex flex-column align-items-center">
             <!-- Texto de paginación centrado -->
-            <span id="paginationInfo" class="mb-2">
-                Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
-            </span>
+            <span id="paginationInfo" class="mb-2" th:if="${totalPages >= 1}">
+        Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
+    </span>
 
             <!-- Paginación centrada -->
-            <nav aria-label="Page navigation example">
+            <nav aria-label="Page navigation example" th:if="${totalPages >= 1}">
               <ul class="pagination justify-content-center">
-                <!-- Botón de "Previo" -->
+                <!-- Botón de "Primero" -->
                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                  <a class="page-link" th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage - 1}, sortOrder=${sortOrder})}">Previo</a>
+                  <a class="page-link"
+                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=0, sortOrder=${sortOrder})}"
+                     aria-label="Primero">
+                    Primero
+                  </a>
                 </li>
 
-                <!-- Páginas numeradas -->
-                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                  <a class="page-link" th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${i}, sortOrder=${sortOrder})}" th:text="${i + 1}"></a>
+                <!-- Botón de "Anterior" -->
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                  <a class="page-link"
+                     th:href="${currentPage > 0} ? @{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage - 1}, sortOrder=${sortOrder})} : '#'"
+                     aria-label="Anterior">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+
+                <!-- Primera página siempre visible -->
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'active'">
+                  <a class="page-link"
+                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=0, sortOrder=${sortOrder})}">1</a>
+                </li>
+
+                <!-- Puntos suspensivos al inicio (solo si hay más de 7 páginas y estás en una página más allá de la 3) -->
+                <li class="page-item disabled" th:if="${currentPage >= 3 and totalPages > 7}">
+                  <span class="page-link">...</span>
+                </li>
+
+                <!-- Páginas numeradas alrededor de la página actual -->
+                <li th:each="i : ${#numbers.sequence(1, totalPages - 2)}"
+                    th:if="${(i >= currentPage - 1 and i <= currentPage + 1) and i > 0 and i < totalPages - 1}"
+                    class="page-item"
+                    th:classappend="${i == currentPage} ? 'active'">
+                  <a class="page-link"
+                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${i}, sortOrder=${sortOrder})}"
+                     th:text="${i + 1}">2</a>
+                </li>
+
+                <!-- Puntos suspensivos antes de la última página (solo si hay más de 7 páginas y estás antes de las últimas 4) -->
+                <li class="page-item disabled" th:if="${currentPage <= totalPages - 4 and totalPages > 7}">
+                  <span class="page-link">...</span>
+                </li>
+
+                <!-- Última página siempre visible (solo si hay más de 1 página) -->
+                <li class="page-item" th:if="${totalPages > 1}" th:classappend="${currentPage == totalPages - 1} ? 'active'">
+                  <a class="page-link"
+                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${totalPages - 1}, sortOrder=${sortOrder})}"
+                     th:text="${totalPages}">Última</a>
                 </li>
 
                 <!-- Botón de "Siguiente" -->
                 <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                  <a class="page-link" th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage + 1}, sortOrder=${sortOrder})}">Siguiente</a>
+                  <a class="page-link"
+                     th:href="${currentPage + 1 < totalPages} ? @{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${currentPage + 1}, sortOrder=${sortOrder})} : '#'"
+                     aria-label="Siguiente">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+
+                <!-- Botón de "Último" -->
+                <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                  <a class="page-link"
+                     th:href="@{/UsuarioFinal/categorias/{idCategoria}(idCategoria=${idCategoria}, page=${totalPages - 1}, sortOrder=${sortOrder})}"
+                     aria-label="Último">
+                    Último
+                  </a>
                 </li>
               </ul>
             </nav>
           </div>
+
+          <!-- Mensaje cuando no hay resultados -->
+          <div class="d-flex flex-column align-items-center" th:if="${totalPages == 0}">
+            <p>No hay resultados para mostrar.</p>
+          </div>
+
+
 
 
 

@@ -2,6 +2,8 @@ package com.example.gtics.config;
 
 import com.example.gtics.repository.RolRepository;
 import com.example.gtics.repository.UsuarioSessionRepository;
+import jakarta.servlet.Filter;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -77,6 +79,11 @@ public class WebSecurityConfig {
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
 
+        http.headers()
+                .cacheControl().disable()
+                .defaultsDisabled()
+                .frameOptions().sameOrigin();
+
         http.authorizeHttpRequests()
                 .requestMatchers("/SuperAdmin", "/SuperAdmin/**").hasAnyAuthority("Super Admin")
                 .requestMatchers("/UsuarioFinal", "/UsuarioFinal/**").hasAnyAuthority("Usuario Final")
@@ -102,6 +109,17 @@ public class WebSecurityConfig {
     @Bean
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();
+    }
+
+    @Bean
+    public Filter noCacheHeadersFilter() {
+        return (request, response, chain) -> {
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+            httpResponse.setHeader("Pragma", "no-cache");
+            httpResponse.setHeader("Expires", "0");
+            chain.doFilter(request, response);
+        };
     }
 
 }

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -59,9 +60,29 @@ public class SistemaController {
 
     @GetMapping({"/ExpressDealsLogin","/", "/Login"})
     public String Login(){
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
+            // Redirige según el rol
+            return "redirect:" + determineRedirectUrl(authentication);
+        }
         return "Sistema/login";
     }
+
+    private String determineRedirectUrl(Authentication authentication) {
+        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("Super Admin"))) {
+            return "/SuperAdmin";
+        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("Usuario Final"))) {
+            return "/UsuarioFinal";
+        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("Administrador Zonal"))) {
+            return "/AdminZonal";
+        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("Agente"))) {
+            return "/Agente";
+        } else {
+            return "/default";
+        }
+    }
+
+
     @GetMapping({"/Registro"})
     public String Registro(@ModelAttribute("usuario") Usuario usuario, Model model){
         List<Distrito> distritos = distritoRepository.findAll();

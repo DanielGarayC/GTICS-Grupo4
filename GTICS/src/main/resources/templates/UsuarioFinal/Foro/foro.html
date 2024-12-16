@@ -365,45 +365,88 @@
                                 <!-- row -->
                                 <!-- Pagination Controls -->
                                 <!-- Paginación -->
-                                <div class="row mt-8">
-                                    <div class="col">
-                                        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-                                            <ul class="pagination">
-                                                <!-- Botón "Anterior" deshabilitado si estamos en la primera página -->
-                                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="${currentPage > 0} ? @{/UsuarioFinal/Reviews(page=${currentPage - 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'"
-                                                       aria-label="Anterior">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
 
-                                                <!-- Enlaces de Páginas -->
-                                                <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
-                                                    th:classappend="${i == currentPage} ? 'active'"
-                                                    class="page-item">
-                                                    <a class="page-link"
-                                                       th:href="@{/UsuarioFinal/Reviews(page=${i}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}"
-                                                       th:text="${i + 1}">
-                                                    </a>
-                                                </li>
+                                <div class="d-flex flex-column align-items-center">
+    <span id="paginationInfo" class="mb-2" th:if="${totalPages >= 1}">
+        Mostrando página [[${currentPage + 1}]] de [[${totalPages}]]
+    </span>
 
-                                                <!-- Botón "Siguiente" deshabilitado si estamos en la última página -->
-                                                <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="${currentPage + 1 < totalPages} ? @{/UsuarioFinal/Reviews(page=${currentPage + 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'"
-                                                       aria-label="Siguiente">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                    <nav aria-label="Page navigation example" th:if="${totalPages >= 1}">
+                                        <ul class="pagination justify-content-center">
+                                            <!-- Botón de "Primero" -->
+                                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                <a class="page-link"
+                                                   th:href="@{/UsuarioFinal/Reviews(page=0, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}"
+                                                   aria-label="Primero">
+                                                    Primero
+                                                </a>
+                                            </li>
 
-                                        <!-- Mostrar un mensaje si no hay páginas -->
-                                        <div th:if="${totalPages == 0}" class="alert alert-warning">
-                                            No hay resultados que mostrar.
-                                        </div>
-                                    </div>
+                                            <!-- Botón de "Anterior" -->
+                                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                <a class="page-link"
+                                                   th:href="${currentPage > 0} ? @{/UsuarioFinal/Reviews(page=${currentPage - 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'"
+                                                   aria-label="Anterior">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+
+                                            <!-- Primera página siempre visible -->
+                                            <li class="page-item" th:classappend="${currentPage == 0} ? 'active'">
+                                                <a class="page-link"
+                                                   th:href="@{/UsuarioFinal/Reviews(page=0, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}">1</a>
+                                            </li>
+
+                                            <!-- Puntos suspensivos al inicio -->
+                                            <li class="page-item disabled" th:if="${currentPage >= 3 and totalPages > 7}">
+                                                <span class="page-link">...</span>
+                                            </li>
+
+                                            <!-- Páginas alrededor de la página actual -->
+                                            <li th:each="i : ${#numbers.sequence(1, totalPages - 2)}"
+                                                th:if="${(i >= currentPage - 1 and i <= currentPage + 1) and i > 0 and i < totalPages - 1}"
+                                                class="page-item"
+                                                th:classappend="${i == currentPage} ? 'active'">
+                                                <a class="page-link"
+                                                   th:href="@{/UsuarioFinal/Reviews(page=${i}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}"
+                                                   th:text="${i + 1}">2</a>
+                                            </li>
+
+                                            <!-- Puntos suspensivos al final -->
+                                            <li class="page-item disabled" th:if="${currentPage <= totalPages - 4 and totalPages > 7}">
+                                                <span class="page-link">...</span>
+                                            </li>
+
+                                            <!-- Última página siempre visible -->
+                                            <li class="page-item" th:if="${totalPages > 1}" th:classappend="${currentPage == totalPages - 1} ? 'active'">
+                                                <a class="page-link"
+                                                   th:href="@{/UsuarioFinal/Reviews(page=${totalPages - 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}"
+                                                   th:text="${totalPages}">Last</a>
+                                            </li>
+
+                                            <!-- Botón de "Siguiente" -->
+                                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                                                <a class="page-link"
+                                                   th:href="${currentPage + 1 < totalPages} ? @{/UsuarioFinal/Reviews(page=${currentPage + 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})} : '#'"
+                                                   aria-label="Siguiente">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+
+                                            <!-- Botón de "Último" -->
+                                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                                                <a class="page-link"
+                                                   th:href="@{/UsuarioFinal/Reviews(page=${totalPages - 1}, size=${pageSize}, searchCriteria=${searchCriteria}, searchKeyword=${searchKeyword}, rating=${rating}, startDate=${startDate}, endDate=${endDate}, sortOrder=${sortOrder})}"
+                                                   aria-label="Último">
+                                                    Último
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+
+                                <div class="d-flex flex-column align-items-center" th:if="${totalPages == 0}">
+                                    <p>No hay resultados para mostrar.</p>
                                 </div>
 
 
