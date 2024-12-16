@@ -63,4 +63,6 @@
 
         @Transient // Esta anotación indica que este campo no se almacena en la base de datos
         private boolean yaLeGusto;
+
+
     }

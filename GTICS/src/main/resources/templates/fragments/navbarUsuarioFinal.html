@@ -17,6 +17,7 @@
     <!-- Libs CSS -->
     <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet" />
     <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet" />
 
     <!-- Theme CSS -->
@@ -291,10 +292,11 @@
                                                 </a>
                                             </div>
                                             <div class="border-top px-0 py-1" th:if="${session['isImpersonating'] == null}">
-                                                <a th:href="@{/ExpressDealsLogin}"
-                                                   style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
-                                                    Cerrar sesión
-                                                </a>
+                                                <form id="logoutForm" th:action="@{/logout}" method="post">
+                                                    <div class="border-top px-5 py-3">
+                                                        <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Cerrar sesión</a>
+                                                    </div>
+                                                </form>
                                             </div>
 
                                         </div>
@@ -387,8 +389,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" role="button" aria-expanded="false" th:href="@{/UsuarioFinal/chatbot}">Soporte Técnico</a>
                             </li>
-                            <li class="nav-item"  th:if="${session['isImpersonating'] != null}">
-                                <a class="nav-link" role="button" aria-expanded="false" href="/revertImpersonation">Regresar</a>
+                            <li class="nav-item" th:if="${session['isImpersonating'] == true}">
+                                <a class="nav-link text-danger" th:href="@{/revertImpersonation}">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-arrow-left-circle-fill"></i></span>
+                                        <span class="nav-link-text">Regresar a Super Admin</span>
+                                    </div>
+                                </a>
                             </li>
 
 
@@ -506,10 +513,11 @@
                                             </a>
                                         </div>
                                         <div class="border-top px-0 py-1" th:if="${session['isImpersonating'] == null}">
-                                            <a th:href="@{/ExpressDealsLogin}"
-                                               style="display: block; width: 100%; padding: 0.5rem; text-align: center;">
-                                                Cerrar sesión
-                                            </a>
+                                            <form id="logoutForm2" th:action="@{/logout}" method="post">
+                                                <div class="border-top px-5 py-3">
+                                                    <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Cerrar sesión</a>
+                                                </div>
+                                            </form>
                                         </div>
 
                                     </div>

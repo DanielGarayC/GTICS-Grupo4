@@ -1033,44 +1033,85 @@
                                 </span>
                             </div>
                             <div class="mb-8">
-                                <!-- Barra de progreso para cada calificación (5 a 1) -->
-                                <div th:each="star : ${#numbers.sequence(5,1,-1)}" class="d-flex align-items-center mb-2">
+                                <!-- Progress 5 estrellas -->
+                                <div class="d-flex align-items-center mb-2">
                                     <div class="text-nowrap me-3 text-muted">
-                                        <span class="d-inline-block align-middle" th:text="${star}">5</span>
+                                        <span class="d-inline-block align-middle text-muted">5</span>
                                         <i class="bi bi-star-fill ms-1 small text-warning"></i>
                                     </div>
                                     <div class="w-100">
-                                        <div class="progress" style="height: 6px;">
+                                        <div class="progress" style="height: 6px">
                                             <div class="progress-bar bg-warning" role="progressbar"
-                                                 th:style="'width: ' + (
-                                                   star == 5 ? ${percent5Star} :
-                                                   (star == 4 ? ${percent4Star} :
-                                                   (star == 3 ? ${percent3Star} :
-                                                   (star == 2 ? ${percent2Star} : ${percent1Star})))
-                                                 ) + '%'"
-                                                 th:attr="
-                                                   aria-valuenow=${
-                                                      star == 5 ? percent5Star :
-                                                      (star == 4 ? percent4Star :
-                                                      (star == 3 ? percent3Star :
-                                                      (star == 2 ? percent2Star : percent1Star)))
-                                                   },
-                                                   aria-valuemin='0',
-                                                   aria-valuemax='100'
-                                                 ">
+                                                 th:style="'width: ' + ${percent5Star} + '%'"
+                                                 th:attr="aria-valuenow=${percent5Star}, aria-valuemin='0', aria-valuemax='100'">
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="text-muted ms-3"
-                                          th:text="${
-                                            star == 5 ? #numbers.formatDecimal(percent5Star,1,1) :
-                                            (star == 4 ? #numbers.formatDecimal(percent4Star,1,1) :
-                                            (star == 3 ? #numbers.formatDecimal(percent3Star,1,1) :
-                                            (star == 2 ? #numbers.formatDecimal(percent2Star,1,1) :
-                                             #numbers.formatDecimal(percent1Star,1,1))))
-                                          } + '%'">
-                                        53%
-                                    </span>
+                                    <span class="text-muted ms-3" th:text="${#numbers.formatDecimal(percent5Star, 1, 1)} + '%'">53%</span>
+                                </div>
+                                <!-- Progress 4 estrellas -->
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="text-nowrap me-3 text-muted">
+                                        <span class="d-inline-block align-middle text-muted">4</span>
+                                        <i class="bi bi-star-fill ms-1 small text-warning"></i>
+                                    </div>
+                                    <div class="w-100">
+                                        <div class="progress" style="height: 6px">
+                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                 th:style="'width: ' + ${percent4Star} + '%'"
+                                                 th:attr="aria-valuenow=${percent4Star}, aria-valuemin='0', aria-valuemax='100'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted ms-3" th:text="${#numbers.formatDecimal(percent4Star, 1, 1)} + '%'">22%</span>
+                                </div>
+                                <!-- Progress 3 estrellas -->
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="text-nowrap me-3 text-muted">
+                                        <span class="d-inline-block align-middle text-muted">3</span>
+                                        <i class="bi bi-star-fill ms-1 small text-warning"></i>
+                                    </div>
+                                    <div class="w-100">
+                                        <div class="progress" style="height: 6px">
+                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                 th:style="'width: ' + ${percent3Star} + '%'"
+                                                 th:attr="aria-valuenow=${percent3Star}, aria-valuemin='0', aria-valuemax='100'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted ms-3" th:text="${#numbers.formatDecimal(percent3Star, 1, 1)} + '%'">14%</span>
+                                </div>
+                                <!-- Progress 2 estrellas -->
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="text-nowrap me-3 text-muted">
+                                        <span class="d-inline-block align-middle text-muted">2</span>
+                                        <i class="bi bi-star-fill ms-1 small text-warning"></i>
+                                    </div>
+                                    <div class="w-100">
+                                        <div class="progress" style="height: 6px">
+                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                 th:style="'width: ' + ${percent2Star} + '%'"
+                                                 th:attr="aria-valuenow=${percent2Star}, aria-valuemin='0', aria-valuemax='100'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted ms-3" th:text="${#numbers.formatDecimal(percent2Star, 1, 1)} + '%'">5%</span>
+                                </div>
+                                <!-- Progress 1 estrella -->
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="text-nowrap me-3 text-muted">
+                                        <span class="d-inline-block align-middle text-muted">1</span>
+                                        <i class="bi bi-star-fill ms-1 small text-warning"></i>
+                                    </div>
+                                    <div class="w-100">
+                                        <div class="progress" style="height: 6px">
+                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                 th:style="'width: ' + ${percent1Star} + '%'"
+                                                 th:attr="aria-valuenow=${percent1Star}, aria-valuemin='0', aria-valuemax='100'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted ms-3" th:text="${#numbers.formatDecimal(percent1Star, 1, 1)} + '%'">7%</span>
                                 </div>
                             </div>
                         </div>
@@ -1093,10 +1134,6 @@
 </div><!-- /.modal -->
 
 
-
-<!-- modal -->
-<div th:insert="~{fragments/modalProducto :: modalProducto(${producto}, ${imagenes}, ${fechaFormateada})}
-"></div>
 
 
 

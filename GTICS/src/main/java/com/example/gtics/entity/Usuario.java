@@ -37,12 +37,12 @@ public class Usuario {
     private String email;
 
     @Column(name = "direccion", nullable = false, length = 45)
-    @NotBlank(message = "Debe ingresar una dirección", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
+    @NotBlank(message = "Debe ingresar una dirección", groups = {AdminZonalValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
     private String direccion;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "iddistrito")
-    @NotNull(message = "Debe seleccionar un distrito", groups = {AdminZonalValidationGroup.class, AgenteValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
+    @NotNull(message = "Debe seleccionar un distrito", groups = {AdminZonalValidationGroup.class, UsuarioFinalValidationGroup.class, RegistroUsuarioValidationGroup.class})
     private Distrito distrito;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -59,9 +59,9 @@ public class Usuario {
     private String agtCodigoaduana;
 
     @Column(name = "agt_ruc", length = 45)
-    @NotBlank(message = "El RUC no puede estar vacío", groups = {AgenteValidationGroup.class})
-    @Size(min = 10, max = 10, message = "El RUC debe tener exactamente 10 dígitos", groups = {AgenteValidationGroup.class})
-    @Pattern(regexp = "\\d+", message = "El RUC debe contener solo dígitos", groups = {AgenteValidationGroup.class})
+    //@NotBlank(message = "El RUC no puede estar vacío", groups = {AgenteValidationGroup.class})
+    //@Size(min = 10, max = 10, message = "El RUC debe tener exactamente 10 dígitos", groups = {AgenteValidationGroup.class})
+    //@Pattern(regexp = "\\d+", message = "El RUC debe contener solo dígitos", groups = {AgenteValidationGroup.class})
     private String agtRuc;
 
     @Column(name = "agt_razonsocial", length = 45)

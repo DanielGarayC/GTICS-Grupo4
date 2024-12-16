@@ -5,6 +5,7 @@ import com.example.gtics.entity.Carritocompra;
 import com.example.gtics.entity.ProductoHasCarritocompra;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -35,4 +36,8 @@ public interface ProductoHasCarritocompraRepository extends JpaRepository<Produc
     int countById_IdCarritoCompra(Integer id);
 
     List<ProductoHasCarritocompra> findById_IdCarritoCompra(Integer id);
+    @Modifying
+    @Transactional
+    @Query("UPDATE ProductoHasCarritocompra phc SET phc.resenaCreada = true WHERE phc.idProducto.id = :idProducto AND phc.idCarritoCompra.idUsuario.id = :idUsuario AND phc.resenaCreada = false")
+    int actualizarResenaCreada(@Param("idUsuario") Integer idUsuario, @Param("idProducto") Integer idProducto);
 }

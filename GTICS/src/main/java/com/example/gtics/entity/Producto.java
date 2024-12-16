@@ -89,6 +89,9 @@ public class Producto {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Fotosproducto> fotos;
 
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Resena> resenas;  // Asegúrate de que el nombre es 'resenas'
+
     // **Campos Transitorios para Calificación**
     @Transient
     private double averageRating;

@@ -81,6 +81,7 @@ public class UsuarioFinalController {
     private final TarjetaRepository tarjetaRepository;
     private final ControlOrdenRepository controlOrdenRepository;
     private final TiendaRepository tiendaRepository;
+    private final ProveedorRepository proveedorRepository;
 
     // Aquí usaremos un HashMap en memoria (o una caché) para simular la relación
     private final Map<Integer, Set<String>> usuariosLikes = new HashMap<>();
@@ -115,7 +116,7 @@ public class UsuarioFinalController {
                                   SubcategoriaRepository subcategoriaRepository, CarritoCompraRepository carritoCompraRepository,
                                   FotosResenaRepository fotosResenaRepository, ResenaRepository resenaRepository,
                                   ControlOrdenRepository controlOrdenRepository, TarjetaRepository tarjetaRepository,
-                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository, DireccionRepository direccionRepository, ZonaRepository zonaRepository, EtiquetaRepository etiquetaRepository, MessageRepository messageRepository, TiendaRepository tiendaRepository ) {
+                                  ForoPreguntaRepository foroPreguntaRepository, ForoRespuestaRepository foroRespuestaRepository, DireccionRepository direccionRepository, ZonaRepository zonaRepository, ProveedorRepository proveedorRepository, MessageRepository messageRepository, TiendaRepository tiendaRepository ) {
         this.solicitudAgenteRepository = solicitudAgenteRepository;
         this.usuarioRepository = usuarioRepository;
         this.fotosProductoRepository = fotosProductoRepository;
@@ -137,6 +138,7 @@ public class UsuarioFinalController {
         this.controlOrdenRepository = controlOrdenRepository;
         this.tarjetaRepository = tarjetaRepository;
         this.tiendaRepository = tiendaRepository;
+        this.proveedorRepository = proveedorRepository;
     }
 
     @GetMapping("/consulta-dni/{dni}")
@@ -1316,6 +1318,9 @@ public class UsuarioFinalController {
                 // Filtrar los productos por la zona del usuario
                 List<Producto> productos = productoRepository.findProductosPorZona(zonaUsuario.getId());
 
+                Optional<Producto> topProductoOpt = productoRepository.findTopByZona_IdOrderByCantVentasDesc(zonaUsuario.getId());
+                topProductoOpt.ifPresent(topProducto -> model.addAttribute("ventaDelMomento", topProducto));
+
                 // Obtener calificaciones y conteo de reseñas
                 List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCount();
 
@@ -1488,104 +1493,145 @@ public class UsuarioFinalController {
             @PathVariable("idCategoria") Integer idCategoria,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "default") String sortOrder, // Parámetro de ordenamiento
+            @RequestParam(required = false) List<String> proveedores, // Filtro de proveedores
+            @RequestParam(required = false) List<Integer> ratings, // Filtro de ratings
+            @RequestParam(required = false) String proveedorBusqueda, // Parámetro de búsqueda
             Authentication authentication,
             Model model) {
 
-        if (authentication != null && authentication.isAuthenticated()) {
-            String email = authentication.getName(); // Obtener el email del usuario autenticado
-            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        // Verificar si el usuario está autenticado
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            return "redirect:/ExpressDealsLogin";
+        }
 
-            // Buscar la categoría por ID
-            Optional<Categoria> categoriaOpt = categoriaRepository.findById(idCategoria);
-            List<Categoria> categorias = categoriaRepository.findAll();
-            model.addAttribute("categorias", categorias);
+        String email = authentication.getName(); // Obtener el email del usuario autenticado
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
-            if (usuarioOpt.isPresent() && categoriaOpt.isPresent()) {
-                Usuario usuario = usuarioOpt.get();
-                Zona zonaUsuario = usuario.getZona();  // Obtener la zona del usuario
-                Categoria categoria = categoriaOpt.get();
-                List<Subcategoria> subcategorias = categoria.getSubcategorias();
+        // Buscar la categoría por ID
+        Optional<Categoria> categoriaOpt = categoriaRepository.findById(idCategoria);
+        List<Categoria> categorias = categoriaRepository.findAll();
+        model.addAttribute("categorias", categorias);
 
-                // Añadir atributos de la categoría y subcategorías al modelo
-                model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
-                model.addAttribute("subcategorias", subcategorias);
+        if (!usuarioOpt.isPresent() || !categoriaOpt.isPresent()) {
+            // Redirigir si no se encuentra la categoría o el usuario
+            return "redirect:/UsuarioFinal/listaProductos";
+        }
 
-                // Definir el criterio de ordenamiento
-                Sort sort = Sort.unsorted();  // Orden predeterminado
-                if ("asc".equals(sortOrder)) {
-                    sort = Sort.by("precio").ascending();  // Orden ascendente por precio
-                } else if ("desc".equals(sortOrder)) {
-                    sort = Sort.by("precio").descending();  // Orden descendente por precio
-                }
+        Usuario usuario = usuarioOpt.get();
+        Zona zonaUsuario = usuario.getZona();  // Obtener la zona del usuario
+        Categoria categoria = categoriaOpt.get();
+        List<Subcategoria> subcategorias = categoria.getSubcategorias();
 
-                // Tamaño de página fijo
-                int size = 12;  // Por ejemplo, 12 productos por página
-                Pageable pageable = PageRequest.of(page, size, sort);
+        // Añadir atributos de la categoría y subcategorías al modelo
+        model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
+        model.addAttribute("subcategorias", subcategorias);
 
-                // Consulta paginada con el criterio de zona y categoría
-                Page<Producto> productosPage = productoRepository.findProductosPorZonaYCategoria(zonaUsuario.getId(), idCategoria, pageable);
-                List<Producto> productos = productosPage.getContent();
+        // Definir el criterio de ordenamiento
+        Sort sort;
+        switch (sortOrder) {
+            case "asc":
+                sort = Sort.by("precio").ascending();  // Orden ascendente por precio
+                break;
+            case "desc":
+                sort = Sort.by("precio").descending(); // Orden descendente por precio
+                break;
+            default:
+                sort = Sort.unsorted(); // Orden predeterminado
+                break;
+        }
 
+        // Tamaño de página fijo
+        int size = 12;  // Por ejemplo, 12 productos por página
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-                List<Object[]> ratings = productoRepository.findAverageRatingAndReviewCount();
-                Map<Integer, RatingData> ratingsMap = ratings.stream()
-                        .collect(Collectors.toMap(
-                                row -> (Integer) row[0],
-                                row -> new RatingData((Double) row[1], (Long) row[2])
-                        ));
+        // Limpiar proveedorBusqueda si está vacío
+        if (proveedorBusqueda != null && proveedorBusqueda.trim().isEmpty()) {
+            proveedorBusqueda = null;
+        }
 
-                for (Producto producto : productos) {
-                    RatingData ratingData = ratingsMap.get(producto.getId());
-                    if (ratingData != null) {
-                        producto.setAverageRating(ratingData.getAverageRating());
-                        producto.setReviewCount(ratingData.getReviewCount());
-                    } else {
-                        producto.setAverageRating(0.0);
-                        producto.setReviewCount(0);
-                    }
-                }
+        // Manejar listas vacías como null para los filtros
+        if (proveedores != null && proveedores.isEmpty()) {
+            proveedores = null;
+        }
+        if (ratings != null && ratings.isEmpty()) {
+            ratings = null;
+        }
 
-                model.addAttribute("productos", productos);
+        // Ejecutar la consulta con filtros
+        Page<Producto> productosPage = productoRepository.findByFilters(
+                zonaUsuario.getId(),
+                idCategoria,
+                proveedores,
+                proveedorBusqueda,
+                ratings,
+                pageable
+        );
+        List<Producto> productos = productosPage.getContent();
 
-                // Total de productos y número de páginas
-                long totalProductos = productosPage.getTotalElements();
-                model.addAttribute("totalProductos", totalProductos);
-                int totalPages = productosPage.getTotalPages();
-                model.addAttribute("totalPages", totalPages);
-                model.addAttribute("currentPage", page);
+        // Calcular los ratings y el conteo de reseñas
+        List<Object[]> ratingsData = productoRepository.findAverageRatingAndReviewCount();
+        Map<Integer, RatingData> ratingsMap = ratingsData.stream()
+                .collect(Collectors.toMap(
+                        row -> (Integer) row[0],
+                        row -> new RatingData((Double) row[1], (Long) row[2])
+                ));
 
-                // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
-                int visiblePages = 3;
-                int startPage = Math.max(0, page - (visiblePages / 2));
-                int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
-
-                // Ajustar el rango si es necesario
-                if (endPage - startPage + 1 < visiblePages) {
-                    if (startPage == 0) {
-                        endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
-                    } else if (endPage == totalPages - 1) {
-                        startPage = Math.max(0, endPage - visiblePages + 1);
-                    }
-                }
-
-                model.addAttribute("startPage", startPage);
-                model.addAttribute("endPage", endPage);
-
-                // Verificar si hay productos para mostrar información del producto principal
-                if (!productos.isEmpty()) {
-                    Producto producto = productos.get(0);  // Producto destacado
-                    model.addAttribute("producto", producto);
-
-                    // Añadir imágenes del producto y fecha formateada
-                    model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
-                    String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
-                    model.addAttribute("fechaFormateada", fechaFormateada);
-                }
+        for (Producto producto : productos) {
+            RatingData ratingData = ratingsMap.get(producto.getId());
+            if (ratingData != null) {
+                producto.setAverageRating(ratingData.getAverageRating());
+                producto.setReviewCount(ratingData.getReviewCount());
             } else {
-                // Redirigir si no se encuentra la categoría o el usuario
-                return "redirect:/UsuarioFinal/listaProductos";
+                producto.setAverageRating(0.0);
+                producto.setReviewCount(0);
             }
         }
+
+        model.addAttribute("productos", productos);
+
+        // Total de productos y número de páginas
+        long totalProductos = productosPage.getTotalElements();
+        model.addAttribute("totalProductos", totalProductos);
+        int totalPages = productosPage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page);
+
+        // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
+        int visiblePages = 3;
+        int startPage = Math.max(0, page - (visiblePages / 2));
+        int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
+
+        // Ajustar el rango si es necesario
+        if (endPage - startPage + 1 < visiblePages) {
+            if (startPage == 0) {
+                endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
+            } else if (endPage == totalPages - 1) {
+                startPage = Math.max(0, endPage - visiblePages + 1);
+            }
+        }
+
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        // Verificar si hay productos para mostrar información del producto principal
+        if (!productos.isEmpty()) {
+            Producto producto = productos.get(0);  // Producto destacado
+            model.addAttribute("producto", producto);
+
+            // Añadir imágenes del producto y fecha formateada
+            model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+            String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+            model.addAttribute("fechaFormateada", fechaFormateada);
+        }
+
+        // Pasar los proveedores disponibles y los seleccionados a la vista
+        List<String> todosProveedores = proveedorRepository.findAll().stream()
+                .map(proveedor -> proveedor.getTienda().getNombreTienda())
+                .collect(Collectors.toList());
+        model.addAttribute("proveedores", todosProveedores);
+        model.addAttribute("proveedoresSeleccionados", proveedores);
+        model.addAttribute("ratingsSeleccionadas", ratings);
+        model.addAttribute("proveedorBusqueda", proveedorBusqueda); // Añadir proveedorBusqueda al modelo
 
         // Mantener el valor de sortOrder en la vista
         model.addAttribute("sortOrder", sortOrder);
@@ -1595,94 +1641,153 @@ public class UsuarioFinalController {
     }
 
 
+
     @GetMapping("/UsuarioFinal/subcategoria/{idSubcategoria}")
     public String mostrarProductosPorSubcategoria(
             @PathVariable("idSubcategoria") Integer idSubcategoria,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "default") String sortOrder,  // Parámetro de ordenamiento
+            @RequestParam(defaultValue = "default") String sortOrder, // Parámetro de ordenamiento
+            @RequestParam(required = false) List<String> proveedores, // Filtro de proveedores
+            @RequestParam(required = false) List<Integer> ratings, // Filtro de ratings
+            @RequestParam(required = false) String proveedorBusqueda, // Parámetro de búsqueda
             Authentication authentication,
             Model model) {
+
+        // Verificar si el usuario está autenticado
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            return "redirect:/ExpressDealsLogin";
+        }
+
+        String email = authentication.getName(); // Obtener el email del usuario autenticado
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
         // Buscar la subcategoría por ID
         Optional<Subcategoria> subcategoriaOpt = subcategoriaRepository.findById(idSubcategoria);
         List<Categoria> categorias = categoriaRepository.findAll();
         model.addAttribute("categorias", categorias);
 
-        if (authentication != null && authentication.isAuthenticated() && subcategoriaOpt.isPresent()) {
-            String email = authentication.getName();  // Obtener el email del usuario autenticado
-            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
-
-            if (usuarioOpt.isPresent()) {
-                Usuario usuario = usuarioOpt.get();
-                Zona zonaUsuario = usuario.getZona();  // Obtener la zona del usuario
-                Subcategoria subcategoria = subcategoriaOpt.get();
-                Categoria categoria = subcategoria.getCategoria();  // Obtener la categoría a la que pertenece
-                List<Subcategoria> subcategorias = categoria.getSubcategorias();  // Obtener subcategorías relacionadas
-
-                // Añadir atributos de la subcategoría y la categoría al modelo
-                model.addAttribute("nombreSubcategoria", subcategoria.getNombreSubcategoria());
-                model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
-                model.addAttribute("subcategorias", subcategorias);
-
-                // Definir el criterio de ordenamiento
-                Sort sort = Sort.unsorted();  // Orden predeterminado
-                if ("asc".equals(sortOrder)) {
-                    sort = Sort.by("precio").ascending();  // Orden ascendente por precio
-                } else if ("desc".equals(sortOrder)) {
-                    sort = Sort.by("precio").descending();  // Orden descendente por precio
-                }
-
-                // Tamaño de página fijo
-                int size = 12;  // Por ejemplo, 12 productos por página
-                Pageable pageable = PageRequest.of(page, size, sort);
-
-                // Consulta paginada con el criterio de subcategoría y zona
-                Page<Producto> productosPage = productoRepository.findProductosPorZonaYSubcategoria(zonaUsuario.getId(), idSubcategoria, pageable);
-                List<Producto> productos = productosPage.getContent();
-                model.addAttribute("productos", productos);
-
-                // Total de productos y número de páginas
-                long totalProductos = productosPage.getTotalElements();
-                model.addAttribute("totalProductos", totalProductos);
-                int totalPages = productosPage.getTotalPages();
-                model.addAttribute("totalPages", totalPages);
-                model.addAttribute("currentPage", page);
-
-                // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
-                int visiblePages = 3;
-                int startPage = Math.max(0, page - (visiblePages / 2));
-                int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
-
-                // Ajustar el rango si es necesario
-                if (endPage - startPage + 1 < visiblePages) {
-                    if (startPage == 0) {
-                        endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
-                    } else if (endPage == totalPages - 1) {
-                        startPage = Math.max(0, endPage - visiblePages + 1);
-                    }
-                }
-
-                model.addAttribute("startPage", startPage);
-                model.addAttribute("endPage", endPage);
-
-                // Verificar si hay productos para mostrar información del producto principal
-                if (!productos.isEmpty()) {
-                    Producto producto = productos.get(0);  // Producto destacado
-                    model.addAttribute("producto", producto);
-
-                    // Añadir imágenes del producto y fecha formateada
-                    model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
-                    String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
-                    model.addAttribute("fechaFormateada", fechaFormateada);
-                }
-            } else {
-                // Redirigir si el usuario no se encuentra
-                return "redirect:/UsuarioFinal/listaProductos";
-            }
-        } else {
-            // Redirigir si la subcategoría no se encuentra
+        if (!usuarioOpt.isPresent() || !subcategoriaOpt.isPresent()) {
+            // Redirigir si no se encuentra la subcategoría o el usuario
             return "redirect:/UsuarioFinal/listaProductos";
         }
+
+        Usuario usuario = usuarioOpt.get();
+        Zona zonaUsuario = usuario.getZona();  // Obtener la zona del usuario
+        Subcategoria subcategoria = subcategoriaOpt.get();
+        Categoria categoria = subcategoria.getCategoria();  // Obtener la categoría a la que pertenece
+        List<Subcategoria> subcategorias = categoria.getSubcategorias();  // Obtener subcategorías relacionadas
+
+        // Añadir atributos de la subcategoría y la categoría al modelo
+        model.addAttribute("nombreSubcategoria", subcategoria.getNombreSubcategoria());
+        model.addAttribute("nombreCategoria", categoria.getNombreCategoria());
+        model.addAttribute("subcategorias", subcategorias);
+        model.addAttribute("idCategoria", categoria.getId());
+        // Definir el criterio de ordenamiento
+        Sort sort;
+        switch (sortOrder) {
+            case "asc":
+                sort = Sort.by("precio").ascending();  // Orden ascendente por precio
+                break;
+            case "desc":
+                sort = Sort.by("precio").descending(); // Orden descendente por precio
+                break;
+            default:
+                sort = Sort.unsorted(); // Orden predeterminado
+                break;
+        }
+
+        // Tamaño de página fijo
+        int size = 12;  // Por ejemplo, 12 productos por página
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        // Limpiar proveedorBusqueda si está vacío
+        if (proveedorBusqueda != null && proveedorBusqueda.trim().isEmpty()) {
+            proveedorBusqueda = null;
+        }
+
+        // Manejar listas vacías como null para los filtros
+        if (proveedores != null && proveedores.isEmpty()) {
+            proveedores = null;
+        }
+        if (ratings != null && ratings.isEmpty()) {
+            ratings = null;
+        }
+
+        // Ejecutar la consulta con filtros
+        Page<Producto> productosPage = productoRepository.findByFilters2(
+                zonaUsuario.getId(),
+                idSubcategoria, // Usar idSubcategoria en lugar de idCategoria
+                proveedores,
+                proveedorBusqueda,
+                ratings,
+                pageable
+        );
+        List<Producto> productos = productosPage.getContent();
+
+        // Calcular los ratings y el conteo de reseñas
+        List<Object[]> ratingsData = productoRepository.findAverageRatingAndReviewCount();
+        Map<Integer, RatingData> ratingsMap = ratingsData.stream()
+                .collect(Collectors.toMap(
+                        row -> (Integer) row[0],
+                        row -> new RatingData((Double) row[1], (Long) row[2])
+                ));
+
+        for (Producto producto : productos) {
+            RatingData ratingData = ratingsMap.get(producto.getId());
+            if (ratingData != null) {
+                producto.setAverageRating(ratingData.getAverageRating());
+                producto.setReviewCount(ratingData.getReviewCount());
+            } else {
+                producto.setAverageRating(0.0);
+                producto.setReviewCount(0);
+            }
+        }
+
+        model.addAttribute("productos", productos);
+
+        // Total de productos y número de páginas
+        long totalProductos = productosPage.getTotalElements();
+        model.addAttribute("totalProductos", totalProductos);
+        int totalPages = productosPage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page);
+
+        // Calcular el rango de páginas para mostrar en la paginación (3 botones visibles)
+        int visiblePages = 3;
+        int startPage = Math.max(0, page - (visiblePages / 2));
+        int endPage = Math.min(totalPages - 1, page + (visiblePages / 2));
+
+        // Ajustar el rango si es necesario
+        if (endPage - startPage + 1 < visiblePages) {
+            if (startPage == 0) {
+                endPage = Math.min(totalPages - 1, startPage + visiblePages - 1);
+            } else if (endPage == totalPages - 1) {
+                startPage = Math.max(0, endPage - visiblePages + 1);
+            }
+        }
+
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        // Verificar si hay productos para mostrar información del producto principal
+        if (!productos.isEmpty()) {
+            Producto producto = productos.get(0);  // Producto destacado
+            model.addAttribute("producto", producto);
+
+            // Añadir imágenes del producto y fecha formateada
+            model.addAttribute("imagenes", fotosProductoRepository.findByProducto_Id(producto.getId()));
+            String fechaFormateada = productoRepository.findFechaFormateadaById(producto.getId());
+            model.addAttribute("fechaFormateada", fechaFormateada);
+        }
+
+        // Pasar los proveedores disponibles y los seleccionados a la vista
+        List<String> todosProveedores = proveedorRepository.findAll().stream()
+                .map(proveedor -> proveedor.getTienda().getNombreTienda())
+                .collect(Collectors.toList());
+        model.addAttribute("proveedores", todosProveedores);
+        model.addAttribute("proveedoresSeleccionados", proveedores);
+        model.addAttribute("ratingsSeleccionadas", ratings);
+        model.addAttribute("proveedorBusqueda", proveedorBusqueda); // Añadir proveedorBusqueda al modelo
 
         // Mantener el valor de sortOrder en la vista
         model.addAttribute("sortOrder", sortOrder);
@@ -1690,6 +1795,7 @@ public class UsuarioFinalController {
         // Retornar la vista de la subcategoría con productos
         return "UsuarioFinal/Productos/subcategoria";
     }
+
 
 
     @GetMapping("/UsuarioFinal/producto/quickView/{idProducto}")
@@ -2078,6 +2184,7 @@ public class UsuarioFinalController {
     public String guardarResena(@Valid @ModelAttribute("resena") Resena resena,
                                 BindingResult bindingResult,
                                 @RequestParam(value = "uploadedPhotos", required = false) MultipartFile[] uploadedPhotos,
+                                @RequestParam("producto.id") Integer idProducto,
                                 RedirectAttributes attr,
                                 Model model) {
 
@@ -2142,6 +2249,13 @@ public class UsuarioFinalController {
 
         // Save the review
         resenaRepository.save(resena);
+        // Actualizar resenaCreada a true en ProductoHasCarritocompra
+        int filasActualizadas = productoHasCarritocompraRepository.actualizarResenaCreada(user.getId(), idProducto);
+        if (filasActualizadas > 0) {
+            attr.addFlashAttribute("msg", "Reseña creada exitosamente.");
+        } else {
+            attr.addFlashAttribute("error", "No se pudo actualizar el estado de la reseña en el carrito.");
+        }
         usuariosLikes.putIfAbsent(resena.getId(), new HashSet<>()); // Agregar al HashMap
 
         attr.addFlashAttribute("msg", "Reseña creada exitosamente.");

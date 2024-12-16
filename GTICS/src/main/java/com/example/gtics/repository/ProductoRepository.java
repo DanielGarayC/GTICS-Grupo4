@@ -21,13 +21,48 @@ import java.util.Optional;
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
+    @Query("SELECT p FROM Producto p " +
+            "JOIN p.idProveedor pr " +
+            "LEFT JOIN p.resenas r " +
+            "WHERE p.zona.id = :zonaId " +
+            "AND p.idCategoria.id = :categoriaId " +
+            "AND (:proveedores IS NULL OR pr.tienda.nombreTienda IN :proveedores) " +
+            "AND (:proveedorBusqueda IS NULL OR LOWER(pr.tienda.nombreTienda) LIKE CONCAT('%', LOWER(:proveedorBusqueda), '%')) " +
+            "AND (:ratings IS NULL OR r.idCalidad.id IN :ratings) " +
+            "GROUP BY p.id")
+    Page<Producto> findByFilters(
+            @Param("zonaId") Integer zonaId,
+            @Param("categoriaId") Integer categoriaId,
+            @Param("proveedores") List<String> proveedores,
+            @Param("proveedorBusqueda") String proveedorBusqueda,
+            @Param("ratings") List<Integer> ratings,
+            Pageable pageable);
+
+    @Query("SELECT p FROM Producto p " +
+            "JOIN p.idProveedor pr " +
+            "LEFT JOIN p.resenas r " +
+            "WHERE p.zona.id = :zonaId " +
+            "AND p.idSubcategoria.id = :subcategoriaId " +
+            "AND (:proveedores IS NULL OR pr.tienda.nombreTienda IN :proveedores) " +
+            "AND (:proveedorBusqueda IS NULL OR LOWER(pr.tienda.nombreTienda) LIKE CONCAT('%', LOWER(:proveedorBusqueda), '%')) " +
+            "AND (:ratings IS NULL OR r.idCalidad.id IN :ratings) " +
+            "GROUP BY p.id")
+    Page<Producto> findByFilters2(
+            @Param("zonaId") Integer zonaId,
+            @Param("subcategoriaId") Integer subcategoriaId,
+            @Param("proveedores") List<String> proveedores,
+            @Param("proveedorBusqueda") String proveedorBusqueda,
+            @Param("ratings") List<Integer> ratings,
+            Pageable pageable);
+
     @Query(value = "SELECT * FROM producto p WHERE p.borrado = 0", nativeQuery = true)
     Page<Producto> findAllActiveConpaginacion(Pageable pageable);
     // Consulta nativa para obtener productos activos
     @Query(value="SELECT * FROM producto p WHERE p.borrado = 0", nativeQuery = true)
     List<Producto> findAllActive();
 
-    // Consulta nativa para obtener productos relevantes
+    Optional<Producto> findTopByZona_IdOrderByCantVentasDesc(Integer zonaId);
+
     @Query(value = "SELECT p.idProducto, p.nombreProducto, p.cantVentas FROM producto p ORDER BY p.cantVentas DESC LIMIT 10", nativeQuery = true)
     List<ProductoRelevanteDTO> findProductosRelevantes();
 
@@ -98,7 +133,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
             "            where p.idProducto = ?1", nativeQuery = true)
     ProductoTabla getProductosTablaId(int id);
 
-    Optional<Producto> findByNombreProductoAndZona(String nombreProducto, Zona zona);
+    Optional<Producto> findByIdAndZona(Integer id, Zona zona);
 
     @Query(value = "SELECT COUNT(*) FROM producto WHERE idCategoria = :idCategoria", nativeQuery = true)
     long contarProductosPorCategoria(@Param("idCategoria") Integer idCategoria);

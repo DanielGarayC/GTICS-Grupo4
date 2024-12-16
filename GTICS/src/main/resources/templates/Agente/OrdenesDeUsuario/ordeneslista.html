@@ -123,7 +123,12 @@
 								   <button class="btn btn-primary me-2" type="submit"><i class="bi bi-search"></i></button>
 								   <a th:href="@{/Agente/Ordenes}" class="btn btn-primary me-2"><i class="bi bi-eraser-fill"></i></a>
 							   </form>
+							   <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}">
 
+							   </div>
+							   <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
+
+							   </div>
 
 
 

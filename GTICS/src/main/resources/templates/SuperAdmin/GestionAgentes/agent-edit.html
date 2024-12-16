@@ -92,30 +92,32 @@
                                                 <input type="hidden" th:name="contrasena" th:value="${agente.contrasena}" />
 
                                                 <div class="row">
+
+                                                    <!-- DNI -->
+                                                    <div class="col-lg-6 col-12">
+                                                        <label for="DNIFinalUser" class="form-label">DNI:</label>
+                                                        <input type="text"  class="form-control" id="DNIFinalUser" th:value="*{dni}" name="dni" minlength="8" maxlength="8" pattern="\d{8}" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" readonly/>
+                                                        <div class="invalid-feedback" th:if="${dniError}" th:text="${dniError}"></div>
+                                                    </div>
+
                                                     <!-- Nombres -->
                                                     <div class="col-lg-6 col-12">
                                                         <label for="creatCustomerName" class="form-label">Nombres:</label>
-                                                        <input type="text" disabled class="form-control" id="creatCustomerName"  th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" />
+                                                        <input type="text"  class="form-control" id="creatCustomerName" th:value="*{nombre}" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" readonly/>
                                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>                                                    </div>
 
                                                     <!-- Apellido Paterno -->
                                                     <div class="col-lg-6 col-12">
                                                         <label for="creatFinalUserLastNameP" class="form-label">Apellido Paterno:</label>
-                                                        <input type="text" disabled class="form-control" id="creatFinalUserLastNameP" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}" />
+                                                        <input type="text"  class="form-control" id="creatFinalUserLastNameP" th:value="*{apellidoPaterno}" th:field="*{apellidoPaterno}" th:classappend="${#fields.hasErrors('apellidoPaterno')?'is-invalid':''}" readonly/>
                                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></div>                                                    </div>
 
                                                     <!-- Apellido Materno -->
                                                     <div class="col-lg-6 col-12">
                                                         <label for="creatFinalUserLastNameM" class="form-label">Apellido Materno:</label>
-                                                        <input type="text" disabled class="form-control" id="creatFinalUserLastNameM" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}" />
+                                                        <input type="text"  class="form-control" id="creatFinalUserLastNameM" th:value="*{apellidoMaterno}" th:field="*{apellidoMaterno}" th:classappend="${#fields.hasErrors('apellidoMaterno')?'is-invalid':''}" readonly/>
                                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></div>                                                    </div>
 
-                                                    <!-- DNI -->
-                                                    <div class="col-lg-6 col-12">
-                                                        <label for="DNIFinalUser" class="form-label">DNI:</label>
-                                                        <input type="text" disabled class="form-control" id="DNIFinalUser" name="dni" minlength="8" maxlength="8" pattern="\d{8}" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}"/>
-                                                        <div class="invalid-feedback" th:if="${dniError}" th:text="${dniError}"></div>
-                                                    </div>
 
                                                     <!-- Número telefónico -->
                                                     <div class="col-lg-6 col-12">
@@ -148,6 +150,8 @@
                                                     <div class="col-lg-6 col-12">
                                                         <label for="valorAduana" class="form-label">Estado del Código:</label>
                                                         <input type="text" class="form-control" id="valorAduana" th:value="${estado}" readonly  />
+                                                        <input type="hidden" name="estado" th:value="${estado}" />
+
                                                     </div>
 
                                                     <!-- Código de Jurisdicción -->
@@ -173,7 +177,7 @@
                                                 <!-- Botones de acción -->
                                                 <div class="col-12 mt-3">
                                                     <div class="d-flex flex-column flex-md-row gap-2">
-                                                        <button class="btn btn-primary" type="submit">Guardar</button>
+                                                        <button class="btn btn-primary" type="button" onclick="showSuccessPopup()">Guardar</button>
                                                         <a th:href="@{/SuperAdmin/listaAgente}" class="btn btn-secondary">Cancelar</a>
                                                     </div>
                                                 </div>
@@ -219,40 +223,20 @@
                 const form = document.getElementById('adminZonalForm');
                 const dniInput = document.getElementById('DNIFinalUser');
                 const phoneInput = document.getElementById('phoneAdminZonal');
-                const dateInput = document.getElementById('creatFinalUserDate');
 
-                // Validar fecha de nacimiento (no puede ser futura)
-                dateInput.addEventListener('blur', function () {
-                    const currentDate = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
-                    if (dateInput.value > currentDate) {
-                        dateInput.setCustomValidity("La fecha de nacimiento no puede ser futura.");
-                        dateInput.classList.add('is-invalid');
-                    } else {
-                        dateInput.setCustomValidity(""); // Restablecer si la fecha es válida
-                        dateInput.classList.remove('is-invalid');
-                        dateInput.classList.add('is-valid');
-                    }
-                });
 
-                // Evento blur para validación en campo DNI
-                dniInput.addEventListener('blur', function() {
-                    this.classList.remove('is-valid', 'is-invalid');
-                    if (!this.validity.valid) {
-                        this.classList.add('is-invalid');
-                    } else {
-                        this.classList.add('is-valid');
-                    }
-                });
 
-                // Evento blur para validación en campo Teléfono
-                phoneInput.addEventListener('blur', function() {
-                    this.classList.remove('is-valid', 'is-invalid');
-                    if (!this.validity.valid) {
-                        this.classList.add('is-invalid');
+                function validateInputField(input) {
+                    input.classList.remove('is-valid', 'is-invalid');
+                    if (!input.validity.valid) {
+                        input.classList.add('is-invalid');
                     } else {
-                        this.classList.add('is-valid');
+                        input.classList.add('is-valid');
                     }
-                });
+                }
+
+                dniInput.addEventListener('blur', () => validateInputField(dniInput));
+                phoneInput.addEventListener('blur', () => validateInputField(phoneInput));
 
                 // Validar todo el formulario al enviarlo
                 form.addEventListener('submit', function (event) {
@@ -268,7 +252,7 @@
             function showSuccessPopup() {
                 Swal.fire({
                     title: '¿Estás seguro?',
-                    text: "Confirma que deseas actualizar la información del Admin Zonal",
+                    text: "¿Deseas actualizar la información del Admin Zonal?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#28a745',
@@ -287,11 +271,7 @@
                 });
             }
 
-            document.addEventListener("DOMContentLoaded", function() {
-                flatpickr("#creatFinalUserDate", {
-                    dateFormat: "Y-m-d"  // Esto asegura que la fecha se envíe en formato yyyy-MM-dd
-                });
-            });
+
 
 
         </script>
