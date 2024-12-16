@@ -382,10 +382,14 @@ public class SuperAdminController {
     }
 
     @PostMapping("/SuperAdmin/Agente/guardar")
-    public String guardarAgente(@ModelAttribute("agente") @Validated(AgenteValidationGroup.class) Usuario agente, BindingResult bindingResult, Model model, @RequestParam("agentPhoto") MultipartFile foto) {
+    public String guardarAgente(@ModelAttribute("agente") @Validated(AgenteValidationGroup.class) Usuario agente, BindingResult bindingResult, Model model, @RequestParam("agentPhoto") MultipartFile foto, @RequestParam("estado") String estado, RedirectAttributes attr) {
 
         System.out.println("Llega al método guardarAgente");
         if(bindingResult.hasErrors()){
+            System.out.println("Errores en el formulario");
+            bindingResult.getFieldErrors().forEach(error -> {
+                System.out.println("Campo: " + error.getField() + " - Error: " + error.getDefaultMessage());
+            });
             // Validación de DNI con prioridad
             if (bindingResult.hasFieldErrors("dni")) {
                 if (bindingResult.getFieldError("dni").getCode().equals("NotBlank")) {
@@ -431,6 +435,7 @@ public class SuperAdminController {
 
 
             model.addAttribute("zonas", zonaRepository.findAll());
+            model.addAttribute("estado", estado);
             return "SuperAdmin/GestionAgentes/agent-edit";
         }
 
@@ -458,6 +463,9 @@ public class SuperAdminController {
             if (!agente.getEmail().equals(agenteExistente.getEmail())) {
                 agenteExistente.setEmail(agente.getEmail());
             }
+            agenteExistente.setDireccion(agenteExistente.getDireccion());
+            agenteExistente.setDistrito(agenteExistente.getDistrito());
+            agenteExistente.setAgtRuc(agenteExistente.getAgtRuc());
             if (!agente.getAgtRazonsocial().equals(agenteExistente.getAgtRazonsocial())) {
                 agenteExistente.setAgtRazonsocial(agente.getAgtRazonsocial());
             }
@@ -472,13 +480,20 @@ public class SuperAdminController {
             if (agente.getZona() != null && !agente.getZona().equals(agenteExistente.getZona())) {
                 agenteExistente.setZona(agente.getZona());
             }
-
-            // Guardar solo si algo ha cambiado
-            agenteExistente.setFoto(foto.getBytes());
+            System.out.println("Foto vacía: " + foto.isEmpty());
+            System.out.println("Bytes de foto: " + (foto.isEmpty() ? "No hay bytes" : foto.getBytes().length));
+            if (foto != null && !foto.isEmpty()) {
+                // Solo actualiza la foto si se subió una nueva
+                agenteExistente.setFoto(foto.getBytes());
+            } else {
+                // Mantén la foto existente si no se subió ninguna nueva
+                agenteExistente.setFoto(agenteExistente.getFoto());
+            }
             usuarioRepository.save(agenteExistente);
+            attr.addFlashAttribute("msg", "Información del agente actualizada exitosamente");
 
         } catch (Exception e) {
-            model.addAttribute("error", "Error al guardar el agente.");
+            attr.addFlashAttribute("error", "Error al guardar el agente.");
             e.printStackTrace();
             return "SuperAdmin/GestionAgentes/agent-edit";
         }
@@ -559,7 +574,7 @@ public class SuperAdminController {
 
             solicitudAgenteRepository.deleteByIdUsuario(usuario);
 
-            redirectAttributes.addFlashAttribute("successMessage", "El usuario ha sido rechazado éxitosamente.");
+            redirectAttributes.addFlashAttribute("msg", "La solicitud ha sido rechazada exitosamente.");
 
             switch (indicador){
                 case 0:
@@ -574,6 +589,8 @@ public class SuperAdminController {
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
 
         } else {
+            redirectAttributes.addFlashAttribute("error", "Ha ocurrido un error al rechazar la solicitud.");
+
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }
 
@@ -591,39 +608,51 @@ public class SuperAdminController {
     @GetMapping("SuperAdmin/aceptarSolicitud")
     public String cambiarRolaAgente(Model model, @RequestParam("id") Integer id,
                                     @RequestParam("indicador") Integer indicador,
-                                    @RequestParam("codigoAduana") Integer codigoAduana,
-                                    @RequestParam("codigoJurisdiccion") Integer codigoJurisdiccion,
+                                    @RequestParam("codigoAduana") String codigoAduana,
+                                    @RequestParam("codigoJurisdiccion") String codigoJurisdiccion,
                                     RedirectAttributes redirectAttributes) {
         System.out.println("pruebaaaa");
-        // Obtener el usuario solicitante por ID
-        Usuario usuario = usuarioRepository.findUsuarioById(id);
-        Integer zonaUsuario = usuario.getDistrito().getZona().getId();
-        Integer idAdminZonal = usuarioRepository.obtenerUnAdminZonalDesuZona(zonaUsuario);
-        usuarioRepository.asignarAdminZonalAUsuario(idAdminZonal,id);
-        // Verificar si el Admin Zonal ya tiene 3 agentes activos asignados
-        Integer cantidadAgentes = usuarioRepository.contarAgentesPorAdminZonal(idAdminZonal);
-        System.out.println(cantidadAgentes);
-
-        if (cantidadAgentes >= 3) {
-            // Usar RedirectAttributes para que el mensaje se vea después del redirect
-            redirectAttributes.addFlashAttribute("error", "Este Administrador Zonal ya tiene el máximo de 3 agentes activos.");
+        System.out.println("ID: " + id + ", Indicador: " + indicador + ", Codigo Aduana: " + codigoAduana + ", Codigo Jurisdicción: " + codigoJurisdiccion);
+        if (id == null || indicador == null) {
+            redirectAttributes.addFlashAttribute("error", "Faltan parámetros obligatorios (ID o Indicador).");
             return "redirect:/SuperAdmin/listaSolicitudesAgentes";
         }
+        try {
+            // Obtener el usuario solicitante por ID
+            Usuario usuario = usuarioRepository.findUsuarioById(id);
+            Integer zonaUsuario = usuario.getDistrito().getZona().getId();
+            Integer idAdminZonal = usuarioRepository.obtenerUnAdminZonalDesuZona(zonaUsuario);
+            usuarioRepository.asignarAdminZonalAUsuario(idAdminZonal, id);
+            // Verificar si el Admin Zonal ya tiene 3 agentes activos asignados
+            Integer cantidadAgentes = usuarioRepository.contarAgentesPorAdminZonal(idAdminZonal);
+            System.out.println(cantidadAgentes);
 
-        // Cambiar el rol del usuario o activar la cuenta, según el indicador
-        switch (indicador) {
-            case 0:
-                usuarioRepository.actualizarRolAAgente(id,codigoAduana,codigoJurisdiccion);
-                break;
-            case 1:
-                usuarioRepository.activarCuenta(id);
-                break;
+            if (cantidadAgentes >= 3) {
+                // Usar RedirectAttributes para que el mensaje se vea después del redirect
+                redirectAttributes.addFlashAttribute("error", "Este Administrador Zonal ya tiene el máximo de 3 agentes activos.");
+                return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+            }
+
+            // Cambiar el rol del usuario o activar la cuenta, según el indicador
+            switch (indicador) {
+                case 0:
+                    usuarioRepository.actualizarRolAAgente(id, codigoAduana, codigoJurisdiccion);
+                    break;
+                case 1:
+                    usuarioRepository.activarCuenta(id);
+                    break;
+            }
+
+            // Eliminar la solicitud
+            solicitudAgenteRepository.deleteByIdUsuario(usuario);
+            redirectAttributes.addFlashAttribute("msg", "Solicitud aceptada con éxito!");
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+        }catch(Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Ocurrió un error al procesar la solicitud.");
+            return "redirect:/SuperAdmin/listaSolicitudesAgentes";
+
         }
-
-        // Eliminar la solicitud
-        solicitudAgenteRepository.deleteByIdUsuario(usuario);
-
-        return "redirect:/SuperAdmin/listaSolicitudesAgentes";
     }
 
 
@@ -1262,11 +1291,11 @@ public class SuperAdminController {
     @GetMapping("/SuperAdmin/eliminarProveedor")
     public String eliminarProveedor(@RequestParam("id") int id, RedirectAttributes attr) {
 
-        Optional<Proveedor> optProduct = proveedorRepository.findById(id);
+        Optional<Proveedor> optProveedor = proveedorRepository.findById(id);
 
-        if (optProduct.isPresent()) {
+        if (optProveedor.isPresent()) {
             try {
-                proveedorRepository.deleteById(id);
+                optProveedor.get().setBaneado(Boolean.TRUE);
                 attr.addFlashAttribute("msg", "El Proveedor ha sido eliminado exitosamente");
             } catch (Exception e) {
                 e.printStackTrace();

@@ -444,16 +444,14 @@ public class AgenteController {
          */
         try {
             ordenRepository.save(orden);
-            attr.addAttribute("editarOrdenExitoso", true);
+            attr.addAttribute("msg", "La orden se ha actualizado exitosamente!");
+            return "redirect:/Agente/Ordenes";
 
         }catch (Exception e){
-            attr.addAttribute("editarOrdenError", true);
+            attr.addAttribute("error", "Ha ocurrido un error al editar la orden.");
+            return "redirect:/Agente/Ordenes";
         }
 
-
-
-
-        return "redirect:/Agente/Ordenes";
     }
 
     @GetMapping({"Agente/Ordenes/DetallesOrdenSinAsignar"})

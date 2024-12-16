@@ -113,13 +113,12 @@
                         </div>
                         <div class="row">
                             <div class="col-xl-12 col-12 mb-5">
-                                <div th:if="${error}" class="alert alert-danger">
-                                    <p th:text="${error}"></p>
+                                <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}">
+
                                 </div>
-                                <div th:if="${successMessage}" class="alert alert-success">
-                                    <p th:text="${successMessage}"></p>
+                                <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
+
                                 </div>
-                                <div class="alert alert-success" role="alert" th:if="${msg != null}"><p th:text="${msg}"></p></div>
 
                                 <!-- card -->
                                 <div class="card h-100 card-lg">
@@ -200,11 +199,11 @@
                                                         <td th:text="${agente.getSoljurisdiccion()}"></td>
                                                         <td th:text="${agente.getNombreZona()}"></td> <!-- Zona -->
                                                         <td>
-                                                            <div class="dropdown">
+                                                            <div class="dropdown" >
                                                                 <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
                                                                     <i class="feather-icon icon-more-vertical fs-5"></i>
                                                                 </a>
-                                                                <ul class="dropdown-menu">
+                                                                <ul class="dropdown-menu dropdown-menu-end" >
                                                                     <li>
                                                                         <a class="dropdown-item"
                                                                            href="javascript:void(0);"

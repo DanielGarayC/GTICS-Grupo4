@@ -1,71 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <title>500 Error</title>
-
-    <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
-
-
-    <!-- Libs CSS -->
-    <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
-    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
-    <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
-
-
-    <!-- Theme CSS -->
-    <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Error Interno del Servidor</title>
+    <link rel="stylesheet" th:href="@{/css/style-500.css}">
 </head>
-
 <body>
-<main>
-    <!-- section -->
-    <section>
-        <div class="container d-flex flex-column">
-            <!-- row -->
-            <div class="row min-vh-100 justify-content-center align-items-center">
-                <!-- col -->
-                <div class="offset-lg-1 col-lg-10 py-8 py-xl-0">
-                    <div class="row justify-content-center align-items-center">
-                        <!-- content -->
-                        <div class="col-md-6">
-                            <div class="mb-6 mb-lg-0">
-                                <h1>Algo ha salido mal</h1>
-                                <p class="mb-8">
-                                    Estamos trabajando para solucionar los incovenientes.
-                                    <br />
-                                </p>
-                                <!-- btn -->
-                                <a th:href="${userRole == 'Super Admin' ? '/SuperAdmin' :
-                                            userRole == 'Agente' ? '/Agente' :
-                                            userRole == 'Administrador Zonal' ? '/AdminZonal' :
-                                            userRole == 'Usuario Final' ? '/UsuarioFinal' :
-                                            '/'}" class="btn btn-primary ms-2">Regresar al inicio
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div>
-                                <!-- img -->
-                                <img src="../assets/images/svg-graphics/error.svg" alt="" class="img-fluid" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
-<!-- section -->
+<div class="container">
+    <!-- Mensaje de error -->
+    <div class="text">
+        <h1>500</h1>
+        <hr>
+        <p>¡Oops! Algo salió mal.</p>
+        <p>Estamos trabajando en solucionarlo.</p>
+        <a th:href="${userRole == 'Super Admin' ? '/SuperAdmin' :
+                                userRole == 'Agente' ? '/Agente' :
+                                userRole == 'Administrador Zonal' ? '/AdminZonal' :
+                                userRole == 'Usuario Final' ? '/UsuarioFinal' :
+                                '/'}"
+           class="btn-primary">
+            Volver al inicio
+        </a>
+    </div>
 
-<!-- Javascript-->
-<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+    <div class="server-animation">
+        <img src="https://cdn-icons-png.flaticon.com/512/4275/4275113.png"
+             alt="Reparación" class="server-img">
+    </div>
 
-<!-- Theme JS -->
-<script th:src="@{/js/theme.min.js}"></script>
+</div>
 
-<script th:src="@{/libs/apexcharts/dist/apexcharts.min.js}"></script>
-<script th:src="@{/js/vendors/chart.js}"></script>
+<script th:src="@{/js/js500.js}"></script>
 </body>
 </html>
