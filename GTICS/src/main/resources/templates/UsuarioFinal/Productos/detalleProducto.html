@@ -900,7 +900,12 @@
                                 <!-- Image container -->
                                 <div class="text-center position-relative mb-3" style="height: 200px;">
                                     <a th:href="@{/UsuarioFinal/detallesProducto/{idProducto}(idProducto=${productoRelacionado.id})}">
-                                        <img th:src="@{'/UsuarioFinal/producto/foto/' + ${productoRelacionado.id}}" alt="Imagen de producto" class="img-fluid product-img" style="max-height: 100%; object-fit: contain; width: auto;" />
+                                        <img th:each="foto, iterStat : ${productoRelacionado.fotos}"
+                                             th:if="${iterStat.index == 0}"
+                                             th:src="@{'/UsuarioFinal/producto/foto/' + ${foto.id}}"
+                                             alt="Imagen de producto"
+                                             class="img-fluid product-img"
+                                             style="max-height: 100%; object-fit: contain; width: auto;" />
                                     </a>
                                 </div>
 
