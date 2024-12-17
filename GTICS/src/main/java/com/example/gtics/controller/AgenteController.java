@@ -27,6 +27,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -415,25 +416,19 @@ public class AgenteController {
     public String OrdenesUsuario(@RequestParam("idUsuario") Integer idUsuario,
                                  Model model,
                                  @RequestParam(defaultValue = "0") int page){
-        if (idUsuario == null) {
-            throw new IllegalArgumentException("El parámetro idUsuario no puede ser null");
-        }
         int pageSize = 6;
         Pageable pageable = PageRequest.of(page, pageSize);
+
         Page<OrdenCarritoDto> ordenCarrito = ordenRepository.obtenerCarritoConDto(idUsuario, pageable);
         Optional<Usuario> usr = usuarioRepository.findById(idUsuario);
 
-        if (usr.isEmpty()) {
-            throw new EntityNotFoundException("No se encontró el usuario con id " + idUsuario);
-        }
 
-        model.addAttribute("ordenCarrito", ordenCarrito.getContent());
+        model.addAttribute("ordenCarrito",ordenCarrito.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", ordenCarrito.getTotalPages());
-        model.addAttribute("usuario", usr.get());
+        model.addAttribute("usuario",usr.get());
         return "Agente/OrdenesDeUsuario/ordenesDeUsuario";
     }
-
 
 
 
